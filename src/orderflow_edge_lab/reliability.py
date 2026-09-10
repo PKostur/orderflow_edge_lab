@@ -45,6 +45,8 @@ def _check_state(path: Path) -> HealthCheck:
         return HealthCheck("execution_state", False, str(exc))
     if state["kill_switch"] or state["equity"] <= 0:
         return HealthCheck("execution_state", False, "execution halted by kill switch or nonpositive equity")
+    if "engine_config" not in state:
+        return HealthCheck("execution_state", False, "execution configuration is not bound; explicit migration required")
     return HealthCheck("execution_state", True, "parseable and structurally valid")
 
 

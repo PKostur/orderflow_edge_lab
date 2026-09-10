@@ -47,10 +47,13 @@ python scripts/paper_control.py release
 ```
 
 Use global `--state`, `--journal`, and optional `--policy` before the command to
-select files. Defaults live in ignored `runtime/`. Keep risk policy and instrument
-assumptions consistent across restarts; do not change costs on an open position.
+select files. Defaults live in ignored `runtime/`. Version 1.0 binds risk policy
+and instrument assumptions into durable checkpoints. The CLI reuses the stored
+policy unless supplied explicitly; changed settings fail closed rather than
+repricing an existing run. Start a separately named, reconciled run for new settings.
 `init` opens/reconciles existing state and never resets its equity. `migrate` is
-the explicit version 1 migration command after manual reconciliation.
+the explicit legacy migration command after manual reconciliation. Older version 2
+state without bound settings must be flat with an empty queue before migration.
 
 Intent JSON contains `strategy_id`, `symbol`, `side`, `entry_reference`, `stop`,
 `target`, and timezone-aware `signal_time`. Market JSON contains `symbol`, `bid`,
@@ -68,7 +71,11 @@ engineering tests. The frozen-observation audit is a separate research tool.
 `status` is read-only and does not recover state. It reports pending and open
 positions even when the kill switch is engaged, if checkpoint integrity passes.
 `kill` blocks entries but does not automatically close positions. Use explicit
-paper closes with fresh quotes. A failed persistence operation has an uncertain
+paper closes with fresh quotes. It also cancels queued intents so releasing the
+switch cannot revive old approvals. `expire` removes elapsed approvals and journals
+their identities. Execution timestamps cannot move backward, including after
+restart. Open positions reserve their modeled stop losses against the remaining
+daily loss budget. A failed persistence operation has an uncertain
 outcome until restart/reconciliation; do not retry blindly.
 
 ## Hardening limits and checks
@@ -98,6 +105,10 @@ reconciliation. Migration preserves a `.v1.bak` copy and appends a checkpoint to
 the existing journal. It cannot retroactively establish the integrity of old
 state/journal pairs. A migration interrupted after the checkpoint can be recovered
 by restarting. Do not delete backups to retry a failed migration blindly.
+
+For unbound pre-1.0 version 2 state, close positions and clear the queue using the
+original version before migration, then supply the original policy to `migrate`.
+Do not edit a checkpoint by hand to add configuration fields.
 
 Operational readiness remains a limited diagnostic. Deletion or rollback of both
 state and journal to a consistent older pair requires external backup/checkpoint

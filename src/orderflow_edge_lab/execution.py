@@ -188,6 +188,17 @@ def validate_execution_state(state: Any) -> None:
         if not isinstance(head, str) or not (head == "GENESIS" or
                 len(head) == 64 and all(c in "0123456789abcdef" for c in head)):
             raise StateCorruptionError("invalid journal anchor")
+    if "engine_config" in state:
+        try:
+            config = state["engine_config"]
+            RiskPolicy(**config["policy"])
+            if not config["instruments"]:
+                raise ValueError("empty instruments")
+            for key, raw in config["instruments"].items():
+                if InstrumentSpec(**raw).symbol != key:
+                    raise ValueError("instrument key mismatch")
+        except (KeyError, TypeError, ValueError, AttributeError) as exc:
+            raise StateCorruptionError("invalid persisted execution configuration") from exc
     if not all(_finite(state[k]) for k in ("equity", "day_start_equity", "realized_pnl_today")):
         raise StateCorruptionError("execution balances must be finite")
     if state["day_start_equity"] <= 0:
@@ -353,7 +364,8 @@ def reconcile_execution(state_path: str | Path, journal_path: str | Path) -> tup
         first = next(iter(snapshots.values()))
         migrated = (state["version"] == 1 and
                     records[-len(snapshots)]["event_type"] == "legacy_state_migrated" and
-                    {**state, "version": 2, "revision": 1, "journal_head": first["journal_head"]} == first)
+                    {**state, "version": 2, "revision": 1, "journal_head": first["journal_head"],
+                     **({"engine_config": first["engine_config"]} if "engine_config" in first else {})} == first)
         if not migrated and (state.get("journal_head") not in snapshots or state != snapshots[state["journal_head"]]):
             raise StateCorruptionError("state does not match journal anchor; refusing overwrite")
     return latest, state != latest
@@ -383,6 +395,7 @@ class PaperEngine:
         if self.state_path.resolve() == Path(journal_path).resolve():
             raise ValueError("state and journal paths must differ")
         self._failed = False
+        self._last_time = None
         self.lock = _EngineLock(self.state_path.with_suffix(self.state_path.suffix + ".lock"))
         self.journal_lock = _EngineLock(Path(str(journal_path) + ".lock"))
         self.lock.acquire()
@@ -391,7 +404,23 @@ class PaperEngine:
             self.journal = HashChainJournal(journal_path)
             self.policy = policy
             self.instruments = dict(instruments)
+            if not self.instruments or any(key != value.symbol for key, value in self.instruments.items()):
+                raise ValueError("instrument registry must be nonempty with matching symbols")
+            self._configuration = {"policy": asdict(policy), "instruments": {
+                key: asdict(value) for key, value in self.instruments.items()}}
             self.state = self._load_or_create(starting_equity, migrate_legacy)
+            if "engine_config" not in self.state:
+                if not migrate_legacy or self.state["positions"] or self.state["pending"]:
+                    raise StateCorruptionError("unbound legacy configuration; reconcile and migrate a flat state")
+                self.state["engine_config"] = deepcopy(self._configuration)
+                self._commit("configuration_bound", {}, _now())
+            if self.state["engine_config"] != self._configuration:
+                raise StateCorruptionError("execution configuration changed; use the original policy and instruments")
+            administrative = {"engine_initialized", "legacy_state_migrated", "configuration_bound"}
+            for row in reversed(HashChainJournal.records(self.journal.path)):
+                if row["event_type"] not in administrative:
+                    self._last_time = _parse_dt(row["timestamp"])
+                    break
         except Exception:
             self.journal_lock.release()
             self.lock.release()
@@ -423,6 +452,7 @@ class PaperEngine:
                 "seen_intents": [],
                 "revision": 0,
                 "journal_head": "GENESIS",
+                "engine_config": deepcopy(self._configuration),
             }
             self.state = state
             self._commit("engine_initialized", {}, _now())
@@ -440,7 +470,8 @@ class PaperEngine:
                     handle.write(self.state_path.read_bytes())
                     handle.flush()
                     os.fsync(handle.fileno())
-                self.state = {**state, "version": 2, "revision": 0, "journal_head": self.journal._last_hash}
+                self.state = {**state, "version": 2, "revision": 0, "journal_head": self.journal._last_hash,
+                              "engine_config": deepcopy(self._configuration)}
                 self._commit("legacy_state_migrated", {"operator_reconciled": True}, _now())
                 return self.state
         state, needs_recovery = reconcile_execution(self.state_path, self.journal.path)
@@ -458,6 +489,8 @@ class PaperEngine:
             head = self.journal.append(event_type, {**deepcopy(payload), "state_after": snapshot}, now)
             self.state = {**snapshot, "journal_head": head}
             self._write_state(self.state)
+            if event_type not in {"engine_initialized", "legacy_state_migrated", "configuration_bound"}:
+                self._last_time = now
         except Exception:
             # Outcome may already be durable; do not accept another operation.
             self._failed = True
@@ -488,6 +521,16 @@ class PaperEngine:
             raise EngineLockError("execution engine is closed")
         if self._failed:
             raise StateCorruptionError("previous persistence failure; close and recover before continuing")
+        if hasattr(self, "_configuration") and self._configuration != {
+                "policy": asdict(self.policy), "instruments": {k: asdict(v) for k, v in self.instruments.items()}}:
+            raise StateCorruptionError("execution configuration changed while engine was open")
+
+    def _operation_time(self, value: datetime | None) -> datetime:
+        self._ensure_open()
+        now = _parse_dt(value or _now())
+        if self._last_time is not None and now < self._last_time:
+            raise RejectedIntent("time_regression")
+        return now
 
     def _validate(
         self,
@@ -498,7 +541,7 @@ class PaperEngine:
         allow_seen: bool = False,
     ) -> tuple[InstrumentSpec, int]:
         self._ensure_open()
-        now = _parse_dt(now)
+        now = self._operation_time(now)
         self._roll_day(now)
         if self.state["kill_switch"]:
             raise RejectedIntent("kill_switch")
@@ -541,6 +584,13 @@ class PaperEngine:
             raise RejectedIntent("daily_loss_limit")
         risk_budget = min(self.state["equity"] * self.policy.risk_fraction,
                           max_loss + self.state["realized_pnl_today"])
+        reserved = 0.0
+        for position in self.state["positions"].values():
+            held_spec = self.instruments[position["symbol"]]
+            held_slip = self.policy.slippage_ticks * held_spec.tick_size
+            held_risk = (abs(position["entry_fill"] - position["stop"]) + held_slip) / held_spec.tick_size * held_spec.tick_value
+            reserved += (held_risk + round_trip_cost) * position["contracts"]
+        risk_budget = min(risk_budget, max_loss + self.state["realized_pnl_today"] - reserved)
         contracts = min(spec.max_contracts, int(math.floor(risk_budget / risk_per_contract)))
         if contracts < 1:
             raise RejectedIntent("risk_budget_too_small")
@@ -554,7 +604,7 @@ class PaperEngine:
         now: datetime | None = None,
         evidence: Mapping[str, Any] | None = None,
     ) -> str:
-        now = _parse_dt(now or _now())
+        now = self._operation_time(now)
         _, contracts = self._validate(intent, market, now)
         intent_id = intent.intent_id
         expires = now.timestamp() + self.policy.approval_ttl_seconds
@@ -581,7 +631,7 @@ class PaperEngine:
         now: datetime | None = None,
     ) -> dict[str, Any]:
         self._ensure_open()
-        now = _parse_dt(now or _now())
+        now = self._operation_time(now)
         pending = self.state["pending"].get(intent_id)
         if pending is None:
             raise RejectedIntent("unknown_pending_intent")
@@ -624,13 +674,23 @@ class PaperEngine:
 
     def reject(self, intent_id: str, *, reason: str, now: datetime | None = None) -> None:
         self._ensure_open()
-        now = _parse_dt(now or _now())
+        now = self._operation_time(now)
         if not reason.strip():
             raise ValueError("rejection reason is required")
         if intent_id not in self.state["pending"]:
             raise RejectedIntent("unknown_pending_intent")
         self.state["pending"].pop(intent_id)
         self._commit("intent_rejected", {"intent_id": intent_id, "reason": reason}, now)
+
+    def expire_pending(self, *, now: datetime | None = None) -> list[str]:
+        now = self._operation_time(now)
+        expired = [ident for ident, pending in self.state["pending"].items()
+                   if now.timestamp() >= pending["expires_at"]]
+        if expired:
+            for ident in expired:
+                self.state["pending"].pop(ident)
+            self._commit("pending_intents_expired", {"intent_ids": expired}, now)
+        return expired
 
     def close_position(
         self,
@@ -641,7 +701,7 @@ class PaperEngine:
         now: datetime | None = None,
     ) -> dict[str, Any]:
         self._ensure_open()
-        now = _parse_dt(now or _now())
+        now = self._operation_time(now)
         position = self.state["positions"].get(intent_id)
         if position is None:
             raise RejectedIntent("unknown_position")
@@ -686,9 +746,11 @@ class PaperEngine:
         now: datetime | None = None,
     ) -> None:
         self._ensure_open()
-        now = _parse_dt(now or _now())
+        now = self._operation_time(now)
         self.state["kill_switch"] = True
-        self._commit("kill_switch_engaged", {"flatten": flatten}, now)
+        cancelled = list(self.state["pending"])
+        self.state["pending"].clear()
+        self._commit("kill_switch_engaged", {"flatten": flatten, "cancelled_intents": cancelled}, now)
         if flatten:
             snapshots = dict(snapshots or {})
             for intent_id, position in list(self.state["positions"].items()):
@@ -699,6 +761,6 @@ class PaperEngine:
 
     def release_kill_switch(self, *, now: datetime | None = None) -> None:
         self._ensure_open()
-        now = _parse_dt(now or _now())
+        now = self._operation_time(now)
         self.state["kill_switch"] = False
         self._commit("kill_switch_released", {}, now)
