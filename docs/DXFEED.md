@@ -44,6 +44,16 @@ DXFEED_TOKEN
 DXFEED_SYMBOL
 ```
 
+If the supplied endpoint uses HTTP Basic authentication instead, set
+`DXFEED_USERNAME` and `DXFEED_PASSWORD` locally and leave `DXFEED_TOKEN` unset.
+Do not combine the authentication modes. A platform-issued username or email
+domain does not establish whether external API access is included.
+Use only the connection method and endpoint supplied for the existing entitlement.
+dxFeed documents both [Basic REST authentication](https://kb.dxfeed.com/en/market-data-api/data-access-solutions/rest.html)
+and [bearer headers](https://kb.dxfeed.com/en/data-services/real-time-and-delayed-services/token-based-authorization/establishing-connection.html).
+Subscription-specific credentials and coverage are described in its
+[getting-started guide](https://kb.dxfeed.com/en/getting-started.html).
+
 Then run:
 
 ```bash

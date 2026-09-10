@@ -15,6 +15,7 @@ Do not commit tokens or paste them into chat.
 from __future__ import annotations
 
 import argparse
+import base64
 from dataclasses import asdict
 import json
 import os
@@ -46,15 +47,23 @@ class _NoRedirect(urllib.request.HTTPRedirectHandler):
         return None
 
 
-def probe_rest(endpoint: str, token: str, symbol: str) -> int:
+def probe_rest(endpoint: str, token: str | None, symbol: str, *,
+               username: str | None = None, password: str | None = None) -> int:
     try:
         parsed = urllib.parse.urlsplit(endpoint)
         if (parsed.scheme != "https" or not parsed.hostname or parsed.username
                 or parsed.password or parsed.query or parsed.fragment
                 or any(c.isspace() for c in endpoint)
-                or not token.strip() or any(c in token for c in "\r\n")
                 or not symbol.strip()):
             raise ValueError("invalid endpoint or credentials")
+        if token:
+            if username or password or not token.strip() or any(c in token for c in "\r\n"):
+                raise ValueError("invalid authentication configuration")
+            authorization = f"Bearer {token}"
+        else:
+            if not username or not password or ":" in username or any(c in username + password for c in "\r\n"):
+                raise ValueError("invalid authentication configuration")
+            authorization = "Basic " + base64.b64encode(f"{username}:{password}".encode("utf-8")).decode("ascii")
         parsed.port
     except ValueError:
         print(json.dumps({"mode": "rest", "status": "failed", "error_type": "InvalidConfiguration"}))
@@ -63,7 +72,7 @@ def probe_rest(endpoint: str, token: str, symbol: str) -> int:
     separator = "&" if "?" in endpoint else "?"
     request = urllib.request.Request(
         endpoint + separator + params,
-        headers={"Authorization": f"Bearer {token}", "User-Agent": "orderflow-edge-lab/0.9"},
+        headers={"Authorization": authorization, "User-Agent": "orderflow-edge-lab/0.9"},
     )
     try:
         opener = urllib.request.build_opener(_NoRedirect())
@@ -101,14 +110,17 @@ def main() -> int:
 
     endpoint = os.environ.get("DXFEED_REST_ENDPOINT")
     token = os.environ.get("DXFEED_TOKEN")
+    username = os.environ.get("DXFEED_USERNAME")
+    password = os.environ.get("DXFEED_PASSWORD")
     symbol = os.environ.get("DXFEED_SYMBOL")
     missing = [
         name for name, value in (
             ("DXFEED_REST_ENDPOINT", endpoint),
-            ("DXFEED_TOKEN", token),
             ("DXFEED_SYMBOL", symbol),
         ) if not value
     ]
+    if not token and not (username and password):
+        missing.append("DXFEED_TOKEN or DXFEED_USERNAME + DXFEED_PASSWORD")
     if missing:
         print(json.dumps({
             "status": "blocked",
@@ -116,12 +128,12 @@ def main() -> int:
             "smallest_action": (
                 "Either export a small dxFeed/DeepCharts trade/BBO CSV and run "
                 "`python scripts/dxfeed_entitlement_probe.py --export FILE.csv`, "
-                "or set the external dxFeed REST endpoint, bearer token, and symbol "
+                "or set the external dxFeed REST endpoint, supported authentication, and symbol "
                 "as local environment variables if your subscription provides them."
             ),
         }, indent=2))
         return 2
-    return probe_rest(endpoint, token, symbol)
+    return probe_rest(endpoint, token, symbol, username=username, password=password)
 
 
 if __name__ == "__main__":
