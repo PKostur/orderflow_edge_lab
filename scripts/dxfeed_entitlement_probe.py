@@ -37,10 +37,28 @@ def probe_export(path: str, symbol: str | None) -> int:
         ),
     )
     print(json.dumps({"mode": "export", "file": str(Path(path)), **asdict(report)}, indent=2))
-    return 0 if report.total_events else 2
+    return 0 if report.passed else 2
+
+
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        # A bearer token must never follow a redirect to another endpoint.
+        return None
 
 
 def probe_rest(endpoint: str, token: str, symbol: str) -> int:
+    try:
+        parsed = urllib.parse.urlsplit(endpoint)
+        if (parsed.scheme != "https" or not parsed.hostname or parsed.username
+                or parsed.password or parsed.query or parsed.fragment
+                or any(c.isspace() for c in endpoint)
+                or not token.strip() or any(c in token for c in "\r\n")
+                or not symbol.strip()):
+            raise ValueError("invalid endpoint or credentials")
+        parsed.port
+    except ValueError:
+        print(json.dumps({"mode": "rest", "status": "failed", "error_type": "InvalidConfiguration"}))
+        return 3
     params = urllib.parse.urlencode([("event", "Quote"), ("symbol", symbol)])
     separator = "&" if "?" in endpoint else "?"
     request = urllib.request.Request(
@@ -48,15 +66,15 @@ def probe_rest(endpoint: str, token: str, symbol: str) -> int:
         headers={"Authorization": f"Bearer {token}", "User-Agent": "orderflow-edge-lab/0.9"},
     )
     try:
-        with urllib.request.urlopen(request, timeout=15) as response:
-            body = response.read(64_000).decode("utf-8", errors="replace")
+        opener = urllib.request.build_opener(_NoRedirect())
+        with opener.open(request, timeout=15) as response:
+            body = response.read(64_000)
             status = response.status
     except Exception as exc:
         print(json.dumps({
             "mode": "rest",
             "status": "failed",
             "error_type": type(exc).__name__,
-            "message": str(exc),
             "note": "Failure may mean endpoint/token/symbol entitlement is unavailable; no credentials were printed.",
         }, indent=2))
         return 3
@@ -66,7 +84,8 @@ def probe_rest(endpoint: str, token: str, symbol: str) -> int:
         "status": "ok" if 200 <= status < 300 else "failed",
         "http_status": status,
         "symbol": symbol,
-        "response_preview": body[:1000],
+        "response_bytes_read": len(body),
+        "note": "HTTP access only; does not establish historical trade entitlement or data validity.",
     }, indent=2))
     return 0 if 200 <= status < 300 else 4
 

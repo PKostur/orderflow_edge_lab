@@ -37,8 +37,13 @@ Then run:
 python scripts/dxfeed_entitlement_probe.py
 ```
 
-The script requests only a Quote event and prints a bounded response preview.
-It never places an order and never prints the token.
+The script requests only a Quote event. It requires an HTTPS endpoint without
+embedded credentials, query parameters, or fragments and refuses redirects.
+It reports HTTP status and a bounded byte count; response bodies and exception
+messages are omitted to avoid exposing credentials echoed by a server.
+HTTP success does not prove historical TimeAndSale access or research validity.
+The export probe returns a nonzero exit code when its quality checks fail.
+Its relaxed side-coverage thresholds test ingestion only, not research readiness.
 
 ## Important entitlement caveat
 
