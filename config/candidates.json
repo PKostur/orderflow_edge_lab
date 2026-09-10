@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "spent_data_rule": "Any data inspected while choosing or modifying a candidate is discovery data.",
+  "candidates": [
+    {"candidate_id":"P001","timeframe":"3m","setup_family":"failed_bear_breakout_long","direction":"long","path":[],"spent_through":"2026-08-22T18:01:00Z","frozen_at":"2026-08-22T18:01:00Z","minimum_events":30,"minimum_active_days":5},
+    {"candidate_id":"P002","timeframe":"1m","setup_family":"upper_band_fade_short","direction":"short","path":["S2","S0","S2","S2"],"spent_through":"2026-08-22T18:01:00Z","frozen_at":"2026-08-22T18:01:00Z","minimum_events":30,"minimum_active_days":5},
+    {"candidate_id":"P003","timeframe":"3m","setup_family":"bull_band_walk","direction":"long","path":["S2","S2","S6","S6"],"spent_through":"2026-08-22T18:01:00Z","frozen_at":"2026-08-22T18:01:00Z","minimum_events":30,"minimum_active_days":5},
+    {"candidate_id":"X101","timeframe":"1m","setup_family":"bear_exhaustion_long","direction":"long","path":[],"numeric_filters":[{"field":"resid_rs_z","op":"<=","value":-1.36776}],"spent_through":"2026-08-22T18:01:00Z","frozen_at":"2026-08-22T18:01:00Z","minimum_events":30,"minimum_active_days":5},
+    {"candidate_id":"X102","timeframe":"1m","setup_family":"bull_breakout","direction":"long","path":[],"numeric_filters":[{"field":"rvol","op":">=","value":0.529794},{"field":"rvol","op":"<=","value":1.236355}],"spent_through":"2026-08-22T18:01:00Z","frozen_at":"2026-08-22T18:01:00Z","minimum_events":30,"minimum_active_days":5},
+    {"candidate_id":"X103","timeframe":"3m","setup_family":"failed_bear_breakout_long","direction":"long","path":[],"numeric_filters":[{"field":"rvol","op":">=","value":0.757884},{"field":"rvol","op":"<=","value":1.650183}],"spent_through":"2026-08-22T18:01:00Z","frozen_at":"2026-08-22T18:01:00Z","minimum_events":30,"minimum_active_days":5},
+    {"candidate_id":"X104","timeframe":"3m","setup_family":"bear_breakout","direction":"short","path":[],"numeric_filters":[{"field":"bandwidth_pct","op":">=","value":0.092184},{"field":"bandwidth_pct","op":"<=","value":0.248497}],"spent_through":"2026-08-22T18:01:00Z","frozen_at":"2026-08-22T18:01:00Z","minimum_events":30,"minimum_active_days":5}
+  ]
+}
