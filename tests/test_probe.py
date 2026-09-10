@@ -1,11 +1,11 @@
 import contextlib
 import importlib.util
 import io
+import json
 from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import MagicMock, patch
-import urllib.error
 
 
 spec = importlib.util.spec_from_file_location(
@@ -75,3 +75,23 @@ class ProbeTests(unittest.TestCase):
             path.write_text("timestamp,symbol,price,bid,ask\n2026-09-01T00:00:00Z,NQ,100,102,101\n")
             with contextlib.redirect_stdout(io.StringIO()):
                 self.assertEqual(probe.probe_export(str(path), None), 2)
+
+    def test_export_probe_reports_causal_bbo_enrichment(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "mixed.csv"
+            path.write_text(
+                "timestamp,symbol,kind,price,bid,ask\n"
+                "2026-09-01T00:00:00Z,MNQ,quote,,20000,20000.25\n"
+                "2026-09-01T00:00:00.100Z,MNQ,trade,20000.25,,\n"
+            )
+            output = io.StringIO()
+            with contextlib.redirect_stdout(output):
+                self.assertEqual(probe.probe_export(str(path), None), 0)
+            payload = json.loads(output.getvalue())
+            self.assertEqual(payload["adapter"]["trades_enriched_from_prior_bbo"], 1)
+            self.assertEqual(payload["adapter"]["trades_quote_classified"], 1)
+            self.assertEqual(payload["quality"]["trade_bbo_fraction"], 1.0)
+
+
+if __name__ == "__main__":
+    unittest.main()

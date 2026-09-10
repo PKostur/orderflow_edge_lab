@@ -195,6 +195,7 @@ def normalize_rows(
     default_symbol: str | None = None,
     source: str = "dxfeed_or_deepcharts_export",
     max_quote_age_seconds: float = 1.0,
+    enrich_prior_bbo: bool = True,
 ) -> list[MarketEvent]:
     """Normalize loosely named dxFeed/DeepCharts CSV-like rows.
 
@@ -205,7 +206,6 @@ def normalize_rows(
         raise ValueError("quote age must be positive and finite")
     out: list[MarketEvent] = []
     previous_trade: dict[str, tuple[int, float]] = {}
-    previous_quote: dict[str, tuple[int, float | None, float | None]] = {}
     for row in rows:
         ts_ns = parse_timestamp_ns(_first(row, _TS_KEYS))
         symbol_value = _first(row, _SYMBOL_KEYS)
@@ -232,16 +232,6 @@ def normalize_rows(
             raise ValueError("price must be positive")
         if size is not None and size < 0:
             raise ValueError("size must be non-negative")
-        if not is_trade:
-            prior = previous_quote.get(symbol)
-            if prior is None or ts_ns >= prior[0]:
-                # Invalid/incomplete updates invalidate the previous usable BBO.
-                previous_quote[symbol] = (ts_ns, bid, ask)
-        elif bid is None and ask is None:
-            prior = previous_quote.get(symbol)
-            if (prior is not None and 0 < ts_ns - prior[0] <= max_quote_age_seconds * 1_000_000_000
-                    and prior[1] is not None and prior[2] is not None and prior[1] < prior[2]):
-                _, bid, ask = prior
         side = _explicit_side(_first(row, _SIDE_KEYS))
         if not is_trade:
             side = Side.UNKNOWN
@@ -262,6 +252,9 @@ def normalize_rows(
         if is_trade and (symbol not in previous_trade or previous_trade[symbol][0] < ts_ns):
             previous_trade[symbol] = (ts_ns, price)
         out.append(MarketEvent(ts_ns, symbol, kind, price, size, bid, ask, side, side_source, source))
+    if enrich_prior_bbo:
+        from .adapters import attach_prior_bbo
+        return list(attach_prior_bbo(out, max_quote_age_seconds=max_quote_age_seconds).events)
     return out
 
 

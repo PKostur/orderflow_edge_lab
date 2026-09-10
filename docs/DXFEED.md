@@ -16,15 +16,37 @@ python scripts/dxfeed_entitlement_probe.py --export path/to/file.csv --symbol NQ
 The adapter accepts common timestamp, symbol, trade price/size, bid/ask, and
 aggressor-side column aliases. It preserves input order for timestamp auditing.
 
+Exports often store quotes and trades on separate rows. The export adapter now
+carries forward the most recent eligible BBO for the same symbol so a later
+trade can be classified against actual prior quote context. The cache is causal:
+it never uses a quote timestamped after the trade, never carries crossed quotes,
+and ignores prior quotes older than two seconds by default. The threshold can be
+changed explicitly:
+
+```bash
+python scripts/dxfeed_entitlement_probe.py \
+  --export path/to/file.csv \
+  --symbol NQ \
+  --max-quote-age-seconds 1.0
+```
+
+The JSON output separates adapter diagnostics from the data-quality report. In
+particular, inspect `trades_enriched_from_prior_bbo`,
+`trades_quote_classified`, `stale_prior_quotes_ignored`,
+`future_prior_quotes_ignored`, and `trade_bbo_fraction` before using an export
+for research.
+
 Aggressor classification precedence is explicit side, then bid/ask matching,
-then tick rule. The quality report states how much classification was explicit,
+then tick rule. Explicit feed-side labels are never overwritten by quote
+inference. The quality report states how much classification was explicit,
 classified, or unknown.
 
 Integer and decimal timestamp strings preserve nanoseconds; supply strings or
 integers rather than already-rounded floating-point epochs. The adapter accepts
 Trade, TimeAndSale, and Quote rows and rejects unsupported event kinds.
 Separate quotes can supply a BBO only for the same symbol, strictly before the
-trade and at most one second old by default. Invalid quote updates invalidate
+trade and within the configured age limit (one second for `normalize_rows`,
+two seconds for the export probe). Invalid quote updates invalidate
 older BBOs. Equal-timestamp quotes are not assumed to precede a trade. Same-row
 BBO fields are treated as contemporaneous export data; their provenance must be
 checked against the export format. Tick-rule inference never uses a later trade.
@@ -32,6 +54,10 @@ checked against the export format. Tick-rule inference never uses a later trade.
 Research quality checks require trades and reject locked or incomplete quotes.
 When freshness is enabled, a reference clock is required and future events fail.
 Passing these checks is data-quality evidence only, not evidence of an edge.
+The entitlement probe intentionally uses relaxed side-coverage thresholds. It
+only answers whether the file can be safely ingested. A passing probe is not a
+claim that the dataset is sufficient for strategy research or out-of-sample
+validation.
 
 ## Path B: external dxFeed REST entitlement
 
@@ -65,8 +91,6 @@ embedded credentials, query parameters, or fragments and refuses redirects.
 It reports HTTP status and a bounded byte count; response bodies and exception
 messages are omitted to avoid exposing credentials echoed by a server.
 HTTP success does not prove historical TimeAndSale access or research validity.
-The export probe returns a nonzero exit code when its quality checks fail.
-Its relaxed side-coverage thresholds test ingestion only, not research readiness.
 
 ## Important entitlement caveat
 

@@ -77,7 +77,7 @@ class DataTests(unittest.TestCase):
         rows = [
             {"timestamp": 1700000000, "symbol": "NQ", "event": "Trade", "price": 100, "bid": 99.75, "ask": 100, "side": "sell"},
             {"timestamp": 1700000001, "symbol": "NQ", "event": "Trade", "price": 101, "bid": 100.75, "ask": 101},
-            {"timestamp": 1700000002, "symbol": "NQ", "event": "Trade", "price": 100.5},
+            {"timestamp": 1700000003, "symbol": "NQ", "event": "Trade", "price": 100.5},
         ]
         events = normalize_rows(rows)
         self.assertEqual(events[0].side, Side.SELL)

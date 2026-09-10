@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import csv
 from dataclasses import asdict
 import json
 import os
@@ -23,13 +24,19 @@ from pathlib import Path
 import urllib.parse
 import urllib.request
 
-from orderflow_edge_lab.data import DataQualityPolicy, load_export_csv, quality_report
+from orderflow_edge_lab.adapters import normalize_dxfeed_rows
+from orderflow_edge_lab.data import DataQualityPolicy, quality_report
 
 
-def probe_export(path: str, symbol: str | None) -> int:
-    events = load_export_csv(path, default_symbol=symbol)
+def probe_export(path: str, symbol: str | None, *, max_quote_age_seconds: float = 2.0) -> int:
+    with Path(path).open("r", encoding="utf-8-sig", newline="") as handle:
+        adapted = normalize_dxfeed_rows(
+            csv.DictReader(handle),
+            default_symbol=symbol,
+            max_quote_age_seconds=max_quote_age_seconds,
+        )
     report = quality_report(
-        events,
+        adapted.events,
         DataQualityPolicy(
             min_events=1,
             max_unknown_trade_side_fraction=1.0,
@@ -37,7 +44,12 @@ def probe_export(path: str, symbol: str | None) -> int:
             min_trade_bbo_fraction_when_explicit_side_low=0.0,
         ),
     )
-    print(json.dumps({"mode": "export", "file": str(Path(path)), **asdict(report)}, indent=2))
+    print(json.dumps({
+        "mode": "export",
+        "file": str(Path(path)),
+        "adapter": asdict(adapted.stats),
+        "quality": asdict(report),
+    }, indent=2))
     return 0 if report.passed else 2
 
 
@@ -103,10 +115,20 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--export", help="Local dxFeed/DeepCharts CSV export")
     parser.add_argument("--symbol", help="Default symbol for exports missing a symbol column")
+    parser.add_argument(
+        "--max-quote-age-seconds",
+        type=float,
+        default=2.0,
+        help="Maximum age of a prior BBO attached to a later trade in export mode",
+    )
     args = parser.parse_args()
 
     if args.export:
-        return probe_export(args.export, args.symbol)
+        return probe_export(
+            args.export,
+            args.symbol,
+            max_quote_age_seconds=args.max_quote_age_seconds,
+        )
 
     endpoint = os.environ.get("DXFEED_REST_ENDPOINT")
     token = os.environ.get("DXFEED_TOKEN")
