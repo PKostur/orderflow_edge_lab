@@ -72,7 +72,18 @@ class ReliabilityTests(unittest.TestCase):
             base["frozen_before_period"] = True
             manifest.write_text(json.dumps(base), encoding="utf-8")
             report2 = deployment_readiness(state, journal, validation_manifest=manifest)
-            self.assertTrue(next(c for c in report2.checks if c.name == "out_of_sample_evidence").passed)
+            self.assertFalse(next(c for c in report2.checks if c.name == "out_of_sample_evidence").passed)
+
+    def test_non_object_json_fails_without_crashing(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            for value in ([], None, 5, "text"):
+                for name in ("state.json", "journal.jsonl", "validation.json"):
+                    (root / name).write_text(json.dumps(value), encoding="utf-8")
+                report = deployment_readiness(root / "state.json", root / "journal.jsonl",
+                                              validation_manifest=root / "validation.json")
+                self.assertFalse(report.ready_for_paper)
+                self.assertTrue(all(not c.passed for c in report.checks))
 
 
 if __name__ == "__main__":

@@ -7,6 +7,17 @@ candidate is discovery data. The frozen registry records the last spent-data
 timestamp for each candidate. Evidence for that candidate must occur strictly
 after that timestamp.
 
+The future-only boundary is the later of `spent_through` and `frozen_at`.
+`sequential_windows` requires an explicit `observed_through` coverage timestamp
+before any window can be complete. Event counts alone cannot establish that
+the window has ended. Empty windows are retained and incomplete tails remain
+incomplete. Coverage is caller-supplied and must come from audited data coverage,
+not the time of the latest selected signal.
+
+Readiness reports do not accept a manifest's self-reported freeze flag as
+verified out-of-sample evidence. Dataset hashes, timestamps, and freeze provenance
+need independent verification; paper readiness remains separate from this gate.
+
 Changing timeframe, path, direction, setup family, horizon, or a numeric filter
 creates a new candidate and a new future-only eligibility boundary.
 

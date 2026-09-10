@@ -70,7 +70,7 @@ def load_candidates(path: str | Path) -> list[Candidate]:
 
 
 def enforce_future_only(candidate: Candidate, event_times: Iterable[datetime]) -> None:
-    boundary = candidate.spent_through.astimezone(UTC)
+    boundary = max(candidate.spent_through, candidate.frozen_at).astimezone(UTC)
     for ts in event_times:
         ts = parse_utc(ts)
         if ts <= boundary:
@@ -94,36 +94,41 @@ def sequential_windows(
     event_times: Sequence[datetime],
     *,
     window_days: int = 7,
+    observed_through: datetime | None = None,
 ) -> list[ValidationWindow]:
     if window_days < 1:
         raise ValueError("window_days must be positive")
     times = sorted(parse_utc(x) for x in event_times)
     enforce_future_only(candidate, times)
-    if not times:
+    coverage = parse_utc(observed_through) if observed_through is not None else None
+    if coverage is not None and times and times[-1] > coverage:
+        raise ValueError("event exceeds observed coverage")
+    if not times and coverage is None:
         return []
 
-    first = candidate.spent_through.astimezone(UTC) + timedelta(microseconds=1)
+    first = max(candidate.spent_through, candidate.frozen_at).astimezone(UTC) + timedelta(microseconds=1)
     cursor = first
-    final = times[-1] + timedelta(microseconds=1)
+    final = coverage if coverage is not None else times[-1] + timedelta(microseconds=1)
     out: list[ValidationWindow] = []
     while cursor < final:
         end = cursor + timedelta(days=window_days)
         selected = [x for x in times if cursor <= x < end]
-        if selected:
-            active_days = len({x.date() for x in selected})
-            complete = (
-                len(selected) >= candidate.minimum_events
-                and active_days >= candidate.minimum_active_days
+        # Retain empty windows so inactive periods cannot disappear.
+        active_days = len({x.date() for x in selected})
+        complete = (
+            coverage is not None and end <= coverage
+            and len(selected) >= candidate.minimum_events
+            and active_days >= candidate.minimum_active_days
+        )
+        out.append(
+            ValidationWindow(
+                start=cursor,
+                end=end,
+                event_count=len(selected),
+                active_days=active_days,
+                complete=complete,
             )
-            out.append(
-                ValidationWindow(
-                    start=cursor,
-                    end=end,
-                    event_count=len(selected),
-                    active_days=active_days,
-                    complete=complete,
-                )
-            )
+        )
         cursor = end
     return out
 
@@ -185,13 +190,19 @@ def research_manifest(
     code_version: str,
     holdout_revealed: bool,
 ) -> dict[str, Any]:
-    safe_config = dict(config)
-    if not holdout_revealed:
-        for key in list(safe_config):
-            lowered = key.lower()
-            if "holdout" in lowered or "final_test" in lowered:
-                safe_config.pop(key)
+    def redact(value: Any) -> Any:
+        if isinstance(value, Mapping):
+            return {k: redact(v) for k, v in value.items()
+                    if holdout_revealed or not any(
+                        marker in str(k).lower() for marker in ("holdout", "final_test"))}
+        if isinstance(value, (list, tuple)):
+            return [redact(v) for v in value]
+        return value
 
+    safe_config = redact(config)
+
+    if len({Path(p).name for p in input_files}) != len(input_files):
+        raise ValueError("input basenames must be unique to avoid losing evidence hashes")
     input_hashes = {Path(p).name: sha256_file(p) for p in input_files}
     payload = {
         "config": safe_config,

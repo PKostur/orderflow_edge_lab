@@ -39,7 +39,35 @@ class ResearchTests(unittest.TestCase):
         times = [start, start + timedelta(hours=2), start + timedelta(days=1)]
         windows = sequential_windows(self.candidate, times, window_days=7)
         self.assertEqual(len(windows), 1)
+        self.assertFalse(windows[0].complete)
+        windows = sequential_windows(self.candidate, times, observed_through=windows[0].end)
         self.assertTrue(windows[0].complete)
+
+    def test_freeze_after_spent_boundary_is_enforced(self):
+        from dataclasses import replace
+        candidate = replace(self.candidate, frozen_at=self.candidate.spent_through + timedelta(days=2))
+        with self.assertRaises(ValueError):
+            enforce_future_only(candidate, [candidate.frozen_at])
+
+    def test_empty_windows_and_coverage_bounds(self):
+        boundary = self.candidate.spent_through
+        windows = sequential_windows(self.candidate, [], observed_through=boundary + timedelta(days=15))
+        self.assertEqual(len(windows), 3)
+        self.assertTrue(all(w.event_count == 0 and not w.complete for w in windows))
+        with self.assertRaises(ValueError):
+            sequential_windows(self.candidate, [boundary + timedelta(days=2)],
+                               observed_through=boundary + timedelta(days=1))
+
+    def test_manifest_redacts_nested_holdout_without_mutation(self):
+        config = {"nested": [{"holdout_score": 99, "keep": 1}]}
+        result = research_manifest(config=config, input_files=[], code_version="test", holdout_revealed=False)
+        self.assertEqual(result["config"], {"nested": [{"keep": 1}]})
+        self.assertEqual(config["nested"][0]["holdout_score"], 99)
+
+    def test_duplicate_input_names_cannot_silently_drop_hashes(self):
+        with self.assertRaisesRegex(ValueError, "basenames"):
+            research_manifest(config={}, input_files=["a/input.csv", "b/input.csv"],
+                              code_version="test", holdout_revealed=False)
 
     def test_bh_monotonic_adjustment(self):
         q = benjamini_hochberg([0.01, 0.04, 0.03, 0.20])

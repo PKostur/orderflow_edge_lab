@@ -39,6 +39,8 @@ def _check_state(path: Path) -> HealthCheck:
         state = json.loads(path.read_text(encoding="utf-8"))
     except Exception as exc:
         return HealthCheck("execution_state", False, f"unreadable: {type(exc).__name__}")
+    if not isinstance(state, dict):
+        return HealthCheck("execution_state", False, "state must be an object")
     required = {"version", "equity", "trading_day", "pending", "positions", "kill_switch"}
     missing = sorted(required - set(state))
     if missing:
@@ -51,8 +53,8 @@ def _check_state(path: Path) -> HealthCheck:
 def _check_journal(path: Path) -> HealthCheck:
     try:
         HashChainJournal.verify(path)
-    except StateCorruptionError as exc:
-        return HealthCheck("journal_chain", False, str(exc))
+    except (StateCorruptionError, OSError, ValueError, TypeError, AttributeError) as exc:
+        return HealthCheck("journal_chain", False, f"journal verification failed: {type(exc).__name__}")
     return HealthCheck("journal_chain", True, "hash chain valid")
 
 
@@ -63,13 +65,16 @@ def _check_fresh_validation(manifest_path: Path | None) -> HealthCheck:
         data = json.loads(manifest_path.read_text(encoding="utf-8"))
     except Exception as exc:
         return HealthCheck("out_of_sample_evidence", False, f"manifest unreadable: {type(exc).__name__}")
+    if not isinstance(data, dict):
+        return HealthCheck("out_of_sample_evidence", False, "manifest must be an object")
     required = {"dataset_sha256", "config_sha256", "period_start", "period_end", "frozen_before_period"}
     missing = sorted(required - set(data))
     if missing:
         return HealthCheck("out_of_sample_evidence", False, "manifest missing: " + ",".join(missing))
     if data.get("frozen_before_period") is not True:
         return HealthCheck("out_of_sample_evidence", False, "parameters were not certified frozen before validation")
-    return HealthCheck("out_of_sample_evidence", True, "manifest records frozen genuine validation inputs")
+    return HealthCheck("out_of_sample_evidence", False,
+                       "manifest assertions alone cannot verify dataset freshness, freeze provenance, or an edge")
 
 
 def deployment_readiness(
@@ -85,8 +90,7 @@ def deployment_readiness(
         _check_fresh_validation(Path(validation_manifest) if validation_manifest else None),
         *additional_checks,
     ]
-    operational = all(c.passed for c in checks if c.name != "out_of_sample_evidence")
-    validation = next(c.passed for c in checks if c.name == "out_of_sample_evidence")
+    operational = all(c.passed for i, c in enumerate(checks) if i != 2)
     # Live remains deliberately impossible in this repository. A future broker
     # adapter requires a separate, explicit design and reconciliation gate.
     return ReadinessReport(ready_for_paper=operational, ready_for_live=False, checks=tuple(checks))
