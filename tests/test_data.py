@@ -7,6 +7,57 @@ from orderflow_edge_lab.data import (
 
 
 class DataTests(unittest.TestCase):
+    def test_nanosecond_precision_is_preserved(self):
+        expected = 1700000000123456789
+        for value in (expected, str(expected), "1700000000.123456789",
+                      "1700000000123.456789", "1700000000123456.789",
+                      "2023-11-14T22:13:20.123456789Z",
+                      "2023-11-15T00:13:20.123456789+02:00"):
+            self.assertEqual(parse_timestamp_ns(value), expected)
+        for value in ("NaN", "Infinity", "1700000000.1234567891", "2023-11-14T22:13:20.1234567891Z"):
+            with self.assertRaises(ValueError):
+                parse_timestamp_ns(value)
+
+    def test_prior_bbo_is_causal_bounded_and_symbol_specific(self):
+        quote = {"timestamp": 1700000000, "symbol": "NQ", "event": "Quote", "bid": 99, "ask": 100}
+        for offset, symbol, expected in ((0.5, "NQ", "quote"), (2, "NQ", "unknown"),
+                                          (-0.5, "NQ", "unknown"), (0, "NQ", "unknown"),
+                                          (0.5, "MNQ", "unknown")):
+            events = normalize_rows([quote, {"timestamp": 1700000000 + offset,
+                                            "symbol": symbol, "price": 100}])
+            self.assertEqual(events[-1].side_source, expected)
+
+    def test_explicit_trade_updates_tick_rule_without_future_lookahead(self):
+        rows = [{"timestamp": 1700000000, "symbol": "NQ", "price": 100, "side": "buy"},
+                {"timestamp": 1700000001, "symbol": "NQ", "price": 99},
+                {"timestamp": 1699999999, "symbol": "NQ", "price": 98}]
+        events = normalize_rows(rows)
+        self.assertEqual(events[1].side, Side.SELL)
+        self.assertEqual(events[1].side_source, "tick_rule")
+        self.assertEqual(events[2].side, Side.UNKNOWN)
+
+    def test_invalid_quote_update_does_not_reuse_older_bbo(self):
+        for bid, ask in ((101, 100), (100, 100), (None, 100)):
+            events = normalize_rows([
+                {"timestamp": 1700000000, "symbol": "NQ", "event": "Quote", "bid": 99, "ask": 100},
+                {"timestamp": 1700000000.1, "symbol": "NQ", "event": "Quote", "bid": bid, "ask": ask},
+                {"timestamp": 1700000000.2, "symbol": "NQ", "price": 100},
+            ])
+            self.assertEqual(events[-1].side, Side.UNKNOWN)
+
+    def test_missing_clock_future_clock_and_quote_only_fail(self):
+        events = normalize_rows([{"timestamp": 1700000000, "symbol": "NQ", "price": 100, "side": "buy"}])
+        policy = DataQualityPolicy(min_events=1, max_latest_age_seconds=1)
+        self.assertIn("missing_freshness_reference", quality_report(events, policy).failures)
+        self.assertIn("future_latest_event", quality_report(events, policy, now_ns=1699999999000000000).failures)
+        quotes = normalize_rows([{"timestamp": 1700000000, "symbol": "NQ", "event": "Quote", "bid": 99, "ask": 100}])
+        self.assertIn("no_trades", quality_report(quotes, DataQualityPolicy(min_events=1)).failures)
+
+    def test_unsupported_and_priceless_trades_are_rejected(self):
+        for row in ({"event": "Trade"}, {"event": "Summary", "price": 100}, {"price": True}):
+            with self.assertRaises(ValueError):
+                normalize_rows([{"timestamp": 1700000000, "symbol": "NQ", **row}])
+
     def test_timestamp_units_and_iso(self):
         values = [
             1_700_000_000,

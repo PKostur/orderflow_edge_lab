@@ -20,6 +20,19 @@ Aggressor classification precedence is explicit side, then bid/ask matching,
 then tick rule. The quality report states how much classification was explicit,
 classified, or unknown.
 
+Integer and decimal timestamp strings preserve nanoseconds; supply strings or
+integers rather than already-rounded floating-point epochs. The adapter accepts
+Trade, TimeAndSale, and Quote rows and rejects unsupported event kinds.
+Separate quotes can supply a BBO only for the same symbol, strictly before the
+trade and at most one second old by default. Invalid quote updates invalidate
+older BBOs. Equal-timestamp quotes are not assumed to precede a trade. Same-row
+BBO fields are treated as contemporaneous export data; their provenance must be
+checked against the export format. Tick-rule inference never uses a later trade.
+
+Research quality checks require trades and reject locked or incomplete quotes.
+When freshness is enabled, a reference clock is required and future events fail.
+Passing these checks is data-quality evidence only, not evidence of an edge.
+
 ## Path B: external dxFeed REST entitlement
 
 If the existing subscription provides an external REST endpoint and bearer
