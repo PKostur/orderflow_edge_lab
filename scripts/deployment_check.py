@@ -15,6 +15,7 @@ from orderflow_edge_lab.execution import (
     TradeIntent,
 )
 from orderflow_edge_lab.research import load_candidates
+from orderflow_edge_lab.reliability import deployment_readiness
 
 
 FORBIDDEN_LIVE_MARKERS = (
@@ -58,6 +59,12 @@ def smoke_paper() -> list[str]:
             close_market = MarketSnapshot("MNQ", 20002.00, 20002.25, now)
             engine.close_position(intent_id, close_market, reason="smoke", now=now)
         HashChainJournal.verify(journal)
+        with PaperEngine(state, journal) as restarted:
+            if restarted.state["positions"] or restarted.state["pending"]:
+                failures.append("restart retained closed position or pending intent")
+        report = deployment_readiness(state, journal)
+        if not report.ready_for_paper or report.ready_for_live:
+            failures.append("paper readiness or live prohibition failed")
     return failures
 
 
@@ -80,8 +87,9 @@ def main() -> int:
         failures.append("candidate registry empty")
 
     try:
-        smoke_paper()
-        checks["paper_smoke"] = "pass"
+        smoke_failures = smoke_paper()
+        failures.extend(smoke_failures)
+        checks["paper_smoke"] = "fail" if smoke_failures else "pass"
     except Exception as exc:
         checks["paper_smoke"] = f"fail: {type(exc).__name__}: {exc}"
         failures.append("paper smoke failed")

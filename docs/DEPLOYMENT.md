@@ -31,7 +31,47 @@ Current target: research, replay, paper execution, and manual approval only.
 
 This repository deliberately fails a deployment scan if common live-order
 method markers appear in `src/`.
-# Hardening limits and checks
+## Manual paper interface
+
+Install the package with `python -m pip install -e .`, then run:
+
+```text
+python scripts/paper_control.py init --equity 10000
+python scripts/paper_control.py status
+python scripts/paper_control.py submit --intent intent.json --export trades.csv
+python scripts/paper_control.py approve INTENT_ID --market market.json
+python scripts/paper_control.py reject INTENT_ID --reason "operator declined"
+python scripts/paper_control.py close INTENT_ID --market market.json --reason "operator close"
+python scripts/paper_control.py kill
+python scripts/paper_control.py release
+```
+
+Use global `--state`, `--journal`, and optional `--policy` before the command to
+select files. Defaults live in ignored `runtime/`. Keep risk policy and instrument
+assumptions consistent across restarts; do not change costs on an open position.
+`init` opens/reconciles existing state and never resets its equity. `migrate` is
+the explicit version 1 migration command after manual reconciliation.
+
+Intent JSON contains `strategy_id`, `symbol`, `side`, `entry_reference`, `stop`,
+`target`, and timezone-aware `signal_time`. Market JSON contains `symbol`, `bid`,
+`ask`, and timezone-aware `timestamp`. Quotes and signals must be fresh at command
+execution; saved examples become stale. The interface has no override for the
+current clock. `submit` requires at least 100 qualifying export events, a fresh
+BBO, and a passing quality report; it records the exact export hash in the journal.
+`approve` explicitly rechecks a supplied fresh market snapshot before a paper fill.
+
+This is an operator-driven engineering interface. It does not generate signals or
+certify that a manual intent was produced by a validated strategy. The low-level
+PaperEngine API assumes upstream signal/data validation; it remains available to
+engineering tests. The frozen-observation audit is a separate research tool.
+
+`status` is read-only and does not recover state. It reports pending and open
+positions even when the kill switch is engaged, if checkpoint integrity passes.
+`kill` blocks entries but does not automatically close positions. Use explicit
+paper closes with fresh quotes. A failed persistence operation has an uncertain
+outcome until restart/reconciliation; do not retry blindly.
+
+## Hardening limits and checks
 
 Paper sizing uses the current anticipated fill, adverse stop slippage, and
 round-trip commissions. It also caps planned loss at the remaining daily loss

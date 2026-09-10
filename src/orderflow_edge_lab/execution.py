@@ -552,6 +552,7 @@ class PaperEngine:
         market: MarketSnapshot,
         *,
         now: datetime | None = None,
+        evidence: Mapping[str, Any] | None = None,
     ) -> str:
         now = _parse_dt(now or _now())
         _, contracts = self._validate(intent, market, now)
@@ -568,7 +569,8 @@ class PaperEngine:
         }
         self.state["pending"][intent_id] = pending
         self.state["seen_intents"].append(intent_id)
-        self._commit("intent_submitted", {"intent_id": intent_id, "contracts": contracts}, now)
+        self._commit("intent_submitted", {"intent_id": intent_id, "contracts": contracts,
+                                           "evidence": dict(evidence) if evidence is not None else None}, now)
         return intent_id
 
     def approve(

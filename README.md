@@ -19,10 +19,25 @@ This repository does not contain live broker order transmission. The execution l
 
 Credentials must remain local. Never commit them or paste them into chat.
 
-The repository will support two zero-cost paths:
+The repository supports two paths using existing access:
 
 1. A normalized adapter for DeepCharts or dxFeed trade/BBO exports.
 2. An entitlement probe scaffold for external dxFeed access without assuming a DeepCharts login automatically grants API entitlement.
+
+The probe supports HTTPS Basic or bearer authentication when provided by the
+existing subscription. A platform-issued username does not determine API rights.
+See [data access and quality checks](docs/DXFEED.md).
+
+## Operator tools
+
+- [Manual paper control and checkpoint recovery](docs/DEPLOYMENT.md): inspect,
+  submit, approve, reject, close, and halt paper execution.
+- [Future-observation audit](docs/RESEARCH_PROTOCOL.md): verify supplied records
+  against frozen rules and produce hashed, descriptive reports without certifying
+  out-of-sample evidence or deployment eligibility.
+
+Local export validation and all engineering tests require no paid API or external
+service. Real market-data access and coverage still depend on your entitlement.
 
 ## Research validity
 
@@ -39,7 +54,8 @@ The repository will support two zero-cost paths:
 signal -> TradeIntent -> data/risk checks -> approval queue -> paper fill -> paper close -> journal
 ```
 
-Any failed data-quality or risk check means no trade.
+The manual submission interface blocks failed data-quality or risk checks.
+Direct PaperEngine callers must supply upstream data/signal validation.
 
 ## Live trading
 
