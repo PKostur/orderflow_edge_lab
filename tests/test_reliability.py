@@ -3,7 +3,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from orderflow_edge_lab.execution import HashChainJournal
+from orderflow_edge_lab.execution import HashChainJournal, PaperEngine
 from orderflow_edge_lab.reliability import deployment_readiness
 
 
@@ -31,6 +31,8 @@ class ReliabilityTests(unittest.TestCase):
             }), encoding="utf-8")
             journal = root / "journal.jsonl"
             HashChainJournal(journal)
+            with PaperEngine(state, journal, migrate_legacy=True):
+                pass
             report = deployment_readiness(state, journal)
             self.assertTrue(report.ready_for_paper)
             self.assertFalse(report.ready_for_live)

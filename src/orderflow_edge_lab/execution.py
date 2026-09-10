@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
+from copy import deepcopy
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -14,11 +15,23 @@ UTC = timezone.utc
 
 
 def _finite(value: object) -> bool:
-    return type(value) in (int, float) and math.isfinite(value)
+    try:
+        return type(value) in (int, float) and math.isfinite(value)
+    except OverflowError:
+        return False
 
 
 def _now() -> datetime:
     return datetime.now(tz=UTC)
+
+
+def _sync_parent(path: Path) -> None:
+    if os.name == "posix":
+        fd = os.open(path.parent, os.O_RDONLY)
+        try:
+            os.fsync(fd)
+        finally:
+            os.close(fd)
 
 
 def _parse_dt(value: str | datetime) -> datetime:
@@ -32,7 +45,7 @@ def _parse_dt(value: str | datetime) -> datetime:
 
 
 def _canonical(value: Any) -> str:
-    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False, default=str)
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False)
 
 
 @dataclass(frozen=True)
@@ -166,8 +179,15 @@ def validate_execution_state(state: Any) -> None:
                 "positions", "seen_intents"}
     if not isinstance(state, dict) or not required <= state.keys():
         raise StateCorruptionError("execution state is missing required fields")
-    if type(state["version"]) is not int or state["version"] != 1:
+    if type(state["version"]) is not int or state["version"] not in (1, 2):
         raise StateCorruptionError("unsupported execution state version")
+    if state["version"] == 2:
+        if type(state.get("revision")) is not int or state["revision"] < 0:
+            raise StateCorruptionError("invalid state revision")
+        head = state.get("journal_head")
+        if not isinstance(head, str) or not (head == "GENESIS" or
+                len(head) == 64 and all(c in "0123456789abcdef" for c in head)):
+            raise StateCorruptionError("invalid journal anchor")
     if not all(_finite(state[k]) for k in ("equity", "day_start_equity", "realized_pnl_today")):
         raise StateCorruptionError("execution balances must be finite")
     if state["day_start_equity"] <= 0:
@@ -216,12 +236,20 @@ class HashChainJournal:
 
     @staticmethod
     def verify(path: str | Path) -> str:
+        records = HashChainJournal.records(path)
+        return records[-1]["hash"] if records else "GENESIS"
+
+    @staticmethod
+    def records(path: str | Path) -> list[dict[str, Any]]:
         path = Path(path)
         if not path.exists():
-            return "GENESIS"
+            return []
         previous = "GENESIS"
+        records = []
         with path.open("r", encoding="utf-8") as handle:
             for lineno, line in enumerate(handle, start=1):
+                if not line.endswith("\n"):
+                    raise StateCorruptionError(f"incomplete journal line {lineno}")
                 try:
                     item = json.loads(line)
                 except json.JSONDecodeError as exc:
@@ -231,13 +259,20 @@ class HashChainJournal:
                 supplied = item.pop("hash", None)
                 if item.get("prev_hash") != previous:
                     raise StateCorruptionError(f"journal chain broken at line {lineno}")
-                calculated = hashlib.sha256(_canonical(item).encode("utf-8")).hexdigest()
+                try:
+                    calculated = hashlib.sha256(_canonical(item).encode("utf-8")).hexdigest()
+                except (TypeError, ValueError) as exc:
+                    raise StateCorruptionError(f"invalid journal values at line {lineno}") from exc
                 if supplied != calculated:
                     raise StateCorruptionError(f"journal hash mismatch at line {lineno}")
                 previous = supplied
-        return previous
+                item["hash"] = supplied
+                records.append(item)
+        return records
 
     def append(self, event_type: str, payload: Mapping[str, Any], when: datetime) -> str:
+        if self.verify(self.path) != self._last_hash:
+            raise StateCorruptionError("journal changed while engine was open")
         item = {
             "event_type": event_type,
             "timestamp": when.astimezone(UTC).isoformat(),
@@ -249,6 +284,7 @@ class HashChainJournal:
             handle.write(_canonical(item) + "\n")
             handle.flush()
             os.fsync(handle.fileno())
+        _sync_parent(self.path)
         self._last_hash = item["hash"]
         return item["hash"]
 
@@ -260,22 +296,67 @@ class _EngineLock:
 
     def acquire(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
+        fd = os.open(self.path, os.O_CREAT | os.O_RDWR, 0o600)
         try:
-            self.fd = os.open(self.path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
-        except FileExistsError as exc:
+            if os.name == "nt":
+                import msvcrt
+                if os.fstat(fd).st_size == 0:
+                    os.write(fd, b"0")
+                os.lseek(fd, 0, os.SEEK_SET)
+                msvcrt.locking(fd, msvcrt.LK_NBLCK, 1)
+            else:
+                import fcntl
+                fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except OSError as exc:
+            os.close(fd)
             raise EngineLockError(f"execution state already owned: {self.path}") from exc
-        os.write(self.fd, str(os.getpid()).encode("ascii"))
-        os.fsync(self.fd)
+        self.fd = fd
 
     def release(self) -> None:
         if self.fd is None:
             return
         os.close(self.fd)
         self.fd = None
-        try:
-            self.path.unlink()
-        except FileNotFoundError:
-            pass
+        # Keep the inode: unlinking permits another process to lock a new file.
+
+
+def reconcile_execution(state_path: str | Path, journal_path: str | Path) -> tuple[dict[str, Any], bool]:
+    """Read-only verification; return the last committed state and recovery need."""
+    path = Path(state_path)
+    try:
+        state = json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
+    except (OSError, ValueError) as exc:
+        raise StateCorruptionError("execution state cannot be parsed; refusing reset") from exc
+    if path.exists():
+        validate_execution_state(state)
+    records = HashChainJournal.records(journal_path)
+    snapshots = {}
+    revision = 0
+    for row in records:
+        payload = row.get("payload")
+        snapshot = payload.get("state_after") if isinstance(payload, dict) else None
+        if snapshot is None:
+            if revision:
+                raise StateCorruptionError("uncheckpointed event after checkpoint history")
+            continue
+        validate_execution_state(snapshot)
+        if (snapshot["version"] != 2 or snapshot["revision"] != revision + 1
+                or snapshot["journal_head"] != row["prev_hash"]):
+            raise StateCorruptionError("invalid checkpoint sequence")
+        revision += 1
+        committed = {**snapshot, "journal_head": row["hash"]}
+        snapshots[row["hash"]] = committed
+    if not snapshots:
+        raise StateCorruptionError("no recoverable checkpoint; legacy state requires explicit migration")
+    latest = next(reversed(snapshots.values()))
+    if state is not None:
+        first = next(iter(snapshots.values()))
+        migrated = (state["version"] == 1 and
+                    records[-len(snapshots)]["event_type"] == "legacy_state_migrated" and
+                    {**state, "version": 2, "revision": 1, "journal_head": first["journal_head"]} == first)
+        if not migrated and (state.get("journal_head") not in snapshots or state != snapshots[state["journal_head"]]):
+            raise StateCorruptionError("state does not match journal anchor; refusing overwrite")
+    return latest, state != latest
 
 
 class PaperEngine:
@@ -284,7 +365,7 @@ class PaperEngine:
     There is intentionally no broker/network order method in this class.
     """
 
-    STATE_VERSION = 1
+    STATE_VERSION = 2
 
     def __init__(
         self,
@@ -294,22 +375,30 @@ class PaperEngine:
         starting_equity: float = 10_000.0,
         policy: RiskPolicy = RiskPolicy(),
         instruments: Mapping[str, InstrumentSpec] = DEFAULT_INSTRUMENTS,
+        migrate_legacy: bool = False,
     ):
         if not _finite(starting_equity) or starting_equity <= 0:
             raise ValueError("starting_equity must be positive")
         self.state_path = Path(state_path)
+        if self.state_path.resolve() == Path(journal_path).resolve():
+            raise ValueError("state and journal paths must differ")
+        self._failed = False
         self.lock = _EngineLock(self.state_path.with_suffix(self.state_path.suffix + ".lock"))
+        self.journal_lock = _EngineLock(Path(str(journal_path) + ".lock"))
         self.lock.acquire()
         try:
+            self.journal_lock.acquire()
             self.journal = HashChainJournal(journal_path)
             self.policy = policy
             self.instruments = dict(instruments)
-            self.state = self._load_or_create(starting_equity)
+            self.state = self._load_or_create(starting_equity, migrate_legacy)
         except Exception:
+            self.journal_lock.release()
             self.lock.release()
             raise
 
     def close(self) -> None:
+        self.journal_lock.release()
         self.lock.release()
 
     def __enter__(self) -> "PaperEngine":
@@ -318,8 +407,8 @@ class PaperEngine:
     def __exit__(self, *_: object) -> None:
         self.close()
 
-    def _load_or_create(self, starting_equity: float) -> dict[str, Any]:
-        if not self.state_path.exists():
+    def _load_or_create(self, starting_equity: float, migrate_legacy: bool) -> dict[str, Any]:
+        if not self.state_path.exists() and self.journal._last_hash == "GENESIS":
             day = _now().date().isoformat()
             state = {
                 "version": self.STATE_VERSION,
@@ -332,15 +421,47 @@ class PaperEngine:
                 "pending": {},
                 "positions": {},
                 "seen_intents": [],
+                "revision": 0,
+                "journal_head": "GENESIS",
             }
-            self._write_state(state)
-            return state
-        try:
+            self.state = state
+            self._commit("engine_initialized", {}, _now())
+            return self.state
+        if migrate_legacy and self.state_path.exists():
             state = json.loads(self.state_path.read_text(encoding="utf-8"))
-        except Exception as exc:
-            raise StateCorruptionError("execution state cannot be parsed; refusing reset") from exc
-        validate_execution_state(state)
+            validate_execution_state(state)
+            if state["version"] == 1:
+                if any("state_after" in row.get("payload", {}) for row in HashChainJournal.records(self.journal.path)):
+                    recovered, _ = reconcile_execution(self.state_path, self.journal.path)
+                    self._write_state(recovered)
+                    return recovered
+                backup = self.state_path.with_suffix(self.state_path.suffix + ".v1.bak")
+                with backup.open("xb") as handle:
+                    handle.write(self.state_path.read_bytes())
+                    handle.flush()
+                    os.fsync(handle.fileno())
+                self.state = {**state, "version": 2, "revision": 0, "journal_head": self.journal._last_hash}
+                self._commit("legacy_state_migrated", {"operator_reconciled": True}, _now())
+                return self.state
+        state, needs_recovery = reconcile_execution(self.state_path, self.journal.path)
+        if needs_recovery:
+            self._write_state(state)
         return state
+
+    def _commit(self, event_type: str, payload: Mapping[str, Any], now: datetime) -> None:
+        self._ensure_open()
+        try:
+            snapshot = deepcopy(self.state)
+            snapshot["revision"] += 1
+            snapshot["journal_head"] = self.journal._last_hash
+            validate_execution_state(snapshot)
+            head = self.journal.append(event_type, {**deepcopy(payload), "state_after": snapshot}, now)
+            self.state = {**snapshot, "journal_head": head}
+            self._write_state(self.state)
+        except Exception:
+            # Outcome may already be durable; do not accept another operation.
+            self._failed = True
+            raise
 
     def _write_state(self, state: Mapping[str, Any]) -> None:
         self._ensure_open()
@@ -351,12 +472,7 @@ class PaperEngine:
             handle.flush()
             os.fsync(handle.fileno())
         os.replace(tmp, self.state_path)
-        if os.name == "posix":
-            dir_fd = os.open(self.state_path.parent, os.O_RDONLY)
-            try:
-                os.fsync(dir_fd)
-            finally:
-                os.close(dir_fd)
+        _sync_parent(self.state_path)
 
     def _roll_day(self, now: datetime) -> None:
         day = now.astimezone(UTC).date().isoformat()
@@ -365,11 +481,13 @@ class PaperEngine:
             self.state["day_start_equity"] = self.state["equity"]
             self.state["realized_pnl_today"] = 0.0
             self.state["trades_today"] = 0
-            self._write_state(self.state)
+            self._commit("trading_day_rolled", {"trading_day": day}, now)
 
     def _ensure_open(self) -> None:
         if self.lock.fd is None:
             raise EngineLockError("execution engine is closed")
+        if self._failed:
+            raise StateCorruptionError("previous persistence failure; close and recover before continuing")
 
     def _validate(
         self,
@@ -450,9 +568,7 @@ class PaperEngine:
         }
         self.state["pending"][intent_id] = pending
         self.state["seen_intents"].append(intent_id)
-        self.state["seen_intents"] = self.state["seen_intents"][-5000:]
-        self._write_state(self.state)
-        self.journal.append("intent_submitted", {"intent_id": intent_id, "contracts": contracts}, now)
+        self._commit("intent_submitted", {"intent_id": intent_id, "contracts": contracts}, now)
         return intent_id
 
     def approve(
@@ -469,8 +585,7 @@ class PaperEngine:
             raise RejectedIntent("unknown_pending_intent")
         if now.timestamp() >= float(pending["expires_at"]):
             self.state["pending"].pop(intent_id, None)
-            self._write_state(self.state)
-            self.journal.append("intent_expired", {"intent_id": intent_id}, now)
+            self._commit("intent_expired", {"intent_id": intent_id}, now)
             raise RejectedIntent("approval_expired")
 
         raw = pending["intent"]
@@ -502,9 +617,8 @@ class PaperEngine:
         self.state["pending"].pop(intent_id, None)
         self.state["positions"][intent_id] = position
         self.state["trades_today"] += 1
-        self._write_state(self.state)
-        self.journal.append("paper_position_opened", position, now)
-        return position
+        self._commit("paper_position_opened", position, now)
+        return deepcopy(position)
 
     def reject(self, intent_id: str, *, reason: str, now: datetime | None = None) -> None:
         self._ensure_open()
@@ -514,8 +628,7 @@ class PaperEngine:
         if intent_id not in self.state["pending"]:
             raise RejectedIntent("unknown_pending_intent")
         self.state["pending"].pop(intent_id)
-        self._write_state(self.state)
-        self.journal.append("intent_rejected", {"intent_id": intent_id, "reason": reason}, now)
+        self._commit("intent_rejected", {"intent_id": intent_id, "reason": reason}, now)
 
     def close_position(
         self,
@@ -560,8 +673,7 @@ class PaperEngine:
         self.state["positions"].pop(intent_id, None)
         self.state["equity"] += pnl
         self.state["realized_pnl_today"] += pnl
-        self._write_state(self.state)
-        self.journal.append("paper_position_closed", result, now)
+        self._commit("paper_position_closed", result, now)
         return result
 
     def engage_kill_switch(
@@ -574,8 +686,7 @@ class PaperEngine:
         self._ensure_open()
         now = _parse_dt(now or _now())
         self.state["kill_switch"] = True
-        self._write_state(self.state)
-        self.journal.append("kill_switch_engaged", {"flatten": flatten}, now)
+        self._commit("kill_switch_engaged", {"flatten": flatten}, now)
         if flatten:
             snapshots = dict(snapshots or {})
             for intent_id, position in list(self.state["positions"].items()):
@@ -588,5 +699,4 @@ class PaperEngine:
         self._ensure_open()
         now = _parse_dt(now or _now())
         self.state["kill_switch"] = False
-        self._write_state(self.state)
-        self.journal.append("kill_switch_released", {}, now)
+        self._commit("kill_switch_released", {}, now)

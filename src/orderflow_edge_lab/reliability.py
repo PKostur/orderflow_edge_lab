@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 from typing import Iterable
 
-from .execution import HashChainJournal, StateCorruptionError, validate_execution_state
+from .execution import HashChainJournal, StateCorruptionError, validate_execution_state, reconcile_execution
 
 UTC = timezone.utc
 
@@ -56,6 +56,16 @@ def _check_journal(path: Path) -> HealthCheck:
     return HealthCheck("journal_chain", True, "hash chain valid")
 
 
+def _check_checkpoint(state_path: Path, journal_path: Path) -> HealthCheck:
+    try:
+        _, recovery = reconcile_execution(state_path, journal_path)
+        if recovery:
+            return HealthCheck("state_journal_checkpoint", False, "verified journal ahead; restart engine to recover")
+    except (StateCorruptionError, OSError, ValueError, TypeError, AttributeError) as exc:
+        return HealthCheck("state_journal_checkpoint", False, f"checkpoint verification failed: {type(exc).__name__}")
+    return HealthCheck("state_journal_checkpoint", True, "state matches durable journal checkpoint")
+
+
 def _check_fresh_validation(manifest_path: Path | None) -> HealthCheck:
     if manifest_path is None or not manifest_path.exists():
         return HealthCheck("out_of_sample_evidence", False, "no validation manifest supplied")
@@ -86,6 +96,7 @@ def deployment_readiness(
         _check_state(Path(state_path)),
         _check_journal(Path(journal_path)),
         _check_fresh_validation(Path(validation_manifest) if validation_manifest else None),
+        _check_checkpoint(Path(state_path), Path(journal_path)),
         *additional_checks,
     ]
     operational = all(c.passed for i, c in enumerate(checks) if i != 2)

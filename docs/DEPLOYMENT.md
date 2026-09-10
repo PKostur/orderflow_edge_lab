@@ -44,9 +44,24 @@ Readiness and engine startup share state-value validation. Nonfinite balances,
 malformed pending intents and positions, invalid counters, and invalid dates
 fail closed. A killed engine is not reported as paper-ready.
 
-Operational readiness is a limited diagnostic, not an unattended-deployment
-certification. The current state and journal writes are separate; crash-atomic
-reconciliation remains unfinished. The lock uses a persistent exclusive file;
-an abnormal process exit can require operator recovery. A valid hash chain alone
-does not prove that no trailing records were deleted. Keep state and journal
-backups and reconcile both before restarting after an interrupted write.
+Version 2 writes and flushes a full journal checkpoint before replacing the state
+file. Startup verifies the hash chain and the state's exact checkpoint anchor,
+then recovers a complete journal-ahead transition once. Persistence failures block
+further operations until restart. Partial tails, state tampering, and journal
+truncation behind the stored anchor fail closed. Readiness requires a reconciled
+checkpoint. Windows and POSIX operating-system locks cover both state and journal;
+the OS releases ownership after a process crash. Persistent `.lock` files are normal
+and must not be deleted to bypass ownership.
+
+Existing version 1 state requires explicit `migrate_legacy=True` after operator
+reconciliation. Migration preserves a `.v1.bak` copy and appends a checkpoint to
+the existing journal. It cannot retroactively establish the integrity of old
+state/journal pairs. A migration interrupted after the checkpoint can be recovered
+by restarting. Do not delete backups to retry a failed migration blindly.
+
+Operational readiness remains a limited diagnostic. Deletion or rollback of both
+state and journal to a consistent older pair requires external backup/checkpoint
+comparison to detect. A partial journal write is refused, not silently truncated.
+Use a local filesystem with reliable flush and locking semantics; network shares
+and storage-controller power-loss guarantees are outside these tests. Full state
+checkpoints favor auditability at this paper-trading scale over log compactness.
