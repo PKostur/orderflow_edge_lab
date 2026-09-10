@@ -1,4 +1,5 @@
 """Audit supplied future observations; never certify an edge or deployment."""
+from collections import defaultdict
 from dataclasses import asdict
 from datetime import datetime, timezone
 import hashlib
@@ -40,6 +41,42 @@ def _invalid_constant(value):
 
 def _json(raw):
     return json.loads(raw, object_pairs_hook=_object, parse_constant=_invalid_constant)
+
+
+def _dependence_diagnostics(rows):
+    """Describe obvious temporal dependence without pretending observations are IID.
+
+    `overlap_count` counts observations whose event occurs before an earlier active
+    outcome has completed. `max_concurrent_outcomes` is the largest number of
+    simultaneously open observation horizons. Daily means provide a coarse cluster
+    summary so a burst of same-day signals cannot masquerade as many independent days.
+    """
+    if not rows:
+        return {
+            "active_days": 0,
+            "overlap_count": 0,
+            "max_concurrent_outcomes": 0,
+            "daily_cluster_summary": oos_summary([]),
+        }
+    ordered = sorted(rows, key=lambda row: (row[0], row[1]))
+    active_ends = []
+    overlap_count = 0
+    max_concurrent = 0
+    daily = defaultdict(list)
+    for event_time, outcome_time, net in ordered:
+        active_ends = [end for end in active_ends if end > event_time]
+        if active_ends:
+            overlap_count += 1
+        active_ends.append(outcome_time)
+        max_concurrent = max(max_concurrent, len(active_ends))
+        daily[event_time.date().isoformat()].append(net)
+    daily_means = [sum(values) / len(values) for _, values in sorted(daily.items())]
+    return {
+        "active_days": len(daily),
+        "overlap_count": overlap_count,
+        "max_concurrent_outcomes": max_concurrent,
+        "daily_cluster_summary": oos_summary(daily_means),
+    }
 
 
 def build_validation_report(registry_path, observations_path, *, observed_through,
@@ -100,17 +137,18 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
         if costs < 0:
             raise ValueError("costs cannot be negative")
         net = _number(gross - costs)
-        grouped[candidate.candidate_id].append((event_time, net))
+        grouped[candidate.candidate_id].append((event_time, outcome_time, net))
     reports = []
     for key, candidate in candidates.items():
         rows = grouped[key]
-        windows = sequential_windows(candidate, [ts for ts, _ in rows], observed_through=coverage)
+        windows = sequential_windows(candidate, [event for event, _, _ in rows], observed_through=coverage)
         reports.append({
             "candidate_id": key,
             "windows": [{**asdict(window), "start": window.start.isoformat(), "end": window.end.isoformat(),
-                         "summary": oos_summary([net for ts, net in rows if window.start <= ts < window.end])}
+                         "summary": oos_summary([net for event, _, net in rows if window.start <= event < window.end])}
                         for window in windows],
-            "summary": oos_summary([net for _, net in rows]),
+            "summary": oos_summary([net for _, _, net in rows]),
+            "dependence": _dependence_diagnostics(rows),
         })
     return {
         "schema_version": 1,
@@ -126,6 +164,7 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
         "limitations": [
             "Source labels, coverage, returns, and costs are caller supplied, not independently verified.",
             "Registry hashes identify rules but do not prove when rules were frozen.",
+            "Event-level summaries do not assume independence; overlap diagnostics and daily clustering are descriptive only.",
             "Descriptive summaries do not establish independence, significance, or profitability.",
         ],
     }

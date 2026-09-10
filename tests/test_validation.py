@@ -41,6 +41,23 @@ class ValidationTests(unittest.TestCase):
         self.assertFalse(report["deployment_eligible"])
         self.assertFalse(report["verified_out_of_sample_evidence"])
 
+    def test_dependence_diagnostics_expose_overlapping_bursts_and_daily_clusters(self):
+        row2 = deepcopy(self.row)
+        row2.update(observation_id="test-2", event_time="2026-09-02T00:01:00Z",
+                    outcome_time="2026-09-02T00:06:00Z", gross_return_r=-0.8, cost_r=0.2)
+        row3 = deepcopy(self.row)
+        row3.update(observation_id="test-3", event_time="2026-09-03T00:00:00Z",
+                    outcome_time="2026-09-03T00:05:00Z", gross_return_r=1.2, cost_r=0.2)
+        report = self.audit([self.row, row2, row3])
+        candidate = report["candidates"][0]
+        self.assertEqual(candidate["dependence"]["active_days"], 2)
+        self.assertEqual(candidate["dependence"]["overlap_count"], 1)
+        self.assertEqual(candidate["dependence"]["max_concurrent_outcomes"], 2)
+        self.assertEqual(candidate["dependence"]["daily_cluster_summary"]["n"], 2)
+        self.assertAlmostEqual(candidate["summary"]["mean_r"], 0.6)
+        self.assertAlmostEqual(candidate["dependence"]["daily_cluster_summary"]["mean_r"], 0.7)
+        self.assertFalse(report["verified_out_of_sample_evidence"])
+
     def test_modified_rules_invalid_costs_and_unfresh_events_rejected(self):
         changes = ({"path": []}, {"numeric_filters": []}, {"features": {"rvol": 0.9}},
                    {"direction": "short"}, {"event_time": "2026-08-25T00:00:00Z"},
@@ -68,6 +85,8 @@ class ValidationTests(unittest.TestCase):
         report = self.audit([])
         self.assertEqual(report["observation_count"], 0)
         self.assertTrue(all(not w["complete"] for w in report["candidates"][0]["windows"]))
+        self.assertEqual(report["candidates"][0]["dependence"]["active_days"], 0)
+        self.assertEqual(report["candidates"][0]["dependence"]["overlap_count"], 0)
 
     def test_duplicate_json_keys_rejected(self):
         self.observations.write_text('{"candidate_id":"P1","candidate_id":"P2"}')
