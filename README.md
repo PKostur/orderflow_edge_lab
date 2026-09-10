@@ -2,6 +2,9 @@
 
 Research-first infrastructure for short-horizon order-flow strategy research and paper execution.
 
+**Version 1.0: research and manual paper release.** See the
+[release guide](docs/RELEASE_1_0.md) for installation, verification, and operational boundaries.
+
 ## Safety boundary
 
 This repository does not contain live broker order transmission. The execution layer is limited to paper and explicit approval workflows. No strategy is considered to have a profitable edge unless it survives genuine out-of-sample validation after realistic costs on data that was not used for discovery or tuning.

@@ -32,3 +32,7 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Deployment diagnostics
         run: python scripts/deployment_check.py
+      - name: Build installable release
+        run: python -m pip wheel --no-deps . --wheel-dir dist
+      - name: Verify installed commands outside checkout
+        run: python scripts/package_smoke.py dist/orderflow_edge_lab-1.0.0-py3-none-any.whl

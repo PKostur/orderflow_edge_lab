@@ -4,10 +4,18 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "orderflow-edge-lab"
-version = "0.9.0"
+version = "1.0.0"
 description = "Research-first order-flow validation and paper execution infrastructure"
 requires-python = ">=3.10"
 dependencies = []
+
+[project.scripts]
+orderflow-paper = "orderflow_edge_lab.cli.paper:main"
+orderflow-probe = "orderflow_edge_lab.cli.probe:main"
+orderflow-validate = "orderflow_edge_lab.cli.validate:main"
+
+[project.gui-scripts]
+orderflow-dxfeed-login = "orderflow_edge_lab.cli.login:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

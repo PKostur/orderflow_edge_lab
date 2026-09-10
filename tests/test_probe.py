@@ -8,10 +8,7 @@ import unittest
 from unittest.mock import MagicMock, patch
 
 
-spec = importlib.util.spec_from_file_location(
-    "probe", Path(__file__).resolve().parents[1] / "scripts/dxfeed_entitlement_probe.py")
-probe = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(probe)
+from orderflow_edge_lab.cli import probe
 
 
 class ProbeTests(unittest.TestCase):

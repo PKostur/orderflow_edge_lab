@@ -7,9 +7,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-spec = importlib.util.spec_from_file_location("paper_control", Path(__file__).resolve().parents[1] / "scripts/paper_control.py")
-control = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(control)
+from orderflow_edge_lab.cli import paper as control
 
 
 class PaperControlTests(unittest.TestCase):
