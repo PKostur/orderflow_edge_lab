@@ -31,3 +31,22 @@ Current target: research, replay, paper execution, and manual approval only.
 
 This repository deliberately fails a deployment scan if common live-order
 method markers appear in `src/`.
+# Hardening limits and checks
+
+Paper sizing uses the current anticipated fill, adverse stop slippage, and
+round-trip commissions. It also caps planned loss at the remaining daily loss
+allowance. These are modeling assumptions: gaps can exceed the planned loss.
+Approval revalidates the market; manual `PaperEngine.reject` persists the decision
+and its reason in the hash-chained journal. Exit snapshots must be fresh, and
+overnight closes book P&L to the closing UTC day.
+
+Readiness and engine startup share state-value validation. Nonfinite balances,
+malformed pending intents and positions, invalid counters, and invalid dates
+fail closed. A killed engine is not reported as paper-ready.
+
+Operational readiness is a limited diagnostic, not an unattended-deployment
+certification. The current state and journal writes are separate; crash-atomic
+reconciliation remains unfinished. The lock uses a persistent exclusive file;
+an abnormal process exit can require operator recovery. A valid hash chain alone
+does not prove that no trailing records were deleted. Keep state and journal
+backups and reconcile both before restarting after an interrupted write.

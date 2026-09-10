@@ -40,6 +40,91 @@ class ExecutionTests(unittest.TestCase):
     def test_intent_id_deterministic(self):
         self.assertEqual(self.intent().intent_id, self.intent().intent_id)
 
+    def test_manual_rejection_is_persisted_and_audited(self):
+        with PaperEngine(self.state, self.journal) as engine:
+            ident = engine.submit(self.intent(), self.market, now=self.now)
+            engine.reject(ident, reason="operator declined", now=self.now)
+            with self.assertRaisesRegex(RejectedIntent, "unknown_pending"):
+                engine.approve(ident, self.market, now=self.now)
+        with PaperEngine(self.state, self.journal) as engine:
+            self.assertNotIn(ident, engine.state["pending"])
+        last = json.loads(self.journal.read_text().splitlines()[-1])
+        self.assertEqual(last["event_type"], "intent_rejected")
+        self.assertEqual(last["payload"]["reason"], "operator declined")
+        HashChainJournal.verify(self.journal)
+
+    def test_malformed_state_blocks_restart_and_readiness(self):
+        from orderflow_edge_lab.reliability import deployment_readiness
+        with PaperEngine(self.state, self.journal) as engine:
+            original = dict(engine.state)
+        for field, value in (("equity", float("nan")), ("kill_switch", "false"),
+                             ("trades_today", -1), ("trading_day", "bad"),
+                             ("pending", {"fake": {}}), ("positions", {"fake": {}})):
+            with self.subTest(field=field):
+                self.state.write_text(json.dumps({**original, field: value}))
+                with self.assertRaises(StateCorruptionError):
+                    PaperEngine(self.state, self.journal)
+                self.assertFalse(deployment_readiness(self.state, self.journal).ready_for_paper)
+
+    def test_nonfinite_values_are_rejected(self):
+        from orderflow_edge_lab.execution import InstrumentSpec
+        for value in (float("nan"), float("inf"), True):
+            for construct in (lambda: MarketSnapshot("MNQ", value, 20001, self.now),
+                              lambda: RiskPolicy(slippage_ticks=value),
+                              lambda: InstrumentSpec("MNQ", value, 0.5),
+                              lambda: self.intent(target=value),
+                              lambda: PaperEngine(self.state, self.journal, starting_equity=value)):
+                with self.subTest(value=value), self.assertRaises(ValueError):
+                    construct()
+
+    def test_sizing_accounts_for_fill_stop_slippage_and_costs(self):
+        policy = RiskPolicy(commission_per_contract_per_side=0.5)
+        with PaperEngine(self.state, self.journal, policy=policy) as engine:
+            ident = engine.submit(self.intent(), self.market, now=self.now)
+            pos = engine.approve(ident, self.market, now=self.now)
+            loss_per_contract = (pos["entry_fill"] - (pos["stop"] - 0.25)) * 2 + 1
+            self.assertLessEqual(pos["contracts"] * loss_per_contract, 50)
+            self.assertEqual(pos["contracts"], 4)
+
+    def test_approval_rechecks_moved_market(self):
+        with PaperEngine(self.state, self.journal) as engine:
+            ident = engine.submit(self.intent(), self.market, now=self.now)
+            moved = MarketSnapshot("MNQ", 20011, 20011.25, self.now)
+            with self.assertRaisesRegex(RejectedIntent, "fill_outside_stop_target"):
+                engine.approve(ident, moved, now=self.now)
+            self.assertFalse(engine.state["positions"])
+
+    def test_stale_and_future_exits_preserve_open_position(self):
+        with PaperEngine(self.state, self.journal) as engine:
+            ident = engine.submit(self.intent(), self.market, now=self.now)
+            engine.approve(ident, self.market, now=self.now)
+            for seconds in (-10, 1):
+                market = MarketSnapshot("MNQ", 20001, 20001.25, self.now + timedelta(seconds=seconds))
+                with self.assertRaisesRegex(RejectedIntent, "stale_market"):
+                    engine.close_position(ident, market, reason="test", now=self.now)
+                self.assertIn(ident, engine.state["positions"])
+
+    def test_repeated_close_cannot_unlock_new_owner(self):
+        first = PaperEngine(self.state, self.journal)
+        first.close()
+        with PaperEngine(self.state, self.journal):
+            first.close()
+            with self.assertRaises(EngineLockError):
+                PaperEngine(self.state, self.journal)
+            with self.assertRaises(EngineLockError):
+                first.submit(self.intent(), self.market, now=self.now)
+
+    def test_exit_rolls_daily_accounting_before_booking_pnl(self):
+        with PaperEngine(self.state, self.journal) as engine:
+            ident = engine.submit(self.intent(), self.market, now=self.now)
+            engine.approve(ident, self.market, now=self.now)
+            engine.state["realized_pnl_today"] = -100
+            tomorrow = self.now + timedelta(days=1)
+            market = MarketSnapshot("MNQ", 20001, 20001.25, tomorrow)
+            result = engine.close_position(ident, market, reason="test", now=tomorrow)
+            self.assertEqual(engine.state["realized_pnl_today"], result["net_pnl"])
+            self.assertEqual(engine.state["trading_day"], tomorrow.date().isoformat())
+
     def test_duplicate_rejected(self):
         with PaperEngine(self.state, self.journal) as engine:
             engine.submit(self.intent(), self.market, now=self.now)

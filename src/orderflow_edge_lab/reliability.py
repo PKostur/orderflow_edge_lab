@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 from typing import Iterable
 
-from .execution import HashChainJournal, StateCorruptionError
+from .execution import HashChainJournal, StateCorruptionError, validate_execution_state
 
 UTC = timezone.utc
 
@@ -39,14 +39,12 @@ def _check_state(path: Path) -> HealthCheck:
         state = json.loads(path.read_text(encoding="utf-8"))
     except Exception as exc:
         return HealthCheck("execution_state", False, f"unreadable: {type(exc).__name__}")
-    if not isinstance(state, dict):
-        return HealthCheck("execution_state", False, "state must be an object")
-    required = {"version", "equity", "trading_day", "pending", "positions", "kill_switch"}
-    missing = sorted(required - set(state))
-    if missing:
-        return HealthCheck("execution_state", False, "missing fields: " + ",".join(missing))
-    if not isinstance(state["pending"], dict) or not isinstance(state["positions"], dict):
-        return HealthCheck("execution_state", False, "pending/positions must be objects")
+    try:
+        validate_execution_state(state)
+    except StateCorruptionError as exc:
+        return HealthCheck("execution_state", False, str(exc))
+    if state["kill_switch"] or state["equity"] <= 0:
+        return HealthCheck("execution_state", False, "execution halted by kill switch or nonpositive equity")
     return HealthCheck("execution_state", True, "parseable and structurally valid")
 
 

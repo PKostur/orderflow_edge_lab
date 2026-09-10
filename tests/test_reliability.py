@@ -21,6 +21,8 @@ class ReliabilityTests(unittest.TestCase):
             state = root / "state.json"
             state.write_text(json.dumps({
                 "version": 1,
+                "day_start_equity": 10000.0, "realized_pnl_today": 0.0,
+                "trades_today": 0, "seen_intents": [],
                 "equity": 10000.0,
                 "trading_day": "2026-09-10",
                 "pending": {},
@@ -41,6 +43,8 @@ class ReliabilityTests(unittest.TestCase):
             state = root / "state.json"
             state.write_text(json.dumps({
                 "version": 1, "equity": 1.0, "trading_day": "2026-09-10",
+                "day_start_equity": 1.0, "realized_pnl_today": 0.0,
+                "trades_today": 0, "seen_intents": [],
                 "pending": {}, "positions": {}, "kill_switch": False,
             }), encoding="utf-8")
             journal = root / "journal.jsonl"
@@ -54,6 +58,8 @@ class ReliabilityTests(unittest.TestCase):
             state = root / "state.json"
             state.write_text(json.dumps({
                 "version": 1, "equity": 1.0, "trading_day": "2026-09-10",
+                "day_start_equity": 1.0, "realized_pnl_today": 0.0,
+                "trades_today": 0, "seen_intents": [],
                 "pending": {}, "positions": {}, "kill_switch": False,
             }), encoding="utf-8")
             journal = root / "journal.jsonl"

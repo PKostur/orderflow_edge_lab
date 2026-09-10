@@ -13,6 +13,10 @@ from typing import Any, Mapping
 UTC = timezone.utc
 
 
+def _finite(value: object) -> bool:
+    return type(value) in (int, float) and math.isfinite(value)
+
+
 def _now() -> datetime:
     return datetime.now(tz=UTC)
 
@@ -39,6 +43,8 @@ class InstrumentSpec:
     max_contracts: int = 10
 
     def __post_init__(self) -> None:
+        if not all(_finite(v) for v in (self.tick_size, self.tick_value)) or type(self.max_contracts) is not int:
+            raise ValueError("instrument values must be finite and contracts integral")
         if self.tick_size <= 0 or self.tick_value <= 0 or self.max_contracts < 1:
             raise ValueError("invalid instrument specification")
 
@@ -64,12 +70,14 @@ class RiskPolicy:
     commission_per_contract_per_side: float = 0.0
 
     def __post_init__(self) -> None:
+        if not all(_finite(v) for v in asdict(self).values()):
+            raise ValueError("risk policy values must be finite numbers")
         if not 0 < self.risk_fraction <= 0.05:
             raise ValueError("risk_fraction must be in (0, 0.05]")
         if not 0 < self.max_daily_loss_fraction <= 0.20:
             raise ValueError("max_daily_loss_fraction must be in (0, 0.20]")
         for name in ("max_trades_per_day", "max_open_positions"):
-            if getattr(self, name) < 1:
+            if type(getattr(self, name)) is not int or getattr(self, name) < 1:
                 raise ValueError(f"{name} must be positive")
         for name in (
             "max_spread_ticks",
@@ -92,6 +100,8 @@ class MarketSnapshot:
     timestamp: datetime
 
     def __post_init__(self) -> None:
+        if not all(_finite(v) for v in (self.bid, self.ask)):
+            raise ValueError("market prices must be finite")
         if self.bid <= 0 or self.ask <= 0 or self.bid > self.ask:
             raise ValueError("invalid market snapshot")
         if self.timestamp.tzinfo is None:
@@ -109,6 +119,8 @@ class TradeIntent:
     signal_time: datetime
 
     def __post_init__(self) -> None:
+        if not all(_finite(v) for v in (self.entry_reference, self.stop, self.target)):
+            raise ValueError("intent prices must be finite")
         side = self.side.upper()
         object.__setattr__(self, "side", side)
         if side not in {"LONG", "SHORT"}:
@@ -148,6 +160,54 @@ class RejectedIntent(RuntimeError):
     pass
 
 
+def validate_execution_state(state: Any) -> None:
+    required = {"version", "equity", "day_start_equity", "realized_pnl_today",
+                "trading_day", "trades_today", "kill_switch", "pending",
+                "positions", "seen_intents"}
+    if not isinstance(state, dict) or not required <= state.keys():
+        raise StateCorruptionError("execution state is missing required fields")
+    if type(state["version"]) is not int or state["version"] != 1:
+        raise StateCorruptionError("unsupported execution state version")
+    if not all(_finite(state[k]) for k in ("equity", "day_start_equity", "realized_pnl_today")):
+        raise StateCorruptionError("execution balances must be finite")
+    if state["day_start_equity"] <= 0:
+        raise StateCorruptionError("day start equity must be positive")
+    if type(state["trades_today"]) is not int or state["trades_today"] < 0:
+        raise StateCorruptionError("invalid daily trade count")
+    if type(state["kill_switch"]) is not bool:
+        raise StateCorruptionError("kill switch must be boolean")
+    if not all(isinstance(state[k], dict) for k in ("pending", "positions")):
+        raise StateCorruptionError("pending and positions must be objects")
+    if not isinstance(state["seen_intents"], list) or not all(isinstance(x, str) for x in state["seen_intents"]):
+        raise StateCorruptionError("seen intents must be a string list")
+    try:
+        day = datetime.strptime(state["trading_day"], "%Y-%m-%d").date()
+        if day.isoformat() != state["trading_day"]:
+            raise ValueError("noncanonical day")
+        for ident, pending in state["pending"].items():
+            raw = dict(pending["intent"])
+            raw["signal_time"] = _parse_dt(raw["signal_time"])
+            if TradeIntent(**raw).intent_id != ident:
+                raise ValueError("pending intent hash mismatch")
+            _parse_dt(pending["submitted_at"])
+            if not _finite(pending["expires_at"]):
+                raise ValueError("invalid expiry")
+            if type(pending["contracts"]) is not int or pending["contracts"] < 1:
+                raise ValueError("invalid contracts")
+        for ident, position in state["positions"].items():
+            if position["intent_id"] != ident or position["side"] not in {"LONG", "SHORT"}:
+                raise ValueError("invalid position identity")
+            if not isinstance(position["symbol"], str) or not position["symbol"]:
+                raise ValueError("invalid position symbol")
+            if type(position["contracts"]) is not int or position["contracts"] < 1:
+                raise ValueError("invalid contracts")
+            if not all(_finite(position[k]) and position[k] > 0 for k in ("entry_fill", "stop", "target")):
+                raise ValueError("invalid position prices")
+            _parse_dt(position["opened_at"])
+    except (KeyError, TypeError, ValueError, AttributeError) as exc:
+        raise StateCorruptionError("invalid execution state values") from exc
+
+
 class HashChainJournal:
     def __init__(self, path: str | Path):
         self.path = Path(path)
@@ -166,6 +226,8 @@ class HashChainJournal:
                     item = json.loads(line)
                 except json.JSONDecodeError as exc:
                     raise StateCorruptionError(f"journal line {lineno} is invalid JSON") from exc
+                if not isinstance(item, dict):
+                    raise StateCorruptionError(f"journal line {lineno} must be an object")
                 supplied = item.pop("hash", None)
                 if item.get("prev_hash") != previous:
                     raise StateCorruptionError(f"journal chain broken at line {lineno}")
@@ -206,9 +268,10 @@ class _EngineLock:
         os.fsync(self.fd)
 
     def release(self) -> None:
-        if self.fd is not None:
-            os.close(self.fd)
-            self.fd = None
+        if self.fd is None:
+            return
+        os.close(self.fd)
+        self.fd = None
         try:
             self.path.unlink()
         except FileNotFoundError:
@@ -232,7 +295,7 @@ class PaperEngine:
         policy: RiskPolicy = RiskPolicy(),
         instruments: Mapping[str, InstrumentSpec] = DEFAULT_INSTRUMENTS,
     ):
-        if starting_equity <= 0:
+        if not _finite(starting_equity) or starting_equity <= 0:
             raise ValueError("starting_equity must be positive")
         self.state_path = Path(state_path)
         self.lock = _EngineLock(self.state_path.with_suffix(self.state_path.suffix + ".lock"))
@@ -276,22 +339,15 @@ class PaperEngine:
             state = json.loads(self.state_path.read_text(encoding="utf-8"))
         except Exception as exc:
             raise StateCorruptionError("execution state cannot be parsed; refusing reset") from exc
-        required = {
-            "version", "equity", "day_start_equity", "realized_pnl_today",
-            "trading_day", "trades_today", "kill_switch", "pending",
-            "positions", "seen_intents",
-        }
-        if not required <= set(state):
-            raise StateCorruptionError("execution state is missing required fields")
-        if state["version"] != self.STATE_VERSION:
-            raise StateCorruptionError("unsupported execution state version")
+        validate_execution_state(state)
         return state
 
     def _write_state(self, state: Mapping[str, Any]) -> None:
+        self._ensure_open()
         self.state_path.parent.mkdir(parents=True, exist_ok=True)
         tmp = self.state_path.with_suffix(self.state_path.suffix + ".partial")
         with tmp.open("w", encoding="utf-8") as handle:
-            handle.write(json.dumps(state, sort_keys=True, indent=2))
+            handle.write(json.dumps(state, sort_keys=True, indent=2, allow_nan=False))
             handle.flush()
             os.fsync(handle.fileno())
         os.replace(tmp, self.state_path)
@@ -311,6 +367,10 @@ class PaperEngine:
             self.state["trades_today"] = 0
             self._write_state(self.state)
 
+    def _ensure_open(self) -> None:
+        if self.lock.fd is None:
+            raise EngineLockError("execution engine is closed")
+
     def _validate(
         self,
         intent: TradeIntent,
@@ -319,6 +379,7 @@ class PaperEngine:
         *,
         allow_seen: bool = False,
     ) -> tuple[InstrumentSpec, int]:
+        self._ensure_open()
         now = _parse_dt(now)
         self._roll_day(now)
         if self.state["kill_switch"]:
@@ -339,11 +400,19 @@ class PaperEngine:
         spread_ticks = (market.ask - market.bid) / spec.tick_size
         if spread_ticks > self.policy.max_spread_ticks:
             raise RejectedIntent("spread")
-        risk_points = abs(intent.entry_reference - intent.stop)
-        reward_points = abs(intent.target - intent.entry_reference)
+        slip = self.policy.slippage_ticks * spec.tick_size
+        fill = market.ask + slip if intent.side == "LONG" else market.bid - slip
+        if (intent.side == "LONG" and not intent.stop < fill < intent.target
+                or intent.side == "SHORT" and not intent.target < fill < intent.stop):
+            raise RejectedIntent("fill_outside_stop_target")
+        risk_points = abs(fill - intent.stop)
+        reward_points = abs(intent.target - fill)
         if risk_points < spec.tick_size:
             raise RejectedIntent("stop_too_close")
-        if reward_points / risk_points < self.policy.min_reward_risk:
+        round_trip_cost = 2 * self.policy.commission_per_contract_per_side
+        risk_per_contract = (risk_points + slip) / spec.tick_size * spec.tick_value + round_trip_cost
+        reward_per_contract = (reward_points - slip) / spec.tick_size * spec.tick_value - round_trip_cost
+        if reward_per_contract / risk_per_contract < self.policy.min_reward_risk:
             raise RejectedIntent("reward_risk")
         if self.state["trades_today"] >= self.policy.max_trades_per_day:
             raise RejectedIntent("daily_trade_limit")
@@ -352,8 +421,8 @@ class PaperEngine:
         max_loss = self.state["day_start_equity"] * self.policy.max_daily_loss_fraction
         if self.state["realized_pnl_today"] <= -max_loss:
             raise RejectedIntent("daily_loss_limit")
-        risk_per_contract = risk_points / spec.tick_size * spec.tick_value
-        risk_budget = self.state["equity"] * self.policy.risk_fraction
+        risk_budget = min(self.state["equity"] * self.policy.risk_fraction,
+                          max_loss + self.state["realized_pnl_today"])
         contracts = min(spec.max_contracts, int(math.floor(risk_budget / risk_per_contract)))
         if contracts < 1:
             raise RejectedIntent("risk_budget_too_small")
@@ -393,11 +462,12 @@ class PaperEngine:
         *,
         now: datetime | None = None,
     ) -> dict[str, Any]:
+        self._ensure_open()
         now = _parse_dt(now or _now())
         pending = self.state["pending"].get(intent_id)
         if pending is None:
             raise RejectedIntent("unknown_pending_intent")
-        if now.timestamp() > float(pending["expires_at"]):
+        if now.timestamp() >= float(pending["expires_at"]):
             self.state["pending"].pop(intent_id, None)
             self._write_state(self.state)
             self.journal.append("intent_expired", {"intent_id": intent_id}, now)
@@ -436,6 +506,17 @@ class PaperEngine:
         self.journal.append("paper_position_opened", position, now)
         return position
 
+    def reject(self, intent_id: str, *, reason: str, now: datetime | None = None) -> None:
+        self._ensure_open()
+        now = _parse_dt(now or _now())
+        if not reason.strip():
+            raise ValueError("rejection reason is required")
+        if intent_id not in self.state["pending"]:
+            raise RejectedIntent("unknown_pending_intent")
+        self.state["pending"].pop(intent_id)
+        self._write_state(self.state)
+        self.journal.append("intent_rejected", {"intent_id": intent_id, "reason": reason}, now)
+
     def close_position(
         self,
         intent_id: str,
@@ -444,6 +525,7 @@ class PaperEngine:
         reason: str,
         now: datetime | None = None,
     ) -> dict[str, Any]:
+        self._ensure_open()
         now = _parse_dt(now or _now())
         position = self.state["positions"].get(intent_id)
         if position is None:
@@ -451,6 +533,12 @@ class PaperEngine:
         spec = self.instruments[position["symbol"]]
         if market.symbol != position["symbol"]:
             raise RejectedIntent("snapshot_symbol_mismatch")
+        market_age = (now - market.timestamp.astimezone(UTC)).total_seconds()
+        if market_age < 0 or market_age > self.policy.max_market_age_seconds:
+            raise RejectedIntent("stale_market")
+        if now < _parse_dt(position["opened_at"]):
+            raise RejectedIntent("close_before_open")
+        self._roll_day(now)
         if position["side"] == "LONG":
             exit_fill = market.bid - self.policy.slippage_ticks * spec.tick_size
             signed_points = exit_fill - position["entry_fill"]
@@ -483,6 +571,7 @@ class PaperEngine:
         flatten: bool = False,
         now: datetime | None = None,
     ) -> None:
+        self._ensure_open()
         now = _parse_dt(now or _now())
         self.state["kill_switch"] = True
         self._write_state(self.state)
@@ -496,6 +585,7 @@ class PaperEngine:
                 self.close_position(intent_id, snapshot, reason="kill_switch", now=now)
 
     def release_kill_switch(self, *, now: datetime | None = None) -> None:
+        self._ensure_open()
         now = _parse_dt(now or _now())
         self.state["kill_switch"] = False
         self._write_state(self.state)
