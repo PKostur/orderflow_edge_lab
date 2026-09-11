@@ -2,11 +2,18 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime, timezone
+import hashlib
 import json
 from pathlib import Path
 from typing import Iterable
 
-from .execution import HashChainJournal, StateCorruptionError, validate_execution_state, reconcile_execution
+from .execution import (
+    HashChainJournal,
+    StateCorruptionError,
+    _canonical,
+    validate_execution_state,
+    reconcile_execution,
+)
 
 UTC = timezone.utc
 ADMINISTRATIVE_EVENTS = {"engine_initialized", "legacy_state_migrated", "configuration_bound"}
@@ -45,6 +52,18 @@ def _parse_utc(value: object) -> datetime:
     return parsed.astimezone(UTC)
 
 
+def _is_sha256(value: object) -> bool:
+    return (
+        isinstance(value, str)
+        and len(value) == 64
+        and all(char in "0123456789abcdef" for char in value)
+    )
+
+
+def _sha256_payload(value: object) -> str:
+    return hashlib.sha256(_canonical(value).encode("utf-8")).hexdigest()
+
+
 def audit_journal_semantics(path: str | Path) -> dict[str, int]:
     """Validate event ordering and event-to-state invariants in a durable paper journal.
 
@@ -65,10 +84,6 @@ def audit_journal_semantics(path: str | Path) -> dict[str, int]:
         if not isinstance(event_type, str) or not event_type:
             raise StateCorruptionError(f"journal event type missing at line {lineno}")
         when = _parse_utc(row.get("timestamp"))
-        # Engine initialization and explicit migration/configuration checkpoints use
-        # persistence wall-clock time, not the strategy's operation clock. Compare
-        # only operational events so readiness enforces the same monotonic clock that
-        # PaperEngine enforces across submit/approve/close/kill operations.
         if event_type not in ADMINISTRATIVE_EVENTS:
             if previous_time is not None and when < previous_time:
                 raise StateCorruptionError(f"journal timestamp regression at line {lineno}")
@@ -151,6 +166,38 @@ def _check_state(path: Path) -> HealthCheck:
     return HealthCheck("execution_state", True, "parseable and structurally valid")
 
 
+def _check_pending_approval_bindings(path: Path) -> HealthCheck:
+    """Fail paper readiness when any pending proposal is not fully approval-bound."""
+    try:
+        state = json.loads(path.read_text(encoding="utf-8"))
+        validate_execution_state(state)
+        engine_config_sha256 = _sha256_payload(state["engine_config"])
+        for intent_id, pending in state["pending"].items():
+            token = pending.get("approval_token")
+            binding = pending.get("approval_binding")
+            if not _is_sha256(token) or not isinstance(binding, dict):
+                raise ValueError(f"pending proposal {intent_id} lacks approval binding")
+            if _sha256_payload(binding) != token:
+                raise ValueError(f"pending proposal {intent_id} has corrupt approval token")
+            if binding.get("intent_id") != intent_id:
+                raise ValueError(f"pending proposal {intent_id} binding identity mismatch")
+            for field in ("intent", "contracts", "submitted_at", "expires_at"):
+                if binding.get(field) != pending.get(field):
+                    raise ValueError(f"pending proposal {intent_id} binding terms mismatch")
+            if not _is_sha256(binding.get("evidence_sha256")):
+                raise ValueError(f"pending proposal {intent_id} evidence digest invalid")
+            if binding.get("engine_config_sha256") != engine_config_sha256:
+                raise ValueError(f"pending proposal {intent_id} configuration digest mismatch")
+            market = binding.get("submitted_market")
+            if not isinstance(market, dict) or set(market) != {"symbol", "bid", "ask", "timestamp"}:
+                raise ValueError(f"pending proposal {intent_id} market binding invalid")
+            if market.get("symbol") != pending["intent"].get("symbol"):
+                raise ValueError(f"pending proposal {intent_id} market symbol mismatch")
+    except (OSError, ValueError, TypeError, KeyError, AttributeError, StateCorruptionError) as exc:
+        return HealthCheck("approval_bindings", False, f"approval binding verification failed: {type(exc).__name__}: {exc}")
+    return HealthCheck("approval_bindings", True, "all pending proposals are fully approval-bound")
+
+
 def _check_journal(path: Path) -> HealthCheck:
     try:
         HashChainJournal.verify(path)
@@ -207,12 +254,15 @@ def deployment_readiness(
     validation_manifest: str | Path | None = None,
     additional_checks: Iterable[HealthCheck] = (),
 ) -> ReadinessReport:
+    state = Path(state_path)
+    journal = Path(journal_path)
     checks = [
-        _check_state(Path(state_path)),
-        _check_journal(Path(journal_path)),
-        _check_journal_semantics(Path(journal_path)),
+        _check_state(state),
+        _check_pending_approval_bindings(state),
+        _check_journal(journal),
+        _check_journal_semantics(journal),
         _check_fresh_validation(Path(validation_manifest) if validation_manifest else None),
-        _check_checkpoint(Path(state_path), Path(journal_path)),
+        _check_checkpoint(state, journal),
         *additional_checks,
     ]
     operational = all(c.passed for c in checks if c.name != "out_of_sample_evidence")

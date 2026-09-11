@@ -99,7 +99,6 @@ class PaperControlTests(unittest.TestCase):
         self.assertEqual(self.run_command("close", ident, "--market", str(market), "--reason", "operator")[0], 0)
         events = [json.loads(line) for line in self.journal.read_text().splitlines()]
         submitted = next(row for row in events if row["event_type"] == "intent_submitted")
-        bound = next(row for row in events if row["event_type"] == "approval_bound")
         evidence = submitted["payload"]["evidence"]
         self.assertEqual(len(evidence["export_sha256"]), 64)
         self.assertTrue(evidence["quality"]["passed"])
@@ -108,7 +107,7 @@ class PaperControlTests(unittest.TestCase):
         self.assertTrue(evidence["promotion"]["source_files_reverified"])
         self.assertEqual(evidence["promotion"]["candidate_id"], "manual-engineering")
         self.assertEqual(len(evidence["promotion"]["validation_report_sha256"]), 64)
-        self.assertEqual(bound["payload"]["approval_token"], token)
+        self.assertEqual(submitted["payload"]["approval_token"], token)
 
     def test_cli_rejects_missing_approval_token(self):
         self.assertEqual(self.run_command("init")[0], 0)

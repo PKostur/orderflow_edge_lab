@@ -5,7 +5,13 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from orderflow_edge_lab.execution import HashChainJournal, PaperEngine, StateCorruptionError
+from orderflow_edge_lab.execution import (
+    HashChainJournal,
+    MarketSnapshot,
+    PaperEngine,
+    StateCorruptionError,
+    TradeIntent,
+)
 from orderflow_edge_lab.reliability import audit_journal_semantics, deployment_readiness
 
 UTC = timezone.utc
@@ -44,6 +50,35 @@ class ReliabilityTests(unittest.TestCase):
             self.assertFalse(evidence.passed)
             semantics = next(c for c in report.checks if c.name == "journal_semantics")
             self.assertTrue(semantics.passed)
+            bindings = next(c for c in report.checks if c.name == "approval_bindings")
+            self.assertTrue(bindings.passed)
+
+    def test_unbound_pending_proposal_fails_paper_readiness(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            state_path = root / "state.json"
+            journal_path = root / "journal.jsonl"
+            now = datetime(2026, 9, 11, 1, 0, tzinfo=UTC)
+            intent = TradeIntent(
+                strategy_id="generic-unbound",
+                symbol="MNQ",
+                side="LONG",
+                entry_reference=20000.25,
+                stop=19995.25,
+                target=20010.25,
+                signal_time=now,
+            )
+            market = MarketSnapshot("MNQ", 20000.00, 20000.25, now)
+            with PaperEngine(state_path, journal_path) as engine:
+                ident = engine.submit(intent, market, now=now)
+                self.assertIn(ident, engine.state["pending"])
+                self.assertNotIn("approval_binding", engine.state["pending"][ident])
+
+            report = deployment_readiness(state_path, journal_path)
+            self.assertFalse(report.ready_for_paper)
+            bindings = next(c for c in report.checks if c.name == "approval_bindings")
+            self.assertFalse(bindings.passed)
+            self.assertIn("lacks approval binding", bindings.detail)
 
     def test_corrupt_journal_fails_closed(self):
         with tempfile.TemporaryDirectory() as td:

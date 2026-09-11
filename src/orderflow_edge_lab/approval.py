@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from copy import deepcopy
-from datetime import datetime
+from dataclasses import asdict
+from datetime import datetime, timezone
 import hashlib
 from typing import Any, Mapping
 
@@ -63,30 +64,55 @@ class ApprovalBoundPaperEngine(PaperEngine):
         now: datetime | None = None,
         evidence: Mapping[str, Any] | None = None,
     ) -> str:
-        # Canonicalize before changing durable state so invalid/non-JSON evidence
-        # cannot create a half-bound approval proposal.
+        """Durably persist a fully approval-bound proposal in one checkpoint.
+
+        Binding used to be committed after ``PaperEngine.submit``. A process failure
+        between those two commits could leave a seen, pending intent without an
+        approval binding, making it impossible to approve or resubmit safely. Build
+        the complete proposal first, then persist it with one journal/state commit.
+        """
+        # Canonicalize evidence before any durable operation such as a day roll so
+        # malformed/non-JSON evidence cannot partially advance execution state.
         evidence_payload = dict(evidence) if evidence is not None else None
         evidence_sha256 = _sha256_payload(evidence_payload)
-        intent_id = super().submit(intent, market, now=now, evidence=evidence_payload)
-        pending = self.state["pending"][intent_id]
+
+        operation_time = self._operation_time(now)
+        _, contracts = self._validate(intent, market, operation_time)
+        intent_id = intent.intent_id
+        submitted_at = operation_time.isoformat()
+        expires_at = operation_time.timestamp() + self.policy.approval_ttl_seconds
+        intent_payload = {
+            **asdict(intent),
+            "signal_time": intent.signal_time.astimezone(timezone.utc).isoformat(),
+        }
         binding = {
             "intent_id": intent_id,
-            "intent": deepcopy(pending["intent"]),
-            "contracts": int(pending["contracts"]),
-            "submitted_at": pending["submitted_at"],
-            "expires_at": float(pending["expires_at"]),
+            "intent": deepcopy(intent_payload),
+            "contracts": contracts,
+            "submitted_at": submitted_at,
+            "expires_at": expires_at,
             "submitted_market": _market_payload(market),
             "evidence_sha256": evidence_sha256,
             "engine_config_sha256": _sha256_payload(self.state["engine_config"]),
         }
         token = _sha256_payload(binding)
-        pending["approval_binding"] = binding
-        pending["approval_token"] = token
-        operation_time = _parse_dt(pending["submitted_at"])
+        pending = {
+            "intent": intent_payload,
+            "submitted_at": submitted_at,
+            "expires_at": expires_at,
+            "contracts": contracts,
+            "approval_binding": binding,
+            "approval_token": token,
+        }
+
+        self.state["pending"][intent_id] = pending
+        self.state["seen_intents"].append(intent_id)
         self._commit(
-            "approval_bound",
+            "intent_submitted",
             {
                 "intent_id": intent_id,
+                "contracts": contracts,
+                "evidence": evidence_payload,
                 "approval_token": token,
                 "evidence_sha256": evidence_sha256,
                 "engine_config_sha256": binding["engine_config_sha256"],
