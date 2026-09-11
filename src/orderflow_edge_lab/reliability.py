@@ -14,6 +14,7 @@ from .execution import (
     validate_execution_state,
     reconcile_execution,
 )
+from .transition_audit import audit_checkpoint_transitions
 
 UTC = timezone.utc
 ADMINISTRATIVE_EVENTS = {"engine_initialized", "legacy_state_migrated", "configuration_bound"}
@@ -145,7 +146,13 @@ def audit_journal_semantics(path: str | Path) -> dict[str, int]:
 
         checked += 1
 
-    return {"records": len(records), "checkpoints": checked, "last_revision": previous_revision}
+    transitions = audit_checkpoint_transitions(records)
+    return {
+        "records": len(records),
+        "checkpoints": checked,
+        "transitions": transitions,
+        "last_revision": previous_revision,
+    }
 
 
 def _check_state(path: Path) -> HealthCheck:
@@ -214,7 +221,7 @@ def _check_journal_semantics(path: Path) -> HealthCheck:
     return HealthCheck(
         "journal_semantics",
         True,
-        f"event ordering and state invariants valid across {stats['records']} records",
+        f"event ordering and state transitions valid across {stats['records']} records",
     )
 
 
