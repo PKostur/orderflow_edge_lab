@@ -12,6 +12,7 @@ from .research import Candidate, enforce_future_only, oos_summary, parse_utc, se
 
 
 OPS = {"<": operator.lt, "<=": operator.le, ">": operator.gt, ">=": operator.ge, "==": operator.eq}
+COST_COMPONENTS = ("fees", "slippage", "spread", "other")
 
 
 def _number(value: object) -> float:
@@ -41,6 +42,24 @@ def _invalid_constant(value):
 
 def _json(raw):
     return json.loads(raw, object_pairs_hook=_object, parse_constant=_invalid_constant)
+
+
+def _cost_provenance(row):
+    model_id = row.get("cost_model_id")
+    if not isinstance(model_id, str) or not model_id.strip():
+        raise ValueError("cost_model_id must be a nonempty string")
+    components = row.get("cost_components_r")
+    if not isinstance(components, dict) or set(components) != set(COST_COMPONENTS):
+        raise ValueError("cost_components_r must contain fees, slippage, spread, and other")
+    parsed = {name: _number(components[name]) for name in COST_COMPONENTS}
+    if any(value < 0 for value in parsed.values()):
+        raise ValueError("cost components cannot be negative")
+    total = _number(row["cost_r"])
+    if total <= 0:
+        raise ValueError("real-market evidence requires positive transaction costs")
+    if not math.isclose(sum(parsed.values()), total, rel_tol=1e-9, abs_tol=1e-12):
+        raise ValueError("cost_r does not match cost_components_r")
+    return model_id.strip(), total
 
 
 def _dependence_diagnostics(rows):
@@ -100,6 +119,7 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
     if not candidates:
         raise ValueError("candidate registry is empty")
     grouped = {key: [] for key in candidates}
+    costs = {key: {"values": [], "models": set()} for key in candidates}
     seen = set()
     previous_time = None
     for line in observation_bytes.decode("utf-8").splitlines():
@@ -133,15 +153,17 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
             raise ValueError("outcome must finish within observed coverage")
         if row.get("source_kind") != "real_market":
             raise ValueError("synthetic or unspecified source is not future-market evidence")
-        gross, costs = _number(row["gross_return_r"]), _number(row["cost_r"])
-        if costs < 0:
-            raise ValueError("costs cannot be negative")
-        net = _number(gross - costs)
+        gross = _number(row["gross_return_r"])
+        model_id, cost = _cost_provenance(row)
+        net = _number(gross - cost)
         grouped[candidate.candidate_id].append((event_time, outcome_time, net))
+        costs[candidate.candidate_id]["values"].append(cost)
+        costs[candidate.candidate_id]["models"].add(model_id)
     reports = []
     for key, candidate in candidates.items():
         rows = grouped[key]
         windows = sequential_windows(candidate, [event for event, _, _ in rows], observed_through=coverage)
+        cost_values = costs[key]["values"]
         reports.append({
             "candidate_id": key,
             "windows": [{**asdict(window), "start": window.start.isoformat(), "end": window.end.isoformat(),
@@ -149,9 +171,16 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
                         for window in windows],
             "summary": oos_summary([net for _, _, net in rows]),
             "dependence": _dependence_diagnostics(rows),
+            "cost_provenance": {
+                "model_ids": sorted(costs[key]["models"]),
+                "observations": len(cost_values),
+                "min_cost_r": min(cost_values) if cost_values else None,
+                "mean_cost_r": sum(cost_values) / len(cost_values) if cost_values else None,
+                "max_cost_r": max(cost_values) if cost_values else None,
+            },
         })
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "audit_status": "supplied_observations_passed_structural_checks",
         "registry_sha256": hashlib.sha256(registry_bytes).hexdigest(),
         "observations_sha256": hashlib.sha256(observation_bytes).hexdigest(),
@@ -162,9 +191,10 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
         "deployment_eligible": False,
         "verified_out_of_sample_evidence": False,
         "limitations": [
-            "Source labels, coverage, returns, and costs are caller supplied, not independently verified.",
+            "Source labels, coverage, returns, cost model labels, and cost components are caller supplied, not independently verified.",
             "Registry hashes identify rules but do not prove when rules were frozen.",
             "Event-level summaries do not assume independence; overlap diagnostics and daily clustering are descriptive only.",
+            "Explicit positive transaction costs reduce frictionless backtest risk but do not prove fills were executable.",
             "Descriptive summaries do not establish independence, significance, or profitability.",
         ],
     }
