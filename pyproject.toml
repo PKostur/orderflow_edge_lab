@@ -7,7 +7,7 @@ name = "orderflow-edge-lab"
 version = "1.0.0"
 description = "Research-first order-flow validation and paper execution infrastructure"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = ["websockets>=12,<16"]
 
 [project.scripts]
 orderflow-paper = "orderflow_edge_lab.cli.paper:main"
@@ -18,6 +18,8 @@ orderflow-discover-endpoint = "orderflow_edge_lab.cli.discover_endpoint:main"
 orderflow-analyze-endpoint = "orderflow_edge_lab.cli.analyze_endpoint:main"
 orderflow-audit-causality = "orderflow_edge_lab.cli.audit_causality:main"
 orderflow-promotion-check = "orderflow_edge_lab.cli.promote:main"
+orderflow-mexc-record = "orderflow_edge_lab.cli.mexc_record:main"
+orderflow-mexc-replay = "orderflow_edge_lab.cli.mexc_replay:main"
 
 [project.gui-scripts]
 orderflow-dxfeed-login = "orderflow_edge_lab.cli.login:main"
