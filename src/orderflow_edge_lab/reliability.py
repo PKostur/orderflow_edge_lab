@@ -32,6 +32,101 @@ class ReadinessReport:
         }
 
 
+def _parse_utc(value: object) -> datetime:
+    if not isinstance(value, str):
+        raise StateCorruptionError("journal timestamp must be a string")
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise StateCorruptionError("journal timestamp is invalid") from exc
+    if parsed.tzinfo is None:
+        raise StateCorruptionError("journal timestamp must be timezone aware")
+    return parsed.astimezone(UTC)
+
+
+def audit_journal_semantics(path: str | Path) -> dict[str, int]:
+    """Validate event ordering and event-to-state invariants in a durable paper journal.
+
+    The hash chain proves bytes were not silently changed after the fact. This audit
+    adds a separate semantic layer so a cryptographically valid but internally
+    implausible event history still fails deployment readiness.
+    """
+    records = HashChainJournal.records(path)
+    if not records:
+        raise StateCorruptionError("journal has no durable checkpoints")
+
+    previous_time: datetime | None = None
+    previous_revision = 0
+    checked = 0
+
+    for lineno, row in enumerate(records, start=1):
+        event_type = row.get("event_type")
+        if not isinstance(event_type, str) or not event_type:
+            raise StateCorruptionError(f"journal event type missing at line {lineno}")
+        when = _parse_utc(row.get("timestamp"))
+        if previous_time is not None and when < previous_time:
+            raise StateCorruptionError(f"journal timestamp regression at line {lineno}")
+        previous_time = when
+
+        payload = row.get("payload")
+        if not isinstance(payload, dict):
+            raise StateCorruptionError(f"journal payload must be an object at line {lineno}")
+        state = payload.get("state_after")
+        if state is None:
+            if previous_revision:
+                raise StateCorruptionError(f"event lacks checkpoint after checkpoint history at line {lineno}")
+            continue
+        validate_execution_state(state)
+        revision = state.get("revision")
+        if revision != previous_revision + 1:
+            raise StateCorruptionError(f"nonconsecutive state revision at line {lineno}")
+        previous_revision = revision
+
+        seen = state["seen_intents"]
+        if len(seen) != len(set(seen)):
+            raise StateCorruptionError(f"duplicate seen intent at line {lineno}")
+
+        intent_id = payload.get("intent_id")
+        if event_type == "intent_submitted":
+            if not isinstance(intent_id, str) or intent_id not in state["pending"] or intent_id not in seen:
+                raise StateCorruptionError(f"submitted intent not represented in state at line {lineno}")
+        elif event_type in {"intent_rejected", "intent_expired"}:
+            if not isinstance(intent_id, str) or intent_id in state["pending"]:
+                raise StateCorruptionError(f"resolved intent remains pending at line {lineno}")
+        elif event_type == "pending_intents_expired":
+            intent_ids = payload.get("intent_ids")
+            if not isinstance(intent_ids, list) or not all(isinstance(x, str) for x in intent_ids):
+                raise StateCorruptionError(f"invalid expired intent list at line {lineno}")
+            if any(x in state["pending"] for x in intent_ids):
+                raise StateCorruptionError(f"expired intent remains pending at line {lineno}")
+        elif event_type == "paper_position_opened":
+            opened_id = payload.get("intent_id")
+            if not isinstance(opened_id, str) or opened_id not in state["positions"] or opened_id in state["pending"]:
+                raise StateCorruptionError(f"opened position not represented in state at line {lineno}")
+            if opened_id not in seen:
+                raise StateCorruptionError(f"opened position has no seen intent at line {lineno}")
+        elif event_type == "paper_position_closed":
+            closed_id = payload.get("intent_id")
+            if not isinstance(closed_id, str) or closed_id in state["positions"]:
+                raise StateCorruptionError(f"closed position remains open at line {lineno}")
+        elif event_type == "kill_switch_engaged":
+            if state["kill_switch"] is not True:
+                raise StateCorruptionError(f"kill switch event/state mismatch at line {lineno}")
+            cancelled = payload.get("cancelled_intents", [])
+            if not isinstance(cancelled, list) or any(x in state["pending"] for x in cancelled):
+                raise StateCorruptionError(f"kill switch left cancelled intents pending at line {lineno}")
+        elif event_type == "kill_switch_released":
+            if state["kill_switch"] is not False:
+                raise StateCorruptionError(f"kill switch release/state mismatch at line {lineno}")
+        elif event_type == "trading_day_rolled":
+            if payload.get("trading_day") != state["trading_day"]:
+                raise StateCorruptionError(f"trading day event/state mismatch at line {lineno}")
+
+        checked += 1
+
+    return {"records": len(records), "checkpoints": checked, "last_revision": previous_revision}
+
+
 def _check_state(path: Path) -> HealthCheck:
     if not path.exists():
         return HealthCheck("execution_state", False, "state file missing")
@@ -56,6 +151,18 @@ def _check_journal(path: Path) -> HealthCheck:
     except (StateCorruptionError, OSError, ValueError, TypeError, AttributeError) as exc:
         return HealthCheck("journal_chain", False, f"journal verification failed: {type(exc).__name__}")
     return HealthCheck("journal_chain", True, "hash chain valid")
+
+
+def _check_journal_semantics(path: Path) -> HealthCheck:
+    try:
+        stats = audit_journal_semantics(path)
+    except (StateCorruptionError, OSError, ValueError, TypeError, AttributeError) as exc:
+        return HealthCheck("journal_semantics", False, f"semantic audit failed: {type(exc).__name__}: {exc}")
+    return HealthCheck(
+        "journal_semantics",
+        True,
+        f"event ordering and state invariants valid across {stats['records']} records",
+    )
 
 
 def _check_checkpoint(state_path: Path, journal_path: Path) -> HealthCheck:
@@ -97,11 +204,12 @@ def deployment_readiness(
     checks = [
         _check_state(Path(state_path)),
         _check_journal(Path(journal_path)),
+        _check_journal_semantics(Path(journal_path)),
         _check_fresh_validation(Path(validation_manifest) if validation_manifest else None),
         _check_checkpoint(Path(state_path), Path(journal_path)),
         *additional_checks,
     ]
-    operational = all(c.passed for i, c in enumerate(checks) if i != 2)
+    operational = all(c.passed for c in checks if c.name != "out_of_sample_evidence")
     # Live remains deliberately impossible in this repository. A future broker
     # adapter requires a separate, explicit design and reconciliation gate.
     return ReadinessReport(ready_for_paper=operational, ready_for_live=False, checks=tuple(checks))
