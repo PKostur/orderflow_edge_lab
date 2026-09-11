@@ -13,6 +13,7 @@ from .research import Candidate, enforce_future_only, oos_summary, parse_utc, se
 
 OPS = {"<": operator.lt, "<=": operator.le, ">": operator.gt, ">=": operator.ge, "==": operator.eq}
 COST_COMPONENTS = ("fees", "slippage", "spread", "other")
+RETURN_PRICE_FIELDS = ("entry_price", "exit_price", "initial_stop_price")
 
 
 def _number(value: object) -> float:
@@ -60,6 +61,30 @@ def _cost_provenance(row):
     if not math.isclose(sum(parsed.values()), total, rel_tol=1e-9, abs_tol=1e-12):
         raise ValueError("cost_r does not match cost_components_r")
     return model_id.strip(), total
+
+
+def _return_provenance(row, candidate):
+    provenance = row.get("return_provenance")
+    if not isinstance(provenance, dict) or set(provenance) != set(RETURN_PRICE_FIELDS):
+        raise ValueError("return_provenance must contain entry_price, exit_price, and initial_stop_price")
+    prices = {name: _number(provenance[name]) for name in RETURN_PRICE_FIELDS}
+    if any(value <= 0 for value in prices.values()):
+        raise ValueError("return provenance prices must be positive")
+    entry = prices["entry_price"]
+    exit_price = prices["exit_price"]
+    stop = prices["initial_stop_price"]
+    if candidate.direction == "long":
+        if stop >= entry:
+            raise ValueError("long initial_stop_price must be below entry_price")
+        computed = (exit_price - entry) / (entry - stop)
+    else:
+        if stop <= entry:
+            raise ValueError("short initial_stop_price must be above entry_price")
+        computed = (entry - exit_price) / (stop - entry)
+    reported = _number(row["gross_return_r"])
+    if not math.isclose(reported, computed, rel_tol=1e-9, abs_tol=1e-12):
+        raise ValueError("gross_return_r does not match return_provenance prices")
+    return computed
 
 
 def _dependence_diagnostics(rows):
@@ -120,6 +145,7 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
         raise ValueError("candidate registry is empty")
     grouped = {key: [] for key in candidates}
     costs = {key: {"values": [], "model": None} for key in candidates}
+    return_counts = {key: 0 for key in candidates}
     seen = set()
     previous_time = None
     for line in observation_bytes.decode("utf-8").splitlines():
@@ -155,7 +181,8 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
             raise ValueError("outcome must finish within observed coverage")
         if row.get("source_kind") != "real_market":
             raise ValueError("synthetic or unspecified source is not future-market evidence")
-        gross = _number(row["gross_return_r"])
+        gross = _return_provenance(row, candidate)
+        return_counts[candidate.candidate_id] += 1
         model_id, cost = _cost_provenance(row)
         frozen_model = costs[candidate.candidate_id]["model"]
         if frozen_model is None:
@@ -181,6 +208,10 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
                         for window in windows],
             "summary": oos_summary([net for _, _, net in rows]),
             "dependence": _dependence_diagnostics(rows),
+            "return_provenance": {
+                "observations_recomputed": return_counts[key],
+                "formula": "directional_price_change / abs(entry_price - initial_stop_price)",
+            },
             "cost_provenance": {
                 "model_ids": [cost_model] if cost_model is not None else [],
                 "observations": len(cost_values),
@@ -190,7 +221,7 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
             },
         })
     return {
-        "schema_version": 3,
+        "schema_version": 4,
         "audit_status": "supplied_observations_passed_structural_checks",
         "registry_sha256": hashlib.sha256(registry_bytes).hexdigest(),
         "observations_sha256": hashlib.sha256(observation_bytes).hexdigest(),
@@ -201,9 +232,10 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
         "deployment_eligible": False,
         "verified_out_of_sample_evidence": False,
         "limitations": [
-            "Source labels, coverage, returns, cost model labels, and cost components are caller supplied, not independently verified.",
+            "Source labels, coverage, prices, cost model labels, and cost components are caller supplied, not independently verified.",
             "Registry hashes identify rules but do not prove when rules were frozen.",
             "Event-level summaries do not assume independence; overlap diagnostics and daily clustering are descriptive only.",
+            "Gross R is recomputed from supplied prices and initial stop distance, but supplied prices and fill timestamps are not independently verified.",
             "Explicit positive transaction costs reduce frictionless backtest risk but do not prove fills were executable.",
             "Descriptive summaries do not establish independence, significance, or profitability.",
         ],
