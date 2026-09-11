@@ -8,6 +8,7 @@ import sys
 import tempfile
 
 from orderflow_edge_lab.approval import ApprovalBoundPaperEngine
+from orderflow_edge_lab.economics import load_economics_policy
 from orderflow_edge_lab.execution import (
     DEFAULT_INSTRUMENTS,
     HashChainJournal,
@@ -58,7 +59,6 @@ def smoke_paper() -> list[str]:
             intent_id = engine.submit(intent, market, now=now, evidence={"smoke": True})
             token = engine.approval_token_for(intent_id)
 
-            # No approval can proceed without the integrity token returned at submit.
             try:
                 engine.approve(intent_id, market, now=now)
             except RejectedIntent as exc:
@@ -67,8 +67,6 @@ def smoke_paper() -> list[str]:
             else:
                 failures.append("missing approval token was accepted")
 
-            # A market move that changes allowable size must not silently alter the
-            # terms the operator was shown at submission.
             moved = MarketSnapshot("MNQ", 19999.00, 19999.25, now)
             try:
                 engine.approve(intent_id, moved, approval_token=token, now=now)
@@ -118,6 +116,14 @@ def main() -> int:
     checks["candidate_count"] = len(candidates)
     if not candidates:
         failures.append("candidate registry empty")
+
+    try:
+        economics_raw = json.loads((root / "config" / "economics.json").read_text(encoding="utf-8"))
+        economics = load_economics_policy(economics_raw)
+        checks["economics"] = economics.report()
+    except Exception as exc:
+        checks["economics"] = f"fail: {type(exc).__name__}: {exc}"
+        failures.append("economics configuration invalid")
 
     try:
         smoke_failures = smoke_paper()
