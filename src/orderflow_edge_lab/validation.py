@@ -14,6 +14,7 @@ from .research import Candidate, enforce_future_only, oos_summary, parse_utc, se
 OPS = {"<": operator.lt, "<=": operator.le, ">": operator.gt, ">=": operator.ge, "==": operator.eq}
 COST_COMPONENTS = ("fees", "slippage", "spread", "other")
 RETURN_PRICE_FIELDS = ("entry_price", "exit_price", "initial_stop_price")
+SOURCE_PROVENANCE_FIELDS = ("dataset_sha256", "record_id")
 
 
 def _number(value: object) -> float:
@@ -87,6 +88,22 @@ def _return_provenance(row, candidate):
     return computed
 
 
+def _source_provenance(row):
+    provenance = row.get("source_provenance")
+    if not isinstance(provenance, dict) or set(provenance) != set(SOURCE_PROVENANCE_FIELDS):
+        raise ValueError("source_provenance must contain dataset_sha256 and record_id")
+    digest = provenance.get("dataset_sha256")
+    record_id = provenance.get("record_id")
+    if not isinstance(digest, str):
+        raise ValueError("dataset_sha256 must be a 64-character hexadecimal SHA-256")
+    digest = digest.strip().lower()
+    if len(digest) != 64 or any(ch not in "0123456789abcdef" for ch in digest):
+        raise ValueError("dataset_sha256 must be a 64-character hexadecimal SHA-256")
+    if not isinstance(record_id, str) or not record_id.strip():
+        raise ValueError("source record_id must be a nonempty string")
+    return digest, record_id.strip()
+
+
 def _dependence_diagnostics(rows):
     """Describe obvious temporal dependence without pretending observations are IID.
 
@@ -146,7 +163,10 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
     grouped = {key: [] for key in candidates}
     costs = {key: {"values": [], "model": None} for key in candidates}
     return_counts = {key: 0 for key in candidates}
+    source_datasets = {key: set() for key in candidates}
+    source_counts = {key: 0 for key in candidates}
     seen = set()
+    seen_source = set()
     previous_time = None
     for line in observation_bytes.decode("utf-8").splitlines():
         row = _json(line)
@@ -181,6 +201,13 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
             raise ValueError("outcome must finish within observed coverage")
         if row.get("source_kind") != "real_market":
             raise ValueError("synthetic or unspecified source is not future-market evidence")
+        dataset_hash, record_id = _source_provenance(row)
+        source_key = (candidate.candidate_id, dataset_hash, record_id)
+        if source_key in seen_source:
+            raise ValueError("duplicate raw source record for candidate")
+        seen_source.add(source_key)
+        source_datasets[candidate.candidate_id].add(dataset_hash)
+        source_counts[candidate.candidate_id] += 1
         gross = _return_provenance(row, candidate)
         return_counts[candidate.candidate_id] += 1
         model_id, cost = _cost_provenance(row)
@@ -208,6 +235,10 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
                         for window in windows],
             "summary": oos_summary([net for _, _, net in rows]),
             "dependence": _dependence_diagnostics(rows),
+            "source_provenance": {
+                "dataset_sha256": sorted(source_datasets[key]),
+                "unique_records": source_counts[key],
+            },
             "return_provenance": {
                 "observations_recomputed": return_counts[key],
                 "formula": "directional_price_change / abs(entry_price - initial_stop_price)",
@@ -221,7 +252,7 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
             },
         })
     return {
-        "schema_version": 4,
+        "schema_version": 5,
         "audit_status": "supplied_observations_passed_structural_checks",
         "registry_sha256": hashlib.sha256(registry_bytes).hexdigest(),
         "observations_sha256": hashlib.sha256(observation_bytes).hexdigest(),
@@ -232,7 +263,8 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
         "deployment_eligible": False,
         "verified_out_of_sample_evidence": False,
         "limitations": [
-            "Source labels, coverage, prices, cost model labels, and cost components are caller supplied, not independently verified.",
+            "Source labels, dataset hashes, record IDs, coverage, prices, cost model labels, and cost components are caller supplied, not independently verified.",
+            "Dataset hashes make source reuse auditable but do not prove export authenticity or completeness.",
             "Registry hashes identify rules but do not prove when rules were frozen.",
             "Event-level summaries do not assume independence; overlap diagnostics and daily clustering are descriptive only.",
             "Gross R is recomputed from supplied prices and initial stop distance, but supplied prices and fill timestamps are not independently verified.",
