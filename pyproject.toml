@@ -15,6 +15,7 @@ orderflow-probe = "orderflow_edge_lab.cli.probe:main"
 orderflow-validate = "orderflow_edge_lab.cli.validate:main"
 orderflow-readiness = "orderflow_edge_lab.cli.readiness:main"
 orderflow-discover-endpoint = "orderflow_edge_lab.cli.discover_endpoint:main"
+orderflow-analyze-endpoint = "orderflow_edge_lab.cli.analyze_endpoint:main"
 
 [project.gui-scripts]
 orderflow-dxfeed-login = "orderflow_edge_lab.cli.login:main"
