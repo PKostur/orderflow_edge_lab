@@ -18,7 +18,8 @@ orderflow-discover-endpoint = "orderflow_edge_lab.cli.discover_endpoint:main"
 orderflow-analyze-endpoint = "orderflow_edge_lab.cli.analyze_endpoint:main"
 orderflow-audit-causality = "orderflow_edge_lab.cli.audit_causality:main"
 orderflow-promotion-check = "orderflow_edge_lab.cli.promote:main"
-orderflow-mexc-record = "orderflow_edge_lab.cli.mexc_record:main"
+orderflow-mexc-record = "orderflow_edge_lab.cli.mexc_record_strict:main"
+orderflow-mexc-audit = "orderflow_edge_lab.cli.mexc_audit:main"
 orderflow-mexc-replay = "orderflow_edge_lab.cli.mexc_replay:main"
 
 [project.gui-scripts]
