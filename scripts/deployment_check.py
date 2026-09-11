@@ -79,8 +79,18 @@ def smoke_paper() -> list[str]:
                 failures.append("approval drift did not preserve pending intent and flat state")
 
             records = HashChainJournal.records(journal)
-            if not any(row["event_type"] == "approval_bound" for row in records):
-                failures.append("approval binding was not durably journaled")
+            submitted = next((row for row in records if row["event_type"] == "intent_submitted"), None)
+            if submitted is None:
+                failures.append("paper proposal was not durably journaled")
+            else:
+                snapshot = submitted.get("payload", {}).get("state_after", {})
+                pending = snapshot.get("pending", {}).get(intent_id, {})
+                if pending.get("approval_token") != token or not isinstance(pending.get("approval_binding"), dict):
+                    failures.append("approval binding was not atomically journaled with submission")
+                if submitted.get("payload", {}).get("approval_token") != token:
+                    failures.append("approval token was not recorded on submission event")
+            if any(row["event_type"] == "approval_bound" for row in records):
+                failures.append("legacy second approval binding checkpoint still exists")
             if not any(row["event_type"] == "approval_token_rejected" for row in records):
                 failures.append("missing approval token attempt was not durably journaled")
             if not any(row["event_type"] == "approval_terms_changed" for row in records):
