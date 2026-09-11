@@ -4,25 +4,23 @@ This path records public MEXC Futures trades and price-level depth for research.
 
 ## Why this path
 
-For ENA/USDT and BTC/USDT research, using the venue's own public market-data streams avoids trying to infer MEXC behavior from another market or from an undocumented desktop bridge. The recorder stores the raw exchange messages before deriving any features so future research can be replayed from immutable source data.
+For ENA/USDT and BTC/USDT research, using the venue's own public market-data streams avoids trying to infer MEXC behavior from another market or from an undocumented desktop bridge. The recorder stores raw exchange messages before deriving features so research can be replayed from immutable source data.
 
-MEXC's current Futures API documentation states that public market endpoints do not require authentication, that the Futures REST base URL is `https://api.mexc.com`, and that the native Futures WebSocket endpoint is `wss://contract.mexc.com/edge`. The WebSocket host is configurable because MEXC documents REST and WebSocket endpoints separately.
+Official MEXC Futures documentation:
 
-Official references:
-
+- https://mexcdevelop.github.io/apidocs/contract_v1_en/
 - https://www.mexc.com/api-docs/futures/integration-guide
 - https://www.mexc.com/api-docs/futures/websocket-api/native-ws-endpoint
 - https://www.mexc.com/api-docs/futures/websocket-api/deal
 - https://www.mexc.com/api-docs/futures/websocket-api/order-book-depth
-- https://www.mexc.com/api-docs/futures/websocket-api/incremental-order-book-maintenance-mechanism
+
+The current native Futures WebSocket endpoint is `wss://contract.mexc.com/edge`. Public market endpoints do not require authentication.
 
 ## Install
 
 ```bash
 python -m pip install -e .
 ```
-
-The only added runtime dependency is the `websockets` client library. REST snapshots use Python's standard library.
 
 ## Record ENA and BTC
 
@@ -32,19 +30,10 @@ The default symbols are `ENA_USDT` and `BTC_USDT`:
 orderflow-mexc-record
 ```
 
-Record for one hour:
+A short validation capture:
 
 ```bash
-orderflow-mexc-record --duration-seconds 3600
-```
-
-Choose symbols explicitly:
-
-```bash
-orderflow-mexc-record \
-  --symbol ENA_USDT \
-  --symbol BTC_USDT \
-  --duration-seconds 3600
+orderflow-mexc-record --duration-seconds 120
 ```
 
 Output is written under `data/mexc_orderflow/` by default:
@@ -56,53 +45,106 @@ YYYYMMDDTHHMMSSZ_mexc_features.jsonl
 YYYYMMDDTHHMMSSZ_mexc_features.jsonl.manifest.json
 ```
 
-Files are created with exclusive-create mode. Existing recordings are never overwritten. A SHA-256 manifest is written when a file closes cleanly.
+Files are exclusive-create and never overwritten. A SHA-256 sidecar is written when each file closes cleanly.
 
-## What is recorded
+## Correct MEXC depth schema
 
-The raw file contains:
+MEXC depth levels are interpreted as:
 
-- a session record declaring symbols and endpoints;
-- full REST depth snapshots;
-- every received public WebSocket message;
-- depth-gap observations;
-- REST depth-commit responses used for recovery;
-- reconnect events.
+```text
+[price, contract volume, order count]
+```
 
-No username, password, API key, token, account data, order, or position data is requested.
+For example, `[77318.5, 210251, 4]` means price `77318.5`, contract volume `210251`, and order count `4`.
 
-The recorder subscribes to MEXC `push.deal` and `push.depth` channels. The deal stream supplies trade price, quantity, exchange side, transaction ID when present, and timestamps. MEXC documents `T=1` as buy and `T=2` as sell. Depth is pushed as price-level updates with monotonically increasing versions.
+The recorder uses contract volume for:
 
-## Order-book synchronization
+- best bid/ask volume;
+- top-N book imbalance;
+- microprice weighting;
+- liquidity added/pulled;
+- depth-flow imbalance.
 
-The local book follows MEXC's documented maintenance mechanism:
+The feature file keeps `best_bid_qty` and `best_ask_qty` as backward-compatible aliases, but the canonical fields are `best_bid_contract_volume` and `best_ask_contract_volume`.
 
-1. fetch a full depth snapshot;
-2. save its `version`;
-3. subscribe to incremental depth;
-4. require each new version to equal `local_version + 1`;
-5. if a gap appears, fetch `/depth_commits/{symbol}/1000` and apply only contiguous missing commits;
-6. if commits cannot bridge the gap, replace the local book with a fresh full snapshot;
-7. stop rather than continue from an uncertain book if continuity still cannot be established.
+## Depth synchronization
 
-MEXC depth quantities are absolute values. Quantity `0` deletes a level. The code sorts recovery commits by version before applying them because the maintenance instructions require ascending application even though API examples may display newer versions first.
+MEXC enables merged incremental depth by default unless `compress` is explicitly disabled. Recorder schema v2 sends:
+
+```json
+{
+  "method": "sub.depth",
+  "param": {
+    "symbol": "BTC_USDT",
+    "compress": false
+  }
+}
+```
+
+The book engine is still range-aware so old captures and any merged messages remain replayable. For a ranged update:
+
+```text
+begin <= local_version + 1 <= end
+version == end
+```
+
+is treated as continuous. A real gap exists only when `begin > local_version + 1`.
+
+The connection sequence is also hardened:
+
+1. connect the WebSocket;
+2. subscribe to deals and depth;
+3. fetch REST snapshots while WebSocket updates buffer;
+4. process the queued updates against the snapshot;
+5. ignore stale updates whose `end <= snapshot_version`;
+6. apply continuous single-version or merged-range updates;
+7. recover only genuine gaps using depth commits;
+8. fall back to a fresh snapshot if commits cannot bridge the gap;
+9. stop rather than continue from an uncertain book.
+
+This removes the snapshot-before-subscription blind window.
+
+## Depth continuity counters
+
+Every depth feature carries cumulative counters for its symbol:
+
+- `depth_messages_seen`
+- `compressed_depth_ranges_seen`
+- `true_depth_gaps_seen`
+- `stale_depth_messages_seen`
+
+The recorder also writes a `session_summary` with these counters. Merged ranges are not counted as packet loss.
+
+## Trade fields
+
+`T=1` is treated as aggressive buy and `T=2` as aggressive sell for CVD and buy/sell volume.
+
+MEXC documentation currently uses inconsistent wording for the `M` field between REST and WebSocket sections. The recorder therefore preserves it neutrally as:
+
+```text
+exchange_m_flag
+```
+
+and does not infer self-trade or auto-transaction semantics from it.
 
 ## Derived features
 
-The feature file currently contains causal, price-level features that can be reconstructed from the raw file:
+The feature stream includes:
 
 - exchange-side buy and sell volume;
 - rolling CVD;
-- rolling trade count and trade velocity;
+- rolling trade count and velocity;
 - best bid and ask;
+- best bid/ask contract volume;
 - spread;
 - top-of-book microprice;
 - configurable top-N book imbalance;
-- bid and ask liquidity added;
-- bid and ask liquidity pulled;
-- depth-flow imbalance from absolute level changes.
+- bid/ask liquidity added;
+- bid/ask liquidity pulled;
+- depth-flow imbalance;
+- depth range metadata and continuity counters.
 
-These are measurements, not trading signals. Liquidity reductions cannot by themselves distinguish cancellation from execution, so the recorder deliberately does not label every pull as a fill or every price interaction as absorption.
+These are measurements, not trading signals. A reduction in resting volume cannot by itself distinguish cancellation from execution.
 
 ## Replay
 
@@ -112,22 +154,18 @@ Rebuild features without touching the network:
 orderflow-mexc-replay data/mexc_orderflow/<raw-file>.jsonl
 ```
 
-If the raw file has a manifest, replay verifies its SHA-256 before processing. Sequence gaps must be resolved by recorded recovery data or replay fails closed.
+Replay verifies the raw SHA-256 when a manifest exists.
 
-You can change research feature parameters during replay without changing the raw source:
+Recorder schema v2 uses the corrected depth schema and continuity model. Replay also supports recorder schema v1. In v1 files, recovery commits and fallback snapshots created only because the old implementation misclassified valid merged ranges are ignored unless a genuine range-aware gap is pending.
 
-```bash
-orderflow-mexc-replay data/mexc_orderflow/<raw-file>.jsonl \
-  --trade-window-seconds 5 \
-  --imbalance-levels 20
-```
+This means the first ENA/BTC sample can be reprocessed from its original immutable raw payloads instead of being discarded.
 
-Changing these parameters creates a new feature artifact. It does not alter the immutable raw recording.
+A replay summary reports the final depth continuity counters.
 
 ## Important limitations
 
-This is price-level depth, not CME-style market-by-order data. The feed shows aggregate quantity at each price level and an order-count field. It does not expose a documented stable identifier for every individual resting order.
+This is price-level depth, not CME-style market-by-order data. It exposes aggregate contract volume at each price and an order-count field, but not a documented stable identifier for every individual resting order.
 
-Therefore the current implementation can measure CVD, L2 imbalance, liquidity changes, microprice and trade/depth interactions, but true queue-position reconstruction is out of scope. Sweep and absorption classifiers should be added only after enough raw data has been collected to define and validate them causally.
+Therefore this path can support CVD, L2 imbalance, liquidity changes, microprice, sweeps/absorption proxies, and BTC/ENA cross-market research, but not true queue-position reconstruction.
 
-The first useful research objective is to record ENA and BTC continuously, then freeze a feature definition and evaluate it on future data that was not used to design the rule. No positive result from previously inspected data should be treated as independent out-of-sample evidence.
+No positive result from previously inspected data should be treated as independent out-of-sample evidence.
