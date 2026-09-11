@@ -28,6 +28,8 @@ class PaperControlTests(unittest.TestCase):
         intent = self.root / "intent.json"
         market = self.root / "market.json"
         export = self.root / "export.csv"
+        validation = self.root / "validation.json"
+        economics = self.root / "economics.json"
         intent.write_text(json.dumps({"strategy_id": "manual-engineering", "symbol": "MNQ", "side": "LONG",
                                       "entry_reference": 20000.25, "stop": 19995.25, "target": 20010.25,
                                       "signal_time": now.isoformat()}))
@@ -35,7 +37,25 @@ class PaperControlTests(unittest.TestCase):
         rows = ["timestamp,symbol,price,bid,ask,side,size"]
         rows.extend(f"{(now - timedelta(milliseconds=100-i)).isoformat()},MNQ,20000.25,20000,20000.25,buy,1" for i in range(100))
         export.write_text("\n".join(rows))
-        return intent, market, export
+        validation.write_text(json.dumps({
+            "deployment_eligible": True,
+            "verified_out_of_sample_evidence": True,
+            "source_verification": {"verified_against_local_files": True},
+            "candidates": [{
+                "candidate_id": "manual-engineering",
+                "windows": [{"complete": True}],
+                "summary": {"n": 1},
+            }],
+        }))
+        economics.write_text(json.dumps({"account_equity": 10000.0}))
+        return intent, market, export, validation, economics
+
+    @staticmethod
+    def submit_args(intent, export, validation, economics):
+        return (
+            "submit", "--intent", str(intent), "--export", str(export),
+            "--validation-report", str(validation), "--economics", str(economics),
+        )
 
     def test_status_does_not_initialize_missing_state(self):
         code, result = self.run_command("status")
@@ -45,8 +65,8 @@ class PaperControlTests(unittest.TestCase):
 
     def test_cli_approval_close_and_evidence_journal(self):
         self.assertEqual(self.run_command("init")[0], 0)
-        intent, market, export = self.files()
-        code, result = self.run_command("submit", "--intent", str(intent), "--export", str(export))
+        intent, market, export, validation, economics = self.files()
+        code, result = self.run_command(*self.submit_args(intent, export, validation, economics))
         self.assertEqual(code, 0, result)
         ident = result["result"]["intent_id"]
         token = result["result"]["approval_token"]
@@ -59,25 +79,66 @@ class PaperControlTests(unittest.TestCase):
         events = [json.loads(line) for line in self.journal.read_text().splitlines()]
         submitted = next(row for row in events if row["event_type"] == "intent_submitted")
         bound = next(row for row in events if row["event_type"] == "approval_bound")
-        self.assertEqual(len(submitted["payload"]["evidence"]["export_sha256"]), 64)
-        self.assertTrue(submitted["payload"]["evidence"]["quality"]["passed"])
+        evidence = submitted["payload"]["evidence"]
+        self.assertEqual(len(evidence["export_sha256"]), 64)
+        self.assertTrue(evidence["quality"]["passed"])
+        self.assertTrue(evidence["promotion"]["promotable"])
+        self.assertFalse(evidence["promotion"]["research_only"])
+        self.assertEqual(evidence["promotion"]["candidate_id"], "manual-engineering")
+        self.assertEqual(len(evidence["promotion"]["validation_report_sha256"]), 64)
         self.assertEqual(bound["payload"]["approval_token"], token)
 
     def test_cli_rejects_missing_approval_token(self):
         self.assertEqual(self.run_command("init")[0], 0)
-        intent, market, export = self.files()
-        code, result = self.run_command("submit", "--intent", str(intent), "--export", str(export))
+        intent, market, export, validation, economics = self.files()
+        code, result = self.run_command(*self.submit_args(intent, export, validation, economics))
         self.assertEqual(code, 0, result)
         ident = result["result"]["intent_id"]
         with self.assertRaises(SystemExit):
             self.run_command("approve", ident, "--market", str(market))
 
+    def test_unpromoted_strategy_cannot_enter_queue(self):
+        self.run_command("init")
+        intent, _, export, validation, economics = self.files()
+        report = json.loads(validation.read_text())
+        report["verified_out_of_sample_evidence"] = False
+        validation.write_text(json.dumps(report))
+        before = self.state.read_bytes(), self.journal.read_bytes()
+        code, result = self.run_command(*self.submit_args(intent, export, validation, economics))
+        self.assertEqual(code, 2)
+        self.assertEqual(result["reason"], "strategy_not_promoted")
+        self.assertIn("out_of_sample_edge_not_verified", result["promotion"]["reasons"])
+        self.assertEqual(before, (self.state.read_bytes(), self.journal.read_bytes()))
+
+    def test_strategy_id_must_match_promoted_candidate(self):
+        self.run_command("init")
+        intent, _, export, validation, economics = self.files()
+        values = json.loads(intent.read_text())
+        values["strategy_id"] = "other-strategy"
+        intent.write_text(json.dumps(values))
+        before = self.state.read_bytes(), self.journal.read_bytes()
+        code, result = self.run_command(*self.submit_args(intent, export, validation, economics))
+        self.assertEqual(code, 2)
+        self.assertEqual(result["status"], "failed")
+        self.assertEqual(result["error_type"], "ValueError")
+        self.assertEqual(before, (self.state.read_bytes(), self.journal.read_bytes()))
+
+    def test_nonzero_fixed_cost_blocks_paper_submit(self):
+        self.run_command("init")
+        intent, _, export, validation, economics = self.files()
+        economics.write_text(json.dumps({"account_equity": 10000.0, "monthly_data_cost": 1.0}))
+        before = self.state.read_bytes(), self.journal.read_bytes()
+        code, result = self.run_command(*self.submit_args(intent, export, validation, economics))
+        self.assertEqual(code, 2)
+        self.assertIn("fixed_operating_cost_not_mapped_to_validated_currency_pnl", result["promotion"]["reasons"])
+        self.assertEqual(before, (self.state.read_bytes(), self.journal.read_bytes()))
+
     def test_low_quality_export_cannot_enter_queue(self):
         self.run_command("init")
-        intent, _, export = self.files()
+        intent, _, export, validation, economics = self.files()
         export.write_text("timestamp,symbol,price\n2026-01-01T00:00:00Z,MNQ,20000\n")
         before = self.state.read_bytes(), self.journal.read_bytes()
-        code, _ = self.run_command("submit", "--intent", str(intent), "--export", str(export))
+        code, _ = self.run_command(*self.submit_args(intent, export, validation, economics))
         self.assertEqual(code, 2)
         self.assertEqual(before, (self.state.read_bytes(), self.journal.read_bytes()))
 
