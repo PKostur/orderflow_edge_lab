@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from copy import deepcopy
 from datetime import datetime
 import hashlib
 from typing import Any, Mapping
@@ -70,7 +71,7 @@ class ApprovalBoundPaperEngine(PaperEngine):
         pending = self.state["pending"][intent_id]
         binding = {
             "intent_id": intent_id,
-            "intent": pending["intent"],
+            "intent": deepcopy(pending["intent"]),
             "contracts": int(pending["contracts"]),
             "submitted_at": pending["submitted_at"],
             "expires_at": float(pending["expires_at"]),
