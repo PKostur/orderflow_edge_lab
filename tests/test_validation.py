@@ -36,7 +36,7 @@ class ValidationTests(unittest.TestCase):
 
     def test_report_hashes_inputs_deducts_costs_and_never_certifies_edge(self):
         report = self.audit()
-        self.assertEqual(report["schema_version"], 2)
+        self.assertEqual(report["schema_version"], 3)
         self.assertEqual(report["observations_sha256"], hashlib.sha256(self.observations.read_bytes()).hexdigest())
         self.assertAlmostEqual(report["candidates"][0]["summary"]["mean_r"], 1.8)
         self.assertTrue(report["candidates"][0]["windows"][0]["complete"])
@@ -71,23 +71,20 @@ class ValidationTests(unittest.TestCase):
                    {"cost_model_id": ""}, {"cost_components_r": {"fees": 0.1}},
                    {"cost_components_r": {"fees": -0.05, "slippage": 0.2, "spread": 0.05, "other": 0.0}},
                    {"cost_components_r": {"fees": 0.01, "slippage": 0.01, "spread": 0.01, "other": 0.0}},
-                   {"cost_r": 0.0, "cost_components_r": {"fees": 0.0, "slippage": 0.0, "spread": 0.0, "other": 0.0}})
+                   {"cost_r": 0.0, "cost_components_r": {"fees": 0.0, "slippage": 0.0, "spread": 0.0, "other": 0.0}},
+                   {"outcome_time": "2026-09-02T00:00:00Z"},
+                   {"outcome_time": "2026-09-01T23:59:59Z"})
         for change in changes:
             with self.subTest(change=change), self.assertRaises(ValueError):
                 self.audit([{**self.row, **change}])
 
-    def test_multiple_cost_models_are_exposed_not_silently_blended(self):
+    def test_multiple_cost_models_for_one_candidate_are_rejected(self):
         row2 = deepcopy(self.row)
         row2.update(observation_id="test-2", event_time="2026-09-03T00:00:00Z",
                     outcome_time="2026-09-03T00:05:00Z", cost_model_id="fixture-stress-v2",
                     cost_r=0.4, cost_components_r={"fees": 0.05, "slippage": 0.25, "spread": 0.10, "other": 0.0})
-        report = self.audit([self.row, row2])
-        provenance = report["candidates"][0]["cost_provenance"]
-        self.assertEqual(provenance["model_ids"], ["fixture-stress-v2", "fixture-v1"])
-        self.assertEqual(provenance["observations"], 2)
-        self.assertAlmostEqual(provenance["min_cost_r"], 0.2)
-        self.assertAlmostEqual(provenance["mean_cost_r"], 0.3)
-        self.assertAlmostEqual(provenance["max_cost_r"], 0.4)
+        with self.assertRaisesRegex(ValueError, "cannot mix transaction cost models"):
+            self.audit([self.row, row2])
 
     def test_duplicate_and_out_of_order_records_rejected(self):
         with self.assertRaisesRegex(ValueError, "duplicate"):
