@@ -119,7 +119,7 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
     if not candidates:
         raise ValueError("candidate registry is empty")
     grouped = {key: [] for key in candidates}
-    costs = {key: {"values": [], "models": set()} for key in candidates}
+    costs = {key: {"values": [], "model": None} for key in candidates}
     seen = set()
     previous_time = None
     for line in observation_bytes.decode("utf-8").splitlines():
@@ -149,21 +149,31 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
         if previous_time is not None and event_time < previous_time:
             raise ValueError("observations must be chronological")
         previous_time = event_time
-        if not event_time <= outcome_time <= coverage:
+        if outcome_time <= event_time:
+            raise ValueError("outcome must finish strictly after event time")
+        if outcome_time > coverage:
             raise ValueError("outcome must finish within observed coverage")
         if row.get("source_kind") != "real_market":
             raise ValueError("synthetic or unspecified source is not future-market evidence")
         gross = _number(row["gross_return_r"])
         model_id, cost = _cost_provenance(row)
+        frozen_model = costs[candidate.candidate_id]["model"]
+        if frozen_model is None:
+            costs[candidate.candidate_id]["model"] = model_id
+        elif model_id != frozen_model:
+            raise ValueError(
+                "candidate observations cannot mix transaction cost models; "
+                "create a separately frozen candidate for materially different execution assumptions"
+            )
         net = _number(gross - cost)
         grouped[candidate.candidate_id].append((event_time, outcome_time, net))
         costs[candidate.candidate_id]["values"].append(cost)
-        costs[candidate.candidate_id]["models"].add(model_id)
     reports = []
     for key, candidate in candidates.items():
         rows = grouped[key]
         windows = sequential_windows(candidate, [event for event, _, _ in rows], observed_through=coverage)
         cost_values = costs[key]["values"]
+        cost_model = costs[key]["model"]
         reports.append({
             "candidate_id": key,
             "windows": [{**asdict(window), "start": window.start.isoformat(), "end": window.end.isoformat(),
@@ -172,7 +182,7 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
             "summary": oos_summary([net for _, _, net in rows]),
             "dependence": _dependence_diagnostics(rows),
             "cost_provenance": {
-                "model_ids": sorted(costs[key]["models"]),
+                "model_ids": [cost_model] if cost_model is not None else [],
                 "observations": len(cost_values),
                 "min_cost_r": min(cost_values) if cost_values else None,
                 "mean_cost_r": sum(cost_values) / len(cost_values) if cost_values else None,
@@ -180,7 +190,7 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
             },
         })
     return {
-        "schema_version": 2,
+        "schema_version": 3,
         "audit_status": "supplied_observations_passed_structural_checks",
         "registry_sha256": hashlib.sha256(registry_bytes).hexdigest(),
         "observations_sha256": hashlib.sha256(observation_bytes).hexdigest(),
