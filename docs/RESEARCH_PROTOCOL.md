@@ -14,14 +14,17 @@ exactly, plus `features` satisfying its numeric filters, timezone-aware
 `cost_components_r` must contain nonnegative `fees`, `slippage`, `spread`, and
 `other` values whose sum equals `cost_r`. A zero-cost real-market observation is
 rejected because frictionless observations are not acceptable evidence for this
-execution-oriented research. Cost model IDs are surfaced in each candidate report
-so results from different assumptions cannot be blended invisibly. The source and
-cost labels remain operator declarations, not independent proof.
+execution-oriented research. A candidate may use only one transaction-cost model
+within a validation audit. Materially different execution assumptions require a
+separately frozen candidate so incompatible cost regimes cannot be pooled into one
+return summary. The source and cost labels remain operator declarations, not
+independent proof.
 
 Input must be chronological. Duplicate identities, unfrozen observations,
-unfinished outcomes, unsupported filters, nonfinite values, missing cost
-provenance, inconsistent cost decomposition, and zero or negative transaction
-costs are rejected.
+unsupported filters, nonfinite values, missing cost provenance, inconsistent cost
+decomposition, mixed transaction-cost models, zero or negative transaction costs,
+and outcomes that finish at or before their event time are rejected. Every outcome
+must finish within the caller-supplied audited coverage timestamp.
 
 The report hashes the exact parsed bytes, retains empty and unfinished windows,
 and computes descriptive net returns after supplied costs. It always sets
