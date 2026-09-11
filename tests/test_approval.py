@@ -76,6 +76,33 @@ class ApprovalBindingTests(unittest.TestCase):
             restarted.approve(ident, self.submission_market, approval_token=token, now=self.now)
             self.assertIn(ident, restarted.state["positions"])
 
+    def test_pending_contract_divergence_cannot_reuse_valid_binding_token(self):
+        with ApprovalBoundPaperEngine(self.state, self.journal) as engine:
+            ident, token = self._submit(engine)
+            original = engine.state["pending"][ident]["contracts"]
+            engine.state["pending"][ident]["contracts"] = original + 1
+            with self.assertRaisesRegex(RejectedIntent, "approval_binding_terms_mismatch"):
+                engine.approval_token_for(ident)
+            with self.assertRaisesRegex(RejectedIntent, "approval_binding_terms_mismatch"):
+                engine.approve(ident, self.submission_market, approval_token=token, now=self.now)
+            self.assertFalse(engine.state["positions"])
+
+    def test_pending_intent_divergence_cannot_reuse_valid_binding_token(self):
+        with ApprovalBoundPaperEngine(self.state, self.journal) as engine:
+            ident, token = self._submit(engine)
+            engine.state["pending"][ident]["intent"]["target"] += 1.0
+            with self.assertRaisesRegex(RejectedIntent, "approval_binding_terms_mismatch"):
+                engine.approve(ident, self.submission_market, approval_token=token, now=self.now)
+            self.assertFalse(engine.state["positions"])
+
+    def test_engine_config_divergence_invalidates_bound_proposal(self):
+        with ApprovalBoundPaperEngine(self.state, self.journal) as engine:
+            ident, token = self._submit(engine)
+            engine.state["engine_config"]["policy"]["risk_fraction"] = 0.004
+            with self.assertRaisesRegex(RejectedIntent, "approval_binding_terms_mismatch"):
+                engine.approve(ident, self.submission_market, approval_token=token, now=self.now)
+            self.assertFalse(engine.state["positions"])
+
     def test_more_favorable_market_cannot_silently_increase_approved_size(self):
         with ApprovalBoundPaperEngine(self.state, self.journal) as engine:
             ident, token = self._submit(engine)

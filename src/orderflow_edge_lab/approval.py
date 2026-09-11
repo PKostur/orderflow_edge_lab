@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from copy import deepcopy
 from datetime import datetime
 import hashlib
 from typing import Any, Mapping
@@ -25,6 +26,14 @@ def _market_payload(market: MarketSnapshot) -> dict[str, Any]:
 
 def _sha256_payload(value: Any) -> str:
     return hashlib.sha256(_canonical(value).encode("utf-8")).hexdigest()
+
+
+def _is_sha256(value: object) -> bool:
+    return (
+        isinstance(value, str)
+        and len(value) == 64
+        and all(char in "0123456789abcdef" for char in value)
+    )
 
 
 class ApprovalBoundPaperEngine(PaperEngine):
@@ -62,7 +71,7 @@ class ApprovalBoundPaperEngine(PaperEngine):
         pending = self.state["pending"][intent_id]
         binding = {
             "intent_id": intent_id,
-            "intent": pending["intent"],
+            "intent": deepcopy(pending["intent"]),
             "contracts": int(pending["contracts"]),
             "submitted_at": pending["submitted_at"],
             "expires_at": float(pending["expires_at"]),
@@ -86,17 +95,62 @@ class ApprovalBoundPaperEngine(PaperEngine):
         )
         return intent_id
 
-    def approval_token_for(self, intent_id: str) -> str:
+    def _validated_binding(self, intent_id: str) -> tuple[dict[str, Any], str]:
+        """Return a binding only when every field still matches the active proposal.
+
+        Hashing the binding alone is not sufficient because approval execution reads
+        fields from ``pending``. A corrupted pending proposal could otherwise diverge
+        from an internally self-consistent binding. This check makes that divergence
+        fail closed before sizing or execution is considered.
+        """
         self._ensure_open()
         pending = self.state["pending"].get(intent_id)
         if pending is None:
             raise RejectedIntent("unknown_pending_intent")
         token = pending.get("approval_token")
         binding = pending.get("approval_binding")
-        if not isinstance(token, str) or not isinstance(binding, dict):
+        if not _is_sha256(token) or not isinstance(binding, dict):
             raise RejectedIntent("approval_binding_missing")
         if _sha256_payload(binding) != token:
             raise RejectedIntent("approval_binding_corrupt")
+
+        try:
+            if binding.get("intent_id") != intent_id:
+                raise ValueError("intent_id")
+            if binding.get("intent") != pending["intent"]:
+                raise ValueError("intent")
+            if binding.get("contracts") != pending["contracts"]:
+                raise ValueError("contracts")
+            if binding.get("submitted_at") != pending["submitted_at"]:
+                raise ValueError("submitted_at")
+            if binding.get("expires_at") != pending["expires_at"]:
+                raise ValueError("expires_at")
+            if not _is_sha256(binding.get("evidence_sha256")):
+                raise ValueError("evidence_sha256")
+            expected_config_sha = _sha256_payload(self.state["engine_config"])
+            if binding.get("engine_config_sha256") != expected_config_sha:
+                raise ValueError("engine_config_sha256")
+
+            market = binding.get("submitted_market")
+            if not isinstance(market, dict) or set(market) != {"symbol", "bid", "ask", "timestamp"}:
+                raise ValueError("submitted_market")
+            submitted_market = MarketSnapshot(
+                symbol=market["symbol"],
+                bid=market["bid"],
+                ask=market["ask"],
+                timestamp=_parse_dt(market["timestamp"]),
+            )
+            if submitted_market.symbol != pending["intent"]["symbol"]:
+                raise ValueError("submitted_market_symbol")
+            if _parse_dt(binding["submitted_at"]).timestamp() >= float(binding["expires_at"]):
+                raise ValueError("nonpositive_approval_ttl")
+        except (KeyError, TypeError, ValueError) as exc:
+            raise RejectedIntent("approval_binding_terms_mismatch") from exc
+
+        return binding, token
+
+    def approval_token_for(self, intent_id: str) -> str:
+        _, token = self._validated_binding(intent_id)
         return token
 
     def approve(
@@ -118,7 +172,7 @@ class ApprovalBoundPaperEngine(PaperEngine):
         if operation_time.timestamp() >= float(pending["expires_at"]):
             return super().approve(intent_id, market, now=operation_time)
 
-        expected_token = self.approval_token_for(intent_id)
+        _, expected_token = self._validated_binding(intent_id)
         if not isinstance(approval_token, str) or approval_token != expected_token:
             self._commit(
                 "approval_token_rejected",
