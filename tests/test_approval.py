@@ -4,7 +4,7 @@ import tempfile
 import unittest
 
 from orderflow_edge_lab.approval import ApprovalBoundPaperEngine
-from orderflow_edge_lab.execution import MarketSnapshot, RejectedIntent, TradeIntent
+from orderflow_edge_lab.execution import MarketSnapshot, RejectedIntent, RiskPolicy, TradeIntent
 
 
 UTC = timezone.utc
@@ -47,7 +47,8 @@ class ApprovalBindingTests(unittest.TestCase):
             self.assertFalse(engine.state["positions"])
 
     def test_less_favorable_market_cannot_silently_downsize_approved_order(self):
-        with ApprovalBoundPaperEngine(self.state, self.journal) as engine:
+        policy = RiskPolicy(min_reward_risk=1.0)
+        with ApprovalBoundPaperEngine(self.state, self.journal, policy=policy) as engine:
             ident = engine.submit(self.intent, self.submission_market, now=self.now)
             proposed = engine.state["pending"][ident]["contracts"]
             moved = MarketSnapshot("MNQ", 20001.00, 20001.25, self.now)
