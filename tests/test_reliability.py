@@ -97,13 +97,21 @@ class ReliabilityTests(unittest.TestCase):
 
             state = json.loads(state_path.read_text(encoding="utf-8"))
             journal = HashChainJournal(journal_path)
-            forged = deepcopy(state)
-            forged["revision"] += 1
-            forged["journal_head"] = journal._last_hash
+            first = deepcopy(state)
+            first["revision"] += 1
+            first["journal_head"] = journal._last_hash
             journal.append(
-                "configuration_bound",
-                {"state_after": forged},
-                datetime(2020, 1, 1, tzinfo=UTC),
+                "kill_switch_released",
+                {"state_after": first},
+                datetime(2026, 9, 11, 2, 0, tzinfo=UTC),
+            )
+            second = deepcopy(first)
+            second["revision"] += 1
+            second["journal_head"] = journal._last_hash
+            journal.append(
+                "kill_switch_released",
+                {"state_after": second},
+                datetime(2026, 9, 11, 1, 59, tzinfo=UTC),
             )
 
             with self.assertRaisesRegex(StateCorruptionError, "timestamp regression"):
