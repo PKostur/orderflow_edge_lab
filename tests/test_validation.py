@@ -39,11 +39,14 @@ class ValidationTests(unittest.TestCase):
 
     def test_report_hashes_inputs_recomputes_returns_deducts_costs_and_never_certifies_edge(self):
         report = self.audit()
-        self.assertEqual(report["schema_version"], 6)
+        self.assertEqual(report["schema_version"], 7)
+        self.assertTrue(report["causal_window_summaries"])
+        self.assertEqual(report["cross_window_outcome_count"], 0)
         self.assertFalse(report["source_verification"]["verified_against_local_files"])
         self.assertEqual(report["observations_sha256"], hashlib.sha256(self.observations.read_bytes()).hexdigest())
         self.assertAlmostEqual(report["candidates"][0]["summary"]["mean_r"], 1.8)
         self.assertTrue(report["candidates"][0]["windows"][0]["complete"])
+        self.assertEqual(report["candidates"][0]["windows"][0]["matured_event_count"], 1)
         self.assertFalse(report["candidates"][0]["windows"][-1]["complete"])
         self.assertEqual(report["candidates"][0]["source_provenance"]["dataset_sha256"], ["a" * 64])
         self.assertEqual(report["candidates"][0]["source_provenance"]["unique_records"], 1)
@@ -52,6 +55,22 @@ class ValidationTests(unittest.TestCase):
         self.assertAlmostEqual(report["candidates"][0]["cost_provenance"]["mean_cost_r"], 0.2)
         self.assertFalse(report["deployment_eligible"])
         self.assertFalse(report["verified_out_of_sample_evidence"])
+
+    def test_window_summary_excludes_outcome_that_matures_after_window_close(self):
+        row = deepcopy(self.row)
+        row.update(event_time="2026-09-07T23:59:00Z", outcome_time="2026-09-08T00:05:00Z")
+        report = self.audit([row])
+        candidate = report["candidates"][0]
+        first = candidate["windows"][0]
+        self.assertEqual(first["event_count"], 1)
+        self.assertEqual(first["matured_event_count"], 0)
+        self.assertEqual(first["cross_window_outcomes_excluded"], 1)
+        self.assertEqual(first["summary"]["n"], 0)
+        self.assertFalse(first["complete"])
+        self.assertEqual(candidate["cross_window_outcome_count"], 1)
+        self.assertEqual(report["cross_window_outcome_count"], 1)
+        self.assertEqual(candidate["summary"]["n"], 1)
+        self.assertAlmostEqual(candidate["summary"]["mean_r"], 1.8)
 
     def test_local_source_file_hash_is_verified_and_mismatch_rejected(self):
         raw = Path(self.tmp.name) / "deepcharts-export.csv"
@@ -156,6 +175,7 @@ class ValidationTests(unittest.TestCase):
         report = self.audit([])
         self.assertEqual(report["observation_count"], 0)
         self.assertTrue(all(not w["complete"] for w in report["candidates"][0]["windows"]))
+        self.assertEqual(report["cross_window_outcome_count"], 0)
         self.assertEqual(report["candidates"][0]["dependence"]["active_days"], 0)
         self.assertEqual(report["candidates"][0]["dependence"]["overlap_count"], 0)
         self.assertEqual(report["candidates"][0]["source_provenance"]["dataset_sha256"], [])
@@ -168,3 +188,7 @@ class ValidationTests(unittest.TestCase):
         self.observations.write_text('{"candidate_id":"P1","candidate_id":"P2"}')
         with self.assertRaisesRegex(ValueError, "duplicate JSON"):
             build_validation_report(self.registry, self.observations, observed_through="2026-09-10T00:00:00Z")
+
+
+if __name__ == "__main__":
+    unittest.main()
