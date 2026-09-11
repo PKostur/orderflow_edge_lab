@@ -42,6 +42,20 @@ class ApprovalBindingTests(unittest.TestCase):
             position = engine.approve(ident, self.submission_market, approval_token=token, now=self.now)
             self.assertEqual(position["contracts"], proposed)
 
+    def test_submission_binding_is_durable_in_single_checkpoint(self):
+        with ApprovalBoundPaperEngine(self.state, self.journal) as engine:
+            ident, token = self._submit(engine, evidence={"dataset_sha256": "c" * 64})
+
+        rows = [json.loads(line) for line in self.journal.read_text(encoding="utf-8").splitlines()]
+        events = [row["event_type"] for row in rows]
+        self.assertEqual(events.count("intent_submitted"), 1)
+        self.assertNotIn("approval_bound", events)
+        submitted = next(row for row in rows if row["event_type"] == "intent_submitted")
+        durable_pending = submitted["payload"]["state_after"]["pending"][ident]
+        self.assertEqual(durable_pending["approval_token"], token)
+        self.assertEqual(durable_pending["approval_binding"]["intent_id"], ident)
+        self.assertEqual(submitted["payload"]["approval_token"], token)
+
     def test_missing_or_wrong_token_fails_closed_and_leaves_intent_pending(self):
         with ApprovalBoundPaperEngine(self.state, self.journal) as engine:
             ident, token = self._submit(engine)
@@ -122,7 +136,7 @@ class ApprovalBindingTests(unittest.TestCase):
         self.assertEqual(last["payload"]["market"]["bid"], moved.bid)
         self.assertEqual(last["payload"]["market"]["ask"], moved.ask)
         self.assertEqual(last["payload"]["market"]["timestamp"], moved.timestamp.isoformat())
-        self.assertGreaterEqual(audit_journal_semantics(self.journal)["checkpoints"], 4)
+        self.assertGreaterEqual(audit_journal_semantics(self.journal)["checkpoints"], 3)
 
     def test_less_favorable_market_cannot_silently_downsize_approved_order(self):
         policy = RiskPolicy(min_reward_risk=1.0)
@@ -141,7 +155,7 @@ class ApprovalBindingTests(unittest.TestCase):
         self.assertEqual(last["payload"]["submitted_contracts"], proposed)
         self.assertLess(last["payload"]["currently_allowed"], proposed)
         self.assertEqual(last["payload"]["market"]["symbol"], "MNQ")
-        self.assertGreaterEqual(audit_journal_semantics(self.journal)["checkpoints"], 4)
+        self.assertGreaterEqual(audit_journal_semantics(self.journal)["checkpoints"], 3)
 
 
 if __name__ == "__main__":
