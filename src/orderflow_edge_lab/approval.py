@@ -1,13 +1,15 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any
+import hashlib
+from typing import Any, Mapping
 
 from orderflow_edge_lab.execution import (
     MarketSnapshot,
     PaperEngine,
     RejectedIntent,
     TradeIntent,
+    _canonical,
     _parse_dt,
 )
 
@@ -21,27 +23,88 @@ def _market_payload(market: MarketSnapshot) -> dict[str, Any]:
     }
 
 
+def _sha256_payload(value: Any) -> str:
+    return hashlib.sha256(_canonical(value).encode("utf-8")).hexdigest()
+
+
 class ApprovalBoundPaperEngine(PaperEngine):
-    """Paper engine whose human approval is bound to the submitted size.
+    """Paper engine with human approval bound to the submitted proposal.
 
-    The base engine intentionally revalidates market and risk conditions at approval.
-    That revalidation can legitimately change the allowable contract count. A human
-    approval should never silently authorize a different size, so this wrapper fails
-    closed whenever the currently allowable size differs from the size recorded when
-    the intent entered the approval queue.
+    The base engine revalidates market and risk conditions at approval. This wrapper
+    additionally binds the operator-visible proposal to the exact intent, submitted
+    contract count, expiry, source-evidence digest, persisted engine configuration,
+    and submission market snapshot. Approval requires the resulting integrity token.
 
-    Approval term drift is durably journaled before rejection. The pending intent is
-    retained so the operator can explicitly reject it or let it expire rather than
-    having an attempted approval silently disappear from the audit trail.
+    The token is not a secret or authentication credential. It is an audit/integrity
+    handle that prevents an approval command from silently referring to a different
+    proposal than the one created at submission.
+
+    Market movement may still occur between submission and approval. Revalidation is
+    therefore performed at approval and fails closed whenever the currently allowable
+    contract count differs from the submitted count.
 
     There is still no broker or network order transmission in this class.
     """
+
+    def submit(
+        self,
+        intent: TradeIntent,
+        market: MarketSnapshot,
+        *,
+        now: datetime | None = None,
+        evidence: Mapping[str, Any] | None = None,
+    ) -> str:
+        # Canonicalize before changing durable state so invalid/non-JSON evidence
+        # cannot create a half-bound approval proposal.
+        evidence_payload = dict(evidence) if evidence is not None else None
+        evidence_sha256 = _sha256_payload(evidence_payload)
+        intent_id = super().submit(intent, market, now=now, evidence=evidence_payload)
+        pending = self.state["pending"][intent_id]
+        binding = {
+            "intent_id": intent_id,
+            "intent": pending["intent"],
+            "contracts": int(pending["contracts"]),
+            "submitted_at": pending["submitted_at"],
+            "expires_at": float(pending["expires_at"]),
+            "submitted_market": _market_payload(market),
+            "evidence_sha256": evidence_sha256,
+            "engine_config_sha256": _sha256_payload(self.state["engine_config"]),
+        }
+        token = _sha256_payload(binding)
+        pending["approval_binding"] = binding
+        pending["approval_token"] = token
+        operation_time = _parse_dt(pending["submitted_at"])
+        self._commit(
+            "approval_bound",
+            {
+                "intent_id": intent_id,
+                "approval_token": token,
+                "evidence_sha256": evidence_sha256,
+                "engine_config_sha256": binding["engine_config_sha256"],
+            },
+            operation_time,
+        )
+        return intent_id
+
+    def approval_token_for(self, intent_id: str) -> str:
+        self._ensure_open()
+        pending = self.state["pending"].get(intent_id)
+        if pending is None:
+            raise RejectedIntent("unknown_pending_intent")
+        token = pending.get("approval_token")
+        binding = pending.get("approval_binding")
+        if not isinstance(token, str) or not isinstance(binding, dict):
+            raise RejectedIntent("approval_binding_missing")
+        if _sha256_payload(binding) != token:
+            raise RejectedIntent("approval_binding_corrupt")
+        return token
 
     def approve(
         self,
         intent_id: str,
         market: MarketSnapshot,
         *,
+        approval_token: str | None = None,
         now: datetime | None = None,
     ) -> dict[str, Any]:
         self._ensure_open()
@@ -50,10 +113,22 @@ class ApprovalBoundPaperEngine(PaperEngine):
         if pending is None:
             raise RejectedIntent("unknown_pending_intent")
 
-        # Preserve the base engine's durable expiry behavior before doing any sizing
-        # comparison. Calling super records intent_expired and removes the pending item.
+        # Preserve durable expiry behavior before token or sizing checks. An expired
+        # proposal cannot be revived by presenting a previously valid token.
         if operation_time.timestamp() >= float(pending["expires_at"]):
             return super().approve(intent_id, market, now=operation_time)
+
+        expected_token = self.approval_token_for(intent_id)
+        if not isinstance(approval_token, str) or approval_token != expected_token:
+            self._commit(
+                "approval_token_rejected",
+                {
+                    "intent_id": intent_id,
+                    "token_supplied": isinstance(approval_token, str),
+                },
+                operation_time,
+            )
+            raise RejectedIntent("approval_token_mismatch")
 
         raw = pending["intent"]
         intent = TradeIntent(
@@ -74,6 +149,7 @@ class ApprovalBoundPaperEngine(PaperEngine):
                     "intent_id": intent_id,
                     "submitted_contracts": submitted_contracts,
                     "currently_allowed": currently_allowed,
+                    "approval_token": expected_token,
                     "market": _market_payload(market),
                 },
                 operation_time,
