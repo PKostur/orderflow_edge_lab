@@ -44,6 +44,14 @@ def _require_dict(value: object, message: str) -> dict[str, Any]:
     return value
 
 
+def _valid_sha256(value: object) -> bool:
+    return (
+        isinstance(value, str)
+        and len(value) == 64
+        and all(ch in "0123456789abcdef" for ch in value.lower())
+    )
+
+
 def assess_candidate_promotion(
     validation_report: dict[str, Any],
     candidate_id: str,
@@ -51,15 +59,10 @@ def assess_candidate_promotion(
 ) -> PromotionAssessment:
     """Fail-closed strategy promotion gate.
 
-    This intentionally does not infer an edge from descriptive statistics. A candidate
-    can pass only when an upstream validation artifact explicitly certifies both
-    deployment eligibility and verified out-of-sample evidence. Current project
-    validation artifacts deliberately do neither, so they remain research-only.
-
-    Recurring project costs are also a hard gate. Until the validation artifact carries
-    a currency-denominated strategy return that can be compared with those fixed costs,
-    any non-zero recurring infrastructure cost prevents promotion rather than being
-    silently ignored.
+    Descriptive statistics never establish an edge. Promotion requires explicit
+    upstream OOS certification plus internally consistent evidence counts, causal
+    window summaries, verified source bytes, and acceptable project economics.
+    Current project validation artifacts deliberately do not certify an edge.
     """
     report = _require_dict(validation_report, "validation report must be an object")
     if not isinstance(candidate_id, str) or not candidate_id.strip():
@@ -67,14 +70,33 @@ def assess_candidate_promotion(
     candidate_id = candidate_id.strip()
 
     reasons: list[str] = []
+    if report.get("schema_version") != 7:
+        reasons.append("unsupported_validation_schema")
+    if report.get("causal_window_summaries") is not True:
+        reasons.append("causal_window_summaries_not_verified")
     if report.get("deployment_eligible") is not True:
         reasons.append("validation_report_not_deployment_eligible")
     if report.get("verified_out_of_sample_evidence") is not True:
         reasons.append("out_of_sample_edge_not_verified")
 
     source = report.get("source_verification")
-    if not isinstance(source, dict) or source.get("verified_against_local_files") is not True:
+    source_ok = isinstance(source, dict) and source.get("verified_against_local_files") is True
+    if not source_ok:
         reasons.append("source_bytes_not_locally_verified")
+    else:
+        files = source.get("files")
+        if (
+            not isinstance(files, list)
+            or not files
+            or any(
+                not isinstance(item, dict)
+                or not isinstance(item.get("path"), str)
+                or not item["path"].strip()
+                or not _valid_sha256(item.get("sha256"))
+                for item in files
+            )
+        ):
+            reasons.append("source_file_evidence_missing")
 
     candidates = report.get("candidates")
     if not isinstance(candidates, list):
@@ -90,10 +112,47 @@ def assess_candidate_promotion(
     complete_windows = [window for window in windows if isinstance(window, dict) and window.get("complete") is True]
     if not complete_windows:
         reasons.append("no_complete_causal_validation_window")
+    elif any(
+        not isinstance(window.get("matured_event_count"), int)
+        or not isinstance(window.get("matured_active_days"), int)
+        or not isinstance(window.get("summary"), dict)
+        or window["summary"].get("n") != window["matured_event_count"]
+        or window["matured_event_count"] <= 0
+        or window["matured_active_days"] <= 0
+        for window in complete_windows
+    ):
+        reasons.append("causal_window_evidence_inconsistent")
 
     summary = candidate.get("summary")
-    if not isinstance(summary, dict) or not isinstance(summary.get("n"), int) or summary.get("n", 0) <= 0:
+    candidate_n = summary.get("n") if isinstance(summary, dict) else None
+    if not isinstance(candidate_n, int) or candidate_n <= 0:
         reasons.append("no_matured_candidate_outcomes")
+    else:
+        source_provenance = candidate.get("source_provenance")
+        return_provenance = candidate.get("return_provenance")
+        cost_provenance = candidate.get("cost_provenance")
+        evidence_counts = (
+            source_provenance.get("unique_records") if isinstance(source_provenance, dict) else None,
+            return_provenance.get("observations_recomputed") if isinstance(return_provenance, dict) else None,
+            cost_provenance.get("observations") if isinstance(cost_provenance, dict) else None,
+        )
+        if any(value != candidate_n for value in evidence_counts):
+            reasons.append("candidate_evidence_count_mismatch")
+
+    report_count = report.get("observation_count")
+    if isinstance(candidates, list) and isinstance(report_count, int):
+        candidate_counts = []
+        for row in candidates:
+            row_summary = row.get("summary") if isinstance(row, dict) else None
+            n = row_summary.get("n") if isinstance(row_summary, dict) else None
+            if not isinstance(n, int) or n < 0:
+                candidate_counts = []
+                break
+            candidate_counts.append(n)
+        if not candidate_counts or sum(candidate_counts) != report_count:
+            reasons.append("report_observation_count_mismatch")
+    else:
+        reasons.append("report_observation_count_mismatch")
 
     if economics.monthly_fixed_cost > 0:
         reasons.append("fixed_operating_cost_not_mapped_to_validated_currency_pnl")
