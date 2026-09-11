@@ -9,9 +9,10 @@ import csv
 import json
 from pathlib import Path
 
+from orderflow_edge_lab.approval import ApprovalBoundPaperEngine
 from orderflow_edge_lab.data import DataQualityPolicy, normalize_rows, quality_report
 from orderflow_edge_lab.execution import (
-    PaperEngine, RiskPolicy, MarketSnapshot, TradeIntent, StateCorruptionError,
+    RiskPolicy, MarketSnapshot, TradeIntent, StateCorruptionError,
     EngineLockError, RejectedIntent,
 )
 from orderflow_edge_lab.reliability import deployment_readiness
@@ -99,8 +100,8 @@ def main(argv=None):
         elif args.command in {"approve", "close"}:
             market = _market(args.market)
         now = datetime.now(timezone.utc)
-        with PaperEngine(args.state, args.journal, starting_equity=getattr(args, "equity", 10000),
-                         policy=policy, migrate_legacy=args.command == "migrate") as engine:
+        with ApprovalBoundPaperEngine(args.state, args.journal, starting_equity=getattr(args, "equity", 10000),
+                                      policy=policy, migrate_legacy=args.command == "migrate") as engine:
             if args.command == "submit":
                 result = {"intent_id": engine.submit(intent, market, now=now, evidence=evidence)}
             elif args.command == "approve":
