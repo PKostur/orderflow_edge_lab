@@ -35,6 +35,8 @@ class RankedEndpoint:
     samples_seen: int
     first_seen_utc: str
     last_seen_utc: str
+    network_scope: str
+    provider_candidate_eligible: bool
     score: int
     reasons: tuple[str, ...]
 
@@ -58,11 +60,26 @@ def _require_bool(report: Mapping[str, Any], field: str, expected: bool) -> None
         raise EndpointCaptureError(f"{field} must be {str(expected).lower()}")
 
 
+def _network_scope(address: ipaddress.IPv4Address | ipaddress.IPv6Address) -> str:
+    if address.is_loopback:
+        return "loopback"
+    if address.is_link_local:
+        return "link_local"
+    if address.is_multicast:
+        return "multicast"
+    if address.is_unspecified:
+        return "unspecified"
+    if address.is_private:
+        return "private"
+    return "public"
+
+
 def _score_observation(row: Mapping[str, Any], started: datetime, ended: datetime) -> RankedEndpoint:
     try:
         process_name = str(row["process_name"]).strip()
         pid = int(row["pid"])
-        address = str(ipaddress.ip_address(str(row["remote_address"]).strip()))
+        address_obj = ipaddress.ip_address(str(row["remote_address"]).strip())
+        address = str(address_obj)
         port = int(row["remote_port"])
         confidence = str(row["confidence"]).strip().lower()
         samples_seen = int(row["samples_seen"])
@@ -93,6 +110,7 @@ def _score_observation(row: Mapping[str, Any], started: datetime, ended: datetim
     if first_seen < started or last_seen > ended:
         raise EndpointCaptureError("observation timestamp falls outside capture window")
 
+    scope = _network_scope(address_obj)
     score = 0
     reasons: list[str] = []
     if reverse_dns and "dxfeed" in reverse_dns:
@@ -107,6 +125,10 @@ def _score_observation(row: Mapping[str, Any], started: datetime, ended: datetim
     if samples_seen >= 3:
         score += 5
         reasons.append("repeated_observation")
+    if scope == "loopback":
+        reasons.append("local_loopback_peer")
+    elif scope != "public":
+        reasons.append(f"nonpublic_{scope}_peer")
 
     # Trust independently derivable facts over a producer supplied confidence label.
     if "reverse_dns_contains_dxfeed" in evidence and not (reverse_dns and "dxfeed" in reverse_dns):
@@ -115,6 +137,13 @@ def _score_observation(row: Mapping[str, Any], started: datetime, ended: datetim
         raise EndpointCaptureError("port evidence is inconsistent with remote_port")
     if "tls_port_443" in evidence and port != 443:
         raise EndpointCaptureError("TLS evidence is inconsistent with remote_port")
+
+    # Only public peers with independently high-signal provider evidence can ever be
+    # ranked as provider candidates. Generic TLS, repetition, and localhost bridge
+    # traffic are descriptive only and must never become an actionable endpoint.
+    provider_candidate_eligible = scope == "public" and (
+        (reverse_dns is not None and "dxfeed" in reverse_dns) or port == 7300
+    )
 
     return RankedEndpoint(
         process_name=process_name,
@@ -127,6 +156,8 @@ def _score_observation(row: Mapping[str, Any], started: datetime, ended: datetim
         samples_seen=samples_seen,
         first_seen_utc=first_seen.isoformat(),
         last_seen_utc=last_seen.isoformat(),
+        network_scope=scope,
+        provider_candidate_eligible=provider_candidate_eligible,
         score=score,
         reasons=tuple(reasons),
     )
@@ -163,10 +194,14 @@ def analyze_capture(report: Mapping[str, Any]) -> dict[str, Any]:
     ranked = [_score_observation(row, started, ended) for row in observations]
     ranked.sort(key=lambda item: (-item.score, item.process_name.lower(), item.remote_address, item.remote_port))
 
-    top_score = ranked[0].score if ranked else 0
-    top = [item for item in ranked if item.score == top_score and top_score > 0]
+    eligible = [item for item in ranked if item.provider_candidate_eligible]
+    top_score = eligible[0].score if eligible else 0
+    top = [item for item in eligible if item.score == top_score and top_score > 0]
     unique_high_signal = len(top) == 1 and top_score >= 45
     candidate = asdict(top[0]) if unique_high_signal else None
+
+    loopback = [item for item in ranked if item.network_scope == "loopback"]
+    public_count = sum(item.network_scope == "public" for item in ranked)
 
     return {
         "schema_version": 1,
@@ -175,6 +210,10 @@ def analyze_capture(report: Mapping[str, Any]) -> dict[str, Any]:
         "capture_ended_at_utc": ended.isoformat(),
         "capture_sample_count": sample_count,
         "ranked_endpoints": [asdict(item) for item in ranked],
+        "public_endpoint_count": public_count,
+        "nonpublic_endpoint_count": len(ranked) - public_count,
+        "local_bridge_observed": bool(loopback),
+        "local_bridge_ports": sorted({item.remote_port for item in loopback}),
         "candidate": candidate,
         "candidate_is_unambiguous": unique_high_signal,
         "external_api_authorized": False,
@@ -182,11 +221,17 @@ def analyze_capture(report: Mapping[str, Any]) -> dict[str, Any]:
         "next_gate": (
             "verify entitlement supplied external API connection details before any independent connection attempt"
             if candidate is not None
-            else "collect a less ambiguous DeepCharts dxFeed reconnect capture"
+            else (
+                "prefer supported DeepCharts export; use a localhost bridge only if the vendor documents a supported integration contract"
+                if loopback
+                else "collect a less ambiguous DeepCharts dxFeed reconnect capture"
+            )
         ),
         "limitations": [
             "Network peer observation does not establish external API entitlement.",
             "Port 7300 is only an indicator; port 443 is generic TLS and weak evidence.",
+            "Loopback/private peers are internal transport evidence, not external provider endpoints.",
+            "Repeated observation can strengthen correlation but cannot identify a provider by itself.",
             "A likely dxFeed peer must not receive account credentials unless the entitlement explicitly supplies that endpoint for external use.",
         ],
     }
