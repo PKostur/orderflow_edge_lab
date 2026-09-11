@@ -19,6 +19,7 @@ class AdapterStats:
     future_prior_quotes_ignored: int
     crossed_quotes_ignored: int
     same_timestamp_quotes_ignored: int = 0
+    timestamp_regressions: int = 0
 
     @property
     def trade_bbo_fraction(self) -> float:
@@ -35,6 +36,7 @@ def attach_prior_bbo(
     events: Iterable[MarketEvent],
     *,
     max_quote_age_seconds: float = 2.0,
+    reject_timestamp_regressions: bool = False,
 ) -> AdaptedEvents:
     """Attach the most recent causal BBO to trade events.
 
@@ -43,20 +45,36 @@ def attach_prior_bbo(
     and is no older than ``max_quote_age_seconds``. This intentionally avoids
     sorting because sorting an export can hide source-order defects and can
     introduce accidental lookahead during replay.
+
+    Timestamp regressions are counted across the raw input stream. Set
+    ``reject_timestamp_regressions`` to fail closed when a source export is not
+    globally chronological instead of merely reporting the defect in stats.
     """
     if not isinstance(max_quote_age_seconds, (int, float)) or isinstance(max_quote_age_seconds, bool):
         raise ValueError("max_quote_age_seconds must be a finite positive number")
     if not math.isfinite(max_quote_age_seconds) or max_quote_age_seconds <= 0:
         raise ValueError("max_quote_age_seconds must be a finite positive number")
+    if not isinstance(reject_timestamp_regressions, bool):
+        raise ValueError("reject_timestamp_regressions must be a bool")
 
     max_age_ns = int(max_quote_age_seconds * 1_000_000_000)
     last_bbo: dict[str, tuple[int, float | None, float | None]] = {}
     output: list[MarketEvent] = []
     trades = quotes = with_bbo = enriched = quote_classified = 0
     stale_ignored = future_ignored = crossed_ignored = 0
-    same_time_ignored = 0
+    same_time_ignored = timestamp_regressions = 0
+    previous_ts_ns: int | None = None
 
     for event in events:
+        if previous_ts_ns is not None and event.ts_ns < previous_ts_ns:
+            timestamp_regressions += 1
+            if reject_timestamp_regressions:
+                raise ValueError(
+                    "source timestamp regression: "
+                    f"event ts_ns={event.ts_ns} follows ts_ns={previous_ts_ns}"
+                )
+        previous_ts_ns = event.ts_ns
+
         is_full_quote = event.bid is not None and event.ask is not None
         if event.kind == "QUOTE" or is_full_quote:
             quotes += 1
@@ -120,6 +138,7 @@ def attach_prior_bbo(
             future_prior_quotes_ignored=future_ignored,
             crossed_quotes_ignored=crossed_ignored,
             same_timestamp_quotes_ignored=same_time_ignored,
+            timestamp_regressions=timestamp_regressions,
         ),
     )
 
@@ -130,7 +149,12 @@ def normalize_dxfeed_rows(
     default_symbol: str | None = None,
     source: str = "dxfeed_or_deepcharts_export",
     max_quote_age_seconds: float = 2.0,
+    reject_timestamp_regressions: bool = False,
 ) -> AdaptedEvents:
     """Normalize dxFeed/DeepCharts rows and causally enrich trades with prior BBO."""
     normalized = normalize_rows(rows, default_symbol=default_symbol, source=source, enrich_prior_bbo=False)
-    return attach_prior_bbo(normalized, max_quote_age_seconds=max_quote_age_seconds)
+    return attach_prior_bbo(
+        normalized,
+        max_quote_age_seconds=max_quote_age_seconds,
+        reject_timestamp_regressions=reject_timestamp_regressions,
+    )
