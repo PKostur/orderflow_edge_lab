@@ -2,9 +2,20 @@
 
 ## Local future-observation audit
 
-Run `python scripts/validate_future.py --observations observations.jsonl
---observed-through 2026-09-10T00:00:00Z --output audit.json` with actual audited
-coverage. The report is created exclusively and will not overwrite an old report.
+Run:
+
+```bash
+python scripts/validate_future.py \
+  --observations observations.jsonl \
+  --source-data deepcharts_export.csv \
+  --observed-through 2026-09-10T00:00:00Z \
+  --output audit.json
+```
+
+Repeat `--source-data` when observations reference more than one raw export. The
+CLI hashes every supplied file locally and rejects an observation whose declared
+`dataset_sha256` does not match one of those exact byte streams. The report is
+created exclusively and will not overwrite an old report or any input file.
 
 Each JSONL row requires `observation_id`, `candidate_id`, `timeframe`,
 `setup_family`, `direction`, `path`, and `numeric_filters` matching the registry
@@ -17,9 +28,10 @@ exactly, plus `features` satisfying its numeric filters, timezone-aware
 record identifier from that dataset. Within one frozen candidate, the same
 `dataset_sha256` plus `record_id` pair cannot be counted twice, even when the
 caller changes `observation_id`. This reduces accidental duplicate evidence and
-makes reuse of raw DeepCharts/dxFeed exports visible in the report. The hash and
-record identifier are still caller supplied, so they do not independently prove
-export authenticity or completeness.
+makes reuse of raw DeepCharts/dxFeed exports visible in the report. The CLI also
+verifies that each declared dataset hash matches a supplied local raw export.
+This proves byte identity with that local file, not that the export itself is
+complete or authentic.
 
 `return_provenance` must contain positive `entry_price`, `exit_price`, and
 `initial_stop_price` values. For a long candidate the initial stop must be below
@@ -40,21 +52,22 @@ not independent proof.
 
 Input must be chronological. Duplicate identities, duplicate raw source records
 within a candidate, unfrozen observations, unsupported filters, nonfinite values,
-missing or malformed source provenance, missing or inconsistent return provenance,
-invalid stop placement, missing cost provenance, inconsistent cost decomposition,
-mixed transaction-cost models, zero or negative transaction costs, and outcomes
-that finish at or before their event time are rejected. Every outcome must finish
-within the caller-supplied audited coverage timestamp.
+missing or malformed source provenance, source hashes not backed by a supplied raw
+file, missing or inconsistent return provenance, invalid stop placement, missing
+cost provenance, inconsistent cost decomposition, mixed transaction-cost models,
+zero or negative transaction costs, and outcomes that finish at or before their
+event time are rejected. Every outcome must finish within the caller-supplied
+audited coverage timestamp.
 
-The report hashes the exact parsed observation bytes, retains empty and unfinished
-windows, exposes all source dataset hashes used by each candidate, recomputes
-directional gross R from supplied prices, and computes descriptive net returns
-after supplied costs. It always sets `deployment_eligible` and
-`verified_out_of_sample_evidence` to false. It cannot verify export authenticity,
-missing observations, price/fill authenticity, execution horizons, freeze
-provenance, fill realism, cost calibration, or independence. Those require
-independently audited market data and a predeclared protocol; a successful audit
-is not edge evidence.
+The report hashes the exact parsed observation bytes, records the locally verified
+source file hashes, retains empty and unfinished windows, exposes all source
+dataset hashes used by each candidate, recomputes directional gross R from
+supplied prices, and computes descriptive net returns after supplied costs. It
+always sets `deployment_eligible` and `verified_out_of_sample_evidence` to false.
+It cannot verify export completeness or upstream authenticity, missing market
+records, price/fill authenticity, execution horizons, freeze provenance, fill
+realism, cost calibration, or independence. Those require independently audited
+market data and a predeclared protocol; a successful audit is not edge evidence.
 
 ## Evidence boundary
 
