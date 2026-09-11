@@ -1,6 +1,5 @@
 import contextlib
 from datetime import datetime, timedelta, timezone
-import importlib.util
 import io
 import json
 from pathlib import Path
@@ -50,15 +49,28 @@ class PaperControlTests(unittest.TestCase):
         code, result = self.run_command("submit", "--intent", str(intent), "--export", str(export))
         self.assertEqual(code, 0, result)
         ident = result["result"]["intent_id"]
+        token = result["result"]["approval_token"]
+        self.assertEqual(len(token), 64)
         code, status = self.run_command("status")
         self.assertIn(ident, status["pending"])
         self.assertFalse(status["positions"])
-        self.assertEqual(self.run_command("approve", ident, "--market", str(market))[0], 0)
+        self.assertEqual(self.run_command("approve", ident, "--token", token, "--market", str(market))[0], 0)
         self.assertEqual(self.run_command("close", ident, "--market", str(market), "--reason", "operator")[0], 0)
         events = [json.loads(line) for line in self.journal.read_text().splitlines()]
         submitted = next(row for row in events if row["event_type"] == "intent_submitted")
+        bound = next(row for row in events if row["event_type"] == "approval_bound")
         self.assertEqual(len(submitted["payload"]["evidence"]["export_sha256"]), 64)
         self.assertTrue(submitted["payload"]["evidence"]["quality"]["passed"])
+        self.assertEqual(bound["payload"]["approval_token"], token)
+
+    def test_cli_rejects_missing_approval_token(self):
+        self.assertEqual(self.run_command("init")[0], 0)
+        intent, market, export = self.files()
+        code, result = self.run_command("submit", "--intent", str(intent), "--export", str(export))
+        self.assertEqual(code, 0, result)
+        ident = result["result"]["intent_id"]
+        with self.assertRaises(SystemExit):
+            self.run_command("approve", ident, "--market", str(market))
 
     def test_low_quality_export_cannot_enter_queue(self):
         self.run_command("init")
@@ -78,3 +90,7 @@ class PaperControlTests(unittest.TestCase):
         self.assertIn("positions", status)
         self.assertEqual(self.run_command("release")[0], 0)
         self.assertEqual(self.run_command("status")[0], 0)
+
+
+if __name__ == "__main__":
+    unittest.main()

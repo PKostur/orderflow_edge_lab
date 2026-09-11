@@ -8,6 +8,7 @@ import sys
 import tempfile
 
 from orderflow_edge_lab.approval import ApprovalBoundPaperEngine
+from orderflow_edge_lab.economics import load_economics_policy
 from orderflow_edge_lab.execution import (
     DEFAULT_INSTRUMENTS,
     HashChainJournal,
@@ -55,13 +56,20 @@ def smoke_paper() -> list[str]:
             signal_time=now,
         )
         with ApprovalBoundPaperEngine(state, journal, starting_equity=10_000) as engine:
-            intent_id = engine.submit(intent, market, now=now)
+            intent_id = engine.submit(intent, market, now=now, evidence={"smoke": True})
+            token = engine.approval_token_for(intent_id)
 
-            # A market move that changes allowable size must not silently alter the
-            # terms the operator was shown at submission.
+            try:
+                engine.approve(intent_id, market, now=now)
+            except RejectedIntent as exc:
+                if "approval_token_mismatch" not in str(exc):
+                    failures.append("missing approval token rejected for an unexpected reason")
+            else:
+                failures.append("missing approval token was accepted")
+
             moved = MarketSnapshot("MNQ", 19999.00, 19999.25, now)
             try:
-                engine.approve(intent_id, moved, now=now)
+                engine.approve(intent_id, moved, approval_token=token, now=now)
             except RejectedIntent as exc:
                 if "approval_terms_changed" not in str(exc):
                     failures.append("approval drift rejected for an unexpected reason")
@@ -71,10 +79,14 @@ def smoke_paper() -> list[str]:
                 failures.append("approval drift did not preserve pending intent and flat state")
 
             records = HashChainJournal.records(journal)
+            if not any(row["event_type"] == "approval_bound" for row in records):
+                failures.append("approval binding was not durably journaled")
+            if not any(row["event_type"] == "approval_token_rejected" for row in records):
+                failures.append("missing approval token attempt was not durably journaled")
             if not any(row["event_type"] == "approval_terms_changed" for row in records):
                 failures.append("approval drift was not durably journaled")
 
-            engine.approve(intent_id, market, now=now)
+            engine.approve(intent_id, market, approval_token=token, now=now)
             close_market = MarketSnapshot("MNQ", 20002.00, 20002.25, now)
             engine.close_position(intent_id, close_market, reason="smoke", now=now)
         HashChainJournal.verify(journal)
@@ -104,6 +116,14 @@ def main() -> int:
     checks["candidate_count"] = len(candidates)
     if not candidates:
         failures.append("candidate registry empty")
+
+    try:
+        economics_raw = json.loads((root / "config" / "economics.json").read_text(encoding="utf-8"))
+        economics = load_economics_policy(economics_raw)
+        checks["economics"] = economics.report()
+    except Exception as exc:
+        checks["economics"] = f"fail: {type(exc).__name__}: {exc}"
+        failures.append("economics configuration invalid")
 
     try:
         smoke_failures = smoke_paper()
