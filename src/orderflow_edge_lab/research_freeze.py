@@ -73,10 +73,10 @@ def build_research_freeze(
     return body
 
 
-def validate_research_freeze(value: object) -> dict[str, Any]:
-    if not isinstance(value, dict):
+def validate_research_freeze(freeze: object) -> dict[str, Any]:
+    if not isinstance(freeze, dict):
         raise ValueError("research freeze must be a JSON object")
-    item = dict(value)
+    item = dict(freeze)
     supplied = item.pop("registration_sha256", None)
     if not isinstance(supplied, str) or len(supplied) != 64:
         raise ValueError("research freeze has no valid registration hash")
@@ -89,10 +89,10 @@ def validate_research_freeze(value: object) -> dict[str, Any]:
     if not isinstance(config, dict):
         raise ValueError("research freeze is missing strategy_config")
     for key in ("sha256", "canonical_json_sha256"):
-        value = config.get(key)
-        if not isinstance(value, str) or len(value) != 64 or any(c not in "0123456789abcdef" for c in value):
+        digest = config.get(key)
+        if not isinstance(digest, str) or len(digest) != 64 or any(c not in "0123456789abcdef" for c in digest):
             raise ValueError(f"invalid strategy_config {key}")
-    return dict(value)
+    return dict(freeze)
 
 
 def verify_strategy_config(freeze: Mapping[str, Any], strategy_config: str | Path) -> bool:
