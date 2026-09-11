@@ -38,13 +38,27 @@ class PaperControlTests(unittest.TestCase):
         rows.extend(f"{(now - timedelta(milliseconds=100-i)).isoformat()},MNQ,20000.25,20000,20000.25,buy,1" for i in range(100))
         export.write_text("\n".join(rows))
         validation.write_text(json.dumps({
+            "schema_version": 7,
             "deployment_eligible": True,
             "verified_out_of_sample_evidence": True,
-            "source_verification": {"verified_against_local_files": True},
+            "causal_window_summaries": True,
+            "observation_count": 1,
+            "source_verification": {
+                "verified_against_local_files": True,
+                "files": [{"path": "source.csv", "sha256": "a" * 64}],
+            },
             "candidates": [{
                 "candidate_id": "manual-engineering",
-                "windows": [{"complete": True}],
+                "windows": [{
+                    "complete": True,
+                    "matured_event_count": 1,
+                    "matured_active_days": 1,
+                    "summary": {"n": 1},
+                }],
                 "summary": {"n": 1},
+                "source_provenance": {"unique_records": 1},
+                "return_provenance": {"observations_recomputed": 1},
+                "cost_provenance": {"observations": 1},
             }],
         }))
         economics.write_text(json.dumps({"account_equity": 10000.0}))
