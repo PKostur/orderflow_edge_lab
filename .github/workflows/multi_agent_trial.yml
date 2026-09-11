@@ -27,4 +27,4 @@ jobs:
       - name: Compile trial
         run: python -m compileall -q experiments/multi_agent_trial
       - name: Run trial tests
-        run: python -m unittest experiments.multi_agent_trial.test_engine -v
+        run: python -m unittest discover -s experiments/multi_agent_trial -p 'test_*.py' -v
