@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, asdict
 from datetime import datetime, timezone
+import hashlib
 import ipaddress
 import json
 from pathlib import Path
@@ -32,6 +33,8 @@ class RankedEndpoint:
     confidence: str
     evidence: tuple[str, ...]
     samples_seen: int
+    first_seen_utc: str
+    last_seen_utc: str
     score: int
     reasons: tuple[str, ...]
 
@@ -55,7 +58,7 @@ def _require_bool(report: Mapping[str, Any], field: str, expected: bool) -> None
         raise EndpointCaptureError(f"{field} must be {str(expected).lower()}")
 
 
-def _score_observation(row: Mapping[str, Any]) -> RankedEndpoint:
+def _score_observation(row: Mapping[str, Any], started: datetime, ended: datetime) -> RankedEndpoint:
     try:
         process_name = str(row["process_name"]).strip()
         pid = int(row["pid"])
@@ -87,6 +90,8 @@ def _score_observation(row: Mapping[str, Any]) -> RankedEndpoint:
     last_seen = _parse_utc(row.get("last_seen_utc"), "last_seen_utc")
     if last_seen < first_seen:
         raise EndpointCaptureError("observation last_seen_utc precedes first_seen_utc")
+    if first_seen < started or last_seen > ended:
+        raise EndpointCaptureError("observation timestamp falls outside capture window")
 
     score = 0
     reasons: list[str] = []
@@ -120,6 +125,8 @@ def _score_observation(row: Mapping[str, Any]) -> RankedEndpoint:
         confidence=confidence,
         evidence=evidence,
         samples_seen=samples_seen,
+        first_seen_utc=first_seen.isoformat(),
+        last_seen_utc=last_seen.isoformat(),
         score=score,
         reasons=tuple(reasons),
     )
@@ -142,6 +149,10 @@ def analyze_capture(report: Mapping[str, Any]) -> dict[str, Any]:
     if ended <= started:
         raise EndpointCaptureError("capture must have a positive duration")
 
+    sample_count = report.get("sample_count")
+    if type(sample_count) is not int or sample_count < 1:
+        raise EndpointCaptureError("sample_count must be a positive integer")
+
     observations = report.get("observations")
     if not isinstance(observations, list):
         raise EndpointCaptureError("observations must be a list")
@@ -149,7 +160,7 @@ def analyze_capture(report: Mapping[str, Any]) -> dict[str, Any]:
     if type(declared_count) is not int or declared_count != len(observations):
         raise EndpointCaptureError("endpoint_count does not match observations")
 
-    ranked = [_score_observation(row) for row in observations]
+    ranked = [_score_observation(row, started, ended) for row in observations]
     ranked.sort(key=lambda item: (-item.score, item.process_name.lower(), item.remote_address, item.remote_port))
 
     top_score = ranked[0].score if ranked else 0
@@ -162,6 +173,7 @@ def analyze_capture(report: Mapping[str, Any]) -> dict[str, Any]:
         "analysis_type": "deepcharts_network_peer_ranking",
         "capture_started_at_utc": started.isoformat(),
         "capture_ended_at_utc": ended.isoformat(),
+        "capture_sample_count": sample_count,
         "ranked_endpoints": [asdict(item) for item in ranked],
         "candidate": candidate,
         "candidate_is_unambiguous": unique_high_signal,
@@ -183,7 +195,9 @@ def analyze_capture(report: Mapping[str, Any]) -> dict[str, Any]:
 def analyze_capture_file(path: str | Path) -> dict[str, Any]:
     capture_path = Path(path)
     try:
-        report = json.loads(capture_path.read_text(encoding="utf-8-sig"))
-    except (OSError, json.JSONDecodeError) as exc:
+        raw = capture_path.read_bytes()
+        report = json.loads(raw.decode("utf-8-sig"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise EndpointCaptureError("capture file cannot be read as JSON") from exc
-    return analyze_capture(report)
+    result = analyze_capture(report)
+    return {**result, "capture_sha256": hashlib.sha256(raw).hexdigest()}
