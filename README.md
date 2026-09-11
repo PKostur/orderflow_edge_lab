@@ -7,16 +7,35 @@ Research-first infrastructure for short-horizon order-flow strategy research and
 
 ## Safety boundary
 
-This repository does not contain live broker order transmission. The execution layer is limited to paper and explicit approval workflows. No strategy is considered to have a profitable edge unless it survives genuine out-of-sample validation after realistic costs on data that was not used for discovery or tuning.
+This repository does not contain live broker or exchange order transmission. The execution layer is limited to paper and explicit approval workflows. No strategy is considered to have a profitable edge unless it survives genuine out-of-sample validation after realistic costs on data that was not used for discovery or tuning.
 
 ## Current priorities
 
-1. Use existing DeepCharts/dxFeed access where the entitlement permits external access.
-2. Keep a zero-additional-cost data path wherever possible.
-3. Preserve strict separation between discovery, validation, and final holdout data.
-4. Fail closed on stale, malformed, incomplete, duplicated, crossed, or low-quality market data.
-5. Make research runs reproducible with frozen configuration, input hashes, and run manifests.
-6. Paper trade and approval-test before any future broker integration is considered.
+1. Use MEXC public Futures trades and price-level depth as the primary zero-additional-cost data path for ENA/BTC crypto research.
+2. Preserve DeepCharts/dxFeed as an optional path where the entitlement permits supported export or external API access.
+3. Keep strict separation between discovery, validation, and final holdout data.
+4. Fail closed on stale, malformed, incomplete, duplicated, crossed, sequence-gapped, or low-quality market data.
+5. Make research runs reproducible with frozen configuration, immutable raw inputs, hashes, and run manifests.
+6. Paper trade and approval-test before any future broker or exchange integration is considered.
+
+## MEXC Futures order flow
+
+The repository can record public MEXC Futures `push.deal` and incremental `push.depth` streams for `ENA_USDT`, `BTC_USDT`, or other Futures symbols without API keys.
+
+```bash
+python -m pip install -e .
+orderflow-mexc-record --symbol ENA_USDT --symbol BTC_USDT
+```
+
+The recorder maintains a synchronized local L2 book using full snapshots, depth versions, commit recovery, and fail-closed snapshot fallback. Raw JSONL is exclusive-create and receives a SHA-256 manifest on clean close. A separate feature stream contains rolling CVD, buy/sell volume, trade velocity, spread, microprice, top-N book imbalance, liquidity adds/pulls, and depth-flow imbalance.
+
+Replay an existing raw capture without touching the network:
+
+```bash
+orderflow-mexc-replay data/mexc_orderflow/<raw-file>.jsonl
+```
+
+See [MEXC Futures order-flow recorder](docs/MEXC_ORDERFLOW.md).
 
 ## dxFeed and DeepCharts
 
@@ -39,8 +58,7 @@ See [data access and quality checks](docs/DXFEED.md).
   against frozen rules and produce hashed, descriptive reports without certifying
   out-of-sample evidence or deployment eligibility.
 
-Local export validation and all engineering tests require no paid API or external
-service. Real market-data access and coverage still depend on your entitlement.
+Local export validation, MEXC public market-data collection, replay, and engineering tests require no paid API or external service beyond the user's existing network access. Real market-data availability and exchange coverage remain vendor-controlled.
 
 ## Research validity
 
@@ -62,4 +80,4 @@ Direct PaperEngine callers must supply upstream data/signal validation.
 
 ## Live trading
 
-Live order transmission is deliberately absent. Any future live adapter should be introduced only after sufficient fresh out-of-sample evidence, paper/shadow reliability evidence, and broker reconciliation testing exist.
+Live order transmission is deliberately absent. Any future live adapter should be introduced only after sufficient fresh out-of-sample evidence, paper/shadow reliability evidence, and broker/exchange reconciliation testing exist.
