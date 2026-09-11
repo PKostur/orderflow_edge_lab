@@ -118,6 +118,51 @@ It reports HTTP status and a bounded byte count; response bodies and exception
 messages are omitted to avoid exposing credentials echoed by a server.
 HTTP success does not prove historical TimeAndSale access or research validity.
 
+## Path C: observe the DeepCharts bridge endpoint on Windows
+
+DeepCharts and DeepDom can share the same dxFeed bridge. To identify the remote
+network peer used while the feed is connected, run the repository PowerShell
+watcher from the project root:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\find_deepcharts_dxfeed.ps1
+```
+
+The watcher samples established TCP connections for processes whose names contain
+`DeepChart`, `DeepCharts`, `DeepDom`, `Volumetrica`, or `dxFeed`. It records only
+process name, PID, remote IP, remote port, reverse DNS when available, first/last
+seen timestamps, and sample counts. It does not inspect process memory, command
+lines, environment variables, configuration files, usernames, passwords, or
+tokens.
+
+For best isolation, start the watcher while DeepCharts is open, then disconnect
+and reconnect only the dxFeed feed once during the 45 second capture. The report
+is written to:
+
+```text
+deepcharts_dxfeed_endpoints.json
+```
+
+Evidence is ranked conservatively:
+
+* `high`: reverse DNS explicitly contains `dxfeed`.
+* `medium`: remote port 7300 was observed.
+* `low`: ordinary TLS port 443. Correlate its appearance with the feed reconnect.
+* `unclassified`: an established DeepCharts-related peer without dxFeed-specific
+  evidence.
+
+If no matching process is found, get the exact executable name from Windows Task
+Manager and rerun:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\find_deepcharts_dxfeed.ps1 -ProcessName ExactProcessName
+```
+
+Discovering the peer used by DeepCharts does not by itself establish that the
+same address is a supported external API endpoint. It is network evidence that
+can be used to identify the service and choose the next safe probe without
+sending credentials to a guessed host.
+
 ## Important entitlement caveat
 
 Do not infer external API or redistribution permission merely from being able
