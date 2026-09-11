@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 import hashlib
 import json
@@ -36,11 +35,12 @@ def _valid_sha256(value: object) -> bool:
 
 
 def _source_from_audit(report: dict[str, Any], audit_path: Path) -> dict[str, Any]:
-    file_meta = report.get("file")
+    if report.get("schema_version") != 2:
+        raise ResearchProtocolError(f"export audit schema v2 required: {audit_path}")
     timestamps = report.get("timestamps")
-    if not isinstance(file_meta, dict) or not isinstance(timestamps, dict):
-        raise ResearchProtocolError(f"audit missing file/timestamps metadata: {audit_path}")
-    digest = file_meta.get("sha256")
+    if not isinstance(timestamps, dict):
+        raise ResearchProtocolError(f"audit missing timestamps metadata: {audit_path}")
+    digest = report.get("source_sha256")
     if not _valid_sha256(digest):
         raise ResearchProtocolError(f"audit has invalid source sha256: {audit_path}")
     minimum = timestamps.get("minimum")
@@ -51,14 +51,18 @@ def _source_from_audit(report: dict[str, Any], audit_path: Path) -> dict[str, An
     end = _parse_utc(maximum)
     if end < start:
         raise ResearchProtocolError(f"audit timestamp range is reversed: {audit_path}")
+    eligibility = report.get("research_eligibility")
     return {
         "audit_path": str(audit_path),
         "audit_sha256": _canonical_sha256(report),
-        "source_name": file_meta.get("name"),
-        "source_sha256": digest.lower(),
+        "source_name": report.get("source_file"),
+        "source_sha256": str(digest).lower(),
         "start": start.isoformat(),
         "end": end.isoformat(),
-        "row_count": report.get("csv", {}).get("row_count") if isinstance(report.get("csv"), dict) else None,
+        "row_count": report.get("rows"),
+        "symbols": report.get("symbols"),
+        "trade_flow_eligible": eligibility.get("trade_flow") if isinstance(eligibility, dict) else None,
+        "bbo_ofi_eligible": eligibility.get("bbo_ofi") if isinstance(eligibility, dict) else None,
     }
 
 
