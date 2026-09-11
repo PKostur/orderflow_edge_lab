@@ -1,0 +1,30 @@
+name: Multi-agent trial
+
+on:
+  push:
+    branches:
+      - experiment/multi-agent-trial
+  pull_request:
+    paths:
+      - 'experiments/multi_agent_trial/**'
+      - '.github/workflows/multi_agent_trial.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  trial:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile trial
+        run: python -m compileall -q experiments/multi_agent_trial
+      - name: Run trial tests
+        run: python -m unittest experiments.multi_agent_trial.test_engine -v
