@@ -17,12 +17,16 @@ UTC = timezone.utc
 class ResearchProtocolTests(unittest.TestCase):
     def audit(self, sha: str = "a" * 64):
         return {
-            "file": {"name": "sample.csv", "sha256": sha},
-            "csv": {"row_count": 100},
+            "schema_version": 2,
+            "source_file": "sample.csv",
+            "source_sha256": sha,
+            "rows": 100,
+            "symbols": ["ENA_USDT"],
             "timestamps": {
                 "minimum": "2026-09-01T00:00:00+00:00",
                 "maximum": "2026-09-10T00:00:00+00:00",
             },
+            "research_eligibility": {"trade_flow": True, "bbo_ofi": True},
         }
 
     def test_freeze_binds_source_hash_and_boundaries(self):
@@ -38,6 +42,7 @@ class ResearchProtocolTests(unittest.TestCase):
         self.assertFalse(manifest["verified_out_of_sample_evidence"])
         self.assertEqual(manifest["sources"][0]["source_sha256"], "a" * 64)
         self.assertEqual(manifest["partition_policy"]["embargo_seconds"], 3600)
+        self.assertTrue(manifest["sources"][0]["bbo_ofi_eligible"])
 
     def test_manifest_tamper_is_detected(self):
         manifest = build_research_freeze(
@@ -53,6 +58,17 @@ class ResearchProtocolTests(unittest.TestCase):
         with self.assertRaisesRegex(ResearchProtocolError, "duplicate source bytes"):
             build_research_freeze(
                 [(Path("a.json"), self.audit()), (Path("b.json"), self.audit())],
+                discovery_end=datetime(2026, 9, 4, tzinfo=UTC),
+                validation_end=datetime(2026, 9, 7, tzinfo=UTC),
+                holdout_end=datetime(2026, 9, 10, tzinfo=UTC),
+            )
+
+    def test_old_export_audit_schema_is_rejected(self):
+        report = self.audit()
+        report["schema_version"] = 1
+        with self.assertRaisesRegex(ResearchProtocolError, "schema v2 required"):
+            build_research_freeze(
+                [(Path("audit.json"), report)],
                 discovery_end=datetime(2026, 9, 4, tzinfo=UTC),
                 validation_end=datetime(2026, 9, 7, tzinfo=UTC),
                 holdout_end=datetime(2026, 9, 10, tzinfo=UTC),
