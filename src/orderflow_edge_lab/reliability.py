@@ -9,6 +9,7 @@ from typing import Iterable
 from .execution import HashChainJournal, StateCorruptionError, validate_execution_state, reconcile_execution
 
 UTC = timezone.utc
+ADMINISTRATIVE_EVENTS = {"engine_initialized", "legacy_state_migrated", "configuration_bound"}
 
 
 @dataclass(frozen=True)
@@ -64,9 +65,14 @@ def audit_journal_semantics(path: str | Path) -> dict[str, int]:
         if not isinstance(event_type, str) or not event_type:
             raise StateCorruptionError(f"journal event type missing at line {lineno}")
         when = _parse_utc(row.get("timestamp"))
-        if previous_time is not None and when < previous_time:
-            raise StateCorruptionError(f"journal timestamp regression at line {lineno}")
-        previous_time = when
+        # Engine initialization and explicit migration/configuration checkpoints use
+        # persistence wall-clock time, not the strategy's operation clock. Compare
+        # only operational events so readiness enforces the same monotonic clock that
+        # PaperEngine enforces across submit/approve/close/kill operations.
+        if event_type not in ADMINISTRATIVE_EVENTS:
+            if previous_time is not None and when < previous_time:
+                raise StateCorruptionError(f"journal timestamp regression at line {lineno}")
+            previous_time = when
 
         payload = row.get("payload")
         if not isinstance(payload, dict):
