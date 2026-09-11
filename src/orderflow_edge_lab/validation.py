@@ -140,6 +140,35 @@ def _dependence_diagnostics(rows):
     }
 
 
+def _causal_window_report(window, rows, candidate, coverage):
+    """Summarize only outcomes that were knowable by a validation window's close.
+
+    Signals are assigned to the window containing their event time. A realized return
+    whose outcome_time is after that window's end is deliberately excluded from that
+    window rather than being shifted into a later window. The candidate-level summary
+    can still include it once it has matured by observed coverage.
+    """
+    selected = [row for row in rows if window.start <= row[0] < window.end]
+    matured = [row for row in selected if row[1] <= window.end]
+    matured_active_days = len({event.date() for event, _, _ in matured})
+    cross_window = len(selected) - len(matured)
+    complete = (
+        window.end <= coverage
+        and len(matured) >= candidate.minimum_events
+        and matured_active_days >= candidate.minimum_active_days
+    )
+    return {
+        **asdict(window),
+        "start": window.start.isoformat(),
+        "end": window.end.isoformat(),
+        "complete": complete,
+        "matured_event_count": len(matured),
+        "matured_active_days": matured_active_days,
+        "cross_window_outcomes_excluded": cross_window,
+        "summary": oos_summary([net for _, _, net in matured]),
+    }
+
+
 def build_validation_report(registry_path, observations_path, *, observed_through,
                             now: datetime | None = None, source_files=None) -> dict:
     coverage = parse_utc(observed_through)
@@ -236,16 +265,19 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
         grouped[candidate.candidate_id].append((event_time, outcome_time, net))
         costs[candidate.candidate_id]["values"].append(cost)
     reports = []
+    total_cross_window = 0
     for key, candidate in candidates.items():
         rows = grouped[key]
         windows = sequential_windows(candidate, [event for event, _, _ in rows], observed_through=coverage)
+        window_reports = [_causal_window_report(window, rows, candidate, coverage) for window in windows]
+        cross_window_count = sum(window["cross_window_outcomes_excluded"] for window in window_reports)
+        total_cross_window += cross_window_count
         cost_values = costs[key]["values"]
         cost_model = costs[key]["model"]
         reports.append({
             "candidate_id": key,
-            "windows": [{**asdict(window), "start": window.start.isoformat(), "end": window.end.isoformat(),
-                         "summary": oos_summary([net for event, _, net in rows if window.start <= event < window.end])}
-                        for window in windows],
+            "windows": window_reports,
+            "cross_window_outcome_count": cross_window_count,
             "summary": oos_summary([net for _, _, net in rows]),
             "dependence": _dependence_diagnostics(rows),
             "source_provenance": {
@@ -269,7 +301,7 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
         "files": verified_source_files,
     }
     return {
-        "schema_version": 6,
+        "schema_version": 7,
         "audit_status": "supplied_observations_passed_structural_checks",
         "registry_sha256": hashlib.sha256(registry_bytes).hexdigest(),
         "observations_sha256": hashlib.sha256(observation_bytes).hexdigest(),
@@ -277,6 +309,8 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
         "observed_through": coverage.isoformat(),
         "generated_at": now.isoformat(),
         "observation_count": len(seen),
+        "cross_window_outcome_count": total_cross_window,
+        "causal_window_summaries": True,
         "candidates": reports,
         "deployment_eligible": False,
         "verified_out_of_sample_evidence": False,
@@ -284,6 +318,8 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
             "Source labels, record IDs, coverage, prices, cost model labels, and cost components are caller supplied, not independently verified.",
             "Local file hashing can verify declared dataset hashes against supplied bytes but does not prove export authenticity or completeness.",
             "Registry hashes identify rules but do not prove when rules were frozen.",
+            "Per-window summaries include only outcomes known by that window's close; cross-window outcomes are excluded from that window rather than shifted forward.",
+            "The candidate-level summary is an as-of-observed-through summary and may include outcomes excluded from their original per-window summary after those outcomes mature.",
             "Event-level summaries do not assume independence; overlap diagnostics and daily clustering are descriptive only.",
             "Gross R is recomputed from supplied prices and initial stop distance, but supplied prices and fill timestamps are not independently verified.",
             "Explicit positive transaction costs reduce frictionless backtest risk but do not prove fills were executable.",
