@@ -45,6 +45,19 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual(result.stats.trades_enriched_from_prior_bbo, 1)
         self.assertEqual(result.stats.trade_bbo_fraction, 1.0)
 
+    def test_trade_embedded_bbo_is_not_reused_as_quote_history(self):
+        result = normalize_dxfeed_rows([
+            {"timestamp": BASE, "symbol": "MNQ", "kind": "trade", "price": 101, "bid": 100, "ask": 101},
+            {"timestamp": BASE + 1, "symbol": "MNQ", "kind": "trade", "price": 101},
+        ])
+        first, second = result.events
+        self.assertEqual((first.bid, first.ask), (100, 101))
+        self.assertEqual(first.side, Side.BUY)
+        self.assertIsNone(second.bid)
+        self.assertIsNone(second.ask)
+        self.assertEqual(result.stats.quote_events, 0)
+        self.assertEqual(result.stats.trades_enriched_from_prior_bbo, 0)
+
     def test_stale_quote_is_not_attached(self):
         result = normalize_dxfeed_rows([
             {"timestamp": BASE, "symbol": "MNQ", "kind": "quote", "bid": 20000.0, "ask": 20000.25},
