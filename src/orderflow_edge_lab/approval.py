@@ -12,6 +12,15 @@ from orderflow_edge_lab.execution import (
 )
 
 
+def _market_payload(market: MarketSnapshot) -> dict[str, Any]:
+    return {
+        "symbol": market.symbol,
+        "bid": market.bid,
+        "ask": market.ask,
+        "timestamp": market.timestamp.isoformat(),
+    }
+
+
 class ApprovalBoundPaperEngine(PaperEngine):
     """Paper engine whose human approval is bound to the submitted size.
 
@@ -20,6 +29,10 @@ class ApprovalBoundPaperEngine(PaperEngine):
     approval should never silently authorize a different size, so this wrapper fails
     closed whenever the currently allowable size differs from the size recorded when
     the intent entered the approval queue.
+
+    Approval term drift is durably journaled before rejection. The pending intent is
+    retained so the operator can explicitly reject it or let it expire rather than
+    having an attempted approval silently disappear from the audit trail.
 
     There is still no broker or network order transmission in this class.
     """
@@ -55,6 +68,16 @@ class ApprovalBoundPaperEngine(PaperEngine):
         _, currently_allowed = self._validate(intent, market, operation_time, allow_seen=True)
         submitted_contracts = int(pending["contracts"])
         if currently_allowed != submitted_contracts:
+            self._commit(
+                "approval_terms_changed",
+                {
+                    "intent_id": intent_id,
+                    "submitted_contracts": submitted_contracts,
+                    "currently_allowed": currently_allowed,
+                    "market": _market_payload(market),
+                },
+                operation_time,
+            )
             raise RejectedIntent(
                 f"approval_terms_changed:submitted_contracts={submitted_contracts},"
                 f"currently_allowed={currently_allowed}"
