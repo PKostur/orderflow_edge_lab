@@ -11,6 +11,7 @@ dependencies = ["websockets>=12,<16"]
 
 [project.scripts]
 orderflow-paper = "orderflow_edge_lab.cli.paper:main"
+orderflow-paper-audit = "orderflow_edge_lab.cli.paper_audit:main"
 orderflow-probe = "orderflow_edge_lab.cli.probe:main"
 orderflow-validate = "orderflow_edge_lab.cli.validate:main"
 orderflow-readiness = "orderflow_edge_lab.cli.readiness:main"
@@ -20,6 +21,7 @@ orderflow-audit-causality = "orderflow_edge_lab.cli.audit_causality:main"
 orderflow-promotion-check = "orderflow_edge_lab.cli.promote:main"
 orderflow-mexc-record = "orderflow_edge_lab.cli.mexc_record:main"
 orderflow-mexc-replay = "orderflow_edge_lab.cli.mexc_replay:main"
+orderflow-export-audit = "orderflow_edge_lab.cli.export_audit:main"
 
 [project.gui-scripts]
 orderflow-dxfeed-login = "orderflow_edge_lab.cli.login:main"
