@@ -15,6 +15,7 @@ from orderflow_edge_lab.execution import (
     RiskPolicy, MarketSnapshot, TradeIntent, StateCorruptionError,
     EngineLockError, RejectedIntent,
 )
+from orderflow_edge_lab.promotion import assess_candidate_promotion_files
 from orderflow_edge_lab.reliability import deployment_readiness
 from orderflow_edge_lab.research import parse_utc
 
@@ -42,6 +43,16 @@ def main(argv=None):
     submit = commands.add_parser("submit")
     submit.add_argument("--intent", required=True)
     submit.add_argument("--export", required=True, help="Fresh trade/BBO CSV; all rows must match intent symbol")
+    submit.add_argument(
+        "--validation-report",
+        required=True,
+        help="Certified validation report. strategy_id must match its promoted candidate_id",
+    )
+    submit.add_argument(
+        "--economics",
+        required=True,
+        help="Economics policy used to recompute the fail-closed promotion decision",
+    )
     approve = commands.add_parser("approve")
     approve.add_argument("intent_id")
     approve.add_argument("--token", required=True, help="Approval integrity token returned by submit")
@@ -83,6 +94,19 @@ def main(argv=None):
             values = _read(args.intent)
             values["signal_time"] = parse_utc(values["signal_time"])
             intent = TradeIntent(**values)
+            promotion = assess_candidate_promotion_files(
+                args.validation_report,
+                intent.strategy_id,
+                args.economics,
+            )
+            if not promotion.promotable or promotion.research_only:
+                print(json.dumps({
+                    "mode": "paper",
+                    "status": "rejected",
+                    "reason": "strategy_not_promoted",
+                    "promotion": promotion.as_dict(),
+                }, indent=2, allow_nan=False))
+                return 2
             data = Path(args.export).read_bytes()
             events = normalize_rows(csv.DictReader(io.StringIO(data.decode("utf-8-sig"))), default_symbol=intent.symbol)
             if any(event.symbol != intent.symbol for event in events):
@@ -97,7 +121,11 @@ def main(argv=None):
                 raise ValueError("a fresh BBO is required for paper execution")
             last = quotes[-1]
             market = MarketSnapshot(intent.symbol, last.bid, last.ask, last.timestamp)
-            evidence = {"export_sha256": hashlib.sha256(data).hexdigest(), "quality": asdict(report)}
+            evidence = {
+                "export_sha256": hashlib.sha256(data).hexdigest(),
+                "quality": asdict(report),
+                "promotion": promotion.as_dict(),
+            }
         elif args.command in {"approve", "close"}:
             market = _market(args.market)
         now = datetime.now(timezone.utc)
