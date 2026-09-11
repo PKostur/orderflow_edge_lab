@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 import hashlib
 import json
 from pathlib import Path
@@ -19,6 +19,7 @@ class PromotionAssessment:
     economics_sha256: str
     monthly_fixed_cost: float
     monthly_cost_hurdle_fraction: float
+    source_files_reverified: bool = False
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -30,6 +31,7 @@ class PromotionAssessment:
             "economics_sha256": self.economics_sha256,
             "monthly_fixed_cost": self.monthly_fixed_cost,
             "monthly_cost_hurdle_fraction": self.monthly_cost_hurdle_fraction,
+            "source_files_reverified": self.source_files_reverified,
         }
 
 
@@ -52,6 +54,56 @@ def _valid_sha256(value: object) -> bool:
     )
 
 
+def _sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _reverify_source_files(report: dict[str, Any]) -> tuple[str, ...]:
+    """Re-hash the exact source paths recorded in a promotable report.
+
+    This is intentionally a second verification at the paper-promotion boundary.
+    The structural report may have been generated earlier; a boolean marker in that
+    report is not enough to prove that the referenced bytes still match now.
+    Relative paths are interpreted using the current process working directory,
+    matching normal Path semantics. Missing, non-file, duplicate, unreadable, or
+    changed inputs all fail closed.
+    """
+    source = report.get("source_verification")
+    files = source.get("files") if isinstance(source, dict) else None
+    if not isinstance(files, list) or not files:
+        return ("source_file_reverification_unavailable",)
+
+    seen: set[Path] = set()
+    reasons: list[str] = []
+    for item in files:
+        if not isinstance(item, dict):
+            return ("source_file_reverification_unavailable",)
+        raw_path = item.get("path")
+        expected = item.get("sha256")
+        if not isinstance(raw_path, str) or not raw_path.strip() or not _valid_sha256(expected):
+            return ("source_file_reverification_unavailable",)
+        path = Path(raw_path).expanduser().resolve()
+        if path in seen:
+            reasons.append("source_file_evidence_ambiguous")
+            continue
+        seen.add(path)
+        try:
+            if not path.is_file():
+                reasons.append("source_file_not_reverifiable")
+                continue
+            actual = _sha256_file(path)
+        except OSError:
+            reasons.append("source_file_not_reverifiable")
+            continue
+        if actual.lower() != str(expected).lower():
+            reasons.append("source_file_sha256_mismatch")
+    return tuple(dict.fromkeys(reasons))
+
+
 def assess_candidate_promotion(
     validation_report: dict[str, Any],
     candidate_id: str,
@@ -63,6 +115,10 @@ def assess_candidate_promotion(
     upstream OOS certification plus internally consistent evidence counts, causal
     window summaries, verified source bytes, and acceptable project economics.
     Current project validation artifacts deliberately do not certify an edge.
+
+    This in-memory assessment validates report structure only. File-backed callers
+    must use ``assess_candidate_promotion_files`` so source bytes are re-hashed at
+    the promotion boundary.
     """
     report = _require_dict(validation_report, "validation report must be an object")
     if not isinstance(candidate_id, str) or not candidate_id.strip():
@@ -167,6 +223,7 @@ def assess_candidate_promotion(
         economics_sha256=_canonical_sha256(economics_report),
         monthly_fixed_cost=economics.monthly_fixed_cost,
         monthly_cost_hurdle_fraction=economics.monthly_cost_hurdle_fraction,
+        source_files_reverified=False,
     )
 
 
@@ -177,9 +234,23 @@ def assess_candidate_promotion_files(
 ) -> PromotionAssessment:
     validation_raw = json.loads(Path(validation_report_path).read_text(encoding="utf-8"))
     economics_raw = json.loads(Path(economics_path).read_text(encoding="utf-8"))
+    report = _require_dict(validation_raw, "validation report must be an object")
     economics = load_economics_policy(_require_dict(economics_raw, "economics policy must be an object"))
-    return assess_candidate_promotion(
-        _require_dict(validation_raw, "validation report must be an object"),
-        candidate_id,
-        economics,
-    )
+    assessment = assess_candidate_promotion(report, candidate_id, economics)
+
+    # Re-hashing is required only when the structural/economic gate would otherwise
+    # permit promotion. Rejected research artifacts remain rejected without requiring
+    # old source files to still be mounted.
+    if not assessment.promotable:
+        return assessment
+
+    reverify_reasons = _reverify_source_files(report)
+    if reverify_reasons:
+        return replace(
+            assessment,
+            promotable=False,
+            research_only=True,
+            reasons=assessment.reasons + reverify_reasons,
+            source_files_reverified=False,
+        )
+    return replace(assessment, source_files_reverified=True)

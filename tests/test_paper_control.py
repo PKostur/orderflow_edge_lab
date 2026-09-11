@@ -1,5 +1,6 @@
 import contextlib
 from datetime import datetime, timedelta, timezone
+import hashlib
 import io
 import json
 from pathlib import Path
@@ -28,6 +29,7 @@ class PaperControlTests(unittest.TestCase):
         intent = self.root / "intent.json"
         market = self.root / "market.json"
         export = self.root / "export.csv"
+        source = self.root / "source.csv"
         validation = self.root / "validation.json"
         economics = self.root / "economics.json"
         intent.write_text(json.dumps({"strategy_id": "manual-engineering", "symbol": "MNQ", "side": "LONG",
@@ -37,6 +39,8 @@ class PaperControlTests(unittest.TestCase):
         rows = ["timestamp,symbol,price,bid,ask,side,size"]
         rows.extend(f"{(now - timedelta(milliseconds=100-i)).isoformat()},MNQ,20000.25,20000,20000.25,buy,1" for i in range(100))
         export.write_text("\n".join(rows))
+        source_bytes = b"frozen-research-source\n"
+        source.write_bytes(source_bytes)
         validation.write_text(json.dumps({
             "schema_version": 7,
             "deployment_eligible": True,
@@ -45,7 +49,10 @@ class PaperControlTests(unittest.TestCase):
             "observation_count": 1,
             "source_verification": {
                 "verified_against_local_files": True,
-                "files": [{"path": "source.csv", "sha256": "a" * 64}],
+                "files": [{
+                    "path": str(source),
+                    "sha256": hashlib.sha256(source_bytes).hexdigest(),
+                }],
             },
             "candidates": [{
                 "candidate_id": "manual-engineering",
@@ -98,6 +105,7 @@ class PaperControlTests(unittest.TestCase):
         self.assertTrue(evidence["quality"]["passed"])
         self.assertTrue(evidence["promotion"]["promotable"])
         self.assertFalse(evidence["promotion"]["research_only"])
+        self.assertTrue(evidence["promotion"]["source_files_reverified"])
         self.assertEqual(evidence["promotion"]["candidate_id"], "manual-engineering")
         self.assertEqual(len(evidence["promotion"]["validation_report_sha256"]), 64)
         self.assertEqual(bound["payload"]["approval_token"], token)
