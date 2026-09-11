@@ -44,6 +44,7 @@ def main(argv=None):
     submit.add_argument("--export", required=True, help="Fresh trade/BBO CSV; all rows must match intent symbol")
     approve = commands.add_parser("approve")
     approve.add_argument("intent_id")
+    approve.add_argument("--token", required=True, help="Approval integrity token returned by submit")
     approve.add_argument("--market", required=True)
     reject = commands.add_parser("reject")
     reject.add_argument("intent_id")
@@ -103,9 +104,10 @@ def main(argv=None):
         with ApprovalBoundPaperEngine(args.state, args.journal, starting_equity=getattr(args, "equity", 10000),
                                       policy=policy, migrate_legacy=args.command == "migrate") as engine:
             if args.command == "submit":
-                result = {"intent_id": engine.submit(intent, market, now=now, evidence=evidence)}
+                intent_id = engine.submit(intent, market, now=now, evidence=evidence)
+                result = {"intent_id": intent_id, "approval_token": engine.approval_token_for(intent_id)}
             elif args.command == "approve":
-                result = engine.approve(args.intent_id, market, now=now)
+                result = engine.approve(args.intent_id, market, approval_token=args.token, now=now)
             elif args.command == "reject":
                 engine.reject(args.intent_id, reason=args.reason, now=now)
                 result = {"intent_id": args.intent_id}
