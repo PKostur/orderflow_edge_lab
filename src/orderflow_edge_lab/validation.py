@@ -8,7 +8,7 @@ import math
 import operator
 from pathlib import Path
 
-from .research import Candidate, enforce_future_only, oos_summary, parse_utc, sequential_windows
+from .research import Candidate, enforce_future_only, oos_summary, parse_utc, sequential_windows, sha256_file
 
 
 OPS = {"<": operator.lt, "<=": operator.le, ">": operator.gt, ">=": operator.ge, "==": operator.eq}
@@ -141,7 +141,7 @@ def _dependence_diagnostics(rows):
 
 
 def build_validation_report(registry_path, observations_path, *, observed_through,
-                            now: datetime | None = None) -> dict:
+                            now: datetime | None = None, source_files=None) -> dict:
     coverage = parse_utc(observed_through)
     now = parse_utc(now or datetime.now(timezone.utc))
     if coverage > now:
@@ -149,6 +149,17 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
     # Hash the exact bytes parsed, avoiding a separate read/hash race.
     registry_bytes = Path(registry_path).read_bytes()
     observation_bytes = Path(observations_path).read_bytes()
+    verified_source_hashes = None
+    verified_source_files = []
+    if source_files is not None:
+        paths = [Path(path) for path in source_files]
+        if not paths:
+            raise ValueError("source_files cannot be empty when source verification is requested")
+        verified_source_hashes = set()
+        for path in paths:
+            digest = sha256_file(path)
+            verified_source_hashes.add(digest)
+            verified_source_files.append({"path": str(path), "sha256": digest})
     raw_registry = _json(registry_bytes)
     candidates = {}
     for raw in raw_registry["candidates"]:
@@ -202,6 +213,8 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
         if row.get("source_kind") != "real_market":
             raise ValueError("synthetic or unspecified source is not future-market evidence")
         dataset_hash, record_id = _source_provenance(row)
+        if verified_source_hashes is not None and dataset_hash not in verified_source_hashes:
+            raise ValueError("observation dataset_sha256 does not match any supplied source file")
         source_key = (candidate.candidate_id, dataset_hash, record_id)
         if source_key in seen_source:
             raise ValueError("duplicate raw source record for candidate")
@@ -251,11 +264,16 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
                 "max_cost_r": max(cost_values) if cost_values else None,
             },
         })
+    source_verification = {
+        "verified_against_local_files": verified_source_hashes is not None,
+        "files": verified_source_files,
+    }
     return {
-        "schema_version": 5,
+        "schema_version": 6,
         "audit_status": "supplied_observations_passed_structural_checks",
         "registry_sha256": hashlib.sha256(registry_bytes).hexdigest(),
         "observations_sha256": hashlib.sha256(observation_bytes).hexdigest(),
+        "source_verification": source_verification,
         "observed_through": coverage.isoformat(),
         "generated_at": now.isoformat(),
         "observation_count": len(seen),
@@ -263,8 +281,8 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
         "deployment_eligible": False,
         "verified_out_of_sample_evidence": False,
         "limitations": [
-            "Source labels, dataset hashes, record IDs, coverage, prices, cost model labels, and cost components are caller supplied, not independently verified.",
-            "Dataset hashes make source reuse auditable but do not prove export authenticity or completeness.",
+            "Source labels, record IDs, coverage, prices, cost model labels, and cost components are caller supplied, not independently verified.",
+            "Local file hashing can verify declared dataset hashes against supplied bytes but does not prove export authenticity or completeness.",
             "Registry hashes identify rules but do not prove when rules were frozen.",
             "Event-level summaries do not assume independence; overlap diagnostics and daily clustering are descriptive only.",
             "Gross R is recomputed from supplied prices and initial stop distance, but supplied prices and fill timestamps are not independently verified.",
