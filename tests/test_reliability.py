@@ -1,10 +1,14 @@
 import json
+from copy import deepcopy
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import tempfile
 import unittest
 
-from orderflow_edge_lab.execution import HashChainJournal, PaperEngine
-from orderflow_edge_lab.reliability import deployment_readiness
+from orderflow_edge_lab.execution import HashChainJournal, PaperEngine, StateCorruptionError
+from orderflow_edge_lab.reliability import audit_journal_semantics, deployment_readiness
+
+UTC = timezone.utc
 
 
 class ReliabilityTests(unittest.TestCase):
@@ -38,6 +42,8 @@ class ReliabilityTests(unittest.TestCase):
             self.assertFalse(report.ready_for_live)
             evidence = next(c for c in report.checks if c.name == "out_of_sample_evidence")
             self.assertFalse(evidence.passed)
+            semantics = next(c for c in report.checks if c.name == "journal_semantics")
+            self.assertTrue(semantics.passed)
 
     def test_corrupt_journal_fails_closed(self):
         with tempfile.TemporaryDirectory() as td:
@@ -53,6 +59,55 @@ class ReliabilityTests(unittest.TestCase):
             journal.write_text('{"bad":true}\n', encoding="utf-8")
             report = deployment_readiness(state, journal)
             self.assertFalse(report.ready_for_paper)
+
+    def test_semantic_audit_rejects_valid_hash_chain_with_event_state_mismatch(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            state_path = root / "state.json"
+            journal_path = root / "journal.jsonl"
+            with PaperEngine(state_path, journal_path):
+                pass
+
+            state = json.loads(state_path.read_text(encoding="utf-8"))
+            journal = HashChainJournal(journal_path)
+            forged = deepcopy(state)
+            forged["revision"] += 1
+            forged["journal_head"] = journal._last_hash
+            forged["kill_switch"] = False
+            journal.append(
+                "kill_switch_engaged",
+                {"flatten": False, "cancelled_intents": [], "state_after": forged},
+                datetime.now(tz=UTC) + timedelta(seconds=1),
+            )
+
+            self.assertEqual(HashChainJournal.verify(journal_path), journal._last_hash)
+            with self.assertRaisesRegex(StateCorruptionError, "kill switch event/state mismatch"):
+                audit_journal_semantics(journal_path)
+            report = deployment_readiness(state_path, journal_path)
+            self.assertFalse(report.ready_for_paper)
+            self.assertFalse(next(c for c in report.checks if c.name == "journal_semantics").passed)
+
+    def test_semantic_audit_rejects_timestamp_regression(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            state_path = root / "state.json"
+            journal_path = root / "journal.jsonl"
+            with PaperEngine(state_path, journal_path):
+                pass
+
+            state = json.loads(state_path.read_text(encoding="utf-8"))
+            journal = HashChainJournal(journal_path)
+            forged = deepcopy(state)
+            forged["revision"] += 1
+            forged["journal_head"] = journal._last_hash
+            journal.append(
+                "configuration_bound",
+                {"state_after": forged},
+                datetime(2020, 1, 1, tzinfo=UTC),
+            )
+
+            with self.assertRaisesRegex(StateCorruptionError, "timestamp regression"):
+                audit_journal_semantics(journal_path)
 
     def test_validation_manifest_requires_frozen_parameters(self):
         with tempfile.TemporaryDirectory() as td:
