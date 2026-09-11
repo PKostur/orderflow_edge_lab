@@ -10,11 +10,24 @@ class PromotionTests(unittest.TestCase):
             "schema_version": 7,
             "deployment_eligible": False,
             "verified_out_of_sample_evidence": False,
-            "source_verification": {"verified_against_local_files": True, "files": []},
+            "causal_window_summaries": True,
+            "observation_count": 25,
+            "source_verification": {
+                "verified_against_local_files": True,
+                "files": [{"path": "source.csv", "sha256": "a" * 64}],
+            },
             "candidates": [{
                 "candidate_id": "P1",
-                "windows": [{"complete": True}],
+                "windows": [{
+                    "complete": True,
+                    "matured_event_count": 25,
+                    "matured_active_days": 5,
+                    "summary": {"n": 25, "mean_r": 0.1},
+                }],
                 "summary": {"n": 25, "mean_r": 0.1},
+                "source_provenance": {"unique_records": 25},
+                "return_provenance": {"observations_recomputed": 25},
+                "cost_provenance": {"observations": 25},
             }],
         }
 
@@ -66,6 +79,53 @@ class PromotionTests(unittest.TestCase):
         result = assess_candidate_promotion(report, "P1", EconomicsPolicy(account_equity=10000))
         self.assertFalse(result.promotable)
         self.assertIn("source_bytes_not_locally_verified", result.reasons)
+
+    def test_verified_source_requires_concrete_hashed_file_evidence(self):
+        report = self.report()
+        report["deployment_eligible"] = True
+        report["verified_out_of_sample_evidence"] = True
+        report["source_verification"]["files"] = []
+        result = assess_candidate_promotion(report, "P1", EconomicsPolicy(account_equity=10000))
+        self.assertFalse(result.promotable)
+        self.assertIn("source_file_evidence_missing", result.reasons)
+
+    def test_candidate_evidence_counts_must_agree(self):
+        report = self.report()
+        report["deployment_eligible"] = True
+        report["verified_out_of_sample_evidence"] = True
+        report["candidates"][0]["return_provenance"]["observations_recomputed"] = 24
+        result = assess_candidate_promotion(report, "P1", EconomicsPolicy(account_equity=10000))
+        self.assertFalse(result.promotable)
+        self.assertIn("candidate_evidence_count_mismatch", result.reasons)
+
+    def test_complete_window_counts_must_be_causally_consistent(self):
+        report = self.report()
+        report["deployment_eligible"] = True
+        report["verified_out_of_sample_evidence"] = True
+        report["candidates"][0]["windows"][0]["summary"]["n"] = 24
+        result = assess_candidate_promotion(report, "P1", EconomicsPolicy(account_equity=10000))
+        self.assertFalse(result.promotable)
+        self.assertIn("causal_window_evidence_inconsistent", result.reasons)
+
+    def test_report_observation_count_must_match_candidate_summaries(self):
+        report = self.report()
+        report["deployment_eligible"] = True
+        report["verified_out_of_sample_evidence"] = True
+        report["observation_count"] = 26
+        result = assess_candidate_promotion(report, "P1", EconomicsPolicy(account_equity=10000))
+        self.assertFalse(result.promotable)
+        self.assertIn("report_observation_count_mismatch", result.reasons)
+
+    def test_schema_and_causal_summary_markers_are_required(self):
+        report = self.report()
+        report["deployment_eligible"] = True
+        report["verified_out_of_sample_evidence"] = True
+        report["schema_version"] = 6
+        report["causal_window_summaries"] = False
+        result = assess_candidate_promotion(report, "P1", EconomicsPolicy(account_equity=10000))
+        self.assertFalse(result.promotable)
+        self.assertIn("unsupported_validation_schema", result.reasons)
+        self.assertIn("causal_window_summaries_not_verified", result.reasons)
 
     def test_unknown_candidate_and_malformed_candidate_list_fail_closed(self):
         with self.assertRaises(ValueError):
