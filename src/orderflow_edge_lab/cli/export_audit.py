@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 from dataclasses import asdict
+from datetime import datetime, timezone
 import csv
 import hashlib
 import json
@@ -11,6 +12,8 @@ from orderflow_edge_lab.adapters import normalize_dxfeed_rows
 from orderflow_edge_lab.data import DataQualityPolicy, quality_report
 from orderflow_edge_lab.dxfeed_bbo import compute_bbo_ofi, extract_bbo_samples
 
+UTC = timezone.utc
+
 
 def _read_rows(path: Path) -> tuple[bytes, list[dict[str, str]]]:
     raw = path.read_bytes()
@@ -19,6 +22,10 @@ def _read_rows(path: Path) -> tuple[bytes, list[dict[str, str]]]:
     if not rows:
         raise ValueError("export contains no data rows")
     return raw, rows
+
+
+def _iso_from_ns(value: int) -> str:
+    return datetime.fromtimestamp(value / 1_000_000_000, tz=UTC).isoformat()
 
 
 def audit_export(
@@ -51,6 +58,7 @@ def audit_export(
     ofi_events, ofi_stats = compute_bbo_ofi(extracted.samples)
 
     symbols = sorted({event.symbol for event in adapted.events})
+    event_times = [event.ts_ns for event in adapted.events]
     by_symbol: dict[str, dict[str, object]] = {}
     for symbol in symbols:
         symbol_ofi = [event.ofi for event in ofi_events if event.symbol == symbol]
@@ -74,11 +82,18 @@ def audit_export(
     )
 
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "source_file": path.name,
         "source_sha256": hashlib.sha256(raw).hexdigest(),
         "rows": len(rows),
         "symbols": symbols,
+        "timestamps": {
+            "first": _iso_from_ns(event_times[0]),
+            "last": _iso_from_ns(event_times[-1]),
+            "minimum": _iso_from_ns(min(event_times)),
+            "maximum": _iso_from_ns(max(event_times)),
+            "regressions_rejected": True,
+        },
         "adapter": asdict(adapted.stats),
         "quality": asdict(quality),
         "bbo": {
