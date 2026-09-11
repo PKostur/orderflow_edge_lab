@@ -17,6 +17,7 @@ orderflow-readiness = "orderflow_edge_lab.cli.readiness:main"
 orderflow-discover-endpoint = "orderflow_edge_lab.cli.discover_endpoint:main"
 orderflow-analyze-endpoint = "orderflow_edge_lab.cli.analyze_endpoint:main"
 orderflow-audit-causality = "orderflow_edge_lab.cli.audit_causality:main"
+orderflow-promotion-check = "orderflow_edge_lab.cli.promote:main"
 
 [project.gui-scripts]
 orderflow-dxfeed-login = "orderflow_edge_lab.cli.login:main"
