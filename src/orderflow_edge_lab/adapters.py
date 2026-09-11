@@ -38,13 +38,18 @@ def attach_prior_bbo(
     max_quote_age_seconds: float = 2.0,
     reject_timestamp_regressions: bool = False,
 ) -> AdaptedEvents:
-    """Attach the most recent causal BBO to trade events.
+    """Attach the most recent causal quote-event BBO to trade events.
 
-    Input order is preserved. A cached quote is eligible only when it appeared
-    earlier in the input, is timestamped strictly before the trade, is not locked or crossed,
-    and is no older than ``max_quote_age_seconds``. This intentionally avoids
-    sorting because sorting an export can hide source-order defects and can
-    introduce accidental lookahead during replay.
+    Input order is preserved. A cached quote is eligible only when it came from
+    an actual ``QUOTE`` event that appeared earlier in the input, is timestamped
+    strictly before the trade, is not locked or crossed, and is no older than
+    ``max_quote_age_seconds``. Bid/ask fields embedded on a ``TRADE`` event may
+    classify that trade itself, but they are deliberately not promoted into
+    reusable quote state for later trades. This prevents trade-local snapshots
+    from silently becoming synthetic quote history.
+
+    This intentionally avoids sorting because sorting an export can hide
+    source-order defects and can introduce accidental lookahead during replay.
 
     Timestamp regressions are counted across the raw input stream. Set
     ``reject_timestamp_regressions`` to fail closed when a source export is not
@@ -75,14 +80,13 @@ def attach_prior_bbo(
                 )
         previous_ts_ns = event.ts_ns
 
-        is_full_quote = event.bid is not None and event.ask is not None
-        if event.kind == "QUOTE" or is_full_quote:
+        if event.kind == "QUOTE":
             quotes += 1
             prior = last_bbo.get(event.symbol)
             if prior is None or event.ts_ns >= prior[0]:
-                # Invalid updates invalidate old BBOs rather than reviving them.
+                # Invalid quote updates invalidate old BBOs rather than reviving them.
                 last_bbo[event.symbol] = (event.ts_ns, event.bid, event.ask)
-            if is_full_quote and event.bid > event.ask:
+            if event.bid is not None and event.ask is not None and event.bid > event.ask:
                 crossed_ignored += 1
 
         if event.kind != "TRADE":
