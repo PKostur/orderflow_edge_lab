@@ -31,6 +31,7 @@ Current target: research, replay, paper execution, and manual approval only.
 
 This repository deliberately fails a deployment scan if common live-order
 method markers appear in `src/`.
+
 ## Manual paper interface
 
 Install the package with `python -m pip install -e .`, then run:
@@ -38,8 +39,8 @@ Install the package with `python -m pip install -e .`, then run:
 ```text
 python scripts/paper_control.py init --equity 10000
 python scripts/paper_control.py status
-python scripts/paper_control.py submit --intent intent.json --export trades.csv
-python scripts/paper_control.py approve INTENT_ID --market market.json
+python scripts/paper_control.py submit --intent intent.json --export trades.csv --validation-report validation.json --economics config/economics.json
+python scripts/paper_control.py approve INTENT_ID --token APPROVAL_TOKEN --market market.json
 python scripts/paper_control.py reject INTENT_ID --reason "operator declined"
 python scripts/paper_control.py close INTENT_ID --market market.json --reason "operator close"
 python scripts/paper_control.py kill
@@ -59,14 +60,30 @@ Intent JSON contains `strategy_id`, `symbol`, `side`, `entry_reference`, `stop`,
 `target`, and timezone-aware `signal_time`. Market JSON contains `symbol`, `bid`,
 `ask`, and timezone-aware `timestamp`. Quotes and signals must be fresh at command
 execution; saved examples become stale. The interface has no override for the
-current clock. `submit` requires at least 100 qualifying export events, a fresh
-BBO, and a passing quality report; it records the exact export hash in the journal.
-`approve` explicitly rechecks a supplied fresh market snapshot before a paper fill.
+current clock.
 
-This is an operator-driven engineering interface. It does not generate signals or
-certify that a manual intent was produced by a validated strategy. The low-level
-PaperEngine API assumes upstream signal/data validation; it remains available to
-engineering tests. The frozen-observation audit is a separate research tool.
+`submit` is fail closed in two independent layers. First, it recomputes the
+strategy promotion decision from the supplied validation report and economics
+policy. The intent `strategy_id` must identify exactly one candidate in that
+report, and the candidate must pass the project's OOS, source-verification,
+causal-window, matured-outcome, and fixed-cost gates. A blocked or malformed
+promotion decision cannot enter the pending queue and does not mutate state or the
+journal. Second, the supplied market export must contain at least 100 qualifying
+events, a fresh BBO, and a passing quality report. The exact export hash and the
+recomputed promotion assessment, including the validation/economics hashes, are
+stored in the submission evidence and therefore included in the approval binding.
+
+`approve` requires the integrity token returned by `submit` and rechecks a fresh
+market snapshot before a paper fill. The token is an audit binding rather than an
+authentication secret. It binds the operator-visible proposal to its submitted
+intent, size, expiry, source evidence, execution configuration, and submission
+market snapshot. Market movement that changes allowable size invalidates approval.
+
+The low-level PaperEngine API remains available for engineering tests and assumes
+upstream signal/data validation. The supported operator CLI is stricter and will
+not accept research-only validation artifacts. This does not prove profitability:
+paper eligibility requires explicit upstream OOS certification and does not turn
+historical results into new evidence.
 
 `status` is read-only and does not recover state. It reports pending and open
 positions even when the kill switch is engaged, if checkpoint integrity passes.
