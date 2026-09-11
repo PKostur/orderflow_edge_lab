@@ -63,6 +63,35 @@ class AdapterTests(unittest.TestCase):
         result = attach_prior_bbo(events)
         self.assertIsNone(result.events[1].bid)
         self.assertEqual(result.stats.future_prior_quotes_ignored, 1)
+        self.assertEqual(result.stats.timestamp_regressions, 1)
+
+    def test_timestamp_regression_can_fail_closed(self):
+        events = [
+            MarketEvent(BASE + 2, "MNQ", "QUOTE", bid=100, ask=101),
+            MarketEvent(BASE + 1, "NQ", "QUOTE", bid=200, ask=201),
+        ]
+        with self.assertRaisesRegex(ValueError, "source timestamp regression"):
+            attach_prior_bbo(events, reject_timestamp_regressions=True)
+
+    def test_timestamp_regression_is_exposed_even_without_bbo_interaction(self):
+        result = attach_prior_bbo([
+            MarketEvent(BASE + 2, "MNQ", "TRADE", price=101),
+            MarketEvent(BASE + 1, "NQ", "TRADE", price=201),
+        ])
+        self.assertEqual(result.stats.timestamp_regressions, 1)
+        self.assertEqual(len(result.events), 2)
+
+    def test_normalize_dxfeed_rows_forwards_strict_timestamp_mode(self):
+        rows = [
+            {"timestamp": BASE + 2, "symbol": "MNQ", "kind": "trade", "price": 101},
+            {"timestamp": BASE + 1, "symbol": "MNQ", "kind": "trade", "price": 100},
+        ]
+        with self.assertRaisesRegex(ValueError, "source timestamp regression"):
+            normalize_dxfeed_rows(rows, reject_timestamp_regressions=True)
+
+    def test_invalid_strict_timestamp_flag_fails_closed(self):
+        with self.assertRaisesRegex(ValueError, "reject_timestamp_regressions must be a bool"):
+            attach_prior_bbo([], reject_timestamp_regressions=1)
 
     def test_explicit_side_wins_over_quote_inference(self):
         result = normalize_dxfeed_rows([
