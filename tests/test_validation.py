@@ -21,7 +21,6 @@ class ValidationTests(unittest.TestCase):
                           "spent_through": "2026-08-22T18:01:00Z", "frozen_at": "2026-09-01T00:00:00Z",
                           "minimum_events": 1, "minimum_active_days": 1}
         self.registry.write_text(json.dumps({"candidates": [self.candidate]}))
-        # Synthetic fixtures exercise auditing only; the report can never certify them.
         self.row = {"observation_id": "test-1", **{k: self.candidate[k] for k in
                     ("candidate_id", "timeframe", "setup_family", "direction", "path", "numeric_filters")},
                     "event_time": "2026-09-02T00:00:00Z", "outcome_time": "2026-09-02T00:05:00Z",
@@ -32,14 +31,16 @@ class ValidationTests(unittest.TestCase):
                     "cost_r": 0.2, "cost_model_id": "fixture-v1",
                     "cost_components_r": {"fees": 0.05, "slippage": 0.10, "spread": 0.05, "other": 0.0}}
 
-    def audit(self, rows=None, coverage="2026-09-10T00:00:00Z"):
+    def audit(self, rows=None, coverage="2026-09-10T00:00:00Z", source_files=None):
         self.observations.write_text("\n".join(json.dumps(row) for row in (rows if rows is not None else [self.row])))
         return build_validation_report(self.registry, self.observations, observed_through=coverage,
-                                       now=datetime(2026, 9, 11, tzinfo=timezone.utc))
+                                       now=datetime(2026, 9, 11, tzinfo=timezone.utc),
+                                       source_files=source_files)
 
     def test_report_hashes_inputs_recomputes_returns_deducts_costs_and_never_certifies_edge(self):
         report = self.audit()
-        self.assertEqual(report["schema_version"], 5)
+        self.assertEqual(report["schema_version"], 6)
+        self.assertFalse(report["source_verification"]["verified_against_local_files"])
         self.assertEqual(report["observations_sha256"], hashlib.sha256(self.observations.read_bytes()).hexdigest())
         self.assertAlmostEqual(report["candidates"][0]["summary"]["mean_r"], 1.8)
         self.assertTrue(report["candidates"][0]["windows"][0]["complete"])
@@ -51,6 +52,18 @@ class ValidationTests(unittest.TestCase):
         self.assertAlmostEqual(report["candidates"][0]["cost_provenance"]["mean_cost_r"], 0.2)
         self.assertFalse(report["deployment_eligible"])
         self.assertFalse(report["verified_out_of_sample_evidence"])
+
+    def test_local_source_file_hash_is_verified_and_mismatch_rejected(self):
+        raw = Path(self.tmp.name) / "deepcharts-export.csv"
+        raw.write_bytes(b"timestamp,price\n2026-09-02T00:00:00Z,100\n")
+        digest = hashlib.sha256(raw.read_bytes()).hexdigest()
+        row = deepcopy(self.row)
+        row["source_provenance"] = {"dataset_sha256": digest, "record_id": "line-2"}
+        report = self.audit([row], source_files=[raw])
+        self.assertTrue(report["source_verification"]["verified_against_local_files"])
+        self.assertEqual(report["source_verification"]["files"][0]["sha256"], digest)
+        with self.assertRaisesRegex(ValueError, "does not match any supplied source file"):
+            self.audit([self.row], source_files=[raw])
 
     def test_dependence_diagnostics_expose_overlapping_bursts_and_daily_clusters(self):
         row2 = deepcopy(self.row)
