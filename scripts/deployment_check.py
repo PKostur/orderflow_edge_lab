@@ -7,11 +7,12 @@ from pathlib import Path
 import sys
 import tempfile
 
+from orderflow_edge_lab.approval import ApprovalBoundPaperEngine
 from orderflow_edge_lab.execution import (
     DEFAULT_INSTRUMENTS,
     HashChainJournal,
     MarketSnapshot,
-    PaperEngine,
+    RejectedIntent,
     TradeIntent,
 )
 from orderflow_edge_lab.research import load_candidates
@@ -53,13 +54,31 @@ def smoke_paper() -> list[str]:
             target=20010.25,
             signal_time=now,
         )
-        with PaperEngine(state, journal, starting_equity=10_000) as engine:
+        with ApprovalBoundPaperEngine(state, journal, starting_equity=10_000) as engine:
             intent_id = engine.submit(intent, market, now=now)
+
+            # A market move that changes allowable size must not silently alter the
+            # terms the operator was shown at submission.
+            moved = MarketSnapshot("MNQ", 19999.00, 19999.25, now)
+            try:
+                engine.approve(intent_id, moved, now=now)
+            except RejectedIntent as exc:
+                if "approval_terms_changed" not in str(exc):
+                    failures.append("approval drift rejected for an unexpected reason")
+            else:
+                failures.append("approval size drift was silently accepted")
+            if intent_id not in engine.state["pending"] or engine.state["positions"]:
+                failures.append("approval drift did not preserve pending intent and flat state")
+
+            records = HashChainJournal.records(journal)
+            if not any(row["event_type"] == "approval_terms_changed" for row in records):
+                failures.append("approval drift was not durably journaled")
+
             engine.approve(intent_id, market, now=now)
             close_market = MarketSnapshot("MNQ", 20002.00, 20002.25, now)
             engine.close_position(intent_id, close_market, reason="smoke", now=now)
         HashChainJournal.verify(journal)
-        with PaperEngine(state, journal) as restarted:
+        with ApprovalBoundPaperEngine(state, journal) as restarted:
             if restarted.state["positions"] or restarted.state["pending"]:
                 failures.append("restart retained closed position or pending intent")
         report = deployment_readiness(state, journal)
