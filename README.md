@@ -9,6 +9,16 @@ Research-first infrastructure for short-horizon order-flow strategy research and
 
 This repository does not contain live broker or exchange order transmission. The execution layer is limited to paper and explicit approval workflows. No strategy is considered to have a profitable edge unless it survives genuine out-of-sample validation after realistic costs on data that was not used for discovery or tuning.
 
+## Continuous multi-agent hardening
+
+The repository now includes a zero-additional-cost multi-agent control plane. Seven specialist agents independently review data integrity, research validity, strategy validation, execution safety, reliability/CI, observability/deployment, and adversarial safety. A release manager aggregates their findings into a hashed report.
+
+```bash
+orderflow-multi-agent --output artifacts/multi_agent_report.json
+```
+
+The same control plane runs hourly in GitHub Actions with read-only repository permissions. It does not place trades or promote a strategy. See [multi-agent hardening](docs/MULTI_AGENT.md).
+
 ## Current priorities
 
 1. Use MEXC public Futures trades and price-level depth as the primary zero-additional-cost data path for ENA/BTC crypto research.
