@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "protocol_name": "strategy-conditioning-v1",
+  "status": "predeclared_research_only",
+  "frozen_at_utc": "2026-09-12T21:15:00Z",
+  "upstream_state_protocol": "regime-research-v1.1",
+  "baseline_strategy_protocol": "discovery-v1",
+  "purpose": "Bind a state-qualified feature to a single-feature strategy-conditioning trial before later strategy PnL is inspected.",
+  "eligibility": {
+    "required_state_screen_status": "screen_ready",
+    "require_enough_forward_batches": true,
+    "require_v1_1_eligible_state_association": true,
+    "require_pnl_independent_redundancy_representative": true,
+    "minimum_independent_batches": 5,
+    "minimum_dominant_sign_fraction": 0.8,
+    "minimum_median_abs_spearman": 0.1
+  },
+  "trial_design": {
+    "maximum_features": 1,
+    "comparison": "frozen discovery-v1 baseline versus the same frozen strategy conditioned only on the frozen state hypothesis",
+    "feature_threshold_policy": "Any state threshold or bucket mapping must be frozen before conditioned strategy PnL is inspected and may use only market-state evidence, never strategy PnL.",
+    "entry_exit_policy": "Do not modify discovery-v1 entry, exit, horizon, direction, or signal definitions inside the conditioning trial.",
+    "economics_policy": "Use identical realistic fee, spread, slippage, latency and staleness assumptions for baseline and conditioned arms.",
+    "batch_policy": "Use identical independent capture batches for baseline and conditioned arms and treat capture batches as dependence clusters.",
+    "risk_policy": "Preserve stop-based MAE/MFE analysis and do not optimize stop or target parameters from conditioning PnL.",
+    "transfer_policy": "Cross-pair checks must keep the state feature definition unchanged and use a PnL-independent universe; transfer is not untouched OOS validation.",
+    "secondary_feature_policy": "A second feature is outside strategy-conditioning-v1 and requires a separately versioned protocol frozen before later evidence is inspected."
+  },
+  "evaluation": {
+    "required_outputs": [
+      "baseline_net_profit_factor",
+      "conditioned_net_profit_factor",
+      "baseline_net_expectancy_bps",
+      "conditioned_net_expectancy_bps",
+      "independent_batches",
+      "observations",
+      "positive_batch_fraction",
+      "mae_mfe_stop_risk_comparison",
+      "original_vs_reversed_control"
+    ],
+    "promotion_rule": "A favorable conditioning result is research evidence only. Candidate freeze, trial accounting, holdout audit, untouched OOS evidence, paper reliability, reconciliation and separate approval remain required before any live consideration."
+  },
+  "claims": {
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false,
+    "automatic_strategy_conditioning_supported": false
+  }
+}
