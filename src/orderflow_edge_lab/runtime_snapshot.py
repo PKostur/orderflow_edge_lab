@@ -94,11 +94,13 @@ def create_runtime_snapshot(
     if not isinstance(engine_config, Mapping):
         raise RuntimeSnapshotError("execution configuration is not bound")
 
+    journal_bytes = journal_path.read_bytes()
     payload: dict[str, Any] = {
         "schema_version": 1,
         "generated_at": current.isoformat(),
         "state_sha256": _sha256_file(state_path),
-        "journal_sha256": _sha256_file(journal_path),
+        "journal_sha256": _sha256_bytes(journal_bytes),
+        "journal_bytes": len(journal_bytes),
         "state_revision": state.get("revision"),
         "journal_head": state.get("journal_head"),
         "engine_config_sha256": _sha256_payload(engine_config),
@@ -154,6 +156,8 @@ def verify_runtime_snapshot(
         "position_ids": sorted(state["positions"]) == list(snapshot.get("position_ids", [])),
         "runtime_operational": not blockers,
     }
+    if "journal_bytes" in snapshot:
+        checks["journal_bytes"] = journal_path.stat().st_size == snapshot.get("journal_bytes")
     if snapshot.get("require_flat") is True:
         checks["flat_runtime"] = not state["pending"] and not state["positions"]
 
