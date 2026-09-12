@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+START_DAEMON=0
+if [[ "${1:-}" == "--start-daemon" ]]; then
+  START_DAEMON=1
+fi
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+cd "$REPO_ROOT"
+
+command -v node >/dev/null 2>&1 || { echo "Node.js 20+ is required" >&2; exit 1; }
+command -v npx >/dev/null 2>&1 || { echo "npx is required" >&2; exit 1; }
+NODE_MAJOR="$(node --version | sed 's/^v//' | cut -d. -f1)"
+if [[ "$NODE_MAJOR" -lt 20 ]]; then
+  echo "Ruflo requires Node >=20; found $(node --version)" >&2
+  exit 1
+fi
+
+ruflo() {
+  npx -y ruflo@latest "$@"
+}
+
+BACKUP_DIR="$(mktemp -d 2>/dev/null || mktemp -d -t orderflow-ruflo)"
+trap 'rm -rf "$BACKUP_DIR"' EXIT
+cp AGENTS.md "$BACKUP_DIR/AGENTS.md"
+cp .agents/skills/orderflow-research/SKILL.md "$BACKUP_DIR/SKILL.md"
+
+set +e
+ruflo init --codex --force --no-signup
+INIT_STATUS=$?
+set -e
+cp "$BACKUP_DIR/AGENTS.md" AGENTS.md
+mkdir -p .agents/skills/orderflow-research
+cp "$BACKUP_DIR/SKILL.md" .agents/skills/orderflow-research/SKILL.md
+if [[ "$INIT_STATUS" -ne 0 ]]; then
+  echo "Ruflo initialization failed" >&2
+  exit "$INIT_STATUS"
+fi
+
+ruflo doctor
+ruflo swarm init --topology hierarchical --max-agents 7 --strategy specialized
+
+ruflo memory store --namespace "orderflow/decisions" --key "safety-boundary-v1" --value "Automatic live broker/exchange transmission is disabled. Ruflo and DeerFlow coordinate research but cannot bypass candidate freeze, holdout audit, trial ledger, realistic economics, approval-bound paper execution, reconciliation, or explicit future user approval."
+ruflo memory store --namespace "orderflow/decisions" --key "orchestration-layers-v1" --value "Ruflo is the meta-harness for memory/swarm coordination; DeerFlow provides trading-domain context; orderflow_edge_lab is the executable source of truth and deterministic evidence gate."
+ruflo memory store --namespace "orderflow/experiments" --key "current-research-v1" --value "Preserve frozen discovery-v1 thresholds. Current research stratifies executable PF by pre-registered market conditions and transfers the unchanged strategy to PnL-independent screened MEXC pairs. Exploratory findings are not OOS proof."
+
+if [[ "$START_DAEMON" -eq 1 ]]; then
+  ruflo daemon start
+fi
+
+echo "Ruflo integration is initialized for $REPO_ROOT"
+echo "Run: npx ruflo@latest swarm status"
+echo "Run: npx ruflo@latest memory search --query orderflow"
+if [[ "$START_DAEMON" -eq 0 ]]; then
+  echo "Optional background workers: bash integrations/ruflo/bootstrap.sh --start-daemon"
+fi
