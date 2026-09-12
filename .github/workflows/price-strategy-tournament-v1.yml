@@ -1,0 +1,158 @@
+name: Price Strategy Tournament v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/strategy-tournament-v1]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: price-strategy-tournament-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  prepare-data:
+    name: prepare-${{ matrix.interval }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        interval: [5m, 15m, 1h]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Fetch immutable public history once for this timeframe
+        run: |
+          orderflow-strategy-tournament-data \
+            --config config/price_strategy_tournament_v1.json \
+            --interval "${{ matrix.interval }}" \
+            --output-dir "artifacts/tournament_data/${{ matrix.interval }}" \
+            --max-workers 8
+      - name: Preserve timeframe data and manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: price-tournament-data-${{ matrix.interval }}
+          path: artifacts/tournament_data/${{ matrix.interval }}/
+          retention-days: 7
+          if-no-files-found: error
+
+  tournament:
+    name: ${{ matrix.family }}-${{ matrix.interval }}
+    needs: prepare-data
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        family:
+          - donchian_breakout
+          - ema_tsmom
+          - bb_mean_reversion
+          - bb_squeeze_breakout
+          - intraday_reversal
+          - trend_pullback
+          - vol_scaled_momentum
+        interval: [5m, 15m, 1h]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Download matching immutable history
+        uses: actions/download-artifact@v4
+        with:
+          name: price-tournament-data-${{ matrix.interval }}
+          path: artifacts/tournament_data/${{ matrix.interval }}
+      - name: Run frozen family cell
+        run: |
+          mkdir -p artifacts/tournament_results
+          orderflow-strategy-tournament \
+            --config config/price_strategy_tournament_v1.json \
+            --family "${{ matrix.family }}" \
+            --interval "${{ matrix.interval }}" \
+            --data-dir "artifacts/tournament_data/${{ matrix.interval }}" \
+            --output "artifacts/tournament_results/${{ matrix.family }}_${{ matrix.interval }}.json"
+      - name: Preserve every trial, including losers
+        uses: actions/upload-artifact@v4
+        with:
+          name: price-strategy-tournament-${{ matrix.family }}-${{ matrix.interval }}
+          path: artifacts/tournament_results/*.json
+          retention-days: 30
+          if-no-files-found: error
+
+  aggregate:
+    name: aggregate-and-adversarial-gate
+    needs: tournament
+    if: always() && needs.tournament.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Download all family/timeframe reports
+        uses: actions/download-artifact@v4
+        with:
+          pattern: price-strategy-tournament-*
+          path: artifacts/all_tournament_results
+          merge-multiple: false
+      - name: Build cost-adjusted leaderboard
+        run: |
+          mkdir -p artifacts/tournament_leaderboard
+          orderflow-strategy-tournament-aggregate \
+            artifacts/all_tournament_results \
+            --minimum-trades 80 \
+            --minimum-folds 6 \
+            --top 150 \
+            --output artifacts/tournament_leaderboard/leaderboard.json
+          python - <<'PY'
+          import json
+          p='artifacts/tournament_leaderboard/leaderboard.json'
+          r=json.load(open(p, encoding='utf-8'))
+          print(json.dumps({
+              'eligible_count': r['eligible_count'],
+              'source_report_count': r['source_report_count'],
+              'top': [
+                  {
+                      'family': x.get('family'),
+                      'interval': x.get('interval'),
+                      'cost_bps': x.get('round_trip_cost_bps'),
+                      'pf': x.get('median_fold_profit_factor'),
+                      'expectancy_bps': x.get('median_fold_expectancy_bps'),
+                      'positive_fold_fraction': x.get('positive_fold_fraction'),
+                      'trades': x.get('total_trades_across_folds'),
+                      'screening_eligible': x.get('screening_eligible'),
+                  }
+                  for x in r['leaderboard'][:15]
+              ],
+          }, indent=2))
+          PY
+      - name: Run deterministic multi-agent release gate
+        run: |
+          orderflow-multi-agent --output artifacts/tournament_leaderboard/multi_agent_report.json
+          python - <<'PY'
+          import json
+          report=json.load(open('artifacts/tournament_leaderboard/multi_agent_report.json', encoding='utf-8'))
+          if report['release_manager']['status'] != 'reviewable':
+              raise SystemExit('deterministic release manager blocked tournament evidence')
+          PY
+      - name: Preserve leaderboard and gate report
+        uses: actions/upload-artifact@v4
+        with:
+          name: price-strategy-tournament-v1-leaderboard
+          path: artifacts/tournament_leaderboard/
+          retention-days: 30
+          if-no-files-found: error
