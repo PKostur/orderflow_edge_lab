@@ -34,6 +34,26 @@ orderflow-backtest "$FEATURE" \
 
 The default backtest configuration must remain identical to `config/orderflow_discovery_v1.json` while discovery-v1 is active.
 
+## Original versus reversed control
+
+```bash
+orderflow-direction-pair "$FEATURE" \
+  --symbol ENA_USDT \
+  --context-symbol BTC_USDT \
+  --output artifacts/orderflow/direction_pair.json
+```
+
+The paired control must preserve identical signals and timestamps while recalculating opposite-direction bid/ask execution rather than merely negating PnL.
+
+## Incremental exposure stress test
+
+```bash
+orderflow-risk-ladder artifacts/orderflow/direction_pair.json \
+  --output artifacts/orderflow/risk_ladder.json
+```
+
+Defaults test effective exposure multiples 1x, 2x, 5x, 10x, 20x, 30x, 50x, 75x, and 100x under 4 bps and 8 bps fee cases. This is a close-to-close exposure stress test, not exact percent-at-risk or a deployment leverage recommendation. It intentionally does not claim to model intratrade MAE, liquidation price, maintenance margin, or funding. Within each stream/family/horizon, overlapping signals are skipped so risk is not silently stacked.
+
 ## Aggregate independent capture batches
 
 ```bash
@@ -111,6 +131,7 @@ Important workflows currently include:
 - `.github/workflows/ci.yml`
 - `.github/workflows/multi-agent-hardening.yml`
 - `.github/workflows/orderflow-continuous-discovery.yml`
+- `.github/workflows/orderflow-exploratory.yml`
 
 Prefer reviewing workflow artifacts and source hashes over manually copying summary numbers.
 
