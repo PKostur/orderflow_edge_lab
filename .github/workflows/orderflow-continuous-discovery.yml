@@ -71,6 +71,10 @@ jobs:
             --minimum-association-observations 20 \
             --redundancy-abs-spearman-threshold 0.80 \
             --output artifacts/orderflow/market_state_aggregate.json
+
+          orderflow-market-state-aggregate-v1-1 "${STATE_REPORTS[@]}" \
+            --protocol config/regime_research_v1_1.json \
+            --output artifacts/orderflow/market_state_aggregate_v1_1.json
       - name: Run frozen discovery-v1 backtest and pre-registered condition analysis
         shell: bash
         run: |
@@ -122,6 +126,7 @@ jobs:
           path: |
             artifacts/orderflow/market_state.json
             artifacts/orderflow/market_state_aggregate.json
+            artifacts/orderflow/market_state_aggregate_v1_1.json
             artifacts/orderflow/backtest.json
             artifacts/orderflow/direction_pair.json
             artifacts/orderflow/stop_risk.json
@@ -129,6 +134,7 @@ jobs:
             artifacts/orderflow/discovery_aggregate.json
             artifacts/orderflow/condition_aggregate.json
             config/regime_research_v1.json
+            config/regime_research_v1_1.json
             config/orderflow_discovery_v1.json
           if-no-files-found: warn
           retention-days: 14
