@@ -1,4 +1,4 @@
-name: Price Strategy Tournament v1
+name: Price Strategy Tournament v1.1
 
 on:
   workflow_dispatch:
@@ -9,14 +9,14 @@ permissions:
   contents: read
 
 concurrency:
-  group: price-strategy-tournament-v1-${{ github.ref }}
+  group: price-strategy-tournament-v1-1-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   prepare-data:
     name: prepare-${{ matrix.interval }}
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
     strategy:
       fail-fast: false
       matrix:
@@ -28,20 +28,21 @@ jobs:
           python-version: "3.12"
       - name: Install research runtime
         run: python -m pip install -e ".[research]"
-      - name: Fetch immutable public history once for this timeframe
+      - name: Fetch immutable MEXC public history once for this timeframe
         run: |
           orderflow-strategy-tournament-data \
-            --config config/price_strategy_tournament_v1.json \
+            --config config/price_strategy_tournament_v1_1.json \
             --interval "${{ matrix.interval }}" \
             --output-dir "artifacts/tournament_data/${{ matrix.interval }}" \
             --max-workers 8
       - name: Preserve timeframe data and manifest
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: price-tournament-data-${{ matrix.interval }}
+          name: price-tournament-v1-1-data-${{ matrix.interval }}
           path: artifacts/tournament_data/${{ matrix.interval }}/
           retention-days: 7
-          if-no-files-found: error
+          if-no-files-found: warn
 
   tournament:
     name: ${{ matrix.family }}-${{ matrix.interval }}
@@ -71,21 +72,21 @@ jobs:
       - name: Download matching immutable history
         uses: actions/download-artifact@v4
         with:
-          name: price-tournament-data-${{ matrix.interval }}
+          name: price-tournament-v1-1-data-${{ matrix.interval }}
           path: artifacts/tournament_data/${{ matrix.interval }}
       - name: Run frozen family cell
         run: |
           mkdir -p artifacts/tournament_results
           orderflow-strategy-tournament \
-            --config config/price_strategy_tournament_v1.json \
+            --config config/price_strategy_tournament_v1_1.json \
             --family "${{ matrix.family }}" \
             --interval "${{ matrix.interval }}" \
             --data-dir "artifacts/tournament_data/${{ matrix.interval }}" \
             --output "artifacts/tournament_results/${{ matrix.family }}_${{ matrix.interval }}.json"
-      - name: Preserve every trial, including losers
+      - name: Preserve every trial including losers
         uses: actions/upload-artifact@v4
         with:
-          name: price-strategy-tournament-${{ matrix.family }}-${{ matrix.interval }}
+          name: price-tournament-v1-1-${{ matrix.family }}-${{ matrix.interval }}
           path: artifacts/tournament_results/*.json
           retention-days: 30
           if-no-files-found: error
@@ -106,7 +107,7 @@ jobs:
       - name: Download all family/timeframe reports
         uses: actions/download-artifact@v4
         with:
-          pattern: price-strategy-tournament-*
+          pattern: price-tournament-v1-1-*
           path: artifacts/all_tournament_results
           merge-multiple: false
       - name: Build cost-adjusted leaderboard
@@ -152,7 +153,7 @@ jobs:
       - name: Preserve leaderboard and gate report
         uses: actions/upload-artifact@v4
         with:
-          name: price-strategy-tournament-v1-leaderboard
+          name: price-strategy-tournament-v1-1-leaderboard
           path: artifacts/tournament_leaderboard/
           retention-days: 30
           if-no-files-found: error
