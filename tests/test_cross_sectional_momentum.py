@@ -60,3 +60,34 @@ def test_costs_reduce_causal_portfolio_result():
     assert low["net_return"] > 0
     assert high["net_return"] < low["net_return"]
     assert high["fold_observations"] >= 3
+
+
+def test_positive_realized_funding_is_debited_from_long_perpetuals():
+    frames = _frames()
+    event_index = pd.date_range("2025-01-01 08:00:00", periods=259, freq="D", tz="UTC")
+    funding = {
+        symbol: pd.DataFrame({"funding_rate": np.full(len(event_index), 0.001)}, index=event_index)
+        for symbol in frames
+    }
+    without_funding = backtest_cross_sectional_momentum(
+        frames,
+        lookback_days=30,
+        holding_days=7,
+        quantile_fraction=0.25,
+        variant="long_only_top",
+        round_trip_cost_bps=0.0,
+        fold_days=60,
+    )
+    with_funding = backtest_cross_sectional_momentum(
+        frames,
+        lookback_days=30,
+        holding_days=7,
+        quantile_fraction=0.25,
+        variant="long_only_top",
+        round_trip_cost_bps=0.0,
+        fold_days=60,
+        funding_frames=funding,
+    )
+    assert with_funding["funding_included"] is True
+    assert with_funding["funding_return_sum"] < 0
+    assert with_funding["net_return"] < without_funding["net_return"]
