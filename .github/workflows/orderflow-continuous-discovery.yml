@@ -43,6 +43,19 @@ jobs:
             --symbol ENA_USDT \
             --context-symbol BTC_USDT \
             --output artifacts/orderflow/backtest.json
+      - name: Run paired directional control and stop-based risk experiment
+        shell: bash
+        run: |
+          FEATURE=$(find artifacts/orderflow -name '*_mexc_features.jsonl' -print -quit)
+          test -n "$FEATURE"
+          orderflow-direction-pair "$FEATURE" \
+            --symbol ENA_USDT \
+            --context-symbol BTC_USDT \
+            --output artifacts/orderflow/direction_pair.json
+          orderflow-stop-risk "$FEATURE" \
+            --symbol ENA_USDT \
+            --context-symbol BTC_USDT \
+            --output artifacts/orderflow/stop_risk.json
       - name: Download prior discovery reports
         shell: bash
         run: |
@@ -75,6 +88,8 @@ jobs:
           name: orderflow-discovery-report
           path: |
             artifacts/orderflow/backtest.json
+            artifacts/orderflow/direction_pair.json
+            artifacts/orderflow/stop_risk.json
             artifacts/orderflow/discovery_aggregate.json
             config/orderflow_discovery_v1.json
           if-no-files-found: warn
