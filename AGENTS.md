@@ -16,32 +16,65 @@ When Ruflo is available:
 
 1. Search Ruflo memory for relevant patterns, experiments, failures, and prior decisions.
 2. Read the DeerFlow project context under `integrations/deerflow/skills/custom/orderflow-research/references/`.
-3. Inspect current repository state and latest research artifacts.
-4. Use the smallest specialist swarm that covers the task.
+3. Read `config/regime_research_v1.json` and `docs/REGIME_RESEARCH.md` for market-condition/indicator work.
+4. Inspect current repository state and latest research artifacts.
+5. Use the smallest specialist pod that covers the question. Do not spawn every specialist merely because they exist.
 
 If Ruflo is unavailable, continue with the repository and DeerFlow guidance rather than blocking the work.
 
-## Specialist ownership
+## Specialized research pods
 
-Use bounded roles. Multiple specialists may read the same evidence, but never allow two writers to modify the same worktree concurrently.
+Multiple specialists may read the same evidence, but never allow two writers to modify the same worktree concurrently.
 
-- **lead / coordinator**: adversarial reviewer and release manager
-- **data integrity researcher**: adapters, sequence continuity, timestamps, causality, provenance
-- **research validity researcher**: discovery/validation/holdout separation, dependence, multiple testing, trial accounting
-- **strategy reviewer**: signals, fills, costs, slippage, RR, BTC/HTF context, cross-pair transfer
-- **execution safety reviewer**: risk, stale-data rejection, approval-bound paper path, reconciliation, kill switch
-- **tester**: unit/integration tests, packaging, Linux/Windows CI, workflow failure paths
-- **observability reviewer**: hashes, logs, manifests, runtime identity, reproducibility
+### Market-state pod
+
+- **trend-structure researcher**: EMA20/50 state and slope, ADX, Donchian position, directional efficiency, 15m/1h alignment, trend/range transitions.
+- **volatility-regime researcher**: ATR percentile, Bollinger bandwidth, realized volatility, expansion/contraction, volatility-of-volatility, range versus spread.
+- **liquidity-microstructure researcher**: spread, displayed depth, microprice, book imbalance, depth-flow, quote update intensity, add/pull behavior, stale/crossed-book quality.
+- **aggressive-flow researcher**: CVD, signed volume ratio, trade intensity, flow acceleration, large-trade share, price/CVD divergence.
+- **mean-reversion researcher**: Bollinger/VWAP displacement, RSI, return z-score, failed breakout, exhaustion versus continuation.
+- **cross-asset researcher**: BTC returns/volatility, flow alignment, rolling correlation/beta, lead-lag, idiosyncratic versus beta-driven altcoin moves.
+- **derivatives-positioning researcher**: funding, OI change, premium/basis and liquidation information only when legitimately available through zero-additional-cost/public or already-owned data.
+- **session researcher**: UTC hour/session, weekday/weekend, funding-window proximity and session-transition effects.
+
+### Economics pod
+
+- **execution-economics researcher**: spread/fee/slippage/latency/staleness burden, signal half-life, expected move after friction, market-impact assumptions.
+- **risk-path researcher**: MAE/MFE, stop placement, RR path, exposure cap, drawdown, risk-of-ruin and original-versus-reversed comparisons.
+
+### Validation pod
+
+- **indicator-orthogonality researcher**: redundancy/correlation among indicators, incremental information after existing regime variables, interaction justification.
+- **research-validity researcher**: discovery/validation/holdout separation, dependence clustering, multiple testing, trial accounting, frozen definitions and OOS claims.
+- **transfer-generalization researcher**: stability across independent batches, regimes and PnL-independently screened coin pairs.
+- **data-integrity researcher**: adapters, sequence continuity, timestamps, causality, provenance and feature eligibility.
+- **reliability/CI tester**: unit/integration tests, packaging, Linux/Windows CI, workflow failure paths and upstream compatibility.
+- **observability reviewer**: hashes, logs, manifests, runtime identity and reproducibility.
+
+### Lead / coordinator
+
+The lead is the adversarial synthesis and release manager. It reconciles specialist findings using evidence rather than voting, challenges indicator proliferation, and blocks promotion when the claimed effect is not economically or statistically supported.
+
+## Market-state research principle
+
+Indicator research must separate **prediction of future market state** from **strategy PnL**.
+
+First ask whether a feature helps identify a future state such as directionality, volatility expansion/contraction, liquidity deterioration, or continuation versus mean reversion. Only afterward ask whether the frozen trading strategy improves PF/net expectancy when conditioned on that state.
+
+Do not select an indicator merely because it has the highest in-sample PF.
 
 ## Current research rules
 
 - Preserve frozen `discovery-v1` thresholds. Do not retune them batch by batch.
 - Treat independent capture batches as the primary dependence clusters.
+- Preserve the pre-registered `regime-research-v1` feature families/targets unless explicitly starting a new version before viewing later evidence.
 - Market-condition findings are exploratory until they meet the pre-registered readiness gate.
 - Cross-pair results are transfer evidence, not untouched OOS evidence for ENA-discovered conditions.
 - The remembered 15m EMA20/50 TradingView result remains an already-inspected development hypothesis, not verified OOS evidence.
 - Risk discussions should prefer the stop-based MAE/MFE experiment over raw leverage.
 - Realistic spread, fees, slippage, latency/freshness and failure assumptions must not be weakened to improve results.
+- Prefer one stable representative from highly redundant indicator clusters.
+- Combine indicators only when there is incremental predictive information or a pre-specified interaction rationale.
 
 ## Evidence and release gates
 
@@ -61,6 +94,8 @@ Store distilled reusable lessons only after evidence exists. Suggested namespace
 - `orderflow/experiments`
 - `orderflow/failures`
 - `orderflow/decisions`
+- `orderflow/regimes`
+- `orderflow/indicators`
 
 Never store API keys, exchange credentials, passwords, account identifiers, secret-bearing `.env` content, or other sensitive values in Ruflo memory.
 
