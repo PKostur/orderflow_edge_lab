@@ -117,6 +117,9 @@ jobs:
             artifacts/all_tournament_results \
             --minimum-trades 80 \
             --minimum-folds 6 \
+            --minimum-symbols 8 \
+            --minimum-positive-symbol-fraction 0.60 \
+            --minimum-pf-symbol-fraction 0.60 \
             --top 150 \
             --output artifacts/tournament_leaderboard/leaderboard.json
           python - <<'PY'
@@ -124,7 +127,8 @@ jobs:
           p='artifacts/tournament_leaderboard/leaderboard.json'
           r=json.load(open(p, encoding='utf-8'))
           print(json.dumps({
-              'eligible_count': r['eligible_count'],
+              'initial_time_fold_eligible_count': r['eligible_count'],
+              'robust_cross_symbol_eligible_count': r['robust_eligible_count'],
               'source_report_count': r['source_report_count'],
               'top': [
                   {
@@ -136,6 +140,9 @@ jobs:
                       'positive_fold_fraction': x.get('positive_fold_fraction'),
                       'trades': x.get('total_trades_across_folds'),
                       'screening_eligible': x.get('screening_eligible'),
+                      'breadth_eligible': x.get('breadth_eligible'),
+                      'robust_screening_eligible': x.get('robust_screening_eligible'),
+                      'symbol_breadth': x.get('symbol_breadth'),
                   }
                   for x in r['leaderboard'][:15]
               ],
