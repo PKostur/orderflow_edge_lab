@@ -47,18 +47,27 @@ finally {
 }
 
 Invoke-Ruflo doctor
-Invoke-Ruflo swarm init --topology hierarchical --max-agents 7 --strategy specialized
+Invoke-Ruflo swarm init --topology hierarchical --max-agents 15 --strategy specialized
 Invoke-Ruflo agent spawn --type coordinator --name orderflow-lead
 Invoke-Ruflo agent spawn --type researcher --name data-integrity
+Invoke-Ruflo agent spawn --type researcher --name trend-structure
+Invoke-Ruflo agent spawn --type researcher --name volatility-regime
+Invoke-Ruflo agent spawn --type researcher --name liquidity-microstructure
+Invoke-Ruflo agent spawn --type researcher --name aggressive-flow
+Invoke-Ruflo agent spawn --type researcher --name mean-reversion
+Invoke-Ruflo agent spawn --type researcher --name cross-asset-context
+Invoke-Ruflo agent spawn --type researcher --name derivatives-session
+Invoke-Ruflo agent spawn --type performance-engineer --name execution-economics
+Invoke-Ruflo agent spawn --type reviewer --name risk-path
+Invoke-Ruflo agent spawn --type reviewer --name indicator-orthogonality
 Invoke-Ruflo agent spawn --type researcher --name research-validity
-Invoke-Ruflo agent spawn --type reviewer --name strategy-validation
-Invoke-Ruflo agent spawn --type security-architect --name execution-safety
-Invoke-Ruflo agent spawn --type tester --name reliability-ci
-Invoke-Ruflo agent spawn --type reviewer --name observability-deployment
+Invoke-Ruflo agent spawn --type researcher --name transfer-generalization
+Invoke-Ruflo agent spawn --type tester --name reliability-observability
 
 Invoke-Ruflo memory store --namespace "orderflow/decisions" --key "safety-boundary-v1" --value "Automatic live broker/exchange transmission is disabled. Ruflo and DeerFlow coordinate research but cannot bypass candidate freeze, holdout audit, trial ledger, realistic economics, approval-bound paper execution, reconciliation, or explicit future user approval."
 Invoke-Ruflo memory store --namespace "orderflow/decisions" --key "orchestration-layers-v1" --value "Ruflo is the meta-harness for memory/swarm coordination; DeerFlow provides trading-domain context; orderflow_edge_lab is the executable source of truth and deterministic evidence gate."
-Invoke-Ruflo memory store --namespace "orderflow/experiments" --key "current-research-v1" --value "Preserve frozen discovery-v1 thresholds. Current research stratifies executable PF by pre-registered market conditions and transfers the unchanged strategy to PnL-independent screened MEXC pairs. Exploratory findings are not OOS proof."
+Invoke-Ruflo memory store --namespace "orderflow/experiments" --key "current-research-v2" --value "Preserve discovery-v1 and regime-research-v1 definitions. First predict future market state, then test conditional strategy economics. Use specialized trend, volatility, liquidity, flow, mean-reversion, cross-asset, derivatives/session, execution, risk, orthogonality, validity and transfer roles. Exploratory findings are not OOS proof."
+Invoke-Ruflo memory store --namespace "orderflow/decisions" --key "indicator-combination-policy-v1" --value "Do not combine indicators solely because they each show high PF. Prefer non-redundant features that add incremental market-state information or have a pre-specified interaction rationale."
 
 if ($StartDaemon) {
     Invoke-Ruflo daemon start
