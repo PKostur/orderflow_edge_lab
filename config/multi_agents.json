@@ -14,8 +14,10 @@
     },
     {
       "id": "research_validity",
-      "focus": "Discovery/validation/holdout separation, candidate freezing, trial accounting, causal audits, realistic economics, and promotion evidence",
+      "focus": "Discovery/validation/holdout separation, frozen discovery protocols, candidate freezing, trial accounting, causal audits, realistic economics, and promotion evidence",
       "required_paths": [
+        "config/orderflow_discovery_v1.json",
+        "src/orderflow_edge_lab/discovery_aggregate.py",
         "src/orderflow_edge_lab/research_protocol.py",
         "src/orderflow_edge_lab/candidate_freeze.py",
         "src/orderflow_edge_lab/holdout_audit.py",
@@ -26,8 +28,10 @@
     },
     {
       "id": "strategy_validation",
-      "focus": "Backtest assumptions, costs, ambiguous fills, walk-forward/OOS evidence, overfitting controls, and candidate comparison",
+      "focus": "Order-flow screening, backtest assumptions, costs, ambiguous fills, walk-forward/OOS evidence, overfitting controls, and candidate comparison",
       "required_paths": [
+        "src/orderflow_edge_lab/orderflow_backtest.py",
+        "src/orderflow_edge_lab/discovery_aggregate.py",
         "src/orderflow_edge_lab/economics.py",
         "src/orderflow_edge_lab/validation.py"
       ],
@@ -46,9 +50,10 @@
     },
     {
       "id": "reliability_ci",
-      "focus": "Compilation, unit/integration tests, packaging, installed command smoke tests, and cross-platform CI readiness",
+      "focus": "Compilation, unit/integration tests, packaging, installed command smoke tests, scheduled research workflows, and cross-platform CI readiness",
       "required_paths": [
         ".github/workflows/ci.yml",
+        ".github/workflows/orderflow-continuous-discovery.yml",
         "scripts/deployment_check.py",
         "scripts/package_smoke.py"
       ],
@@ -60,13 +65,14 @@
       "required_paths": [
         "docs/DEPLOYMENT.md",
         "docs/RESEARCH_PROTOCOL.md",
+        "docs/ORDERFLOW_BACKTEST.md",
         "src/orderflow_edge_lab/runtime_identity.py"
       ],
       "forbidden_claims": []
     },
     {
       "id": "adversarial_reviewer",
-      "focus": "Challenge cross-agent conclusions, detect unsupported edge claims, hidden holdout reuse, unsafe live-execution creep, and fail-open behavior",
+      "focus": "Challenge cross-agent conclusions, detect unsupported edge claims, hidden holdout reuse, threshold tuning from scheduled discovery batches, unsafe live-execution creep, and fail-open behavior",
       "required_paths": [
         "README.md"
       ],

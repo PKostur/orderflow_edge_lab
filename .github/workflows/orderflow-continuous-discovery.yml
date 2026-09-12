@@ -1,0 +1,91 @@
+name: Continuous Order-Flow Discovery
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: continuous-orderflow-discovery
+  cancel-in-progress: false
+
+jobs:
+  capture-and-aggregate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .
+      - name: Capture 15 minutes of fresh public ENA/BTC order flow
+        run: |
+          mkdir -p artifacts/orderflow
+          orderflow-mexc-record \
+            --symbol ENA_USDT \
+            --symbol BTC_USDT \
+            --duration-seconds 900 \
+            --output-dir artifacts/orderflow
+      - name: Run frozen discovery-v1 backtest
+        shell: bash
+        run: |
+          FEATURE=$(find artifacts/orderflow -name '*_mexc_features.jsonl' -print -quit)
+          test -n "$FEATURE"
+          orderflow-backtest "$FEATURE" \
+            --symbol ENA_USDT \
+            --context-symbol BTC_USDT \
+            --output artifacts/orderflow/backtest.json
+      - name: Download prior discovery reports
+        shell: bash
+        run: |
+          mkdir -p prior
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=orderflow-discovery-report&per_page=100" \
+            --jq '.artifacts | sort_by(.created_at) | reverse | .[:47] | .[].workflow_run.id' \
+            | sort -u > prior_run_ids.txt
+          while read -r RUN_ID; do
+            test -n "$RUN_ID" || continue
+            mkdir -p "prior/$RUN_ID"
+            gh run download "$RUN_ID" \
+              --name orderflow-discovery-report \
+              --dir "prior/$RUN_ID" \
+              || rm -rf "prior/$RUN_ID"
+          done < prior_run_ids.txt
+      - name: Aggregate by independent capture batch
+        shell: bash
+        run: |
+          REPORTS=(artifacts/orderflow/backtest.json)
+          while IFS= read -r REPORT; do
+            REPORTS+=("$REPORT")
+          done < <(find prior -type f -name backtest.json | sort)
+          orderflow-discovery-aggregate "${REPORTS[@]}" \
+            --protocol config/orderflow_discovery_v1.json \
+            --output artifacts/orderflow/discovery_aggregate.json
+      - name: Preserve compact discovery report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: orderflow-discovery-report
+          path: |
+            artifacts/orderflow/backtest.json
+            artifacts/orderflow/discovery_aggregate.json
+            config/orderflow_discovery_v1.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Preserve short-lived raw evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: orderflow-discovery-evidence-${{ github.run_id }}
+          path: |
+            artifacts/orderflow/*_mexc_raw.jsonl*
+            artifacts/orderflow/*_mexc_features.jsonl*
+          if-no-files-found: warn
+          retention-days: 2

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "protocol_id": "mexc-orderflow-discovery-v1",
+  "purpose": "Fixed discovery screening before any threshold tuning; not holdout evidence",
+  "source": "MEXC public futures ENA_USDT and BTC_USDT order-flow features",
+  "backtest_config": {
+    "symbol": "ENA_USDT",
+    "context_symbol": "BTC_USDT",
+    "horizons_ms": [1000, 5000, 15000, 30000],
+    "fee_bps_round_trip": [0.0, 4.0, 8.0],
+    "min_trade_count": 5,
+    "min_trade_flow_ratio": 0.25,
+    "min_book_imbalance": 0.25,
+    "min_microprice_edge": 0.2,
+    "cooldown_ms": 2000
+  },
+  "scheduled_capture_seconds": 900,
+  "scheduled_frequency": "hourly",
+  "research_rules": {
+    "causal_clock": "received_at_ns",
+    "long_entry": "current_ask",
+    "long_exit": "future_bid",
+    "short_entry": "current_bid",
+    "short_exit": "future_ask",
+    "threshold_tuning_from_scheduled_batches": false,
+    "batch_is_primary_dependence_cluster": true,
+    "minimum_batches_before_inference": 10,
+    "minimum_total_capture_minutes_before_candidate_revision": 150,
+    "automatic_live_order_transmission": false
+  }
+}
