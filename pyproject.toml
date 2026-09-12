@@ -9,6 +9,9 @@ description = "Research-first order-flow validation and paper execution infrastr
 requires-python = ">=3.10"
 dependencies = ["websockets>=12,<16"]
 
+[project.optional-dependencies]
+research = ["numpy>=2,<3", "pandas>=2,<3"]
+
 [project.scripts]
 orderflow-paper = "orderflow_edge_lab.cli.paper:main"
 orderflow-paper-audit = "orderflow_edge_lab.cli.paper_audit:main"
@@ -33,6 +36,8 @@ orderflow-multi-agent = "orderflow_edge_lab.cli.multi_agent:main"
 orderflow-backtest = "orderflow_edge_lab.cli.orderflow_backtest:main"
 orderflow-direction-pair = "orderflow_edge_lab.cli.direction_pair:main"
 orderflow-risk-ladder = "orderflow_edge_lab.cli.risk_ladder:main"
+orderflow-stop-risk = "orderflow_edge_lab.cli.stop_risk:main"
+orderflow-ema15m-hypothesis = "orderflow_edge_lab.cli.ema15m_hypothesis:main"
 orderflow-discovery-aggregate = "orderflow_edge_lab.cli.discovery_aggregate:main"
 
 [project.gui-scripts]

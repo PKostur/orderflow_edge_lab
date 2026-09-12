@@ -50,6 +50,15 @@ jobs:
         run: |
           orderflow-risk-ladder artifacts/orderflow/direction_pair.json \
             --output artifacts/orderflow/risk_ladder.json
+      - name: Run stop-based MAE/MFE risk ladder
+        shell: bash
+        run: |
+          FEATURE=$(find artifacts/orderflow -name '*_mexc_features.jsonl' -print -quit)
+          test -n "$FEATURE"
+          orderflow-stop-risk "$FEATURE" \
+            --symbol ENA_USDT \
+            --context-symbol BTC_USDT \
+            --output artifacts/orderflow/stop_risk.json
       - name: Preserve capture and reports
         if: always()
         uses: actions/upload-artifact@v4
