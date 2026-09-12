@@ -15,13 +15,17 @@ from orderflow_edge_lab.execution import (
     RiskPolicy, MarketSnapshot, TradeIntent, StateCorruptionError,
     EngineLockError, RejectedIntent,
 )
-from orderflow_edge_lab.promotion import assess_candidate_promotion_files
+from orderflow_edge_lab.promotion_binding import assess_bound_promotion
 from orderflow_edge_lab.reliability import deployment_readiness
 from orderflow_edge_lab.research import parse_utc
 
 
 def _read(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
+
+
+def _sha256_file(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
 def _market(path):
@@ -52,6 +56,16 @@ def main(argv=None):
         "--economics",
         required=True,
         help="Economics policy used to recompute the fail-closed promotion decision",
+    )
+    submit.add_argument(
+        "--candidate-freeze",
+        required=True,
+        help="Candidate-freeze manifest that predates holdout inspection",
+    )
+    submit.add_argument(
+        "--holdout-audit",
+        required=True,
+        help="Holdout provenance audit bound to the exact validation observations",
     )
     approve = commands.add_parser("approve")
     approve.add_argument("intent_id")
@@ -94,17 +108,20 @@ def main(argv=None):
             values = _read(args.intent)
             values["signal_time"] = parse_utc(values["signal_time"])
             intent = TradeIntent(**values)
-            promotion = assess_candidate_promotion_files(
+            promotion, binding_reasons = assess_bound_promotion(
                 args.validation_report,
                 intent.strategy_id,
                 args.economics,
+                args.candidate_freeze,
+                args.holdout_audit,
             )
-            if not promotion.promotable or promotion.research_only:
+            if not promotion.promotable or promotion.research_only or binding_reasons:
                 print(json.dumps({
                     "mode": "paper",
                     "status": "rejected",
-                    "reason": "strategy_not_promoted",
+                    "reason": "strategy_not_bound_for_paper",
                     "promotion": promotion.as_dict(),
+                    "binding_reasons": list(binding_reasons),
                 }, indent=2, allow_nan=False))
                 return 2
             data = Path(args.export).read_bytes()
@@ -125,6 +142,13 @@ def main(argv=None):
                 "export_sha256": hashlib.sha256(data).hexdigest(),
                 "quality": asdict(report),
                 "promotion": promotion.as_dict(),
+                "promotion_binding": {
+                    "candidate_freeze_sha256": _sha256_file(args.candidate_freeze),
+                    "holdout_audit_sha256": _sha256_file(args.holdout_audit),
+                    "validation_report_sha256": _sha256_file(args.validation_report),
+                    "economics_sha256": _sha256_file(args.economics),
+                    "binding_reasons": [],
+                },
             }
         elif args.command in {"approve", "close"}:
             market = _market(args.market)
