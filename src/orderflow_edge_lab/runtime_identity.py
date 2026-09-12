@@ -32,18 +32,21 @@ def _source_tree_sha256(root: Path | None = None) -> str:
     return digest.hexdigest()
 
 
-def _package_version() -> str:
+def _distribution_version(name: str) -> str:
     try:
-        return metadata.version("orderflow-edge-lab")
+        return metadata.version(name)
     except metadata.PackageNotFoundError:
-        return "uninstalled"
+        return "missing"
 
 
 def runtime_identity() -> dict[str, Any]:
     """Return a stable identity for the code/runtime executing a paper session."""
     return {
-        "package_version": _package_version(),
+        "package_version": _distribution_version("orderflow-edge-lab"),
         "package_source_sha256": _source_tree_sha256(),
+        "dependency_versions": {
+            "websockets": _distribution_version("websockets"),
+        },
         "python_version": platform.python_version(),
         "python_implementation": platform.python_implementation(),
         "platform_system": platform.system(),
