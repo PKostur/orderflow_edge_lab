@@ -39,50 +39,51 @@ def _candidate(symbols, start: pd.Timestamp, *, cost_bps: float = 20.0):
 
 def _frame(index: pd.DatetimeIndex, slope: float = 0.01):
     close = 100.0 * np.exp(np.arange(len(index)) * slope)
-    open_ = close * (1.0 + 0.0001)
+    open_ = close * 0.999
     return pd.DataFrame(
         {
             "open": open_,
             "high": np.maximum(open_, close) * 1.001,
             "low": np.minimum(open_, close) * 0.999,
             "close": close,
-            "volume": np.ones(len(index)),
+            "volume": 1.0,
         },
         index=index,
     )
 
 
-def test_signal_ranks_past_returns_without_future_data():
-    frames = _frames()
-    closes = pd.concat({k: v["close"] for k, v in frames.items()}, axis=1)
-    weights = build_signal_weights(closes, lookback_days=30, holding_days=7, quantile_fraction=0.25, variant="long_only_top")
-    # Six symbols with q=0.25 selects exactly one winner. At the first rebalance the strongest trailing asset is A.
-    assert weights.iloc[30]["A"] == 1.0
-    assert float(weights.iloc[30].abs().sum()) == 1.0
-    assert weights.iloc[29].abs().sum() == 0.0
+def test_candidate_hash_and_first_execution_are_causal():
+    idx = pd.date_range("2026-08-01", periods=140, freq="8h", tz="UTC")
+    start = idx[110]
+    candidate = _candidate(["A"], start)
+    assert verify_candidate_spec(candidate)
+    as_of = idx[115] + pd.Timedelta(hours=2)
+    targets = build_execution_targets(_frame(idx), candidate, as_of_utc=as_of)
+    assert len(targets) > 0
+    assert targets.index.min() == start + pd.Timedelta(hours=8)
+    assert not (targets.index <= start).any()
 
 
-def test_costs_reduce_causal_portfolio_result():
-    frames = _frames()
-    low = backtest_cross_sectional_momentum(
-        frames,
-        lookback_days=30,
-        holding_days=7,
-        quantile_fraction=0.25,
-        variant="dollar_neutral_top_bottom",
-        round_trip_cost_bps=0.0,
-        fold_days=60,
-    )
-    high = backtest_cross_sectional_momentum(
-        frames,
-        lookback_days=30,
-        holding_days=7,
-        quantile_fraction=0.25,
-        variant="dollar_neutral_top_bottom",
-        round_trip_cost_bps=20.0,
-        fold_days=60,
-    )
-    assert low["rebalances"] > 20
-    assert low["net_return"] > 0
-    assert high["net_return"] < low["net_return"]
-    assert high["fold_observations"] >= 3
+def test_positive_funding_debits_long_forward_portfolio():
+    idx = pd.date_range("2026-08-01", periods=140, freq="8h", tz="UTC")
+    start = idx[110]
+    symbols = ["A", "B", "C", "D"]
+    candidate = _candidate(symbols, start, cost_bps=20.0)
+    frames = {symbol: _frame(idx, 0.004 + i * 0.0001) for i, symbol in enumerate(symbols)}
+    as_of = idx[116] + pd.Timedelta(hours=4)
+    empty_funding = {
+        symbol: pd.DataFrame(columns=["funding_rate"], index=pd.DatetimeIndex([], tz="UTC"))
+        for symbol in symbols
+    }
+    baseline = build_forward_report(frames, empty_funding, candidate, as_of_utc=as_of)
+
+    funding_index = pd.DatetimeIndex([start + pd.Timedelta(hours=16), start + pd.Timedelta(hours=24)])
+    positive_funding = {
+        symbol: pd.DataFrame({"funding_rate": [0.001, 0.001]}, index=funding_index)
+        for symbol in symbols
+    }
+    charged = build_forward_report(frames, positive_funding, candidate, as_of_utc=as_of)
+    assert baseline["metrics"]["net_return"] > charged["metrics"]["net_return"]
+    assert any(row["funding_return"] < 0 for row in charged["portfolio_intervals"])
+    assert charged["claims"]["live_order_transmission_supported"] is False
+    assert charged["claims"]["profitable_edge_established"] is False
