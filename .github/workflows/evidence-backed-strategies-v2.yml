@@ -1,0 +1,183 @@
+name: Evidence-Backed Strategies v2
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/evidence-backed-strategies-v2]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: evidence-backed-strategies-v2-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  prepare-price-data:
+    name: prepare-${{ matrix.interval }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        interval: [4h, 8h, 1d]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Fetch target-venue MEXC history
+        run: |
+          orderflow-strategy-tournament-data \
+            --config config/evidence_backed_strategies_v2.json \
+            --interval "${{ matrix.interval }}" \
+            --output-dir "artifacts/evidence_v2/data/${{ matrix.interval }}" \
+            --max-workers 8
+      - name: Preserve immutable timeframe data
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-v2-data-${{ matrix.interval }}
+          path: artifacts/evidence_v2/data/${{ matrix.interval }}/
+          retention-days: 7
+          if-no-files-found: error
+
+  price-family:
+    name: price-${{ matrix.family }}-${{ matrix.interval }}
+    needs: prepare-price-data
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        family: [donchian_breakout, ema_tsmom, vol_scaled_momentum]
+        interval: [4h, 8h, 1d]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - uses: actions/download-artifact@v4
+        with:
+          name: evidence-v2-data-${{ matrix.interval }}
+          path: artifacts/evidence_v2/data/${{ matrix.interval }}
+      - name: Run frozen source-backed family cell
+        run: |
+          mkdir -p artifacts/evidence_v2/price
+          orderflow-strategy-tournament \
+            --config config/evidence_backed_strategies_v2.json \
+            --family "${{ matrix.family }}" \
+            --interval "${{ matrix.interval }}" \
+            --data-dir "artifacts/evidence_v2/data/${{ matrix.interval }}" \
+            --output "artifacts/evidence_v2/price/${{ matrix.family }}_${{ matrix.interval }}.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: evidence-v2-price-${{ matrix.family }}-${{ matrix.interval }}
+          path: artifacts/evidence_v2/price/*.json
+          retention-days: 30
+          if-no-files-found: error
+
+  basis-convergence:
+    name: perp-basis-convergence
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run published-prior MEXC spot/perpetual convergence grid
+        run: |
+          mkdir -p artifacts/evidence_v2/basis
+          orderflow-basis-convergence \
+            --config config/evidence_backed_strategies_v2.json \
+            --output artifacts/evidence_v2/basis/basis_convergence.json \
+            --max-workers 5
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: evidence-v2-basis-convergence
+          path: artifacts/evidence_v2/basis/
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate-price:
+    name: aggregate-price
+    needs: price-family
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: evidence-v2-price-*
+          path: artifacts/evidence_v2/all_price
+          merge-multiple: false
+      - name: Build robust price-family leaderboard
+        run: |
+          mkdir -p artifacts/evidence_v2/aggregate
+          orderflow-strategy-tournament-aggregate \
+            artifacts/evidence_v2/all_price \
+            --minimum-trades 40 \
+            --minimum-folds 5 \
+            --minimum-symbols 8 \
+            --minimum-positive-symbol-fraction 0.60 \
+            --minimum-pf-symbol-fraction 0.60 \
+            --top 150 \
+            --output artifacts/evidence_v2/aggregate/price_leaderboard.json
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/evidence_v2/aggregate/price_leaderboard.json', encoding='utf-8'))
+          print(json.dumps({
+              'initial_eligible': r['eligible_count'],
+              'robust_eligible': r['robust_eligible_count'],
+              'top': r['leaderboard'][:10],
+          }, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: evidence-v2-price-leaderboard
+          path: artifacts/evidence_v2/aggregate/
+          retention-days: 30
+          if-no-files-found: error
+
+  release-gate:
+    name: adversarial-release-gate
+    needs: [aggregate-price, basis-convergence]
+    if: always() && needs.aggregate-price.result == 'success' && needs.basis-convergence.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Deterministic multi-agent release manager
+        run: |
+          mkdir -p artifacts/evidence_v2/gate
+          orderflow-multi-agent --output artifacts/evidence_v2/gate/multi_agent_report.json
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/evidence_v2/gate/multi_agent_report.json', encoding='utf-8'))
+          if r['release_manager']['status'] != 'reviewable':
+              raise SystemExit('release manager blocked evidence-backed tournament')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: evidence-v2-release-gate
+          path: artifacts/evidence_v2/gate/
+          retention-days: 30
+          if-no-files-found: error
