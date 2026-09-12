@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [main]
   push:
-    branches: [release/deadline-forward-agents-v2]
+    branches: [release/cross-sectional-forward-v1]
   schedule:
     - cron: "42 * * * *"
 
@@ -30,7 +30,7 @@ jobs:
       - name: Run frozen forward agents
         shell: bash
         run: |
-          mkdir -p artifacts/deadline/ena artifacts/deadline/trend/source
+          mkdir -p artifacts/deadline/ena artifacts/deadline/trend/source artifacts/deadline/xs/source
           orderflow-ena-forward-shadow \
             --candidate config/ena_mean_reversion_candidate_v1.json \
             --output artifacts/deadline/ena/report.json \
@@ -42,8 +42,15 @@ jobs:
             --source-dir artifacts/deadline/trend/source \
             --max-workers 5 &
           TREND_PID=$!
+          orderflow-cross-sectional-forward-shadow \
+            --candidate config/cross_sectional_candidate_v1.json \
+            --output artifacts/deadline/xs/report.json \
+            --source-dir artifacts/deadline/xs/source \
+            --max-workers 5 &
+          XS_PID=$!
           wait "$ENA_PID"
           wait "$TREND_PID"
+          wait "$XS_PID"
       - name: Build visible forward-only scoreboard
         run: |
           python - <<'PY'
@@ -51,9 +58,11 @@ jobs:
           from pathlib import Path
           ena=json.load(open('artifacts/deadline/ena/report.json', encoding='utf-8'))
           trend=json.load(open('artifacts/deadline/trend/report.json', encoding='utf-8'))
+          xs=json.load(open('artifacts/deadline/xs/report.json', encoding='utf-8'))
           es=ena['metrics']
           eo=ena.get('open_position')
           trend_pnl=float(trend['metrics']['net_pnl_per_1000_usdt'])
+          xs_pnl=float(xs['metrics']['net_pnl_per_1000_usdt'])
           ena_completed=float(es.get('compounded_return') or 0.0) * 1000.0
           ena_open_gross=(float(eo.get('unrealized_gross_return') or 0.0) * 1000.0) if eo else 0.0
           lines=[
@@ -61,16 +70,18 @@ jobs:
             '',
             f"As of UTC: **{trend['as_of_utc']}**",
             '',
-            '| Frozen agent | Status | Completed trades | Open positions | Forward PnL / $1,000 | Notes |',
+            '| Frozen agent | Status | Completed trades/periods | Open positions | Forward PnL / $1,000 | Notes |',
             '|---|---:|---:|---:|---:|---|',
             f"| ENA 1h BB/RSI/ATR | {ena['status']} | {int(es.get('trades') or 0)} | {1 if eo else 0} | ${ena_completed + ena_open_gross:,.2f}* | completed net + open gross MTM |",
             f"| 10-coin 8h EMA24/96 ATR | {trend['status']} | {int(trend['metrics']['completed_symbol_trades'])} | {int(trend['metrics']['open_symbol_positions'])} | ${trend_pnl:,.2f} | includes modeled trading costs + realized funding |",
+            f"| 10-coin daily 30d/7d cross-sectional | {xs['status']} | {int(xs['metrics']['completed_holding_periods'])} | {int(xs['metrics']['open_symbol_positions'])} | ${xs_pnl:,.2f} | dollar-neutral; includes modeled trading costs + realized funding |",
             '',
-            '* ENA open-position MTM is gross until exit under its frozen legacy report; completed ENA trades include the frozen 20 bps round-trip cost. Do not compare this row directly with the fully cost/funding-aware trend row while a position is open.',
+            '* ENA open-position MTM is gross until exit under its frozen legacy report; completed ENA trades include the frozen 20 bps round-trip cost. Do not compare this row directly with the fully cost/funding-aware portfolio rows while an ENA position is open.',
             '',
             '**Interpretation:** this is genuine post-freeze paper/shadow market PnL. A positive number is a visible forward result, not by itself statistical proof of a persistent edge.',
             '',
             f"Trend candidate hash: `{trend['candidate_spec_sha256']}`",
+            f"Cross-sectional candidate hash: `{xs['candidate_spec_sha256']}`",
             f"ENA candidate hash: `{ena['candidate_spec_sha256']}`",
             '',
             'Live order transmission: **disabled**.'
@@ -84,7 +95,7 @@ jobs:
         run: |
           python - <<'PY'
           import json
-          for p in ['artifacts/deadline/ena/report.json','artifacts/deadline/trend/report.json']:
+          for p in ['artifacts/deadline/ena/report.json','artifacts/deadline/trend/report.json','artifacts/deadline/xs/report.json']:
               r=json.load(open(p, encoding='utf-8'))
               c=r['claims']
               if c.get('verified_out_of_sample_evidence') or c.get('profitable_edge_established') or c.get('live_order_transmission_supported'):

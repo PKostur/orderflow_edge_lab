@@ -1,0 +1,76 @@
+name: Cross-Sectional Forward Shadow v1
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [release/cross-sectional-forward-v1]
+  schedule:
+    - cron: "27 * * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cross-sectional-forward-shadow-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Recompute frozen cross-sectional forward shadow
+        run: |
+          mkdir -p artifacts/cross_sectional_forward/source
+          orderflow-cross-sectional-forward-shadow \
+            --candidate config/cross_sectional_candidate_v1.json \
+            --output artifacts/cross_sectional_forward/report.json \
+            --source-dir artifacts/cross_sectional_forward/source \
+            --max-workers 5
+      - name: Enforce paper-only and claim boundaries
+        run: |
+          python - <<'PY'
+          import json
+          p='artifacts/cross_sectional_forward/report.json'
+          r=json.load(open(p, encoding='utf-8'))
+          c=r['claims']
+          if not c.get('candidate_specification_frozen') or not c.get('paper_shadow_only'):
+              raise SystemExit('cross-sectional candidate or paper-only boundary is invalid')
+          if c.get('verified_out_of_sample_evidence') or c.get('profitable_edge_established') or c.get('live_order_transmission_supported'):
+              raise SystemExit('cross-sectional forward shadow emitted a forbidden promotion claim')
+          print(json.dumps({
+              'candidate_id': r['candidate_id'],
+              'status': r['status'],
+              'as_of_utc': r['as_of_utc'],
+              'net_pnl_per_1000_usdt': r['metrics']['net_pnl_per_1000_usdt'],
+              'executed_rebalances': r['metrics']['executed_rebalances'],
+              'completed_holding_periods': r['metrics']['completed_holding_periods'],
+              'open_symbol_positions': r['metrics']['open_symbol_positions'],
+              'current_weights': r['current_weights'],
+          }, indent=2))
+          PY
+      - name: Deterministic multi-agent release gate
+        run: |
+          orderflow-multi-agent --output artifacts/cross_sectional_forward/multi_agent_report.json
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/cross_sectional_forward/multi_agent_report.json', encoding='utf-8'))
+          if r['release_manager']['status'] != 'reviewable':
+              raise SystemExit('deterministic release manager blocked cross-sectional forward shadow')
+          PY
+      - name: Preserve forward evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cross-sectional-forward-shadow-v1
+          path: artifacts/cross_sectional_forward/
+          retention-days: 14
+          if-no-files-found: warn

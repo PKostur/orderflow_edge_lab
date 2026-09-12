@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "candidate_id": "mexc_xs_mom30_7_dn_v1",
+  "frozen_at_utc": "2026-09-12T18:25:01Z",
+  "forward_signal_start_utc": "2026-09-13T00:00:00Z",
+  "selection_provenance": {
+    "source_protocol": "published-cross-sectional-v1.1",
+    "development_end_exclusive_utc": "2026-09-12T00:00:00Z",
+    "selection_reason": "Funding-aware dollar-neutral 30d/7d cross-sectional momentum representative; selected because the pre-specified dollar-neutral variant passed the development stability gate at 12/16/20 bps, not because it had the highest headline return.",
+    "development_evidence_only": true,
+    "untouched_oos_claim": false,
+    "survivorship_warning": "The fixed current liquid 10-coin panel is not a reconstructed point-in-time universe, so forward evidence is required before any edge claim.",
+    "pre_forward_engineering_correction": "Warmup fetch start expanded from 2026-07-01 to 2026-01-01 before the forward boundary because the shared MEXC history loader enforces at least 200 candles. Strategy definition, symbols, lookback, holding period, rebalance phase, costs and funding rules are unchanged.",
+    "supersedes_pre_forward_spec_sha256": "611a0447f4bad157e0ff82b1521e27562ca1514489af7d9313574a024434140c"
+  },
+  "specification": {
+    "venue": "MEXC Futures",
+    "symbols": [
+      "BTC_USDT",
+      "ETH_USDT",
+      "SOL_USDT",
+      "XRP_USDT",
+      "DOGE_USDT",
+      "BNB_USDT",
+      "ADA_USDT",
+      "LINK_USDT",
+      "SUI_USDT",
+      "ENA_USDT"
+    ],
+    "interval": "1d",
+    "family": "cross_sectional_momentum",
+    "lookback_days": 30,
+    "holding_days": 7,
+    "quantile_fraction": 0.25,
+    "variant": "dollar_neutral_top_bottom",
+    "signal_rule": "rank trailing_30d_close_to_close_return; long top quartile and short bottom quartile at equal dollar weights",
+    "signal_timing": "completed_daily_close_only",
+    "execution_timing": "next_daily_bar_open",
+    "forward_rebalance_phase": "first completed daily signal candle whose open timestamp is on_or_after forward_signal_start_utc, then every 7 completed daily observations",
+    "portfolio_weighting": "50pct_long_winners_50pct_short_losers_equal_weight_within_each_side",
+    "gross_portfolio_exposure_cap": 1.0,
+    "round_trip_cost_bps": 20.0,
+    "funding_accounting": "actual_public_MEXC_realized_funding_cashflows_during_held_interval",
+    "leverage": 1.0
+  },
+  "forward_protocol": {
+    "indicator_warmup_start_utc": "2026-01-01T00:00:00Z",
+    "position_state_at_boundary": "flat",
+    "no_retuning_after_forward_start": true,
+    "first_possible_execution_utc": "2026-09-14T00:00:00Z",
+    "minimum_completed_forward_rebalances_for_edge_review": 10,
+    "paper_shadow_only": true,
+    "mark_to_market": "current_daily_MEXC_perpetual_candle_or_latest_available_price",
+    "deadline_observation_utc": "2026-09-16T20:59:59Z",
+    "visible_pnl_is_not_statistical_proof": true
+  },
+  "claims": {
+    "candidate_specification_frozen": true,
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  },
+  "spec_sha256": "60ed9b9ee661df4952d994b9b76226cc7a017447007b1ad02f0e1f5c564107e5"
+}
