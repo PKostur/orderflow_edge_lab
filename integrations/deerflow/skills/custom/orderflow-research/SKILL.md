@@ -58,6 +58,19 @@ For substantial regime/indicator research, use bounded specialist tasks. Run onl
 14. **Data integrity**: causal eligibility, sequence/timestamp correctness, adapters and provenance.
 15. **Reliability/observability**: CI, packaging, workflow failures, hashes, manifests, runtime identity and reproducibility.
 
+## Compatibility role mapping
+
+The expanded pods preserve the original six specialist responsibilities expected by the migration layer:
+
+- **Data integrity** maps to the data-integrity and liquidity/microstructure specialists.
+- **Research validity and statistics** maps to research-validity and indicator-orthogonality specialists.
+- **Strategy and backtest validation** maps to trend, volatility, flow, mean-reversion, cross-asset, transfer and execution-economics specialists.
+- **Execution safety and risk** maps to risk-path plus the repository execution-safety reviewer.
+- **Reliability and CI** maps to reliability/observability.
+- **Observability and deployment** maps to reliability/observability plus the lead's release checks.
+
+The lead remains the **adversarial reviewer and release manager**.
+
 ## Lead-agent responsibility
 
 The lead agent is the adversarial synthesis/release manager.
