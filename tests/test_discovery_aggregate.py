@@ -6,6 +6,7 @@ import tempfile
 import unittest
 
 from orderflow_edge_lab.discovery_aggregate import DiscoveryAggregateError, aggregate, verify_manifest
+from orderflow_edge_lab.orderflow_backtest import BacktestConfig
 
 
 CONFIG = {
@@ -60,6 +61,23 @@ class DiscoveryAggregateTests(unittest.TestCase):
             },
         }), encoding="utf-8")
         return path
+
+    def test_repository_protocol_matches_backtest_defaults(self):
+        cfg = BacktestConfig()
+        actual = {
+            "symbol": cfg.symbol,
+            "context_symbol": cfg.context_symbol,
+            "horizons_ms": list(cfg.horizons_ms),
+            "fee_bps_round_trip": list(cfg.fee_bps_round_trip),
+            "min_trade_count": cfg.min_trade_count,
+            "min_trade_flow_ratio": cfg.min_trade_flow_ratio,
+            "min_book_imbalance": cfg.min_book_imbalance,
+            "min_microprice_edge": cfg.min_microprice_edge,
+            "cooldown_ms": cfg.cooldown_ms,
+        }
+        repository_protocol = Path(__file__).resolve().parents[1] / "config" / "orderflow_discovery_v1.json"
+        protocol = json.loads(repository_protocol.read_text(encoding="utf-8"))
+        self.assertEqual(protocol["backtest_config"], actual)
 
     def test_uses_batches_as_primary_unit(self):
         a = self._report("a.json", "a" * 64, 1.0, 100)
