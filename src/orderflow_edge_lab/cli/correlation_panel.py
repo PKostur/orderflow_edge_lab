@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 
@@ -26,7 +27,9 @@ def main() -> None:
     parser.add_argument("--output", required=True)
     args = parser.parse_args()
 
-    screen = json.loads(Path(args.screen).read_text(encoding="utf-8"))
+    screen_path = Path(args.screen)
+    screen_bytes = screen_path.read_bytes()
+    screen = json.loads(screen_bytes.decode("utf-8"))
     report = build_correlation_panel(
         screen,
         CorrelationPanelConfig(
@@ -43,6 +46,8 @@ def main() -> None:
             request_pause_seconds=args.request_pause_seconds,
         ),
     )
+    report["source_screen_sha256"] = hashlib.sha256(screen_bytes).hexdigest()
+    report["source_screen_selection_rule"] = screen.get("selection_rule")
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, indent=2), encoding="utf-8")
