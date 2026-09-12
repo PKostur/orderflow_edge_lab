@@ -11,6 +11,7 @@ from orderflow_edge_lab.candidate_freeze import build_candidate_freeze
 from orderflow_edge_lab.cli import paper as control
 from orderflow_edge_lab.holdout_audit import build_holdout_audit
 from orderflow_edge_lab.research_protocol import build_research_freeze
+from orderflow_edge_lab.trial_ledger import append_holdout_trial, new_trial_ledger
 
 
 class PaperControlTests(unittest.TestCase):
@@ -107,6 +108,17 @@ class PaperControlTests(unittest.TestCase):
         )
         holdout_path = self.root / "holdout.json"
         holdout_path.write_text(json.dumps(holdout), encoding="utf-8")
+        ledger = new_trial_ledger(
+            family_name="paper-control-family",
+            alpha=0.05,
+            now=datetime(2026, 4, 1, 0, 1, tzinfo=timezone.utc),
+        )
+        ledger = append_holdout_trial(
+            ledger,
+            holdout,
+            now=datetime(2026, 4, 1, 0, 2, tzinfo=timezone.utc),
+        )
+        (self.root / "trial-ledger.json").write_text(json.dumps(ledger), encoding="utf-8")
 
         validation.write_text(json.dumps({
             "schema_version": 7,
@@ -148,6 +160,7 @@ class PaperControlTests(unittest.TestCase):
             "--validation-report", str(validation), "--economics", str(economics),
             "--candidate-freeze", str(root / "candidate-freeze.json"),
             "--holdout-audit", str(root / "holdout.json"),
+            "--trial-ledger", str(root / "trial-ledger.json"),
         )
 
     def test_status_does_not_initialize_missing_state(self):
@@ -182,7 +195,7 @@ class PaperControlTests(unittest.TestCase):
         binding = evidence["promotion_binding"]
         self.assertEqual(binding["binding_reasons"], [])
         self.assertTrue(all(len(binding[key]) == 64 for key in (
-            "candidate_freeze_sha256", "holdout_audit_sha256",
+            "candidate_freeze_sha256", "holdout_audit_sha256", "trial_ledger_sha256",
             "validation_report_sha256", "economics_sha256",
         )))
         self.assertEqual(submitted["payload"]["approval_token"], token)
@@ -221,6 +234,20 @@ class PaperControlTests(unittest.TestCase):
         self.assertEqual(code, 2)
         self.assertEqual(result["reason"], "strategy_not_bound_for_paper")
         self.assertIn("holdout_audit_manifest_invalid", result["binding_reasons"])
+        self.assertEqual(before, (self.state.read_bytes(), self.journal.read_bytes()))
+
+    def test_tampered_trial_ledger_cannot_enter_queue(self):
+        self.run_command("init")
+        intent, _, export, validation, economics = self.files()
+        ledger_path = self.root / "trial-ledger.json"
+        ledger = json.loads(ledger_path.read_text())
+        ledger["trials"][0]["candidate_id"] = "other"
+        ledger_path.write_text(json.dumps(ledger))
+        before = self.state.read_bytes(), self.journal.read_bytes()
+        code, result = self.run_command(*self.submit_args(intent, export, validation, economics))
+        self.assertEqual(code, 2)
+        self.assertEqual(result["reason"], "strategy_not_bound_for_paper")
+        self.assertIn("trial_ledger_manifest_invalid", result["binding_reasons"])
         self.assertEqual(before, (self.state.read_bytes(), self.journal.read_bytes()))
 
     def test_validation_observation_mismatch_cannot_enter_queue(self):
