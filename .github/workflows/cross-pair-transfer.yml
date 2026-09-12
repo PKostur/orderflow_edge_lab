@@ -17,7 +17,7 @@ concurrency:
 jobs:
   transfer-test:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -76,6 +76,26 @@ jobs:
             "${ARGS[@]}" \
             --duration-seconds 900 \
             --output-dir artifacts/cross_pair/capture
+      - name: Evaluate pre-registered future market-state targets before strategy PnL
+        shell: bash
+        run: |
+          FEATURE=$(find artifacts/cross_pair/capture -name '*_mexc_features.jsonl' -print -quit)
+          test -n "$FEATURE"
+          BATCH_ID=$(basename "$FEATURE" _mexc_features.jsonl)
+          mapfile -t SYMBOLS < <(python - <<'PY'
+          import json
+          data=json.load(open('artifacts/cross_pair/correlation_panel.json', encoding='utf-8'))
+          for symbol in data['selected_symbols']:
+              print(symbol)
+          PY
+          )
+          for SYMBOL in "${SYMBOLS[@]}"; do
+            orderflow-market-state-scan "$FEATURE" \
+              --symbol "$SYMBOL" \
+              --context-symbol BTC_USDT \
+              --batch-id "$BATCH_ID" \
+              --output "artifacts/cross_pair/market_state_${SYMBOL}.json"
+          done
       - name: Run unchanged frozen strategy, conditions and stop-risk per pair
         shell: bash
         run: |
