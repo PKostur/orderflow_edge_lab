@@ -45,6 +45,11 @@ jobs:
             --symbol ENA_USDT \
             --context-symbol BTC_USDT \
             --output artifacts/orderflow/direction_pair.json
+      - name: Run incremental exposure risk ladder
+        shell: bash
+        run: |
+          orderflow-risk-ladder artifacts/orderflow/direction_pair.json \
+            --output artifacts/orderflow/risk_ladder.json
       - name: Preserve capture and reports
         if: always()
         uses: actions/upload-artifact@v4
