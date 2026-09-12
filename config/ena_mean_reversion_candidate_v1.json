@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "candidate_id": "ena_bb40_rsi25_75_atr15_v1",
+  "status": "frozen_for_forward_paper_shadow",
+  "candidate_scope": "ENA_USDT only",
+  "freeze_effective_utc": "2026-09-12T16:00:00Z",
+  "forward_signal_start_utc": "2026-09-12T16:00:00Z",
+  "specification": {
+    "symbol": "ENA_USDT",
+    "interval": "1h",
+    "signal_family": "bb_mean_reversion",
+    "bollinger_period": 40,
+    "bollinger_std": 2.0,
+    "rsi_period": 14,
+    "rsi_long_threshold": 25.0,
+    "rsi_short_threshold": 75.0,
+    "max_hold_bars": 20,
+    "entry_execution": "next_bar_open_after_completed_signal_bar",
+    "long_exit": "completed_close_at_or_above_bollinger_mid_then_next_bar_open",
+    "short_exit": "completed_close_at_or_below_bollinger_mid_then_next_bar_open",
+    "atr_period": 14,
+    "hard_stop_atr_multiple": 1.5,
+    "fixed_profit_target": null,
+    "after_hard_stop": "remain_flat_until_signal_state_resets_or_reverses",
+    "same_bar_stop_target_ambiguity": "stop_first",
+    "round_trip_cost_bps": 20.0,
+    "pyramiding": false
+  },
+  "development_evidence": {
+    "history_start": "2026-03-01T00:00:00Z",
+    "history_end_exclusive": "2026-09-12T00:00:00Z",
+    "risk_experiment_commit": "ca59ecc10be7aa59bf3d2c7e467a374f1b580022",
+    "risk_workflow_run_id": 34703135745,
+    "risk_artifact_sha256": "94ee2ebd582b695156b7ef187f520ccd62ce7b6fcccefdedf3fdd2086c2d723c",
+    "reference_metrics": {
+      "trades": 40,
+      "expectancy_bps": 55.356893096433716,
+      "profit_factor": 1.3557625030086555,
+      "win_rate": 0.45,
+      "compounded_trade_return": 0.20088675677715018,
+      "max_trade_loss_bps": -664.8719178739326,
+      "trade_equity_max_drawdown": -0.15033778310202606,
+      "fold_observations": 9,
+      "positive_fold_fraction": 0.6666666666666666,
+      "median_fold_expectancy_bps": 33.508310649882354,
+      "median_fold_profit_factor": 1.237922143922797,
+      "tail_loss_reduction_fraction_vs_unstopped": 0.8247173365691675
+    },
+    "adjacent_stop_full_period_positive_pf_above_one": "2/2",
+    "portfolio_wide_cross_symbol_robust_eligible_count": 0,
+    "cross_symbol_interpretation": "The broad portfolio screen did not pass. This freeze is therefore ENA-specific forward research, not a universal crypto strategy claim."
+  },
+  "forward_protocol": {
+    "use_pre_freeze_bars_for_indicator_warmup_only": true,
+    "reset_position_state_flat_at_forward_signal_start": true,
+    "score_only_trades_triggered_by_signal_bars_at_or_after_forward_signal_start": true,
+    "closed_candles_only": true,
+    "no_retuning_after_forward_start": true,
+    "minimum_completed_forward_trades_for_any_edge_review": 20,
+    "paper_shadow_only": true,
+    "indicator_warmup_start_utc": "2026-09-01T00:00:00Z"
+  },
+  "claims": {
+    "candidate_specification_frozen": true,
+    "development_only_until_forward_evidence": true,
+    "cross_symbol_portfolio_robustness_established": false,
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  },
+  "spec_sha256": "4edb0789492fe89da333f00023cd6437985748e0adc3fa038827301d29204e31"
+}

@@ -1,0 +1,73 @@
+name: ENA Frozen Forward Shadow v1
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"
+  push:
+    branches: [research/ena-mean-reversion-risk-v1]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ena-frozen-forward-shadow-v1
+  cancel-in-progress: true
+
+jobs:
+  forward-shadow:
+    name: forward-shadow
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Verify frozen candidate and run forward-only shadow recomputation
+        run: |
+          mkdir -p artifacts/ena_forward_shadow
+          orderflow-ena-forward-shadow \
+            --candidate config/ena_mean_reversion_candidate_v1.json \
+            --source-output artifacts/ena_forward_shadow/ENA_USDT_1h_forward_source.csv \
+            --output artifacts/ena_forward_shadow/forward_report.json
+      - name: Enforce paper-shadow claims
+        run: |
+          python - <<'PY'
+          import json
+          report=json.load(open('artifacts/ena_forward_shadow/forward_report.json', encoding='utf-8'))
+          claims=report['claims']
+          if claims.get('profitable_edge_established'):
+              raise SystemExit('forward collector cannot establish profitable edge automatically')
+          if claims.get('verified_out_of_sample_evidence'):
+              raise SystemExit('forward collector cannot self-certify OOS evidence')
+          if claims.get('live_order_transmission_supported'):
+              raise SystemExit('forward collector cannot enable live transmission')
+          print(json.dumps({
+              'candidate_id': report['candidate_id'],
+              'status': report['status'],
+              'completed_forward_trades': report['metrics']['trades'],
+              'open_position': report['open_position'],
+              'claims': claims,
+          }, indent=2))
+          PY
+      - name: Run deterministic release gate on code-triggered runs
+        if: github.event_name != 'schedule'
+        run: |
+          orderflow-multi-agent --output artifacts/ena_forward_shadow/multi_agent_report.json
+          python - <<'PY'
+          import json
+          report=json.load(open('artifacts/ena_forward_shadow/multi_agent_report.json', encoding='utf-8'))
+          if report['release_manager']['status'] != 'reviewable':
+              raise SystemExit('deterministic release manager blocked forward-shadow collector')
+          PY
+      - name: Preserve immutable forward snapshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ena-frozen-forward-shadow-v1-${{ github.run_id }}
+          path: artifacts/ena_forward_shadow/
+          retention-days: 30
+          if-no-files-found: error
