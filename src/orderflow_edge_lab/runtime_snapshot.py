@@ -8,6 +8,7 @@ from typing import Any, Mapping
 
 from .execution import StateCorruptionError, _canonical, validate_execution_state
 from .reliability import deployment_readiness
+from .runtime_identity import runtime_identity
 
 UTC = timezone.utc
 
@@ -72,7 +73,7 @@ def create_runtime_snapshot(
     now: datetime | None = None,
     require_flat: bool = True,
 ) -> dict[str, Any]:
-    """Freeze exact paper runtime bytes before a controlled paper session.
+    """Freeze exact paper runtime bytes and code identity before a session.
 
     This is operational provenance only. It does not establish an out-of-sample edge
     and it never enables broker or exchange transmission.
@@ -95,8 +96,9 @@ def create_runtime_snapshot(
         raise RuntimeSnapshotError("execution configuration is not bound")
 
     journal_bytes = journal_path.read_bytes()
+    identity = runtime_identity()
     payload: dict[str, Any] = {
-        "schema_version": 1,
+        "schema_version": 2,
         "generated_at": current.isoformat(),
         "state_sha256": _sha256_file(state_path),
         "journal_sha256": _sha256_bytes(journal_bytes),
@@ -104,6 +106,8 @@ def create_runtime_snapshot(
         "state_revision": state.get("revision"),
         "journal_head": state.get("journal_head"),
         "engine_config_sha256": _sha256_payload(engine_config),
+        "runtime_identity": identity,
+        "runtime_identity_sha256": _sha256_payload(identity),
         "trading_day": state["trading_day"],
         "pending_ids": pending_ids,
         "position_ids": position_ids,
@@ -125,7 +129,7 @@ def verify_runtime_snapshot(
     *,
     now: datetime | None = None,
 ) -> dict[str, Any]:
-    """Verify that runtime files still match a previously frozen snapshot."""
+    """Verify that runtime files and, for schema v2, code identity still match."""
     if not isinstance(snapshot, Mapping):
         raise RuntimeSnapshotError("runtime snapshot must be an object")
     supplied = snapshot.get("snapshot_sha256")
@@ -135,7 +139,8 @@ def verify_runtime_snapshot(
     unsigned.pop("snapshot_sha256", None)
     if _sha256_payload(unsigned) != supplied:
         raise RuntimeSnapshotError("runtime snapshot manifest was modified")
-    if snapshot.get("schema_version") != 1:
+    schema = snapshot.get("schema_version")
+    if schema not in (1, 2):
         raise RuntimeSnapshotError("unsupported runtime snapshot schema")
 
     state_path = Path(state_path)
@@ -160,17 +165,33 @@ def verify_runtime_snapshot(
         checks["journal_bytes"] = journal_path.stat().st_size == snapshot.get("journal_bytes")
     if snapshot.get("require_flat") is True:
         checks["flat_runtime"] = not state["pending"] and not state["positions"]
+    if schema == 2:
+        current_identity = runtime_identity()
+        stored_identity = snapshot.get("runtime_identity")
+        stored_identity_sha = snapshot.get("runtime_identity_sha256")
+        checks["runtime_identity_manifest"] = (
+            isinstance(stored_identity, Mapping)
+            and isinstance(stored_identity_sha, str)
+            and _sha256_payload(stored_identity) == stored_identity_sha
+        )
+        checks["runtime_identity"] = (
+            checks["runtime_identity_manifest"]
+            and current_identity == stored_identity
+            and _sha256_payload(current_identity) == stored_identity_sha
+        )
 
     failed = sorted(name for name, passed in checks.items() if not passed)
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "verified_at": current.isoformat(),
         "snapshot_sha256": supplied,
+        "snapshot_schema_version": schema,
         "verified": not failed,
         "failed_checks": failed,
         "runtime_blockers": blockers,
         "checks": checks,
         "ready_for_live": False,
         "live_order_transmission_supported": False,
+        "verified_out_of_sample_evidence": False,
         "profitable_edge_established": False,
     }
