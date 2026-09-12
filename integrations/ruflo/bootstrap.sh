@@ -40,18 +40,27 @@ if [[ "$INIT_STATUS" -ne 0 ]]; then
 fi
 
 ruflo doctor
-ruflo swarm init --topology hierarchical --max-agents 7 --strategy specialized
+ruflo swarm init --topology hierarchical --max-agents 15 --strategy specialized
 ruflo agent spawn --type coordinator --name orderflow-lead
 ruflo agent spawn --type researcher --name data-integrity
+ruflo agent spawn --type researcher --name trend-structure
+ruflo agent spawn --type researcher --name volatility-regime
+ruflo agent spawn --type researcher --name liquidity-microstructure
+ruflo agent spawn --type researcher --name aggressive-flow
+ruflo agent spawn --type researcher --name mean-reversion
+ruflo agent spawn --type researcher --name cross-asset-context
+ruflo agent spawn --type researcher --name derivatives-session
+ruflo agent spawn --type performance-engineer --name execution-economics
+ruflo agent spawn --type reviewer --name risk-path
+ruflo agent spawn --type reviewer --name indicator-orthogonality
 ruflo agent spawn --type researcher --name research-validity
-ruflo agent spawn --type reviewer --name strategy-validation
-ruflo agent spawn --type security-architect --name execution-safety
-ruflo agent spawn --type tester --name reliability-ci
-ruflo agent spawn --type reviewer --name observability-deployment
+ruflo agent spawn --type researcher --name transfer-generalization
+ruflo agent spawn --type tester --name reliability-observability
 
 ruflo memory store --namespace "orderflow/decisions" --key "safety-boundary-v1" --value "Automatic live broker/exchange transmission is disabled. Ruflo and DeerFlow coordinate research but cannot bypass candidate freeze, holdout audit, trial ledger, realistic economics, approval-bound paper execution, reconciliation, or explicit future user approval."
 ruflo memory store --namespace "orderflow/decisions" --key "orchestration-layers-v1" --value "Ruflo is the meta-harness for memory/swarm coordination; DeerFlow provides trading-domain context; orderflow_edge_lab is the executable source of truth and deterministic evidence gate."
-ruflo memory store --namespace "orderflow/experiments" --key "current-research-v1" --value "Preserve frozen discovery-v1 thresholds. Current research stratifies executable PF by pre-registered market conditions and transfers the unchanged strategy to PnL-independent screened MEXC pairs. Exploratory findings are not OOS proof."
+ruflo memory store --namespace "orderflow/experiments" --key "current-research-v2" --value "Preserve discovery-v1 and regime-research-v1 definitions. First predict future market state, then test conditional strategy economics. Use specialized trend, volatility, liquidity, flow, mean-reversion, cross-asset, derivatives/session, execution, risk, orthogonality, validity and transfer roles. Exploratory findings are not OOS proof."
+ruflo memory store --namespace "orderflow/decisions" --key "indicator-combination-policy-v1" --value "Do not combine indicators solely because they each show high PF. Prefer non-redundant features that add incremental market-state information or have a pre-specified interaction rationale."
 
 if [[ "$START_DAEMON" -eq 1 ]]; then
   ruflo daemon start
