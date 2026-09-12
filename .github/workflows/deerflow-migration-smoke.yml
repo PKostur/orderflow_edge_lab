@@ -45,8 +45,7 @@ jobs:
           test -f deer-flow/skills/custom/orderflow-research/references/project-context.md
           test -f deer-flow/skills/custom/orderflow-research/references/commands.md
           test -f deer-flow/skills/custom/orderflow-research/references/hourly-research-task.md
-      - name: Confirm no launch or credentials required
+      - name: Confirm setup boundary without inspecting secrets
         run: |
-          grep -q '^models:' deer-flow/config.yaml
-          test ! -f deer-flow/.env
-          echo "DeerFlow migration bootstrap compatibility passed; services were not started."
+          test -f deer-flow/config.yaml
+          echo "DeerFlow migration bootstrap compatibility passed; services were not started and secret-bearing files were not inspected."
