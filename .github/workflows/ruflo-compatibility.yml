@@ -1,0 +1,53 @@
+name: Ruflo Meta-Harness Compatibility
+
+on:
+  pull_request:
+    paths:
+      - "AGENTS.md"
+      - ".agents/**"
+      - "integrations/ruflo/**"
+      - ".github/workflows/ruflo-compatibility.yml"
+      - ".gitignore"
+  schedule:
+    - cron: "43 5 * * 2"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ruflo-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      CI: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Verify current Ruflo CLI
+        run: npx -y ruflo@latest --version
+      - name: Initialize Ruflo Codex integration in disposable runner workspace
+        shell: bash
+        run: |
+          cp AGENTS.md "$RUNNER_TEMP/orderflow-AGENTS.md"
+          cp .agents/skills/orderflow-research/SKILL.md "$RUNNER_TEMP/orderflow-SKILL.md"
+          npx -y ruflo@latest init --codex --force --no-signup
+          cp "$RUNNER_TEMP/orderflow-AGENTS.md" AGENTS.md
+          mkdir -p .agents/skills/orderflow-research
+          cp "$RUNNER_TEMP/orderflow-SKILL.md" .agents/skills/orderflow-research/SKILL.md
+          test -f .agents/config.toml
+      - name: Verify project policy survived init
+        shell: bash
+        run: |
+          grep -q "Automatic live broker or exchange order transmission remains disabled" AGENTS.md
+          grep -q "Ruflo is the meta-harness" .agents/skills/orderflow-research/SKILL.md
+      - name: Exercise swarm coordination and memory
+        shell: bash
+        run: |
+          npx -y ruflo@latest swarm init --topology hierarchical --max-agents 7 --strategy specialized
+          npx -y ruflo@latest memory store --namespace "orderflow/ci" --key "compatibility-smoke" --value "Ruflo coordination smoke passed without trading credentials or live-order capability."
+          npx -y ruflo@latest memory search --query "compatibility smoke"
+      - name: Check MetaHarness command availability
+        run: npx -y ruflo@latest metaharness --help
