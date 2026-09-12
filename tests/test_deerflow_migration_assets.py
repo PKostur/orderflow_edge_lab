@@ -17,6 +17,7 @@ class DeerFlowMigrationAssetsTests(unittest.TestCase):
             SKILL,
             SKILL.parent / "references" / "project-context.md",
             SKILL.parent / "references" / "commands.md",
+            SKILL.parent / "references" / "hourly-research-task.md",
         ]
         for path in expected:
             self.assertTrue(path.is_file(), path)
@@ -41,6 +42,12 @@ class DeerFlowMigrationAssetsTests(unittest.TestCase):
         self.assertIn("never claim profitability without genuine untouched out-of-sample evidence", text)
         self.assertIn("automatic live broker/exchange order transmission remains out of scope", text)
         self.assertIn("frozen discovery-v1", text)
+
+    def test_recurring_task_preserves_discovery_boundary(self):
+        text = (SKILL.parent / "references" / "hourly-research-task.md").read_text(encoding="utf-8").lower()
+        self.assertIn("preserve discovery-v1 thresholds", text)
+        self.assertIn("genuine untouched out-of-sample evidence", text)
+        self.assertIn("do not enable automatic live broker/exchange transmission", text)
 
     def test_bootstraps_follow_official_install_boundary(self):
         for name in ("bootstrap.ps1", "bootstrap.sh"):
