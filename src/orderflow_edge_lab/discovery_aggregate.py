@@ -12,6 +12,9 @@ class DiscoveryAggregateError(ValueError):
     pass
 
 
+SUPPORTED_BACKTEST_SCHEMA_VERSIONS = {1, 2}
+
+
 def _sha256(path: str | Path) -> str:
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
@@ -39,7 +42,7 @@ def _load_report(path: str | Path, expected_config: dict[str, Any]) -> dict[str,
         report = json.loads(Path(path).read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         raise DiscoveryAggregateError(f"cannot read backtest report: {path}") from exc
-    if not isinstance(report, dict) or report.get("schema_version") != 1:
+    if not isinstance(report, dict) or report.get("schema_version") not in SUPPORTED_BACKTEST_SCHEMA_VERSIONS:
         raise DiscoveryAggregateError(f"unsupported backtest report: {path}")
     if report.get("config") != expected_config:
         raise DiscoveryAggregateError(f"backtest config does not match frozen protocol: {path}")
@@ -113,6 +116,7 @@ def aggregate(
         {
             "path": str(path),
             "report_sha256": _sha256(path),
+            "report_schema_version": int(report["schema_version"]),
             "source_sha256": report["source_sha256"],
             "feature_rows": int(report.get("feature_rows", 0)),
             "signals": int(report.get("signals", 0)),
@@ -133,6 +137,7 @@ def aggregate(
             "primary_independence_unit": "capture_batch",
             "event_weighted_statistics_are_descriptive_only": True,
             "thresholds_frozen_for_discovery_v1": True,
+            "supported_backtest_schema_versions": sorted(SUPPORTED_BACKTEST_SCHEMA_VERSIONS),
         },
         "claims": {
             "exploratory_only": True,
