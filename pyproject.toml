@@ -23,6 +23,7 @@ orderflow-mexc-record = "orderflow_edge_lab.cli.mexc_record:main"
 orderflow-mexc-replay = "orderflow_edge_lab.cli.mexc_replay:main"
 orderflow-export-audit = "orderflow_edge_lab.cli.export_audit:main"
 orderflow-research-freeze = "orderflow_edge_lab.cli.research_freeze:main"
+orderflow-candidate-freeze = "orderflow_edge_lab.cli.candidate_freeze:main"
 
 [project.gui-scripts]
 orderflow-dxfeed-login = "orderflow_edge_lab.cli.login:main"
