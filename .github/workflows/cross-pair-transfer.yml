@@ -24,7 +24,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install
-        run: python -m pip install -e .
+        run: python -m pip install -e ".[research]"
       - name: Screen liquid MEXC perpetuals without using strategy PnL
         run: |
           mkdir -p artifacts/cross_pair
