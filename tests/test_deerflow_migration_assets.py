@@ -65,11 +65,17 @@ class DeerFlowMigrationAssetsTests(unittest.TestCase):
                 self.assertIn(required, text, f"{name}: {required}")
             self.assertNotRegex(text, re.compile(r"(?i)(type|get-content|cat)\s+.*\.env(?:\s|$)"))
 
-    def test_bootstrap_does_not_start_long_running_services(self):
+    def test_launch_is_explicit_and_health_checked(self):
         ps = (MIGRATION / "bootstrap.ps1").read_text(encoding="utf-8")
         sh = (MIGRATION / "bootstrap.sh").read_text(encoding="utf-8")
-        self.assertNotRegex(ps, r"(?m)^\s*&\s*make\s+(docker-start|dev)\s*$")
-        self.assertNotRegex(sh, r"(?m)^\s*make\s+(docker-start|dev)\s*$")
+        self.assertIn("[switch]$Launch", ps)
+        self.assertIn("if ($Launch)", ps)
+        self.assertIn("make dev-daemon", ps)
+        self.assertIn("http://localhost:2026", ps)
+        self.assertIn('LAUNCH="${LAUNCH:-0}"', sh)
+        self.assertIn('if [[ "$LAUNCH" == "1" ]]', sh)
+        self.assertIn("make dev-daemon", sh)
+        self.assertIn("http://localhost:2026", sh)
 
 
 if __name__ == "__main__":
