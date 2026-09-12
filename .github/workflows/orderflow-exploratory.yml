@@ -36,7 +36,16 @@ jobs:
             --symbol ENA_USDT \
             --context-symbol BTC_USDT \
             --output artifacts/orderflow/backtest.json
-      - name: Preserve capture and report
+      - name: Run paired original versus reversed trade control
+        shell: bash
+        run: |
+          FEATURE=$(find artifacts/orderflow -name '*_mexc_features.jsonl' -print -quit)
+          test -n "$FEATURE"
+          orderflow-direction-pair "$FEATURE" \
+            --symbol ENA_USDT \
+            --context-symbol BTC_USDT \
+            --output artifacts/orderflow/direction_pair.json
+      - name: Preserve capture and reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
