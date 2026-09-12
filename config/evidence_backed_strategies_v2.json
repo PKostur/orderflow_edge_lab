@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "protocol_name": "evidence-backed-strategies-v2",
+  "frozen_at_intent": "2026-09-12",
+  "status": "development_screening",
+  "purpose": "Test strategy families with published empirical support on target-venue MEXC data without modifying discovery-v1, regime-research-v1, or the frozen ENA candidate.",
+  "sources": [
+    {
+      "strategy_class": "perpetual basis convergence / funding arbitrage",
+      "citation": "He, Manela, Ross, von Wachter, Fundamentals of Perpetual Futures",
+      "evidence": "paper reports high Sharpe ratios for futures-spot convergence strategies even under high trading costs"
+    },
+    {
+      "strategy_class": "volatility-adaptive trend following",
+      "citation": "Karassavidis, Quantitative Evaluation of Volatility-Adaptive Trend-Following Models in Cryptocurrency Markets",
+      "evidence": "multi-horizon moving averages, RSI confirmation and ATR risk scaling produced positive historical risk-adjusted results on BTC/ETH"
+    },
+    {
+      "strategy_class": "systematic crypto trend following",
+      "citation": "Bui and Nguyen, AdaptiveTrend",
+      "evidence": "reported out-of-sample Sharpe 2.41 across 150+ crypto pairs over 2022-2024 with transaction-cost and regime robustness tests"
+    },
+    {
+      "strategy_class": "time-series momentum",
+      "citation": "Han, Kang, Ryu, Momentum in the Cryptocurrency Market: A Comprehensive Analysis under Realistic Assumptions",
+      "evidence": "strong evidence of time-series momentum but warns that many apparently profitable portfolios fail under liquidation and realistic-profitability tests"
+    },
+    {
+      "strategy_class": "moving-average and breakout technical rules",
+      "citation": "Technical analysis in cryptocurrency markets: Do transaction costs and bubbles matter?",
+      "evidence": "moving-average and breakout rules showed periods of profitability beyond buy-and-hold after transaction costs"
+    }
+  ],
+  "data": {
+    "source": "MEXC public futures klines",
+    "target_execution_venue": "MEXC Futures",
+    "start": "2024-01-01",
+    "end_exclusive": "2026-09-12",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "intervals": ["4h", "8h", "1d"],
+    "universe_selection_uses_strategy_pnl": false
+  },
+  "dependence_and_trials": {
+    "fold_days": 120,
+    "minimum_fold_observations": 5,
+    "minimum_total_trades": 40,
+    "minimum_positive_fold_fraction": 0.6,
+    "trial_unit": "family x interval x parameter variant x round-trip cost case; 120-day calendar time fold is the dependence cluster and symbols are aggregated inside each fold",
+    "all_trials_retained": true,
+    "screening_is_not_promotion": true
+  },
+  "economics": {
+    "round_trip_cost_bps": [12.0, 16.0, 20.0],
+    "notes": "Price-family tests use the same conservative MEXC API futures cost cases as price-strategy-tournament-v1.1. Basis-convergence uses a separate two-leg friction stress grid."
+  },
+  "families": {
+    "donchian_breakout": {
+      "pod": ["trend_structure", "volatility_regime", "execution_economics"],
+      "external_prior": "published moving-average/breakout technical-rule evidence",
+      "market_state_hypothesis": "large-range breakouts identify persistent directional states on slower horizons",
+      "grid": {"lookback": [20, 55, 100]}
+    },
+    "ema_tsmom": {
+      "pod": ["trend_structure", "volatility_regime", "execution_economics"],
+      "external_prior": "time-series momentum and volatility-adaptive trend-following literature",
+      "market_state_hypothesis": "EMA separation normalized by ATR identifies persistent trend states",
+      "grid": {"fast": [6, 12, 24], "slow": [48, 96], "min_atr_spread": [0.0, 0.25]}
+    },
+    "vol_scaled_momentum": {
+      "pod": ["trend_structure", "volatility_regime", "research_validity"],
+      "external_prior": "time-series momentum under realistic assumptions",
+      "market_state_hypothesis": "past return scaled by realized volatility identifies directional persistence while suppressing weak noisy moves",
+      "grid": {"lookback": [12, 24, 48], "vol_window": [48, 96], "threshold": [0.5, 1.0]}
+    }
+  },
+  "screening_gate": {
+    "median_expectancy_after_cost_bps_gt": 0.0,
+    "median_profit_factor_gt": 1.0,
+    "minimum_positive_fold_fraction": 0.6,
+    "minimum_total_trades": 40,
+    "minimum_fold_observations": 5,
+    "minimum_symbols": 8,
+    "minimum_positive_symbol_fraction": 0.6,
+    "requires_parameter_stability_review_before_candidate_freeze": true,
+    "requires_symbol_concentration_review_before_candidate_freeze": true
+  },
+  "basis_convergence": {
+    "symbols": ["BTC_USDT", "ETH_USDT", "BNB_USDT", "DOGE_USDT", "ADA_USDT"],
+    "start": "2024-01-01",
+    "end_exclusive": "2026-09-12",
+    "interval": "1h",
+    "upper_entry_bps": [25.0, 50.0, 100.0],
+    "lower_exit_bps": [0.0, 10.0, 25.0],
+    "round_trip_pair_cost_bps": [20.0, 30.0, 40.0],
+    "fold_days": 120,
+    "minimum_trades": 20,
+    "minimum_folds": 4,
+    "minimum_positive_fold_fraction": 0.6,
+    "minimum_positive_symbol_fraction": 0.6,
+    "direction": "long spot / short perpetual only",
+    "causality": "basis is observed on a completed 1h bar; entry and exit execute at the next 1h open; realized funding is credited only while the short perpetual leg was already open across settlement",
+    "two_leg_cost_note": "20/30/40 bps are all-in round-trip stress assumptions for both legs combined and are intentionally not presented as a guaranteed user fee tier"
+  },
+  "claims": {
+    "external_papers_are_priors_not_proof_on_mexc": true,
+    "development_screening_only": true,
+    "profitable_edge_established": false,
+    "verified_out_of_sample_evidence": false,
+    "live_order_transmission_supported": false
+  }
+}
