@@ -4,11 +4,36 @@
 
 It does not infer profitability from descriptive statistics. It requires an upstream validation artifact to explicitly state both `deployment_eligible=true` and `verified_out_of_sample_evidence=true`. Current `orderflow-validate` reports intentionally set both fields to false, so current evidence remains research-only.
 
-The gate also requires source bytes to have been locally hash-verified and the selected candidate to contain at least one complete causal validation window with matured outcomes.
+Promotion now also requires two immutable provenance artifacts created before the decision boundary:
+
+1. a candidate freeze that binds the exact candidate registry bytes and candidate specification to the frozen research protocol;
+2. a holdout audit that proves the exact observation bytes used by validation contain the candidate only inside the predeclared holdout interval and, when source files are supplied, rehashes the referenced market-data bytes locally.
+
+The holdout audit deliberately does not claim an edge. Its `verified_out_of_sample_evidence`, `profitable_edge_established`, and `live_order_transmission_supported` claims remain false. It only proves provenance and partition compliance.
+
+Create the holdout audit after observations have matured, before promotion checking:
+
+```bash
+orderflow-holdout-audit \
+  --observations artifacts/holdout_observations.jsonl \
+  --candidate-freeze research/candidate_freeze.json \
+  --candidate-id CANDIDATE_ID \
+  --source-file data/deepcharts_export.csv \
+  --output research/holdout_audit.json
+```
+
+The promotion boundary then verifies that:
+
+* the candidate freeze still re-verifies against the current research freeze and registry bytes;
+* the holdout audit references the exact candidate-freeze manifest;
+* the holdout candidate specification hash matches the frozen candidate;
+* the validation report registry SHA-256 matches the frozen registry bytes;
+* the validation report observations SHA-256 matches the exact holdout observations bytes;
+* holdout event and outcome timestamps remained inside the frozen interval;
+* holdout source bytes were locally rehashed successfully;
+* the existing causal-window, evidence-count, source-byte, and economics checks also pass.
 
 For a structurally promotable candidate, the file-backed promotion path performs a second source-byte verification immediately at the promotion boundary. Every source file recorded in `source_verification.files` must still exist as a regular file and its current SHA-256 must match the digest embedded in the validation report. Missing, unreadable, duplicate-resolved, or changed source files fail closed. A successful file-backed assessment records `source_files_reverified=true`.
-
-This second verification prevents a previously valid report from silently authorizing paper execution after the underlying research data has been replaced or modified. It does not prove that the original export was authentic or complete.
 
 Project operating costs are part of the gate. If `config/economics.json` contains any non-zero recurring cost, promotion remains blocked until the validation evidence contains a defensible currency-denominated return model that can be compared with those costs. This avoids treating data, platform, compute, or model subscriptions as economically free.
 
@@ -19,12 +44,14 @@ orderflow-promotion-check \
   --validation-report artifacts/validation.json \
   --candidate-id CANDIDATE_ID \
   --economics config/economics.json \
+  --candidate-freeze research/candidate_freeze.json \
+  --holdout-audit research/holdout_audit.json \
   --output artifacts/promotion_assessment.json
 ```
 
 Exit codes:
 
-* `0`: all implemented promotion gates passed, including promotion-time source re-verification.
+* `0`: all implemented promotion gates passed, including holdout binding and promotion-time source re-verification.
 * `2`: malformed or unreadable evidence.
 * `3`: valid evidence was assessed but promotion is blocked.
 
