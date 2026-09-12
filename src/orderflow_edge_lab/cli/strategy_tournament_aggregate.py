@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 from orderflow_edge_lab.strategy_tournament import rank_results
+from orderflow_edge_lab.tournament_robustness import SymbolBreadthGate, apply_symbol_breadth_gate
 
 
 def main() -> None:
@@ -12,6 +13,9 @@ def main() -> None:
     parser.add_argument("results_dir")
     parser.add_argument("--minimum-trades", type=int, default=80)
     parser.add_argument("--minimum-folds", type=int, default=6)
+    parser.add_argument("--minimum-symbols", type=int, default=8)
+    parser.add_argument("--minimum-positive-symbol-fraction", type=float, default=0.60)
+    parser.add_argument("--minimum-pf-symbol-fraction", type=float, default=0.60)
     parser.add_argument("--top", type=int, default=150)
     parser.add_argument("--output", required=True)
     args = parser.parse_args()
@@ -32,6 +36,14 @@ def main() -> None:
         reports,
         minimum_trades=args.minimum_trades,
         minimum_folds=args.minimum_folds,
+    )
+    leaderboard = apply_symbol_breadth_gate(
+        leaderboard,
+        SymbolBreadthGate(
+            minimum_symbol_observations=args.minimum_symbols,
+            minimum_positive_expectancy_fraction=args.minimum_positive_symbol_fraction,
+            minimum_profit_factor_gt_one_fraction=args.minimum_pf_symbol_fraction,
+        ),
     )
     leaderboard["source_report_count"] = len(reports)
     leaderboard["source_families"] = sorted({str(report.get("family")) for report in reports})
