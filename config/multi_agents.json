@@ -4,78 +4,97 @@
     {
       "id": "data_integrity",
       "focus": "Market-data adapters, DeepCharts/dxFeed and MEXC ingestion, sequence integrity, timestamps, provenance, and causal feature eligibility",
-      "required_paths": [
-        "src/orderflow_edge_lab/adapters.py",
-        "src/orderflow_edge_lab/data_lineage.py",
-        "src/orderflow_edge_lab/dxfeed_bbo.py",
-        "src/orderflow_edge_lab/mexc_orderflow.py"
-      ],
+      "required_paths": ["src/orderflow_edge_lab/adapters.py", "src/orderflow_edge_lab/data_lineage.py", "src/orderflow_edge_lab/dxfeed_bbo.py", "src/orderflow_edge_lab/mexc_orderflow.py"],
       "forbidden_claims": []
+    },
+    {
+      "id": "trend_structure",
+      "focus": "Trend/range state, completed-candle EMA and slope behavior, ADX/Donchian/directional-efficiency research, and multi-timeframe agreement without look-ahead",
+      "required_paths": ["config/regime_research_v1.json", "docs/REGIME_RESEARCH.md", "src/orderflow_edge_lab/ema15m_hypothesis.py"],
+      "forbidden_claims": ["best indicator", "proven trend predictor"]
+    },
+    {
+      "id": "volatility_regime",
+      "focus": "ATR/Bollinger-width/realized-volatility state, expansion-contraction behavior, volatility-of-volatility, and movement relative to execution friction",
+      "required_paths": ["config/regime_research_v1.json", "src/orderflow_edge_lab/market_conditions.py"],
+      "forbidden_claims": ["guaranteed volatility edge"]
+    },
+    {
+      "id": "liquidity_microstructure",
+      "focus": "Spread, displayed depth, microprice, book imbalance, depth-flow, liquidity add/pull, quote intensity, stale/crossed-book quality, and microstructure state",
+      "required_paths": ["config/regime_research_v1.json", "src/orderflow_edge_lab/mexc_orderflow.py", "src/orderflow_edge_lab/market_conditions.py", "src/orderflow_edge_lab/orderflow_backtest.py"],
+      "forbidden_claims": ["guaranteed order flow edge"]
+    },
+    {
+      "id": "aggressive_flow",
+      "focus": "CVD, signed aggressive volume, trade intensity, flow acceleration, large-trade share, price-flow divergence, continuation and exhaustion",
+      "required_paths": ["config/regime_research_v1.json", "src/orderflow_edge_lab/mexc_orderflow.py", "src/orderflow_edge_lab/orderflow_backtest.py"],
+      "forbidden_claims": []
+    },
+    {
+      "id": "mean_reversion",
+      "focus": "Bollinger/VWAP displacement, RSI/return z-score hypotheses, failed breakouts, exhaustion and continuation-versus-reversion state",
+      "required_paths": ["config/regime_research_v1.json", "docs/REGIME_RESEARCH.md"],
+      "forbidden_claims": ["guaranteed mean reversion"]
+    },
+    {
+      "id": "cross_asset_context",
+      "focus": "BTC returns, volatility, order-flow agreement, rolling beta/correlation, lead-lag, and idiosyncratic versus BTC-driven altcoin behavior",
+      "required_paths": ["config/regime_research_v1.json", "src/orderflow_edge_lab/cross_pair.py", "src/orderflow_edge_lab/orderflow_backtest.py"],
+      "forbidden_claims": []
+    },
+    {
+      "id": "derivatives_positioning",
+      "focus": "Funding, open-interest, mark premium/basis and liquidation context only when legitimately available at zero additional cost; missing fields must not be invented",
+      "required_paths": ["config/regime_research_v1.json", "docs/REGIME_RESEARCH.md"],
+      "forbidden_claims": ["funding guarantees", "open interest guarantees"]
+    },
+    {
+      "id": "execution_economics",
+      "focus": "Spread, fees, slippage, latency/staleness, signal half-life, expected move after friction, and whether statistical predictability is economically tradeable",
+      "required_paths": ["config/regime_research_v1.json", "src/orderflow_edge_lab/economics.py", "src/orderflow_edge_lab/market_conditions.py"],
+      "forbidden_claims": ["zero cost execution", "frictionless"]
+    },
+    {
+      "id": "risk_path",
+      "focus": "MAE/MFE, stop and target path, RR, requested equity risk, exposure caps, drawdown and risk-of-ruin diagnostics",
+      "required_paths": ["src/orderflow_edge_lab/stop_risk.py", "src/orderflow_edge_lab/risk_ladder.py"],
+      "forbidden_claims": ["risk free"]
+    },
+    {
+      "id": "indicator_orthogonality",
+      "focus": "Detect redundant indicators, require incremental market-state information, challenge correlated indicator stacking, and justify interactions before combination",
+      "required_paths": ["config/regime_research_v1.json", "docs/REGIME_RESEARCH.md"],
+      "forbidden_claims": ["more indicators always improve"]
     },
     {
       "id": "research_validity",
-      "focus": "Discovery/validation/holdout separation, frozen discovery protocols, candidate freezing, trial accounting, causal audits, realistic economics, and promotion evidence",
-      "required_paths": [
-        "config/orderflow_discovery_v1.json",
-        "src/orderflow_edge_lab/discovery_aggregate.py",
-        "src/orderflow_edge_lab/research_protocol.py",
-        "src/orderflow_edge_lab/candidate_freeze.py",
-        "src/orderflow_edge_lab/holdout_audit.py",
-        "src/orderflow_edge_lab/trial_ledger.py",
-        "src/orderflow_edge_lab/promotion.py"
-      ],
+      "focus": "Discovery/validation/holdout separation, frozen protocols, dependence clustering, candidate freezing, trial accounting, multiple testing, causal audits and promotion evidence",
+      "required_paths": ["config/orderflow_discovery_v1.json", "config/regime_research_v1.json", "src/orderflow_edge_lab/discovery_aggregate.py", "src/orderflow_edge_lab/research_protocol.py", "src/orderflow_edge_lab/candidate_freeze.py", "src/orderflow_edge_lab/holdout_audit.py", "src/orderflow_edge_lab/trial_ledger.py", "src/orderflow_edge_lab/promotion.py"],
       "forbidden_claims": ["guaranteed profitable", "proven profitable edge"]
     },
     {
-      "id": "strategy_validation",
-      "focus": "Order-flow screening, backtest assumptions, costs, ambiguous fills, walk-forward/OOS evidence, overfitting controls, and candidate comparison",
-      "required_paths": [
-        "src/orderflow_edge_lab/orderflow_backtest.py",
-        "src/orderflow_edge_lab/discovery_aggregate.py",
-        "src/orderflow_edge_lab/economics.py",
-        "src/orderflow_edge_lab/validation.py"
-      ],
-      "forbidden_claims": ["risk free", "guaranteed return"]
+      "id": "transfer_generalization",
+      "focus": "Independent-batch stability, regime stability and PnL-independent cross-pair transfer without relabeling transfer evidence as untouched OOS",
+      "required_paths": ["src/orderflow_edge_lab/cross_pair.py", "src/orderflow_edge_lab/condition_aggregate.py", "src/orderflow_edge_lab/market_conditions.py"],
+      "forbidden_claims": ["generalizes to all coins"]
     },
     {
       "id": "execution_safety",
-      "focus": "Approval-bound paper execution, risk checks, stale-market rejection, state ownership, journal integrity, kill switches, and reconciliation",
-      "required_paths": [
-        "src/orderflow_edge_lab/approval.py",
-        "src/orderflow_edge_lab/execution.py",
-        "src/orderflow_edge_lab/runtime_snapshot.py",
-        "src/orderflow_edge_lab/session_audit.py"
-      ],
+      "focus": "Approval-bound paper execution, stale-market rejection, state ownership, journal integrity, kill switches, reconciliation and prevention of accidental live transmission",
+      "required_paths": ["src/orderflow_edge_lab/approval.py", "src/orderflow_edge_lab/execution.py", "src/orderflow_edge_lab/runtime_snapshot.py", "src/orderflow_edge_lab/session_audit.py"],
       "forbidden_claims": []
     },
     {
-      "id": "reliability_ci",
-      "focus": "Compilation, unit/integration tests, packaging, installed command smoke tests, scheduled research workflows, and cross-platform CI readiness",
-      "required_paths": [
-        ".github/workflows/ci.yml",
-        ".github/workflows/orderflow-continuous-discovery.yml",
-        "scripts/deployment_check.py",
-        "scripts/package_smoke.py"
-      ],
-      "forbidden_claims": []
-    },
-    {
-      "id": "observability_deployment",
-      "focus": "Structured reports, hashes, manifests, logs, run identity, reproducibility, operator diagnostics, and deployment documentation",
-      "required_paths": [
-        "docs/DEPLOYMENT.md",
-        "docs/RESEARCH_PROTOCOL.md",
-        "docs/ORDERFLOW_BACKTEST.md",
-        "src/orderflow_edge_lab/runtime_identity.py"
-      ],
+      "id": "reliability_observability",
+      "focus": "Compilation, tests, packaging, Linux/Windows CI, workflow failures, hashes, manifests, runtime identity, operator diagnostics and reproducibility",
+      "required_paths": [".github/workflows/ci.yml", ".github/workflows/orderflow-continuous-discovery.yml", "scripts/deployment_check.py", "scripts/package_smoke.py", "src/orderflow_edge_lab/runtime_identity.py"],
       "forbidden_claims": []
     },
     {
       "id": "adversarial_reviewer",
-      "focus": "Challenge cross-agent conclusions, detect unsupported edge claims, hidden holdout reuse, threshold tuning from scheduled discovery batches, unsafe live-execution creep, and fail-open behavior",
-      "required_paths": [
-        "README.md"
-      ],
+      "focus": "Challenge specialist conclusions, detect indicator mining/redundancy, unsupported edge claims, hidden holdout reuse, threshold tuning, unsafe live-execution creep and fail-open behavior",
+      "required_paths": ["README.md", "AGENTS.md", "config/regime_research_v1.json"],
       "forbidden_claims": ["guaranteed profitable", "risk free", "certain profit", "proven profitable edge"]
     }
   ],
@@ -83,11 +102,20 @@
     "block_on": ["critical", "error"],
     "require_agents": [
       "data_integrity",
+      "trend_structure",
+      "volatility_regime",
+      "liquidity_microstructure",
+      "aggressive_flow",
+      "mean_reversion",
+      "cross_asset_context",
+      "derivatives_positioning",
+      "execution_economics",
+      "risk_path",
+      "indicator_orthogonality",
       "research_validity",
-      "strategy_validation",
+      "transfer_generalization",
       "execution_safety",
-      "reliability_ci",
-      "observability_deployment",
+      "reliability_observability",
       "adversarial_reviewer"
     ],
     "live_order_transmission_supported": false,

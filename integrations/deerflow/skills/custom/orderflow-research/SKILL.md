@@ -1,13 +1,13 @@
 ---
 name: orderflow-research
-description: Orchestrates the PKostur/orderflow_edge_lab trading-research project using specialist subagents for data integrity, research validity, strategy validation, execution safety, reliability, and observability. Use for ENA/BTC order-flow research, DeepCharts/dxFeed integration, backtesting, paper execution safety, CI, and project refinement.
+description: Orchestrates the PKostur/orderflow_edge_lab trading-research project using specialist subagents for market-state research, validation, execution safety, reliability, and observability. Use for ENA/BTC order-flow research, DeepCharts/dxFeed integration, regime/indicator research, backtesting, paper execution safety, CI, and project refinement.
 ---
 
 # Order-Flow Research Orchestrator
 
 Use this skill for work on the `orderflow_edge_lab` automated trading research project.
 
-Read `references/project-context.md` before making research or architecture decisions. Read `references/commands.md` before invoking repository commands.
+Read `references/project-context.md` before making research or architecture decisions. Read `references/commands.md` before invoking repository commands. For indicator/market-condition work also read `config/regime_research_v1.json` and `docs/REGIME_RESEARCH.md` from the trading repository.
 
 ## Core operating rule
 
@@ -17,131 +17,84 @@ Never claim profitability without genuine untouched out-of-sample evidence that 
 
 Automatic live broker/exchange order transmission remains out of scope. Do not implement or enable it unless the repository has explicit evidence for promotion, reliable paper/shadow operation, reconciliation tests, and the user explicitly approves a future live step.
 
-## Repository resolution
+## Market-state-first research
 
-The bootstrap process writes `references/local-project.md` into this installed skill with the local `orderflow_edge_lab` path and migration metadata.
+Indicator research must not start by ranking indicators on strategy profit factor.
 
-If that file exists, use it as the canonical local path. If it does not exist, locate the repository conservatively and do not guess a path.
+First ask whether an indicator family helps predict a future market-state target:
 
-Do not modify DeerFlow upstream code merely to work around a project-specific need. Prefer changes in `orderflow_edge_lab`, this custom skill, or a later out-of-tree DeerFlow extension.
+- directionality versus chop;
+- volatility expansion versus contraction;
+- liquidity stability versus deterioration;
+- continuation versus mean reversion.
 
-## Required orchestration pattern
+Then test whether the frozen trading strategy benefits from conditioning on that state after realistic costs.
 
-For substantial refinement, backtesting, promotion, or migration tasks, delegate six bounded specialist reviews using the built-in `task` tool. Run up to three in parallel per turn so the default DeerFlow concurrency limit is respected.
+## Specialist pods
 
-### Specialist 1: Data integrity
+For substantial regime/indicator research, use bounded specialist tasks. Run only the roles relevant to the question and respect DeerFlow concurrency limits.
 
-Delegate with a prompt that asks the worker to inspect only the evidence relevant to:
+### Market-state specialists
 
-- MEXC depth/trade sequencing and recovery;
-- observation-time causality;
-- DeepCharts/dxFeed schema and export eligibility;
-- source hashes and provenance;
-- timestamp regressions, stale/crossed books, duplicates, and coverage;
-- whether derived features are causally valid.
+1. **Trend / structure**: EMA state/slope, ADX, Donchian location, directional efficiency, 15m/1h agreement and transitions.
+2. **Volatility**: ATR percentile, Bollinger bandwidth, realized volatility, expansion/contraction, volatility-of-volatility.
+3. **Liquidity / microstructure**: spread, displayed depth, microprice, book imbalance, depth-flow, liquidity add/pull, update intensity and book quality.
+4. **Aggressive flow**: CVD, signed volume ratio, trade intensity, flow acceleration, large-trade share and price/flow divergence.
+5. **Mean reversion**: Bollinger/VWAP displacement, RSI, return z-score, failed breakout and exhaustion.
+6. **Cross-asset**: BTC returns/volatility, flow alignment, rolling beta/correlation and lead-lag.
+7. **Derivatives positioning**: funding, OI, basis/premium and liquidation context only when legitimately available at zero additional cost.
+8. **Session/time**: UTC session, weekday/weekend, funding and session-transition effects.
 
-Require concrete file paths, commands, or evidence. Do not ask this worker to judge profitability.
+### Economics specialists
 
-### Specialist 2: Research validity and statistics
+9. **Execution economics**: spread, fees, slippage, latency, staleness, signal half-life and expected move after friction.
+10. **Risk path**: MAE/MFE, stop placement, RR path, exposure caps, drawdown and risk-of-ruin diagnostics.
 
-Ask the worker to inspect:
+### Validation specialists
 
-- discovery/validation/holdout separation;
-- frozen discovery-v1 adherence;
-- candidate freeze and holdout binding;
-- trial-ledger accounting;
-- dependence clustering and pseudo-replication;
-- multiple-testing burden;
-- whether any OOS claim is actually supported.
+11. **Indicator orthogonality**: redundancy/correlation and incremental information after existing regime variables.
+12. **Research validity and statistics**: discovery/validation/holdout separation, dependence, multiple testing, trial accounting and OOS claims.
+13. **Transfer/generalization**: stability across independent batches, regimes and PnL-independently screened coin pairs.
+14. **Data integrity**: causal eligibility, sequence/timestamp correctness, adapters and provenance.
+15. **Reliability/observability**: CI, packaging, workflow failures, hashes, manifests, runtime identity and reproducibility.
 
-The worker must flag threshold tuning performed after inspecting discovery batches.
+## Compatibility role mapping
 
-### Specialist 3: Strategy and backtest validation
+The expanded pods preserve the original six specialist responsibilities expected by the migration layer:
 
-Ask the worker to inspect:
+- **Data integrity** maps to the data-integrity and liquidity/microstructure specialists.
+- **Research validity and statistics** maps to research-validity and indicator-orthogonality specialists.
+- **Strategy and backtest validation** maps to trend, volatility, flow, mean-reversion, cross-asset, transfer and execution-economics specialists.
+- **Execution safety and risk** maps to risk-path plus the repository execution-safety reviewer.
+- **Reliability and CI** maps to reliability/observability.
+- **Observability and deployment** maps to reliability/observability plus the lead's release checks.
 
-- signal definitions;
-- spread crossing and fill assumptions;
-- fees, slippage, latency, funding, and gap behavior;
-- RR variants and comparison fairness;
-- BTC context and 15m/1h bias timing;
-- 1-minute Bollinger setup integration;
-- walk-forward and OOS design;
-- whether order flow improves executable expectancy rather than only directional accuracy.
-
-Prioritize the 5 to 15 second microstructure horizon without retuning discovery-v1 thresholds batch by batch.
-
-### Specialist 4: Execution safety and risk
-
-Ask the worker to inspect:
-
-- approval-bound paper execution;
-- stale-market rejection;
-- sizing and risk limits;
-- state/journal integrity;
-- kill switches;
-- approval expiry;
-- reconciliation and recovery;
-- any path that could accidentally transmit a live order.
-
-This worker must fail closed on uncertainty.
-
-### Specialist 5: Reliability and CI
-
-Ask the worker to inspect:
-
-- unit/integration tests;
-- packaging and installed command smoke tests;
-- Linux/Windows compatibility;
-- scheduled capture workflows;
-- artifact retention and failure preservation;
-- retry/reconnect behavior;
-- deployment diagnostics.
-
-Require reproducible failures rather than speculative cleanup suggestions.
-
-### Specialist 6: Observability and deployment
-
-Ask the worker to inspect:
-
-- structured logs;
-- SHA-256 manifests;
-- runtime identity;
-- session snapshots and closeouts;
-- operator diagnostics;
-- research artifact traceability;
-- whether a result can be reproduced from source artifacts.
+The lead remains the **adversarial reviewer and release manager**.
 
 ## Lead-agent responsibility
 
-The lead agent is the adversarial reviewer and release manager.
+The lead agent is the adversarial synthesis/release manager.
 
 After specialist results return:
 
 1. Reconcile contradictions using repository evidence, not voting.
-2. Challenge any unsupported edge claim.
-3. Prefer one high-value research or correctness improvement over broad refactoring.
-4. Preserve frozen discovery-v1 thresholds unless explicitly starting a new candidate generation after discovery.
-5. Keep infrastructure work secondary unless it blocks trustworthy research.
-6. If implementation is appropriate, create a branch, make the smallest coherent change, run relevant tests/CI, and merge only after required checks pass.
-7. If a step needs something only the user can supply, state the single smallest concrete action needed, then continue all independent work.
+2. Challenge unsupported edge claims and indicator proliferation.
+3. Prefer one stable representative from highly redundant indicators.
+4. Require a new feature to add incremental market-state information or have a pre-specified interaction rationale before combining it with existing variables.
+5. Preserve frozen discovery-v1 and regime-research-v1 definitions unless explicitly starting a new protocol version before later evidence is inspected.
+6. Keep infrastructure work secondary unless it blocks trustworthy research.
+7. If implementation is appropriate, create a branch, make the smallest coherent change, run relevant tests/CI, and merge only after required checks pass.
+8. If a step needs something only the user can supply, state the single smallest concrete action needed, then continue all independent work.
 
-## Current empirical priority
+## Research validity rules
 
-The main research question is not simply whether order flow predicts the next move. It is whether order-flow information can improve executable expectancy enough to overcome spread and fees, especially as a selective filter for the existing ENA setup:
-
-```text
-1m Bollinger behavior
-        +
-15m / 1h regime
-        +
-BTC context
-        +
-order-flow confirmation
-        -> trade / no trade
-```
-
-Do not optimize this combined system on the same batches used to discover the idea. A new combined candidate must be frozen before later untouched validation data is inspected.
+- Treat independent capture batches as dependence clusters.
+- Cross-pair transfer is generalization evidence, not automatically OOS validation.
+- Do not choose the cross-pair universe from strategy PnL.
+- Do not tune indicator definitions or buckets because one batch looked attractive.
+- Do not combine indicators simply because both had high PF.
+- Do not weaken fees/spread/slippage assumptions to rescue an indicator.
+- Already-inspected historical periods remain development data.
 
 ## DeepCharts / dxFeed priority
 

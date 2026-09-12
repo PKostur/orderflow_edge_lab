@@ -131,9 +131,50 @@ def _claim_findings(root: Path, spec: AgentSpec) -> tuple[list[Finding], list[st
     return findings, checks
 
 
+def _regime_protocol_findings(root: Path, spec: AgentSpec) -> tuple[list[Finding], list[str]]:
+    research_ids = {
+        "trend_structure",
+        "volatility_regime",
+        "liquidity_microstructure",
+        "aggressive_flow",
+        "mean_reversion",
+        "cross_asset_context",
+        "derivatives_positioning",
+        "execution_economics",
+        "indicator_orthogonality",
+        "transfer_generalization",
+    }
+    if spec.agent_id not in research_ids:
+        return [], []
+    checks = ["regime_research_protocol"]
+    findings: list[Finding] = []
+    path = root / "config" / "regime_research_v1.json"
+    if not path.exists():
+        return [Finding("error", "regime_protocol_missing", "Specialized regime research protocol is missing.")], checks
+    try:
+        protocol = json.loads(path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        return [Finding("error", "regime_protocol_invalid_json", "Regime protocol is not valid JSON.", {"error": str(exc)})], checks
+    claims = protocol.get("claims", {})
+    if claims.get("profitable_edge_established") is not False:
+        findings.append(Finding("error", "regime_protocol_edge_claim", "Regime discovery protocol must not establish profitability."))
+    if claims.get("verified_out_of_sample_evidence") is not False:
+        findings.append(Finding("error", "regime_protocol_oos_claim", "Regime discovery protocol must not claim verified OOS evidence."))
+    if "specialist_families" not in protocol or "synthesis_rules" not in protocol:
+        findings.append(Finding("error", "regime_protocol_incomplete", "Regime protocol is missing specialist families or synthesis rules."))
+    synthesis = protocol.get("synthesis_rules", {})
+    if not synthesis.get("redundancy_control"):
+        findings.append(Finding("warning", "indicator_redundancy_control_missing", "Regime protocol does not visibly require redundancy control."))
+    return findings, checks
+
+
 def _domain_findings(root: Path, spec: AgentSpec, run_commands: bool) -> tuple[list[Finding], list[str]]:
     findings: list[Finding] = []
     checks: list[str] = []
+
+    regime_findings, regime_checks = _regime_protocol_findings(root, spec)
+    findings.extend(regime_findings)
+    checks.extend(regime_checks)
 
     if spec.agent_id == "data_integrity":
         checks.extend(["zero_cost_dxfeed_path", "mexc_replay_path"])
@@ -143,29 +184,30 @@ def _domain_findings(root: Path, spec: AgentSpec, run_commands: bool) -> tuple[l
             findings.append(Finding("error", "mexc_adapter_missing", "MEXC order-flow adapter is missing."))
 
     elif spec.agent_id == "research_validity":
-        checks.extend(["trial_ledger_promotion_binding", "holdout_binding"])
+        checks.extend(["trial_ledger_promotion_binding", "holdout_binding", "regime_protocol_binding"])
         promotion = _read_text(root / "src" / "orderflow_edge_lab" / "promotion.py").lower()
         promote_cli = _read_text(root / "src" / "orderflow_edge_lab" / "cli" / "promote.py").lower()
         combined = promotion + "\n" + promote_cli
         if "trial_ledger" not in combined and "trial-ledger" not in combined:
-            findings.append(
-                Finding(
-                    "warning",
-                    "trial_ledger_not_bound_to_promotion",
-                    "Trial accounting exists but is not visibly mandatory at the promotion boundary.",
-                )
-            )
+            findings.append(Finding("warning", "trial_ledger_not_bound_to_promotion", "Trial accounting exists but is not visibly mandatory at the promotion boundary."))
         if "holdout" not in combined:
             findings.append(Finding("error", "holdout_not_bound_to_promotion", "Promotion boundary does not visibly reference holdout evidence."))
+        if not (root / "config" / "regime_research_v1.json").exists():
+            findings.append(Finding("error", "regime_protocol_missing", "Research validity cannot audit specialized regime hypotheses without a protocol file."))
 
-    elif spec.agent_id == "strategy_validation":
-        checks.extend(["cost_model_presence", "oos_language_presence"])
-        validation = _read_text(root / "src" / "orderflow_edge_lab" / "validation.py").lower()
+    elif spec.agent_id == "execution_economics":
+        checks.extend(["cost_model_presence", "friction_language_presence"])
         economics = _read_text(root / "src" / "orderflow_edge_lab" / "economics.py").lower()
         if not any(token in economics for token in ("fee", "slippage", "spread", "cost")):
             findings.append(Finding("error", "economics_model_incomplete", "Economics module does not visibly model trading costs."))
-        if not any(token in validation for token in ("holdout", "out_of_sample", "out-of-sample")):
-            findings.append(Finding("warning", "oos_guard_not_visible", "Validation module does not visibly reference out-of-sample or holdout evidence."))
+
+    elif spec.agent_id == "risk_path":
+        checks.extend(["mae_mfe_path", "exposure_cap_path"])
+        stop_risk = _read_text(root / "src" / "orderflow_edge_lab" / "stop_risk.py").lower()
+        if "mfe" not in stop_risk or "mae" not in stop_risk:
+            findings.append(Finding("warning", "mae_mfe_not_visible", "Stop-risk module does not visibly report both MAE and MFE."))
+        if "max_exposure" not in stop_risk:
+            findings.append(Finding("warning", "exposure_cap_not_visible", "Stop-risk module does not visibly preserve an exposure cap."))
 
     elif spec.agent_id == "execution_safety":
         checks.extend(["live_dependency_scan", "approval_boundary_presence"])
@@ -177,8 +219,8 @@ def _domain_findings(root: Path, spec: AgentSpec, run_commands: bool) -> tuple[l
         if "approval" not in execution:
             findings.append(Finding("error", "approval_boundary_missing", "Execution module does not visibly preserve an approval boundary."))
 
-    elif spec.agent_id == "reliability_ci":
-        checks.append("ci_workflow_presence")
+    elif spec.agent_id == "reliability_observability":
+        checks.extend(["ci_workflow_presence", "runtime_identity", "hash_evidence"])
         if run_commands:
             checks.extend(["compileall", "unittest", "deployment_check"])
             findings.append(_run_command(root, [sys.executable, "-m", "compileall", "-q", "src", "scripts", "tests"]))
@@ -186,20 +228,20 @@ def _domain_findings(root: Path, spec: AgentSpec, run_commands: bool) -> tuple[l
             findings.append(_run_command(root, [sys.executable, "scripts/deployment_check.py"]))
         else:
             findings.append(Finding("info", "heavy_checks_skipped", "Reliability commands were skipped for this run."))
-
-    elif spec.agent_id == "observability_deployment":
-        checks.extend(["runtime_identity", "deployment_docs", "hash_evidence"])
         runtime_identity = _read_text(root / "src" / "orderflow_edge_lab" / "runtime_identity.py").lower()
         if "sha256" not in runtime_identity:
             findings.append(Finding("warning", "runtime_identity_not_hashed", "Runtime identity does not visibly contain SHA-256 evidence."))
 
     elif spec.agent_id == "adversarial_reviewer":
-        checks.extend(["safety_boundary", "dependency_challenge", "fail_closed_language"])
+        checks.extend(["safety_boundary", "dependency_challenge", "fail_closed_language", "indicator_mining_boundary"])
         readme = _read_text(root / "README.md").lower()
+        agents = _read_text(root / "AGENTS.md").lower()
         if "does not contain live broker or exchange order transmission" not in readme:
             findings.append(Finding("error", "live_boundary_not_explicit", "README no longer explicitly excludes live order transmission."))
         if "out-of-sample" not in readme:
             findings.append(Finding("warning", "oos_boundary_not_explicit", "README does not explicitly require out-of-sample evidence."))
+        if "do not select an indicator merely because it has the highest in-sample pf" not in agents:
+            findings.append(Finding("warning", "indicator_mining_guard_missing", "Agent contract does not explicitly reject highest-PF-only indicator selection."))
 
     return findings, checks
 
@@ -229,7 +271,7 @@ def run_multi_agent(
     config: str | Path = "config/multi_agents.json",
     *,
     run_commands: bool = True,
-    max_workers: int = 7,
+    max_workers: int = 8,
 ) -> dict[str, Any]:
     root_path = Path(root).resolve()
     config_path = Path(config)
