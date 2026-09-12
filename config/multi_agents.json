@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "agents": [
+    {
+      "id": "data_integrity",
+      "focus": "Market-data adapters, DeepCharts/dxFeed and MEXC ingestion, sequence integrity, timestamps, provenance, and causal feature eligibility",
+      "required_paths": [
+        "src/orderflow_edge_lab/adapters.py",
+        "src/orderflow_edge_lab/data_lineage.py",
+        "src/orderflow_edge_lab/dxfeed_bbo.py",
+        "src/orderflow_edge_lab/mexc.py"
+      ],
+      "forbidden_claims": []
+    },
+    {
+      "id": "research_validity",
+      "focus": "Discovery/validation/holdout separation, candidate freezing, trial accounting, causal audits, realistic economics, and promotion evidence",
+      "required_paths": [
+        "src/orderflow_edge_lab/research_freeze.py",
+        "src/orderflow_edge_lab/candidate_freeze.py",
+        "src/orderflow_edge_lab/holdout_audit.py",
+        "src/orderflow_edge_lab/trial_ledger.py",
+        "src/orderflow_edge_lab/promotion.py"
+      ],
+      "forbidden_claims": ["guaranteed profitable", "proven profitable edge"]
+    },
+    {
+      "id": "strategy_validation",
+      "focus": "Backtest assumptions, costs, ambiguous fills, walk-forward/OOS evidence, overfitting controls, and candidate comparison",
+      "required_paths": [
+        "src/orderflow_edge_lab/economics.py",
+        "src/orderflow_edge_lab/validation.py"
+      ],
+      "forbidden_claims": ["risk free", "guaranteed return"]
+    },
+    {
+      "id": "execution_safety",
+      "focus": "Approval-bound paper execution, risk checks, stale-market rejection, state ownership, journal integrity, kill switches, and reconciliation",
+      "required_paths": [
+        "src/orderflow_edge_lab/approval.py",
+        "src/orderflow_edge_lab/execution.py",
+        "src/orderflow_edge_lab/runtime_snapshot.py",
+        "src/orderflow_edge_lab/session_audit.py"
+      ],
+      "forbidden_claims": []
+    },
+    {
+      "id": "reliability_ci",
+      "focus": "Compilation, unit/integration tests, packaging, installed command smoke tests, and cross-platform CI readiness",
+      "required_paths": [
+        ".github/workflows/ci.yml",
+        "scripts/deployment_check.py",
+        "scripts/package_smoke.py"
+      ],
+      "forbidden_claims": []
+    },
+    {
+      "id": "observability_deployment",
+      "focus": "Structured reports, hashes, manifests, logs, run identity, reproducibility, operator diagnostics, and deployment documentation",
+      "required_paths": [
+        "docs/DEPLOYMENT.md",
+        "docs/RESEARCH_PROTOCOL.md",
+        "src/orderflow_edge_lab/runtime_identity.py"
+      ],
+      "forbidden_claims": []
+    },
+    {
+      "id": "adversarial_reviewer",
+      "focus": "Challenge cross-agent conclusions, detect unsupported edge claims, hidden holdout reuse, unsafe live-execution creep, and fail-open behavior",
+      "required_paths": [
+        "README.md"
+      ],
+      "forbidden_claims": ["guaranteed profitable", "risk free", "certain profit", "proven profitable edge"]
+    }
+  ],
+  "release_manager": {
+    "block_on": ["critical", "error"],
+    "require_agents": [
+      "data_integrity",
+      "research_validity",
+      "strategy_validation",
+      "execution_safety",
+      "reliability_ci",
+      "observability_deployment",
+      "adversarial_reviewer"
+    ],
+    "live_order_transmission_supported": false,
+    "profitable_edge_established": false
+  }
+}
