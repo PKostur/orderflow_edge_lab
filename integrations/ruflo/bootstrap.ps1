@@ -48,6 +48,13 @@ finally {
 
 Invoke-Ruflo doctor
 Invoke-Ruflo swarm init --topology hierarchical --max-agents 7 --strategy specialized
+Invoke-Ruflo agent spawn --type coordinator --name orderflow-lead
+Invoke-Ruflo agent spawn --type researcher --name data-integrity
+Invoke-Ruflo agent spawn --type researcher --name research-validity
+Invoke-Ruflo agent spawn --type reviewer --name strategy-validation
+Invoke-Ruflo agent spawn --type security-architect --name execution-safety
+Invoke-Ruflo agent spawn --type tester --name reliability-ci
+Invoke-Ruflo agent spawn --type reviewer --name observability-deployment
 
 Invoke-Ruflo memory store --namespace "orderflow/decisions" --key "safety-boundary-v1" --value "Automatic live broker/exchange transmission is disabled. Ruflo and DeerFlow coordinate research but cannot bypass candidate freeze, holdout audit, trial ledger, realistic economics, approval-bound paper execution, reconciliation, or explicit future user approval."
 Invoke-Ruflo memory store --namespace "orderflow/decisions" --key "orchestration-layers-v1" --value "Ruflo is the meta-harness for memory/swarm coordination; DeerFlow provides trading-domain context; orderflow_edge_lab is the executable source of truth and deterministic evidence gate."
@@ -59,6 +66,7 @@ if ($StartDaemon) {
 
 Write-Host "Ruflo integration is initialized for $RepoRoot"
 Write-Host "Run: npx ruflo@latest swarm status"
+Write-Host "Run: npx ruflo@latest agent list"
 Write-Host "Run: npx ruflo@latest memory search --query orderflow"
 if (-not $StartDaemon) {
     Write-Host "Optional background workers: .\integrations\ruflo\bootstrap.ps1 -StartDaemon"
