@@ -34,6 +34,28 @@ class PairScreenTests(unittest.TestCase):
         self.assertFalse(sol["api_allowed"])
         self.assertTrue(sol["research_screen_pass"])
 
+    def test_non_crypto_tradfi_contracts_are_excluded_from_coin_panel(self):
+        details = {
+            "success": True,
+            "data": [
+                {"symbol": "ETH_USDT", "baseCoin": "ETH", "quoteCoin": "USDT", "conceptPlate": ["mc-trade-zone-layer2"]},
+                {"symbol": "XAU_USDT", "baseCoin": "XAU", "quoteCoin": "USDT", "conceptPlate": ["mc-trade-zone-metals", "mc-trade-zone-tradfi", "mc-trade-zone-Commodities"]},
+            ],
+        }
+        tickers = {
+            "success": True,
+            "data": [
+                {"symbol": "ETH_USDT", "bid1": 50, "ask1": 50.005, "lastPrice": 50, "amount24": 100_000_000, "high24Price": 55, "lower24Price": 45},
+                {"symbol": "XAU_USDT", "bid1": 4000, "ask1": 4000.1, "lastPrice": 4000, "amount24": 500_000_000, "high24Price": 4100, "lower24Price": 3900},
+            ],
+        }
+        with patch("orderflow_edge_lab.pair_screen._fetch_json", side_effect=[details, tickers]):
+            report = screen_pairs(PairScreenConfig(top_n=2))
+        self.assertEqual(report["selected_symbols"], ["ETH_USDT"])
+        xau = next(row for row in report["universe"] if row["symbol"] == "XAU_USDT")
+        self.assertIn("non_crypto_contract", xau["screen_fail_reasons"])
+        self.assertFalse(xau["research_screen_pass"])
+
 
 if __name__ == "__main__":
     unittest.main()

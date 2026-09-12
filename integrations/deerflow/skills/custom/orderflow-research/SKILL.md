@@ -7,7 +7,7 @@ description: Orchestrates the PKostur/orderflow_edge_lab trading-research projec
 
 Use this skill for work on the `orderflow_edge_lab` automated trading research project.
 
-Read `references/project-context.md` before making research or architecture decisions. Read `references/commands.md` before invoking repository commands. For indicator/market-condition work also read `config/regime_research_v1.json` and `docs/REGIME_RESEARCH.md` from the trading repository.
+Read `references/project-context.md` before making research or architecture decisions. Read `references/commands.md` before invoking repository commands. For indicator/market-condition work also read `config/regime_research_v1.json` and `docs/REGIME_RESEARCH.md` from the trading repository. For public news/event context also read `config/news_monitor_v1.json` before interpreting event evidence.
 
 ## Core operating rule
 
@@ -42,21 +42,22 @@ For substantial regime/indicator research, use bounded specialist tasks. Run onl
 4. **Aggressive flow**: CVD, signed volume ratio, trade intensity, flow acceleration, large-trade share and price/flow divergence.
 5. **Mean reversion**: Bollinger/VWAP displacement, RSI, return z-score, failed breakout and exhaustion.
 6. **Cross-asset**: BTC returns/volatility, flow alignment, rolling beta/correlation and lead-lag.
-7. **Derivatives positioning**: funding, OI, basis/premium and liquidation context only when legitimately available at zero additional cost.
-8. **Session/time**: UTC session, weekday/weekend, funding and session-transition effects.
+7. **News / event context**: public headline timing, conservative coin attribution, immutable source metadata and post-event coin/BTC behavior as observational context only.
+8. **Derivatives positioning**: funding, OI, basis/premium and liquidation context only when legitimately available at zero additional cost.
+9. **Session/time**: UTC session, weekday/weekend, funding and session-transition effects.
 
 ### Economics specialists
 
-9. **Execution economics**: spread, fees, slippage, latency, staleness, signal half-life and expected move after friction.
-10. **Risk path**: MAE/MFE, stop placement, RR path, exposure caps, drawdown and risk-of-ruin diagnostics.
+10. **Execution economics**: spread, fees, slippage, latency, staleness, signal half-life and expected move after friction.
+11. **Risk path**: MAE/MFE, stop placement, RR path, exposure caps, drawdown and risk-of-ruin diagnostics.
 
 ### Validation specialists
 
-11. **Indicator orthogonality**: redundancy/correlation and incremental information after existing regime variables.
-12. **Research validity and statistics**: discovery/validation/holdout separation, dependence, multiple testing, trial accounting and OOS claims.
-13. **Transfer/generalization**: stability across independent batches, regimes and PnL-independently screened coin pairs.
-14. **Data integrity**: causal eligibility, sequence/timestamp correctness, adapters and provenance.
-15. **Reliability/observability**: CI, packaging, workflow failures, hashes, manifests, runtime identity and reproducibility.
+12. **Indicator orthogonality**: redundancy/correlation and incremental information after existing regime variables.
+13. **Research validity and statistics**: discovery/validation/holdout separation, dependence, multiple testing, trial accounting and OOS claims.
+14. **Transfer/generalization**: stability across independent batches, regimes and PnL-independently screened coin pairs.
+15. **Data integrity**: causal eligibility, sequence/timestamp correctness, adapters and provenance.
+16. **Reliability/observability**: CI, packaging, workflow failures, hashes, manifests, runtime identity and reproducibility.
 
 ## Compatibility role mapping
 
@@ -91,6 +92,8 @@ After specialist results return:
 - Treat independent capture batches as dependence clusters.
 - Cross-pair transfer is generalization evidence, not automatically OOS validation.
 - Do not choose the cross-pair universe from strategy PnL.
+- BTC-correlation diversification may be applied only after the PnL-independent compatibility screen and must not inspect strategy returns.
+- Public news/event evidence is observational development context. Do not infer causality, retune discovery-v1 from news outcomes, or make news a strategy filter unless a separate specification is frozen before later validation data is inspected.
 - Do not tune indicator definitions or buckets because one batch looked attractive.
 - Do not combine indicators simply because both had high PF.
 - Do not weaken fees/spread/slippage assumptions to rescue an indicator.

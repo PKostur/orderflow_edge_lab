@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from collections import defaultdict
 import json
-import math
 from pathlib import Path
 from typing import Any
 
@@ -82,6 +81,10 @@ def aggregate_cross_pair(screen_path: str | Path, results_dir: str | Path) -> di
                 "screen_amount24_usdt": market.get("amount24_usdt"),
                 "screen_range24_bps": market.get("range24_bps"),
                 "screen_funding_rate": market.get("funding_rate"),
+                "screen_btc_correlation": market.get("btc_correlation"),
+                "screen_btc_correlation_samples": market.get("btc_correlation_samples"),
+                "screen_btc_correlation_bucket": market.get("btc_correlation_bucket"),
+                "screen_panel_selection_reason": market.get("panel_selection_reason"),
                 "api_allowed": market.get("api_allowed"),
             })
         for row in conditions.get("condition_summary", []):
@@ -90,11 +93,13 @@ def aggregate_cross_pair(screen_path: str | Path, results_dir: str | Path) -> di
             condition_rows.append({"symbol": symbol, **row})
 
     ready_conditions = [row for row in condition_rows if row.get("screening_condition_ready") is True]
+    selection_rule = screen.get("selection_rule")
     return {
         "schema_version": 1,
         "experiment": "unchanged_cross_pair_transfer_test",
         "pair_screen": {
-            "selection_rule": screen.get("selection_rule"),
+            "source_experiment": screen.get("experiment"),
+            "selection_rule": selection_rule,
             "selected_symbols": screen.get("selected_symbols"),
         },
         "pair_summary": pair_rows,

@@ -32,6 +32,7 @@ Ruflo is the meta-harness for memory, swarm/task coordination, routing, hooks, a
 - aggressive-flow researcher: CVD, signed volume, trade intensity, acceleration, large-trade share, price/flow divergence
 - mean-reversion researcher: Bollinger/VWAP displacement, RSI, return z-score, failed breakout/exhaustion
 - cross-asset researcher: BTC returns/volatility, flow alignment, rolling correlation/beta and lead-lag
+- news-event researcher: public headline timing, conservative symbol attribution, source provenance and subsequent coin/BTC behavior as observational context only
 - derivatives-positioning researcher: funding, OI, premium/basis and liquidation context when legitimately available at zero additional cost
 - session researcher: UTC session, weekend/weekday, funding/session transition effects
 
@@ -73,7 +74,9 @@ A new indicator should enter a combined regime only if it adds incremental infor
 
 Preserve frozen discovery-v1 thresholds, the pre-registered regime-research-v1 families, capture-batch dependence clustering, realistic execution costs, immutable provenance, trial accounting, approval-bound paper execution, and untouched future validation for any candidate promoted from discovery.
 
-Current market-condition work may stratify PF by pre-registered signal-time regimes and transfer the unchanged strategy to PnL-independent screened pairs. Do not turn an exploratory bucket into a trading requirement until its readiness gate is satisfied across independent batches.
+Current market-condition work may stratify PF by pre-registered signal-time regimes and transfer the unchanged strategy to PnL-independent screened pairs. A BTC-correlation-diversified panel is permitted only after that compatibility screen and must not use strategy PnL. Do not turn an exploratory bucket into a trading requirement until its readiness gate is satisfied across independent batches.
+
+Public news/event monitoring is an external development context, not a strategy condition. Do not infer causality from headlines, use article outcomes to retune discovery-v1, or make news a trading filter unless a separate specification is frozen before later validation evidence is inspected.
 
 ## Safety
 

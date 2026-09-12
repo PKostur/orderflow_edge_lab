@@ -4,6 +4,8 @@ on:
   pull_request:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    - cron: "17 */3 * * *"
 
 permissions:
   contents: read
@@ -15,33 +17,56 @@ concurrency:
 jobs:
   transfer-test:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: Install
-        run: python -m pip install -e .
+        run: python -m pip install -e ".[research]"
       - name: Screen liquid MEXC perpetuals without using strategy PnL
         run: |
           mkdir -p artifacts/cross_pair
           orderflow-pair-screen \
-            --top 4 \
+            --top 18 \
             --max-spread-bps 5 \
             --min-turnover-usdt 10000000 \
             --output artifacts/cross_pair/pair_screen.json
-      - name: Capture selected pairs plus BTC simultaneously
+      - name: Build a BTC-correlation-diversified research panel
+        run: |
+          orderflow-correlation-panel \
+            artifacts/cross_pair/pair_screen.json \
+            --lookback-hours 72 \
+            --interval Min5 \
+            --min-samples 200 \
+            --panel-size 6 \
+            --high-positive-min 0.65 \
+            --low-absolute-max 0.25 \
+            --high-target 2 \
+            --low-target 2 \
+            --output artifacts/cross_pair/correlation_panel.json
+          python - <<'PY'
+          import json
+          data=json.load(open('artifacts/cross_pair/correlation_panel.json', encoding='utf-8'))
+          if len(data.get('selected_symbols', [])) < 4:
+              raise SystemExit('correlation-diversified panel has fewer than four eligible symbols')
+          print(json.dumps({
+              'selected_symbols': data['selected_symbols'],
+              'bucket_counts': data['bucket_counts'],
+          }, indent=2))
+          PY
+      - name: Capture diversified panel plus BTC for one independent 15-minute batch
         shell: bash
         run: |
           mapfile -t SYMBOLS < <(python - <<'PY'
           import json
-          data=json.load(open('artifacts/cross_pair/pair_screen.json', encoding='utf-8'))
+          data=json.load(open('artifacts/cross_pair/correlation_panel.json', encoding='utf-8'))
           for symbol in data['selected_symbols']:
               print(symbol)
           PY
           )
-          test "${#SYMBOLS[@]}" -gt 0
+          test "${#SYMBOLS[@]}" -ge 4
           ARGS=()
           for SYMBOL in "${SYMBOLS[@]}"; do
             ARGS+=(--symbol "$SYMBOL")
@@ -49,16 +74,36 @@ jobs:
           ARGS+=(--symbol BTC_USDT)
           orderflow-mexc-record \
             "${ARGS[@]}" \
-            --duration-seconds 120 \
+            --duration-seconds 900 \
             --output-dir artifacts/cross_pair/capture
-      - name: Run unchanged frozen strategy and market-condition analysis per pair
+      - name: Evaluate pre-registered future market-state targets before strategy PnL
+        shell: bash
+        run: |
+          FEATURE=$(find artifacts/cross_pair/capture -name '*_mexc_features.jsonl' -print -quit)
+          test -n "$FEATURE"
+          BATCH_ID=$(basename "$FEATURE" _mexc_features.jsonl)
+          mapfile -t SYMBOLS < <(python - <<'PY'
+          import json
+          data=json.load(open('artifacts/cross_pair/correlation_panel.json', encoding='utf-8'))
+          for symbol in data['selected_symbols']:
+              print(symbol)
+          PY
+          )
+          for SYMBOL in "${SYMBOLS[@]}"; do
+            orderflow-market-state-scan "$FEATURE" \
+              --symbol "$SYMBOL" \
+              --context-symbol BTC_USDT \
+              --batch-id "$BATCH_ID" \
+              --output "artifacts/cross_pair/market_state_${SYMBOL}.json"
+          done
+      - name: Run unchanged frozen strategy, conditions and stop-risk per pair
         shell: bash
         run: |
           FEATURE=$(find artifacts/cross_pair/capture -name '*_mexc_features.jsonl' -print -quit)
           test -n "$FEATURE"
           mapfile -t SYMBOLS < <(python - <<'PY'
           import json
-          data=json.load(open('artifacts/cross_pair/pair_screen.json', encoding='utf-8'))
+          data=json.load(open('artifacts/cross_pair/correlation_panel.json', encoding='utf-8'))
           for symbol in data['selected_symbols']:
               print(symbol)
           PY
@@ -72,13 +117,36 @@ jobs:
               --symbol "$SYMBOL" \
               --context-symbol BTC_USDT \
               --output "artifacts/cross_pair/conditions_${SYMBOL}.json"
+            orderflow-stop-risk "$FEATURE" \
+              --symbol "$SYMBOL" \
+              --context-symbol BTC_USDT \
+              --rr 1,2,3 \
+              --risk-pct 0.25,0.5,1,1.5,2,3,5 \
+              --fees-bps 4,8 \
+              --max-exposure 100 \
+              --output "artifacts/cross_pair/stop_risk_${SYMBOL}.json"
           done
+      - name: Measure current public-news context for the tested panel
+        continue-on-error: true
+        run: |
+          orderflow-news-monitor \
+            --panel artifacts/cross_pair/correlation_panel.json \
+            --output artifacts/cross_pair/news_context.json
       - name: Aggregate cross-pair transfer evidence
         run: |
           orderflow-cross-pair \
-            --screen artifacts/cross_pair/pair_screen.json \
+            --screen artifacts/cross_pair/correlation_panel.json \
             --results-dir artifacts/cross_pair \
             --output artifacts/cross_pair/cross_pair_summary.json
+      - name: Run deterministic release-manager gate
+        run: |
+          orderflow-multi-agent --output artifacts/cross_pair/multi_agent_report.json
+          python - <<'PY'
+          import json
+          report=json.load(open('artifacts/cross_pair/multi_agent_report.json', encoding='utf-8'))
+          if report['release_manager']['status'] != 'reviewable':
+              raise SystemExit('deterministic release manager blocked the research run')
+          PY
       - name: Preserve transfer evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -86,4 +154,4 @@ jobs:
           name: cross-pair-market-condition-transfer
           path: artifacts/cross_pair/
           if-no-files-found: warn
-          retention-days: 14
+          retention-days: 30

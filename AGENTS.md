@@ -34,6 +34,7 @@ Multiple specialists may read the same evidence, but never allow two writers to 
 - **aggressive-flow researcher**: CVD, signed volume ratio, trade intensity, flow acceleration, large-trade share, price/CVD divergence.
 - **mean-reversion researcher**: Bollinger/VWAP displacement, RSI, return z-score, failed breakout, exhaustion versus continuation.
 - **cross-asset researcher**: BTC returns/volatility, flow alignment, rolling correlation/beta, lead-lag, idiosyncratic versus beta-driven altcoin moves.
+- **news-event researcher**: public headline timing, conservative coin attribution, source provenance, and subsequent coin/BTC behavior as observational context only.
 - **derivatives-positioning researcher**: funding, OI change, premium/basis and liquidation information only when legitimately available through zero-additional-cost/public or already-owned data.
 - **session researcher**: UTC hour/session, weekday/weekend, funding-window proximity and session-transition effects.
 
@@ -70,6 +71,8 @@ Do not select an indicator merely because it has the highest in-sample PF.
 - Preserve the pre-registered `regime-research-v1` feature families/targets unless explicitly starting a new version before viewing later evidence.
 - Market-condition findings are exploratory until they meet the pre-registered readiness gate.
 - Cross-pair results are transfer evidence, not untouched OOS evidence for ENA-discovered conditions.
+- A BTC-correlation-diversified pair panel may be used only after the existing PnL-independent market-compatibility screen; correlation selection must not inspect strategy PnL.
+- Public news/event monitoring is development-only observational context. Do not infer causality from event timing, retune `discovery-v1` from news outcomes, or make news a strategy filter unless a separate specification is frozen before later validation data is inspected.
 - The remembered 15m EMA20/50 TradingView result remains an already-inspected development hypothesis, not verified OOS evidence.
 - Risk discussions should prefer the stop-based MAE/MFE experiment over raw leverage.
 - Realistic spread, fees, slippage, latency/freshness and failure assumptions must not be weakened to improve results.

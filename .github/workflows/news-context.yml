@@ -1,0 +1,75 @@
+name: Coin News Behavior Monitor
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 * * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: coin-news-behavior-monitor
+  cancel-in-progress: true
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .
+      - name: Screen a liquid PnL-independent MEXC universe
+        run: |
+          mkdir -p artifacts/news_context
+          orderflow-pair-screen \
+            --top 18 \
+            --max-spread-bps 5 \
+            --min-turnover-usdt 10000000 \
+            --output artifacts/news_context/pair_screen.json
+      - name: Build BTC-correlation-diversified monitoring panel
+        run: |
+          orderflow-correlation-panel \
+            artifacts/news_context/pair_screen.json \
+            --lookback-hours 72 \
+            --interval Min5 \
+            --min-samples 200 \
+            --panel-size 6 \
+            --high-positive-min 0.65 \
+            --low-absolute-max 0.25 \
+            --high-target 2 \
+            --low-target 2 \
+            --output artifacts/news_context/correlation_panel.json
+      - name: Monitor public coin news and subsequent behavior
+        run: |
+          orderflow-news-monitor \
+            --panel artifacts/news_context/correlation_panel.json \
+            --output artifacts/news_context/news_context.json
+      - name: Verify research-only boundary
+        run: |
+          python - <<'PY'
+          import json
+          report=json.load(open('artifacts/news_context/news_context.json', encoding='utf-8'))
+          claims=report['claims']
+          assert claims['research_only'] is True
+          assert claims['news_is_strategy_filter'] is False
+          assert claims['profitable_edge_established'] is False
+          assert claims['live_order_transmission_supported'] is False
+          print(json.dumps({
+              'event_count': report['event_count'],
+              'source_errors': report['source_errors'],
+              'market_data_errors': report['market_data_errors'],
+          }, indent=2))
+          PY
+      - name: Preserve news-context evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coin-news-behavior-context-${{ github.run_id }}
+          path: artifacts/news_context/
+          if-no-files-found: warn
+          retention-days: 30

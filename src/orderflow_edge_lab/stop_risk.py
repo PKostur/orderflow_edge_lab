@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from bisect import bisect_left, bisect_right
 from dataclasses import dataclass
 import hashlib
 from pathlib import Path
@@ -24,20 +25,20 @@ class StopRiskConfig:
     starting_equity: float = 100.0
 
 
-def _quotes_between(quotes, start_ns: int, end_ns: int):
-    return [row for row in quotes if start_ns <= row[0] <= end_ns]
+def _quote_slice(quotes, quote_times, start_ns: int, end_ns: int):
+    left = bisect_left(quote_times, start_ns)
+    right = bisect_right(quote_times, end_ns)
+    return quotes[left:right]
 
 
-def _first_quote_at_or_after(quotes, target_ns: int):
-    for row in quotes:
-        if row[0] >= target_ns:
-            return row
-    return None
+def _first_quote_at_or_after(quotes, quote_times, target_ns: int):
+    index = bisect_left(quote_times, target_ns)
+    return quotes[index] if index < len(quotes) else None
 
 
-def _stop_distance(signal, trade_side: int, quotes, cfg: StopRiskConfig):
+def _stop_distance(signal, trade_side: int, quotes, quote_times, cfg: StopRiskConfig):
     signal_ns = int(signal["signal_observed_at_ns"])
-    prior = _quotes_between(quotes, signal_ns - cfg.lookback_ms * 1_000_000, signal_ns)
+    prior = _quote_slice(quotes, quote_times, signal_ns - cfg.lookback_ms * 1_000_000, signal_ns)
     if not prior:
         return None
     bid = float(signal["signal_bid"])
@@ -54,14 +55,14 @@ def _stop_distance(signal, trade_side: int, quotes, cfg: StopRiskConfig):
     return None if distance <= 0 else (entry, distance, spread)
 
 
-def _trade_path(signal, trade_side: int, rr: float, quotes, cfg: StopRiskConfig):
-    stop_info = _stop_distance(signal, trade_side, quotes, cfg)
+def _trade_path(signal, trade_side: int, rr: float, quotes, quote_times, cfg: StopRiskConfig):
+    stop_info = _stop_distance(signal, trade_side, quotes, quote_times, cfg)
     if stop_info is None:
         return None
     entry, distance, spread = stop_info
     signal_ns = int(signal["signal_observed_at_ns"])
     end_ns = signal_ns + cfg.time_stop_ms * 1_000_000
-    future = _quotes_between(quotes, signal_ns + 1, end_ns)
+    future = _quote_slice(quotes, quote_times, signal_ns + 1, end_ns)
     if not future:
         return None
     stop = entry - trade_side * distance
@@ -88,7 +89,7 @@ def _trade_path(signal, trade_side: int, rr: float, quotes, cfg: StopRiskConfig)
             exit_ns, exit_exchange_ts_ms, exit_price = observed_ns, exchange_ts_ms, executable
             break
     if exit_price is None:
-        quote = _first_quote_at_or_after(quotes, end_ns)
+        quote = _first_quote_at_or_after(quotes, quote_times, end_ns)
         if quote is None:
             return None
         exit_ns, bid, ask, exit_exchange_ts_ms = quote
@@ -113,7 +114,7 @@ def _trade_path(signal, trade_side: int, rr: float, quotes, cfg: StopRiskConfig)
     }
 
 
-def _simulate_sequence(signals, quotes, *, stream: str, family: str, rr: float, risk_fraction: float, fee_bps: float, cfg: StopRiskConfig):
+def _simulate_sequence(signals, quotes, quote_times, *, stream: str, family: str, rr: float, risk_fraction: float, fee_bps: float, cfg: StopRiskConfig):
     equity = cfg.starting_equity
     peak = equity
     max_drawdown = 0.0
@@ -126,7 +127,7 @@ def _simulate_sequence(signals, quotes, *, stream: str, family: str, rr: float, 
             continue
         signal_side = int(signal["side"])
         trade_side = signal_side if stream == "original" else -signal_side
-        path = _trade_path(signal, trade_side, rr, quotes, cfg)
+        path = _trade_path(signal, trade_side, rr, quotes, quote_times, cfg)
         if path is None:
             continue
         stop_and_cost_bps = float(path["stop_distance_bps"]) + fee_bps
@@ -207,6 +208,7 @@ def evaluate_stop_risk(feature_path: str | Path, backtest_cfg: BacktestConfig = 
     rows = _load(feature_path)
     signals = candidate_signals(rows, backtest_cfg)
     quotes = _quote_rows(rows, backtest_cfg.symbol)
+    quote_times = [int(row[0]) for row in quotes]
     families = sorted({str(signal["family"]) for signal in signals})
     summaries = []
     ledger = []
@@ -215,7 +217,7 @@ def evaluate_stop_risk(feature_path: str | Path, backtest_cfg: BacktestConfig = 
             for rr in risk_cfg.rr_targets:
                 for risk_fraction in risk_cfg.risk_fractions:
                     for fee_bps in risk_cfg.fee_bps_round_trip:
-                        summary, trades = _simulate_sequence(signals, quotes, stream=stream, family=family, rr=float(rr), risk_fraction=float(risk_fraction), fee_bps=float(fee_bps), cfg=risk_cfg)
+                        summary, trades = _simulate_sequence(signals, quotes, quote_times, stream=stream, family=family, rr=float(rr), risk_fraction=float(risk_fraction), fee_bps=float(fee_bps), cfg=risk_cfg)
                         summaries.append(summary)
                         ledger.extend(trades)
     return {
