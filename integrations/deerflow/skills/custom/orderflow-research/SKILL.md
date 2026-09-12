@@ -53,7 +53,7 @@ For substantial regime/indicator research, use bounded specialist tasks. Run onl
 ### Validation specialists
 
 11. **Indicator orthogonality**: redundancy/correlation and incremental information after existing regime variables.
-12. **Research validity/statistics**: discovery/validation/holdout separation, dependence, multiple testing, trial accounting and OOS claims.
+12. **Research validity and statistics**: discovery/validation/holdout separation, dependence, multiple testing, trial accounting and OOS claims.
 13. **Transfer/generalization**: stability across independent batches, regimes and PnL-independently screened coin pairs.
 14. **Data integrity**: causal eligibility, sequence/timestamp correctness, adapters and provenance.
 15. **Reliability/observability**: CI, packaging, workflow failures, hashes, manifests, runtime identity and reproducibility.
