@@ -6,7 +6,7 @@ import tempfile
 import unittest
 
 from orderflow_edge_lab.discovery_aggregate import DiscoveryAggregateError, aggregate, verify_manifest
-from orderflow_edge_lab.orderflow_backtest import BacktestConfig
+from orderflow_edge_lab.orderflow_backtest import BacktestConfig, evaluate
 
 
 CONFIG = {
@@ -35,10 +35,10 @@ class DiscoveryAggregateTests(unittest.TestCase):
             "research_rules": {"minimum_batches_before_inference": 3},
         }), encoding="utf-8")
 
-    def _report(self, name, source, net, observations=4, *, config=None):
+    def _report(self, name, source, net, observations=4, *, config=None, schema_version=1):
         path = self.root / name
         path.write_text(json.dumps({
-            "schema_version": 1,
+            "schema_version": schema_version,
             "source_sha256": source,
             "config": CONFIG if config is None else config,
             "feature_rows": 100,
@@ -61,6 +61,23 @@ class DiscoveryAggregateTests(unittest.TestCase):
             },
         }), encoding="utf-8")
         return path
+
+    @staticmethod
+    def _trade(symbol, observed_ms, *, bid, ask, buy, sell, imbalance, micro):
+        return {
+            "event_type": "trade",
+            "symbol": symbol,
+            "exchange_ts_ms": observed_ms,
+            "received_at_ns": observed_ms * 1_000_000,
+            "best_bid": bid,
+            "best_ask": ask,
+            "microprice": micro,
+            "book_imbalance_10": imbalance,
+            "rolling_buy_volume": buy,
+            "rolling_sell_volume": sell,
+            "rolling_trade_count": 10,
+            "trade_price": (bid + ask) / 2,
+        }
 
     def test_repository_protocol_matches_backtest_defaults(self):
         cfg = BacktestConfig()
@@ -90,6 +107,37 @@ class DiscoveryAggregateTests(unittest.TestCase):
         self.assertFalse(row["inference_ready"])
         self.assertTrue(verify_manifest(report))
         self.assertFalse(report["claims"]["profitable_edge_established"])
+
+    def test_accepts_historical_and_current_backtest_schemas_together(self):
+        old = self._report("old.json", "a" * 64, 1.0, schema_version=1)
+        current = self._report("current.json", "b" * 64, 2.0, schema_version=2)
+        report = aggregate([old, current], self.protocol)
+        self.assertEqual(report["batches"], 2)
+        self.assertEqual([row["report_schema_version"] for row in report["evidence"]], [1, 2])
+        self.assertEqual(report["interpretation"]["supported_backtest_schema_versions"], [1, 2])
+        self.assertTrue(verify_manifest(report))
+
+    def test_current_backtester_output_is_accepted_by_discovery_aggregate(self):
+        features = self.root / "features.jsonl"
+        rows = [
+            self._trade("BTC_USDT", 500, bid=100.0, ask=100.1, buy=9, sell=1, imbalance=0.5, micro=100.08),
+            self._trade("ENA_USDT", 1000, bid=10.00, ask=10.01, buy=9, sell=1, imbalance=0.6, micro=10.008),
+            self._trade("ENA_USDT", 32000, bid=10.03, ask=10.04, buy=9, sell=1, imbalance=0.6, micro=10.038),
+        ]
+        features.write_text("".join(json.dumps(row) + "\n" for row in rows), encoding="utf-8")
+        backtest = evaluate(features, BacktestConfig())
+        self.assertEqual(backtest["schema_version"], 2)
+        report_path = self.root / "current_backtest.json"
+        report_path.write_text(json.dumps(backtest), encoding="utf-8")
+        aggregate_report = aggregate([report_path], self.protocol)
+        self.assertEqual(aggregate_report["batches"], 1)
+        self.assertEqual(aggregate_report["evidence"][0]["report_schema_version"], 2)
+        self.assertTrue(verify_manifest(aggregate_report))
+
+    def test_rejects_unknown_backtest_schema(self):
+        report = self._report("future.json", "c" * 64, 1.0, schema_version=3)
+        with self.assertRaises(DiscoveryAggregateError):
+            aggregate([report], self.protocol)
 
     def test_rejects_duplicate_source_capture(self):
         a = self._report("a.json", "a" * 64, 1.0)
