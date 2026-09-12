@@ -26,7 +26,8 @@ Use only public MEXC futures data. Pre-screen USDT perpetuals on current market 
 - spread <= 5 bps;
 - 24h quote turnover >= 10 million USDT;
 - nonzero 24h range;
-- exclude BTC from traded candidates because BTC remains the context market.
+- exclude ENA because it is the discovery market;
+- exclude BTC because it remains the context market.
 
 Rank passing pairs by quote turnover, then capture the top four candidates plus BTC simultaneously. `apiAllowed` is recorded but is not required for research-only market-data tests.
 
