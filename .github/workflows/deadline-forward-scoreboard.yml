@@ -1,0 +1,109 @@
+name: Deadline Forward PnL Scoreboard
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [release/deadline-forward-agents-v2]
+  schedule:
+    - cron: "42 * * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deadline-forward-scoreboard-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  scoreboard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run frozen forward agents
+        shell: bash
+        run: |
+          mkdir -p artifacts/deadline/ena artifacts/deadline/trend/source
+          orderflow-ena-forward-shadow \
+            --candidate config/ena_mean_reversion_candidate_v1.json \
+            --output artifacts/deadline/ena/report.json \
+            --source-output artifacts/deadline/ena/ENA_USDT_1h.csv &
+          ENA_PID=$!
+          orderflow-htf-trend-forward-shadow \
+            --candidate config/htf_trend_candidate_v1.json \
+            --output artifacts/deadline/trend/report.json \
+            --source-dir artifacts/deadline/trend/source \
+            --max-workers 5 &
+          TREND_PID=$!
+          wait "$ENA_PID"
+          wait "$TREND_PID"
+      - name: Build visible forward-only scoreboard
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          ena=json.load(open('artifacts/deadline/ena/report.json', encoding='utf-8'))
+          trend=json.load(open('artifacts/deadline/trend/report.json', encoding='utf-8'))
+          es=ena['metrics']
+          eo=ena.get('open_position')
+          trend_pnl=float(trend['metrics']['net_pnl_per_1000_usdt'])
+          ena_completed=float(es.get('compounded_return') or 0.0) * 1000.0
+          ena_open_gross=(float(eo.get('unrealized_gross_return') or 0.0) * 1000.0) if eo else 0.0
+          lines=[
+            '# Deadline Forward PnL Scoreboard',
+            '',
+            f"As of UTC: **{trend['as_of_utc']}**",
+            '',
+            '| Frozen agent | Status | Completed trades | Open positions | Forward PnL / $1,000 | Notes |',
+            '|---|---:|---:|---:|---:|---|',
+            f"| ENA 1h BB/RSI/ATR | {ena['status']} | {int(es.get('trades') or 0)} | {1 if eo else 0} | ${ena_completed + ena_open_gross:,.2f}* | completed net + open gross MTM |",
+            f"| 10-coin 8h EMA24/96 ATR | {trend['status']} | {int(trend['metrics']['completed_symbol_trades'])} | {int(trend['metrics']['open_symbol_positions'])} | ${trend_pnl:,.2f} | includes modeled trading costs + realized funding |",
+            '',
+            '* ENA open-position MTM is gross until exit under its frozen legacy report; completed ENA trades include the frozen 20 bps round-trip cost. Do not compare this row directly with the fully cost/funding-aware trend row while a position is open.',
+            '',
+            '**Interpretation:** this is genuine post-freeze paper/shadow market PnL. A positive number is a visible forward result, not by itself statistical proof of a persistent edge.',
+            '',
+            f"Trend candidate hash: `{trend['candidate_spec_sha256']}`",
+            f"ENA candidate hash: `{ena['candidate_spec_sha256']}`",
+            '',
+            'Live order transmission: **disabled**.'
+          ]
+          text='\n'.join(lines)+'\n'
+          Path('artifacts/deadline/SCOREBOARD.md').write_text(text, encoding='utf-8')
+          print(text)
+          PY
+          cat artifacts/deadline/SCOREBOARD.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Enforce immutable claim boundaries
+        run: |
+          python - <<'PY'
+          import json
+          for p in ['artifacts/deadline/ena/report.json','artifacts/deadline/trend/report.json']:
+              r=json.load(open(p, encoding='utf-8'))
+              c=r['claims']
+              if c.get('verified_out_of_sample_evidence') or c.get('profitable_edge_established') or c.get('live_order_transmission_supported'):
+                  raise SystemExit(f'forbidden automatic promotion claim in {p}')
+          PY
+      - name: Deterministic multi-agent release gate
+        run: |
+          orderflow-multi-agent --output artifacts/deadline/multi_agent_report.json
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/deadline/multi_agent_report.json', encoding='utf-8'))
+          if r['release_manager']['status'] != 'reviewable':
+              raise SystemExit('deterministic release manager blocked deadline scoreboard')
+          PY
+      - name: Preserve deadline evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deadline-forward-pnl-scoreboard
+          path: artifacts/deadline/
+          retention-days: 14
+          if-no-files-found: warn
