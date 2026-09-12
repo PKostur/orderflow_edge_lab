@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "protocol_name": "published-cross-sectional-v1.1",
+  "supersedes": "published-cross-sectional-v1",
+  "supersession_reason": "Adversarial review after the first price-only development run identified omitted perpetual funding cashflows. v1.1 changes only execution-economics accounting by including realized MEXC funding; signal definition, universe, dates, validation folds, costs and trial set remain unchanged.",
+  "frozen_at_intent": "2026-09-12",
+  "status": "development_screening",
+  "purpose": "Replicate published short-horizon cryptocurrency cross-sectional momentum on target-venue MEXC perpetual data with realized funding and trading costs.",
+  "source_prior": {
+    "citation": "Drogen, Hoffstein, Otte, Cross-sectional Momentum in Cryptocurrency Markets",
+    "published_signal": "rank assets by trailing 30-day performance and hold winners for the next 7 days",
+    "reported_evidence": "top recent performers historically continued to outperform over the subsequent week; long-only momentum portfolios exceeded a Bitcoin benchmark in the study sample",
+    "conflicting_evidence_note": "later literature reports weak or absent cross-sectional momentum under more realistic assumptions, so this is a replication target rather than an accepted current edge"
+  },
+  "data": {
+    "source": "MEXC public futures daily klines plus public realized funding history",
+    "target_execution_venue": "MEXC Futures",
+    "start": "2024-01-01",
+    "end_exclusive": "2026-09-12",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "universe_selection_uses_strategy_pnl": false,
+    "survivorship_warning": "fixed current liquid panel is a development convenience and is not a historically reconstructed point-in-time universe"
+  },
+  "strategy": {
+    "lookback_days": 30,
+    "holding_days": 7,
+    "quantile_fraction": 0.25,
+    "variants": ["long_only_top", "dollar_neutral_top_bottom"],
+    "signal_time": "completed daily close",
+    "execution_time": "next daily open",
+    "rebalance_rule": "every 7 calendar observations after sufficient lookback",
+    "gross_exposure": 1.0
+  },
+  "economics": {
+    "round_trip_cost_bps": [12.0, 16.0, 20.0],
+    "cost_accounting": "half the round-trip cost per unit of one-way portfolio turnover; changes from old to new weights incur both sells and buys",
+    "funding_accounting": "realized MEXC funding rates are debited from long perpetual weights and credited to short perpetual weights only for settlement timestamps strictly inside an already-held daily position interval"
+  },
+  "validation": {
+    "fold_days": 120,
+    "minimum_folds": 5,
+    "minimum_rebalances": 40,
+    "minimum_positive_fold_fraction": 0.6,
+    "median_fold_return_gt": 0.0,
+    "median_fold_sharpe_gt": 0.0,
+    "all_trials_retained": true,
+    "screening_is_not_promotion": true
+  },
+  "claims": {
+    "external_paper_is_prior_not_proof": true,
+    "development_screening_only": true,
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  }
+}
