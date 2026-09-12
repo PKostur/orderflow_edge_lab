@@ -5,7 +5,7 @@ import hashlib
 import json
 import math
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 
 class OrderFlowBacktestError(ValueError):
@@ -27,7 +27,7 @@ class BacktestConfig:
 
 def _load(path: str | Path) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
-    last_ts: dict[str, int] = {}
+    last_observed_ns: int | None = None
     with Path(path).open("r", encoding="utf-8") as fh:
         for line_no, line in enumerate(fh, 1):
             if not line.strip():
@@ -38,23 +38,30 @@ def _load(path: str | Path) -> list[dict[str, Any]]:
                 raise OrderFlowBacktestError(f"invalid JSON on line {line_no}") from exc
             if not isinstance(row, dict):
                 raise OrderFlowBacktestError(f"line {line_no} is not an object")
-            ts = row.get("exchange_ts_ms")
             symbol = row.get("symbol")
-            if ts is None or not symbol:
+            if not symbol or row.get("event_type") not in {"trade", "depth"}:
                 continue
+            observed = row.get("received_at_ns")
+            if observed is None:
+                raise OrderFlowBacktestError(f"missing received_at_ns on line {line_no}")
             try:
-                ts_i = int(ts)
+                observed_ns = int(observed)
             except (TypeError, ValueError) as exc:
-                raise OrderFlowBacktestError(f"invalid timestamp on line {line_no}") from exc
-            if symbol in last_ts and ts_i < last_ts[symbol]:
-                raise OrderFlowBacktestError(f"timestamp regression for {symbol} on line {line_no}")
-            last_ts[symbol] = ts_i
+                raise OrderFlowBacktestError(f"invalid received_at_ns on line {line_no}") from exc
+            if last_observed_ns is not None and observed_ns < last_observed_ns:
+                raise OrderFlowBacktestError(f"observation-time regression on line {line_no}")
+            last_observed_ns = observed_ns
             row = dict(row)
-            row["exchange_ts_ms"] = ts_i
+            row["observed_at_ns"] = observed_ns
+            exchange_ts = row.get("exchange_ts_ms")
+            if exchange_ts is not None:
+                try:
+                    row["exchange_ts_ms"] = int(exchange_ts)
+                except (TypeError, ValueError) as exc:
+                    raise OrderFlowBacktestError(f"invalid exchange_ts_ms on line {line_no}") from exc
             rows.append(row)
     if not rows:
-        raise OrderFlowBacktestError("no timestamped feature rows")
-    rows.sort(key=lambda r: (r["exchange_ts_ms"], str(r.get("symbol", "")), str(r.get("event_type", ""))))
+        raise OrderFlowBacktestError("no causal feature rows")
     return rows
 
 
@@ -104,15 +111,14 @@ def _latest_context(rows: list[dict[str, Any]], symbol: str) -> list[tuple[int, 
         ratio = _flow_ratio(row)
         if ratio is None:
             continue
-        side = _side_from_sign(ratio, 0.10)
-        out.append((row["exchange_ts_ms"], side))
+        out.append((row["observed_at_ns"], _side_from_sign(ratio, 0.10)))
     return out
 
 
-def _context_side(context: list[tuple[int, int]], ts: int) -> int:
+def _context_side(context: list[tuple[int, int]], observed_ns: int) -> int:
     latest = 0
-    for event_ts, side in context:
-        if event_ts > ts:
+    for event_ns, side in context:
+        if event_ns > observed_ns:
             break
         latest = side
     return latest
@@ -120,17 +126,18 @@ def _context_side(context: list[tuple[int, int]], ts: int) -> int:
 
 def candidate_signals(rows: list[dict[str, Any]], cfg: BacktestConfig) -> list[dict[str, Any]]:
     context = _latest_context(rows, cfg.context_symbol)
-    last_signal: dict[str, int] = {}
+    last_signal_ns: dict[str, int] = {}
     signals: list[dict[str, Any]] = []
+    cooldown_ns = cfg.cooldown_ms * 1_000_000
     for row in rows:
         if row.get("symbol") != cfg.symbol or row.get("event_type") != "trade":
             continue
-        ts = row["exchange_ts_ms"]
+        observed_ns = row["observed_at_ns"]
         count = int(row.get("rolling_trade_count") or 0)
         flow = _flow_ratio(row)
         book = _book_imbalance(row)
         micro = _micro_edge(row)
-        btc = _context_side(context, ts)
+        btc = _context_side(context, observed_ns)
         families: list[tuple[str, int]] = []
         if count >= cfg.min_trade_count and flow is not None:
             families.append(("cvd", _side_from_sign(flow, cfg.min_trade_flow_ratio)))
@@ -152,7 +159,7 @@ def candidate_signals(rows: list[dict[str, Any]], cfg: BacktestConfig) -> list[d
             if side == 0:
                 continue
             key = f"{family}:{side}"
-            if ts - last_signal.get(key, -10**18) < cfg.cooldown_ms:
+            if observed_ns - last_signal_ns.get(key, -10**30) < cooldown_ns:
                 continue
             bid, ask = row.get("best_bid"), row.get("best_ask")
             if bid is None or ask is None or float(ask) <= float(bid):
@@ -160,7 +167,8 @@ def candidate_signals(rows: list[dict[str, Any]], cfg: BacktestConfig) -> list[d
             signals.append({
                 "family": family,
                 "side": side,
-                "signal_ts_ms": ts,
+                "signal_observed_at_ns": observed_ns,
+                "signal_exchange_ts_ms": row.get("exchange_ts_ms"),
                 "entry_price": float(ask) if side > 0 else float(bid),
                 "signal_bid": float(bid),
                 "signal_ask": float(ask),
@@ -169,12 +177,12 @@ def candidate_signals(rows: list[dict[str, Any]], cfg: BacktestConfig) -> list[d
                 "microprice_edge": micro,
                 "btc_flow_side": btc,
             })
-            last_signal[key] = ts
+            last_signal_ns[key] = observed_ns
     return signals
 
 
-def _quote_rows(rows: list[dict[str, Any]], symbol: str) -> list[tuple[int, float, float]]:
-    out: list[tuple[int, float, float]] = []
+def _quote_rows(rows: list[dict[str, Any]], symbol: str) -> list[tuple[int, float, float, int | None]]:
+    out: list[tuple[int, float, float, int | None]] = []
     for row in rows:
         if row.get("symbol") != symbol:
             continue
@@ -183,15 +191,15 @@ def _quote_rows(rows: list[dict[str, Any]], symbol: str) -> list[tuple[int, floa
             continue
         bid_f, ask_f = float(bid), float(ask)
         if math.isfinite(bid_f) and math.isfinite(ask_f) and 0 < bid_f < ask_f:
-            out.append((row["exchange_ts_ms"], bid_f, ask_f))
+            out.append((row["observed_at_ns"], bid_f, ask_f, row.get("exchange_ts_ms")))
     return out
 
 
-def _first_quote_at_or_after(quotes: list[tuple[int, float, float]], target: int) -> tuple[int, float, float] | None:
+def _first_quote_at_or_after(quotes: list[tuple[int, float, float, int | None]], target_ns: int) -> tuple[int, float, float, int | None] | None:
     lo, hi = 0, len(quotes)
     while lo < hi:
         mid = (lo + hi) // 2
-        if quotes[mid][0] < target:
+        if quotes[mid][0] < target_ns:
             lo = mid + 1
         else:
             hi = mid
@@ -205,13 +213,21 @@ def evaluate(path: str | Path, cfg: BacktestConfig = BacktestConfig()) -> dict[s
     observations: list[dict[str, Any]] = []
     for signal in signals:
         for horizon in cfg.horizons_ms:
-            quote = _first_quote_at_or_after(quotes, signal["signal_ts_ms"] + horizon)
+            target_ns = signal["signal_observed_at_ns"] + horizon * 1_000_000
+            quote = _first_quote_at_or_after(quotes, target_ns)
             if quote is None:
                 continue
-            exit_ts, bid, ask = quote
+            exit_ns, bid, ask, exit_exchange_ts = quote
             exit_price = bid if signal["side"] > 0 else ask
             gross = signal["side"] * (exit_price / signal["entry_price"] - 1.0) * 10_000.0
-            base = {**signal, "horizon_ms": horizon, "exit_ts_ms": exit_ts, "exit_price": exit_price, "gross_bps": gross}
+            base = {
+                **signal,
+                "horizon_ms": horizon,
+                "exit_observed_at_ns": exit_ns,
+                "exit_exchange_ts_ms": exit_exchange_ts,
+                "exit_price": exit_price,
+                "gross_bps": gross,
+            }
             for fee in cfg.fee_bps_round_trip:
                 observations.append({**base, "fee_bps_round_trip": fee, "net_bps": gross - fee})
 
@@ -224,22 +240,22 @@ def evaluate(path: str | Path, cfg: BacktestConfig = BacktestConfig()) -> dict[s
         gross = [float(x["gross_bps"]) for x in group]
         if not nets:
             continue
-        mean = sum(nets) / len(nets)
-        wins = sum(x > 0 for x in nets)
         summary.append({
             "family": family,
             "horizon_ms": horizon,
             "fee_bps_round_trip": fee,
             "observations": len(nets),
             "gross_mean_bps": sum(gross) / len(gross),
-            "net_mean_bps": mean,
-            "net_win_rate": wins / len(nets),
+            "net_mean_bps": sum(nets) / len(nets),
+            "net_win_rate": sum(x > 0 for x in nets) / len(nets),
             "net_total_bps": sum(nets),
         })
 
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "source_sha256": hashlib.sha256(Path(path).read_bytes()).hexdigest(),
+        "causal_clock": "received_at_ns",
+        "exchange_timestamps_used_for_ordering": False,
         "config": {
             "symbol": cfg.symbol,
             "context_symbol": cfg.context_symbol,
