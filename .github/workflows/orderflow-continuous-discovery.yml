@@ -25,7 +25,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install
-        run: python -m pip install -e .
+        run: python -m pip install -e ".[research]"
       - name: Capture 15 minutes of fresh public ENA/BTC order flow
         run: |
           mkdir -p artifacts/orderflow
@@ -34,6 +34,43 @@ jobs:
             --symbol BTC_USDT \
             --duration-seconds 900 \
             --output-dir artifacts/orderflow
+      - name: Evaluate frozen regime-research-v1 market-state targets before strategy PnL
+        shell: bash
+        run: |
+          FEATURE=$(find artifacts/orderflow -name '*_mexc_features.jsonl' -print -quit)
+          test -n "$FEATURE"
+          orderflow-market-state-scan "$FEATURE" \
+            --symbol ENA_USDT \
+            --context-symbol BTC_USDT \
+            --output artifacts/orderflow/market_state.json
+      - name: Download prior discovery reports
+        shell: bash
+        run: |
+          mkdir -p prior
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=orderflow-discovery-report&per_page=100" \
+            --jq '.artifacts | sort_by(.created_at) | reverse | .[:47] | .[].workflow_run.id' \
+            | sort -u > prior_run_ids.txt
+          while read -r RUN_ID; do
+            test -n "$RUN_ID" || continue
+            mkdir -p "prior/$RUN_ID"
+            gh run download "$RUN_ID" \
+              --name orderflow-discovery-report \
+              --dir "prior/$RUN_ID" \
+              || rm -rf "prior/$RUN_ID"
+          done < prior_run_ids.txt
+      - name: Aggregate market-state evidence by independent capture batch before strategy PnL
+        shell: bash
+        run: |
+          STATE_REPORTS=(artifacts/orderflow/market_state.json)
+          while IFS= read -r REPORT; do
+            STATE_REPORTS+=("$REPORT")
+          done < <(find prior -type f -name market_state.json | sort)
+          orderflow-market-state-aggregate "${STATE_REPORTS[@]}" \
+            --minimum-independent-batches 3 \
+            --minimum-positive-batch-fraction 0.6666666666666666 \
+            --minimum-association-observations 20 \
+            --redundancy-abs-spearman-threshold 0.80 \
+            --output artifacts/orderflow/market_state_aggregate.json
       - name: Run frozen discovery-v1 backtest and pre-registered condition analysis
         shell: bash
         run: |
@@ -60,22 +97,7 @@ jobs:
             --symbol ENA_USDT \
             --context-symbol BTC_USDT \
             --output artifacts/orderflow/stop_risk.json
-      - name: Download prior discovery reports
-        shell: bash
-        run: |
-          mkdir -p prior
-          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=orderflow-discovery-report&per_page=100" \
-            --jq '.artifacts | sort_by(.created_at) | reverse | .[:47] | .[].workflow_run.id' \
-            | sort -u > prior_run_ids.txt
-          while read -r RUN_ID; do
-            test -n "$RUN_ID" || continue
-            mkdir -p "prior/$RUN_ID"
-            gh run download "$RUN_ID" \
-              --name orderflow-discovery-report \
-              --dir "prior/$RUN_ID" \
-              || rm -rf "prior/$RUN_ID"
-          done < prior_run_ids.txt
-      - name: Aggregate by independent capture batch
+      - name: Aggregate strategy discovery evidence by independent capture batch
         shell: bash
         run: |
           REPORTS=(artifacts/orderflow/backtest.json)
@@ -98,12 +120,15 @@ jobs:
         with:
           name: orderflow-discovery-report
           path: |
+            artifacts/orderflow/market_state.json
+            artifacts/orderflow/market_state_aggregate.json
             artifacts/orderflow/backtest.json
             artifacts/orderflow/direction_pair.json
             artifacts/orderflow/stop_risk.json
             artifacts/orderflow/conditions.json
             artifacts/orderflow/discovery_aggregate.json
             artifacts/orderflow/condition_aggregate.json
+            config/regime_research_v1.json
             config/orderflow_discovery_v1.json
           if-no-files-found: warn
           retention-days: 14
