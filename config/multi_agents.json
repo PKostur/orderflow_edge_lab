@@ -40,8 +40,14 @@
     {
       "id": "cross_asset_context",
       "focus": "BTC returns, volatility, order-flow agreement, rolling beta/correlation, lead-lag, and idiosyncratic versus BTC-driven altcoin behavior",
-      "required_paths": ["config/regime_research_v1.json", "src/orderflow_edge_lab/cross_pair.py", "src/orderflow_edge_lab/orderflow_backtest.py"],
+      "required_paths": ["config/regime_research_v1.json", "src/orderflow_edge_lab/cross_pair.py", "src/orderflow_edge_lab/btc_correlation.py", "src/orderflow_edge_lab/orderflow_backtest.py"],
       "forbidden_claims": []
+    },
+    {
+      "id": "news_event_context",
+      "focus": "Public coin-news event timing, conservative symbol attribution, source provenance, and post-event coin/BTC behavior without causal overclaiming or strategy retuning",
+      "required_paths": ["config/news_monitor_v1.json", "src/orderflow_edge_lab/news_monitor.py", ".github/workflows/news-context.yml"],
+      "forbidden_claims": ["news guarantees", "news proves causality"]
     },
     {
       "id": "derivatives_positioning",
@@ -76,7 +82,7 @@
     {
       "id": "transfer_generalization",
       "focus": "Independent-batch stability, regime stability and PnL-independent cross-pair transfer without relabeling transfer evidence as untouched OOS",
-      "required_paths": ["src/orderflow_edge_lab/cross_pair.py", "src/orderflow_edge_lab/condition_aggregate.py", "src/orderflow_edge_lab/market_conditions.py"],
+      "required_paths": ["src/orderflow_edge_lab/cross_pair.py", "src/orderflow_edge_lab/condition_aggregate.py", "src/orderflow_edge_lab/market_conditions.py", "src/orderflow_edge_lab/btc_correlation.py"],
       "forbidden_claims": ["generalizes to all coins"]
     },
     {
@@ -88,7 +94,7 @@
     {
       "id": "reliability_observability",
       "focus": "Compilation, tests, packaging, Linux/Windows CI, workflow failures, hashes, manifests, runtime identity, operator diagnostics and reproducibility",
-      "required_paths": [".github/workflows/ci.yml", ".github/workflows/orderflow-continuous-discovery.yml", "scripts/deployment_check.py", "scripts/package_smoke.py", "src/orderflow_edge_lab/runtime_identity.py"],
+      "required_paths": [".github/workflows/ci.yml", ".github/workflows/orderflow-continuous-discovery.yml", ".github/workflows/cross-pair-transfer.yml", ".github/workflows/news-context.yml", "scripts/deployment_check.py", "scripts/package_smoke.py", "src/orderflow_edge_lab/runtime_identity.py"],
       "forbidden_claims": []
     },
     {
@@ -108,6 +114,7 @@
       "aggressive_flow",
       "mean_reversion",
       "cross_asset_context",
+      "news_event_context",
       "derivatives_positioning",
       "execution_economics",
       "risk_path",

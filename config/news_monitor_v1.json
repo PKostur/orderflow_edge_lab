@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "protocol_name": "news-context-v1",
+  "status": "development_observational",
+  "purpose": "Monitor public coin-news headlines and measure subsequent coin/BTC behavior as exogenous research context without using news to retune frozen order-flow rules.",
+  "sources": [
+    {
+      "name": "coindesk",
+      "url": "https://www.coindesk.com/arc/outboundfeeds/rss/",
+      "access": "public_rss"
+    },
+    {
+      "name": "cointelegraph",
+      "url": "https://cointelegraph.com/?format=rss",
+      "access": "public_rss"
+    }
+  ],
+  "matching": {
+    "scope": "headline_or_title_only",
+    "method": "conservative_symbol_aliases",
+    "article_bodies_stored": false
+  },
+  "market_behavior": {
+    "data_source": "MEXC public futures candlesticks",
+    "interval": "Min5",
+    "max_age_hours": 48,
+    "pre_event_minutes": 15,
+    "horizons_minutes": [5, 15, 30, 60],
+    "context_symbol": "BTC_USDT",
+    "relative_measure": "coin_return_minus_btc_return_bps_not_beta_adjusted"
+  },
+  "research_rules": [
+    "Do not infer causality from headline timing and subsequent price movement.",
+    "Do not make news a strategy filter unless a separate specification is frozen before later validation data is inspected.",
+    "Do not use news outcomes to retune discovery-v1 thresholds.",
+    "Do not store article bodies, credentials, API keys or account data.",
+    "Incomplete future horizons remain incomplete rather than being imputed."
+  ],
+  "claims": {
+    "research_only": true,
+    "causal_effect_established": false,
+    "eligible_as_strategy_filter": false,
+    "profitable_edge_established": false,
+    "verified_out_of_sample_evidence": false,
+    "live_order_transmission_supported": false
+  }
+}
