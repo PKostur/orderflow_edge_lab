@@ -13,6 +13,8 @@ class PairScreenError(ValueError):
 
 DEFAULT_REST_BASE = "https://api.mexc.com"
 STABLE_BASES = {"USDT", "USDC", "DAI", "TUSD", "FDUSD", "USDE", "USDD"}
+NON_CRYPTO_CONCEPT_TOKENS = ("tradfi", "metal", "commodit", "forex", "index", "stock", "equity")
+NON_CRYPTO_BASES = {"XAU", "XAG"}
 
 
 @dataclass(frozen=True)
@@ -24,6 +26,7 @@ class PairScreenConfig:
     context_symbol: str = "BTC_USDT"
     exclude_symbols: tuple[str, ...] = ("ENA_USDT",)
     exclude_stable_bases: bool = True
+    exclude_non_crypto_contracts: bool = True
     rest_base: str = DEFAULT_REST_BASE
 
 
@@ -66,6 +69,14 @@ def _ticker_rows(payload: Mapping[str, Any]) -> list[dict[str, Any]]:
     raise PairScreenError("contract ticker data must be an object or list")
 
 
+def _concept_tokens(value: Any) -> list[str]:
+    if isinstance(value, str):
+        return [value.lower()]
+    if isinstance(value, list):
+        return [str(item).lower() for item in value]
+    return []
+
+
 def screen_pairs(config: PairScreenConfig = PairScreenConfig()) -> dict[str, Any]:
     if config.top_n < 1:
         raise PairScreenError("top_n must be positive")
@@ -80,8 +91,10 @@ def screen_pairs(config: PairScreenConfig = PairScreenConfig()) -> dict[str, Any
     for ticker in tickers:
         symbol = str(ticker.get("symbol") or "").upper()
         detail = details.get(symbol, {})
-        base_coin = str(detail.get("baseCoin") or (symbol.split("_")[0] if "_" in symbol else ""))
-        quote_coin = str(detail.get("quoteCoin") or (symbol.split("_")[1] if "_" in symbol else ""))
+        base_coin = str(detail.get("baseCoin") or (symbol.split("_")[0] if "_" in symbol else "")).upper()
+        quote_coin = str(detail.get("quoteCoin") or (symbol.split("_")[1] if "_" in symbol else "")).upper()
+        concept_plate = detail.get("conceptPlate")
+        concept_tokens = _concept_tokens(concept_plate)
         bid = _number(ticker.get("bid1"))
         ask = _number(ticker.get("ask1"))
         last = _number(ticker.get("lastPrice"))
@@ -102,6 +115,11 @@ def screen_pairs(config: PairScreenConfig = PairScreenConfig()) -> dict[str, Any
             reasons.append("wrong_quote_coin")
         if config.exclude_stable_bases and base_coin in STABLE_BASES:
             reasons.append("stable_base")
+        if config.exclude_non_crypto_contracts and (
+            base_coin in NON_CRYPTO_BASES
+            or any(token in plate for plate in concept_tokens for token in NON_CRYPTO_CONCEPT_TOKENS)
+        ):
+            reasons.append("non_crypto_contract")
         if spread_bps is None:
             reasons.append("invalid_bbo")
         elif spread_bps > config.max_spread_bps:
@@ -122,7 +140,7 @@ def screen_pairs(config: PairScreenConfig = PairScreenConfig()) -> dict[str, Any
             "range24_bps": range24_bps,
             "funding_rate": funding,
             "api_allowed": detail.get("apiAllowed"),
-            "concept_plate": detail.get("conceptPlate"),
+            "concept_plate": concept_plate,
             "research_screen_pass": not reasons,
             "screen_fail_reasons": reasons,
         }
@@ -141,6 +159,7 @@ def screen_pairs(config: PairScreenConfig = PairScreenConfig()) -> dict[str, Any
             "min_turnover_usdt_24h": config.min_turnover_usdt_24h,
             "excluded_symbols": sorted(explicit_excludes),
             "exclude_stable_bases": config.exclude_stable_bases,
+            "exclude_non_crypto_contracts": config.exclude_non_crypto_contracts,
             "ranking": "descending 24h quote turnover after hard compatibility filters",
             "backtest_performance_used_for_selection": False,
             "api_allowed_required_for_research": False,
