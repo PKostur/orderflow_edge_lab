@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from .execution import StateCorruptionError, _canonical, validate_execution_state
-from .cli.paper_audit import audit_paper_runtime
+from .reliability import deployment_readiness
 
 UTC = timezone.utc
 
@@ -41,6 +41,30 @@ def _load_state(path: Path) -> dict[str, Any]:
     return raw
 
 
+def _runtime_blockers(
+    state: Mapping[str, Any],
+    state_path: Path,
+    journal_path: Path,
+    current: datetime,
+) -> list[str]:
+    readiness = deployment_readiness(state_path, journal_path)
+    blockers: list[str] = []
+    if not readiness.ready_for_paper:
+        blockers.append("base_readiness_failed")
+    if state.get("kill_switch") is True:
+        blockers.append("kill_switch_engaged")
+    now_epoch = current.timestamp()
+    for pending in state.get("pending", {}).values():
+        expiry = pending.get("expires_at")
+        if isinstance(expiry, bool) or not isinstance(expiry, (int, float)):
+            blockers.append("invalid_pending_expiry")
+            break
+        if float(expiry) <= now_epoch:
+            blockers.append("expired_pending_intents")
+            break
+    return blockers
+
+
 def create_runtime_snapshot(
     state_path: str | Path,
     journal_path: str | Path,
@@ -56,12 +80,11 @@ def create_runtime_snapshot(
     state_path = Path(state_path)
     journal_path = Path(journal_path)
     current = (now or datetime.now(tz=UTC)).astimezone(UTC)
-    audit = audit_paper_runtime(state_path, journal_path, now=current)
-    if not audit.get("operational_ready"):
-        blockers = audit.get("blockers") or ["runtime_not_ready"]
-        raise RuntimeSnapshotError("runtime audit failed: " + ",".join(str(x) for x in blockers))
-
     state = _load_state(state_path)
+    blockers = _runtime_blockers(state, state_path, journal_path, current)
+    if blockers:
+        raise RuntimeSnapshotError("runtime audit failed: " + ",".join(blockers))
+
     pending_ids = sorted(state["pending"])
     position_ids = sorted(state["positions"])
     if require_flat and (pending_ids or position_ids):
@@ -117,17 +140,19 @@ def verify_runtime_snapshot(
     journal_path = Path(journal_path)
     state = _load_state(state_path)
     current = (now or datetime.now(tz=UTC)).astimezone(UTC)
-    audit = audit_paper_runtime(state_path, journal_path, now=current)
+    blockers = _runtime_blockers(state, state_path, journal_path, current)
 
+    engine_config = state.get("engine_config")
     checks = {
         "state_sha256": _sha256_file(state_path) == snapshot.get("state_sha256"),
         "journal_sha256": _sha256_file(journal_path) == snapshot.get("journal_sha256"),
         "state_revision": state.get("revision") == snapshot.get("state_revision"),
         "journal_head": state.get("journal_head") == snapshot.get("journal_head"),
-        "engine_config_sha256": _sha256_payload(state.get("engine_config")) == snapshot.get("engine_config_sha256"),
+        "engine_config_sha256": isinstance(engine_config, Mapping)
+        and _sha256_payload(engine_config) == snapshot.get("engine_config_sha256"),
         "pending_ids": sorted(state["pending"]) == list(snapshot.get("pending_ids", [])),
         "position_ids": sorted(state["positions"]) == list(snapshot.get("position_ids", [])),
-        "runtime_operational": audit.get("operational_ready") is True,
+        "runtime_operational": not blockers,
     }
     if snapshot.get("require_flat") is True:
         checks["flat_runtime"] = not state["pending"] and not state["positions"]
@@ -139,6 +164,7 @@ def verify_runtime_snapshot(
         "snapshot_sha256": supplied,
         "verified": not failed,
         "failed_checks": failed,
+        "runtime_blockers": blockers,
         "checks": checks,
         "ready_for_live": False,
         "live_order_transmission_supported": False,
