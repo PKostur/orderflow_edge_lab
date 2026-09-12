@@ -13,6 +13,7 @@ dependencies = ["websockets>=12,<16"]
 orderflow-paper = "orderflow_edge_lab.cli.paper:main"
 orderflow-paper-audit = "orderflow_edge_lab.cli.paper_audit:main"
 orderflow-runtime-snapshot = "orderflow_edge_lab.cli.runtime_snapshot:main"
+orderflow-session-audit = "orderflow_edge_lab.cli.session_audit:main"
 orderflow-probe = "orderflow_edge_lab.cli.probe:main"
 orderflow-validate = "orderflow_edge_lab.cli.validate:main"
 orderflow-readiness = "orderflow_edge_lab.cli.readiness:main"
