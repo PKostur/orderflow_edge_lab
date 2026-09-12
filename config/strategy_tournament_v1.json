@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "protocol_name": "strategy-tournament-v1",
+  "status": "discovery_only",
+  "frozen_before_later_evidence": true,
+  "purpose": "Evaluate a small set of distinct, interpretable strategy families in parallel without changing discovery-v1 or regime-research-v1. Market-state predictiveness is tested before strategy conditioning, and no family is promoted from in-sample PnL alone.",
+  "claims": {
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  },
+  "universe": {
+    "selection": "PnL-independent liquid MEXC perpetual universe using existing pair-screen and BTC-correlation diversification",
+    "minimum_turnover_usdt": 10000000,
+    "maximum_spread_bps": 5,
+    "context_symbol": "BTC_USDT"
+  },
+  "families": {
+    "trend_breakout": {
+      "pod": "trend/structure",
+      "entry_concept": "Donchian breakout with directional-efficiency and trend-state confirmation",
+      "parameter_grid": {
+        "lookback_bars": [20, 40],
+        "trend_filter": ["none", "ema20_gt_ema50"],
+        "adx_min": [0, 20, 25]
+      }
+    },
+    "ema_pullback_continuation": {
+      "pod": "trend/structure",
+      "entry_concept": "Trend continuation after causal pullback toward fast EMA while slow trend remains aligned",
+      "parameter_grid": {
+        "fast_ema": [20],
+        "slow_ema": [50],
+        "pullback_atr": [0.25, 0.5, 0.75]
+      }
+    },
+    "bollinger_mean_reversion": {
+      "pod": "mean reversion",
+      "entry_concept": "Fade statistically stretched Bollinger displacement only when directionality is low and liquidity is stable",
+      "parameter_grid": {
+        "period": [20],
+        "stddev": [2.0, 2.5],
+        "exit_z": [0.0, 0.5]
+      }
+    },
+    "vwap_reversion": {
+      "pod": "mean reversion",
+      "entry_concept": "Fade ATR-normalized displacement from session VWAP in non-trending states",
+      "parameter_grid": {
+        "entry_atr": [1.0, 1.5, 2.0],
+        "exit_atr": [0.25, 0.5]
+      }
+    },
+    "volatility_breakout": {
+      "pod": "volatility regime",
+      "entry_concept": "Trade range expansion after volatility compression with trend and liquidity confirmation",
+      "parameter_grid": {
+        "compression_percentile": [20, 30],
+        "breakout_lookback": [10, 20],
+        "atr_stop": [1.0, 1.5]
+      }
+    },
+    "orderflow_continuation": {
+      "pod": "aggressive flow",
+      "entry_concept": "Continuation when aggressive flow, depth-flow imbalance and microprice displacement agree, subject to execution-economics gates",
+      "parameter_grid": {
+        "flow_window_seconds": [10, 30],
+        "imbalance_threshold": [0.15, 0.25],
+        "btc_context": ["ignored", "aligned"]
+      }
+    }
+  },
+  "state_first_rules": {
+    "targets": ["directionality_chop", "volatility_expansion_contraction", "liquidity_stability_deterioration", "continuation_reversion"],
+    "strategy_pnl_used_for_initial_state_selection": false,
+    "redundancy_control": "Cluster highly associated indicators and retain one representative unless a second feature shows incremental predictive information or has a pre-specified interaction rationale."
+  },
+  "economics": {
+    "fees_bps_round_trip": [4, 8],
+    "include_observed_spread": true,
+    "include_slippage": true,
+    "include_latency": true,
+    "risk_research": "preserve stop-based MAE/MFE analysis with 1R, 2R and 3R targets"
+  },
+  "evaluation": {
+    "dependence_cluster": "independent capture batch",
+    "minimum_independent_batches_before_candidate_freeze": 10,
+    "preferred_independent_batches": 20,
+    "require_original_vs_reversed_control": true,
+    "require_positive_net_expectancy_after_costs": true,
+    "require_profit_factor_above_one_after_costs": true,
+    "require_cross_pair_transfer": true,
+    "cross_pair_transfer_is_oos": false,
+    "rank_by": ["state_predictive_information", "net_expectancy_after_costs", "stability_across_batches", "transfer_consistency", "drawdown_and_mae_path"],
+    "do_not_rank_by": ["maximum_in_sample_profit_factor", "single_best_parameter_combination"]
+  },
+  "promotion": {
+    "candidate_freeze_required": true,
+    "untouched_holdout_required_for_edge_claim": true,
+    "paper_shadow_reliability_required": true,
+    "reconciliation_required": true,
+    "separate_user_approval_required_for_live": true
+  }
+}

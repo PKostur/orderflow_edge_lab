@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "protocol_name": "price-strategy-tournament-v1.1",
+  "supersedes": "price-strategy-tournament-v1",
+  "supersession_reason": "v1 historical provider was unreachable from GitHub-hosted runners before any strategy result was produced; v1.1 changes only the historical data source/symbol notation and preserves families, grids, folds, costs and screening gates.",
+  "frozen_at_intent": "2026-09-12",
+  "status": "development_screening",
+  "purpose": "Parallel source-backed price-strategy tournament under conservative execution costs, using target-venue public MEXC futures history.",
+  "data": {
+    "source": "MEXC public futures klines",
+    "target_execution_venue": "MEXC Futures",
+    "start": "2026-03-01",
+    "end_exclusive": "2026-09-12",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "intervals": ["5m", "15m", "1h"],
+    "universe_selection_uses_strategy_pnl": false
+  },
+  "dependence_and_trials": {
+    "fold_days": 21,
+    "minimum_fold_observations": 6,
+    "minimum_total_trades": 80,
+    "minimum_positive_fold_fraction": 0.6,
+    "trial_unit": "family x interval x parameter variant x round-trip cost case; calendar time fold is the dependence cluster and symbols are aggregated inside each fold",
+    "all_trials_retained": true,
+    "screening_is_not_promotion": true
+  },
+  "economics": {
+    "round_trip_cost_bps": [12.0, 16.0, 20.0],
+    "interpretation": {
+      "12": "maker-fee floor proxy before adverse selection/slippage",
+      "16": "taker-fee floor proxy before adverse selection/slippage",
+      "20": "taker plus additional friction stress case"
+    },
+    "mexc_api_fee_reference": {
+      "effective_date": "2026-06-01",
+      "maker_bps_per_side": 6.0,
+      "taker_bps_per_side": 8.0,
+      "source": "MEXC announcement: Updates to API Futures Trading Fees (Jun 1, 2026)"
+    }
+  },
+  "families": {
+    "donchian_breakout": {
+      "pod": ["trend_structure", "volatility_regime"],
+      "market_state_hypothesis": "range breakout predicts continuation during directional states",
+      "grid": {"lookback": [20, 40, 80, 120]}
+    },
+    "ema_tsmom": {
+      "pod": ["trend_structure", "volatility_regime"],
+      "market_state_hypothesis": "EMA separation normalized by ATR identifies persistent directional state",
+      "grid": {"fast": [10, 20], "slow": [50, 100], "min_atr_spread": [0.0, 0.25]}
+    },
+    "bb_mean_reversion": {
+      "pod": ["mean_reversion", "volatility_regime"],
+      "market_state_hypothesis": "extreme Bollinger displacement plus RSI exhaustion identifies reversion-prone state",
+      "grid": {"period": [20, 40], "std": [1.5, 2.0], "rsi_low": [25, 30], "rsi_high": [70, 75], "max_hold": [20]}
+    },
+    "bb_squeeze_breakout": {
+      "pod": ["volatility_regime", "trend_structure"],
+      "market_state_hypothesis": "low bandwidth followed by band breakout identifies volatility expansion with directional continuation",
+      "grid": {"period": [20, 40], "std": [2.0], "squeeze_q": [0.1, 0.2], "q_window": [200], "max_hold": [20, 40]}
+    },
+    "intraday_reversal": {
+      "pod": ["mean_reversion", "volatility_regime"],
+      "market_state_hypothesis": "large standardized short-horizon moves can overreact and mean-revert",
+      "grid": {"lookback": [3, 6], "vol_window": [48], "z": [1.5, 2.0], "max_hold": [6, 12]}
+    },
+    "trend_pullback": {
+      "pod": ["trend_structure", "mean_reversion"],
+      "market_state_hypothesis": "pullbacks inside an established EMA trend can resume in trend direction",
+      "grid": {"fast": [20], "slow": [50, 100], "long_rsi_max": [40, 45], "short_rsi_min": [55, 60], "max_hold": [12, 24]}
+    },
+    "vol_scaled_momentum": {
+      "pod": ["trend_structure", "volatility_regime", "execution_economics"],
+      "market_state_hypothesis": "return normalized by realized volatility identifies directional persistence while reducing noisy weak signals",
+      "grid": {"lookback": [12, 24, 48, 96], "vol_window": [96], "threshold": [0.5, 1.0]}
+    }
+  },
+  "screening_gate": {
+    "median_expectancy_after_cost_bps_gt": 0.0,
+    "median_profit_factor_gt": 1.0,
+    "minimum_positive_fold_fraction": 0.6,
+    "minimum_total_trades": 80,
+    "minimum_fold_observations": 6,
+    "requires_parameter_stability_review_before_candidate_freeze": true,
+    "requires_symbol_concentration_review_before_candidate_freeze": true
+  },
+  "forward_rule": {
+    "selection": "Only candidates that pass development screening and adversarial review may be frozen.",
+    "forward_source": "later MEXC public market data / paper-shadow path after freeze",
+    "forward_data_must_start_after_freeze": true,
+    "no_retuning_after_forward_starts": true,
+    "deadline_date": "2026-09-16"
+  },
+  "claims": {
+    "profitable_edge_established": false,
+    "historically_profitable_strategy_is_not_future_guarantee": true,
+    "development_screening_only": true,
+    "live_order_transmission_supported": false
+  }
+}
