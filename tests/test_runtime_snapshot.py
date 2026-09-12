@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from orderflow_edge_lab.execution import PaperEngine
 from orderflow_edge_lab.runtime_snapshot import (
@@ -15,7 +16,7 @@ UTC = timezone.utc
 
 
 class RuntimeSnapshotTests(unittest.TestCase):
-    def test_clean_runtime_snapshot_verifies_exact_bytes(self):
+    def test_clean_runtime_snapshot_verifies_exact_bytes_and_build(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
             state = root / "state.json"
@@ -25,15 +26,19 @@ class RuntimeSnapshotTests(unittest.TestCase):
 
             now = datetime(2026, 9, 12, 3, 0, tzinfo=UTC)
             snapshot = create_runtime_snapshot(state, journal, now=now)
+            self.assertEqual(snapshot["schema_version"], 2)
             self.assertTrue(snapshot["ready_for_paper"])
             self.assertFalse(snapshot["ready_for_live"])
             self.assertFalse(snapshot["profitable_edge_established"])
             self.assertEqual(snapshot["pending_ids"], [])
             self.assertEqual(snapshot["position_ids"], [])
+            self.assertEqual(len(snapshot["runtime_identity_sha256"]), 64)
+            self.assertEqual(len(snapshot["runtime_identity"]["package_source_sha256"]), 64)
 
             verified = verify_runtime_snapshot(snapshot, state, journal, now=now)
             self.assertTrue(verified["verified"])
             self.assertEqual(verified["failed_checks"], [])
+            self.assertTrue(verified["checks"]["runtime_identity"])
 
     def test_snapshot_detects_runtime_drift(self):
         with tempfile.TemporaryDirectory() as td:
@@ -53,6 +58,25 @@ class RuntimeSnapshotTests(unittest.TestCase):
             self.assertIn("state_sha256", verified["failed_checks"])
             self.assertIn("journal_sha256", verified["failed_checks"])
             self.assertIn("runtime_operational", verified["failed_checks"])
+
+    def test_snapshot_detects_code_or_runtime_identity_change(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            state = root / "state.json"
+            journal = root / "journal.jsonl"
+            with PaperEngine(state, journal):
+                pass
+
+            now = datetime(2026, 9, 12, 3, 0, tzinfo=UTC)
+            snapshot = create_runtime_snapshot(state, journal, now=now)
+            changed = dict(snapshot["runtime_identity"])
+            changed["package_source_sha256"] = "f" * 64
+            with patch("orderflow_edge_lab.runtime_snapshot.runtime_identity", return_value=changed):
+                verified = verify_runtime_snapshot(snapshot, state, journal, now=now)
+
+            self.assertFalse(verified["verified"])
+            self.assertIn("runtime_identity", verified["failed_checks"])
+            self.assertTrue(verified["checks"]["runtime_identity_manifest"])
 
     def test_manifest_tampering_fails_closed(self):
         with tempfile.TemporaryDirectory() as td:

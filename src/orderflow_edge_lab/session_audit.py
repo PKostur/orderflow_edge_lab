@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 from typing import Any, Mapping
 
+from .runtime_identity import runtime_identity
 from .runtime_snapshot import _load_state, _runtime_blockers, _sha256_payload
 
 UTC = timezone.utc
@@ -27,11 +28,22 @@ def _validate_snapshot(snapshot: Mapping[str, Any]) -> None:
     unsigned.pop("snapshot_sha256", None)
     if _sha256_payload(unsigned) != supplied:
         raise SessionAuditError("runtime snapshot manifest was modified")
-    if snapshot.get("schema_version") != 1:
+    schema = snapshot.get("schema_version")
+    if schema not in (1, 2):
         raise SessionAuditError("unsupported runtime snapshot schema")
     boundary = snapshot.get("journal_bytes")
     if isinstance(boundary, bool) or not isinstance(boundary, int) or boundary < 0:
         raise SessionAuditError("runtime snapshot lacks an append-only journal byte boundary")
+    if schema == 2:
+        identity = snapshot.get("runtime_identity")
+        identity_sha = snapshot.get("runtime_identity_sha256")
+        if (
+            not isinstance(identity, Mapping)
+            or not isinstance(identity_sha, str)
+            or len(identity_sha) != 64
+            or _sha256_payload(identity) != identity_sha
+        ):
+            raise SessionAuditError("runtime snapshot build identity is invalid")
 
 
 def _parse_appended_events(raw: bytes) -> tuple[int, dict[str, int]]:
@@ -72,8 +84,9 @@ def close_paper_session(
     """Audit a paper session against its immutable pre-session snapshot.
 
     The closeout proves that journal history present at session start is unchanged and
-    reports only records appended after that boundary. It does not establish strategy
-    profitability and does not enable live order transmission.
+    reports only records appended after that boundary. Schema v2 snapshots also bind
+    the closeout to the exact package source and Python runtime used at session start.
+    This does not establish strategy profitability and does not enable live orders.
     """
     if not isinstance(snapshot, Mapping):
         raise SessionAuditError("runtime snapshot must be an object")
@@ -118,6 +131,17 @@ def close_paper_session(
     if state.get("trading_day") != snapshot.get("trading_day"):
         blockers.append("trading_day_changed")
 
+    runtime_identity_verified: bool | None = None
+    if snapshot.get("schema_version") == 2:
+        identity = runtime_identity()
+        identity_sha = _sha256_payload(identity)
+        runtime_identity_verified = (
+            identity == snapshot.get("runtime_identity")
+            and identity_sha == snapshot.get("runtime_identity_sha256")
+        )
+        if not runtime_identity_verified:
+            blockers.append("runtime_identity_changed")
+
     try:
         runtime_blockers = _runtime_blockers(state, state_path, journal_path, current)
     except (OSError, ValueError, TypeError, KeyError):
@@ -131,13 +155,15 @@ def close_paper_session(
 
     blockers = sorted(set(blockers))
     payload: dict[str, Any] = {
-        "schema_version": 1,
+        "schema_version": 2,
         "closed_at": current.isoformat(),
         "start_snapshot_sha256": snapshot["snapshot_sha256"],
+        "start_snapshot_schema_version": snapshot.get("schema_version"),
         "start_journal_bytes": boundary,
         "end_journal_bytes": len(journal),
         "end_journal_sha256": _sha256_bytes(journal),
         "journal_prefix_verified": prefix_ok,
+        "runtime_identity_verified": runtime_identity_verified,
         "appended_bytes": max(0, len(journal) - boundary),
         "appended_records": appended_count,
         "appended_event_counts": event_counts,
