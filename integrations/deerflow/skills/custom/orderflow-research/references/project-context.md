@@ -37,7 +37,10 @@ The repository contains:
 - original-versus-reversed paired execution controls;
 - effective-exposure stress testing;
 - stop-based percent-equity risk testing with executable-path MAE/MFE;
-- discovery aggregation by independent capture batch;
+- pre-registered market-condition stratification;
+- PnL-independent MEXC pair compatibility screening;
+- unchanged cross-pair transfer testing;
+- discovery and condition aggregation by independent capture batch;
 - DeepCharts/dxFeed export audit/bundling adapters;
 - immutable research/candidate/holdout provenance;
 - trial accounting and promotion gates;
@@ -47,7 +50,7 @@ The repository contains:
 
 ## Frozen discovery-v1 protocol
 
-Do not silently retune this protocol batch by batch.
+Do not silently retune this protocol batch by batch or pair by pair.
 
 - CVD / trade-flow ratio threshold: absolute 0.25
 - Book imbalance threshold: absolute 0.25
@@ -61,6 +64,28 @@ Do not silently retune this protocol batch by batch.
 
 Current discovery treats each fresh capture batch as the primary dependence cluster rather than treating every nearby signal as independent evidence.
 
+## Market-condition research
+
+The next empirical question is whether executable PF and expectancy improve under stable market conditions rather than because of one lucky short capture. The condition protocol was frozen before cross-pair results are inspected. It stratifies each signal by:
+
+- executable spread;
+- prior 15-second price range relative to spread;
+- prior 15-second absolute return relative to spread;
+- rolling 10-second trade intensity;
+- BTC order-flow alignment;
+- family-normalized signal strength;
+- UTC session.
+
+A condition is not allowed to influence pair selection or later candidate construction until it has at least 20 observations across at least 3 independent capture batches, PF above 1 after the stated cost case, positive net expectancy, and positive net expectancy in at least two thirds of contributing batches.
+
+Initial two-batch exploration found some large relative PF lifts but no economically positive condition after 4 bps. One example was 15-second microprice with BTC flow against the ENA signal: pooled PF improved from roughly 0.12 to roughly 0.53, but net expectancy remained negative and only two batches existed. Treat this as exploratory evidence against premature condition selection, not as a trading rule.
+
+## Cross-pair transfer research
+
+Once conditions are adequately supported, test whether the frozen order-flow logic transfers to other coins. Pair selection must be independent of strategy PnL. The current market-compatibility screen uses public MEXC futures data and requires a valid BBO, spread no wider than 5 bps, at least 10 million USDT of 24-hour quote turnover, and nonzero 24-hour range. ENA is excluded because it is the discovery market and BTC is excluded because it remains the context market. Rank qualifying pairs by turnover and capture the top four plus BTC simultaneously.
+
+Apply the same discovery-v1 thresholds, BTC context, horizons, and cost cases to every selected pair. Do not optimize thresholds per pair. Every pair must retain an original-versus-reversed control and the same condition report. Cross-pair success is transfer evidence, not untouched OOS evidence for a condition discovered on ENA.
+
 ## Risk research
 
 When percent equity risk is requested, prefer the stop-based experiment rather than equating leverage with risk. The current exploratory stop model uses recent causally observed BBO structure, a minimum stop distance expressed in current spreads, executable bid/ask path traversal, a 30-second time stop, RR targets 1R/2R/3R, and requested equity-risk levels 0.25% through 5%.
@@ -73,7 +98,7 @@ Short clean order-flow pilots have shown small directional asymmetry, especially
 
 A development-only historical test on the already-inspected August ENA/BTC minute data is being used to compare the preserved Bollinger/BTC baseline with a completed-candle 15-minute EMA20/EMA50 direction filter. Because the period has already been inspected in prior work, any favorable result is development evidence only, never OOS.
 
-Continuous discovery captures fresh public ENA/BTC order flow under the frozen protocol. Later candidate creation must freeze a new specification before untouched validation data is examined.
+Continuous discovery captures fresh public ENA/BTC order flow under the frozen protocol and now accumulates compact condition evidence across independent batches. Later candidate creation must freeze a new specification before untouched validation data is examined.
 
 ## Safety and promotion boundary
 
@@ -108,7 +133,9 @@ Use six specialist subagents and keep the lead agent as the adversarial reviewer
 
 Prioritize:
 
-- accumulating clean independent MEXC discovery batches;
+- accumulating clean independent MEXC discovery and condition batches;
+- checking whether PF improvement is stable across pre-registered market conditions rather than threshold-chasing;
+- screening other coins by liquidity/microstructure compatibility without using strategy PnL, then testing the frozen logic unchanged;
 - validating DeepCharts/dxFeed data adapters when real exports are available;
 - testing whether order-flow features improve executable expectancy rather than only direction accuracy;
 - checking 5 to 15 second predictive decay without threshold-chasing;
