@@ -67,6 +67,11 @@ def main(argv=None):
         required=True,
         help="Holdout provenance audit bound to the exact validation observations",
     )
+    submit.add_argument(
+        "--trial-ledger",
+        required=True,
+        help="Experiment-family trial ledger proving this exact holdout inspection was counted",
+    )
     approve = commands.add_parser("approve")
     approve.add_argument("intent_id")
     approve.add_argument("--token", required=True, help="Approval integrity token returned by submit")
@@ -114,6 +119,7 @@ def main(argv=None):
                 args.economics,
                 args.candidate_freeze,
                 args.holdout_audit,
+                args.trial_ledger,
             )
             if not promotion.promotable or promotion.research_only or binding_reasons:
                 print(json.dumps({
@@ -145,6 +151,7 @@ def main(argv=None):
                 "promotion_binding": {
                     "candidate_freeze_sha256": _sha256_file(args.candidate_freeze),
                     "holdout_audit_sha256": _sha256_file(args.holdout_audit),
+                    "trial_ledger_sha256": _sha256_file(args.trial_ledger),
                     "validation_report_sha256": _sha256_file(args.validation_report),
                     "economics_sha256": _sha256_file(args.economics),
                     "binding_reasons": [],
