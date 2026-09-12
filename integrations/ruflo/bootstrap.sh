@@ -41,6 +41,13 @@ fi
 
 ruflo doctor
 ruflo swarm init --topology hierarchical --max-agents 7 --strategy specialized
+ruflo agent spawn --type coordinator --name orderflow-lead
+ruflo agent spawn --type researcher --name data-integrity
+ruflo agent spawn --type researcher --name research-validity
+ruflo agent spawn --type reviewer --name strategy-validation
+ruflo agent spawn --type security-architect --name execution-safety
+ruflo agent spawn --type tester --name reliability-ci
+ruflo agent spawn --type reviewer --name observability-deployment
 
 ruflo memory store --namespace "orderflow/decisions" --key "safety-boundary-v1" --value "Automatic live broker/exchange transmission is disabled. Ruflo and DeerFlow coordinate research but cannot bypass candidate freeze, holdout audit, trial ledger, realistic economics, approval-bound paper execution, reconciliation, or explicit future user approval."
 ruflo memory store --namespace "orderflow/decisions" --key "orchestration-layers-v1" --value "Ruflo is the meta-harness for memory/swarm coordination; DeerFlow provides trading-domain context; orderflow_edge_lab is the executable source of truth and deterministic evidence gate."
@@ -52,6 +59,7 @@ fi
 
 echo "Ruflo integration is initialized for $REPO_ROOT"
 echo "Run: npx ruflo@latest swarm status"
+echo "Run: npx ruflo@latest agent list"
 echo "Run: npx ruflo@latest memory search --query orderflow"
 if [[ "$START_DAEMON" -eq 0 ]]; then
   echo "Optional background workers: bash integrations/ruflo/bootstrap.sh --start-daemon"
