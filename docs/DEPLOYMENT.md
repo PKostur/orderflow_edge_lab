@@ -39,7 +39,7 @@ Install the package with `python -m pip install -e .`, then run:
 ```text
 python scripts/paper_control.py init --equity 10000
 python scripts/paper_control.py status
-python scripts/paper_control.py submit --intent intent.json --export trades.csv --validation-report validation.json --economics config/economics.json
+python scripts/paper_control.py submit --intent intent.json --export trades.csv --validation-report validation.json --economics config/economics.json --candidate-freeze research/candidate-freeze.json --holdout-audit research/holdout-audit.json
 python scripts/paper_control.py approve INTENT_ID --token APPROVAL_TOKEN --market market.json
 python scripts/paper_control.py reject INTENT_ID --reason "operator declined"
 python scripts/paper_control.py close INTENT_ID --market market.json --reason "operator close"
@@ -62,16 +62,23 @@ Intent JSON contains `strategy_id`, `symbol`, `side`, `entry_reference`, `stop`,
 execution; saved examples become stale. The interface has no override for the
 current clock.
 
-`submit` is fail closed in two independent layers. First, it recomputes the
+`submit` is fail closed in three independent layers. First, it recomputes the
 strategy promotion decision from the supplied validation report and economics
-policy. The intent `strategy_id` must identify exactly one candidate in that
-report, and the candidate must pass the project's OOS, source-verification,
-causal-window, matured-outcome, and fixed-cost gates. A blocked or malformed
-promotion decision cannot enter the pending queue and does not mutate state or the
-journal. Second, the supplied market export must contain at least 100 qualifying
-events, a fresh BBO, and a passing quality report. The exact export hash and the
-recomputed promotion assessment, including the validation/economics hashes, are
-stored in the submission evidence and therefore included in the approval binding.
+policy. Second, the exact validation report must bind to a valid candidate-freeze
+manifest and a valid holdout audit. The candidate, registry hash, candidate
+specification hash, holdout observations hash, frozen holdout partition, and
+reverified source bytes must all agree. A positive validation report cannot enter
+the paper queue by itself. Third, the supplied market export must contain at least
+100 qualifying events, a fresh BBO, and a passing quality report.
+
+The intent `strategy_id` must identify exactly one candidate in the validation
+report and in the frozen candidate set. A blocked or malformed promotion or
+provenance decision cannot enter the pending queue and does not mutate state or the
+journal. The exact fresh export hash, recomputed promotion assessment, candidate
+freeze file hash, holdout audit file hash, validation report file hash, and
+economics file hash are stored in submission evidence. That evidence is included in
+the approval binding, so an approval token cannot silently refer to a different
+research provenance chain.
 
 `approve` requires the integrity token returned by `submit` and rechecks a fresh
 market snapshot before a paper fill. The token is an audit binding rather than an
@@ -81,8 +88,9 @@ market snapshot. Market movement that changes allowable size invalidates approva
 
 The low-level PaperEngine API remains available for engineering tests and assumes
 upstream signal/data validation. The supported operator CLI is stricter and will
-not accept research-only validation artifacts. This does not prove profitability:
-paper eligibility requires explicit upstream OOS certification and does not turn
+not accept research-only validation artifacts or validation artifacts detached
+from their frozen holdout provenance. This does not prove profitability: paper
+eligibility requires explicit upstream OOS certification and does not turn
 historical results into new evidence.
 
 `status` is read-only and does not recover state. It reports pending and open
