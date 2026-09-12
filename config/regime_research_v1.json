@@ -1,0 +1,195 @@
+{
+  "schema_version": 1,
+  "protocol_name": "regime-research-v1",
+  "status": "discovery_only",
+  "purpose": "Separate market-state prediction from strategy-PnL conditioning so indicator research explains future regime first and only then asks whether the frozen trading logic benefits from that regime.",
+  "claims": {
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  },
+  "market_state_targets": {
+    "directionality": {
+      "description": "Future directional efficiency rather than raw return sign.",
+      "horizons_seconds": [15, 30, 60, 300],
+      "metrics": ["absolute_return_over_realized_range", "signed_return_bps"],
+      "goal": "distinguish persistent directional movement from chop"
+    },
+    "volatility": {
+      "description": "Future realized volatility/range relative to a trailing causal baseline.",
+      "horizons_seconds": [30, 60, 300],
+      "metrics": ["future_range_bps", "future_realized_volatility", "volatility_expansion_ratio"],
+      "goal": "distinguish expansion, normal and contraction regimes"
+    },
+    "liquidity": {
+      "description": "Future tradability and execution quality independent of strategy PnL.",
+      "horizons_seconds": [5, 15, 30, 60],
+      "metrics": ["future_spread_bps", "future_top_depth", "spread_expansion_ratio"],
+      "goal": "identify stable versus deteriorating liquidity"
+    },
+    "continuation_reversion": {
+      "description": "Whether a current displacement persists or mean-reverts over the next horizon.",
+      "horizons_seconds": [15, 30, 60, 300],
+      "metrics": ["continuation_fraction", "reversion_fraction", "future_return_from_signal_mid_bps"],
+      "goal": "distinguish continuation-friendly and mean-reversion-friendly states"
+    }
+  },
+  "specialist_families": {
+    "trend_structure": {
+      "indicators": [
+        "ema20_ema50_15m_state",
+        "ema20_ema50_1h_state",
+        "ema20_slope_atr_normalized_15m",
+        "ema50_slope_atr_normalized_15m",
+        "adx14_15m",
+        "donchian20_position_15m",
+        "directional_efficiency_15m"
+      ],
+      "questions": [
+        "Is the market trending, transitioning or ranging?",
+        "Is trend direction consistent across 15m and 1h?",
+        "Does trend strength add information beyond simple EMA state?"
+      ]
+    },
+    "volatility_regime": {
+      "indicators": [
+        "atr14_percentile_15m",
+        "bollinger_bandwidth20_percentile_15m",
+        "realized_volatility_1m_15m",
+        "range_to_atr_15m",
+        "volatility_of_volatility_15m",
+        "short_range_to_spread_15s"
+      ],
+      "questions": [
+        "Is volatility compressed, normal or expanding?",
+        "Do order-flow signals work only when expected movement can exceed friction?"
+      ]
+    },
+    "liquidity_microstructure": {
+      "indicators": [
+        "spread_bps",
+        "top10_depth_notional",
+        "book_imbalance_10",
+        "microprice_displacement",
+        "quote_update_intensity",
+        "depth_flow_imbalance",
+        "liquidity_add_pull_ratio",
+        "stale_update_rate"
+      ],
+      "questions": [
+        "Is displayed liquidity supportive or fragile?",
+        "Does directional book pressure persist after controlling for spread and depth?"
+      ]
+    },
+    "aggressive_flow": {
+      "indicators": [
+        "cvd_10s",
+        "signed_volume_ratio_10s",
+        "trade_count_10s",
+        "aggressive_volume_acceleration",
+        "large_trade_share",
+        "price_cvd_divergence"
+      ],
+      "questions": [
+        "Is aggressive flow persistent, exhausted or divergent from price?",
+        "Does flow acceleration add information beyond static CVD?"
+      ]
+    },
+    "mean_reversion": {
+      "indicators": [
+        "bollinger_zscore_1m",
+        "rsi14_1m",
+        "distance_from_vwap_atr_1m",
+        "short_term_return_zscore",
+        "failed_breakout_state"
+      ],
+      "questions": [
+        "Is current displacement stretched enough to favor reversion?",
+        "Does order flow confirm exhaustion versus continuation?"
+      ]
+    },
+    "cross_asset_context": {
+      "indicators": [
+        "btc_return_1m",
+        "btc_return_5m",
+        "btc_return_15m",
+        "btc_realized_volatility",
+        "btc_flow_alignment",
+        "rolling_btc_correlation",
+        "rolling_btc_beta",
+        "btc_lead_lag_state"
+      ],
+      "questions": [
+        "Is the altcoin moving idiosyncratically or as BTC beta?",
+        "Does BTC lead the signal or merely co-move with it?"
+      ]
+    },
+    "derivatives_positioning": {
+      "indicators": [
+        "funding_rate",
+        "funding_rate_zscore",
+        "open_interest_change",
+        "price_open_interest_state",
+        "basis_or_mark_premium",
+        "liquidation_intensity_if_available"
+      ],
+      "questions": [
+        "Is positioning crowded or expanding with price?",
+        "Does the same order-flow signal behave differently under leverage crowding?"
+      ],
+      "availability_rule": "Use only fields available from legitimate zero-additional-cost public/existing data sources; missing derivatives fields do not block other research."
+    },
+    "time_session": {
+      "indicators": [
+        "utc_hour",
+        "utc_session",
+        "weekday_weekend",
+        "minutes_to_funding_event",
+        "session_open_proximity"
+      ],
+      "questions": [
+        "Are signal properties stable across sessions?",
+        "Are apparent edges concentrated in one narrow time bucket?"
+      ]
+    },
+    "execution_economics": {
+      "indicators": [
+        "spread_to_expected_range",
+        "fee_to_expected_range",
+        "observed_latency",
+        "quote_staleness",
+        "signal_half_life",
+        "expected_move_after_costs"
+      ],
+      "questions": [
+        "Is a statistically predictive state economically tradeable?",
+        "How much of gross predictability survives realistic friction?"
+      ]
+    }
+  },
+  "synthesis_rules": {
+    "primary_objective": "incremental predictive information about future market state and net executable expectancy, not standalone in-sample profit factor",
+    "minimum_condition_observations": 20,
+    "minimum_independent_batches": 3,
+    "minimum_positive_batch_fraction": 0.6666666667,
+    "require_positive_net_expectancy_after_costs": true,
+    "require_pf_above_one_after_costs_for_trade_condition": true,
+    "compare_against_family_baseline": true,
+    "compare_original_vs_reversed": true,
+    "redundancy_control": [
+      "report correlation/association among candidate indicators",
+      "prefer one representative from highly redundant indicator clusters",
+      "measure incremental lift after conditioning on already-selected regime variables"
+    ],
+    "multiple_testing": "All promoted condition hypotheses must enter the trial accounting/freeze workflow before later validation.",
+    "transfer": "Cross-pair tests use unchanged definitions and are transfer evidence only until a new frozen candidate is evaluated on later untouched data."
+  },
+  "anti_overfit_rules": [
+    "Do not change indicator definitions or bucket boundaries because one batch looked attractive.",
+    "Do not select the best of many indicators solely by maximum PF.",
+    "Do not combine indicators unless each adds incremental information or a pre-specified interaction hypothesis exists.",
+    "Do not label already-inspected historical periods as OOS.",
+    "Do not use strategy PnL to choose the initial cross-pair universe.",
+    "Do not weaken transaction-cost assumptions to rescue an indicator."
+  ]
+}
