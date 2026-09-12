@@ -1,0 +1,52 @@
+name: DeerFlow Migration Smoke
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "integrations/deerflow/**"
+      - "tests/test_deerflow_migration_assets.py"
+      - ".github/workflows/deerflow-migration-smoke.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "43 6 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  upstream-compatibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout order-flow project
+        uses: actions/checkout@v4
+        with:
+          path: orderflow_edge_lab
+      - name: Clone current DeerFlow main
+        run: git clone --depth 1 https://github.com/bytedance/deer-flow.git deer-flow
+      - name: Verify official DeerFlow root contract
+        run: |
+          test -f deer-flow/Makefile
+          test -d deer-flow/backend
+          test -d deer-flow/frontend
+          test -f deer-flow/config.example.yaml
+      - name: Exercise official config bootstrap boundary
+        working-directory: deer-flow
+        run: |
+          test ! -f config.yaml
+          make config
+          test -f config.yaml
+      - name: Install migrated custom skill layout
+        run: |
+          mkdir -p deer-flow/skills/custom
+          cp -R orderflow_edge_lab/integrations/deerflow/skills/custom/orderflow-research deer-flow/skills/custom/
+          test -f deer-flow/skills/custom/orderflow-research/SKILL.md
+          test -f deer-flow/skills/custom/orderflow-research/references/project-context.md
+          test -f deer-flow/skills/custom/orderflow-research/references/commands.md
+          test -f deer-flow/skills/custom/orderflow-research/references/hourly-research-task.md
+      - name: Confirm no launch or credentials required
+        run: |
+          grep -q '^models:' deer-flow/config.yaml
+          test ! -f deer-flow/.env
+          echo "DeerFlow migration bootstrap compatibility passed; services were not started."
