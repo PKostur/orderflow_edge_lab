@@ -34,7 +34,7 @@ jobs:
             --symbol BTC_USDT \
             --duration-seconds 900 \
             --output-dir artifacts/orderflow
-      - name: Run frozen discovery-v1 backtest
+      - name: Run frozen discovery-v1 backtest and pre-registered condition analysis
         shell: bash
         run: |
           FEATURE=$(find artifacts/orderflow -name '*_mexc_features.jsonl' -print -quit)
@@ -43,6 +43,10 @@ jobs:
             --symbol ENA_USDT \
             --context-symbol BTC_USDT \
             --output artifacts/orderflow/backtest.json
+          orderflow-market-conditions "$FEATURE" \
+            --symbol ENA_USDT \
+            --context-symbol BTC_USDT \
+            --output artifacts/orderflow/conditions.json
       - name: Run paired directional control and stop-based risk experiment
         shell: bash
         run: |
@@ -81,6 +85,13 @@ jobs:
           orderflow-discovery-aggregate "${REPORTS[@]}" \
             --protocol config/orderflow_discovery_v1.json \
             --output artifacts/orderflow/discovery_aggregate.json
+
+          CONDITION_REPORTS=(artifacts/orderflow/conditions.json)
+          while IFS= read -r REPORT; do
+            CONDITION_REPORTS+=("$REPORT")
+          done < <(find prior -type f -name conditions.json | sort)
+          orderflow-condition-aggregate "${CONDITION_REPORTS[@]}" \
+            --output artifacts/orderflow/condition_aggregate.json
       - name: Preserve compact discovery report
         if: always()
         uses: actions/upload-artifact@v4
@@ -90,7 +101,9 @@ jobs:
             artifacts/orderflow/backtest.json
             artifacts/orderflow/direction_pair.json
             artifacts/orderflow/stop_risk.json
+            artifacts/orderflow/conditions.json
             artifacts/orderflow/discovery_aggregate.json
+            artifacts/orderflow/condition_aggregate.json
             config/orderflow_discovery_v1.json
           if-no-files-found: warn
           retention-days: 14
