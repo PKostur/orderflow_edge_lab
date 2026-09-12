@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "protocol_name": "regime-research-v1.1",
+  "supersedes_for_forward_screening_only": "regime-research-v1",
+  "status": "forward_discovery_only",
+  "frozen_at_utc": "2026-09-12T20:55:00Z",
+  "evidence_start_batch_id": "20260912T210000Z",
+  "purpose": "Harden cross-batch market-state screening without changing regime-research-v1 scans or discovery-v1 strategy definitions. Future batches must show both directional stability and a minimum practical rank-association magnitude before a state hypothesis can enter a separate strategy-conditioning research test.",
+  "development_context": "The pre-freeze regime-research-v1 implementation labeled cross-batch association stability from sign consistency alone. v1.1 is versioned before post-21:00 UTC capture evidence and adds a practical effect-size floor plus more independent dependence clusters. Previously inspected batches remain development context and are excluded from v1.1 eligibility.",
+  "state_screen": {
+    "minimum_independent_batches": 5,
+    "minimum_dominant_sign_fraction": 0.8,
+    "minimum_association_observations_per_batch": 20,
+    "minimum_median_abs_spearman": 0.10,
+    "minimum_median_abs_partial_spearman": 0.10,
+    "redundancy_abs_spearman_threshold": 0.80,
+    "effect_size_note": "The absolute Spearman floor is a practical screening threshold, not a calibrated significance test or profitability threshold."
+  },
+  "sequencing": {
+    "market_state_prediction_first": true,
+    "strategy_pnl_may_be_tested_only_after_state_screen": true,
+    "strategy_conditioning_requires_separate_predeclared_test": true,
+    "state_screen_does_not_auto_promote_trade_filter": true
+  },
+  "redundancy_and_incremental_information": {
+    "representative_selection": "Use the existing PnL-independent highest independent-batch availability rule for highly redundant clusters.",
+    "second_feature_rule": "A second feature from a redundant cluster must independently pass the forward partial-Spearman effect and sign-stability screen, or have a separately pre-specified interaction rationale before later evidence is inspected."
+  },
+  "multiple_testing": "Any state hypothesis advanced into strategy-conditioning research must be frozen and entered into trial accounting before later strategy evidence is inspected. This state screen itself does not claim statistical significance.",
+  "claims": {
+    "changes_regime_research_v1_scan_definitions": false,
+    "changes_discovery_v1_strategy_definitions": false,
+    "uses_strategy_pnl_for_state_selection": false,
+    "previously_inspected_batches_eligible": false,
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  }
+}
