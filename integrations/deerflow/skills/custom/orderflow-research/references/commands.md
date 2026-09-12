@@ -71,6 +71,56 @@ orderflow-stop-risk "$FEATURE" \
 
 This is the preferred risk experiment when discussing percent equity at risk. The technical stop is defined causally from recent observed BBO structure with a minimum spread multiple. Position exposure is sized from `technical stop bps + stated round-trip fee bps`, not stop distance alone, then capped by `--max-exposure`. The report records executable-path MAE/MFE, stop/target/time exits, realized drawdown, profit factor, and original/reversed streams. It still does not model liquidation price, maintenance margin, funding, or market impact, so it is not a live-leverage simulator.
 
+## Pre-registered market-condition analysis
+
+```bash
+orderflow-market-conditions \
+  artifacts/batch_01/mexc_features.jsonl \
+  artifacts/batch_02/mexc_features.jsonl \
+  --symbol ENA_USDT \
+  --context-symbol BTC_USDT \
+  --output artifacts/conditions.json
+```
+
+This stratifies the frozen order-flow signals by pre-registered signal-time conditions: spread, 15-second range-to-spread, 15-second absolute-return-to-spread, rolling trade intensity, BTC-flow alignment, signal-strength multiple, and UTC session. It reports pooled PF plus independent-batch consistency. A condition is not eligible to guide pair screening until it has at least 20 observations across at least 3 independent batches, PF above 1, positive net expectancy, and positive expectancy in at least two thirds of contributing batches.
+
+Aggregate compact condition reports without retaining every raw capture:
+
+```bash
+orderflow-condition-aggregate \
+  artifacts/batch_01/conditions.json \
+  artifacts/batch_02/conditions.json \
+  artifacts/batch_03/conditions.json \
+  --output artifacts/condition_aggregate.json
+```
+
+## Cross-pair transfer research
+
+Screen current MEXC USDT perpetuals by market compatibility only:
+
+```bash
+orderflow-pair-screen \
+  --top 4 \
+  --max-spread-bps 5 \
+  --min-turnover-usdt 10000000 \
+  --output artifacts/pair_screen.json
+```
+
+The screen excludes ENA, which is the discovery market, and BTC, which remains the context market. It uses BBO validity, current spread, 24h quote turnover, and nonzero range. Strategy PnL is never used to choose pairs and `apiAllowed` is recorded rather than required for public research.
+
+The workflow `.github/workflows/cross-pair-transfer.yml` captures the selected four pairs plus BTC simultaneously, then applies the unchanged discovery-v1 thresholds and BTC context to every pair. Each pair receives an original-versus-reversed control and the same market-condition analysis. No thresholds may be tuned per pair.
+
+Aggregate a completed transfer run with:
+
+```bash
+orderflow-cross-pair \
+  --screen artifacts/cross_pair/pair_screen.json \
+  --results-dir artifacts/cross_pair \
+  --output artifacts/cross_pair/cross_pair_summary.json
+```
+
+Cross-pair results are transfer evidence, not untouched OOS evidence for a condition discovered on ENA.
+
 ## Historical 15m EMA20/EMA50 hypothesis
 
 ```bash
@@ -164,6 +214,7 @@ Important workflows currently include:
 - `.github/workflows/multi-agent-hardening.yml`
 - `.github/workflows/orderflow-continuous-discovery.yml`
 - `.github/workflows/orderflow-exploratory.yml`
+- `.github/workflows/cross-pair-transfer.yml`
 
 Prefer reviewing workflow artifacts and source hashes over manually copying summary numbers.
 

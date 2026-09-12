@@ -27,12 +27,21 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install
-        run: python -m pip install -e .
+        run: python -m pip install -e .[research]
       - name: Run specialist agents and release manager
         run: orderflow-multi-agent --output artifacts/multi_agent_report.json
-      - name: Verify report manifest
-        run: python -c "import json; from orderflow_edge_lab.multi_agent import verify_report; r=json.load(open('artifacts/multi_agent_report.json', encoding='utf-8')); assert verify_report(r)"
+      - name: Verify report manifest and release gate
+        run: |
+          python - <<'PY'
+          import json
+          from orderflow_edge_lab.multi_agent import verify_report
+          report = json.load(open('artifacts/multi_agent_report.json', encoding='utf-8'))
+          assert verify_report(report), 'multi-agent manifest verification failed'
+          status = report['release_manager']['status']
+          assert status != 'blocked', f'multi-agent release manager blocked the change: {report["release_manager"]["next_actions"]}'
+          PY
       - name: Upload evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: multi-agent-hardening-report
