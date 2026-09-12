@@ -1,0 +1,46 @@
+name: Order-Flow Exploratory Backtest
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fresh-mexc-sample:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .
+      - name: Capture fresh public ENA/BTC order flow
+        run: |
+          mkdir -p artifacts/orderflow
+          orderflow-mexc-record \
+            --symbol ENA_USDT \
+            --symbol BTC_USDT \
+            --duration-seconds 120 \
+            --output-dir artifacts/orderflow
+      - name: Run pre-specified exploratory event backtest
+        shell: bash
+        run: |
+          FEATURE=$(find artifacts/orderflow -name '*_mexc_features.jsonl' -print -quit)
+          test -n "$FEATURE"
+          orderflow-backtest "$FEATURE" \
+            --symbol ENA_USDT \
+            --context-symbol BTC_USDT \
+            --output artifacts/orderflow/backtest.json
+      - name: Preserve capture and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fresh-mexc-orderflow-exploratory
+          path: artifacts/orderflow/
+          if-no-files-found: warn
+          retention-days: 14
