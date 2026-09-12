@@ -21,17 +21,20 @@ def _frame(rows: int = 500, *, trending: bool = True) -> pd.DataFrame:
 
 
 class StrategyTournamentTests(unittest.TestCase):
-    def test_donchian_uses_prior_range_not_current_bar(self):
+    def test_donchian_entries_use_prior_range_not_current_bar(self):
         frame = _frame(150, trending=False)
         lookback = 20
         target = generate_target_position(frame, "donchian_breakout", {"lookback": lookback})
         prior_high = frame["high"].rolling(lookback, min_periods=lookback).max().shift(1)
         prior_low = frame["low"].rolling(lookback, min_periods=lookback).min().shift(1)
-        for idx in frame.index[lookback + 1 :]:
-            if target.loc[idx] == 1:
-                self.assertGreater(frame.loc[idx, "close"], prior_high.loc[idx])
-            if target.loc[idx] == -1:
-                self.assertLess(frame.loc[idx, "close"], prior_low.loc[idx])
+        previous = target.shift(1).fillna(0.0)
+        entered_long = (target == 1.0) & (previous != 1.0)
+        entered_short = (target == -1.0) & (previous != -1.0)
+        self.assertGreater(int(entered_long.sum() + entered_short.sum()), 0)
+        for idx in frame.index[entered_long]:
+            self.assertGreater(frame.loc[idx, "close"], prior_high.loc[idx])
+        for idx in frame.index[entered_short]:
+            self.assertLess(frame.loc[idx, "close"], prior_low.loc[idx])
 
     def test_higher_execution_cost_cannot_improve_same_backtest_return(self):
         frame = _frame(700, trending=True)
