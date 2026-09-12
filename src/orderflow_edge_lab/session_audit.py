@@ -6,12 +6,7 @@ import json
 from pathlib import Path
 from typing import Any, Mapping
 
-from .runtime_snapshot import (
-    RuntimeSnapshotError,
-    _load_state,
-    _runtime_blockers,
-    _sha256_payload,
-)
+from .runtime_snapshot import _load_state, _runtime_blockers, _sha256_payload
 
 UTC = timezone.utc
 
@@ -106,10 +101,7 @@ def close_paper_session(
             blockers.append("journal_history_rewritten")
         appended = journal[boundary:]
 
-    try:
-        appended_count, event_counts = _parse_appended_events(appended)
-    except SessionAuditError:
-        raise
+    appended_count, event_counts = _parse_appended_events(appended)
 
     start_revision = snapshot.get("state_revision")
     end_revision = state.get("revision")
@@ -126,8 +118,12 @@ def close_paper_session(
     if state.get("trading_day") != snapshot.get("trading_day"):
         blockers.append("trading_day_changed")
 
-    runtime_blockers = _runtime_blockers(state, state_path, journal_path, current)
+    try:
+        runtime_blockers = _runtime_blockers(state, state_path, journal_path, current)
+    except (OSError, ValueError, TypeError, KeyError):
+        runtime_blockers = ["runtime_audit_failed"]
     blockers.extend(runtime_blockers)
+
     pending_ids = sorted(state.get("pending", {}))
     position_ids = sorted(state.get("positions", {}))
     if require_flat and (pending_ids or position_ids):
