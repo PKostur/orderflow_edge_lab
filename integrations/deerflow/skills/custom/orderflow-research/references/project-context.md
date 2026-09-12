@@ -19,6 +19,8 @@ The original discretionary edge hypothesis came from 1-minute ENA price behavior
 
 The old price/HTF system showed some positive gross behavior in places, but transaction costs materially weakened or erased expectancy. Therefore order flow is being tested primarily as a selective filter and timing signal, not assumed to be a standalone profitable strategy.
 
+A user recollection says an earlier TradingView indicator comparison may have favored a 15-minute EMA20/EMA50 crossover/regime. That exact historical result has not been independently recovered from saved artifacts. Preserved project templates more commonly reference EMA9/EMA21, while the preserved August HTF Python test used completed-candle SMA20 price/slope variants on 15m and 1h. Therefore EMA20/EMA50 must be treated as a new hypothesis until directly supported by preserved evidence.
+
 ## Current order-flow research
 
 The repository contains:
@@ -32,6 +34,9 @@ The repository contains:
 - liquidity additions/pulls and depth-flow imbalance;
 - ENA/BTC joint capture;
 - spread-aware event backtesting;
+- original-versus-reversed paired execution controls;
+- effective-exposure stress testing;
+- stop-based percent-equity risk testing with executable-path MAE/MFE;
 - discovery aggregation by independent capture batch;
 - DeepCharts/dxFeed export audit/bundling adapters;
 - immutable research/candidate/holdout provenance;
@@ -56,9 +61,17 @@ Do not silently retune this protocol batch by batch.
 
 Current discovery treats each fresh capture batch as the primary dependence cluster rather than treating every nearby signal as independent evidence.
 
+## Risk research
+
+When percent equity risk is requested, prefer the stop-based experiment rather than equating leverage with risk. The current exploratory stop model uses recent causally observed BBO structure, a minimum stop distance expressed in current spreads, executable bid/ask path traversal, a 30-second time stop, RR targets 1R/2R/3R, and requested equity-risk levels 0.25% through 5%.
+
+Position exposure must be sized from both the technical stop distance and the stated round-trip transaction-cost hurdle. Do not size from stop distance alone when costs are material relative to the stop. Apply an explicit exposure cap. The experiment reports MAE/MFE and realized drawdown, but does not model liquidation price, maintenance margin, funding, or market impact, so it is not a deployable leverage model.
+
 ## Current empirical status
 
-A short clean pilot showed small positive raw microprice response around the 5 to 15 second horizon in one sample, but the effect did not survive the 4 bps additional cost hurdle. This is exploratory only. No profitable edge has been established.
+Short clean order-flow pilots have shown small directional asymmetry, especially where original book/microprice signals outperform fully reversed controls, but the effects have not established positive executable expectancy after realistic costs. This is exploratory only. No profitable edge has been established.
+
+A development-only historical test on the already-inspected August ENA/BTC minute data is being used to compare the preserved Bollinger/BTC baseline with a completed-candle 15-minute EMA20/EMA50 direction filter. Because the period has already been inspected in prior work, any favorable result is development evidence only, never OOS.
 
 Continuous discovery captures fresh public ENA/BTC order flow under the frozen protocol. Later candidate creation must freeze a new specification before untouched validation data is examined.
 
@@ -99,7 +112,9 @@ Prioritize:
 - validating DeepCharts/dxFeed data adapters when real exports are available;
 - testing whether order-flow features improve executable expectancy rather than only direction accuracy;
 - checking 5 to 15 second predictive decay without threshold-chasing;
-- eventually evaluating order flow as a filter for the 1-minute Bollinger + 15m/1h bias + BTC-context setup;
+- measuring stop-based MAE/MFE and cost-aware position sizing rather than raw leverage alone;
+- evaluating the 15m EMA20/EMA50 idea as a separately labeled development hypothesis;
+- eventually evaluating order flow as a filter for the 1-minute Bollinger + HTF bias + BTC-context setup;
 - preserving immutable provenance and untouched validation windows.
 
 Infrastructure hardening is secondary unless a reliability issue blocks trustworthy research.
