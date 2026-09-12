@@ -76,6 +76,33 @@ def build_signal_weights(
     return signal
 
 
+def _daily_funding_return(
+    weights: pd.DataFrame,
+    funding_frames: Mapping[str, pd.DataFrame] | None,
+) -> pd.Series:
+    out = pd.Series(0.0, index=weights.index, dtype=float)
+    if not funding_frames or len(weights) < 2:
+        return out
+    for i in range(len(weights) - 1):
+        start = weights.index[i]
+        end = weights.index[i + 1]
+        contribution = 0.0
+        for symbol in weights.columns:
+            weight = float(weights.iloc[i][symbol])
+            if abs(weight) <= 1e-15:
+                continue
+            frame = funding_frames.get(symbol)
+            if frame is None or frame.empty or "funding_rate" not in frame.columns:
+                continue
+            # Only credit/debit funding strictly inside the interval so a position is unquestionably held across settlement.
+            mask = (frame.index > start) & (frame.index < end)
+            rate_sum = float(pd.to_numeric(frame.loc[mask, "funding_rate"], errors="coerce").fillna(0.0).sum())
+            # Positive rate: longs pay and shorts receive.
+            contribution += -weight * rate_sum
+        out.iloc[i] = contribution
+    return out
+
+
 def backtest_cross_sectional_momentum(
     frames: Mapping[str, pd.DataFrame],
     *,
@@ -85,6 +112,7 @@ def backtest_cross_sectional_momentum(
     variant: str,
     round_trip_cost_bps: float,
     fold_days: int,
+    funding_frames: Mapping[str, pd.DataFrame] | None = None,
 ) -> dict[str, Any]:
     opens, closes = _align_frames(frames)
     signal_weights = build_signal_weights(
@@ -97,7 +125,9 @@ def backtest_cross_sectional_momentum(
     # A signal formed on the completed close at t is first executable at open(t+1).
     weights = signal_weights.shift(1).fillna(0.0)
     next_open_returns = opens.shift(-1) / opens - 1.0
-    gross_daily = (weights * next_open_returns).sum(axis=1).fillna(0.0)
+    price_daily = (weights * next_open_returns).sum(axis=1).fillna(0.0)
+    funding_daily = _daily_funding_return(weights, funding_frames)
+    gross_daily = price_daily + funding_daily
     turnover = (weights - weights.shift(1).fillna(0.0)).abs().sum(axis=1)
     side_cost = float(round_trip_cost_bps) / 2.0 / 10_000.0
     net_daily = gross_daily - turnover * side_cost
@@ -106,6 +136,8 @@ def backtest_cross_sectional_momentum(
         net_daily.iloc[-2] -= float(weights.iloc[-2].abs().sum()) * side_cost
     usable = net_daily.iloc[:-1].copy()
     gross_usable = gross_daily.iloc[:-1].copy()
+    price_usable = price_daily.iloc[:-1].copy()
+    funding_usable = funding_daily.iloc[:-1].copy()
     turnover_usable = turnover.iloc[:-1].copy()
     weights_usable = weights.iloc[:-1].copy()
 
@@ -137,6 +169,7 @@ def backtest_cross_sectional_momentum(
                 "sharpe": fold_sharpe,
                 "turnover": float(turnover_usable.iloc[mask].sum()),
                 "rebalances": int((turnover_usable.iloc[mask] > 1e-12).sum()),
+                "funding_return_sum": float(funding_usable.iloc[mask].sum()),
             }
         )
     fold_returns = [float(row["net_return"]) for row in folds]
@@ -159,11 +192,14 @@ def backtest_cross_sectional_momentum(
         "holding_days": int(holding_days),
         "quantile_fraction": float(quantile_fraction),
         "round_trip_cost_bps": float(round_trip_cost_bps),
+        "funding_included": bool(funding_frames),
         "symbols": list(opens.columns),
         "start": usable.index.min().isoformat(),
         "end": usable.index.max().isoformat(),
         "rebalances": rebalances,
         "total_turnover": float(turnover_usable.sum()),
+        "price_return_sum": float(price_usable.sum()),
+        "funding_return_sum": float(funding_usable.sum()),
         "gross_return": float((1.0 + gross_usable).cumprod().iloc[-1] - 1.0),
         "net_return": float(equity.iloc[-1] - 1.0),
         "max_drawdown": float(drawdown.min()),
@@ -178,7 +214,12 @@ def backtest_cross_sectional_momentum(
     }
 
 
-def run_frozen_grid(frames: Mapping[str, pd.DataFrame], protocol: Mapping[str, Any]) -> dict[str, Any]:
+def run_frozen_grid(
+    frames: Mapping[str, pd.DataFrame],
+    protocol: Mapping[str, Any],
+    *,
+    funding_frames: Mapping[str, pd.DataFrame] | None = None,
+) -> dict[str, Any]:
     strategy = protocol["strategy"]
     validation = protocol["validation"]
     rows: list[dict[str, Any]] = []
@@ -192,6 +233,7 @@ def run_frozen_grid(frames: Mapping[str, pd.DataFrame], protocol: Mapping[str, A
                 variant=str(variant),
                 round_trip_cost_bps=float(cost),
                 fold_days=int(validation["fold_days"]),
+                funding_frames=funding_frames,
             )
             eligible = bool(
                 result["rebalances"] >= int(validation["minimum_rebalances"])
