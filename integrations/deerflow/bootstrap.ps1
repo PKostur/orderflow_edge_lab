@@ -1,13 +1,29 @@
 param(
     [string]$DeerFlowRoot = "",
     [string]$OrderflowRoot = "",
-    [switch]$UpdateSkill
+    [switch]$UpdateSkill,
+    [switch]$Launch
 )
 
 $ErrorActionPreference = "Stop"
 
 function Resolve-FullPath([string]$Path) {
     return [System.IO.Path]::GetFullPath((Join-Path (Get-Location) $Path))
+}
+
+function Wait-DeerFlow([string]$Url = "http://localhost:2026", [int]$Attempts = 60) {
+    for ($Attempt = 1; $Attempt -le $Attempts; $Attempt++) {
+        try {
+            $Response = Invoke-WebRequest -Uri $Url -UseBasicParsing -TimeoutSec 5
+            if ($Response.StatusCode -ge 200 -and $Response.StatusCode -lt 500) {
+                Write-Host "DeerFlow responded at $Url with HTTP $($Response.StatusCode)."
+                return
+            }
+        } catch {
+            if ($Attempt -eq $Attempts) { throw "DeerFlow did not become reachable at $Url after launch." }
+        }
+        Start-Sleep -Seconds 2
+    }
 }
 
 $ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -99,9 +115,7 @@ try {
     }
 
     $Commit = "unknown"
-    try {
-        $Commit = (& git -C $OrderflowRoot rev-parse HEAD).Trim()
-    } catch {}
+    try { $Commit = (& git -C $OrderflowRoot rev-parse HEAD).Trim() } catch {}
     $LocalReference = @"
 # Generated local project binding
 
@@ -148,9 +162,27 @@ Use `orderflow_project_root` as the canonical working directory for trading-proj
         Write-Host "Environment variable names referenced by config.yaml: $($ReferencedEnvVars -join ', ')"
         Write-Host "Values were not inspected."
     }
-    Write-Host "Exact next command to launch DeerFlow:"
-    Write-Host "  cd `"$DeerFlowRoot`""
-    Write-Host "  $NextCommand"
+
+    if ($Launch) {
+        if (-not $ModelConfigured) {
+            throw "Launch requested, but config.yaml has no active model entry under models:. Add one model and rerun with -Launch."
+        }
+        if ($DockerReady) {
+            Write-Host "Starting DeerFlow Docker development services..."
+            & make docker-start
+        } else {
+            Write-Host "Starting DeerFlow local development services in daemon mode..."
+            & make dev-daemon
+        }
+        if ($LASTEXITCODE -ne 0) { throw "DeerFlow launch command failed" }
+        Wait-DeerFlow
+        Write-Host "DeerFlow is running at http://localhost:2026"
+    } else {
+        Write-Host "Exact next command to launch DeerFlow:"
+        Write-Host "  cd `"$DeerFlowRoot`""
+        Write-Host "  $NextCommand"
+        Write-Host "Or rerun this bootstrap with -Launch to start and verify DeerFlow automatically."
+    }
 } finally {
     Pop-Location
 }
