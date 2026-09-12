@@ -6,6 +6,11 @@ on:
       - "AGENTS.md"
       - ".agents/**"
       - "integrations/ruflo/**"
+      - "integrations/deerflow/**"
+      - "src/**"
+      - "tests/**"
+      - "config/**"
+      - "pyproject.toml"
       - ".github/workflows/ruflo-compatibility.yml"
       - ".gitignore"
   schedule:
