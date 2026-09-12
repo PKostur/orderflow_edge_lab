@@ -1,0 +1,72 @@
+name: ENA Mean Reversion Risk v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/ena-mean-reversion-risk-v1]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ena-mean-reversion-risk-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  risk-development:
+    name: risk-development
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run focused risk regression tests
+        run: python -m unittest tests.test_ena_mean_reversion_risk -v
+      - name: Fetch target-venue history and run bounded risk grid
+        run: |
+          mkdir -p artifacts/ena_risk_v1
+          orderflow-ena-mean-reversion-risk \
+            --config config/ena_mean_reversion_risk_v1.json \
+            --source-output artifacts/ena_risk_v1/ENA_USDT_1h.csv \
+            --output artifacts/ena_risk_v1/report.json
+      - name: Adversarial claim check
+        run: |
+          python - <<'PY'
+          import json
+          report=json.load(open('artifacts/ena_risk_v1/report.json', encoding='utf-8'))
+          claims=report['claims']
+          forbidden=[
+              claims.get('profitable_edge_established'),
+              claims.get('untouched_oos_completed'),
+              claims.get('live_order_transmission_supported'),
+          ]
+          if any(forbidden):
+              raise SystemExit('development risk report made a forbidden promotion/live claim')
+          ref=report['reference_risk_variant']
+          print(json.dumps({
+              'reference_risk_variant': ref,
+              'baseline_full_period': report['baseline']['full_period'],
+              'baseline_excursions': report['baseline_excursions'],
+          }, indent=2))
+          PY
+      - name: Run deterministic multi-agent release gate
+        run: |
+          orderflow-multi-agent --output artifacts/ena_risk_v1/multi_agent_report.json
+          python - <<'PY'
+          import json
+          report=json.load(open('artifacts/ena_risk_v1/multi_agent_report.json', encoding='utf-8'))
+          if report['release_manager']['status'] != 'reviewable':
+              raise SystemExit('deterministic release manager blocked risk evidence')
+          PY
+      - name: Preserve complete risk evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ena-mean-reversion-risk-v1
+          path: artifacts/ena_risk_v1/
+          retention-days: 30
+          if-no-files-found: error
