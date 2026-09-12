@@ -22,6 +22,7 @@ class PairScreenConfig:
     min_turnover_usdt_24h: float = 10_000_000.0
     quote_coin: str = "USDT"
     context_symbol: str = "BTC_USDT"
+    exclude_symbols: tuple[str, ...] = ("ENA_USDT",)
     exclude_stable_bases: bool = True
     rest_base: str = DEFAULT_REST_BASE
 
@@ -73,9 +74,11 @@ def screen_pairs(config: PairScreenConfig = PairScreenConfig()) -> dict[str, Any
     base = config.rest_base.rstrip("/")
     details = _detail_map(_fetch_json(f"{base}/api/v1/contract/detail"))
     tickers = _ticker_rows(_fetch_json(f"{base}/api/v1/contract/ticker"))
+    explicit_excludes = {symbol.upper() for symbol in config.exclude_symbols}
+    explicit_excludes.add(config.context_symbol.upper())
     rows: list[dict[str, Any]] = []
     for ticker in tickers:
-        symbol = str(ticker.get("symbol") or "")
+        symbol = str(ticker.get("symbol") or "").upper()
         detail = details.get(symbol, {})
         base_coin = str(detail.get("baseCoin") or (symbol.split("_")[0] if "_" in symbol else ""))
         quote_coin = str(detail.get("quoteCoin") or (symbol.split("_")[1] if "_" in symbol else ""))
@@ -93,8 +96,8 @@ def screen_pairs(config: PairScreenConfig = PairScreenConfig()) -> dict[str, Any
         if last is not None and last > 0 and high24 is not None and low24 is not None and high24 >= low24:
             range24_bps = (high24 - low24) / last * 10_000.0
         reasons: list[str] = []
-        if symbol == config.context_symbol:
-            reasons.append("context_symbol")
+        if symbol in explicit_excludes:
+            reasons.append("explicitly_excluded_symbol")
         if quote_coin != config.quote_coin:
             reasons.append("wrong_quote_coin")
         if config.exclude_stable_bases and base_coin in STABLE_BASES:
@@ -136,7 +139,7 @@ def screen_pairs(config: PairScreenConfig = PairScreenConfig()) -> dict[str, Any
             "quote_coin": config.quote_coin,
             "max_spread_bps": config.max_spread_bps,
             "min_turnover_usdt_24h": config.min_turnover_usdt_24h,
-            "context_symbol_excluded": config.context_symbol,
+            "excluded_symbols": sorted(explicit_excludes),
             "exclude_stable_bases": config.exclude_stable_bases,
             "ranking": "descending 24h quote turnover after hard compatibility filters",
             "backtest_performance_used_for_selection": False,
