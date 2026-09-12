@@ -27,51 +27,56 @@ From the `orderflow_edge_lab` repository root:
 .\integrations\deerflow\bootstrap.ps1
 ```
 
-The script is intentionally idempotent. It:
+The script is intentionally idempotent. It clones DeerFlow when absent, follows the repository's official config and install path, installs the `orderflow-research` custom skill, binds the real local trading-repo path, and preserves existing config/secrets.
 
-1. clones `https://github.com/bytedance/deer-flow.git` into a sibling `deer-flow` directory when absent;
-2. verifies `Makefile`, `backend/`, `frontend/`, and `config.example.yaml`;
-3. runs `make config` only when `config.yaml` is absent;
-4. checks whether `docker info` succeeds;
-5. uses `make docker-init` when Docker is available, otherwise runs `make check` then `make install`;
-6. copies the `orderflow-research` skill into DeerFlow's `skills/custom/` directory;
-7. writes a generated `references/local-project.md` with the real local repository paths and current trading-project commit;
-8. reports model/environment-variable names referenced by `config.yaml` without opening secret-bearing `.env` files;
-9. prints the exact launch command required by DeerFlow's official install boundary.
+Because this project explicitly requires launch verification, the bootstrap can also start DeerFlow and verify that `http://localhost:2026` responds:
+
+```powershell
+.\integrations\deerflow\bootstrap.ps1 -Launch
+```
+
+When Docker is available this uses `make docker-start`. Without Docker it uses DeerFlow's `make dev-daemon` after the official local install succeeds. Launch mode refuses to continue when no active model is configured.
 
 To deliberately refresh the installed custom skill from this repo later:
 
 ```powershell
-.\integrations\deerflow\bootstrap.ps1 -UpdateSkill
+.\integrations\deerflow\bootstrap.ps1 -UpdateSkill -Launch
 ```
 
 ## Bootstrap on macOS / Linux / Git Bash
+
+Setup only:
 
 ```bash
 bash integrations/deerflow/bootstrap.sh
 ```
 
+Setup, launch, and HTTP verification:
+
+```bash
+LAUNCH=1 bash integrations/deerflow/bootstrap.sh
+```
+
 To refresh the installed custom skill:
 
 ```bash
-UPDATE_SKILL=1 bash integrations/deerflow/bootstrap.sh
+UPDATE_SKILL=1 LAUNCH=1 bash integrations/deerflow/bootstrap.sh
 ```
 
-## Expected setup result
+## What the bootstrap follows
 
-If Docker is installed and the daemon is reachable, the setup stops after `make docker-init`. The next launch command is:
+The bootstrap mirrors DeerFlow's official `Install.md` decisions:
 
-```bash
-make docker-start
-```
+- validates the DeerFlow repository root;
+- runs `make config` only if `config.yaml` is absent;
+- detects Docker with `docker info`;
+- uses `make docker-init` for the Docker path;
+- otherwise runs `make check` and `make install` for local development;
+- does not invent model credentials;
+- does not inspect secret-bearing `.env` files;
+- preserves existing configuration values.
 
-If Docker is unavailable but local prerequisites pass, the setup runs `make install`. The next launch command is:
-
-```bash
-make dev
-```
-
-This follows DeerFlow's official `Install.md` boundary rather than leaving long-running services behind during setup.
+Without launch mode it prints the exact official next command. With launch mode it starts services and polls `http://localhost:2026` until DeerFlow responds or the verification fails.
 
 ## Model configuration
 
@@ -87,7 +92,7 @@ After DeerFlow is launched, activate the custom skill explicitly when you want t
 /orderflow-research Continue the ENA/BTC order-flow research. Inspect the latest repository and discovery evidence, delegate the specialist reviews, and implement the highest-value safe next step.
 ```
 
-The skill's references carry the project history, current research protocol, command map, multi-agent role boundaries, and safety/promotion rules.
+The skill's references carry the project history, current research protocol, command map, multi-agent role boundaries, safety/promotion rules, and the migrated recurring research task.
 
 ## Source-of-truth rule
 

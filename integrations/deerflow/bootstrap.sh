@@ -5,6 +5,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ORDERFLOW_ROOT="${ORDERFLOW_ROOT:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
 DEERFLOW_ROOT="${DEERFLOW_ROOT:-$(cd "$ORDERFLOW_ROOT/.." && pwd)/deer-flow}"
 UPDATE_SKILL="${UPDATE_SKILL:-0}"
+LAUNCH="${LAUNCH:-0}"
 
 printf 'Order-flow repo: %s\n' "$ORDERFLOW_ROOT"
 printf 'DeerFlow repo:   %s\n' "$DEERFLOW_ROOT"
@@ -40,7 +41,9 @@ else
   echo "config.yaml already exists; leaving existing values unchanged."
 fi
 
+DOCKER_READY=0
 if command -v docker >/dev/null 2>&1 && docker info >/dev/null 2>&1; then
+  DOCKER_READY=1
   echo "Docker daemon detected. Preparing DeerFlow Docker prerequisites..."
   make docker-init
   SETUP_PATH="Docker"
@@ -120,6 +123,39 @@ if [[ -n "$ENV_NAMES" ]]; then
   printf 'Environment variable names referenced by config.yaml: %s\n' "$ENV_NAMES"
   echo "Values were not inspected."
 fi
-echo "Exact next command to launch DeerFlow:"
-printf '  cd %q\n' "$DEERFLOW_ROOT"
-printf '  %s\n' "$NEXT_COMMAND"
+
+if [[ "$LAUNCH" == "1" ]]; then
+  if [[ "$MODEL_CONFIGURED" != "1" ]]; then
+    echo "Launch requested, but config.yaml has no active model entry under models:. Add one model and rerun with LAUNCH=1." >&2
+    exit 1
+  fi
+  if [[ "$DOCKER_READY" == "1" ]]; then
+    echo "Starting DeerFlow Docker development services..."
+    make docker-start
+  else
+    echo "Starting DeerFlow local development services in daemon mode..."
+    make dev-daemon
+  fi
+  python3 - <<'PY'
+import time
+import urllib.request
+url = "http://localhost:2026"
+for attempt in range(60):
+    try:
+        with urllib.request.urlopen(url, timeout=5) as response:
+            status = int(response.status)
+        if 200 <= status < 500:
+            print(f"DeerFlow responded at {url} with HTTP {status}.")
+            raise SystemExit(0)
+    except Exception:
+        if attempt == 59:
+            raise SystemExit(f"DeerFlow did not become reachable at {url} after launch")
+    time.sleep(2)
+PY
+  echo "DeerFlow is running at http://localhost:2026"
+else
+  echo "Exact next command to launch DeerFlow:"
+  printf '  cd %q\n' "$DEERFLOW_ROOT"
+  printf '  %s\n' "$NEXT_COMMAND"
+  echo "Or rerun this bootstrap with LAUNCH=1 to start and verify DeerFlow automatically."
+fi
