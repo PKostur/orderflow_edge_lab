@@ -8,7 +8,7 @@
         "src/orderflow_edge_lab/adapters.py",
         "src/orderflow_edge_lab/data_lineage.py",
         "src/orderflow_edge_lab/dxfeed_bbo.py",
-        "src/orderflow_edge_lab/mexc.py"
+        "src/orderflow_edge_lab/mexc_orderflow.py"
       ],
       "forbidden_claims": []
     },
@@ -16,7 +16,7 @@
       "id": "research_validity",
       "focus": "Discovery/validation/holdout separation, candidate freezing, trial accounting, causal audits, realistic economics, and promotion evidence",
       "required_paths": [
-        "src/orderflow_edge_lab/research_freeze.py",
+        "src/orderflow_edge_lab/research_protocol.py",
         "src/orderflow_edge_lab/candidate_freeze.py",
         "src/orderflow_edge_lab/holdout_audit.py",
         "src/orderflow_edge_lab/trial_ledger.py",
