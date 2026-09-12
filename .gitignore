@@ -17,3 +17,14 @@ data/private/
 data/mexc_orderflow/
 *.partial
 .DS_Store
+
+# Ruflo/Codex local runtime and generated integration state.
+.claude/
+.claude-flow/
+.codex/
+.mcp.json
+CLAUDE.md
+.agents/config.toml
+.agents/skills/*
+!.agents/skills/orderflow-research/
+!.agents/skills/orderflow-research/SKILL.md
