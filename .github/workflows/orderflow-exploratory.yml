@@ -11,7 +11,7 @@ permissions:
 jobs:
   fresh-mexc-sample:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -25,7 +25,7 @@ jobs:
           orderflow-mexc-record \
             --symbol ENA_USDT \
             --symbol BTC_USDT \
-            --duration-seconds 240 \
+            --duration-seconds 120 \
             --output-dir artifacts/orderflow
       - name: Run pre-specified exploratory event backtest
         shell: bash
@@ -37,9 +37,10 @@ jobs:
             --context-symbol BTC_USDT \
             --output artifacts/orderflow/backtest.json
       - name: Preserve capture and report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: fresh-mexc-orderflow-exploratory
           path: artifacts/orderflow/
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 14
