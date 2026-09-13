@@ -5,6 +5,26 @@
   "frozen_at_utc": "2026-09-13T18:12:00Z",
   "sentiment_protocol": "sentiment-monitor-v1",
   "purpose": "Predeclare how a qualified sentiment state may later be tested as a veto-only conditioning variable against otherwise unchanged frozen strategies.",
+  "target_strategies": [
+    {
+      "strategy_id": "mexc_8h_ema24_96_atr025_v1",
+      "candidate_path": "config/htf_trend_candidate_v1.json",
+      "role": "primary",
+      "reason": "Already frozen multi-symbol directional strategy; sentiment can map causally to long/short entry vetoes without changing the signal generator."
+    },
+    {
+      "strategy_id": "ena_bb40_rsi25_75_atr15_v1",
+      "candidate_path": "config/ena_mean_reversion_candidate_v1.json",
+      "role": "secondary",
+      "reason": "Already frozen ENA directional mean-reversion strategy; provides a coin-specific robustness comparison without creating a new sentiment strategy."
+    }
+  ],
+  "explicit_initial_exclusions": [
+    {
+      "strategy_family": "cross_sectional_momentum",
+      "reason": "A bullish/bearish single-symbol veto does not map cleanly to the frozen rank-based portfolio construction; adding it would require a separately frozen protocol."
+    }
+  ],
   "activation_gates": {
     "sentiment_state_readiness_required": true,
     "minimum_independent_event_clusters": 5,
@@ -23,6 +43,7 @@
     "thresholds_may_be_selected_by_pf_or_expectancy": false
   },
   "conditioning_mapping": {
+    "feature_name": "decayed_headline_sentiment_v1",
     "mode": "veto_only",
     "sentiment_must_be_published_before_strategy_signal": true,
     "maximum_sentiment_age_hours": 6,
@@ -67,6 +88,7 @@
     "The frozen baseline strategy parameters and economics remain unchanged.",
     "Sentiment thresholds cannot be retuned after strategy results are inspected.",
     "The reversed-sentiment arm is retained as an adversarial control rather than discarded when inconvenient.",
+    "The primary and secondary strategy order is frozen before sentiment-conditioned PnL is inspected.",
     "Any historical sentiment backtest is development evidence unless a genuinely untouched holdout was frozen before inspection.",
     "No result from this protocol authorizes live order transmission."
   ],
