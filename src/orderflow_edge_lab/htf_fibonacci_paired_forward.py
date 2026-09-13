@@ -21,7 +21,7 @@ def _trade_stats(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
             "completed_trades": 0,
             "expectancy_bps": None,
             "profit_factor": None,
-            "profit_factor_infinite": false,
+            "profit_factor_infinite": False,
             "win_rate": None,
         }
     gains = float(returns[returns > 0].sum())
