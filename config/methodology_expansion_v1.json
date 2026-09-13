@@ -8,12 +8,12 @@
     "source": "MEXC public futures klines plus public realized funding history where required",
     "target_execution_venue": "MEXC Futures",
     "price_only_start": "2024-01-01T00:00:00Z",
-    "funding_complete_start": "2025-03-22T00:00:00Z",
+    "funding_complete_start": "2025-03-22T16:00:00Z",
     "ena_start": "2024-05-01T00:00:00Z",
     "end_exclusive": "2026-09-12T00:00:00Z",
     "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
     "universe_selection_uses_strategy_pnl": false,
-    "funding_rule": "Funding-aware tests may begin only when all frozen symbols have observed public MEXC funding data; missing pre-coverage funding is never imputed as zero."
+    "funding_rule": "Funding-aware tests may begin only when all frozen symbols have observed public MEXC funding data; missing pre-coverage funding is never imputed as zero. The configured common start reflects the first common observed funding timestamp discovered by the integrity gate, without changing any strategy cell, cost case, or selection rule."
   },
   "methodologies": {
     "lagged_reversal": {
