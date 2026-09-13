@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "protocol_name": "high-cadence-evidence-capture-v1",
+  "status": "forward_data_collection_only",
+  "frozen_at_utc": "2026-09-13T14:35:00Z",
+  "purpose": "Maximize prospective public-market evidence collection without changing any frozen strategy, state threshold, candidate-selection rule, execution economics, or independence definition.",
+  "source": {
+    "venue": "MEXC Futures",
+    "data": "public order flow only",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "universe_selection_uses_strategy_pnl": false
+  },
+  "capture": {
+    "duration_seconds": 900,
+    "scheduled_minutes_utc": [2, 32],
+    "target_cadence_minutes": 30,
+    "raw_artifact_retention_days": 14,
+    "features_artifact_retention_days": 14
+  },
+  "validity": {
+    "capture_only": true,
+    "strategy_pnl_used_for_collection": false,
+    "overlapping_or_close_batches_may_be_counted_as_independent": false,
+    "future_analysis_must_apply_the_frozen_dependence_rules": true,
+    "cross_symbol_rows_from_the_same_time_batch_are_not_independent_time_trials": true,
+    "no_strategy_parameters_changed": true,
+    "no_state_thresholds_changed": true,
+    "no_execution_economics_changed": true
+  },
+  "claims": {
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  }
+}
