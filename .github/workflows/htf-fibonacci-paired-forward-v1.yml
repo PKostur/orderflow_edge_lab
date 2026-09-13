@@ -1,0 +1,139 @@
+name: HTF Fibonacci Paired Forward v1
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [research/htf-fibonacci-paired-forward-v1]
+  schedule:
+    - cron: "53 * * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: htf-fibonacci-paired-forward-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  paired-shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+
+      - name: Verify paired candidate bindings before PnL
+        run: |
+          python - <<'PY'
+          import json
+          from orderflow_edge_lab.htf_trend_forward_shadow import verify_candidate_spec
+
+          base=json.load(open('config/htf_fibonacci_paired_control_v1.json', encoding='utf-8'))
+          fib=json.load(open('config/htf_fibonacci_forward_candidate_v1.json', encoding='utf-8'))
+          original=json.load(open('config/htf_trend_candidate_v1.json', encoding='utf-8'))
+
+          assert verify_candidate_spec(base)
+          assert verify_candidate_spec(fib)
+          assert base['selection_provenance']['source_candidate_spec_sha256'] == original['spec_sha256']
+          assert base['selection_provenance']['paired_fibonacci_candidate_spec_sha256'] == fib['spec_sha256']
+          assert base['forward_signal_start_utc'] == fib['forward_signal_start_utc'] == '2026-09-13T16:00:00Z'
+          assert base['specification'] == fib['specification']
+          assert base['forward_protocol']['position_state_at_boundary'] == 'flat'
+          assert fib['forward_protocol']['position_state_at_boundary'] == 'flat'
+          assert base['forward_protocol']['no_backfill_before_forward_start'] is True
+          assert fib['forward_protocol']['no_backfill_before_forward_start'] is True
+          assert base['claims']['live_order_transmission_supported'] is False
+          assert fib['claims']['live_order_transmission_supported'] is False
+          PY
+
+      - name: Compile and run paired-forward boundary tests
+        run: |
+          python -m py_compile \
+            src/orderflow_edge_lab/htf_fibonacci_paired_forward.py \
+            src/orderflow_edge_lab/cli/htf_fibonacci_paired_forward.py
+          python -m unittest discover -s tests -p 'test_htf_fibonacci_paired_forward.py' -v
+
+      - name: Recompute both prospective paper arms from public MEXC data
+        run: |
+          mkdir -p artifacts/htf_fibonacci_paired_forward/source
+          orderflow-htf-fibonacci-paired-forward \
+            --baseline-candidate config/htf_fibonacci_paired_control_v1.json \
+            --fibonacci-candidate config/htf_fibonacci_forward_candidate_v1.json \
+            --output artifacts/htf_fibonacci_paired_forward/report.json \
+            --source-dir artifacts/htf_fibonacci_paired_forward/source \
+            --max-workers 5
+
+      - name: Enforce contemporaneous forward-only comparison
+        run: |
+          python - <<'PY'
+          import json
+          import pandas as pd
+
+          r=json.load(open('artifacts/htf_fibonacci_paired_forward/report.json', encoding='utf-8'))
+          start=pd.Timestamp(r['forward_signal_start_utc'])
+          asof=pd.Timestamp(r['as_of_utc'])
+          c=r['claims']
+
+          assert r['entry_subset_verified'] is True
+          assert c['contemporaneous_control_frozen_before_first_executable_signal'] is True
+          assert c['same_strategy_economics_except_fibonacci_entry_gate'] is True
+          assert c['paper_shadow_only'] is True
+          assert c['pnl_used_to_retune_or_select_parameters'] is False
+          assert c['verified_profitable_edge'] is False
+          assert c['live_order_transmission_supported'] is False
+
+          for arm in ('baseline','fibonacci'):
+              for row in r[arm]['completed_trades']:
+                  assert pd.Timestamp(row['entry_time']) > start
+              for row in r[arm]['open_positions']:
+                  assert pd.Timestamp(row['entry_time']) > start
+
+          if asof < start + pd.Timedelta(hours=8):
+              assert r['status'] == 'waiting_for_first_executable_forward_signal'
+              assert r['baseline']['trade_stats']['completed_trades'] == 0
+              assert r['fibonacci']['trade_stats']['completed_trades'] == 0
+              assert not r['baseline']['open_positions']
+              assert not r['fibonacci']['open_positions']
+
+          assert r['paired_reviewable'] is False or (
+              r['baseline']['trade_stats']['completed_trades'] >= r['minimum_completed_trades_per_arm_for_edge_review']
+              and r['fibonacci']['trade_stats']['completed_trades'] >= r['minimum_completed_trades_per_arm_for_edge_review']
+          )
+
+          print(json.dumps({
+              'status': r['status'],
+              'as_of_utc': r['as_of_utc'],
+              'paired_reviewable': r['paired_reviewable'],
+              'baseline_net_return': r['baseline']['metrics']['net_return'],
+              'fibonacci_net_return': r['fibonacci']['metrics']['net_return'],
+              'fib_minus_baseline_net_return': r['paired_deltas']['net_return'],
+              'baseline_completed_trades': r['baseline']['trade_stats']['completed_trades'],
+              'fibonacci_completed_trades': r['fibonacci']['trade_stats']['completed_trades'],
+          }, indent=2))
+          PY
+
+      - name: Deterministic multi-agent release gate
+        run: |
+          orderflow-multi-agent --output artifacts/htf_fibonacci_paired_forward/multi_agent_report.json
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/htf_fibonacci_paired_forward/multi_agent_report.json', encoding='utf-8'))
+          if r['release_manager']['status'] != 'reviewable':
+              raise SystemExit('deterministic release manager blocked paired Fibonacci forward comparison')
+          PY
+
+      - name: Preserve paired forward evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: htf-fibonacci-paired-forward-v1
+          path: artifacts/htf_fibonacci_paired_forward/
+          retention-days: 30
+          if-no-files-found: warn
