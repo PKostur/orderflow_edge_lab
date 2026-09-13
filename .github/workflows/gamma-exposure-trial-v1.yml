@@ -37,7 +37,7 @@ jobs:
         run: |
           python -m py_compile src/orderflow_edge_lab/gamma_exposure.py scripts/gamma_exposure_trial_v1.py
           python -m unittest tests.test_gamma_exposure -v
-      - name: Recover prior forward comparison ledger if available
+      - name: Recover prior validated forward comparison ledger if available
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -45,7 +45,15 @@ jobs:
           set -euo pipefail
           rm -rf /tmp/gamma_previous
           mkdir -p /tmp/gamma_previous artifacts/gamma
-          PREV_ID="$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=gamma-exposure-trial-v1&per_page=20" --jq '.artifacts[] | select(.expired == false) | .id' | head -n 1 || true)"
+          PREV_ID=""
+          while IFS=$'\t' read -r ARTIFACT_ID RUN_ID; do
+            [[ -z "${ARTIFACT_ID:-}" || -z "${RUN_ID:-}" ]] && continue
+            CONCLUSION="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}" --jq '.conclusion // ""' 2>/dev/null || true)"
+            if [[ "$CONCLUSION" == "success" ]]; then
+              PREV_ID="$ARTIFACT_ID"
+              break
+            fi
+          done < <(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=gamma-exposure-trial-v1&per_page=20" --jq '.artifacts[] | select(.expired == false) | [.id, .workflow_run.id] | @tsv' || true)
           if [[ -n "$PREV_ID" ]]; then
             gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${PREV_ID}/zip" > /tmp/gamma_previous.zip
             unzip -q /tmp/gamma_previous.zip -d /tmp/gamma_previous
@@ -100,7 +108,7 @@ jobs:
         run: |
           python - <<'PY'
           import json
-          from datetime import datetime, timezone
+          from datetime import datetime
           protocol=json.load(open('config/gamma_exposure_trial_v1.json', encoding='utf-8'))
           snap=json.load(open('artifacts/gamma/snapshot.json', encoding='utf-8'))
           history=json.load(open('artifacts/gamma/comparison_history.json', encoding='utf-8'))
