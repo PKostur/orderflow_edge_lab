@@ -109,6 +109,19 @@ jobs:
             --binding-protocol config/strategy_conditioning_registry_binding_v1.json \
             --conditioning-protocol config/strategy_conditioning_v1_1.json \
             --output artifacts/orderflow/strategy_conditioning_registry_binding_v1.json
+      - name: Freeze PnL-independent market-state thresholds before strategy PnL
+        shell: bash
+        run: |
+          STATE_REPORTS=(artifacts/orderflow/market_state.json)
+          while IFS= read -r REPORT; do
+            STATE_REPORTS+=("$REPORT")
+          done < <(find prior -type f -name market_state.json | sort)
+          orderflow-state-threshold-freeze-v1 \
+            artifacts/orderflow/market_state_aggregate_v1_2.json \
+            artifacts/orderflow/strategy_conditioning_registry_binding_v1.json \
+            "${STATE_REPORTS[@]}" \
+            --protocol config/state_threshold_freeze_v1.json \
+            --output artifacts/orderflow/state_threshold_freeze_v1.json
       - name: Run frozen discovery-v1 backtest and pre-registered condition analysis
         shell: bash
         run: |
@@ -166,6 +179,7 @@ jobs:
             artifacts/orderflow/state_promotion_report_v1_2.json
             artifacts/orderflow/state_candidate_registry_v1.json
             artifacts/orderflow/strategy_conditioning_registry_binding_v1.json
+            artifacts/orderflow/state_threshold_freeze_v1.json
             artifacts/orderflow/backtest.json
             artifacts/orderflow/direction_pair.json
             artifacts/orderflow/stop_risk.json
@@ -178,6 +192,7 @@ jobs:
             config/state_candidate_registry_v1.json
             config/strategy_conditioning_v1_1.json
             config/strategy_conditioning_registry_binding_v1.json
+            config/state_threshold_freeze_v1.json
             config/orderflow_discovery_v1.json
           if-no-files-found: warn
           retention-days: 14

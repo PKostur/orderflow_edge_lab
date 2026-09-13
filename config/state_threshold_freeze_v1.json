@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "protocol_name": "state-threshold-freeze-v1",
+  "status": "predeclared_research_only",
+  "upstream_state_protocol": "regime-research-v1.2",
+  "upstream_binding_protocol": "strategy-conditioning-registry-binding-v1",
+  "downstream_conditioning_protocol": "strategy-conditioning-v1.1",
+  "frozen_after_commit": "307eb59864106f300f86a93d04e4b1ccda398f04",
+  "purpose": "Freeze a PnL-independent market-state bucket mapping for the deterministic v1.2 conditioning candidate before conditioned strategy PnL is inspected.",
+  "threshold_rules": {
+    "minimum_independent_dependence_clusters": 5,
+    "minimum_valid_observations_per_cluster": 20,
+    "lower_quantile": 0.3333333333333333,
+    "upper_quantile": 0.6666666666666666,
+    "within_cluster_rule": "linear_interpolated_feature_quantile_over_rows_with_finite_feature_and_selected_state_target",
+    "across_cluster_rule": "median_of_representative_cluster_quantiles",
+    "bucket_labels": ["lower", "middle", "upper"],
+    "association_sign_mapping": {
+      "positive": {"predicted_target_low": "lower", "neutral": "middle", "predicted_target_high": "upper"},
+      "negative": {"predicted_target_low": "upper", "neutral": "middle", "predicted_target_high": "lower"}
+    },
+    "strategy_bucket_selection_permitted": false,
+    "threshold_optimization_against_strategy_pnl_permitted": false
+  },
+  "claims": {
+    "market_state_evidence_only": true,
+    "uses_strategy_pnl_for_threshold_selection": false,
+    "uses_strategy_pf_for_threshold_selection": false,
+    "uses_strategy_expectancy_for_threshold_selection": false,
+    "selects_strategy_favorable_bucket": false,
+    "changes_discovery_v1_strategy_definitions": false,
+    "automatic_conditioned_pnl_test_supported": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  }
+}
