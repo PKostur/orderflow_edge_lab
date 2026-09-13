@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "protocol_name": "strategy-conditioning-v1.1",
+  "supersedes_for_forward_conditioning_only": "strategy-conditioning-v1",
+  "status": "predeclared_research_only",
+  "upstream_state_protocol": "regime-research-v1.2",
+  "baseline_strategy_protocol": "discovery-v1",
+  "frozen_after_commit": "d965db8f4fb463a761af8cf241efe609310120c6",
+  "purpose": "Bind one dependence-cluster-qualified market-state feature to a frozen strategy-conditioning trial before any conditioned strategy PnL is inspected.",
+  "eligibility": {
+    "required_state_screen_status": "screen_ready",
+    "require_enough_forward_dependence_clusters": true,
+    "require_v1_2_eligible_state_association": true,
+    "require_pnl_independent_redundancy_representative": true,
+    "minimum_independent_dependence_clusters": 5,
+    "minimum_dominant_sign_fraction": 0.8,
+    "minimum_median_abs_spearman": 0.1,
+    "dependence_gap_seconds": 300
+  },
+  "trial_design": {
+    "maximum_features": 1,
+    "comparison": "frozen discovery-v1 baseline versus the same frozen strategy conditioned only on the frozen v1.2 state hypothesis",
+    "feature_threshold_policy": "Any state threshold or bucket mapping must be frozen using market-state evidence only before conditioned strategy PnL is inspected. Strategy PnL, PF, expectancy, or returns may not select the threshold.",
+    "entry_exit_policy": "Do not modify discovery-v1 entry, exit, horizon, direction, or signal definitions inside the conditioning trial.",
+    "economics_policy": "Use identical realistic fee, spread, slippage, latency and staleness assumptions for baseline and conditioned arms.",
+    "dependence_policy": "Use the same v1.2 dependence-cluster representatives for baseline and conditioned arms. Raw capture files within the same overlap-aware dependence cluster may not be counted as separate evidence units.",
+    "risk_policy": "Preserve stop-based MAE/MFE analysis and do not optimize stop or target parameters from conditioning PnL.",
+    "transfer_policy": "Cross-pair checks must keep the state feature definition unchanged and use a PnL-independent universe. Transfer evidence is not untouched OOS validation.",
+    "secondary_feature_policy": "A second feature is outside strategy-conditioning-v1.1 and requires a separately versioned protocol with an incremental-information or pre-specified interaction rationale frozen before later evidence is inspected."
+  },
+  "evaluation": {
+    "required_outputs": [
+      "baseline_net_profit_factor",
+      "conditioned_net_profit_factor",
+      "baseline_net_expectancy_bps",
+      "conditioned_net_expectancy_bps",
+      "independent_dependence_clusters",
+      "observations",
+      "positive_cluster_fraction",
+      "mae_mfe_stop_risk_comparison",
+      "original_vs_reversed_control"
+    ],
+    "promotion_rule": "A favorable conditioning result is research evidence only. Candidate freeze, trial accounting, holdout audit, genuine untouched OOS evidence, paper or shadow reliability, reconciliation and separate user approval remain required before live consideration."
+  },
+  "claims": {
+    "changes_discovery_v1_strategy_definitions": false,
+    "uses_strategy_pnl_for_state_selection": false,
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false,
+    "automatic_strategy_conditioning_supported": false
+  }
+}

@@ -79,12 +79,15 @@ jobs:
           orderflow-market-state-aggregate-v1-2 "${STATE_REPORTS[@]}" \
             --protocol config/regime_research_v1_2.json \
             --output artifacts/orderflow/market_state_aggregate_v1_2.json
-      - name: Publish PnL-independent state promotion report
+      - name: Publish PnL-independent state promotion reports
         shell: bash
         run: |
           orderflow-state-promotion-report \
             artifacts/orderflow/market_state_aggregate_v1_1.json \
             --output artifacts/orderflow/state_promotion_report.json
+          orderflow-state-promotion-report-v1-2 \
+            artifacts/orderflow/market_state_aggregate_v1_2.json \
+            --output artifacts/orderflow/state_promotion_report_v1_2.json
       - name: Run frozen discovery-v1 backtest and pre-registered condition analysis
         shell: bash
         run: |
@@ -139,6 +142,7 @@ jobs:
             artifacts/orderflow/market_state_aggregate_v1_1.json
             artifacts/orderflow/market_state_aggregate_v1_2.json
             artifacts/orderflow/state_promotion_report.json
+            artifacts/orderflow/state_promotion_report_v1_2.json
             artifacts/orderflow/backtest.json
             artifacts/orderflow/direction_pair.json
             artifacts/orderflow/stop_risk.json
@@ -148,6 +152,7 @@ jobs:
             config/regime_research_v1.json
             config/regime_research_v1_1.json
             config/regime_research_v1_2.json
+            config/strategy_conditioning_v1_1.json
             config/orderflow_discovery_v1.json
           if-no-files-found: warn
           retention-days: 14
