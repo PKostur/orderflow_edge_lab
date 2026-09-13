@@ -3,7 +3,7 @@ name: Gamma Exposure Trial v1
 on:
   workflow_dispatch:
   push:
-    branches: [research/gamma-exposure-trial-v1]
+    branches: [main, research/gamma-exposure-trial-v1]
     paths:
       - "config/gamma_exposure_trial_v1.json"
       - "docs/GAMMA_EXPOSURE_TRIAL_V1.md"
