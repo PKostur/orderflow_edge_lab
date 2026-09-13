@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "protocol_name": "strategy-conditioning-registry-binding-v1",
+  "status": "predeclared_research_only",
+  "upstream_registry_protocol": "state-candidate-registry-v1",
+  "upstream_state_protocol": "regime-research-v1.2",
+  "downstream_conditioning_protocol": "strategy-conditioning-v1.1",
+  "frozen_after_commit": "7b2343ce2c04a5cd390f3c46596c5a6a91f14c54",
+  "purpose": "Bind the strategy-conditioning-v1.1 freeze to the single deterministic PnL-independent candidate locked by state-candidate-registry-v1 before conditioned strategy PnL is inspected.",
+  "eligibility": {
+    "require_valid_registry_sha256": true,
+    "require_locked_candidate": true,
+    "require_locked_candidate_eligible_in_current_report": true,
+    "require_exact_registry_candidate_identity": true
+  },
+  "claims": {
+    "changes_discovery_v1_strategy_definitions": false,
+    "changes_regime_research_v1_2_definitions": false,
+    "changes_strategy_conditioning_v1_1_definitions": false,
+    "uses_strategy_pnl_for_candidate_selection": false,
+    "uses_profit_factor_for_candidate_selection": false,
+    "automatic_conditioned_pnl_execution_supported": false,
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  }
+}
