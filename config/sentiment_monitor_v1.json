@@ -67,6 +67,14 @@
       "Phrase weights are frozen before forward sentiment evidence and may not be tuned using strategy PnL."
     ]
   },
+  "state_aggregation": {
+    "feature_name": "decayed_headline_sentiment_v1",
+    "method": "within_symbol_exponentially_decayed_weighted_mean",
+    "half_life_minutes": 90,
+    "maximum_age_hours": 6,
+    "future_events_allowed": false,
+    "strategy_pnl_may_tune_decay": false
+  },
   "market_behavior": {
     "data_source": "MEXC public futures candlesticks",
     "interval": "Min5",
@@ -96,7 +104,7 @@
   "research_rules": [
     "Sentiment remains observational until a separate conditioning protocol is both frozen and eligibility gates are satisfied.",
     "Do not infer causality from sentiment score and subsequent price behavior.",
-    "Do not choose symbols, phrases, phrase weights, thresholds or horizons by strategy PF or expectancy.",
+    "Do not choose symbols, phrases, phrase weights, thresholds, decay windows or horizons by strategy PF or expectancy.",
     "Do not use sentiment to create a new entry, reverse a signal, increase size or alter stops during the observational stage.",
     "Incomplete future horizons remain incomplete rather than being imputed.",
     "Do not backfill sentiment observations from before evidence_start_utc into the forward observational ledger."
