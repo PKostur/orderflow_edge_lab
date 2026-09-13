@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "protocol_name": "methodology-expansion-v1",
+  "frozen_at_intent_utc": "2026-09-13T08:00:00Z",
+  "status": "retrospective_development_screening_only",
+  "purpose": "Use the waiting period for broader falsification-oriented backtesting without changing any frozen forward candidate. Add genuinely distinct reversal and funding-carry methodologies and small predeclared neighborhoods around the watched ENA, HTF trend, and cross-sectional candidates.",
+  "data": {
+    "source": "MEXC public futures klines plus public realized funding history where required",
+    "target_execution_venue": "MEXC Futures",
+    "price_only_start": "2024-01-01T00:00:00Z",
+    "funding_complete_start": "2025-03-22T00:00:00Z",
+    "ena_start": "2024-05-01T00:00:00Z",
+    "end_exclusive": "2026-09-12T00:00:00Z",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "universe_selection_uses_strategy_pnl": false,
+    "funding_rule": "Funding-aware tests may begin only when all frozen symbols have observed public MEXC funding data; missing pre-coverage funding is never imputed as zero."
+  },
+  "methodologies": {
+    "lagged_reversal": {
+      "pod": ["mean_reversion", "execution_economics", "research_validity"],
+      "prior": "Recent short-horizon crypto mean-reversion research reports a detectable 15-minute one-bar reversal effect whose gross magnitude can still be smaller than realistic capture costs.",
+      "interval": "15m",
+      "signal": "At a completed 15-minute candle, take the opposite sign of that candle's close-to-close return; execute at the next candle open and hold one bar.",
+      "control": "Identical continuation-direction strategy using the same timing and costs.",
+      "cost_bps": [12.0, 16.0, 20.0, 30.0],
+      "fold_days": 30
+    },
+    "funding_carry": {
+      "pod": ["derivatives_positioning", "execution_economics", "research_validity"],
+      "prior": "Perpetual-futures funding is a genuine contract cashflow and an economically distinct candidate factor, but published evidence also warns that realistic execution and selection can erase apparent carry alpha.",
+      "interval": "8h",
+      "signal": "Rank the last already-realized funding rate cross-sectionally, then at the next 8-hour open go long the most negative-funding contracts and short the most positive-funding contracts.",
+      "control": "Reverse the carry direction while preserving the same timing, weights and costs.",
+      "n_each_side": [1, 2],
+      "cost_bps": [20.0, 30.0, 40.0],
+      "fold_days": 60
+    },
+    "htf_trend_neighborhood": {
+      "pod": ["trend_structure", "volatility_regime", "execution_economics", "research_validity"],
+      "purpose": "Measure whether the frozen EMA24/96 ATR0.25 candidate is a broad neighborhood or a narrow parameter spike. This cannot replace the frozen candidate.",
+      "variants": [
+        {"fast": 20, "slow": 80, "atr_period": 14, "min_atr_spread": 0.25},
+        {"fast": 24, "slow": 96, "atr_period": 14, "min_atr_spread": 0.0},
+        {"fast": 24, "slow": 96, "atr_period": 14, "min_atr_spread": 0.25},
+        {"fast": 24, "slow": 96, "atr_period": 14, "min_atr_spread": 0.5},
+        {"fast": 30, "slow": 120, "atr_period": 14, "min_atr_spread": 0.25}
+      ],
+      "cost_bps": [20.0, 30.0, 40.0],
+      "fold_days": 120
+    },
+    "cross_sectional_neighborhood": {
+      "pod": ["transfer_generalization", "execution_economics", "research_validity"],
+      "purpose": "Measure horizon stability around the frozen 30d/7d dollar-neutral momentum rule without redefining the forward candidate.",
+      "variants": [
+        {"lookback_days": 20, "holding_days": 7, "quantile_fraction": 0.25},
+        {"lookback_days": 30, "holding_days": 7, "quantile_fraction": 0.25},
+        {"lookback_days": 60, "holding_days": 7, "quantile_fraction": 0.25},
+        {"lookback_days": 30, "holding_days": 14, "quantile_fraction": 0.25}
+      ],
+      "cost_bps": [20.0, 30.0, 40.0],
+      "fold_days": 120,
+      "survivorship_warning": "The fixed current liquid 10-coin panel is not a reconstructed point-in-time universe."
+    },
+    "ena_stop_neighborhood": {
+      "pod": ["mean_reversion", "risk_path", "execution_economics", "research_validity"],
+      "purpose": "Retest only the risk neighborhood around the frozen ENA BB40/2 RSI25/75 signal over the extended historical sample. Signal parameters remain fixed.",
+      "stop_atr_multiple": [1.0, 1.5, 2.0],
+      "cost_bps": [20.0, 30.0, 40.0],
+      "fold_days": 90
+    }
+  },
+  "analysis_rules": {
+    "all_predeclared_trials_retained": true,
+    "no_ranking_by_highest_profit_factor": true,
+    "no_new_forward_candidate_selection_from_this_lane": true,
+    "controls_are_reported_alongside_original_methodologies": true,
+    "funding_must_be_observed_not_invented": true,
+    "execution_costs_may_not_be_reduced_below_predeclared_cases": true,
+    "overlapping_folds_are_descriptive_dependence_clusters_not_oos_trials": true,
+    "frozen_discovery_v1_and_regime_research_protocols_are_unchanged": true,
+    "frozen_forward_candidates_are_unchanged": true
+  },
+  "claims": {
+    "retrospective_development_only": true,
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  }
+}
