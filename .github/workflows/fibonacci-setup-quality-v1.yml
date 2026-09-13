@@ -1,0 +1,75 @@
+name: Fibonacci Setup Quality v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/fibonacci-setup-quality-v1]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fibonacci-setup-quality-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  fibonacci-setup-quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Compile Fibonacci runner
+        run: python -m py_compile scripts/fibonacci_setup_quality_v1.py
+      - name: Run all predeclared Fibonacci cells
+        run: |
+          mkdir -p artifacts/fibonacci_setup_quality_v1
+          python scripts/fibonacci_setup_quality_v1.py \
+            --config config/fibonacci_setup_quality_v1.json \
+            --output artifacts/fibonacci_setup_quality_v1/report.json \
+            --max-workers 6
+      - name: Verify protocol and claims
+        run: |
+          python - <<'PY'
+          import json
+          p='artifacts/fibonacci_setup_quality_v1/report.json'
+          r=json.load(open(p, encoding='utf-8'))
+          assert r['protocol_name']=='fibonacci-setup-quality-v1'
+          assert r['trial_count']==24, r['trial_count']
+          assert r['all_predeclared_overlays_and_cost_cells_retained'] is True
+          assert r['claims']['verified_out_of_sample_evidence'] is False
+          assert r['claims']['profitable_edge_established'] is False
+          assert r['claims']['live_order_transmission_supported'] is False
+          strategies={row['strategy'] for row in r['cells']}
+          overlays={row['overlay'] for row in r['cells']}
+          assert strategies=={'ena_mean_reversion','htf_trend'}
+          assert overlays=={'baseline','fib_core','fib_deep_786','nonfib_matched_control'}
+          assert r['cross_sectional_candidate']['tested'] is False
+          print(json.dumps({
+              'trial_count': r['trial_count'],
+              'strategies': sorted(strategies),
+              'overlays': sorted(overlays),
+              'fib_specific_diagnostics': r['fib_specific_diagnostics'],
+          }, indent=2))
+          PY
+      - name: Deterministic multi-agent release-manager check
+        run: |
+          orderflow-multi-agent --output artifacts/fibonacci_setup_quality_v1/multi_agent_report.json
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/fibonacci_setup_quality_v1/multi_agent_report.json', encoding='utf-8'))
+          if r['release_manager']['status'] != 'reviewable':
+              raise SystemExit('release manager blocked Fibonacci setup-quality lane')
+          PY
+      - name: Upload complete Fibonacci evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fibonacci-setup-quality-v1
+          path: artifacts/fibonacci_setup_quality_v1/
+          retention-days: 30
+          if-no-files-found: error
