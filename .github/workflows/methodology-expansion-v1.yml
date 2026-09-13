@@ -1,0 +1,73 @@
+name: Methodology Expansion v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/methodology-expansion-v1]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: methodology-expansion-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  retrospective-methodology-matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Compile methodology runner
+        run: python -m py_compile scripts/methodology_expansion_v1.py
+      - name: Run all predeclared methodology cells
+        run: |
+          mkdir -p artifacts/methodology_expansion_v1
+          python scripts/methodology_expansion_v1.py \
+            --config config/methodology_expansion_v1.json \
+            --output artifacts/methodology_expansion_v1/report.json \
+            --max-workers 6
+      - name: Verify claims and complete trial retention
+        run: |
+          python - <<'PY'
+          import json
+          p='artifacts/methodology_expansion_v1/report.json'
+          r=json.load(open(p, encoding='utf-8'))
+          assert r['protocol_name']=='methodology-expansion-v1'
+          assert r['all_predeclared_trials_retained'] is True
+          assert r['claims']['verified_out_of_sample_evidence'] is False
+          assert r['claims']['profitable_edge_established'] is False
+          assert r['claims']['live_order_transmission_supported'] is False
+          families={row['methodology'] for row in r['cells']}
+          required={
+              'lagged_one_bar_reversal',
+              'lagged_cross_sectional_funding_carry',
+              'ema_tsmom_neighborhood',
+              'cross_sectional_momentum_neighborhood',
+              'ena_frozen_signal_stop_neighborhood',
+          }
+          assert families==required, (families, required)
+          print(json.dumps({'trial_count': r['trial_count'], 'methodologies': sorted(families)}, indent=2))
+          PY
+      - name: Deterministic multi-agent release-manager check
+        run: |
+          orderflow-multi-agent --output artifacts/methodology_expansion_v1/multi_agent_report.json
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/methodology_expansion_v1/multi_agent_report.json', encoding='utf-8'))
+          if r['release_manager']['status'] != 'reviewable':
+              raise SystemExit('release manager blocked methodology expansion')
+          PY
+      - name: Upload complete methodology evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: methodology-expansion-v1
+          path: artifacts/methodology_expansion_v1/
+          retention-days: 30
+          if-no-files-found: error
