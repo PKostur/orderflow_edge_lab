@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from collections import Counter
-import math
 from typing import Any, Mapping, Sequence
 
 import numpy as np
@@ -22,20 +21,18 @@ def _trade_stats(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
             "completed_trades": 0,
             "expectancy_bps": None,
             "profit_factor": None,
+            "profit_factor_infinite": false,
             "win_rate": None,
         }
     gains = float(returns[returns > 0].sum())
     losses = float(-returns[returns < 0].sum())
-    if losses > 0:
-        pf: float | None = gains / losses
-    elif gains > 0:
-        pf = math.inf
-    else:
-        pf = None
+    infinite_pf = losses <= 0 and gains > 0
+    pf = gains / losses if losses > 0 else None
     return {
         "completed_trades": int(len(returns)),
         "expectancy_bps": float(returns.mean() * 10_000.0),
-        "profit_factor": pf,
+        "profit_factor": float(pf) if pf is not None else None,
+        "profit_factor_infinite": bool(infinite_pf),
         "win_rate": float(np.mean(returns > 0)),
     }
 
