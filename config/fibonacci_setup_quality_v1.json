@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "protocol_name": "fibonacci-setup-quality-v1",
+  "frozen_at_intent_utc": "2026-09-13T12:54:00Z",
+  "status": "retrospective_development_screening_only",
+  "purpose": "Test whether a causal Fibonacci retracement overlay improves setup quality for already-frozen ENA mean-reversion and HTF trend candidates without changing either forward candidate. Separate generic pullback-depth filtering from Fibonacci-specific proximity by retaining a matched non-Fibonacci control.",
+  "pods": [
+    "trend_structure",
+    "mean_reversion",
+    "risk_path",
+    "execution_economics",
+    "indicator_orthogonality",
+    "research_validity"
+  ],
+  "data": {
+    "source": "MEXC public futures klines plus observed public realized funding where required",
+    "target_execution_venue": "MEXC Futures",
+    "end_exclusive": "2026-09-12T00:00:00Z",
+    "ena_start": "2024-05-01T00:00:00Z",
+    "htf_funding_complete_start": "2025-03-22T16:00:00Z",
+    "htf_symbols": [
+      "BTC_USDT",
+      "ETH_USDT",
+      "SOL_USDT",
+      "XRP_USDT",
+      "DOGE_USDT",
+      "BNB_USDT",
+      "ADA_USDT",
+      "LINK_USDT",
+      "SUI_USDT",
+      "ENA_USDT"
+    ],
+    "missing_funding_rule": "Funding-aware HTF tests must stop rather than impute unavailable pre-coverage funding as zero."
+  },
+  "fibonacci_definition": {
+    "anchor_lookback_bars": 24,
+    "anchor_uses_current_signal_bar": false,
+    "anchor_rule": "For a long setup, use the lowest prior low in the lookback and the highest subsequent prior high after that low. For a short setup, use the highest prior high and the lowest subsequent prior low after that high. Both anchor points must therefore already exist before the signal close.",
+    "minimum_impulse_atr": 2.0,
+    "retracement_depth_long": "(prior_swing_high - signal_close) / (prior_swing_high - prior_swing_low)",
+    "retracement_depth_short": "(signal_close - prior_swing_low) / (prior_swing_high - prior_swing_low)",
+    "valid_depth_range": [0.0, 1.0],
+    "level_tolerance": 0.025,
+    "overlays": {
+      "baseline": {
+        "levels": null,
+        "description": "Original frozen candidate with no Fibonacci entry gate."
+      },
+      "fib_core": {
+        "levels": [0.382, 0.5, 0.618],
+        "description": "Permit a new entry or reversal only when retracement depth is within +/-2.5 percentage points of 38.2%, 50%, or 61.8%."
+      },
+      "fib_deep_786": {
+        "levels": [0.786],
+        "description": "Permit a new entry or reversal only when retracement depth is within +/-2.5 percentage points of 78.6%."
+      },
+      "nonfib_matched_control": {
+        "levels": [0.3, 0.43, 0.7],
+        "description": "Matched three-level pullback-depth control using identical tolerance but deliberately non-Fibonacci centers."
+      }
+    }
+  },
+  "ena_mean_reversion": {
+    "candidate_config": "config/ena_mean_reversion_candidate_v1.json",
+    "interval": "1h",
+    "signal_family": "bb_mean_reversion",
+    "parameters": {
+      "period": 40,
+      "std": 2.0,
+      "rsi_period": 14,
+      "rsi_low": 25.0,
+      "rsi_high": 75.0,
+      "max_hold": 20
+    },
+    "hard_stop_atr_multiple": 1.5,
+    "atr_period": 14,
+    "round_trip_cost_bps": [20.0, 30.0, 40.0],
+    "fold_days": 90,
+    "entry_gate_rule": "The Fib overlay may block a new entry or direction reversal, but once admitted it cannot alter the original signal-state exit or the frozen ATR stop."
+  },
+  "htf_trend": {
+    "candidate_config": "config/htf_trend_candidate_v1.json",
+    "interval": "8h",
+    "signal_family": "ema_tsmom",
+    "parameters": {
+      "fast": 24,
+      "slow": 96,
+      "atr_period": 14,
+      "min_atr_spread": 0.25
+    },
+    "round_trip_cost_bps": [20.0, 30.0, 40.0],
+    "fold_days": 120,
+    "funding_accounting": "actual_public_MEXC_realized_funding_cashflows_during_held_interval",
+    "entry_gate_rule": "The Fib overlay may block a transition from flat into a new trend side or a direct reversal. Once admitted, the position remains until the original EMA/ATR target exits, goes flat, or reverses; an unqualified reversal exits the old side and waits flat."
+  },
+  "cross_sectional_candidate": {
+    "tested": false,
+    "reason": "A dollar-neutral cross-sectional rank has no single directionally coherent swing anchor. Adding a BTC-level Fib gate or arbitrary per-asset anchor would change the methodology rather than add a like-for-like setup filter."
+  },
+  "quality_metrics": [
+    "setup_count",
+    "retained_setup_fraction",
+    "net_expectancy_bps",
+    "profit_factor",
+    "win_rate",
+    "compounded_return",
+    "max_drawdown",
+    "median_mae_bps",
+    "median_mfe_bps",
+    "stop_fraction",
+    "positive_fold_fraction",
+    "portfolio_net_return_for_htf",
+    "funding_contribution_for_htf"
+  ],
+  "analysis_rules": {
+    "all_predeclared_overlays_and_cost_cells_retained": true,
+    "no_ranking_by_highest_profit_factor": true,
+    "no_fibonacci_level_retuning_after_results": true,
+    "matched_nonfibonacci_control_required": true,
+    "same_execution_and_exit_rules_as_baseline": true,
+    "same_cost_case_between_baseline_and_overlay": true,
+    "same_data_window_between_baseline_and_overlay": true,
+    "frozen_forward_candidates_unchanged": true,
+    "discovery_v1_unchanged": true,
+    "regime_research_v1_unchanged": true,
+    "retrospective_results_cannot_replace_forward_candidates": true
+  },
+  "claims": {
+    "retrospective_development_only": true,
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  }
+}
