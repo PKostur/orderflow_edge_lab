@@ -23,6 +23,7 @@ class MultiAgentTests(unittest.TestCase):
                 "mean_reversion",
                 "cross_asset_context",
                 "news_event_context",
+                "sentiment_context",
                 "derivatives_positioning",
                 "execution_economics",
                 "risk_path",
