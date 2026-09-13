@@ -165,6 +165,25 @@ jobs:
             artifacts/orderflow/market_state.json \
             artifacts/orderflow/strategy_state_mapping_v1.json \
             --output artifacts/orderflow/conditioned_experiment_v1.json
+      - name: Aggregate conditioned results by overlap-aware dependence cluster
+        shell: bash
+        run: |
+          CONDITIONED_REPORTS=(artifacts/orderflow/conditioned_experiment_v1.json)
+          while IFS= read -r REPORT; do
+            CONDITIONED_REPORTS+=("$REPORT")
+          done < <(find prior -type f -name conditioned_experiment_v1.json | sort)
+
+          STATE_ARGS=(--state-report artifacts/orderflow/market_state.json)
+          while IFS= read -r REPORT; do
+            STATE_ARGS+=(--state-report "$REPORT")
+          done < <(find prior -type f -name market_state.json | sort)
+
+          orderflow-conditioned-result-aggregate-v1 \
+            "${CONDITIONED_REPORTS[@]}" \
+            "${STATE_ARGS[@]}" \
+            --protocol config/conditioned_result_aggregate_v1.json \
+            --regime-protocol config/regime_research_v1_2.json \
+            --output artifacts/orderflow/conditioned_result_aggregate_v1.json
       - name: Aggregate strategy discovery evidence by independent capture batch
         shell: bash
         run: |
@@ -199,6 +218,7 @@ jobs:
             artifacts/orderflow/state_threshold_freeze_v1.json
             artifacts/orderflow/strategy_state_mapping_v1.json
             artifacts/orderflow/conditioned_experiment_v1.json
+            artifacts/orderflow/conditioned_result_aggregate_v1.json
             artifacts/orderflow/backtest.json
             artifacts/orderflow/direction_pair.json
             artifacts/orderflow/stop_risk.json
@@ -213,6 +233,7 @@ jobs:
             config/strategy_conditioning_registry_binding_v1.json
             config/state_threshold_freeze_v1.json
             config/strategy_state_mapping_v1.json
+            config/conditioned_result_aggregate_v1.json
             config/orderflow_discovery_v1.json
           if-no-files-found: warn
           retention-days: 14
