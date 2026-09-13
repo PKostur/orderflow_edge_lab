@@ -1,0 +1,190 @@
+name: Gamma Exposure Trial v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, research/gamma-exposure-trial-v1]
+    paths:
+      - "config/gamma_exposure_trial_v1.json"
+      - "docs/GAMMA_EXPOSURE_TRIAL_V1.md"
+      - "src/orderflow_edge_lab/gamma_exposure.py"
+      - "scripts/gamma_exposure_trial_v1.py"
+      - "tests/test_gamma_exposure.py"
+      - ".github/workflows/gamma-exposure-trial-v1.yml"
+  schedule:
+    - cron: "17 * * * *"
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: gamma-exposure-trial-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  forward-gamma-comparison:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Compile and test gamma trial
+        run: |
+          python -m py_compile src/orderflow_edge_lab/gamma_exposure.py scripts/gamma_exposure_trial_v1.py
+          python -m unittest tests.test_gamma_exposure -v
+      - name: Recover prior validated forward comparison ledger if available
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/gamma_previous
+          mkdir -p /tmp/gamma_previous artifacts/gamma
+          PREV_ID=""
+          while IFS=$'\t' read -r ARTIFACT_ID RUN_ID; do
+            [[ -z "${ARTIFACT_ID:-}" || -z "${RUN_ID:-}" ]] && continue
+            CONCLUSION="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}" --jq '.conclusion // ""' 2>/dev/null || true)"
+            if [[ "$CONCLUSION" == "success" ]]; then
+              PREV_ID="$ARTIFACT_ID"
+              break
+            fi
+          done < <(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=gamma-exposure-trial-v1&per_page=20" --jq '.artifacts[] | select(.expired == false) | [.id, .workflow_run.id] | @tsv' || true)
+          if [[ -n "$PREV_ID" ]]; then
+            gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${PREV_ID}/zip" > /tmp/gamma_previous.zip
+            unzip -q /tmp/gamma_previous.zip -d /tmp/gamma_previous
+            PREV_HISTORY="$(find /tmp/gamma_previous -name comparison_history.json -type f | head -n 1 || true)"
+            if [[ -n "$PREV_HISTORY" ]]; then
+              cp "$PREV_HISTORY" artifacts/gamma/previous_history.json
+            fi
+          fi
+      - name: Run unchanged frozen forward agents
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/gamma/ena artifacts/gamma/trend/source artifacts/gamma/xs/source
+          orderflow-ena-forward-shadow \
+            --candidate config/ena_mean_reversion_candidate_v1.json \
+            --output artifacts/gamma/ena/report.json \
+            --source-output artifacts/gamma/ena/ENA_USDT_1h.csv &
+          ENA_PID=$!
+          orderflow-htf-trend-forward-shadow \
+            --candidate config/htf_trend_candidate_v1.json \
+            --output artifacts/gamma/trend/report.json \
+            --source-dir artifacts/gamma/trend/source \
+            --max-workers 5 &
+          TREND_PID=$!
+          orderflow-cross-sectional-forward-shadow \
+            --candidate config/cross_sectional_candidate_v1.json \
+            --output artifacts/gamma/xs/report.json \
+            --source-dir artifacts/gamma/xs/source \
+            --max-workers 5 &
+          XS_PID=$!
+          wait "$ENA_PID"
+          wait "$TREND_PID"
+          wait "$XS_PID"
+      - name: Collect gamma snapshot and append forward comparison
+        shell: bash
+        run: |
+          set -euo pipefail
+          PREV_ARGS=()
+          if [[ -f artifacts/gamma/previous_history.json ]]; then
+            PREV_ARGS=(--previous-history artifacts/gamma/previous_history.json)
+          fi
+          python scripts/gamma_exposure_trial_v1.py \
+            --config config/gamma_exposure_trial_v1.json \
+            --snapshot-output artifacts/gamma/snapshot.json \
+            --history-output artifacts/gamma/comparison_history.json \
+            --raw-output artifacts/gamma/deribit_raw.json \
+            --ena-report artifacts/gamma/ena/report.json \
+            --trend-report artifacts/gamma/trend/report.json \
+            --cross-sectional-report artifacts/gamma/xs/report.json \
+            "${PREV_ARGS[@]}"
+      - name: Enforce research and live-execution boundaries
+        run: |
+          python - <<'PY'
+          import json
+          from datetime import datetime
+          protocol=json.load(open('config/gamma_exposure_trial_v1.json', encoding='utf-8'))
+          snap=json.load(open('artifacts/gamma/snapshot.json', encoding='utf-8'))
+          history=json.load(open('artifacts/gamma/comparison_history.json', encoding='utf-8'))
+          boundary=datetime.fromisoformat(protocol['frozen_at_intent_utc'].replace('Z','+00:00'))
+          observed=datetime.fromisoformat(snap['observed_at_utc'].replace('Z','+00:00'))
+          assert observed >= boundary
+          assert snap['limitations']['dealer_positioning_observed'] is False
+          assert snap['limitations']['historical_open_interest_backfilled'] is False
+          assert history['guards']['historical_strategy_results_relabelled_gamma_conditioned'] is False
+          assert history['claims']['gamma_threshold_selected_from_strategy_pnl'] is False
+          assert history['claims']['strategy_parameters_changed'] is False
+          for payload in [snap, history]:
+              claims=payload['claims']
+              assert claims['verified_out_of_sample_evidence'] is False
+              assert claims['profitable_edge_established'] is False
+              assert claims['live_order_transmission_supported'] is False
+          for p in ['artifacts/gamma/ena/report.json','artifacts/gamma/trend/report.json','artifacts/gamma/xs/report.json']:
+              claims=json.load(open(p, encoding='utf-8'))['claims']
+              assert not claims.get('verified_out_of_sample_evidence')
+              assert not claims.get('profitable_edge_established')
+              assert not claims.get('live_order_transmission_supported')
+          PY
+      - name: Build comparison summary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          s=json.load(open('artifacts/gamma/snapshot.json', encoding='utf-8'))
+          h=json.load(open('artifacts/gamma/comparison_history.json', encoding='utf-8'))
+          current=h['records'][-1]
+          m=s['metrics']
+          lines=[
+              '# Gamma Exposure Trial v1',
+              '',
+              f"Observed UTC: **{s['observed_at_utc']}**",
+              f"Reference BTC underlying: **${m['reference_spot_usd']:,.2f}**",
+              f"Gross GEX / 1% move: **${m['gross_gamma_exposure_usd_per_1pct']:,.0f}**",
+              f"Call-minus-put GEX proxy / 1% move: **${m['call_minus_put_gamma_proxy_usd_per_1pct']:,.0f}** ({m['call_minus_put_proxy_sign']})",
+              f"Call-minus-put / gross ratio: **{m['call_minus_put_to_gross_ratio']:.4f}**",
+              f"Balance-flip proxy: **{('$' + format(m['balance_flip_proxy_usd'], ',.2f')) if m['balance_flip_proxy_usd'] is not None else 'not inside frozen grid'}**",
+              f"Major absolute gamma strike: **${m['nearest_major_abs_gamma_strike_usd']:,.0f}**",
+              '',
+              '| Frozen agent | Completed outcomes | Open positions | Current forward PnL / $1,000 |',
+              '|---|---:|---:|---:|',
+          ]
+          labels={'ena_1h':'ENA 1h','trend_8h':'8h trend','cross_sectional_30d_7d':'30d/7d cross-sectional'}
+          for key in ('ena_1h','trend_8h','cross_sectional_30d_7d'):
+              row=current['strategy'][key]
+              lines.append(f"| {labels[key]} | {row['completed_outcomes']} | {row['open_positions']} | ${row['pnl_per_1000_usdt']:,.2f} |")
+          lines += [
+              '',
+              f"Comparison status: **{h['status']}**",
+              f"Forward gamma snapshots retained: **{h['guards']['observed_forward_snapshots']} / {h['guards']['minimum_forward_snapshots']}** minimum for descriptive state comparison.",
+              f"Completed outcome increments observed after gamma collection began: **{h['guards']['observed_completed_outcome_increments']} / {h['guards']['minimum_completed_strategy_outcomes']}** minimum for PnL-by-gamma-state tables.",
+              '',
+              'The call-minus-put value is an analytic proxy, not observed dealer positioning. No historical GEX was backfilled. No frozen trading parameter changed. Live transmission remains disabled.',
+          ]
+          text='\n'.join(lines)+'\n'
+          Path('artifacts/gamma/SUMMARY.md').write_text(text, encoding='utf-8')
+          print(text)
+          PY
+          cat artifacts/gamma/SUMMARY.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Deterministic multi-agent release-manager check
+        run: |
+          orderflow-multi-agent --output artifacts/gamma/multi_agent_report.json
+          python - <<'PY'
+          import json
+          report=json.load(open('artifacts/gamma/multi_agent_report.json', encoding='utf-8'))
+          if report['release_manager']['status'] != 'reviewable':
+              raise SystemExit('release manager blocked gamma exposure trial')
+          PY
+      - name: Preserve gamma trial evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gamma-exposure-trial-v1
+          path: artifacts/gamma/
+          retention-days: 30
+          if-no-files-found: error
