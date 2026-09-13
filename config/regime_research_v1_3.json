@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "protocol_name": "regime-research-v1.3",
+  "supersedes_for_forward_screening_only": "regime-research-v1.2",
+  "status": "forward_discovery_only",
+  "frozen_at_utc": "2026-09-13T12:45:00Z",
+  "evidence_start_utc": "2026-09-13T13:00:00Z",
+  "evidence_start_batch_id": "20260913T130000Z",
+  "purpose": "Predeclare family representatives, target ownership, redundancy controls and incremental-information tests before later forward market-state evidence is inspected. Preserve regime-research-v1 indicator and target definitions and discovery-v1 trading logic unchanged.",
+  "inherits": {
+    "feature_and_target_definitions": "regime-research-v1",
+    "association_thresholds": "regime-research-v1.1",
+    "dependence_clustering": "regime-research-v1.2",
+    "discovery_strategy_logic": "discovery-v1"
+  },
+  "primary_family_representatives": {
+    "trend_structure": {
+      "feature": "directional_efficiency_15m",
+      "primary_targets": ["directionality", "continuation_reversion"],
+      "rationale": "Directly measures trend efficiency without using strategy PnL and is conceptually distinct from absolute volatility."
+    },
+    "volatility_regime": {
+      "feature": "atr14_percentile_15m",
+      "primary_targets": ["volatility"],
+      "rationale": "Causal normalized volatility-state representative with broad availability."
+    },
+    "liquidity_microstructure": {
+      "feature": "spread_bps",
+      "primary_targets": ["liquidity"],
+      "rationale": "Direct executable-friction state variable and stable reference for depth or book-pressure increments."
+    },
+    "aggressive_flow": {
+      "feature": "signed_volume_ratio_10s",
+      "primary_targets": ["directionality", "continuation_reversion"],
+      "rationale": "Scale-normalized aggressive-flow representative already available from public MEXC prints."
+    },
+    "mean_reversion": {
+      "feature": "bollinger_zscore_1m",
+      "primary_targets": ["continuation_reversion"],
+      "rationale": "Direct normalized displacement measure aligned with the original ENA hypothesis while remaining state-first."
+    },
+    "cross_asset_context": {
+      "feature": "rolling_btc_correlation",
+      "primary_targets": ["directionality", "continuation_reversion", "volatility"],
+      "rationale": "Measures BTC coupling without selecting on strategy PnL."
+    },
+    "derivatives_positioning": {
+      "feature": "funding_rate_zscore",
+      "primary_targets": ["directionality", "continuation_reversion", "volatility"],
+      "rationale": "Use only when legitimately observed; unavailable observations remain missing rather than imputed."
+    },
+    "time_session": {
+      "feature": "utc_session",
+      "primary_targets": ["directionality", "volatility", "liquidity", "continuation_reversion"],
+      "rationale": "Predeclared stability slice, not a performance-selection variable."
+    }
+  },
+  "predeclared_incremental_tests": [
+    {
+      "base_feature": "directional_efficiency_15m",
+      "candidate_feature": "adx14_15m",
+      "target_family": "directionality",
+      "interaction_rationale": "ADX may add trend-strength information beyond directional efficiency."
+    },
+    {
+      "base_feature": "atr14_percentile_15m",
+      "candidate_feature": "bollinger_bandwidth20_percentile_15m",
+      "target_family": "volatility",
+      "interaction_rationale": "Bandwidth may distinguish compression geometry beyond ATR percentile."
+    },
+    {
+      "base_feature": "spread_bps",
+      "candidate_feature": "top10_depth_notional",
+      "target_family": "liquidity",
+      "interaction_rationale": "Depth may distinguish fragile from stable quotes at similar spread."
+    },
+    {
+      "base_feature": "signed_volume_ratio_10s",
+      "candidate_feature": "aggressive_volume_acceleration",
+      "target_family": "continuation_reversion",
+      "interaction_rationale": "Acceleration may identify persistence or exhaustion beyond static flow imbalance."
+    },
+    {
+      "base_feature": "bollinger_zscore_1m",
+      "candidate_feature": "rsi14_1m",
+      "target_family": "continuation_reversion",
+      "interaction_rationale": "RSI is allowed only if it adds information beyond the predeclared displacement representative."
+    },
+    {
+      "base_feature": "rolling_btc_correlation",
+      "candidate_feature": "btc_flow_alignment",
+      "target_family": "directionality",
+      "interaction_rationale": "Flow alignment may add short-horizon lead context beyond rolling co-movement."
+    }
+  ],
+  "redundancy_policy": {
+    "association_measure": "absolute_spearman",
+    "high_redundancy_threshold": 0.80,
+    "representative_rule": "Within a highly redundant cluster retain the predeclared family representative unless another feature independently passes the inherited partial-Spearman screen against the same future-state target.",
+    "no_pf_selection": true,
+    "no_strategy_pnl_selection": true,
+    "second_feature_requires_incremental_information_or_prespecified_interaction": true
+  },
+  "dependence_policy": {
+    "inherit_v1_2_clustering": true,
+    "independent_capture_batches_are_dependence_clusters": true,
+    "one_representative_report_per_cluster": true,
+    "representative_selection_uses_strategy_pnl": false
+  },
+  "sequencing": {
+    "market_state_prediction_first": true,
+    "evaluate_directionality_chop": true,
+    "evaluate_volatility_expansion_contraction": true,
+    "evaluate_liquidity_stability_deterioration": true,
+    "evaluate_continuation_reversion": true,
+    "strategy_conditioning_only_after_state_screen": true,
+    "conditioning_requires_separate_frozen_protocol": true,
+    "cross_pair_transfer_is_not_oos_validation": true
+  },
+  "economics_and_risk_boundary": {
+    "state_screen_uses_strategy_pnl": false,
+    "later_conditioning_must_use_realistic_fees_spread_slippage_latency": true,
+    "preserve_stop_based_mae_mfe_research": true,
+    "preserve_original_vs_reversed_controls": true,
+    "preserve_trial_accounting_and_holdout_audit": true,
+    "preserve_paper_reconciliation_and_runtime_integrity": true
+  },
+  "claims": {
+    "changes_regime_research_v1_scan_definitions": false,
+    "changes_regime_research_v1_1_effect_thresholds": false,
+    "changes_regime_research_v1_2_dependence_rules": false,
+    "changes_discovery_v1_strategy_definitions": false,
+    "uses_strategy_pnl_for_state_selection": false,
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  }
+}
