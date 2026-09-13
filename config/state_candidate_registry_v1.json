@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "protocol_name": "state-candidate-registry-v1",
+  "status": "predeclared_research_only",
+  "upstream_promotion_experiment": "state_promotion_report_v1_2",
+  "upstream_state_protocol": "regime-research-v1.2",
+  "downstream_conditioning_protocol": "strategy-conditioning-v1.1",
+  "frozen_after_commit": "6f655e6288e27585fc6ffa7602e6ecbf17fc087d",
+  "purpose": "Remove discretionary cherry-picking when multiple PnL-independent v1.2 market-state hypotheses become eligible for strategy-conditioning-v1.1.",
+  "selection": {
+    "maximum_locked_candidates": 1,
+    "eligibility_field": "eligible_for_strategy_conditioning_v1_1_freeze",
+    "new_candidate_order": [
+      "research_family",
+      "feature",
+      "target"
+    ],
+    "order_direction": "ascending_lexical",
+    "preserve_first_locked_candidate": true,
+    "reject_conflicting_prior_locks": true,
+    "ignore_state_association_magnitude_for_candidate_order": true,
+    "ignore_strategy_pnl_for_candidate_order": true
+  },
+  "claims": {
+    "changes_discovery_v1_strategy_definitions": false,
+    "changes_regime_research_v1_2_definitions": false,
+    "uses_strategy_pnl_for_selection": false,
+    "uses_profit_factor_for_selection": false,
+    "uses_expectancy_for_selection": false,
+    "uses_state_association_magnitude_for_selection": false,
+    "automatic_strategy_conditioning_supported": false,
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  }
+}
