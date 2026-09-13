@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "protocol_name": "regime-research-v1.2",
+  "supersedes_for_forward_screening_only": "regime-research-v1.1",
+  "status": "forward_discovery_only",
+  "frozen_at_utc": "2026-09-13T00:50:00Z",
+  "evidence_start_utc": "2026-09-13T02:00:00Z",
+  "evidence_start_batch_id": "20260913T020000Z",
+  "purpose": "Make dependence accounting explicit for future market-state evidence without changing regime-research-v1 feature or target definitions, discovery-v1 strategy logic, or regime-research-v1.1 association thresholds.",
+  "development_context": "regime-research-v1.1 treats unique batch_id values as independent capture batches. v1.2 is frozen before its evidence boundary and adds timestamp-based dependence clustering so overlapping or near-adjacent capture intervals cannot inflate the independent-batch count.",
+  "state_screen": {
+    "minimum_independent_batches": 5,
+    "minimum_dominant_sign_fraction": 0.8,
+    "minimum_association_observations_per_batch": 20,
+    "minimum_median_abs_spearman": 0.10,
+    "minimum_median_abs_partial_spearman": 0.10,
+    "redundancy_abs_spearman_threshold": 0.80,
+    "effect_size_note": "Thresholds are inherited unchanged from regime-research-v1.1 and remain practical screening floors, not significance or profitability thresholds."
+  },
+  "dependence_clustering": {
+    "interval_source": "minimum and maximum observed_at_ns values in each regime-research-v1 market-state report",
+    "dependence_gap_seconds": 300,
+    "cluster_rule": "After sorting by capture start, reports belong to the same transitive dependence cluster when the next capture starts no later than the current cluster end plus dependence_gap_seconds.",
+    "representative_rule": "Within each dependence cluster choose the report with the greatest number of timestamped market-state observations; tie-break by earliest capture start and then lexical batch_id. Never use strategy PnL, PF, expectancy, returns, or state association magnitude.",
+    "counting_rule": "Only one representative report per dependence cluster enters the cross-batch association, redundancy, and incremental-information screen.",
+    "boundary_rule": "A report is eligible only when both its batch_id and first observed_at_ns are at or after the frozen v1.2 evidence boundary."
+  },
+  "sequencing": {
+    "market_state_prediction_first": true,
+    "strategy_pnl_may_be_tested_only_after_state_screen": true,
+    "strategy_conditioning_requires_separate_predeclared_test": true,
+    "state_screen_does_not_auto_promote_trade_filter": true,
+    "existing_strategy_conditioning_v1_is_not_silently_retargeted": true
+  },
+  "redundancy_and_incremental_information": {
+    "representative_selection": "Use the existing PnL-independent highest independent-batch availability rule for highly redundant feature clusters after dependence-cluster representatives have been selected.",
+    "second_feature_rule": "A second feature from a redundant cluster must independently pass the forward partial-Spearman effect and sign-stability screen, or have a separately pre-specified interaction rationale before later evidence is inspected."
+  },
+  "multiple_testing": "Any state hypothesis advanced into later strategy-conditioning research must be frozen and entered into trial accounting before later strategy evidence is inspected. This state screen itself does not claim statistical significance.",
+  "claims": {
+    "changes_regime_research_v1_scan_definitions": false,
+    "changes_regime_research_v1_1_effect_thresholds": false,
+    "changes_discovery_v1_strategy_definitions": false,
+    "uses_strategy_pnl_for_state_selection": false,
+    "previously_inspected_or_preboundary_batches_eligible": false,
+    "overlap_aware_dependence_clustering_applied": true,
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  }
+}

@@ -75,6 +75,10 @@ jobs:
           orderflow-market-state-aggregate-v1-1 "${STATE_REPORTS[@]}" \
             --protocol config/regime_research_v1_1.json \
             --output artifacts/orderflow/market_state_aggregate_v1_1.json
+
+          orderflow-market-state-aggregate-v1-2 "${STATE_REPORTS[@]}" \
+            --protocol config/regime_research_v1_2.json \
+            --output artifacts/orderflow/market_state_aggregate_v1_2.json
       - name: Publish PnL-independent state promotion report
         shell: bash
         run: |
@@ -133,6 +137,7 @@ jobs:
             artifacts/orderflow/market_state.json
             artifacts/orderflow/market_state_aggregate.json
             artifacts/orderflow/market_state_aggregate_v1_1.json
+            artifacts/orderflow/market_state_aggregate_v1_2.json
             artifacts/orderflow/state_promotion_report.json
             artifacts/orderflow/backtest.json
             artifacts/orderflow/direction_pair.json
@@ -142,6 +147,7 @@ jobs:
             artifacts/orderflow/condition_aggregate.json
             config/regime_research_v1.json
             config/regime_research_v1_1.json
+            config/regime_research_v1_2.json
             config/orderflow_discovery_v1.json
           if-no-files-found: warn
           retention-days: 14
