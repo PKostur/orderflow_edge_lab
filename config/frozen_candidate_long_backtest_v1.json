@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "protocol_name": "frozen-candidate-long-backtest-v1",
+  "frozen_at_intent_utc": "2026-09-13T07:45:00Z",
+  "status": "retrospective_development_stress_only",
+  "purpose": "Re-evaluate the exact frozen forward strategy parameterizations over longer pre-freeze MEXC history without retuning, candidate replacement, or OOS claims.",
+  "data_end_exclusive_utc": "2026-09-12T00:00:00Z",
+  "candidates": {
+    "ena_mean_reversion": {
+      "candidate_path": "config/ena_mean_reversion_candidate_v1.json",
+      "history_start_utc": "2024-01-01T00:00:00Z",
+      "minimum_signal_start_utc": "2024-05-01T00:00:00Z",
+      "interval": "1h",
+      "uses_funding": false
+    },
+    "htf_trend": {
+      "candidate_path": "config/htf_trend_candidate_v1.json",
+      "history_start_utc": "2021-01-01T00:00:00Z",
+      "minimum_signal_start_utc": "2021-03-01T00:00:00Z",
+      "interval": "8h",
+      "uses_funding": true
+    },
+    "cross_sectional": {
+      "candidate_path": "config/cross_sectional_candidate_v1.json",
+      "history_start_utc": "2023-01-01T00:00:00Z",
+      "minimum_signal_start_utc": "2023-03-01T00:00:00Z",
+      "interval": "1d",
+      "uses_funding": true
+    }
+  },
+  "windows": {
+    "include_full_available_history": true,
+    "include_calendar_years": true,
+    "rolling_windows": [
+      {"length_days": 180, "step_days": 90},
+      {"length_days": 360, "step_days": 180}
+    ],
+    "minimum_window_days": 90,
+    "reset_position_flat_at_each_window_start": true
+  },
+  "economics": {
+    "frozen_round_trip_cost_bps": 20.0,
+    "adverse_cost_stress_bps": [30.0, 40.0],
+    "funding_for_applicable_candidates": "actual public MEXC realized funding events",
+    "cost_stress_is_diagnostic_only": true
+  },
+  "analysis_rules": {
+    "source_candidate_signal_and_risk_parameters_must_not_change": true,
+    "source_candidate_universe_must_not_change": true,
+    "source_candidate_timeframe_must_not_change": true,
+    "all_predeclared_windows_must_be_retained": true,
+    "no_window_selection_by_profit_factor_or_return": true,
+    "no_parameter_optimization": true,
+    "calendar_and_rolling_subperiods_are_dependence_aware_diagnostics_not_independent_trials": true,
+    "historical_results_do_not_modify_forward_candidate_status": true,
+    "historical_results_are_not_untouched_oos": true,
+    "historical_results_cannot_authorize_live_execution": true
+  },
+  "claims": {
+    "development_stress_only": true,
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  }
+}
