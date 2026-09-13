@@ -2,7 +2,7 @@ name: Continuous Order-Flow Discovery
 
 on:
   schedule:
-    - cron: "17 * * * *"
+    - cron: "17,47 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -94,7 +94,7 @@ jobs:
           REGISTRY_ARGS=()
           while IFS= read -r REGISTRY; do
             REGISTRY_ARGS+=(--prior-registry "$REGISTRY")
-          done < <(find prior -type f -name state_candidate_registry_v1.json | sort)
+          done < <(find prior -type f -path '*/artifacts/orderflow/state_candidate_registry_v1.json' | sort)
           orderflow-state-candidate-registry-v1 \
             artifacts/orderflow/state_promotion_report_v1_2.json \
             --protocol config/state_candidate_registry_v1.json \
@@ -237,7 +237,7 @@ jobs:
             config/orderflow_discovery_v1.json
           if-no-files-found: warn
           retention-days: 14
-      - name: Preserve short-lived raw evidence
+      - name: Preserve raw evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -246,4 +246,4 @@ jobs:
             artifacts/orderflow/*_mexc_raw.jsonl*
             artifacts/orderflow/*_mexc_features.jsonl*
           if-no-files-found: warn
-          retention-days: 2
+          retention-days: 14
