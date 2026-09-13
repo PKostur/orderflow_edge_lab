@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "protocol_name": "evidence-collection-watchdog-v1",
+  "status": "collection_reliability_only",
+  "frozen_at_utc": "2026-09-13T14:50:00Z",
+  "purpose": "Restart prospective evidence collection after a missed or failed scheduled run without changing research definitions, imputing missed observations, or creating duplicate active collectors.",
+  "checks": [
+    {"workflow": "high-cadence-evidence-capture-v1.yml", "artifact_prefix": "high-cadence-state-ledger-v1", "maximum_staleness_minutes": 55},
+    {"workflow": "orderflow-continuous-discovery.yml", "artifact_prefix": "orderflow-discovery-ledger-v1", "maximum_staleness_minutes": 65},
+    {"workflow": "cross-pair-transfer.yml", "artifact_prefix": "cross-pair-market-condition-transfer", "maximum_staleness_minutes": 110},
+    {"workflow": "gamma-exposure-trial-v1.yml", "artifact_prefix": "gamma-exposure-trial-v1", "maximum_staleness_minutes": 100},
+    {"workflow": "news-context.yml", "artifact_prefix": "coin-news-behavior-context-", "maximum_staleness_minutes": 65}
+  ],
+  "guards": {
+    "dispatch_only_when_no_active_run": true,
+    "missed_market_time_may_be_backfilled": false,
+    "strategy_parameters_may_change": false,
+    "state_thresholds_may_change": false,
+    "execution_economics_may_change": false,
+    "watchdog_uses_strategy_pnl": false,
+    "live_order_transmission_supported": false
+  },
+  "claims": {
+    "research_only": true,
+    "profitable_edge_established": false,
+    "verified_out_of_sample_evidence": false,
+    "live_order_transmission_supported": false
+  }
+}
