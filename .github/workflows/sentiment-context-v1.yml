@@ -1,17 +1,14 @@
-name: Sentiment Context Specialist v1
+name: Sentiment Context Specialist v1.1
 
 on:
   pull_request:
     branches: [main]
     paths:
-      - "config/sentiment_monitor_v1.json"
-      - "config/sentiment_conditioning_v1.json"
-      - "config/multi_agents.json"
-      - "src/orderflow_edge_lab/sentiment_monitor.py"
-      - "src/orderflow_edge_lab/cli/sentiment_monitor.py"
-      - "tests/test_sentiment_monitor.py"
-      - "tests/test_multi_agent.py"
-      - "pyproject.toml"
+      - "config/sentiment_monitor_v1_1.json"
+      - "config/sentiment_conditioning_v1_1.json"
+      - "src/orderflow_edge_lab/sentiment_monitor_v1_1.py"
+      - "src/orderflow_edge_lab/cli/sentiment_monitor_v1_1.py"
+      - "tests/test_sentiment_monitor_v1_1.py"
       - ".github/workflows/sentiment-context-v1.yml"
   workflow_dispatch:
   schedule:
@@ -22,7 +19,7 @@ permissions:
   actions: write
 
 concurrency:
-  group: sentiment-context-v1-${{ github.ref }}
+  group: sentiment-context-v1-1-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
@@ -36,29 +33,54 @@ jobs:
           python-version: "3.12"
       - name: Install research runtime
         run: python -m pip install -e ".[research]"
-      - name: Validate frozen observation and conditioning boundaries
+      - name: Validate frozen v1.1 protocol and fixed strategy universe
         run: |
           python - <<'PY'
           import json
-          monitor=json.load(open('config/sentiment_monitor_v1.json',encoding='utf-8'))
-          cond=json.load(open('config/sentiment_conditioning_v1.json',encoding='utf-8'))
-          assert monitor['protocol_name'] == 'sentiment-monitor-v1'
+          monitor=json.load(open('config/sentiment_monitor_v1_1.json',encoding='utf-8'))
+          cond=json.load(open('config/sentiment_conditioning_v1_1.json',encoding='utf-8'))
+          expected={'ETH_USDT','SOL_USDT','XRP_USDT','DOGE_USDT','BNB_USDT','ADA_USDT','LINK_USDT','SUI_USDT','ENA_USDT'}
+          assert monitor['protocol_name'] == 'sentiment-monitor-v1.1'
+          assert monitor['supersedes'] == 'sentiment-monitor-v1'
           assert monitor['status'] == 'forward_observational'
+          assert set(monitor['observation_universe']['strategy_conditioning_symbols']) == expected
+          assert set(monitor['observation_universe']['readiness_symbols']) == expected
+          assert monitor['observation_universe']['context_only_symbols'] == ['BTC_USDT']
+          assert monitor['observation_universe']['strategy_pnl_used_for_universe_selection'] is False
+          assert monitor['observation_universe']['dynamic_cross_pair_panel_used_for_readiness'] is False
+          assert monitor['claims']['v1_evidence_reused'] is False
           assert monitor['claims']['sentiment_is_strategy_filter'] is False
           assert monitor['claims']['eligible_as_strategy_filter'] is False
           assert monitor['claims']['live_order_transmission_supported'] is False
-          assert monitor['state_readiness']['strategy_pnl_may_affect_readiness'] is False
-          assert cond['protocol_name'] == 'sentiment-conditioning-v1'
-          assert cond['status'] == 'frozen_inactive_until_state_qualification'
-          assert cond['activation_gates']['strategy_pnl_may_select_sentiment_state'] is False
+          assert cond['protocol_name'] == 'sentiment-conditioning-v1.1'
+          assert cond['supersedes'] == 'sentiment-conditioning-v1'
+          assert cond['sentiment_protocol'] == 'sentiment-monitor-v1.1'
+          assert cond['conditioning_mapping']['btc_leg_may_be_conditioned'] is False
           assert cond['conditioning_mapping']['may_create_new_entries'] is False
           assert cond['conditioning_mapping']['may_reverse_existing_signal'] is False
+          assert cond['claims']['v1_sentiment_evidence_reused'] is False
           assert cond['claims']['active_strategy_filter'] is False
           assert cond['claims']['backtest_authorized_now'] is False
           assert cond['claims']['live_order_transmission_supported'] is False
           PY
+      - name: Validate both public headline feeds are parseable now
+        run: |
+          python - <<'PY'
+          import json
+          from urllib.request import Request, urlopen
+          from orderflow_edge_lab.news_monitor import parse_feed
+          p=json.load(open('config/sentiment_monitor_v1_1.json',encoding='utf-8'))
+          for source in p['sources']:
+              req=Request(source['url'],headers={'Accept':'application/rss+xml, application/atom+xml, application/xml, text/xml, */*','User-Agent':'orderflow-edge-lab/1.0 research-news-monitor'})
+              with urlopen(req,timeout=20) as r:
+                  raw=r.read(8_000_000)
+              rows=parse_feed(source['name'],raw)
+              if not rows:
+                  raise SystemExit(f"{source['name']} returned no parseable feed items")
+              print(source['name'], len(rows))
+          PY
       - name: Run sentiment specialist tests
-        run: python -m unittest tests.test_sentiment_monitor -v
+        run: python -m unittest tests.test_sentiment_monitor tests.test_sentiment_monitor_v1_1 -v
       - name: Run deterministic release-manager gate
         run: |
           orderflow-multi-agent --output artifacts/sentiment_validation_multi_agent.json
@@ -66,7 +88,7 @@ jobs:
           import json
           report=json.load(open('artifacts/sentiment_validation_multi_agent.json',encoding='utf-8'))
           if report['release_manager']['status'] != 'reviewable':
-              raise SystemExit('release manager blocked sentiment specialist')
+              raise SystemExit('release manager blocked sentiment specialist v1.1')
           PY
 
   monitor:
@@ -82,28 +104,7 @@ jobs:
           python-version: "3.12"
       - name: Install research runtime
         run: python -m pip install -e ".[research]"
-      - name: Screen liquid MEXC perpetuals without strategy PnL
-        run: |
-          mkdir -p artifacts/sentiment_context
-          orderflow-pair-screen \
-            --top 18 \
-            --max-spread-bps 5 \
-            --min-turnover-usdt 10000000 \
-            --output artifacts/sentiment_context/pair_screen.json
-      - name: Build BTC-correlation-diversified sentiment panel
-        run: |
-          orderflow-correlation-panel \
-            artifacts/sentiment_context/pair_screen.json \
-            --lookback-hours 72 \
-            --interval Min5 \
-            --min-samples 200 \
-            --panel-size 6 \
-            --high-positive-min 0.65 \
-            --low-absolute-max 0.25 \
-            --high-target 2 \
-            --low-target 2 \
-            --output artifacts/sentiment_context/correlation_panel.json
-      - name: Recover prior successful sentiment ledger
+      - name: Recover prior successful v1.1 sentiment ledger only
         shell: bash
         run: |
           set -euo pipefail
@@ -113,7 +114,7 @@ jobs:
             [[ -z "${ARTIFACT_ID:-}" || -z "${RUN_ID:-}" ]] && continue
             CONCLUSION="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}" --jq '.conclusion // ""' 2>/dev/null || true)"
             if [[ "$CONCLUSION" == "success" ]]; then PREV_ID="$ARTIFACT_ID"; break; fi
-          done < <(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=sentiment-context-ledger-v1&per_page=20" \
+          done < <(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=sentiment-context-ledger-v1-1&per_page=20" \
             --jq '.artifacts | map(select(.expired == false)) | sort_by(.created_at) | reverse | .[] | [.id,.workflow_run.id] | @tsv' || true)
           if [[ -n "$PREV_ID" ]]; then
             gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${PREV_ID}/zip" > /tmp/sentiment_previous.zip
@@ -121,7 +122,7 @@ jobs:
             PRIOR="$(find /tmp/sentiment_previous -type f -name 'sentiment_ledger.json' -print -quit || true)"
             if [[ -n "$PRIOR" ]]; then cp "$PRIOR" artifacts/sentiment_context/prior_ledger.json; fi
           fi
-      - name: Collect and score public headline sentiment
+      - name: Collect strategy-aligned public headline sentiment v1.1
         shell: bash
         run: |
           set -euo pipefail
@@ -129,9 +130,8 @@ jobs:
           if [[ -f artifacts/sentiment_context/prior_ledger.json ]]; then
             PRIOR_ARGS+=(--prior-ledger artifacts/sentiment_context/prior_ledger.json)
           fi
-          orderflow-sentiment-monitor \
-            --panel artifacts/sentiment_context/correlation_panel.json \
-            --protocol config/sentiment_monitor_v1.json \
+          python -m orderflow_edge_lab.cli.sentiment_monitor_v1_1 \
+            --protocol config/sentiment_monitor_v1_1.json \
             --snapshot-output artifacts/sentiment_context/current_snapshot.json \
             --output artifacts/sentiment_context/sentiment_ledger.json \
             "${PRIOR_ARGS[@]}"
@@ -140,18 +140,24 @@ jobs:
           python - <<'PY'
           import json
           report=json.load(open('artifacts/sentiment_context/sentiment_ledger.json',encoding='utf-8'))
+          assert report['protocol_name'] == 'sentiment-monitor-v1.1'
           claims=report['claims']
           assert claims['research_only'] is True
           assert claims['observational_only'] is True
           assert claims['sentiment_is_strategy_filter'] is False
           assert claims['eligible_as_strategy_filter'] is False
+          assert claims['v1_evidence_reused'] is False
           assert claims['profitable_edge_established'] is False
           assert claims['live_order_transmission_supported'] is False
+          summary=report['summary']
           print(json.dumps({
-              'events': report['summary']['event_count'],
-              'non_neutral': report['summary']['non_neutral_event_count'],
-              'independent_clusters': report['summary']['independent_event_cluster_count'],
-              'state_screen_ready': report['summary']['state_screen_ready'],
+              'events': summary['event_count'],
+              'readiness_events': summary['readiness_event_count'],
+              'non_neutral': summary['non_neutral_event_count'],
+              'sources': summary['distinct_sources'],
+              'conditioning_symbols': summary['distinct_conditioning_symbols'],
+              'independent_clusters': summary['independent_event_cluster_count'],
+              'state_screen_ready': summary['state_screen_ready'],
           }, indent=2))
           PY
       - name: Deterministic release-manager integrity check
@@ -163,25 +169,23 @@ jobs:
           if report['release_manager']['status'] != 'reviewable':
               raise SystemExit('release manager blocked sentiment evidence collection')
           PY
-      - name: Preserve cumulative sentiment evidence
+      - name: Preserve cumulative sentiment v1.1 evidence
         uses: actions/upload-artifact@v4
         with:
-          name: sentiment-context-ledger-v1
+          name: sentiment-context-ledger-v1-1
           path: |
             artifacts/sentiment_context/sentiment_ledger.json
             artifacts/sentiment_context/current_snapshot.json
-            artifacts/sentiment_context/pair_screen.json
-            artifacts/sentiment_context/correlation_panel.json
             artifacts/sentiment_context/multi_agent_report.json
-            config/sentiment_monitor_v1.json
-            config/sentiment_conditioning_v1.json
+            config/sentiment_monitor_v1_1.json
+            config/sentiment_conditioning_v1_1.json
           retention-days: 90
           if-no-files-found: error
-      - name: Delete superseded cumulative sentiment ledgers
+      - name: Delete superseded cumulative sentiment v1.1 ledgers
         shell: bash
         run: |
           set -euo pipefail
-          mapfile -t IDS < <(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=sentiment-context-ledger-v1&per_page=100" \
+          mapfile -t IDS < <(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=sentiment-context-ledger-v1-1&per_page=100" \
             --jq '.artifacts | map(select(.expired == false)) | sort_by(.created_at) | reverse | .[1:] | .[].id' || true)
           for ID in "${IDS[@]}"; do
             [[ -z "$ID" ]] || gh api -X DELETE "repos/${GITHUB_REPOSITORY}/actions/artifacts/${ID}" || true
