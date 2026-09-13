@@ -1,6 +1,11 @@
 name: High-Cadence Market Evidence Capture v1
 
 on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "config/high_cadence_evidence_capture_v1.json"
+      - ".github/workflows/high-cadence-evidence-capture-v1.yml"
   workflow_dispatch:
   schedule:
     - cron: "2,32 * * * *"
@@ -9,7 +14,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: high-cadence-market-evidence-capture-v1
+  group: high-cadence-market-evidence-capture-v1-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
