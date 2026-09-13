@@ -34,6 +34,12 @@ def main() -> None:
     symbols = [str(value) for value in spec["symbols"]]
     warmup_start = str(candidate["forward_protocol"]["indicator_warmup_start_utc"])
     forward_start = str(candidate["forward_signal_start_utc"])
+    forward_start_ts = pd.Timestamp(forward_start)
+    forward_start_ts = (
+        forward_start_ts.tz_localize("UTC")
+        if forward_start_ts.tzinfo is None
+        else forward_start_ts.tz_convert("UTC")
+    )
     source_dir = Path(args.source_dir)
     source_dir.mkdir(parents=True, exist_ok=True)
 
@@ -43,7 +49,12 @@ def main() -> None:
 
     def load(symbol: str):
         frame = fetch_mexc_futures_klines(symbol, "8h", warmup_start, as_of.isoformat())
-        fund = fetch_mexc_funding_history(symbol, forward_start, as_of.isoformat())
+        if as_of <= forward_start_ts:
+            fund = pd.DataFrame(
+                columns=["funding_rate"], index=pd.DatetimeIndex([], tz="UTC")
+            )
+        else:
+            fund = fetch_mexc_funding_history(symbol, forward_start, as_of.isoformat())
         return symbol, frame, fund
 
     with ThreadPoolExecutor(max_workers=max(1, min(int(args.max_workers), len(symbols)))) as pool:
