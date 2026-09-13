@@ -2,7 +2,7 @@ name: Continuous Order-Flow Discovery
 
 on:
   schedule:
-    - cron: "17 * * * *"
+    - cron: "17,47 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -94,7 +94,7 @@ jobs:
           REGISTRY_ARGS=()
           while IFS= read -r REGISTRY; do
             REGISTRY_ARGS+=(--prior-registry "$REGISTRY")
-          done < <(find prior -type f -name state_candidate_registry_v1.json | sort)
+          done < <(find prior -type f -path '*/artifacts/orderflow/state_candidate_registry_v1.json' | sort)
           orderflow-state-candidate-registry-v1 \
             artifacts/orderflow/state_promotion_report_v1_2.json \
             --protocol config/state_candidate_registry_v1.json \
