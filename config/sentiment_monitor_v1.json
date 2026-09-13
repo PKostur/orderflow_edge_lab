@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "protocol_name": "sentiment-monitor-v1",
+  "status": "forward_observational",
+  "frozen_at_utc": "2026-09-13T18:21:00Z",
+  "evidence_start_utc": "2026-09-13T18:30:00Z",
+  "purpose": "Collect deterministic public-headline sentiment as a market-state research stream without changing, filtering, reversing, sizing or timing any strategy trade.",
+  "sources": [
+    {
+      "name": "coindesk",
+      "url": "https://www.coindesk.com/arc/outboundfeeds/rss/",
+      "access": "public_rss"
+    },
+    {
+      "name": "cointelegraph",
+      "url": "https://cointelegraph.com/?format=rss",
+      "access": "public_rss"
+    }
+  ],
+  "matching": {
+    "scope": "headline_or_title_only",
+    "method": "conservative_symbol_aliases_from_news_monitor_v1",
+    "article_bodies_stored": false,
+    "credentials_or_account_data_stored": false
+  },
+  "scoring": {
+    "method": "deterministic_phrase_lexicon_v1",
+    "transform": "tanh(raw_score/3)",
+    "score_range": [-1.0, 1.0],
+    "neutral_abs_score_below": 0.10,
+    "positive_phrase_weights": {
+      "approved": 2.0,
+      "approval": 1.5,
+      "partnership": 1.25,
+      "adoption": 1.25,
+      "integration": 1.0,
+      "upgrade": 0.75,
+      "launch": 0.75,
+      "inflows": 1.0,
+      "record inflows": 1.5,
+      "wins": 0.75,
+      "expands": 0.75,
+      "surge": 0.5,
+      "rally": 0.5
+    },
+    "negative_phrase_weights": {
+      "hack": -2.0,
+      "exploit": -2.0,
+      "breach": -2.0,
+      "fraud": -2.0,
+      "ban": -2.0,
+      "lawsuit": -1.5,
+      "charges": -1.5,
+      "outflows": -1.0,
+      "delist": -1.5,
+      "delisted": -1.5,
+      "outage": -1.5,
+      "rejects": -1.5,
+      "rejected": -1.5,
+      "plunge": -0.75,
+      "crash": -1.25,
+      "liquidation": -0.75
+    },
+    "limitations": [
+      "Headline sentiment is a deterministic lexical proxy, not semantic truth.",
+      "Sarcasm, complex negation, ambiguous entity context and source framing can be missed.",
+      "Phrase weights are frozen before forward sentiment evidence and may not be tuned using strategy PnL."
+    ]
+  },
+  "state_aggregation": {
+    "feature_name": "decayed_headline_sentiment_v1",
+    "method": "within_symbol_exponentially_decayed_weighted_mean",
+    "half_life_minutes": 90,
+    "maximum_age_hours": 6,
+    "future_events_allowed": false,
+    "strategy_pnl_may_tune_decay": false
+  },
+  "market_behavior": {
+    "data_source": "MEXC public futures candlesticks",
+    "interval": "Min5",
+    "max_age_hours": 48,
+    "pre_event_minutes": 15,
+    "horizons_minutes": [5, 15, 30, 60],
+    "context_symbol": "BTC_USDT",
+    "relative_measure": "coin_return_minus_btc_return_bps_not_beta_adjusted"
+  },
+  "dependence": {
+    "event_cluster_gap_minutes": 60,
+    "same_or_near_publication_window_is_one_dependence_cluster": true,
+    "same_time_cross_symbol_events_are_not_independent_time_trials": true
+  },
+  "state_targets_before_strategy_pnl": [
+    "sentiment_sign_times_future_coin_minus_btc_return_bps",
+    "future_absolute_coin_return_bps",
+    "future_coin_minus_btc_return_bps"
+  ],
+  "state_readiness": {
+    "minimum_scored_matched_events": 30,
+    "minimum_non_neutral_events": 12,
+    "minimum_independent_event_clusters": 5,
+    "minimum_distinct_sources": 2,
+    "strategy_pnl_may_affect_readiness": false
+  },
+  "research_rules": [
+    "Sentiment remains observational until a separate conditioning protocol is both frozen and eligibility gates are satisfied.",
+    "Do not infer causality from sentiment score and subsequent price behavior.",
+    "Do not choose symbols, phrases, phrase weights, thresholds, decay windows or horizons by strategy PF or expectancy.",
+    "Do not use sentiment to create a new entry, reverse a signal, increase size or alter stops during the observational stage.",
+    "Incomplete future horizons remain incomplete rather than being imputed.",
+    "Do not backfill sentiment observations from before evidence_start_utc into the forward observational ledger."
+  ],
+  "claims": {
+    "research_only": true,
+    "observational_only": true,
+    "causal_effect_established": false,
+    "sentiment_is_strategy_filter": false,
+    "eligible_as_strategy_filter": false,
+    "profitable_edge_established": false,
+    "verified_out_of_sample_evidence": false,
+    "live_order_transmission_supported": false
+  }
+}

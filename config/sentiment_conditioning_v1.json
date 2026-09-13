@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "protocol_name": "sentiment-conditioning-v1",
+  "status": "frozen_inactive_until_state_qualification",
+  "frozen_at_utc": "2026-09-13T18:21:00Z",
+  "sentiment_protocol": "sentiment-monitor-v1",
+  "purpose": "Predeclare how a qualified sentiment state may later be tested as a veto-only conditioning variable against otherwise unchanged frozen strategies.",
+  "target_strategies": [
+    {
+      "strategy_id": "mexc_8h_ema24_96_atr025_v1",
+      "candidate_path": "config/htf_trend_candidate_v1.json",
+      "role": "primary",
+      "reason": "Already frozen multi-symbol directional strategy; sentiment can map causally to long/short entry vetoes without changing the signal generator."
+    },
+    {
+      "strategy_id": "ena_bb40_rsi25_75_atr15_v1",
+      "candidate_path": "config/ena_mean_reversion_candidate_v1.json",
+      "role": "secondary",
+      "reason": "Already frozen ENA directional mean-reversion strategy; provides a coin-specific robustness comparison without creating a new sentiment strategy."
+    }
+  ],
+  "explicit_initial_exclusions": [
+    {
+      "strategy_family": "cross_sectional_momentum",
+      "reason": "A bullish/bearish single-symbol veto does not map cleanly to the frozen rank-based portfolio construction; adding it would require a separately frozen protocol."
+    }
+  ],
+  "activation_gates": {
+    "sentiment_state_readiness_required": true,
+    "minimum_independent_event_clusters": 5,
+    "minimum_scored_matched_events": 30,
+    "minimum_non_neutral_events": 12,
+    "minimum_distinct_sources": 2,
+    "sentiment_state_must_show_predeclared_directional_information": true,
+    "strategy_pnl_may_select_sentiment_state": false,
+    "automatic_activation": false
+  },
+  "threshold_freeze": {
+    "method": "pnl_independent_cluster_quantiles",
+    "lower_quantile": 0.20,
+    "upper_quantile": 0.80,
+    "compute_within_eligible_independent_clusters_then_take_median": true,
+    "thresholds_may_be_selected_by_pf_or_expectancy": false
+  },
+  "conditioning_mapping": {
+    "feature_name": "decayed_headline_sentiment_v1",
+    "mode": "veto_only",
+    "sentiment_must_be_published_before_strategy_signal": true,
+    "maximum_sentiment_age_hours": 6,
+    "long_rule": "skip an otherwise valid long only when the frozen pre-signal sentiment state is at or below the lower threshold",
+    "short_rule": "skip an otherwise valid short only when the frozen pre-signal sentiment state is at or above the upper threshold",
+    "may_create_new_entries": false,
+    "may_reverse_existing_signal": false,
+    "may_increase_position_size": false,
+    "may_change_stops_targets_or_holding_period": false
+  },
+  "paired_backtest": {
+    "arms": [
+      "unchanged_baseline",
+      "sentiment_conditioned",
+      "reversed_sentiment_placebo"
+    ],
+    "same_entry_signal_before_veto": true,
+    "same_exit_and_stop_logic": true,
+    "same_execution_costs_funding_spread_slippage_latency": true,
+    "retain_all_predeclared_arms": true,
+    "no_best_pf_selection": true,
+    "required_metrics": [
+      "completed_trades",
+      "net_expectancy_bps",
+      "profit_factor",
+      "win_rate",
+      "max_drawdown",
+      "mae",
+      "mfe",
+      "affected_decision_count",
+      "original_vs_reversed_discrimination"
+    ]
+  },
+  "review_minimums": {
+    "minimum_completed_baseline_trades": 20,
+    "minimum_completed_conditioned_trades": 20,
+    "minimum_affected_decisions": 10,
+    "insufficient_sample_is_a_valid_outcome": true
+  },
+  "research_rules": [
+    "State prediction is evaluated before strategy PnL.",
+    "The frozen baseline strategy parameters and economics remain unchanged.",
+    "Sentiment thresholds cannot be retuned after strategy results are inspected.",
+    "The reversed-sentiment arm is retained as an adversarial control rather than discarded when inconvenient.",
+    "The primary and secondary strategy order is frozen before sentiment-conditioned PnL is inspected.",
+    "Any historical sentiment backtest is development evidence unless a genuinely untouched holdout was frozen before inspection.",
+    "No result from this protocol authorizes live order transmission."
+  ],
+  "claims": {
+    "active_strategy_filter": false,
+    "backtest_authorized_now": false,
+    "profitable_edge_established": false,
+    "verified_out_of_sample_evidence": false,
+    "live_order_transmission_supported": false
+  }
+}

@@ -50,6 +50,12 @@
       "forbidden_claims": ["news guarantees", "news proves causality"]
     },
     {
+      "id": "sentiment_context",
+      "focus": "Deterministic public-headline sentiment scoring, source/time provenance, PnL-independent state testing before strategy conditioning, and strict separation between observation and any later veto-only backtest",
+      "required_paths": ["config/sentiment_monitor_v1.json", "config/sentiment_conditioning_v1.json", "src/orderflow_edge_lab/sentiment_monitor.py", ".github/workflows/sentiment-context-v1.yml"],
+      "forbidden_claims": ["sentiment guarantees", "sentiment proves causality", "sentiment edge proven"]
+    },
+    {
       "id": "derivatives_positioning",
       "focus": "Funding, open-interest, mark premium/basis and liquidation context only when legitimately available at zero additional cost; missing fields must not be invented",
       "required_paths": ["config/regime_research_v1.json", "docs/REGIME_RESEARCH.md"],
@@ -94,7 +100,7 @@
     {
       "id": "reliability_observability",
       "focus": "Compilation, tests, packaging, Linux/Windows CI, workflow failures, hashes, manifests, runtime identity, operator diagnostics and reproducibility",
-      "required_paths": [".github/workflows/ci.yml", ".github/workflows/orderflow-continuous-discovery.yml", ".github/workflows/cross-pair-transfer.yml", ".github/workflows/news-context.yml", "scripts/deployment_check.py", "scripts/package_smoke.py", "src/orderflow_edge_lab/runtime_identity.py"],
+      "required_paths": [".github/workflows/ci.yml", ".github/workflows/orderflow-continuous-discovery.yml", ".github/workflows/cross-pair-transfer.yml", ".github/workflows/news-context.yml", ".github/workflows/sentiment-context-v1.yml", "scripts/deployment_check.py", "scripts/package_smoke.py", "src/orderflow_edge_lab/runtime_identity.py"],
       "forbidden_claims": []
     },
     {
@@ -115,6 +121,7 @@
       "mean_reversion",
       "cross_asset_context",
       "news_event_context",
+      "sentiment_context",
       "derivatives_positioning",
       "execution_economics",
       "risk_path",
