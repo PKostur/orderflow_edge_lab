@@ -1,0 +1,219 @@
+name: MEXC Derivatives Context v1
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "config/mexc_derivatives_context_v1.json"
+      - ".github/workflows/mexc-derivatives-context-v1.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "0,30 * * * *"
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: mexc-derivatives-context-v1-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  validate:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate frozen protocol and current public endpoint
+        run: |
+          python - <<'PY'
+          import json
+          from urllib.request import Request, urlopen
+          p=json.load(open('config/mexc_derivatives_context_v1.json', encoding='utf-8'))
+          assert p['protocol_name'] == 'mexc-derivatives-context-v1'
+          assert p['validity']['strategy_pnl_used_for_collection'] is False
+          assert p['sampling']['historical_backfill_from_current_snapshot_allowed'] is False
+          assert p['claims']['live_order_transmission_supported'] is False
+          url=p['source']['base_url'] + p['source']['endpoint'] + '?symbol=BTC_USDT'
+          req=Request(url, headers={'Accept':'application/json','User-Agent':'orderflow-edge-lab/1.0'})
+          with urlopen(req, timeout=20) as r:
+              payload=json.loads(r.read().decode('utf-8'))
+          assert payload.get('success') is True
+          data=payload.get('data')
+          assert isinstance(data, dict) and data.get('symbol') == 'BTC_USDT'
+          for key in ('fundingRate','holdVol','indexPrice','fairPrice','bid1','ask1','timestamp'):
+              assert key in data
+          PY
+
+  capture:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Capture public MEXC derivatives snapshot
+        run: |
+          mkdir -p artifacts/derivatives_context
+          python - <<'PY'
+          import json, math, time
+          from datetime import datetime, timezone
+          from pathlib import Path
+          from urllib.parse import urlencode
+          from urllib.request import Request, urlopen
+
+          protocol=json.load(open('config/mexc_derivatives_context_v1.json', encoding='utf-8'))
+          boundary=datetime.fromisoformat(protocol['evidence_start_utc'].replace('Z','+00:00'))
+          now=datetime.now(timezone.utc)
+          if now < boundary:
+              raise SystemExit(f'derivatives evidence boundary not reached: {boundary.isoformat()}')
+
+          def finite(value):
+              try:
+                  x=float(value)
+              except (TypeError, ValueError):
+                  return None
+              return x if math.isfinite(x) else None
+
+          rows={}
+          base=protocol['source']['base_url'] + protocol['source']['endpoint']
+          for symbol in protocol['source']['symbols']:
+              req=Request(base + '?' + urlencode({'symbol':symbol}), headers={'Accept':'application/json','User-Agent':'orderflow-edge-lab/1.0'})
+              with urlopen(req, timeout=20) as response:
+                  payload=json.loads(response.read().decode('utf-8'))
+              if payload.get('success') is not True or not isinstance(payload.get('data'), dict):
+                  rows[symbol]={'available':False,'error':'invalid_public_ticker_payload'}
+                  continue
+              d=payload['data']
+              index=finite(d.get('indexPrice')); fair=finite(d.get('fairPrice'))
+              bid=finite(d.get('bid1')); ask=finite(d.get('ask1'))
+              spread=None
+              if bid is not None and ask is not None and ask >= bid and (ask+bid) > 0:
+                  spread=(ask-bid)/((ask+bid)/2.0)*10000.0
+              premium=(fair/index-1.0)*10000.0 if fair is not None and index not in (None,0.0) and index > 0 else None
+              rows[symbol]={
+                  'available':True,
+                  'symbol':symbol,
+                  'funding_rate':finite(d.get('fundingRate')),
+                  'hold_volume_contracts':finite(d.get('holdVol')),
+                  'index_price':index,
+                  'fair_price':fair,
+                  'last_price':finite(d.get('lastPrice')),
+                  'bid1':bid,
+                  'ask1':ask,
+                  'fair_minus_index_bps':premium,
+                  'quoted_spread_bps':spread,
+                  'exchange_timestamp_ms':d.get('timestamp'),
+              }
+              time.sleep(0.06)
+          observed=datetime.now(timezone.utc)
+          out={
+              'schema_version':1,
+              'protocol_name':'mexc-derivatives-context-v1',
+              'observed_at_utc':observed.isoformat().replace('+00:00','Z'),
+              'rows':rows,
+              'limitations':{
+                  'hold_volume_is_normalized_notional_open_interest':False,
+                  'cross_symbol_hold_volume_comparison_supported':False,
+                  'historical_backfill_from_snapshot':False,
+              },
+              'claims':{
+                  'research_only':True,
+                  'profitable_edge_established':False,
+                  'verified_out_of_sample_evidence':False,
+                  'live_order_transmission_supported':False,
+              },
+          }
+          Path('artifacts/derivatives_context/current_snapshot.json').write_text(json.dumps(out,indent=2),encoding='utf-8')
+          PY
+      - name: Recover prior successful derivatives ledger
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/derivatives_context/history /tmp/derivatives_previous
+          PREV_ID=""
+          while IFS=$'\t' read -r ARTIFACT_ID RUN_ID; do
+            [[ -z "${ARTIFACT_ID:-}" || -z "${RUN_ID:-}" ]] && continue
+            CONCLUSION="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}" --jq '.conclusion // ""' 2>/dev/null || true)"
+            if [[ "$CONCLUSION" == "success" ]]; then PREV_ID="$ARTIFACT_ID"; break; fi
+          done < <(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=mexc-derivatives-context-ledger-v1&per_page=20" \
+            --jq '.artifacts | map(select(.expired == false)) | sort_by(.created_at) | reverse | .[] | [.id,.workflow_run.id] | @tsv' || true)
+          if [[ -n "$PREV_ID" ]]; then
+            gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${PREV_ID}/zip" > /tmp/derivatives_previous.zip
+            unzip -q /tmp/derivatives_previous.zip -d /tmp/derivatives_previous
+            PRIOR="$(find /tmp/derivatives_previous -type d -path '*/artifacts/derivatives_context/history' -print -quit || true)"
+            [[ -z "$PRIOR" ]] || cp -a "$PRIOR"/. artifacts/derivatives_context/history/
+          fi
+      - name: Append snapshot and calculate within-symbol changes
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('artifacts/derivatives_context')
+          current=json.load(open(root/'current_snapshot.json',encoding='utf-8'))
+          stamp=current['observed_at_utc'].replace(':','').replace('-','').replace('.','_')
+          history=root/'history'; history.mkdir(parents=True,exist_ok=True)
+          prior_files=sorted(history.glob('*.json'))
+          previous=json.load(open(prior_files[-1],encoding='utf-8')) if prior_files else None
+          changes={}
+          for symbol,row in current['rows'].items():
+              prev=(previous or {}).get('rows',{}).get(symbol,{})
+              cur_hold=row.get('hold_volume_contracts'); prev_hold=prev.get('hold_volume_contracts')
+              delta=None; pct=None
+              if cur_hold is not None and prev_hold is not None:
+                  delta=cur_hold-prev_hold
+                  if prev_hold != 0: pct=delta/prev_hold
+              changes[symbol]={
+                  'hold_volume_change_contracts':delta,
+                  'hold_volume_change_fraction':pct,
+                  'funding_rate':row.get('funding_rate'),
+                  'fair_minus_index_bps':row.get('fair_minus_index_bps'),
+                  'quoted_spread_bps':row.get('quoted_spread_bps'),
+              }
+          current['within_symbol_changes_from_previous_snapshot']=changes
+          target=history/f'{stamp}.json'
+          target.write_text(json.dumps(current,indent=2),encoding='utf-8')
+          summary={
+              'schema_version':1,
+              'protocol_name':'mexc-derivatives-context-v1',
+              'snapshot_count':len(list(history.glob('*.json'))),
+              'latest_observed_at_utc':current['observed_at_utc'],
+              'latest':changes,
+              'claims':current['claims'],
+          }
+          (root/'summary.json').write_text(json.dumps(summary,indent=2),encoding='utf-8')
+          PY
+      - name: Deterministic release-manager integrity check
+        run: |
+          orderflow-multi-agent --output artifacts/derivatives_context/multi_agent_report.json
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/derivatives_context/multi_agent_report.json',encoding='utf-8'))
+          if r['release_manager']['status'] != 'reviewable': raise SystemExit('release manager blocked derivatives context collection')
+          PY
+      - name: Preserve cumulative derivatives context
+        uses: actions/upload-artifact@v4
+        with:
+          name: mexc-derivatives-context-ledger-v1
+          path: |
+            artifacts/derivatives_context/history/
+            artifacts/derivatives_context/summary.json
+            artifacts/derivatives_context/multi_agent_report.json
+            config/mexc_derivatives_context_v1.json
+          retention-days: 90
+          if-no-files-found: error
+      - name: Delete superseded cumulative derivatives ledgers
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t IDS < <(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=mexc-derivatives-context-ledger-v1&per_page=100" \
+            --jq '.artifacts | map(select(.expired == false)) | sort_by(.created_at) | reverse | .[1:] | .[].id' || true)
+          for ID in "${IDS[@]}"; do
+            [[ -z "$ID" ]] || gh api -X DELETE "repos/${GITHUB_REPOSITORY}/actions/artifacts/${ID}" || true
+          done

@@ -1,0 +1,106 @@
+name: Evidence Collection Watchdog v1.1
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "config/evidence_collection_watchdog_v1_1.json"
+      - ".github/workflows/evidence-collection-watchdog-v1.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "25,55 * * * *"
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  validate:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate watchdog protocol
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.load(open('config/evidence_collection_watchdog_v1_1.json', encoding='utf-8'))
+          assert p['protocol_name'] == 'evidence-collection-watchdog-v1.1'
+          assert p['supersedes'] == 'evidence-collection-watchdog-v1'
+          assert p['guards']['dispatch_only_when_no_active_run'] is True
+          assert p['guards']['missed_market_time_may_be_backfilled'] is False
+          assert p['guards']['watchdog_uses_strategy_pnl'] is False
+          assert p['guards']['live_order_transmission_supported'] is False
+          for row in p['checks']:
+              assert int(row['maximum_staleness_minutes']) >= 30
+              assert (Path('.github/workflows') / row['workflow']).is_file()
+          PY
+
+  repair-stale-collectors:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dispatch stale collectors only when idle
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import os
+          import subprocess
+          from datetime import datetime, timezone
+
+          repo=os.environ['GITHUB_REPOSITORY']
+          protocol=json.load(open('config/evidence_collection_watchdog_v1_1.json', encoding='utf-8'))
+          now=datetime.now(timezone.utc)
+
+          def gh(*args):
+              p=subprocess.run(['gh', *args], text=True, capture_output=True)
+              if p.returncode != 0:
+                  raise RuntimeError(f"gh {' '.join(args)} failed: {p.stderr.strip()}")
+              return p.stdout
+
+          raw=gh('api', f'repos/{repo}/actions/artifacts?per_page=100')
+          artifacts=json.loads(raw).get('artifacts', [])
+          actions=[]
+          for check in protocol['checks']:
+              workflow=check['workflow']
+              prefix=check['artifact_prefix']
+              max_age=float(check['maximum_staleness_minutes'])
+              runs=json.loads(gh('run','list','--workflow',workflow,'--limit','20','--json','status,createdAt,conclusion'))
+              active=any(r.get('status') in {'queued','in_progress','waiting','pending','requested'} for r in runs)
+              matching=[a for a in artifacts if not a.get('expired') and str(a.get('name','')).startswith(prefix)]
+              latest=max(matching, key=lambda a:a.get('created_at','')) if matching else None
+              if latest:
+                  observed=datetime.fromisoformat(latest['created_at'].replace('Z','+00:00'))
+                  age=(now-observed).total_seconds()/60.0
+              else:
+                  age=float('inf')
+              dispatched=False
+              if not active and age > max_age:
+                  gh('workflow','run',workflow,'--ref','main')
+                  dispatched=True
+              actions.append({
+                  'workflow': workflow,
+                  'active': active,
+                  'latest_artifact': latest.get('name') if latest else None,
+                  'artifact_age_minutes': None if age == float('inf') else round(age,2),
+                  'maximum_staleness_minutes': max_age,
+                  'dispatched': dispatched,
+              })
+          report={'checked_at_utc': now.isoformat(), 'protocol':'evidence-collection-watchdog-v1.1', 'actions': actions}
+          print(json.dumps(report, indent=2))
+          with open('watchdog_report.json','w',encoding='utf-8') as f:
+              json.dump(report, f, indent=2)
+          PY
+      - name: Preserve watchdog report
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-collection-watchdog-v1-1-${{ github.run_id }}
+          path: watchdog_report.json
+          retention-days: 30
+          if-no-files-found: error

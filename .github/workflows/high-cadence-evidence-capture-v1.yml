@@ -1,0 +1,237 @@
+name: High-Cadence Market Evidence Capture v1
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "config/high_cadence_evidence_capture_v1.json"
+      - ".github/workflows/high-cadence-evidence-capture-v1.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "2,32 * * * *"
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: high-cadence-market-evidence-capture-v1-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 29
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Choose deterministic replay-retention tier
+        id: retention
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Compact state evidence is preserved on every run. Full raw/features are
+          # replay material, not independent evidence, so scheduled runs retain one
+          # complete 15-minute replay batch per UTC day. Manual/PR runs retain raw
+          # data for debugging and validation.
+          KEEP_RAW=false
+          if [[ "${{ github.event_name }}" != "schedule" ]]; then
+            KEEP_RAW=true
+          else
+            HOUR="$(date -u +%H)"
+            MINUTE="$(date -u +%M)"
+            if (( 10#$HOUR == 0 && 10#$MINUTE < 20 )); then
+              KEEP_RAW=true
+            fi
+          fi
+          echo "keep_raw=$KEEP_RAW" >> "$GITHUB_OUTPUT"
+          echo "keep_raw=$KEEP_RAW"
+      - name: Verify frozen capture-only protocol
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('config/high_cadence_evidence_capture_v1.json', encoding='utf-8'))
+          assert p['protocol_name'] == 'high-cadence-evidence-capture-v1'
+          assert p['capture']['duration_seconds'] == 900
+          assert p['capture']['target_cadence_minutes'] == 30
+          assert p['validity']['capture_only'] is True
+          assert p['validity']['strategy_pnl_used_for_collection'] is False
+          assert p['validity']['cross_symbol_rows_from_the_same_time_batch_are_not_independent_time_trials'] is True
+          assert p['claims']['profitable_edge_established'] is False
+          assert p['claims']['live_order_transmission_supported'] is False
+          PY
+      - name: Capture fixed 10-symbol public MEXC panel for 15 minutes
+        run: |
+          mkdir -p artifacts/high_cadence
+          orderflow-mexc-record \
+            --symbol BTC_USDT \
+            --symbol ETH_USDT \
+            --symbol SOL_USDT \
+            --symbol XRP_USDT \
+            --symbol DOGE_USDT \
+            --symbol BNB_USDT \
+            --symbol ADA_USDT \
+            --symbol LINK_USDT \
+            --symbol SUI_USDT \
+            --symbol ENA_USDT \
+            --duration-seconds 900 \
+            --output-dir artifacts/high_cadence
+      - name: Produce PnL-independent state reports for every non-BTC symbol
+        shell: bash
+        run: |
+          set -euo pipefail
+          FEATURE=$(find artifacts/high_cadence -name '*_mexc_features.jsonl' -print -quit)
+          test -n "$FEATURE"
+          BATCH_ID=$(basename "$FEATURE" _mexc_features.jsonl)
+          for SYMBOL in ETH_USDT SOL_USDT XRP_USDT DOGE_USDT BNB_USDT ADA_USDT LINK_USDT SUI_USDT ENA_USDT; do
+            orderflow-market-state-scan "$FEATURE" \
+              --symbol "$SYMBOL" \
+              --context-symbol BTC_USDT \
+              --batch-id "$BATCH_ID" \
+              --output "artifacts/high_cadence/market_state_${SYMBOL}.json"
+          done
+      - name: Recover cumulative compact state ledger
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/high_cadence_previous
+          mkdir -p /tmp/high_cadence_previous artifacts/high_cadence/history
+          PREV_ID=""
+          while IFS=$'\t' read -r ARTIFACT_ID RUN_ID; do
+            [[ -z "${ARTIFACT_ID:-}" || -z "${RUN_ID:-}" ]] && continue
+            CONCLUSION="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}" --jq '.conclusion // ""' 2>/dev/null || true)"
+            if [[ "$CONCLUSION" == "success" ]]; then
+              PREV_ID="$ARTIFACT_ID"
+              break
+            fi
+          done < <(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=high-cadence-state-ledger-v1&per_page=20" \
+            --jq '.artifacts | map(select(.expired == false)) | sort_by(.created_at) | reverse | .[] | [.id, .workflow_run.id] | @tsv' || true)
+          if [[ -n "$PREV_ID" ]]; then
+            gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${PREV_ID}/zip" > /tmp/high_cadence_previous.zip
+            unzip -q /tmp/high_cadence_previous.zip -d /tmp/high_cadence_previous
+            PRIOR_HISTORY="$(find /tmp/high_cadence_previous -type d -path '*/artifacts/high_cadence/history' -print -quit || true)"
+            if [[ -n "$PRIOR_HISTORY" ]]; then
+              cp -a "$PRIOR_HISTORY"/. artifacts/high_cadence/history/
+            fi
+          else
+            # One-time migration path for pre-ledger PR validation artifacts.
+            LEGACY_ID="$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?per_page=100" \
+              --jq '.artifacts | map(select(.expired == false and (.name | startswith("high-cadence-state-")))) | sort_by(.created_at) | reverse | .[0].id // empty' || true)"
+            if [[ -n "$LEGACY_ID" ]]; then
+              gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${LEGACY_ID}/zip" > /tmp/high_cadence_legacy.zip
+              rm -rf /tmp/high_cadence_legacy && mkdir -p /tmp/high_cadence_legacy
+              unzip -q /tmp/high_cadence_legacy.zip -d /tmp/high_cadence_legacy
+              LEGACY_ROOT="$(find /tmp/high_cadence_legacy -type f -name 'market_state_ENA_USDT.json' -printf '%h\n' | head -n 1 || true)"
+              if [[ -n "$LEGACY_ROOT" ]]; then
+                LEGACY_BATCH="legacy_$(date -u +%Y%m%dT%H%M%SZ)"
+                mkdir -p "artifacts/high_cadence/history/${LEGACY_BATCH}"
+                cp "$LEGACY_ROOT"/market_state_*.json "artifacts/high_cadence/history/${LEGACY_BATCH}/" || true
+              fi
+            fi
+          fi
+      - name: Append current batch to cumulative state ledger
+        shell: bash
+        run: |
+          set -euo pipefail
+          FEATURE=$(find artifacts/high_cadence -name '*_mexc_features.jsonl' -print -quit)
+          test -n "$FEATURE"
+          BATCH_ID=$(basename "$FEATURE" _mexc_features.jsonl)
+          mkdir -p "artifacts/high_cadence/history/${BATCH_ID}"
+          cp artifacts/high_cadence/market_state_*.json "artifacts/high_cadence/history/${BATCH_ID}/"
+      - name: Aggregate each symbol by overlap-aware dependence cluster before strategy PnL
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/high_cadence/aggregates
+          for SYMBOL in ETH_USDT SOL_USDT XRP_USDT DOGE_USDT BNB_USDT ADA_USDT LINK_USDT SUI_USDT ENA_USDT; do
+            mapfile -t REPORTS < <(find artifacts/high_cadence/history -type f -name "market_state_${SYMBOL}.json" | sort)
+            test "${#REPORTS[@]}" -ge 1
+            orderflow-market-state-aggregate-v1-2 "${REPORTS[@]}" \
+              --protocol config/regime_research_v1_2.json \
+              --output "artifacts/high_cadence/aggregates/market_state_aggregate_v1_2_${SYMBOL}.json"
+            orderflow-state-promotion-report-v1-2 \
+              "artifacts/high_cadence/aggregates/market_state_aggregate_v1_2_${SYMBOL}.json" \
+              --output "artifacts/high_cadence/aggregates/state_promotion_report_v1_2_${SYMBOL}.json"
+          done
+      - name: Write immutable capture manifest
+        run: |
+          python - <<'PY'
+          import hashlib, json
+          from datetime import datetime, timezone
+          from pathlib import Path
+          root=Path('artifacts/high_cadence')
+          files=[]
+          for p in sorted(root.rglob('*')):
+              if p.is_file() and 'history' not in p.parts:
+                  files.append({
+                      'name': str(p.relative_to(root)),
+                      'bytes': p.stat().st_size,
+                      'sha256': hashlib.sha256(p.read_bytes()).hexdigest(),
+                  })
+          protocol=Path('config/high_cadence_evidence_capture_v1.json')
+          history_files=list((root/'history').rglob('market_state_*.json'))
+          payload={
+              'schema_version': 1,
+              'protocol_name': 'high-cadence-evidence-capture-v1',
+              'recorded_at_utc': datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
+              'protocol_sha256': hashlib.sha256(protocol.read_bytes()).hexdigest(),
+              'cumulative_state_report_count': len(history_files),
+              'raw_replay_retained_for_this_run': '${{ steps.retention.outputs.keep_raw }}' == 'true',
+              'files': files,
+              'claims': {
+                  'strategy_pnl_used_for_collection': False,
+                  'profitable_edge_established': False,
+                  'live_order_transmission_supported': False,
+              },
+          }
+          (root/'capture_manifest.json').write_text(json.dumps(payload, indent=2), encoding='utf-8')
+          PY
+      - name: Deterministic release-manager integrity check
+        run: |
+          orderflow-multi-agent --output artifacts/high_cadence/multi_agent_report.json
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/high_cadence/multi_agent_report.json', encoding='utf-8'))
+          if r['release_manager']['status'] != 'reviewable':
+              raise SystemExit('release manager blocked evidence capture')
+          PY
+      - name: Preserve cumulative compact state ledger
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: high-cadence-state-ledger-v1
+          path: |
+            artifacts/high_cadence/history/
+            artifacts/high_cadence/aggregates/
+            artifacts/high_cadence/capture_manifest.json
+            artifacts/high_cadence/multi_agent_report.json
+            config/high_cadence_evidence_capture_v1.json
+            config/regime_research_v1_2.json
+          retention-days: 90
+          if-no-files-found: error
+      - name: Delete superseded cumulative state-ledger artifacts
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t IDS < <(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=high-cadence-state-ledger-v1&per_page=100" \
+            --jq '.artifacts | map(select(.expired == false)) | sort_by(.created_at) | reverse | .[1:] | .[].id' || true)
+          for ID in "${IDS[@]}"; do
+            [[ -z "$ID" ]] || gh api -X DELETE "repos/${GITHUB_REPOSITORY}/actions/artifacts/${ID}" || true
+          done
+      - name: Preserve deterministic raw replay sample
+        if: always() && steps.retention.outputs.keep_raw == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: high-cadence-market-replay-${{ github.run_id }}
+          path: |
+            artifacts/high_cadence/*_mexc_raw.jsonl*
+            artifacts/high_cadence/*_mexc_features.jsonl*
+          retention-days: 7
+          if-no-files-found: error
