@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "protocol_name": "strategy-state-mapping-v1",
+  "status": "predeclared_research_only",
+  "upstream_threshold_protocol": "state-threshold-freeze-v1",
+  "downstream_conditioning_protocol": "strategy-conditioning-v1.1",
+  "baseline_strategy_protocol": "discovery-v1",
+  "frozen_after_commit": "fb57da37638fa8278c9875b66475399f2499ec32",
+  "purpose": "Freeze which market-state bucket may define the conditioned arm before any conditioned strategy PnL is inspected, using only state semantics and execution rationale.",
+  "mapping_rules": {
+    "directionality_vs_chop": {
+      "selected_market_state_label": "predicted_target_high",
+      "rationale": "The frozen discovery-v1 logic is directional; the predeclared trial asks whether signals observed in a more directional future-state regime behave differently from the unconditional baseline."
+    },
+    "volatility_expansion_contraction": {
+      "selected_market_state_label": "predicted_target_high",
+      "rationale": "The predeclared trial tests the state where expected movement is larger relative to a causal baseline, without changing fees, spread, slippage, latency or strategy definitions."
+    },
+    "liquidity_stability_deterioration": {
+      "selected_market_state_label": "predicted_target_low",
+      "rationale": "The current qualified liquidity targets are future spread or spread-expansion measures, so a lower predicted target represents the predeclared more stable execution state."
+    },
+    "signed_direction_or_continuation": {
+      "selected_market_state_label": null,
+      "rationale": "Signed-return targets require a separately versioned side-aware interaction with long versus short signal direction; strategy-state-mapping-v1 does not infer or optimize that interaction."
+    }
+  },
+  "trial_rules": {
+    "conditioned_arm_rule": "Keep only otherwise-valid frozen discovery-v1 signals whose current state feature falls in the single mapped raw feature bucket.",
+    "baseline_arm_rule": "Use the same frozen discovery-v1 signals without the state bucket gate.",
+    "entry_exit_changes_permitted": false,
+    "direction_changes_permitted": false,
+    "threshold_changes_permitted": false,
+    "execution_economics_changes_permitted": false,
+    "stop_or_target_optimization_permitted": false,
+    "strategy_pnl_may_select_bucket": false,
+    "unsupported_family_behavior": "emit_unsupported_for_v1_mapping_and_do_not_run_conditioned_pnl"
+  },
+  "claims": {
+    "market_state_semantics_only": true,
+    "uses_strategy_pnl_for_bucket_selection": false,
+    "uses_strategy_pf_for_bucket_selection": false,
+    "uses_strategy_expectancy_for_bucket_selection": false,
+    "changes_discovery_v1_strategy_definitions": false,
+    "automatic_conditioned_pnl_test_supported": false,
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  }
+}
