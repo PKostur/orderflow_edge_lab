@@ -12,6 +12,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: high-cadence-market-evidence-capture-v1-${{ github.ref }}
@@ -20,7 +21,9 @@ concurrency:
 jobs:
   capture:
     runs-on: ubuntu-latest
-    timeout-minutes: 24
+    timeout-minutes: 29
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -72,6 +75,43 @@ jobs:
               --batch-id "$BATCH_ID" \
               --output "artifacts/high_cadence/market_state_${SYMBOL}.json"
           done
+      - name: Recover prior compact high-cadence state evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf prior_state /tmp/high_cadence_state_zips
+          mkdir -p prior_state /tmp/high_cadence_state_zips
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?per_page=100" \
+            --jq '.artifacts | map(select(.expired == false and (.name | startswith("high-cadence-state-")))) | sort_by(.created_at) | reverse | .[:47] | .[].id' \
+            > prior_state_artifact_ids.txt
+          while read -r ARTIFACT_ID; do
+            test -n "$ARTIFACT_ID" || continue
+            ZIP="/tmp/high_cadence_state_zips/${ARTIFACT_ID}.zip"
+            DEST="prior_state/${ARTIFACT_ID}"
+            mkdir -p "$DEST"
+            if gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" > "$ZIP" 2>/dev/null; then
+              unzip -q "$ZIP" -d "$DEST" || rm -rf "$DEST"
+            else
+              rm -rf "$DEST"
+            fi
+          done < prior_state_artifact_ids.txt
+      - name: Aggregate each symbol by overlap-aware dependence cluster before strategy PnL
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/high_cadence/aggregates
+          for SYMBOL in ETH_USDT SOL_USDT XRP_USDT DOGE_USDT BNB_USDT ADA_USDT LINK_USDT SUI_USDT ENA_USDT; do
+            REPORTS=("artifacts/high_cadence/market_state_${SYMBOL}.json")
+            while IFS= read -r REPORT; do
+              REPORTS+=("$REPORT")
+            done < <(find prior_state -type f -name "market_state_${SYMBOL}.json" | sort)
+            orderflow-market-state-aggregate-v1-2 "${REPORTS[@]}" \
+              --protocol config/regime_research_v1_2.json \
+              --output "artifacts/high_cadence/aggregates/market_state_aggregate_v1_2_${SYMBOL}.json"
+            orderflow-state-promotion-report-v1-2 \
+              "artifacts/high_cadence/aggregates/market_state_aggregate_v1_2_${SYMBOL}.json" \
+              --output "artifacts/high_cadence/aggregates/state_promotion_report_v1_2_${SYMBOL}.json"
+          done
       - name: Write immutable capture manifest
         run: |
           python - <<'PY'
@@ -80,10 +120,10 @@ jobs:
           from pathlib import Path
           root=Path('artifacts/high_cadence')
           files=[]
-          for p in sorted(root.glob('*')):
+          for p in sorted(root.rglob('*')):
               if p.is_file():
                   files.append({
-                      'name': p.name,
+                      'name': str(p.relative_to(root)),
                       'bytes': p.stat().st_size,
                       'sha256': hashlib.sha256(p.read_bytes()).hexdigest(),
                   })
@@ -111,11 +151,27 @@ jobs:
           if r['release_manager']['status'] != 'reviewable':
               raise SystemExit('release manager blocked evidence capture')
           PY
-      - name: Preserve high-cadence evidence
+      - name: Preserve compact high-cadence state evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: high-cadence-state-${{ github.run_id }}
+          path: |
+            artifacts/high_cadence/market_state_*.json
+            artifacts/high_cadence/aggregates/
+            artifacts/high_cadence/capture_manifest.json
+            artifacts/high_cadence/multi_agent_report.json
+            config/high_cadence_evidence_capture_v1.json
+            config/regime_research_v1_2.json
+          retention-days: 30
+          if-no-files-found: error
+      - name: Preserve raw high-cadence market evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: high-cadence-market-evidence-${{ github.run_id }}
-          path: artifacts/high_cadence/
+          path: |
+            artifacts/high_cadence/*_mexc_raw.jsonl*
+            artifacts/high_cadence/*_mexc_features.jsonl*
           retention-days: 14
           if-no-files-found: error
