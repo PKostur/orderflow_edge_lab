@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "protocol_name": "conditioned-result-aggregate-v1",
+  "frozen_at_utc": "2026-09-13T07:55:00Z",
+  "status": "predeclared_before_cluster_result_review",
+  "upstream_protocols": {
+    "market_state_dependence": "regime-research-v1.2",
+    "conditioned_experiment": "strategy_conditioned_experiment_v1",
+    "conditioning": "strategy-conditioning-v1.1"
+  },
+  "aggregation": {
+    "dependence_unit": "regime-research-v1.2 timestamp-overlap-aware capture cluster",
+    "representative_rule": "inherit v1.2: most timestamped state observations, then earliest capture start, then lexical batch_id",
+    "cluster_weighting": "equal",
+    "minimum_independent_clusters_for_review": 5,
+    "strategy_cell_order": "lexical family then horizon_ms then fee_bps_round_trip",
+    "risk_cell_order": "lexical stream/family then rr_target then requested_risk_fraction then fee_bps_round_trip",
+    "ranking_or_best_cell_selection_permitted": false,
+    "automatic_candidate_promotion_permitted": false
+  },
+  "required_consistency": {
+    "same_strategy_state_mapping_manifest_sha256": true,
+    "same_state_gate": true,
+    "same_economics": true,
+    "conditioned_report_manifest_verification": true,
+    "representative_selection_uses_strategy_pnl": false
+  },
+  "diagnostics": {
+    "strategy": [
+      "cluster_count",
+      "median_baseline_net_expectancy_bps",
+      "median_conditioned_net_expectancy_bps",
+      "median_conditioned_minus_baseline_expectancy_bps",
+      "positive_delta_cluster_fraction",
+      "dominant_delta_sign_fraction",
+      "median_baseline_profit_factor",
+      "median_conditioned_profit_factor"
+    ],
+    "direction_control": [
+      "median_baseline_original_minus_reversed_net_bps",
+      "median_conditioned_original_minus_reversed_net_bps",
+      "median_conditioned_minus_baseline_direction_discrimination_bps"
+    ],
+    "risk_path": [
+      "median_change_max_realized_drawdown_pct",
+      "median_change_mean_mae_bps",
+      "median_change_mean_mfe_bps",
+      "baseline_ruined_cluster_fraction",
+      "conditioned_ruined_cluster_fraction"
+    ]
+  },
+  "interpretation": {
+    "retains_all_cells": true,
+    "overlapping_raw_captures_do_not_count_as_independent": true,
+    "positive_conditioning_delta_is_not_oos_validation": true,
+    "cross_pair_transfer_is_not_oos_validation": true,
+    "requires_later_candidate_freeze_trial_accounting_holdout_and_untouched_oos": true
+  },
+  "claims": {
+    "research_only": true,
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  }
+}
