@@ -155,6 +155,16 @@ jobs:
             --symbol ENA_USDT \
             --context-symbol BTC_USDT \
             --output artifacts/orderflow/stop_risk.json
+      - name: Run frozen baseline versus conditioned research experiment
+        shell: bash
+        run: |
+          FEATURE=$(find artifacts/orderflow -name '*_mexc_features.jsonl' -print -quit)
+          test -n "$FEATURE"
+          orderflow-conditioned-experiment-v1 \
+            "$FEATURE" \
+            artifacts/orderflow/market_state.json \
+            artifacts/orderflow/strategy_state_mapping_v1.json \
+            --output artifacts/orderflow/conditioned_experiment_v1.json
       - name: Aggregate strategy discovery evidence by independent capture batch
         shell: bash
         run: |
@@ -188,6 +198,7 @@ jobs:
             artifacts/orderflow/strategy_conditioning_registry_binding_v1.json
             artifacts/orderflow/state_threshold_freeze_v1.json
             artifacts/orderflow/strategy_state_mapping_v1.json
+            artifacts/orderflow/conditioned_experiment_v1.json
             artifacts/orderflow/backtest.json
             artifacts/orderflow/direction_pair.json
             artifacts/orderflow/stop_risk.json
