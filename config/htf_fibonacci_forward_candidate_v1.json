@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "candidate_id": "mexc_8h_ema24_96_atr025_fibcore_v1",
+  "frozen_at_utc": "2026-09-13T16:00:00Z",
+  "forward_signal_start_utc": "2026-09-13T16:00:00Z",
+  "selection_provenance": {
+    "base_candidate_id": "mexc_8h_ema24_96_atr025_v1",
+    "base_candidate_spec_sha256": "aa98c8179f5c3160edda2e5e78d9a9c99adca76013da984f78aa2fcd943a0f0d",
+    "source_protocol": "fibonacci-htf-robustness-v1",
+    "parent_fibonacci_protocol": "fibonacci-setup-quality-v1",
+    "development_end_exclusive_utc": "2026-09-12T00:00:00Z",
+    "robustness_artifact_sha256": "2cc0210dfd78c7f178c0d89fdb6e7ce7989d80f4b485e6c06fd366592cd21d0c",
+    "robustness_workflow_run_id": 34759528921,
+    "selection_reason": "Prospective paper-only validation of the predeclared Fib-core overlay after retrospective robustness checks; no Fibonacci or strategy parameter was retuned.",
+    "development_evidence_only": true,
+    "untouched_oos_claim": false
+  },
+  "specification": {
+    "venue": "MEXC Futures",
+    "symbols": [
+      "BTC_USDT",
+      "ETH_USDT",
+      "SOL_USDT",
+      "XRP_USDT",
+      "DOGE_USDT",
+      "BNB_USDT",
+      "ADA_USDT",
+      "LINK_USDT",
+      "SUI_USDT",
+      "ENA_USDT"
+    ],
+    "interval": "8h",
+    "family": "ema_tsmom",
+    "fast_ema": 24,
+    "slow_ema": 96,
+    "atr_period": 14,
+    "min_atr_spread": 0.25,
+    "position_rule": "long_if_normalized_ema_spread_gt_threshold_short_if_lt_negative_threshold_else_flat",
+    "signal_timing": "completed_8h_close_only",
+    "execution_timing": "next_8h_bar_open",
+    "portfolio_weighting": "equal_weight_across_active_symbols",
+    "gross_portfolio_exposure_cap": 1.0,
+    "round_trip_cost_bps": 20.0,
+    "funding_accounting": "actual_public_MEXC_realized_funding_cashflows_during_held_interval",
+    "leverage": 1.0
+  },
+  "fibonacci_overlay": {
+    "mode": "entry_transition_gate_only",
+    "anchor_lookback_bars": 24,
+    "minimum_impulse_atr": 2.0,
+    "levels": [
+      0.382,
+      0.5,
+      0.618
+    ],
+    "level_tolerance": 0.025,
+    "current_signal_bar_excluded_from_anchor": true,
+    "missed_gate_cannot_enter_later": true,
+    "reversal_requires_fresh_gate": true
+  },
+  "forward_protocol": {
+    "indicator_warmup_start_utc": "2026-07-01T00:00:00Z",
+    "position_state_at_boundary": "flat",
+    "no_retuning_after_forward_start": true,
+    "minimum_completed_forward_trades_for_edge_review": 20,
+    "paper_shadow_only": true,
+    "mark_to_market": "latest_available_MEXC_perpetual_price_or_current_8h_close",
+    "visible_pnl_is_not_statistical_proof": true,
+    "no_backfill_before_forward_start": true
+  },
+  "claims": {
+    "candidate_specification_frozen": true,
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  },
+  "spec_sha256": "42728de49b2f4868946c7e24dcac83bf26a92f40ad0ad8b9bb050243320e87f1"
+}
