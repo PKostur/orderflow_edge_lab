@@ -1,10 +1,10 @@
-name: Evidence Collection Watchdog v1
+name: Evidence Collection Watchdog v1.1
 
 on:
   pull_request:
     branches: [main]
     paths:
-      - "config/evidence_collection_watchdog_v1.json"
+      - "config/evidence_collection_watchdog_v1_1.json"
       - ".github/workflows/evidence-collection-watchdog-v1.yml"
   workflow_dispatch:
   schedule:
@@ -25,8 +25,9 @@ jobs:
           python - <<'PY'
           import json
           from pathlib import Path
-          p=json.load(open('config/evidence_collection_watchdog_v1.json', encoding='utf-8'))
-          assert p['protocol_name'] == 'evidence-collection-watchdog-v1'
+          p=json.load(open('config/evidence_collection_watchdog_v1_1.json', encoding='utf-8'))
+          assert p['protocol_name'] == 'evidence-collection-watchdog-v1.1'
+          assert p['supersedes'] == 'evidence-collection-watchdog-v1'
           assert p['guards']['dispatch_only_when_no_active_run'] is True
           assert p['guards']['missed_market_time_may_be_backfilled'] is False
           assert p['guards']['watchdog_uses_strategy_pnl'] is False
@@ -54,7 +55,7 @@ jobs:
           from datetime import datetime, timezone
 
           repo=os.environ['GITHUB_REPOSITORY']
-          protocol=json.load(open('config/evidence_collection_watchdog_v1.json', encoding='utf-8'))
+          protocol=json.load(open('config/evidence_collection_watchdog_v1_1.json', encoding='utf-8'))
           now=datetime.now(timezone.utc)
 
           def gh(*args):
@@ -91,14 +92,15 @@ jobs:
                   'maximum_staleness_minutes': max_age,
                   'dispatched': dispatched,
               })
-          print(json.dumps({'checked_at_utc': now.isoformat(), 'actions': actions}, indent=2))
+          report={'checked_at_utc': now.isoformat(), 'protocol':'evidence-collection-watchdog-v1.1', 'actions': actions}
+          print(json.dumps(report, indent=2))
           with open('watchdog_report.json','w',encoding='utf-8') as f:
-              json.dump({'checked_at_utc': now.isoformat(), 'actions': actions}, f, indent=2)
+              json.dump(report, f, indent=2)
           PY
       - name: Preserve watchdog report
         uses: actions/upload-artifact@v4
         with:
-          name: evidence-collection-watchdog-v1-${{ github.run_id }}
+          name: evidence-collection-watchdog-v1-1-${{ github.run_id }}
           path: watchdog_report.json
           retention-days: 30
           if-no-files-found: error
