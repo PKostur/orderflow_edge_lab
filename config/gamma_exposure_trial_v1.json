@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gamma-exposure-trial-v1",
+  "status": "forward_research_only",
+  "frozen_at_intent_utc": "2026-09-13T10:24:00Z",
+  "purpose": "Add BTC options gamma exposure as a separately versioned derivatives-positioning context trial and compare it prospectively with the already-frozen ENA 1h, 8h trend, and cross-sectional forward agents without changing any strategy parameter or execution rule.",
+  "source": {
+    "venue": "Deribit",
+    "currency": "BTC",
+    "kind": "option",
+    "api": "public REST v2",
+    "instruments_endpoint": "public/get_instruments",
+    "summary_endpoint": "public/get_book_summary_by_currency",
+    "uses_private_account_data": false,
+    "uses_paid_data": false,
+    "historical_open_interest_backfill_allowed": false
+  },
+  "snapshot_definition": {
+    "sampling": "hourly",
+    "schedule_minute_utc": 17,
+    "active_instruments_only": true,
+    "minimum_open_interest_btc": 0.0,
+    "iv_source": "mark_iv",
+    "underlying_source": "underlying_price",
+    "interest_rate_source": "interest_rate",
+    "reference_spot": "median_finite_underlying_price_across_usable_options",
+    "gamma_model": "standard_black_scholes_gamma_using_mark_iv_and_remaining_calendar_time",
+    "gamma_exposure_usd_per_1pct_formula": "gamma * open_interest_btc * contract_size * spot_usd^2 * 0.01",
+    "gross_gamma_exposure": "sum_absolute_instrument_gamma_exposure_usd_per_1pct",
+    "call_minus_put_gamma_proxy": "call exposure enters positive and put exposure enters negative; this is an analytic call-minus-put proxy and is not observed dealer inventory",
+    "strike_aggregation": "sum exposure by strike across expiries",
+    "top_strikes_each_side": 5,
+    "balance_flip_proxy": {
+      "enabled": true,
+      "spot_ratio_min": 0.6,
+      "spot_ratio_max": 1.4,
+      "grid_points": 161,
+      "definition": "nearest sign crossing of recomputed call-minus-put gamma proxy across the frozen spot grid using each option's current mark IV, rate and time to expiry"
+    }
+  },
+  "comparison_definition": {
+    "strategy_inputs": [
+      "config/ena_mean_reversion_candidate_v1.json",
+      "config/htf_trend_candidate_v1.json",
+      "config/cross_sectional_candidate_v1.json"
+    ],
+    "strategy_parameters_may_change": false,
+    "execution_economics_may_change": false,
+    "risk_parameters_may_change": false,
+    "gamma_snapshot_must_be_at_or_before_strategy_observation": true,
+    "maximum_gamma_snapshot_staleness_minutes": 90,
+    "forward_only_from_freeze_boundary": true,
+    "historical_strategy_results_may_be_displayed_as_baseline_context": true,
+    "historical_strategy_results_may_not_be_relabelled_gamma_conditioned": true,
+    "primary_comparison_features": [
+      "gross_gamma_exposure_usd_per_1pct",
+      "call_minus_put_gamma_proxy_usd_per_1pct",
+      "call_minus_put_to_gross_ratio",
+      "balance_flip_proxy_usd",
+      "spot_distance_to_balance_flip_pct",
+      "nearest_major_abs_gamma_strike_distance_pct",
+      "top5_abs_gamma_concentration"
+    ],
+    "categorical_context": [
+      "call_minus_put_proxy_sign"
+    ],
+    "minimum_forward_snapshots_before_descriptive_state_comparison": 12,
+    "minimum_completed_strategy_outcomes_before_any_pnl_by_gamma_state_table": 5
+  },
+  "anti_overfit_rules": [
+    "Do not choose gamma thresholds from strategy PnL.",
+    "Do not change frozen ENA, 8h trend, or cross-sectional parameters because of gamma results.",
+    "Do not backfill historical GEX from current open interest or current implied volatility.",
+    "Do not label the call-minus-put proxy as observed dealer positioning.",
+    "Do not promote a gamma condition from the highest retrospective PF or expectancy.",
+    "Do not weaken fees, spread, funding, slippage, risk, holdout, or claim boundaries.",
+    "Do not combine gamma with another condition until incremental information is separately demonstrated under a predeclared protocol."
+  ],
+  "claims": {
+    "research_only": true,
+    "dealer_positioning_observed": false,
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  }
+}
