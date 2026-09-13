@@ -7,7 +7,7 @@ on:
 
 permissions:
   contents: read
-  actions: read
+  actions: write
 
 concurrency:
   group: continuous-orderflow-discovery
@@ -26,6 +26,23 @@ jobs:
           python-version: "3.12"
       - name: Install
         run: python -m pip install -e ".[research]"
+      - name: Choose deterministic replay-retention tier
+        id: retention
+        shell: bash
+        run: |
+          set -euo pipefail
+          KEEP_RAW=false
+          if [[ "${{ github.event_name }}" != "schedule" ]]; then
+            KEEP_RAW=true
+          else
+            HOUR="$(date -u +%H)"
+            MINUTE="$(date -u +%M)"
+            if (( 10#$HOUR % 4 == 0 && 10#$MINUTE < 35 )); then
+              KEEP_RAW=true
+            fi
+          fi
+          echo "keep_raw=$KEEP_RAW" >> "$GITHUB_OUTPUT"
+          echo "keep_raw=$KEEP_RAW"
       - name: Capture 15 minutes of fresh public ENA/BTC order flow
         run: |
           mkdir -p artifacts/orderflow
@@ -250,6 +267,7 @@ jobs:
               'updated_at_utc': datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
               'batch_count': len(batches),
               'batches': batches,
+              'raw_replay_retained_for_this_run': '${{ steps.retention.outputs.keep_raw }}' == 'true',
               'claims': {
                   'verified_out_of_sample_edge_established': False,
                   'profitable_edge_established': False,
@@ -275,6 +293,16 @@ jobs:
             config/orderflow_discovery_v1.json
           if-no-files-found: warn
           retention-days: 90
+      - name: Delete superseded cumulative discovery-ledger artifacts
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t IDS < <(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=orderflow-discovery-ledger-v1&per_page=100" \
+            --jq '.artifacts | map(select(.expired == false)) | sort_by(.created_at) | reverse | .[1:] | .[].id' || true)
+          for ID in "${IDS[@]}"; do
+            [[ -z "$ID" ]] || gh api -X DELETE "repos/${GITHUB_REPOSITORY}/actions/artifacts/${ID}" || true
+          done
       - name: Preserve compact discovery report
         if: always()
         uses: actions/upload-artifact@v4
@@ -312,13 +340,13 @@ jobs:
             config/orderflow_discovery_v1.json
           if-no-files-found: warn
           retention-days: 14
-      - name: Preserve raw evidence
-        if: always()
+      - name: Preserve deterministic raw discovery replay sample
+        if: always() && steps.retention.outputs.keep_raw == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: orderflow-discovery-evidence-${{ github.run_id }}
+          name: orderflow-discovery-replay-${{ github.run_id }}
           path: |
             artifacts/orderflow/*_mexc_raw.jsonl*
             artifacts/orderflow/*_mexc_features.jsonl*
           if-no-files-found: warn
-          retention-days: 14
+          retention-days: 5
