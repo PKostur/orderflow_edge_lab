@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from hashlib import sha256
 import json
+import unittest
 
 import numpy as np
 import pandas as pd
@@ -67,71 +68,76 @@ def _frame(index: pd.DatetimeIndex, slope: float = 0.01):
     )
 
 
-def test_candidate_hash_and_first_execution_are_strictly_forward():
-    idx = pd.date_range("2026-08-01", periods=160, freq="8h", tz="UTC")
-    start = idx[120]
-    candidate = _candidate(["A"], start)
-    assert verify_candidate_spec(candidate)
-    as_of = idx[126] + pd.Timedelta(hours=2)
-    targets = build_execution_targets(_frame(idx), candidate, as_of_utc=as_of)
-    assert len(targets) > 0
-    assert targets.index.min() == start + pd.Timedelta(hours=8)
-    assert not (targets.index <= start).any()
+class HtfFibonacciForwardShadowTests(unittest.TestCase):
+    def test_candidate_hash_and_first_execution_are_strictly_forward(self):
+        idx = pd.date_range("2026-08-01", periods=160, freq="8h", tz="UTC")
+        start = idx[120]
+        candidate = _candidate(["A"], start)
+        self.assertTrue(verify_candidate_spec(candidate))
+        as_of = idx[126] + pd.Timedelta(hours=2)
+        targets = build_execution_targets(_frame(idx), candidate, as_of_utc=as_of)
+        self.assertGreater(len(targets), 0)
+        self.assertEqual(targets.index.min(), start + pd.Timedelta(hours=8))
+        self.assertFalse((targets.index <= start).any())
 
+    def test_failed_entry_gate_does_not_manufacture_delayed_entry(self):
+        idx = pd.date_range("2026-09-01", periods=6, freq="8h", tz="UTC")
+        target = pd.Series([0.0, 1.0, 1.0, 1.0, 0.0, 1.0], index=idx)
+        eligible = pd.Series([False, False, True, True, False, True], index=idx)
+        gated = gate_target_on_entry_transitions(target, eligible)
+        self.assertEqual(gated.tolist(), [0.0, 0.0, 0.0, 0.0, 0.0, 1.0])
 
-def test_failed_entry_gate_does_not_manufacture_delayed_entry():
-    idx = pd.date_range("2026-09-01", periods=6, freq="8h", tz="UTC")
-    target = pd.Series([0.0, 1.0, 1.0, 1.0, 0.0, 1.0], index=idx)
-    eligible = pd.Series([False, False, True, True, False, True], index=idx)
-    gated = gate_target_on_entry_transitions(target, eligible)
-    assert gated.tolist() == [0.0, 0.0, 0.0, 0.0, 0.0, 1.0]
-
-
-def test_current_signal_bar_high_is_not_part_of_swing_anchor():
-    idx = pd.date_range("2026-07-01", periods=40, freq="8h", tz="UTC")
-    frame = pd.DataFrame(
-        {
-            "open": np.full(40, 100.0),
-            "high": np.full(40, 102.0),
-            "low": np.full(40, 98.0),
-            "close": np.full(40, 100.0),
-        },
-        index=idx,
-    )
-    frame.loc[idx[10], "low"] = 80.0
-    frame.loc[idx[20], "high"] = 120.0
-    target = pd.Series(0.0, index=idx)
-    target.loc[idx[30]] = 1.0
-    baseline = directional_fib_depth(
-        frame, target, lookback_bars=24, minimum_impulse_atr=2.0, atr_period=14
-    )
-    altered = frame.copy()
-    altered.loc[idx[30], "high"] = 1000.0
-    changed = directional_fib_depth(
-        altered, target, lookback_bars=24, minimum_impulse_atr=2.0, atr_period=14
-    )
-    assert np.isfinite(baseline.loc[idx[30]])
-    assert baseline.loc[idx[30]] == changed.loc[idx[30]]
-
-
-def test_forward_report_remains_paper_only():
-    idx = pd.date_range("2026-08-01", periods=160, freq="8h", tz="UTC")
-    start = idx[120]
-    symbols = ["A", "B"]
-    candidate = _candidate(symbols, start)
-    frames = {symbol: _frame(idx, 0.004 + i * 0.0001) for i, symbol in enumerate(symbols)}
-    funding = {
-        symbol: pd.DataFrame(
-            columns=["funding_rate"], index=pd.DatetimeIndex([], tz="UTC")
+    def test_current_signal_bar_high_is_not_part_of_swing_anchor(self):
+        idx = pd.date_range("2026-07-01", periods=40, freq="8h", tz="UTC")
+        frame = pd.DataFrame(
+            {
+                "open": np.full(40, 100.0),
+                "high": np.full(40, 102.0),
+                "low": np.full(40, 98.0),
+                "close": np.full(40, 100.0),
+            },
+            index=idx,
         )
-        for symbol in symbols
-    }
-    report = build_forward_report(
-        frames, funding, candidate, as_of_utc=idx[128] + pd.Timedelta(hours=1)
-    )
-    assert report["experiment"] == "htf-fibonacci-forward-shadow-v1"
-    assert report["claims"]["fibonacci_overlay_frozen"] is True
-    assert report["claims"]["paper_shadow_only"] is True
-    assert report["claims"]["verified_out_of_sample_evidence"] is False
-    assert report["claims"]["profitable_edge_established"] is False
-    assert report["claims"]["live_order_transmission_supported"] is False
+        frame.loc[idx[10], "low"] = 80.0
+        frame.loc[idx[20], "high"] = 120.0
+        target = pd.Series(0.0, index=idx)
+        target.loc[idx[30]] = 1.0
+        baseline = directional_fib_depth(
+            frame, target, lookback_bars=24, minimum_impulse_atr=2.0, atr_period=14
+        )
+        altered = frame.copy()
+        altered.loc[idx[30], "high"] = 1000.0
+        changed = directional_fib_depth(
+            altered, target, lookback_bars=24, minimum_impulse_atr=2.0, atr_period=14
+        )
+        self.assertTrue(np.isfinite(baseline.loc[idx[30]]))
+        self.assertEqual(baseline.loc[idx[30]], changed.loc[idx[30]])
+
+    def test_forward_report_remains_paper_only(self):
+        idx = pd.date_range("2026-08-01", periods=160, freq="8h", tz="UTC")
+        start = idx[120]
+        symbols = ["A", "B"]
+        candidate = _candidate(symbols, start)
+        frames = {
+            symbol: _frame(idx, 0.004 + i * 0.0001)
+            for i, symbol in enumerate(symbols)
+        }
+        funding = {
+            symbol: pd.DataFrame(
+                columns=["funding_rate"], index=pd.DatetimeIndex([], tz="UTC")
+            )
+            for symbol in symbols
+        }
+        report = build_forward_report(
+            frames, funding, candidate, as_of_utc=idx[128] + pd.Timedelta(hours=1)
+        )
+        self.assertEqual(report["experiment"], "htf-fibonacci-forward-shadow-v1")
+        self.assertTrue(report["claims"]["fibonacci_overlay_frozen"])
+        self.assertTrue(report["claims"]["paper_shadow_only"])
+        self.assertFalse(report["claims"]["verified_out_of_sample_evidence"])
+        self.assertFalse(report["claims"]["profitable_edge_established"])
+        self.assertFalse(report["claims"]["live_order_transmission_supported"])
+
+
+if __name__ == "__main__":
+    unittest.main()
