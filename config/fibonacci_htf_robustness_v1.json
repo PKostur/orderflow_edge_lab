@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "protocol_name": "fibonacci-htf-robustness-v1",
+  "status": "retrospective_development_robustness_only",
+  "parent_protocol": "fibonacci-setup-quality-v1",
+  "parent_branch_head": "de6972a9342fc65e622cb36cc08eda1c916c0010",
+  "purpose": "Test whether the already-observed HTF Fib-core setup-quality lead is diversified across symbols, fixed time folds, and causal BTC market regimes without changing Fibonacci levels, tolerance, anchors, strategy parameters, execution, costs, or funding accounting.",
+  "data": {
+    "source": "MEXC public futures klines plus observed public realized funding",
+    "start": "2025-03-22T16:00:00Z",
+    "end_exclusive": "2026-09-12T00:00:00Z",
+    "symbols": [
+      "BTC_USDT",
+      "ETH_USDT",
+      "SOL_USDT",
+      "XRP_USDT",
+      "DOGE_USDT",
+      "BNB_USDT",
+      "ADA_USDT",
+      "LINK_USDT",
+      "SUI_USDT",
+      "ENA_USDT"
+    ],
+    "interval": "8h"
+  },
+  "frozen_strategy": {
+    "signal_family": "ema_tsmom",
+    "parameters": {
+      "fast": 24,
+      "slow": 96,
+      "atr_period": 14,
+      "min_atr_spread": 0.25
+    },
+    "execution_timing": "next_8h_bar_open",
+    "portfolio_weighting": "equal_weight_across_active_symbols",
+    "gross_portfolio_exposure_cap": 1.0,
+    "funding_accounting": "actual_public_MEXC_realized_funding_cashflows_during_held_interval"
+  },
+  "frozen_fibonacci": {
+    "anchor_lookback_bars": 24,
+    "minimum_impulse_atr": 2.0,
+    "level_tolerance": 0.025,
+    "fib_core_levels": [
+      0.382,
+      0.5,
+      0.618
+    ],
+    "matched_nonfib_levels": [
+      0.3,
+      0.43,
+      0.7
+    ],
+    "deep_786_retested": false,
+    "reason_deep_786_not_retested": "The parent screen produced zero HTF setups; robustness work is restricted to the already-defined primary Fib-core comparison and matched control."
+  },
+  "costs": {
+    "round_trip_bps": [
+      20.0,
+      30.0,
+      40.0
+    ],
+    "primary_diagnostic_bps": 20.0
+  },
+  "time_robustness": {
+    "fold_days": 120,
+    "fold_anchor": "fixed_data_start",
+    "rule": "Calendar folds are anchored to the declared data start, not to observed trade times or PnL."
+  },
+  "regime_robustness": {
+    "btc_trend": {
+      "definition": "Frozen HTF ema_tsmom state on BTC, shifted one bar so the entry-open label uses only the prior completed 8h bar.",
+      "labels": [
+        "bear",
+        "neutral",
+        "bull"
+      ]
+    },
+    "btc_volatility": {
+      "measure": "ATR14/close from the prior completed BTC 8h bar",
+      "history_bars": 90,
+      "minimum_history_bars": 60,
+      "thresholds": [
+        0.3333333333333333,
+        0.6666666666666666
+      ],
+      "threshold_rule": "At each entry, compare prior-bar volatility with rolling terciles estimated strictly from still-earlier observations.",
+      "labels": [
+        "low",
+        "middle",
+        "high",
+        "unknown"
+      ]
+    }
+  },
+  "diagnostics": {
+    "per_symbol": true,
+    "fixed_time_fold": true,
+    "btc_trend_regime": true,
+    "btc_volatility_regime": true,
+    "leave_one_symbol_out_portfolio": true,
+    "leave_one_fold_out_portfolio": true,
+    "concentration_hhi": true,
+    "max_setup_share": true,
+    "matched_nonfib_control_retained": true
+  },
+  "analysis_rules": {
+    "no_fibonacci_level_retuning": true,
+    "no_tolerance_retuning": true,
+    "no_anchor_retuning": true,
+    "no_strategy_parameter_retuning": true,
+    "no_symbol_selection_by_pnl": true,
+    "no_fold_selection_by_pnl": true,
+    "no_regime_selection_by_pnl": true,
+    "all_cost_cells_retained": true,
+    "descriptive_robustness_not_promotion": true,
+    "parent_forward_candidate_unchanged": true,
+    "no_live_transmission": true
+  },
+  "claims": {
+    "retrospective_development_only": true,
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  }
+}
