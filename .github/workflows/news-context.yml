@@ -3,7 +3,7 @@ name: Coin News Behavior Monitor
 on:
   workflow_dispatch:
   schedule:
-    - cron: "23 * * * *"
+    - cron: "27,57 * * * *"
 
 permissions:
   contents: read
