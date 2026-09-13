@@ -1,0 +1,71 @@
+name: Frozen Candidate Long Backtests v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/frozen-candidate-long-backtests-v1]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: frozen-candidate-long-backtests-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  long-history-stress:
+    name: exact-candidates-long-history-stress
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run all predeclared long-history cells
+        run: |
+          python scripts/frozen_candidate_long_backtests.py \
+            --config config/frozen_candidate_long_backtest_v1.json \
+            --output-dir artifacts/frozen_candidate_long_backtest_v1 \
+            --max-workers 4
+      - name: Verify retrospective-only claims and print exact-cost full-history cells
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('artifacts/frozen_candidate_long_backtest_v1/summary.json')
+          report = json.loads(path.read_text(encoding='utf-8'))
+          assert report['claims']['development_stress_only'] is True
+          assert report['claims']['verified_out_of_sample_evidence'] is False
+          assert report['claims']['profitable_edge_established'] is False
+          assert report['claims']['live_order_transmission_supported'] is False
+          assert report['all_predeclared_cells_retained'] is True
+          primary = [
+              row for row in report['cells']
+              if row['window_name'] == 'full_available' and row['is_exact_frozen_cost_case']
+          ]
+          if len(primary) != 3:
+              raise SystemExit(f'expected exactly three primary watched-candidate cells, got {len(primary)}')
+          print(json.dumps({'cell_count': report['cell_count'], 'primary': primary}, indent=2))
+          PY
+      - name: Deterministic multi-agent release-manager check
+        run: |
+          orderflow-multi-agent \
+            --output artifacts/frozen_candidate_long_backtest_v1/multi_agent_report.json
+          python - <<'PY'
+          import json
+          report = json.load(open('artifacts/frozen_candidate_long_backtest_v1/multi_agent_report.json', encoding='utf-8'))
+          if report['release_manager']['status'] != 'reviewable':
+              raise SystemExit('release manager blocked long-history stress artifact')
+          PY
+      - name: Upload complete historical stress pack
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: frozen-candidate-long-backtests-v1
+          path: artifacts/frozen_candidate_long_backtest_v1/
+          retention-days: 30
+          if-no-files-found: error
