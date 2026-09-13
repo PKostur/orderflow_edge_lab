@@ -1,0 +1,116 @@
+name: High-Cadence Market Evidence Capture v1
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "2,32 * * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: high-cadence-market-evidence-capture-v1
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Verify frozen capture-only protocol
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('config/high_cadence_evidence_capture_v1.json', encoding='utf-8'))
+          assert p['protocol_name'] == 'high-cadence-evidence-capture-v1'
+          assert p['capture']['duration_seconds'] == 900
+          assert p['capture']['target_cadence_minutes'] == 30
+          assert p['validity']['capture_only'] is True
+          assert p['validity']['strategy_pnl_used_for_collection'] is False
+          assert p['validity']['cross_symbol_rows_from_the_same_time_batch_are_not_independent_time_trials'] is True
+          assert p['claims']['profitable_edge_established'] is False
+          assert p['claims']['live_order_transmission_supported'] is False
+          PY
+      - name: Capture fixed 10-symbol public MEXC panel for 15 minutes
+        run: |
+          mkdir -p artifacts/high_cadence
+          orderflow-mexc-record \
+            --symbol BTC_USDT \
+            --symbol ETH_USDT \
+            --symbol SOL_USDT \
+            --symbol XRP_USDT \
+            --symbol DOGE_USDT \
+            --symbol BNB_USDT \
+            --symbol ADA_USDT \
+            --symbol LINK_USDT \
+            --symbol SUI_USDT \
+            --symbol ENA_USDT \
+            --duration-seconds 900 \
+            --output-dir artifacts/high_cadence
+      - name: Produce PnL-independent state reports for every non-BTC symbol
+        shell: bash
+        run: |
+          set -euo pipefail
+          FEATURE=$(find artifacts/high_cadence -name '*_mexc_features.jsonl' -print -quit)
+          test -n "$FEATURE"
+          BATCH_ID=$(basename "$FEATURE" _mexc_features.jsonl)
+          for SYMBOL in ETH_USDT SOL_USDT XRP_USDT DOGE_USDT BNB_USDT ADA_USDT LINK_USDT SUI_USDT ENA_USDT; do
+            orderflow-market-state-scan "$FEATURE" \
+              --symbol "$SYMBOL" \
+              --context-symbol BTC_USDT \
+              --batch-id "$BATCH_ID" \
+              --output "artifacts/high_cadence/market_state_${SYMBOL}.json"
+          done
+      - name: Write immutable capture manifest
+        run: |
+          python - <<'PY'
+          import hashlib, json
+          from datetime import datetime, timezone
+          from pathlib import Path
+          root=Path('artifacts/high_cadence')
+          files=[]
+          for p in sorted(root.glob('*')):
+              if p.is_file():
+                  files.append({
+                      'name': p.name,
+                      'bytes': p.stat().st_size,
+                      'sha256': hashlib.sha256(p.read_bytes()).hexdigest(),
+                  })
+          protocol=Path('config/high_cadence_evidence_capture_v1.json')
+          payload={
+              'schema_version': 1,
+              'protocol_name': 'high-cadence-evidence-capture-v1',
+              'recorded_at_utc': datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
+              'protocol_sha256': hashlib.sha256(protocol.read_bytes()).hexdigest(),
+              'files': files,
+              'claims': {
+                  'strategy_pnl_used_for_collection': False,
+                  'profitable_edge_established': False,
+                  'live_order_transmission_supported': False,
+              },
+          }
+          (root/'capture_manifest.json').write_text(json.dumps(payload, indent=2), encoding='utf-8')
+          PY
+      - name: Deterministic release-manager integrity check
+        run: |
+          orderflow-multi-agent --output artifacts/high_cadence/multi_agent_report.json
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/high_cadence/multi_agent_report.json', encoding='utf-8'))
+          if r['release_manager']['status'] != 'reviewable':
+              raise SystemExit('release manager blocked evidence capture')
+          PY
+      - name: Preserve high-cadence evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: high-cadence-market-evidence-${{ github.run_id }}
+          path: artifacts/high_cadence/
+          retention-days: 14
+          if-no-files-found: error
