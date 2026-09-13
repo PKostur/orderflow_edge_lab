@@ -75,36 +75,62 @@ jobs:
               --batch-id "$BATCH_ID" \
               --output "artifacts/high_cadence/market_state_${SYMBOL}.json"
           done
-      - name: Recover prior compact high-cadence state evidence
+      - name: Recover cumulative compact state ledger
         shell: bash
         run: |
           set -euo pipefail
-          rm -rf prior_state /tmp/high_cadence_state_zips
-          mkdir -p prior_state /tmp/high_cadence_state_zips
-          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?per_page=100" \
-            --jq '.artifacts | map(select(.expired == false and (.name | startswith("high-cadence-state-")))) | sort_by(.created_at) | reverse | .[:47] | .[].id' \
-            > prior_state_artifact_ids.txt
-          while read -r ARTIFACT_ID; do
-            test -n "$ARTIFACT_ID" || continue
-            ZIP="/tmp/high_cadence_state_zips/${ARTIFACT_ID}.zip"
-            DEST="prior_state/${ARTIFACT_ID}"
-            mkdir -p "$DEST"
-            if gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" > "$ZIP" 2>/dev/null; then
-              unzip -q "$ZIP" -d "$DEST" || rm -rf "$DEST"
-            else
-              rm -rf "$DEST"
+          rm -rf /tmp/high_cadence_previous
+          mkdir -p /tmp/high_cadence_previous artifacts/high_cadence/history
+          PREV_ID=""
+          while IFS=$'\t' read -r ARTIFACT_ID RUN_ID; do
+            [[ -z "${ARTIFACT_ID:-}" || -z "${RUN_ID:-}" ]] && continue
+            CONCLUSION="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}" --jq '.conclusion // ""' 2>/dev/null || true)"
+            if [[ "$CONCLUSION" == "success" ]]; then
+              PREV_ID="$ARTIFACT_ID"
+              break
             fi
-          done < prior_state_artifact_ids.txt
+          done < <(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=high-cadence-state-ledger-v1&per_page=20" \
+            --jq '.artifacts | map(select(.expired == false)) | sort_by(.created_at) | reverse | .[] | [.id, .workflow_run.id] | @tsv' || true)
+          if [[ -n "$PREV_ID" ]]; then
+            gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${PREV_ID}/zip" > /tmp/high_cadence_previous.zip
+            unzip -q /tmp/high_cadence_previous.zip -d /tmp/high_cadence_previous
+            PRIOR_HISTORY="$(find /tmp/high_cadence_previous -type d -path '*/artifacts/high_cadence/history' -print -quit || true)"
+            if [[ -n "$PRIOR_HISTORY" ]]; then
+              cp -a "$PRIOR_HISTORY"/. artifacts/high_cadence/history/
+            fi
+          else
+            # One-time migration path for pre-ledger PR validation artifacts.
+            LEGACY_ID="$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?per_page=100" \
+              --jq '.artifacts | map(select(.expired == false and (.name | startswith("high-cadence-state-")))) | sort_by(.created_at) | reverse | .[0].id // empty' || true)"
+            if [[ -n "$LEGACY_ID" ]]; then
+              gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${LEGACY_ID}/zip" > /tmp/high_cadence_legacy.zip
+              rm -rf /tmp/high_cadence_legacy && mkdir -p /tmp/high_cadence_legacy
+              unzip -q /tmp/high_cadence_legacy.zip -d /tmp/high_cadence_legacy
+              LEGACY_ROOT="$(find /tmp/high_cadence_legacy -type f -name 'market_state_ENA_USDT.json' -printf '%h\n' | head -n 1 || true)"
+              if [[ -n "$LEGACY_ROOT" ]]; then
+                LEGACY_BATCH="legacy_$(date -u +%Y%m%dT%H%M%SZ)"
+                mkdir -p "artifacts/high_cadence/history/${LEGACY_BATCH}"
+                cp "$LEGACY_ROOT"/market_state_*.json "artifacts/high_cadence/history/${LEGACY_BATCH}/" || true
+              fi
+            fi
+          fi
+      - name: Append current batch to cumulative state ledger
+        shell: bash
+        run: |
+          set -euo pipefail
+          FEATURE=$(find artifacts/high_cadence -name '*_mexc_features.jsonl' -print -quit)
+          test -n "$FEATURE"
+          BATCH_ID=$(basename "$FEATURE" _mexc_features.jsonl)
+          mkdir -p "artifacts/high_cadence/history/${BATCH_ID}"
+          cp artifacts/high_cadence/market_state_*.json "artifacts/high_cadence/history/${BATCH_ID}/"
       - name: Aggregate each symbol by overlap-aware dependence cluster before strategy PnL
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p artifacts/high_cadence/aggregates
           for SYMBOL in ETH_USDT SOL_USDT XRP_USDT DOGE_USDT BNB_USDT ADA_USDT LINK_USDT SUI_USDT ENA_USDT; do
-            REPORTS=("artifacts/high_cadence/market_state_${SYMBOL}.json")
-            while IFS= read -r REPORT; do
-              REPORTS+=("$REPORT")
-            done < <(find prior_state -type f -name "market_state_${SYMBOL}.json" | sort)
+            mapfile -t REPORTS < <(find artifacts/high_cadence/history -type f -name "market_state_${SYMBOL}.json" | sort)
+            test "${#REPORTS[@]}" -ge 1
             orderflow-market-state-aggregate-v1-2 "${REPORTS[@]}" \
               --protocol config/regime_research_v1_2.json \
               --output "artifacts/high_cadence/aggregates/market_state_aggregate_v1_2_${SYMBOL}.json"
@@ -121,18 +147,20 @@ jobs:
           root=Path('artifacts/high_cadence')
           files=[]
           for p in sorted(root.rglob('*')):
-              if p.is_file():
+              if p.is_file() and 'history' not in p.parts:
                   files.append({
                       'name': str(p.relative_to(root)),
                       'bytes': p.stat().st_size,
                       'sha256': hashlib.sha256(p.read_bytes()).hexdigest(),
                   })
           protocol=Path('config/high_cadence_evidence_capture_v1.json')
+          history_files=list((root/'history').rglob('market_state_*.json'))
           payload={
               'schema_version': 1,
               'protocol_name': 'high-cadence-evidence-capture-v1',
               'recorded_at_utc': datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
               'protocol_sha256': hashlib.sha256(protocol.read_bytes()).hexdigest(),
+              'cumulative_state_report_count': len(history_files),
               'files': files,
               'claims': {
                   'strategy_pnl_used_for_collection': False,
@@ -151,19 +179,19 @@ jobs:
           if r['release_manager']['status'] != 'reviewable':
               raise SystemExit('release manager blocked evidence capture')
           PY
-      - name: Preserve compact high-cadence state evidence
+      - name: Preserve cumulative compact state ledger
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: high-cadence-state-${{ github.run_id }}
+          name: high-cadence-state-ledger-v1
           path: |
-            artifacts/high_cadence/market_state_*.json
+            artifacts/high_cadence/history/
             artifacts/high_cadence/aggregates/
             artifacts/high_cadence/capture_manifest.json
             artifacts/high_cadence/multi_agent_report.json
             config/high_cadence_evidence_capture_v1.json
             config/regime_research_v1_2.json
-          retention-days: 30
+          retention-days: 90
           if-no-files-found: error
       - name: Preserve raw high-cadence market evidence
         if: always()
