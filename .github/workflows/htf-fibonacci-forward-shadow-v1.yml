@@ -1,0 +1,132 @@
+name: HTF Fibonacci Forward Shadow v1
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [research/fibonacci-htf-robustness-v1]
+  push:
+    branches: [research/htf-fibonacci-forward-shadow-v1]
+  schedule:
+    - cron: "47 * * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: htf-fibonacci-forward-shadow-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+
+      - name: Verify frozen candidate and parent bindings
+        run: |
+          python - <<'PY'
+          import json
+          from orderflow_edge_lab.htf_trend_forward_shadow import verify_candidate_spec
+
+          c=json.load(open('config/htf_fibonacci_forward_candidate_v1.json', encoding='utf-8'))
+          b=json.load(open('config/htf_trend_candidate_v1.json', encoding='utf-8'))
+          f=json.load(open('config/fibonacci_setup_quality_v1.json', encoding='utf-8'))
+          r=json.load(open('config/fibonacci_htf_robustness_v1.json', encoding='utf-8'))
+
+          assert verify_candidate_spec(c)
+          assert c['selection_provenance']['base_candidate_spec_sha256'] == b['spec_sha256']
+          assert c['selection_provenance']['source_protocol'] == r['protocol_name']
+          assert c['selection_provenance']['robustness_artifact_sha256'] == '2cc0210dfd78c7f178c0d89fdb6e7ce7989d80f4b485e6c06fd366592cd21d0c'
+          assert c['forward_signal_start_utc'] == '2026-09-13T16:00:00Z'
+          assert c['forward_protocol']['position_state_at_boundary'] == 'flat'
+          assert c['forward_protocol']['no_backfill_before_forward_start'] is True
+
+          for key in ('symbols','interval','family','fast_ema','slow_ema','atr_period','min_atr_spread','position_rule','signal_timing','execution_timing','portfolio_weighting','gross_portfolio_exposure_cap','round_trip_cost_bps','funding_accounting','leverage'):
+              assert c['specification'][key] == b['specification'][key], key
+
+          p=f['fibonacci_definition']
+          o=c['fibonacci_overlay']
+          assert o['anchor_lookback_bars'] == p['anchor_lookback_bars']
+          assert o['minimum_impulse_atr'] == p['minimum_impulse_atr']
+          assert o['levels'] == p['overlays']['fib_core']['levels']
+          assert o['level_tolerance'] == p['level_tolerance']
+          assert o['levels'] == r['frozen_fibonacci']['fib_core_levels']
+          PY
+
+      - name: Compile and run Fibonacci forward causality tests
+        run: |
+          python -m py_compile \
+            src/orderflow_edge_lab/fibonacci_overlay.py \
+            src/orderflow_edge_lab/htf_fibonacci_forward_shadow.py \
+            src/orderflow_edge_lab/cli/htf_fibonacci_forward_shadow.py
+          python -m unittest discover -s tests -p 'test_htf_fibonacci_forward_shadow.py' -v
+
+      - name: Recompute prospective paper shadow from public MEXC data
+        run: |
+          mkdir -p artifacts/htf_fibonacci_forward/source
+          orderflow-htf-fibonacci-forward-shadow \
+            --candidate config/htf_fibonacci_forward_candidate_v1.json \
+            --output artifacts/htf_fibonacci_forward/report.json \
+            --source-dir artifacts/htf_fibonacci_forward/source \
+            --max-workers 5
+
+      - name: Enforce forward-only and claim boundaries
+        run: |
+          python - <<'PY'
+          import json
+          import pandas as pd
+
+          r=json.load(open('artifacts/htf_fibonacci_forward/report.json', encoding='utf-8'))
+          c=r['claims']
+          start=pd.Timestamp(r['forward_signal_start_utc'])
+          asof=pd.Timestamp(r['as_of_utc'])
+          assert r['candidate_id'] == 'mexc_8h_ema24_96_atr025_fibcore_v1'
+          assert c.get('candidate_specification_frozen') is True
+          assert c.get('fibonacci_overlay_frozen') is True
+          assert c.get('paper_shadow_only') is True
+          assert c.get('verified_out_of_sample_evidence') is False
+          assert c.get('profitable_edge_established') is False
+          assert c.get('live_order_transmission_supported') is False
+          for row in r['completed_trades']:
+              assert pd.Timestamp(row['entry_time']) > start
+          for row in r['open_positions']:
+              assert pd.Timestamp(row['entry_time']) > start
+          if asof < start + pd.Timedelta(hours=8):
+              assert r['status'] == 'waiting_for_first_executable_forward_signal'
+              assert r['metrics']['completed_symbol_trades'] == 0
+          print(json.dumps({
+              'candidate_id': r['candidate_id'],
+              'status': r['status'],
+              'as_of_utc': r['as_of_utc'],
+              'net_return': r['metrics']['net_return'],
+              'completed_symbol_trades': r['metrics']['completed_symbol_trades'],
+              'open_symbol_positions': r['metrics']['open_symbol_positions'],
+              'current_weights': r['current_weights'],
+          }, indent=2))
+          PY
+
+      - name: Deterministic multi-agent release gate
+        run: |
+          orderflow-multi-agent --output artifacts/htf_fibonacci_forward/multi_agent_report.json
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/htf_fibonacci_forward/multi_agent_report.json', encoding='utf-8'))
+          if r['release_manager']['status'] != 'reviewable':
+              raise SystemExit('deterministic release manager blocked Fibonacci forward shadow')
+          PY
+
+      - name: Preserve forward evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: htf-fibonacci-forward-shadow-v1
+          path: artifacts/htf_fibonacci_forward/
+          retention-days: 30
+          if-no-files-found: warn
