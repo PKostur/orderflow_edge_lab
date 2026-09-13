@@ -75,6 +75,12 @@ jobs:
           orderflow-market-state-aggregate-v1-1 "${STATE_REPORTS[@]}" \
             --protocol config/regime_research_v1_1.json \
             --output artifacts/orderflow/market_state_aggregate_v1_1.json
+      - name: Publish PnL-independent state promotion report
+        shell: bash
+        run: |
+          orderflow-state-promotion-report \
+            artifacts/orderflow/market_state_aggregate_v1_1.json \
+            --output artifacts/orderflow/state_promotion_report.json
       - name: Run frozen discovery-v1 backtest and pre-registered condition analysis
         shell: bash
         run: |
@@ -127,6 +133,7 @@ jobs:
             artifacts/orderflow/market_state.json
             artifacts/orderflow/market_state_aggregate.json
             artifacts/orderflow/market_state_aggregate_v1_1.json
+            artifacts/orderflow/state_promotion_report.json
             artifacts/orderflow/backtest.json
             artifacts/orderflow/direction_pair.json
             artifacts/orderflow/stop_risk.json
