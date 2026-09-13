@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "protocol_name": "mexc-derivatives-context-v1",
+  "status": "forward_context_only",
+  "frozen_at_utc": "2026-09-13T14:53:00Z",
+  "evidence_start_utc": "2026-09-13T15:00:00Z",
+  "source": {
+    "venue": "MEXC Futures",
+    "base_url": "https://api.mexc.com",
+    "endpoint": "/api/v1/contract/ticker",
+    "authentication_required": false,
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"]
+  },
+  "fields": {
+    "fundingRate": "public current funding rate",
+    "holdVol": "exchange-reported total holdings in contract-volume units; do not relabel as normalized notional open interest",
+    "indexPrice": "public index price",
+    "fairPrice": "public fair/mark-like price",
+    "bid1": "best bid",
+    "ask1": "best ask",
+    "lastPrice": "last traded price",
+    "timestamp": "exchange timestamp"
+  },
+  "derived_fields": {
+    "fair_minus_index_bps": "(fairPrice / indexPrice - 1) * 10000 when both are finite and positive",
+    "quoted_spread_bps": "(ask1 - bid1) / midpoint * 10000 when quotes are finite and ordered"
+  },
+  "sampling": {
+    "target_cadence_minutes": 30,
+    "join_to_high_cadence_market_capture": true,
+    "missing_fields_remain_missing": true,
+    "historical_backfill_from_current_snapshot_allowed": false
+  },
+  "validity": {
+    "strategy_pnl_used_for_collection": false,
+    "strategy_parameters_may_change": false,
+    "state_thresholds_may_change": false,
+    "execution_economics_may_change": false,
+    "cross_symbol_same_time_snapshots_are_not_independent_time_trials": true
+  },
+  "claims": {
+    "research_only": true,
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  }
+}
