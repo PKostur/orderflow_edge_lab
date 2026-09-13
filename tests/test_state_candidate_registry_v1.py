@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import pytest
+import unittest
 
 from orderflow_edge_lab.state_candidate_registry_v1 import (
     StateCandidateRegistryV1Error,
@@ -104,7 +104,10 @@ def test_rejects_conflicting_prior_locks() -> None:
         _report(_candidate("aggressive_flow", "alpha", "future_directionality")),
         _protocol(),
     )
-    with pytest.raises(StateCandidateRegistryV1Error, match="conflicting prior candidate locks"):
+    with unittest.TestCase().assertRaisesRegex(
+        StateCandidateRegistryV1Error,
+        "conflicting prior candidate locks",
+    ):
         build_state_candidate_registry_v1(
             _report(_candidate("liquidity_microstructure", "gamma", "future_liquidity")),
             _protocol(),
