@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "protocol": "gold-v1.4-sparse-donchian-validation",
+  "candidate": {"family":"donchian_breakout","timeframe":"D1","lookback":55,"hold_bars":4},
+  "selection_disclosure": "post-selection from v1.0.2 development; this holdout is internal historical validation, not future OOS",
+  "holdout": {"start":"2024-01-01","end_exclusive":"2026-01-01","eligible_events":62,"nonoverlapping_trades":24},
+  "state": {
+    "combined_spearman": -0.08715469265442825,
+    "year_spearman": {"2024":0.08854700854700855,"2025":-0.24298584298584303},
+    "passes_frozen_state_gate": false
+  },
+  "primary_5bps": {
+    "mean_net_bps": 76.56750439770927,
+    "median_net_bps": 79.31646837631757,
+    "profit_factor": 2.5924442691203327,
+    "positive_trade_fraction": 0.7083333333333334,
+    "year_2024_mean_net_bps": 51.734991191014196,
+    "year_2025_mean_net_bps": 91.46701232172632,
+    "reversed_mean_net_bps": -86.56750439770927,
+    "mean_after_removing_best_trade_bps": 57.47112782178449,
+    "best_trade_net_bps": 515.7841656439793,
+    "long_trades": 24,
+    "short_trades": 0
+  },
+  "high_cost_10bps": {"mean_net_bps":71.56750439770927,"profit_factor":2.4446384050611454},
+  "failed_frozen_gates": [
+    "combined state Spearman > 0",
+    "each scorable calendar-year state Spearman > 0",
+    "both long and short sides have at least 3 holdout trades"
+  ],
+  "holdout_pass": false,
+  "leverage_tested": false,
+  "post_holdout_replication_opened": false,
+  "claims": {"verified_oos":false,"profitable_edge_established":false,"live_enabled":false}
+}
