@@ -1,13 +1,20 @@
 {
   "schema_version": 1,
-  "protocol_name": "lsk-btc-aligned-30s-regime-router-v1",
-  "status": "frozen_at_intent_before_router_pnl_review",
+  "protocol_name": "lsk-btc-aligned-30s-regime-router-v1.1",
+  "status": "frozen_at_intent_v1_1_before_any_forward_router_pnl_review",
   "symbol": "LSK_USDT",
   "context_symbol": "BTC_USDT",
   "family": "aligned_btc",
   "horizon_ms": 30000,
-  "fee_bps_round_trip": [4.0, 8.0],
-  "additional_execution_stress_bps_round_trip": [0.0, 2.0, 4.0],
+  "fee_bps_round_trip": [
+    4.0,
+    8.0
+  ],
+  "additional_execution_stress_bps_round_trip": [
+    0.0,
+    2.0,
+    4.0
+  ],
   "causal_baseline": {
     "type": "prior_signal_state_only",
     "minimum_prior_signals": 5,
@@ -22,7 +29,7 @@
     "price_response": [
       "local_return_15s_bps",
       "local_range_15s_bps",
-      "price_response_efficiency"
+      "directional_price_response_efficiency"
     ],
     "displacement": [
       "abs_return_to_spread_15s",
@@ -38,8 +45,8 @@
     ]
   },
   "derived_feature_definitions": {
-    "price_response_efficiency": "abs(local_return_15s_bps) / max(signal_strength_multiple, 1e-9)",
-    "spread_vs_prior_median": "spread_bps / median(prior eligible signal spread_bps)"
+    "spread_vs_prior_median": "spread_bps / median(prior eligible signal spread_bps)",
+    "directional_price_response_efficiency": "signal_side * local_return_15s_bps / max(signal_strength_multiple, 1e-9)"
   },
   "router": {
     "common_gate": {
@@ -50,21 +57,27 @@
       "rolling_trade_count_10s": ">= prior median",
       "local_quote_updates_per_second_15s": ">= prior median",
       "local_range_15s_bps": ">= prior median",
-      "price_response_efficiency": ">= prior median",
       "abs_return_to_spread_15s": "< prior 75th percentile",
-      "spread_vs_prior_median": "<= 1.25"
+      "spread_vs_prior_median": "<= 1.25",
+      "directional_price_response_efficiency": "> max(0, prior median)"
     },
     "reversed": {
       "abs_return_to_spread_15s": ">= prior 75th percentile",
-      "price_response_efficiency": "<= prior 25th percentile",
-      "exhaustion_confirmation": "at least one of: trade count below prior median, quote-update rate below prior median, spread_vs_prior_median > 1.0"
+      "exhaustion_confirmation": "at least one of: trade count below prior median, quote-update rate below prior median, spread_vs_prior_median > 1.0",
+      "directional_price_response_efficiency": "<= prior 25th percentile"
     },
     "otherwise": "no_trade",
-    "precedence": ["reversed", "original", "no_trade"]
+    "precedence": [
+      "reversed",
+      "original",
+      "no_trade"
+    ]
   },
   "controls": [
-    "always_original",
-    "always_reversed",
+    "always_original_all_signals",
+    "always_reversed_all_signals",
+    "always_original_matched_post_warmup",
+    "always_reversed_matched_post_warmup",
     "unconditional_frozen_signal"
   ],
   "numeric_forward_screen": {
@@ -86,5 +99,7 @@
     "verified_out_of_sample_evidence": false,
     "standalone_router_promotable": false,
     "live_order_transmission_supported": false
-  }
+  },
+  "supersedes": "lsk-btc-aligned-30s-regime-router-v1",
+  "pre_forward_correction_reason": "v1 used absolute local return in price-response efficiency, which could misclassify a move against the signal as successful continuation; corrected before any forward router PnL was evaluated."
 }
