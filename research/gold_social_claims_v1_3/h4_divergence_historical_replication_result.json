@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "protocol": "gold-h4-divergence-historical-replication-v1",
+  "source": {
+    "provider_lineage": "HistData.com MetaTrader-format XAUUSD M1, public fokan/xauusd-2009-2026 mirror",
+    "workflow_run": 34887503267,
+    "artifact_id": 10365416428,
+    "artifact_sha256": "8d3ecac298f078c373237f88edf69dc0d8d7671a4996ec34e8c92238ce854d22",
+    "resample": "causal M1 to H4",
+    "rows": 15970,
+    "start": "2010-01-03 16:00:00+00:00",
+    "end": "2019-12-31 16:00:00+00:00",
+    "median_bars_per_active_day": 6.0
+  },
+  "permutation_epochs_per_cell": 20000,
+  "cells_tested": 5,
+  "replication_pass_count": 0,
+  "closest_state_cell": {
+    "family": "reddit_h4_bb_rsi_divergence",
+    "lookback": 6,
+    "hold": 6,
+    "events": 592,
+    "trades": 211,
+    "state_scorable_clusters": 10,
+    "state_median_cluster_spearman": 0.1079624519142329,
+    "state_positive_cluster_fraction": 0.7,
+    "state_permutation_p": 0.014349282535873207,
+    "primary_5bps_median_cluster_net_bps": -14.020075931856452,
+    "primary_5bps_median_cluster_pf": 0.672099078411467,
+    "primary_5bps_positive_cluster_fraction": 0.18181818181818182,
+    "mean_net_5bps": -11.221254634970474,
+    "state_pass": false,
+    "replication_pass": false
+  },
+  "other_cells": [
+    {"family":"reddit_h4_bb_rsi_divergence","lookback":3,"hold":6,"state_rho":-0.07117152202831517,"permutation_p":0.8863556822158892,"median_net_5bps":-29.932635272647968,"pf_5bps":0.4541067024369973,"replication_pass":false},
+    {"family":"youtube_rsi_divergence_range_reentry","lookback":5,"hold":8,"state_rho":0.09160538807597632,"permutation_p":0.09989500524973752,"median_net_5bps":-10.34968608431803,"pf_5bps":0.5739095966524123,"replication_pass":false},
+    {"family":"youtube_rsi_divergence_range_reentry","lookback":10,"hold":8,"state_rho":-0.028081841432225065,"permutation_p":0.631618419079046,"median_net_5bps":-5.734252277782946,"pf_5bps":0.7939065628653663,"replication_pass":false},
+    {"family":"youtube_rsi_divergence_range_reentry","lookback":10,"hold":16,"state_rho":0.02704784616549323,"permutation_p":0.3698315084245788,"median_net_5bps":-7.257525619313486,"pf_5bps":0.8551821301429985,"replication_pass":false}
+  ],
+  "decision": "Reject the frozen H4 Reddit/YouTube divergence hypotheses. Do not open the 2024-2025 holdout, do not test leverage, and do not retune these five cells on the replication period.",
+  "holdout_opened": false,
+  "leverage_tested": false,
+  "claims": {"verified_oos":false,"profitable_edge_established":false,"live_enabled":false}
+}
