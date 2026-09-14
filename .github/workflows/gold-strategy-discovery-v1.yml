@@ -1,0 +1,74 @@
+name: Gold Strategy Discovery v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/gold-strategy-discovery-v1]
+    paths:
+      - "config/gold_strategy_discovery_v1.json"
+      - "scripts/run_gold_strategy_discovery_v1.py"
+      - ".github/workflows/gold-strategy-discovery-v1.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gold-strategy-discovery-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tournament:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install runtime
+        run: python -m pip install pandas numpy
+      - name: Fetch frozen public XAUUSD histories
+        run: |
+          mkdir -p artifacts/gold_strategy_discovery_v1/data
+          base="https://raw.githubusercontent.com/simom1/XAUUSD-history/main/Gold-Cash/XAUUSD"
+          curl -fL --retry 3 "$base/XAUUSD_M15_2010_2026.csv" -o artifacts/gold_strategy_discovery_v1/data/XAUUSD_M15_2010_2026.csv
+          curl -fL --retry 3 "$base/XAUUSD_H1_2010_2026.csv" -o artifacts/gold_strategy_discovery_v1/data/XAUUSD_H1_2010_2026.csv
+          curl -fL --retry 3 "$base/XAUUSD_H4_2010_2026.csv" -o artifacts/gold_strategy_discovery_v1/data/XAUUSD_H4_2010_2026.csv
+          curl -fL --retry 3 "$base/XAUUSD_D1_2010_2026.csv" -o artifacts/gold_strategy_discovery_v1/data/XAUUSD_D1_2010_2026.csv
+          sha256sum artifacts/gold_strategy_discovery_v1/data/*.csv > artifacts/gold_strategy_discovery_v1/data/SHA256SUMS.txt
+      - name: Run development tournament without opening holdout
+        run: |
+          python scripts/run_gold_strategy_discovery_v1.py \
+            --data-dir artifacts/gold_strategy_discovery_v1/data \
+            --output artifacts/gold_strategy_discovery_v1/development_results.json
+      - name: Enforce data integrity floor
+        run: |
+          python - <<'PY'
+          import json
+          p='artifacts/gold_strategy_discovery_v1/development_results.json'
+          r=json.load(open(p))
+          floors={'M15':40,'H1':8,'H4':2,'D1':0.8}
+          bad={tf:v for tf,v in r['integrity'].items() if v['median_bars_per_day'] < floors[tf]}
+          if bad:
+              raise SystemExit(f'data integrity floor failed: {bad}')
+          if r['holdout_opened']:
+              raise SystemExit('holdout must remain sealed in development workflow')
+          PY
+      - name: Deterministic release-manager guard
+        run: |
+          python -m pip install -e ".[research]"
+          orderflow-multi-agent --output artifacts/gold_strategy_discovery_v1/multi_agent_report.json
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/gold_strategy_discovery_v1/multi_agent_report.json'))
+          if r['release_manager']['status'] != 'reviewable':
+              raise SystemExit(r['release_manager']['next_actions'])
+          PY
+      - name: Preserve development evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-strategy-discovery-v1-development
+          path: artifacts/gold_strategy_discovery_v1/
+          retention-days: 30
+          if-no-files-found: error
