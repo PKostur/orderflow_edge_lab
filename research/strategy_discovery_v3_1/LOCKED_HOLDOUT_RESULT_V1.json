@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "protocol_name": "strategy-discovery-v3.1-long-horizon-market-neutral",
+  "candidate_freeze": "research/strategy_discovery_v3_1/CANDIDATE_FREEZE_V1.json",
+  "holdout_status": "opened_once_and_rejected",
+  "candidate": {
+    "family": "cross_sectional_beta_residual_momentum",
+    "residual_lookback_hours": 48,
+    "top_bottom_k": 1,
+    "hold_hours": 48,
+    "btc_beta_window_hours": 192
+  },
+  "locked_internal_holdout": {
+    "fold_16": {
+      "trades": 10,
+      "mean_net_bps": 130.26791730952635,
+      "profit_factor": 3.5775695003280776,
+      "mean_gross_bps": 145.1655449572339,
+      "state_spearman": -0.309090909090909
+    },
+    "fold_17": {
+      "trades": 9,
+      "mean_net_bps": -224.1091387305804,
+      "profit_factor": 0.0783121642265759,
+      "mean_gross_bps": -209.13298784138425,
+      "state_spearman": -0.75
+    },
+    "combined": {
+      "total_trades": 19,
+      "mean_net_bps": -37.59489870947156,
+      "median_fold_net_bps": -46.92061071052703,
+      "profit_factor": 0.7348292636020121,
+      "positive_cluster_fraction": 0.50
+    }
+  },
+  "frozen_gate_result": {
+    "median_net_expectancy_positive": false,
+    "profit_factor_above_one": false,
+    "positive_cluster_fraction_at_least_half": true,
+    "overall_pass": false
+  },
+  "conclusion": "Reject candidate. The development signal does not survive the locked internal holdout and its state relationship reverses sign. No retuning on folds 16-17 is permitted.",
+  "leverage": {
+    "allowed_by_protocol": false,
+    "reason": "Unlevered locked holdout failed. Leverage cannot rescue negative expectancy."
+  },
+  "claims": {
+    "internal_holdout_not_future_oos": true,
+    "profitable_edge_established": false,
+    "live_enabled": false
+  }
+}
