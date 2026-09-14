@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "amendment_name": "btc-lead-lag-v1.1-pre-outcome-reliability",
+  "frozen_at_intent": "2026-09-14",
+  "outcomes_inspected_before_amendment": false,
+  "supersedes_implementation_only": "btc-lead-lag-v1 runner at commit 8b434554e699b76bba7b9d8e0e14498622fc420c",
+  "reason": "The first implementation declared but did not enforce the predeclared 24-bar time-shift placebo, clustered direction-randomization reporting, and parameter-neighborhood support. Any output from that runner is inadmissible and must not be inspected for research conclusions.",
+  "unchanged": [
+    "feature family",
+    "symbols",
+    "dates",
+    "timeframe",
+    "BTC impulse lookbacks",
+    "lead-lag bars",
+    "beta windows",
+    "future horizons",
+    "state gate",
+    "cost cases",
+    "dependence clusters",
+    "execution timing",
+    "promotion boundaries"
+  ],
+  "implementation_requirements": {
+    "enforce_time_shift_placebo": true,
+    "time_shift_bars": 24,
+    "report_clustered_direction_randomization": true,
+    "direction_randomization_iterations": 2000,
+    "require_one_axis_parameter_neighborhood_support_for_final_economic_pass": true,
+    "prior_runner_output_admissible": false
+  }
+}
