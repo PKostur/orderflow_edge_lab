@@ -1,0 +1,153 @@
+name: Strategy Discovery v2.1 Low-Turnover
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/strategy-discovery-v2]
+    paths:
+      - "config/strategy_discovery_v2_1.json"
+      - "scripts/run_strategy_discovery_v2_1.py"
+      - ".github/workflows/strategy-discovery-v2-1.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: strategy-discovery-v2-1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  prepare-data:
+    name: prepare-${{ matrix.interval }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        interval: [15m, 1h]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Fetch immutable public MEXC history
+        run: |
+          orderflow-strategy-tournament-data \
+            --config config/strategy_discovery_v2_1.json \
+            --interval "${{ matrix.interval }}" \
+            --output-dir "artifacts/strategy_discovery_v2_1/data/${{ matrix.interval }}" \
+            --max-workers 8
+      - name: Preserve immutable history and manifest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: strategy-discovery-v2-1-data-${{ matrix.interval }}
+          path: artifacts/strategy_discovery_v2_1/data/${{ matrix.interval }}/
+          retention-days: 7
+          if-no-files-found: warn
+
+  evaluate:
+    name: evaluate-${{ matrix.interval }}
+    needs: prepare-data
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        interval: [15m, 1h]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Download frozen interval data
+        uses: actions/download-artifact@v4
+        with:
+          name: strategy-discovery-v2-1-data-${{ matrix.interval }}
+          path: artifacts/strategy_discovery_v2_1/data/${{ matrix.interval }}
+      - name: Run state-first causal tournament
+        run: |
+          python scripts/run_strategy_discovery_v2_1.py \
+            --config config/strategy_discovery_v2_1.json \
+            --data-dir "artifacts/strategy_discovery_v2_1/data/${{ matrix.interval }}" \
+            --interval "${{ matrix.interval }}" \
+            --output "artifacts/strategy_discovery_v2_1/results/${{ matrix.interval }}.json"
+      - name: Preserve every state and economic trial
+        uses: actions/upload-artifact@v4
+        with:
+          name: strategy-discovery-v2-1-result-${{ matrix.interval }}
+          path: artifacts/strategy_discovery_v2_1/results/${{ matrix.interval }}.json
+          retention-days: 30
+          if-no-files-found: error
+
+  aggregate:
+    name: aggregate-adversarial-release-gate
+    needs: evaluate
+    if: always() && needs.evaluate.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Download all interval results
+        uses: actions/download-artifact@v4
+        with:
+          pattern: strategy-discovery-v2-1-result-*
+          path: artifacts/strategy_discovery_v2_1/all_results
+          merge-multiple: false
+      - name: Build immutable combined summary
+        run: |
+          mkdir -p artifacts/strategy_discovery_v2_1/aggregate
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          rows=[]
+          for p in Path('artifacts/strategy_discovery_v2_1/all_results').rglob('*.json'):
+              rows.append(json.load(open(p, encoding='utf-8')))
+          if len(rows) != 2:
+              raise SystemExit(f'expected 2 interval reports, found {len(rows)}')
+          primary=[]
+          top_state=[]
+          for r in rows:
+              primary.extend(r.get('primary_cost_leaderboard', []))
+              top_state.extend(r.get('top_state', []))
+          primary.sort(key=lambda x:(x.get('economic_pass',False),x.get('median_fold_net_expectancy_bps',-1e99)), reverse=True)
+          top_state.sort(key=lambda x:(x.get('state_pass',False),x.get('median_fold_spearman',-1e99)), reverse=True)
+          report={
+              'schema_version':1,
+              'protocol_name':'strategy-discovery-v2.1-low-turnover',
+              'interval_reports':[{k:r[k] for k in ['interval','state_trial_count','state_pass_count','translation_count','economic_pass_count_primary']} for r in rows],
+              'economic_pass_count_primary':sum(int(r.get('economic_pass_count_primary',0)) for r in rows),
+              'top_state':top_state[:30],
+              'primary_cost_leaderboard':primary[:60],
+              'claims':{'development_screening_only':True,'profitable_edge_established':False,'verified_oos':False,'live_enabled':False},
+          }
+          out=Path('artifacts/strategy_discovery_v2_1/aggregate/summary.json')
+          out.write_text(json.dumps(report, indent=2), encoding='utf-8')
+          print(json.dumps({'economic_pass_count_primary':report['economic_pass_count_primary'],'top_state':report['top_state'][:8],'top_primary':report['primary_cost_leaderboard'][:8]}, indent=2))
+          PY
+      - name: Deterministic multi-agent release manager gate
+        run: |
+          orderflow-multi-agent --output artifacts/strategy_discovery_v2_1/aggregate/multi_agent_report.json
+          python - <<'PY'
+          import json
+          p='artifacts/strategy_discovery_v2_1/aggregate/multi_agent_report.json'
+          report=json.load(open(p, encoding='utf-8'))
+          if report['release_manager']['status'] != 'reviewable':
+              raise SystemExit(f"release manager blocked: {report['release_manager']['next_actions']}")
+          PY
+      - name: Preserve aggregate and release evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: strategy-discovery-v2-1-aggregate
+          path: artifacts/strategy_discovery_v2_1/aggregate/
+          retention-days: 30
+          if-no-files-found: error
