@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "amendment_name": "microprice-imbalance-forward-v1.1-pre-outcome-reliability",
+  "parent_protocol": "microprice-imbalance-forward-v1",
+  "outcomes_inspected_before_amendment": false,
+  "reason": "Static implementation review before any prospective batch outcome identified fail-closed JSON serialization risk when a feature is constant or insufficient, and a need to bound nearest-future lookup delay so nominal horizons cannot silently drift across data gaps.",
+  "unchanged": [
+    "feature definitions",
+    "target horizons",
+    "capture duration",
+    "symbol universe",
+    "dependence-cluster definition",
+    "minimum batch count",
+    "state thresholds",
+    "orthogonality rule",
+    "strategy-PnL prohibition"
+  ],
+  "implementation_requirements": {
+    "serialize_nonfinite_statistics_as_null": true,
+    "future_lookup_max_delay_ms": 2000,
+    "prior_unamended_batch_output_admissible": false
+  },
+  "claims": {
+    "profitable_edge_established": false,
+    "untouched_oos": false,
+    "live_order_transmission_supported": false
+  }
+}
