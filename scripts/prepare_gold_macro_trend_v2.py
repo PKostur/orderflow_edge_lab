@@ -38,10 +38,11 @@ def main():
     ap=argparse.ArgumentParser(); ap.add_argument('--output-dir',required=True); args=ap.parse_args()
     out=Path(args.output_dir); out.mkdir(parents=True,exist_ok=True)
     manifest={'schema_version':2,'source_amendment':'gold-macro-trend-v2.1-source-amendment','source_files':{}}
+    filenames={'gold':'gold_stooq_daily.csv','silver':'silver_stooq_daily.csv'}
     for name,symbol in YAHOO.items():
         d=fetch_yahoo(symbol)
         if len(d)<2500: raise SystemExit(f'{name} too short: {len(d)}')
-        p=out/f'{name}_daily.csv'; d.to_csv(p,index=False)
+        p=out/filenames[name]; d.to_csv(p,index=False)
         manifest['source_files'][name]={'provider':'Yahoo Finance via yfinance','symbol':symbol,'instrument_semantics':'continuous front futures proxy','rows':int(len(d)),'first':str(d.date.min()),'last':str(d.date.max()),'sha256':sha(p)}
     for name,series in FRED.items():
         url=f'https://fred.stlouisfed.org/graph/fredgraph.csv?id={series}'
