@@ -6,6 +6,7 @@ on:
     branches: [research/gold-macro-trend-v2]
     paths:
       - "config/gold_macro_trend_v2.json"
+      - "config/gold_macro_trend_v2_1_source_amendment.json"
       - "scripts/prepare_gold_macro_trend_v2.py"
       - "scripts/run_gold_macro_trend_v2.py"
       - ".github/workflows/gold-macro-trend-v2.yml"
@@ -27,8 +28,8 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install research runtime
-        run: python -m pip install pandas numpy requests
-      - name: Acquire independent gold silver and macro histories
+        run: python -m pip install pandas numpy requests yfinance
+      - name: Acquire amended gold silver proxy and macro histories
         run: |
           mkdir -p artifacts/gold_macro_trend_v2/data
           python scripts/prepare_gold_macro_trend_v2.py --output-dir artifacts/gold_macro_trend_v2/data
