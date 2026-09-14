@@ -32,18 +32,18 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: gold-strategy-discovery-v1-development
-          path: artifacts/gold_strategy_discovery_v1_1
+          path: artifacts/gold_strategy_discovery_v1
           github-token: ${{ github.token }}
           repository: PKostur/orderflow_edge_lab
           run-id: 34877800446
       - name: Verify exact preserved source data
         run: |
-          test -f artifacts/gold_strategy_discovery_v1_1/data/SHA256SUMS.txt
-          sha256sum -c artifacts/gold_strategy_discovery_v1_1/data/SHA256SUMS.txt
+          test -f artifacts/gold_strategy_discovery_v1/data/SHA256SUMS.txt
+          sha256sum -c artifacts/gold_strategy_discovery_v1/data/SHA256SUMS.txt
       - name: Run development-only community tournament
         run: |
           python scripts/run_gold_strategy_discovery_v1_1.py \
-            --data-dir artifacts/gold_strategy_discovery_v1_1/data \
+            --data-dir artifacts/gold_strategy_discovery_v1/data \
             --output artifacts/gold_strategy_discovery_v1_1/development_results.json
       - name: Guard evidence boundary
         run: |
