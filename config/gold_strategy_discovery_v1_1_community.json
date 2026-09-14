@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold-strategy-discovery-v1.1-community",
+  "frozen_at_intent": "2026-09-14",
+  "status": "development_with_locked_internal_holdout",
+  "parent_source_head": "1e95c1f22c02e58cc88bb1c8674eb4cad77dcba1",
+  "purpose": "Outcome-blind second batch of mechanically testable XAUUSD strategies gathered from Reddit/YouTube, frozen before gold v1.0.1 development results are opened.",
+  "source_boundary": {
+    "reddit_and_youtube_claims_are_hypothesis_sources_only": true,
+    "headline_win_rates_are_not_evidence": true,
+    "subjective_or_incompletely_disclosed_rules_are_tested_only_as_named_mechanical_proxies": true,
+    "gold_v1_0_1_results_inspected_before_freeze": false
+  },
+  "data": {
+    "instrument": "XAUUSD cash-gold proxy",
+    "source_artifact_run": 34877800446,
+    "source_artifact_id": 10362726740,
+    "source_artifact_digest": "sha256:64defa307ae1f845d258f3fffc791ed85bb97bc37905601325ef80e2035262c6",
+    "timeframes": ["M15", "H1"],
+    "development_start": "2010-01-01",
+    "development_end_exclusive": "2024-01-01",
+    "locked_internal_holdout_start": "2024-01-01",
+    "locked_internal_holdout_end_exclusive": "2026-01-01",
+    "post_holdout_replication_start": "2026-01-01",
+    "post_holdout_replication_end_exclusive": "2026-09-01"
+  },
+  "dependence": {
+    "calendar_fold_days": 63,
+    "minimum_development_folds": 12,
+    "locked_holdout_opened": false,
+    "no_trade_may_cross_fold_boundary": true
+  },
+  "economics": {
+    "round_trip_cost_bps": [2.0, 5.0, 10.0],
+    "primary_cost_bps": 5.0,
+    "same_cost_model_as_gold_v1": true
+  },
+  "families": {
+    "youtube_three_am_london_ifvg_proxy": {
+      "timeframe": "M15",
+      "source_claim": "3:00 AM New York-time London-open inverse-FVG gold setup marketed around 90% win rate",
+      "mechanical_proxy": "trade only 03:00-05:00 America/New_York; require prior 32-bar liquidity sweep plus reclaim of an opposite-direction three-candle fair-value-gap boundary",
+      "sweep_lookback": [16, 32],
+      "holds_bars": [4, 8, 12]
+    },
+    "asian_range_london_breakout_retest": {
+      "timeframe": "M15",
+      "source_claim": "mark Asian range; London breaks it; enter continuation after retest/rejection",
+      "asian_utc_hours": [0, 7],
+      "london_utc_hours": [7, 11],
+      "retest_bars": [1, 2, 4],
+      "holds_bars": [4, 8, 16]
+    },
+    "tokyo_london_ny_range_push_reversal": {
+      "timeframe": "M15",
+      "source_claim": "Tokyo range -> London push/sweep -> New York reclaim/reversal",
+      "tokyo_utc_hours": [0, 7],
+      "london_utc_hours": [7, 12],
+      "new_york_utc_hours": [12, 17],
+      "micro_break_lookback": [2, 4],
+      "holds_bars": [4, 8, 16]
+    },
+    "reddit_ema_21_50_pullback": {
+      "timeframes": ["M15", "H1"],
+      "source_claim": "21/50 EMA trend alignment with pullback and momentum confirmation",
+      "pullback_atr": [0.25, 0.5, 1.0],
+      "rsi_threshold": [50, 55],
+      "holds_bars": [4, 8, 16]
+    },
+    "reddit_session_ema_9_21_rsi7": {
+      "timeframe": "M15",
+      "source_claim": "9/21 EMA + RSI7 scalp restricted to London/New York sessions",
+      "rsi_threshold": [52, 55, 60],
+      "session": ["london", "new_york", "both"],
+      "holds_bars": [4, 8]
+    },
+    "reddit_fifteen_minute_orb": {
+      "timeframe": "M15",
+      "source_claim": "simple 15-minute opening-range breakout on gold",
+      "session": ["london", "new_york"],
+      "entry_mode": ["direct", "retest"],
+      "retest_window_bars": [1, 2, 4],
+      "holds_bars": [4, 8, 16]
+    },
+    "previous_day_break_retest": {
+      "timeframes": ["M15", "H1"],
+      "source_claim": "previous-day high/low breakout followed by retest and continuation",
+      "retest_atr": [0.1, 0.25, 0.5],
+      "holds_bars": [4, 8, 16]
+    }
+  },
+  "state_before_pnl": {
+    "required": true,
+    "target": "signed causal forward return over frozen hold horizon",
+    "median_fold_spearman_gt": 0.0,
+    "minimum_positive_fold_fraction": 0.60
+  },
+  "development_gate": {
+    "minimum_development_folds": 12,
+    "minimum_trades": 80,
+    "median_primary_net_expectancy_bps_gt": 0.0,
+    "median_primary_profit_factor_gt": 1.0,
+    "minimum_positive_economic_fold_fraction": 0.60,
+    "high_cost_median_expectancy_nonnegative": true,
+    "must_beat_reversed_direction_control": true,
+    "requires_parameter_neighborhood_stability_before_holdout": true
+  },
+  "selection": {
+    "maximum_candidates_opened_on_locked_holdout": 5,
+    "candidate_must_be_frozen_before_holdout": true,
+    "no_retuning_after_holdout_open": true,
+    "holdout_is_not_genuine_future_oos": true
+  },
+  "risk_and_leverage": {
+    "leverage_grid_after_unlevered_holdout_pass_only": [2, 5, 10],
+    "leverage_cannot_rescue_negative_expectancy": true
+  },
+  "claims": {
+    "verified_oos": false,
+    "profitable_edge_established": false,
+    "live_enabled": false
+  }
+}
