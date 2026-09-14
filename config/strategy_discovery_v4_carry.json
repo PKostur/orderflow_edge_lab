@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "protocol_name": "strategy-discovery-v4-funding-basis-carry",
+  "frozen_at_intent": "2026-09-14",
+  "status": "development_with_locked_internal_holdout",
+  "purpose": "Test market-neutral return sources with explicit cash flows: perpetual funding and executable MEXC spot-perp basis convergence.",
+  "data": {
+    "source": "MEXC public spot and futures APIs",
+    "interval": "1h",
+    "start": "2025-09-01",
+    "development_end_exclusive": "2026-08-01",
+    "end_exclusive": "2026-09-12",
+    "candidate_symbols": ["BTC", "ETH", "SOL", "XRP", "DOGE", "BNB", "ADA", "LINK", "SUI", "ENA"],
+    "universe_rule": "retain a symbol only if both MEXC spot USDT and perpetual USDT histories cover at least 90% of development timestamps and public funding history is available; selection never uses strategy PnL",
+    "futures_symbol_format": "BASE_USDT",
+    "spot_symbol_format": "BASEUSDT"
+  },
+  "dependence": {
+    "calendar_fold_days": 21,
+    "development_folds": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],
+    "discard_boundary_fold": 15,
+    "locked_internal_holdout_folds": [16,17],
+    "holdout_opened": false,
+    "no_position_may_cross_fold_or_dev_holdout_boundary": true
+  },
+  "causality": {
+    "signal_uses_completed_hour_t": true,
+    "entry": "next hourly spot and perpetual opens",
+    "funding_cashflows": "include only public settlement records strictly after entry and at or before exit",
+    "spot_and_perp_position_sizes_frozen_at_entry": true,
+    "no_same_bar_fill": true
+  },
+  "economics": {
+    "gross_notional_normalized": true,
+    "cash_carry_weights": {"spot": 0.5, "perpetual": -0.5},
+    "round_trip_cost_cases_bps_per_leg": {
+      "low": {"spot": 10.0, "perpetual": 12.0},
+      "primary": {"spot": 20.0, "perpetual": 16.0},
+      "high": {"spot": 30.0, "perpetual": 20.0}
+    },
+    "primary_case": "primary",
+    "borrow_cost_for_reverse_carry": "not assumed available; reverse spot-short carry is diagnostic-only and cannot promote without a frozen borrow series",
+    "funding_is_realized_cashflow_not_fee_waiver": true
+  },
+  "state_before_pnl": {
+    "required": true,
+    "basis_target": "future spot-perp basis compression over frozen horizon",
+    "funding_target": "future realized cumulative funding rate over frozen horizon",
+    "median_fold_spearman_gt": 0.0,
+    "minimum_positive_fold_fraction": 0.60,
+    "minimum_events": 80,
+    "no_strategy_pnl_used_for_state_selection": true
+  },
+  "families": {
+    "positive_funding_cash_and_carry": {
+      "funding_rate_thresholds": [0.00005,0.00010,0.00020],
+      "minimum_perp_premium_bps": [0.0,5.0,10.0],
+      "holds_hours": [8,24,72,168]
+    },
+    "basis_convergence_cash_and_carry": {
+      "entry_perp_premium_bps": [10.0,20.0,40.0,80.0],
+      "holds_hours": [8,24,72,168],
+      "requires_nonnegative_entry_funding": [true,false]
+    },
+    "funding_basis_hybrid": {
+      "funding_rate_thresholds": [0.00005,0.00010,0.00020],
+      "entry_perp_premium_bps": [10.0,20.0,40.0],
+      "holds_hours": [24,72,168]
+    },
+    "funding_persistence_carry": {
+      "minimum_positive_settlements_before_entry": [2,3,5],
+      "minimum_mean_funding_rate": [0.00005,0.00010],
+      "holds_hours": [24,72,168]
+    },
+    "cross_sectional_funding_spread": {
+      "top_bottom_k": [1,2],
+      "funding_lookback_settlements": [2,3,5],
+      "holds_hours": [8,24,72],
+      "construction": "short highest-funding perpetual basket and long lowest-funding perpetual basket, equal gross notional, BTC-beta neutralized using lagged 192h betas"
+    },
+    "reverse_carry_negative_funding_diagnostic": {
+      "funding_rate_thresholds": [-0.00005,-0.00010,-0.00020],
+      "holds_hours": [24,72,168],
+      "promotion_allowed": false
+    }
+  },
+  "development_gate": {
+    "state_screen_required_first": true,
+    "median_fold_net_expectancy_bps_gt": 0.0,
+    "median_fold_profit_factor_gt": 1.0,
+    "minimum_positive_fold_fraction": 0.60,
+    "minimum_total_trades": 60,
+    "minimum_symbol_breadth_fraction": 0.60,
+    "must_beat_reversed_or_no_funding_placebo_control": true,
+    "requires_primary_and_high_cost_case_nonnegative_median_expectancy": true,
+    "requires_parameter_neighborhood_stability": true
+  },
+  "selection": {
+    "maximum_candidates_opened_on_locked_holdout": 3,
+    "no_holdout_open_until_frozen_development_gates_pass": true,
+    "no_retuning_after_holdout_open": true,
+    "locked_holdout_is_not_genuine_future_oos": true
+  },
+  "risk_and_leverage": {
+    "combined_spot_perp_mae_mfe_required_before_promotion": true,
+    "leverage_grid_after_unlevered_holdout_pass_only": [2,5,10],
+    "leverage_cannot_rescue_negative_expectancy": true
+  },
+  "claims": {
+    "development_only": true,
+    "holdout_opened": false,
+    "verified_oos": false,
+    "profitable_edge_established": false,
+    "live_enabled": false
+  }
+}
