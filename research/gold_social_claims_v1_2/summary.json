@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "protocol": "gold-social-claims-v1.2",
+  "development_period": ["2020-01-01", "2024-01-01"],
+  "trial_count": 128,
+  "valid_trial_count": 128,
+  "preliminary_development_pass_count": 0,
+  "holdout_opened": false,
+  "leverage_tested": false,
+  "family_summary": {
+    "london_sweep_asia_reclaim": {"cells": 12, "best_primary_median_fold_net_bps": -5.0133, "best_state_valid_primary_median_fold_net_bps": -5.5768},
+    "london_sweep_asia_stoch_divergence": {"cells": 24, "best_primary_median_fold_net_bps": -3.4762, "best_state_valid_primary_median_fold_net_bps": -4.8424},
+    "ny_sweep_session_level_reversal": {"cells": 24, "best_primary_median_fold_net_bps": -3.9722, "best_state_valid_primary_median_fold_net_bps": -4.7070},
+    "tokyo_london_push_ny_reversal": {"cells": 12, "best_primary_median_fold_net_bps": -5.3269},
+    "three_am_ifvg_proxy": {"cells": 48, "best_primary_median_fold_net_bps": -2.7113, "best_state_valid_primary_median_fold_net_bps": -4.0157},
+    "ny_sweep_choch_fvg_proxy": {"cells": 8, "best_primary_median_fold_net_bps": -0.5855, "best_trade_count": 31, "state_gate_passes": 0}
+  },
+  "notable_diagnostics": {
+    "three_am_ifvg_best_state_valid": {"timeframe":"M1","anchor_window_minutes":60,"prior_range_minutes":120,"displacement_atr":0.75,"hold_minutes":60,"trades":275,"state_median_spearman":0.1487,"state_scorable_folds":2,"primary_median_fold_net_bps":-4.0157,"primary_median_fold_pf":0.4339,"primary_positive_fold_fraction":0.125},
+    "choch_fvg_near_zero_cell": {"choch_lookback":10,"displacement_atr":1.25,"rr":1.5,"trades":4,"primary_median_fold_net_bps":-0.5855,"primary_positive_fold_fraction":0.5,"interpretation":"far below minimum trade and state-evidence requirements"}
+  },
+  "conclusion": "No deterministic implementation of the tested Reddit/YouTube session-liquidity claims passes the frozen development gate. Positive-looking tiny-sample cells are non-promotable; populated families are net-negative after realistic costs. Locked 2024-2025 holdout remains sealed.",
+  "claims": {"verified_oos": false, "profitable_edge_established": false, "live_enabled": false}
+}
