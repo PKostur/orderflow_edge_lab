@@ -1,0 +1,63 @@
+name: Two-Leg Relative Value V1
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - research/strategy-discovery-v2
+    paths:
+      - 'config/two_leg_relative_value_v1.json'
+      - 'scripts/run_two_leg_relative_value_v1.py'
+      - '.github/workflows/two-leg-relative-value-v1.yml'
+      - 'src/orderflow_edge_lab/mexc_history.py'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-and-run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+      - name: Install package
+        run: python -m pip install -e .
+      - name: Compile evaluator
+        run: python -m py_compile scripts/run_two_leg_relative_value_v1.py
+      - name: Validate frozen protocol
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('config/two_leg_relative_value_v1.json')
+          cfg = json.loads(p.read_text())
+          assert cfg['protocol_name'] == 'two-leg-relative-value-v1'
+          assert cfg['base_research_commit'] == '4a39c1d762c5e43a875a4254d7879b92cac09c36'
+          assert cfg['state_layer']['evaluated_before_portfolio_pnl'] is True
+          assert cfg['claims']['verified_out_of_sample_evidence'] is False
+          assert cfg['claims']['profitable_edge_established'] is False
+          assert cfg['promotion']['automatic_live_transmission'] is False
+          print('protocol validation ok')
+          PY
+      - name: Run frozen state-first development screen
+        run: |
+          python scripts/run_two_leg_relative_value_v1.py \
+            --config config/two_leg_relative_value_v1.json \
+            --output-dir research/two_leg_relative_value_v1
+      - name: Show summary
+        if: always()
+        run: |
+          if [ -f research/two_leg_relative_value_v1/summary.json ]; then
+            cat research/two_leg_relative_value_v1/summary.json
+          fi
+      - name: Upload research evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: two-leg-relative-value-v1-${{ github.sha }}
+          path: research/two_leg_relative_value_v1/
+          if-no-files-found: warn
