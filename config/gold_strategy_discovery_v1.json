@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold-strategy-discovery-v1",
+  "frozen_at_intent": "2026-09-14",
+  "status": "development_with_locked_internal_holdout",
+  "purpose": "Test unrelated conventional and Reddit/YouTube gold strategies from simple to institutionally-styled mechanical proxies without granting social-media win-rate claims evidentiary weight.",
+  "data": {
+    "primary_instrument": "XAUUSD cash-gold proxy",
+    "source": "simom1/XAUUSD-history public GitHub archive",
+    "timeframes": ["M15", "H1", "H4", "D1"],
+    "long_history_start": "2010-01-01",
+    "development_end_exclusive": "2024-01-01",
+    "locked_internal_holdout_start": "2024-01-01",
+    "locked_internal_holdout_end_exclusive": "2026-01-01",
+    "post_holdout_replication_start": "2026-01-01",
+    "post_holdout_replication_end_exclusive": "2026-09-01",
+    "strategy_selection_predates_no_social_media_source": false,
+    "locked_holdout_is_not_genuine_future_oos": true
+  },
+  "economics": {
+    "round_trip_cost_bps": [2.0,5.0,10.0],
+    "primary_cost_bps": 5.0,
+    "all_signals_enter_next_bar": true,
+    "same_bar_signal_and_fill_forbidden": true,
+    "leverage_grid_after_unlevered_holdout_pass_only": [2,5,10]
+  },
+  "dependence": {
+    "calendar_fold_days": 63,
+    "state_before_pnl": true,
+    "minimum_development_folds": 12,
+    "minimum_total_trades": 80,
+    "minimum_positive_fold_fraction": 0.60,
+    "all_trials_retained": true,
+    "no_best_cell_auto_promotion": true
+  },
+  "conventional_families": {
+    "ema_trend": {"timeframes":["H1","H4"],"fast":[20,50],"slow":[50,200],"hold_bars":[4,8,16]},
+    "donchian_breakout": {"timeframes":["H1","H4","D1"],"lookback":[20,55],"hold_bars":[4,8,16]},
+    "bollinger_mean_reversion": {"timeframes":["H1","H4"],"length":[20],"stdev":[2.0,2.5],"hold_bars":[4,8,16]},
+    "rsi_mean_reversion": {"timeframes":["H1","H4"],"length":[14],"levels":[30,25],"hold_bars":[4,8,16]},
+    "atr_range_breakout": {"timeframes":["H1","H4"],"atr_length":[14],"range_z":[1.0,1.5,2.0],"hold_bars":[4,8,16]},
+    "trend_pullback": {"timeframes":["H1","H4"],"ema":[50,100],"pullback_atr":[0.5,1.0],"hold_bars":[4,8,16]}
+  },
+  "community_claim_families": {
+    "reddit_ema_4_21_cross": {
+      "source_summary": "Reddit XAUUSD thread: EMA21 trend direction, EMA4/EMA21 cross used for entry/exit.",
+      "timeframes":["M15","H1"],
+      "mechanical_status":"directly_testable"
+    },
+    "reddit_ema_50_200_rsi_atr": {
+      "source_summary":"Reddit Gold EA: EMA50/200 crossover + RSI14 confirmation + ATR-based risk.",
+      "timeframes":["H1"],
+      "rsi_confirm":[55,60],
+      "atr_stop":[1.5,2.0],
+      "rr":[1.5,2.0],
+      "mechanical_status":"proxy_required_for_unspecified_ATR_multiples"
+    },
+    "youtube_ema_9_21_rsi": {
+      "source_summary":"YouTube gold scalping claim: EMA9/21 plus RSI momentum and trend-phase filter.",
+      "timeframes":["M15"],
+      "rsi_confirm":[52,55,60],
+      "slope_filter":[false,true],
+      "hold_bars":[4,8,16],
+      "mechanical_status":"mechanical_proxy_of_described_rules"
+    },
+    "previous_day_high_low_rejection": {
+      "source_summary":"Reddit high-win-rate suggestion: buy rejection from previous/day low, sell rejection from previous/day high after confirmation.",
+      "timeframes":["M15","H1"],
+      "rejection_atr":[0.1,0.25,0.5],
+      "hold_bars":[4,8,16],
+      "mechanical_status":"mechanical_proxy"
+    },
+    "london_orb_sweep": {
+      "source_summary":"Reddit: London-open opening range breakout with pre-London sell/buy-side liquidity sweep and pullback.",
+      "timeframes":["M15"],
+      "opening_bars":[2,4],
+      "sweep_lookback_bars":[8,16],
+      "hold_bars":[4,8],
+      "mechanical_status":"timeframe-coarsened_proxy"
+    },
+    "turtle_soup_session_sweep": {
+      "source_summary":"YouTube Gold Futures Turtle Soup: time-based prior high/low sweep followed by reversal/CISD confirmation.",
+      "timeframes":["M15","H1"],
+      "lookback":[20,48],
+      "confirmation_bars":[1,2],
+      "hold_bars":[4,8,16],
+      "mechanical_status":"mechanical_proxy"
+    },
+    "smc_sweep_choch_fvg_proxy": {
+      "source_summary":"Reddit/YouTube ICT/SMC: session or prior swing liquidity sweep, displacement/CHOCH, FVG-style retracement entry.",
+      "timeframes":["M15","H1"],
+      "swing_lookback":[20,48],
+      "displacement_atr":[0.75,1.25],
+      "hold_bars":[4,8,16],
+      "mechanical_status":"proxy_only_subjective_order_block_and_FVG_labels_not_used"
+    },
+    "vwap_ema_atr_rsi_confluence": {
+      "source_summary":"Reddit scalping model: session VWAP + EMA50 + ATR expansion + RSI divergence/weak continuation after sweep.",
+      "timeframes":["M15"],
+      "atr_z":[0.5,1.0],
+      "hold_bars":[4,8],
+      "mechanical_status":"proxy_RSI_divergence_implemented_from_raw_price_and_RSI"
+    },
+    "fake_breakout_reversal_proxy": {
+      "source_summary":"YouTube 90% win-rate Gold claim emphasizes confirmation and fake-breakout rejection but does not publish enough exact rules in searchable description.",
+      "timeframes":["M15","H1"],
+      "lookback":[20,48],
+      "reentry_bars":[1,2],
+      "hold_bars":[4,8,16],
+      "mechanical_status":"proxy_not_creator_exact_system"
+    }
+  },
+  "claims_not_exactly_testable_from_public_description": [
+    "YouTube buy-only 100% win-rate layered DCA system: exact layer spacing, sizing, exits and failure rules unavailable in searchable description",
+    "YouTube 90% win-rate fake-breakout system: exact confirmation algorithm unavailable in searchable description",
+    "discretionary ICT order-block/FVG drawings that cannot be deterministically reconstructed from the public descriptions"
+  ],
+  "development_gate": {
+    "state_median_spearman_gt":0.0,
+    "state_positive_fold_fraction_gte":0.60,
+    "primary_median_fold_net_expectancy_bps_gt":0.0,
+    "primary_median_fold_profit_factor_gt":1.0,
+    "primary_positive_fold_fraction_gte":0.60,
+    "minimum_total_trades":80,
+    "must_beat_reversed_direction_control":true,
+    "high_cost_median_expectancy_nonnegative":true,
+    "parameter_neighborhood_stability_required":true
+  },
+  "selection": {
+    "max_candidates_opened_on_locked_holdout":5,
+    "candidate_freeze_before_holdout":true,
+    "no_retuning_after_holdout_open":true,
+    "2026_replication_only_after_internal_holdout_pass":true
+  },
+  "claims": {"development_only":true,"verified_oos":false,"profitable_edge_established":false,"live_enabled":false}
+}
