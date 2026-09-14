@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold-v1.5-long-donchian-replication",
+  "frozen_at_intent": "2026-09-14",
+  "status": "new_post_holdout_hypothesis_with_unopened_2026_historical_replication",
+  "selection_disclosure": {
+    "post_selection": true,
+    "inspired_by": "v1.4 internal holdout contained 24 long trades and zero short trades while symmetric candidate economics were positive",
+    "2024_2025_cannot_validate_this_long_only_hypothesis": true,
+    "2026_replication_is_historical_not_future_oos": true
+  },
+  "candidate": {
+    "instrument": "XAUUSD cash-gold proxy",
+    "timeframe": "D1",
+    "direction": "long_only",
+    "lookback_completed_bars": 55,
+    "hold_bars": 4,
+    "signal": "completed close exceeds maximum high of prior 55 completed D1 bars",
+    "entry": "next D1 bar open",
+    "exit": "open after four completed holding bars, identical timing to v1.4",
+    "one_active_trade_at_a_time": true
+  },
+  "replication": {
+    "start": "2026-01-01",
+    "end_exclusive": "2026-07-23",
+    "end_reason": "public frozen D1 source currently ends 2026-07-22",
+    "minimum_nonoverlapping_trades": 5,
+    "no_use_of_2026_data_before_this_freeze": true
+  },
+  "state_before_pnl": {
+    "eligible_event_target": "whether next-open-to-frozen-exit raw return is positive",
+    "minimum_eligible_events": 10,
+    "continuation_fraction_gt": 0.50,
+    "mean_raw_forward_return_bps_gt": 0.0
+  },
+  "economics": {
+    "round_trip_cost_bps": [2.0,5.0,10.0],
+    "primary_cost_bps": 5.0,
+    "high_cost_bps": 10.0
+  },
+  "replication_gate": {
+    "primary_mean_net_bps_gt": 0.0,
+    "primary_profit_factor_gt": 1.0,
+    "high_cost_mean_net_bps_gte": 0.0,
+    "mean_after_removing_single_best_trade_gt": 0.0,
+    "positive_trade_fraction_gt": 0.50,
+    "at_least_three_positive_trade_months": true
+  },
+  "leverage": {
+    "grid_after_unlevered_replication_pass_only": [2,5,10],
+    "purpose": "risk/path diagnostic only; leverage cannot establish edge"
+  },
+  "claims": {"verified_oos":false,"profitable_edge_established":false,"live_enabled":false}
+}
