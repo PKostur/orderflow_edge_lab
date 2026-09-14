@@ -12,6 +12,7 @@ from scipy.stats import rankdata
 
 FEATURES = ("microprice_displacement_bps", "book_imbalance_10")
 HORIZONS = (5, 15, 30, 60)
+MAX_FUTURE_LOOKUP_DELAY_MS = 2000
 
 
 def _corr(x: np.ndarray, y: np.ndarray) -> float:
@@ -71,12 +72,19 @@ def _read_features(path: Path) -> pd.DataFrame:
 def _symbol_arrays(group: pd.DataFrame, horizon_s: int) -> tuple[np.ndarray, np.ndarray, np.ndarray] | None:
     ts = group["ts_ms"].to_numpy(dtype=np.int64)
     mid = group["mid"].to_numpy(dtype=float)
-    future_index = np.searchsorted(ts, ts + horizon_s * 1000, side="left")
+    target_ts = ts + horizon_s * 1000
+    future_index = np.searchsorted(ts, target_ts, side="left")
     valid = future_index < len(group)
-    if not valid.any():
+    valid_positions = np.flatnonzero(valid)
+    if len(valid_positions) == 0:
         return None
-    current_idx = np.flatnonzero(valid)
-    future_idx = future_index[valid]
+    future_for_valid = future_index[valid]
+    lookup_delay = ts[future_for_valid] - target_ts[valid]
+    timely = lookup_delay <= MAX_FUTURE_LOOKUP_DELAY_MS
+    current_idx = valid_positions[timely]
+    future_idx = future_for_valid[timely]
+    if len(current_idx) == 0:
+        return None
     y = 10000.0 * (mid[future_idx] / mid[current_idx] - 1.0)
     return current_idx, future_idx, y
 
@@ -90,10 +98,12 @@ def run_batch(features_path: Path, batch_id: str, out: Path, epochs: int = 1000)
     for symbol, group in frame.groupby("symbol", sort=True):
         if symbol == "BTC_USDT" or len(group) < 50:
             continue
-        assoc_values.append(_corr(
+        value = _corr(
             group["microprice_displacement_bps"].to_numpy(float),
             group["book_imbalance_10"].to_numpy(float),
-        ))
+        )
+        if math.isfinite(value):
+            assoc_values.append(value)
 
     for feature in FEATURES:
         for horizon in HORIZONS:
@@ -114,9 +124,9 @@ def run_batch(features_path: Path, batch_id: str, out: Path, epochs: int = 1000)
                     continue
                 symbol_payload.append((symbol, x, y))
                 symbol_rhos.append(rho)
-            batch_rho = float(np.median(symbol_rhos)) if symbol_rhos else float("nan")
+            batch_rho = float(np.median(symbol_rhos)) if symbol_rhos else None
             perm_values: list[float] = []
-            if len(symbol_payload) >= 1 and math.isfinite(batch_rho):
+            if symbol_payload and batch_rho is not None:
                 for _ in range(epochs):
                     per_symbol: list[float] = []
                     for _symbol, x, y in symbol_payload:
@@ -126,31 +136,34 @@ def run_batch(features_path: Path, batch_id: str, out: Path, epochs: int = 1000)
                             per_symbol.append(value)
                     if per_symbol:
                         perm_values.append(float(np.median(per_symbol)))
-            if perm_values:
+            if perm_values and batch_rho is not None:
                 perm_p = (1.0 + sum(abs(v) >= abs(batch_rho) for v in perm_values)) / (1.0 + len(perm_values))
             else:
-                perm_p = float("nan")
+                perm_p = None
             metrics.append({
                 "feature": feature,
                 "horizon_seconds": horizon,
                 "valid_symbols": len(symbol_rhos),
                 "batch_median_spearman": batch_rho,
-                "feature_sign_reversed_spearman": -batch_rho if math.isfinite(batch_rho) else None,
-                "within_symbol_batch_permutation_p": perm_p if math.isfinite(perm_p) else None,
+                "feature_sign_reversed_spearman": -batch_rho if batch_rho is not None else None,
+                "within_symbol_batch_permutation_p": perm_p,
                 "symbol_spearman": symbol_rhos,
             })
 
+    association_median = float(np.median(assoc_values)) if assoc_values else None
     payload = {
         "schema_version": 1,
         "protocol": "microprice-imbalance-forward-v1",
+        "amendment": "microprice-imbalance-forward-v1.1-pre-outcome-reliability",
         "batch_id": batch_id,
         "source_file": features_path.name,
         "rows_after_1s_sampling": int(len(frame)),
+        "future_lookup_max_delay_ms": MAX_FUTURE_LOOKUP_DELAY_MS,
         "feature_association": {
             "metric": "Spearman",
-            "median_symbol_rho": float(np.nanmedian(assoc_values)) if assoc_values else None,
-            "high_redundancy": bool(assoc_values and abs(float(np.nanmedian(assoc_values))) >= 0.80),
-            "symbol_rhos": [v for v in assoc_values if math.isfinite(v)],
+            "median_symbol_rho": association_median,
+            "high_redundancy": bool(association_median is not None and abs(association_median) >= 0.80),
+            "symbol_rhos": assoc_values,
         },
         "state_metrics": metrics,
         "claims": {
@@ -191,12 +204,12 @@ def run_aggregate(inputs: list[Path], out: Path) -> None:
                     perm_ps.append(float(p))
             n = len(values)
             positive = sum(v > 0 for v in values)
-            median_rho = float(np.median(values)) if values else float("nan")
+            median_rho = float(np.median(values)) if values else None
             positive_fraction = positive / n if n else 0.0
             sign_p = _sign_test_two_sided(positive, n)
             passed = bool(
                 n >= 6
-                and math.isfinite(median_rho)
+                and median_rho is not None
                 and median_rho > 0.02
                 and positive_fraction >= (2.0 / 3.0)
                 and sign_p <= 0.10
@@ -205,7 +218,7 @@ def run_aggregate(inputs: list[Path], out: Path) -> None:
                 "feature": feature,
                 "horizon_seconds": horizon,
                 "independent_batches": n,
-                "median_batch_spearman": median_rho if math.isfinite(median_rho) else None,
+                "median_batch_spearman": median_rho,
                 "positive_batch_fraction": positive_fraction,
                 "two_sided_sign_test_p": sign_p,
                 "median_within_batch_permutation_p": float(np.median(perm_ps)) if perm_ps else None,
@@ -214,12 +227,14 @@ def run_aggregate(inputs: list[Path], out: Path) -> None:
 
     assoc = [b.get("feature_association", {}).get("median_symbol_rho") for b in batches]
     assoc = [float(v) for v in assoc if v is not None and math.isfinite(float(v))]
+    assoc_median = float(np.median(assoc)) if assoc else None
     payload = {
         "schema_version": 1,
         "protocol": "microprice-imbalance-forward-v1",
+        "amendment": "microprice-imbalance-forward-v1.1-pre-outcome-reliability",
         "independent_batches_seen": len(batches),
-        "feature_association_median_across_batches": float(np.median(assoc)) if assoc else None,
-        "high_redundancy_across_batches": bool(assoc and abs(float(np.median(assoc))) >= 0.80),
+        "feature_association_median_across_batches": assoc_median,
+        "high_redundancy_across_batches": bool(assoc_median is not None and abs(assoc_median) >= 0.80),
         "state_results": rows,
         "state_passes": sum(bool(r["state_pass"]) for r in rows),
         "strategy_pnl_layer_open": False,
