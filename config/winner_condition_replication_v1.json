@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "protocol_name": "winner-condition-replication-v1",
+  "status": "discovery_protocol_frozen_at_intent",
+  "purpose": "Search broadly for exceptionally strong strategy behavior, identify the market conditions responsible for the winner without using the replication set, then freeze and test a standalone conditioned strategy on untouched instruments and time periods.",
+  "separation_from_existing_research": {
+    "branches": ["main", "research/winner-condition-replication-v1"],
+    "must_not_modify": ["frozen dependence-aware state protocol", "LSK BTC-aligned 30-second experiment", "ENA frozen candidate"],
+    "discovery_results_cannot_change_replication_rules_after_freeze": true
+  },
+  "stage_1_broad_tournament": {
+    "objective": "Find high-expectancy strategy families rather than a single lucky parameter cell.",
+    "markets_targeted": ["crypto spot/perpetual", "equity index futures", "FX", "liquid equities/ETFs", "commodities"],
+    "timeframes": ["1m", "5m", "15m", "1h", "4h", "1d"],
+    "families": [
+      "trend_breakout",
+      "time_series_momentum",
+      "cross_sectional_momentum",
+      "mean_reversion",
+      "volatility_breakout",
+      "volatility_contraction_expansion",
+      "carry_basis_funding",
+      "opening_range_breakout",
+      "relative_value_pairs",
+      "liquidity_imbalance",
+      "orderflow_continuation",
+      "orderflow_exhaustion_reversal",
+      "gap_reversion_or_continuation"
+    ],
+    "realistic_cost_requirement": true,
+    "all_trials_retained": true,
+    "minimum_independent_time_clusters": 5,
+    "minimum_trades": 60,
+    "minimum_profit_factor_after_cost": 1.20,
+    "minimum_positive_cluster_fraction": 0.60,
+    "reject_if_single_cluster_profit_share_gt": 0.50,
+    "winner_ranking": [
+      "median expectancy after realistic cost",
+      "profit factor after realistic cost",
+      "cluster consistency",
+      "drawdown",
+      "parameter neighborhood stability",
+      "instrument breadth"
+    ]
+  },
+  "stage_2_winning_condition_decomposition": {
+    "objective": "Explain when and why the winning strategy works without changing its base signal definition.",
+    "candidate_condition_groups": [
+      "trend_vs_range",
+      "realized_volatility",
+      "volatility_expansion_or_contraction",
+      "spread_and_liquidity",
+      "volume_and_trade_intensity",
+      "orderflow_imbalance",
+      "recent_displacement_relative_to_spread_or_ATR",
+      "higher_timeframe_alignment",
+      "cross_market_or_benchmark_alignment",
+      "time_of_day_or_session",
+      "funding_basis_carry_state",
+      "news_or_event_proximity_when_available"
+    ],
+    "selection_rule": "Conditions may be selected only from the discovery set and must improve economic robustness rather than merely maximize raw PnL.",
+    "controls": [
+      "unconditioned winner",
+      "opposite-direction mapping when applicable",
+      "randomized condition labels",
+      "matched-frequency no-trade control"
+    ],
+    "output": "A frozen standalone rule containing base signal, direction logic, no-trade states, sizing, exits, and execution assumptions."
+  },
+  "stage_3_untouched_replication": {
+    "objective": "Attempt to falsify the frozen standalone conditioned strategy.",
+    "minimum_new_independent_clusters": 5,
+    "preferred_new_independent_clusters": 10,
+    "must_include": [
+      "unseen time periods",
+      "unseen instruments from the same market when available",
+      "cross-market transfer when economically meaningful"
+    ],
+    "promotion_requirements": {
+      "median_expectancy_after_full_cost_bps_gt": 0.0,
+      "profit_factor_after_full_cost_gt": 1.20,
+      "minimum_positive_cluster_fraction": 0.60,
+      "conditioned_strategy_must_beat_unconditioned_winner": true,
+      "conditioned_strategy_must_beat_fixed_direction_controls": true,
+      "no_single_cluster_profit_share_gt": 0.40,
+      "parameter_neighborhood_must_remain_profitable": true,
+      "stress_cost_case_must_not_collapse": true
+    }
+  },
+  "execution_model": {
+    "required_components": [
+      "venue fees",
+      "bid_ask spread",
+      "slippage",
+      "latency",
+      "adverse selection",
+      "funding or borrow where relevant"
+    ],
+    "report_multiple_cost_stresses": true,
+    "no_claim_from_fee_only_backtest": true
+  },
+  "anti_overfit_rules": {
+    "discovery_and_replication_sets_separate": true,
+    "condition_thresholds_frozen_before_replication": true,
+    "all_failed_trials_preserved": true,
+    "multiple_testing_adjustment_required_for_large_searches": true,
+    "parameter_neighborhood_review_required": true,
+    "symbol_and_period_concentration_review_required": true,
+    "screening_is_not_promotion": true
+  },
+  "claims": {
+    "profitable_edge_established": false,
+    "verified_out_of_sample_evidence": false,
+    "standalone_strategy_promotable": false,
+    "live_order_transmission_supported": false
+  }
+}
