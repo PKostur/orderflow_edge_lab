@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "protocol_name": "two-leg-relative-value-v1",
+  "frozen_at_intent": "2026-09-14",
+  "status": "development_screening",
+  "base_research_commit": "4a39c1d762c5e43a875a4254d7879b92cac09c36",
+  "purpose": "Test whether BTC-relative information that failed as a single-leg monetization mechanism becomes economically meaningful when expressed as a genuinely beta-hedged two-leg BTC/alt portfolio, while preserving state-first research and realistic execution costs on both legs.",
+  "pods": [
+    "btc_cross_asset_context",
+    "mean_reversion",
+    "trend_structure",
+    "execution_economics",
+    "risk_path",
+    "indicator_orthogonality",
+    "research_validity_statistics",
+    "transfer_generalization",
+    "data_integrity",
+    "reliability_observability",
+    "adversarial_lead"
+  ],
+  "data": {
+    "source": "MEXC public futures klines",
+    "target_execution_venue": "MEXC Futures",
+    "development_start": "2026-03-01",
+    "development_end_exclusive": "2026-09-12",
+    "interval": "1h",
+    "context_symbol": "BTC_USDT",
+    "tradable_alt_symbols": ["ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "universe_selection_uses_strategy_pnl": false,
+    "historical_period_already_inspected": true,
+    "untouched_oos_claim_allowed": false
+  },
+  "dependence_and_trials": {
+    "calendar_fold_days": 21,
+    "calendar_time_fold_is_dependence_cluster": true,
+    "minimum_folds": 6,
+    "minimum_symbols": 8,
+    "minimum_total_portfolio_trades": 60,
+    "minimum_positive_fold_fraction": 0.60,
+    "minimum_positive_symbol_fraction": 0.60,
+    "trial_unit": "spread_definition x regression_window x entry_threshold x exit_rule x cost_case",
+    "all_trials_retained": true,
+    "no_best_cell_auto_promotion": true,
+    "future_after_freeze_required_for_oos": true
+  },
+  "causality": {
+    "signal_uses_completed_bar_t": true,
+    "hedge_ratio_estimation_uses_only_information_available_through_t": true,
+    "entry": "both legs at next bar open t+1",
+    "exit": "both legs at same causal exit timestamp",
+    "no_same_bar_fill": true,
+    "no_forward_fill_across_missing_symbol_bars": true,
+    "one_active_portfolio_per_alt_symbol": true,
+    "portfolio_exit_must_remain_inside_signal_dependence_fold": true
+  },
+  "spread_definitions": {
+    "rolling_log_price_residual": {
+      "description": "Causal rolling OLS of alt log price on BTC log price with intercept; spread is the contemporaneous regression residual.",
+      "regression_windows": [96, 192],
+      "zscore_window": "same_as_regression_window"
+    },
+    "rolling_return_beta_residual": {
+      "description": "Causal rolling OLS beta of alt hourly log return on BTC hourly log return; cumulative residual over a frozen lookback forms the state score.",
+      "regression_windows": [96, 192],
+      "residual_lookbacks": [4, 12]
+    }
+  },
+  "state_layer": {
+    "evaluated_before_portfolio_pnl": true,
+    "targets": [
+      "future_spread_change_signed_for_reversion_or_continuation",
+      "future_spread_absolute_change_for_expansion_or_contraction",
+      "future_rolling_beta_stability"
+    ],
+    "primary_metrics": ["calendar_fold_spearman", "sign_accuracy_above_frozen_threshold"],
+    "median_spearman_gt": 0.0,
+    "minimum_positive_fold_fraction": 0.60,
+    "strategy_pnl_not_used_for_state_selection": true
+  },
+  "orthogonality": {
+    "features_tested": ["spread_zscore", "rolling_beta", "beta_change", "btc_realized_volatility", "alt_realized_volatility", "relative_volume"],
+    "redundancy_metric": "absolute Spearman association",
+    "high_redundancy_threshold": 0.80,
+    "one_representative_per_highly_redundant_cluster": true,
+    "second_feature_requires_incremental_predictive_information_or_prespecified_interaction": true,
+    "no_feature_combination_selected_by_in_sample_profit_factor": true
+  },
+  "portfolio_construction": {
+    "gross_notional_normalization": "1.0 total gross notional per portfolio trade",
+    "alt_leg_notional": "1/(1+abs(beta))",
+    "btc_leg_notional": "abs(beta)/(1+abs(beta))",
+    "direction_mean_reversion": "if spread z > threshold, short alt and long beta-weighted BTC; if spread z < -threshold, long alt and short beta-weighted BTC",
+    "direction_continuation_control": "exactly reverse the mean-reversion portfolio direction",
+    "beta_sign_rule": "if estimated beta <= 0 or non-finite, the observation is ineligible",
+    "beta_cap": 3.0,
+    "entry_threshold_z": [1.5, 2.0],
+    "exit_rules": [
+      {"type": "time", "hold_bars": 4},
+      {"type": "time", "hold_bars": 8},
+      {"type": "spread_cross_zero_or_time", "max_hold_bars": 8}
+    ]
+  },
+  "economics": {
+    "round_trip_cost_bps_per_leg": [6.0, 8.0, 10.0],
+    "primary_round_trip_cost_bps_per_leg": 8.0,
+    "portfolio_cost_method": "apply each leg cost to that leg's gross-notional weight on entry and exit; report total portfolio cost explicitly",
+    "funding": {
+      "include_only_if_legitimate_historical_field_available": true,
+      "missing_funding_policy": "report separate no-funding sensitivity; never impute or invent funding"
+    },
+    "slippage_latency": "captured inside frozen per-leg cost cases for v1; no zero-cost promotion",
+    "zero_cost_results_cannot_promote": true
+  },
+  "controls": {
+    "reversed_portfolio_direction": true,
+    "btc_leg_removed_single_leg_control": true,
+    "beta_equal_one_control": true,
+    "randomized_within_symbol_fold_entry_sign_permutation": true,
+    "cross_pair_transfer_is_not_untouched_oos": true
+  },
+  "economic_gate": {
+    "state_screen_required_first": true,
+    "primary_per_leg_cost_bps": 8.0,
+    "median_fold_net_expectancy_bps_gt": 0.0,
+    "median_fold_profit_factor_gt": 1.0,
+    "minimum_positive_fold_fraction": 0.60,
+    "minimum_positive_symbol_fraction": 0.60,
+    "minimum_total_portfolio_trades": 60,
+    "must_beat_reversed_direction_control": true,
+    "must_beat_single_leg_control": true,
+    "requires_parameter_neighborhood_stability": true,
+    "no_selection_by_highest_in_sample_pf": true
+  },
+  "risk_path": {
+    "portfolio_mae_mfe_required_before_candidate_freeze": true,
+    "leg_level_mae_mfe_required": true,
+    "beta_drift_during_trade_required": true,
+    "stop_grid_only_after_economic_gate": true,
+    "no_stop_optimization_to_rescue_negative_gross_edge": true
+  },
+  "promotion": {
+    "candidate_freeze_required": true,
+    "holdout_audit_required": true,
+    "genuine_future_after_freeze_validation_required": true,
+    "paper_shadow_reliability_required": true,
+    "reconciliation_required": true,
+    "ruflo_meta_harness_gate_required": true,
+    "deterministic_release_manager_gate_required": true,
+    "automatic_live_transmission": false,
+    "separate_user_approval_for_live_required": true
+  },
+  "claims": {
+    "development_screening_only": true,
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  }
+}
