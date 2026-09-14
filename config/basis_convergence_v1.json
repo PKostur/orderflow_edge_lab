@@ -51,13 +51,17 @@
       "include_observed_funding_cashflows": true,
       "only_apply_records_with_settlement_timestamp_inside_position": true,
       "position_side_sign_must_be_respected": true,
+      "positive_rate_long_pays_short_receives": true,
+      "history_must_cover_entire_symbol_study_period": true,
+      "maximum_allowed_gap_hours_between_records": 12,
+      "incomplete_symbol_funding_history_blocks_symbol_economics": true,
       "missing_funding_record_blocks_affected_trade_economics": true
     }
   },
   "controls": {
-    "reversed_direction": true,
+    "reversed_direction": "same entry times and exits, invert the frozen convergence side",
     "within_symbol_fold_sign_permutation_iterations": 2000,
-    "basis_sign_removed_placebo": true
+    "basis_sign_removed_placebo": "same abs(z) entry trigger and exits, but replace basis sign with a deterministic alternating long/short side ordered within each symbol-fold, starting long; this preserves trigger timing and approximate side balance while removing basis-direction information"
   },
   "screening_gate": {
     "minimum_total_trades": 80,
@@ -66,8 +70,10 @@
     "minimum_positive_fold_fraction": 0.60,
     "minimum_positive_symbol_fraction": 0.60,
     "must_beat_reversed_direction_control": true,
+    "must_beat_basis_sign_removed_placebo": true,
     "randomized_direction_p_lt": 0.05,
     "requires_parameter_neighborhood_support": true,
+    "parameter_neighborhood_definition": "at least one one-axis adjacent variant among rolling window, z threshold, or hold bars must independently satisfy the base economic gate at 16 bps",
     "no_best_cell_auto_promotion": true
   },
   "orthogonality": {
