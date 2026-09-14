@@ -39,8 +39,7 @@ jobs:
       - name: Verify preserved data artifact
         run: |
           test -f artifacts/gold_strategy_discovery_v1/data/SHA256SUMS.txt
-          cd artifacts/gold_strategy_discovery_v1/data
-          sha256sum -c SHA256SUMS.txt
+          sha256sum -c artifacts/gold_strategy_discovery_v1/data/SHA256SUMS.txt
       - name: Run unchanged development tournament with finite JSON serialization
         run: |
           python scripts/run_gold_strategy_discovery_v1_0_1.py \
