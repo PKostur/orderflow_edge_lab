@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "protocol_name": "strategy-discovery-v2.1.3-low-turnover",
+  "source_workflow_run_id": 34856870642,
+  "source_head_sha": "036b83d5a050b919e7a0046168edf3a2dbf9ab8b",
+  "superseded_result_artifacts_used": false,
+  "intervals": {
+    "15m": {
+      "state_trial_count": 112,
+      "state_pass_count": 56,
+      "translation_count": 168,
+      "economic_pass_count_primary_16bps": 0,
+      "top_state": {
+        "family": "session_vwap_reversion",
+        "params": {"threshold": 1.5, "hold_bars": 8},
+        "median_fold_spearman": 0.11769881612169661,
+        "positive_fold_fraction": 1.0,
+        "state_symbol_breadth": 9
+      },
+      "top_primary_economic_row": {
+        "family": "range_expansion_fade",
+        "params": {"range_z": 1.0, "hold_bars": 8},
+        "total_trades": 8136,
+        "symbol_breadth": 9,
+        "median_fold_net_expectancy_bps": -10.390466554802689,
+        "median_fold_profit_factor": 0.7292401322303377,
+        "positive_fold_fraction": 0.0,
+        "positive_symbol_fraction": 0.0,
+        "economic_pass": false
+      }
+    },
+    "1h": {
+      "state_trial_count": 112,
+      "state_pass_count": 44,
+      "translation_count": 132,
+      "economic_pass_count_primary_16bps": 0,
+      "top_state": {
+        "family": "session_vwap_reversion",
+        "params": {"threshold": 1.5, "hold_bars": 8},
+        "median_fold_spearman": 0.1841829786168029,
+        "positive_fold_fraction": 1.0,
+        "state_symbol_breadth": 9
+      },
+      "top_primary_economic_row": {
+        "family": "rolling_beta_spread_momentum",
+        "params": {"regression_window": 192, "threshold_z": 1.5, "hold_bars": 8},
+        "total_trades": 1616,
+        "symbol_breadth": 9,
+        "median_fold_net_expectancy_bps": 1.097871258848859,
+        "median_fold_profit_factor": 1.002628953654106,
+        "positive_fold_fraction": 0.5,
+        "positive_symbol_fraction": 0.7777777777777778,
+        "economic_pass": false
+      },
+      "cost_sensitivity_of_top_primary_row": {
+        "12bps": {"median_fold_net_expectancy_bps": 5.097871258848859, "median_fold_profit_factor": 1.061, "positive_fold_fraction": 0.6, "positive_symbol_fraction": 0.7777777777777778},
+        "16bps": {"median_fold_net_expectancy_bps": 1.097871258848859, "median_fold_profit_factor": 1.002628953654106, "positive_fold_fraction": 0.5, "positive_symbol_fraction": 0.7777777777777778},
+        "20bps": {"median_fold_net_expectancy_bps": -2.902128741151141, "median_fold_profit_factor": 0.948, "positive_fold_fraction": 0.5, "positive_symbol_fraction": 0.5555555555555556}
+      },
+      "neighbor_96bar_regression": {
+        "12bps_median_fold_net_expectancy_bps": -0.39432246093507084,
+        "16bps_median_fold_net_expectancy_bps": -4.39432246093507
+      }
+    }
+  },
+  "combined": {
+    "state_trial_count": 224,
+    "state_pass_count": 100,
+    "translation_count": 300,
+    "economic_pass_count_primary_16bps": 0,
+    "dominant_state_interpretation": "mean_reversion",
+    "candidate_frozen": false,
+    "risk_path_triggered": false
+  },
+  "release_manager": {
+    "status": "reviewable",
+    "error_count": 0,
+    "warning_count": 2
+  },
+  "claims": {
+    "development_screening_only": true,
+    "profitable_edge_established": false,
+    "verified_out_of_sample_evidence": false,
+    "live_enabled": false
+  }
+}
