@@ -1,4 +1,4 @@
-name: Strategy Discovery v2.1 Low-Turnover
+name: Strategy Discovery v2.1.2 Low-Turnover
 
 on:
   workflow_dispatch:
@@ -6,7 +6,9 @@ on:
     branches: [research/strategy-discovery-v2]
     paths:
       - "config/strategy_discovery_v2_1.json"
+      - "config/strategy_discovery_v2_1_2_amendment.json"
       - "scripts/run_strategy_discovery_v2_1.py"
+      - "scripts/run_strategy_discovery_v2_1_2.py"
       - ".github/workflows/strategy-discovery-v2-1.yml"
 
 permissions:
@@ -71,7 +73,7 @@ jobs:
           path: artifacts/strategy_discovery_v2_1/data/${{ matrix.interval }}
       - name: Run state-first causal tournament
         run: |
-          python scripts/run_strategy_discovery_v2_1.py \
+          python scripts/run_strategy_discovery_v2_1_2.py \
             --config config/strategy_discovery_v2_1.json \
             --data-dir "artifacts/strategy_discovery_v2_1/data/${{ matrix.interval }}" \
             --interval "${{ matrix.interval }}" \
@@ -123,7 +125,7 @@ jobs:
           top_state.sort(key=lambda x:(x.get('state_pass',False),x.get('median_fold_spearman',-1e99)), reverse=True)
           report={
               'schema_version':1,
-              'protocol_name':'strategy-discovery-v2.1-low-turnover',
+              'protocol_name':'strategy-discovery-v2.1.2-low-turnover',
               'interval_reports':[{k:r[k] for k in ['interval','state_trial_count','state_pass_count','translation_count','economic_pass_count_primary']} for r in rows],
               'economic_pass_count_primary':sum(int(r.get('economic_pass_count_primary',0)) for r in rows),
               'top_state':top_state[:30],
