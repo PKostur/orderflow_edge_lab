@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "protocol_name": "residual-right-tail-state-v1",
+  "status": "post-selection-state-discovery",
+  "parent_research_head": "4073dbf8b59fedef6887dc507f5a071785befcf5",
+  "source_strategy": {
+    "family": "rolling_beta_spread_momentum",
+    "interval": "1h",
+    "regression_window": 192,
+    "threshold_z": 1.5,
+    "hold_bars": 8,
+    "source_trade_count": 1616,
+    "source_cost_bps": 16.0
+  },
+  "purpose": "Explain, without PnL-based feature selection, which pre-entry market states distinguish large beta-neutral residual continuation events from failed residual-momentum signals.",
+  "data": {
+    "source": "exact archived MEXC public futures 1h klines from strategy-discovery-v2.1.3",
+    "symbols": ["ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "context_symbol": "BTC_USDT",
+    "start": "2026-03-01",
+    "end_exclusive": "2026-09-12",
+    "calendar_fold_days": 21,
+    "all_symbols_share_calendar_fold_dependence": true
+  },
+  "evidence_boundary": {
+    "development_folds": [0,1,2,3,4,5,6],
+    "feature_selection_locked_folds": [7,8,9],
+    "locked_folds_are_not_untouched_oos": true,
+    "reason": "Strategy PnL from all ten folds has already been inspected. The last three folds are only locked from this new feature/model search, not globally untouched evidence.",
+    "no_locked_fold_metric_may_change_feature_sets_models_or_thresholds": true
+  },
+  "targets": {
+    "signed_residual_continuation_8h": {
+      "type": "continuous",
+      "definition": "sign(signal residual z) * (asset future log return over the frozen 8h hold - signal-time rolling beta * BTC future log return over the same hold)",
+      "strategy_pnl_used": false
+    },
+    "right_tail_continuation_8h": {
+      "type": "binary",
+      "definition": "signed_residual_continuation_8h exceeds the training-only 80th percentile for that outer split",
+      "quantile": 0.80,
+      "threshold_fit_on_training_only": true,
+      "strategy_pnl_used": false
+    }
+  },
+  "feature_families": {
+    "residual_geometry": [
+      "residual_z", "abs_residual_z", "residual_sign", "residual_slope_1h", "residual_slope_4h", "residual_slope_12h", "residual_accel_4h", "residual_vol_12h", "residual_vol_24h", "beta", "beta_change_24h"
+    ],
+    "btc_regime": [
+      "btc_ret_4h", "btc_ret_12h", "btc_ret_24h", "btc_rv_12h", "btc_rv_24h", "btc_rv_48h", "btc_range_z_24h", "btc_volume_z_24h"
+    ],
+    "asset_regime": [
+      "asset_ret_4h", "asset_ret_12h", "asset_ret_24h", "asset_rv_12h", "asset_rv_24h", "asset_range_z_24h", "asset_volume_z_24h", "session_vwap_distance_atr"
+    ],
+    "relative_regime": [
+      "excess_ret_4h", "excess_ret_12h", "excess_ret_24h", "residual_rank_cross_section", "residual_abs_rank_cross_section"
+    ],
+    "cross_section": [
+      "cs_return_dispersion_4h", "cs_return_dispersion_12h", "cs_return_dispersion_24h", "cs_residual_dispersion", "cs_positive_return_share_4h"
+    ],
+    "session": ["hour_sin", "hour_cos", "weekday_sin", "weekday_cos"]
+  },
+  "feature_sets": {
+    "R": ["residual_geometry"],
+    "R_B": ["residual_geometry", "btc_regime"],
+    "R_A": ["residual_geometry", "asset_regime"],
+    "R_X": ["residual_geometry", "relative_regime", "cross_section"],
+    "R_B_X": ["residual_geometry", "btc_regime", "relative_regime", "cross_section"],
+    "CORE": ["residual_geometry", "btc_regime", "asset_regime", "relative_regime", "cross_section", "session"]
+  },
+  "model_grid": {
+    "continuous": {
+      "ridge": [{"alpha": 0.1}, {"alpha": 1.0}, {"alpha": 10.0}, {"alpha": 100.0}],
+      "elastic_net": [{"alpha": 0.0001, "l1_ratio": 0.1}, {"alpha": 0.001, "l1_ratio": 0.25}, {"alpha": 0.01, "l1_ratio": 0.5}, {"alpha": 0.05, "l1_ratio": 0.75}],
+      "hist_gradient_boosting": [{"max_iter": 80, "max_leaf_nodes": 7, "learning_rate": 0.05}, {"max_iter": 120, "max_leaf_nodes": 15, "learning_rate": 0.05}, {"max_iter": 160, "max_leaf_nodes": 15, "learning_rate": 0.03}, {"max_iter": 120, "max_leaf_nodes": 31, "learning_rate": 0.03}]
+    },
+    "binary": {
+      "logistic": [{"C": 0.1}, {"C": 0.5}, {"C": 1.0}, {"C": 5.0}],
+      "random_forest": [{"n_estimators": 120, "max_depth": 3, "min_samples_leaf": 20}, {"n_estimators": 160, "max_depth": 5, "min_samples_leaf": 20}, {"n_estimators": 160, "max_depth": 7, "min_samples_leaf": 10}, {"n_estimators": 200, "max_depth": 5, "min_samples_leaf": 10}],
+      "hist_gradient_boosting": [{"max_iter": 80, "max_leaf_nodes": 7, "learning_rate": 0.05}, {"max_iter": 120, "max_leaf_nodes": 15, "learning_rate": 0.05}, {"max_iter": 160, "max_leaf_nodes": 15, "learning_rate": 0.03}, {"max_iter": 120, "max_leaf_nodes": 31, "learning_rate": 0.03}]
+    }
+  },
+  "epoch_accounting": {
+    "core_epochs": 144,
+    "calculation": "6 feature sets * (12 continuous model variants + 12 binary model variants)",
+    "winner_adversarial_epochs": 10000,
+    "winner_adversarial_method": "target permutation within symbol and 21-day development dependence cluster; only family winners are tested",
+    "all_core_epochs_retained": true,
+    "no_best_cell_auto_promotion": true
+  },
+  "validation": {
+    "primary_development": "leave-one-development-calendar-fold-out over folds 0-6; training includes only other development folds",
+    "locked_evaluation": "fit selected family winners on all folds 0-6 and evaluate once on folds 7-9",
+    "symbol_generalization": "report leave-one-symbol-out diagnostics for selected family winners, but do not train/test across simultaneous symbols as independent time evidence",
+    "preprocessing_fit_on_training_only": true,
+    "binary_target_threshold_fit_on_training_only": true,
+    "no_symbol_identity_feature_in_primary_models": true
+  },
+  "selection": {
+    "continuous_development_gate": {
+      "median_fold_spearman_gt": 0.05,
+      "positive_fold_fraction_gte": 0.70
+    },
+    "binary_development_gate": {
+      "median_fold_auc_gt": 0.55,
+      "positive_auc_fold_fraction_gte": 0.70,
+      "median_top_quintile_lift_gt": 1.10
+    },
+    "family_winner_rule": "one winner per target by primary metric, then simpler model if within 0.01 of best primary metric",
+    "locked_support": {
+      "continuous_median_spearman_gt": 0.05,
+      "continuous_positive_fold_count_gte": 2,
+      "binary_median_auc_gt": 0.55,
+      "binary_auc_above_half_fold_count_gte": 2
+    },
+    "permutation_p_lt": 0.01
+  },
+  "post_state_translation": {
+    "allowed_only_if_locked_state_support_and_permutation_gate_both_pass": true,
+    "gate_definition": "allow only top 25% of predicted continuation probability or continuous state score using training-development prediction quantiles; threshold cannot be selected from strategy PnL",
+    "translation_is_post_selection_development_only": true,
+    "leverage_after_translation": [1,2],
+    "leverage_5x_10x_not_retested_unless_unlevered_state_conditioned_edge_first_passes": true
+  },
+  "validity": {
+    "candlestick_liquidity_proxy_is_not_called_true_liquidity": true,
+    "no_hidden_liquidity_or_mbo_claim": true,
+    "no_pnl_feature_selection": true,
+    "no_verified_oos_claim": true,
+    "no_profitable_edge_claim": true,
+    "live_enabled": false
+  }
+}
