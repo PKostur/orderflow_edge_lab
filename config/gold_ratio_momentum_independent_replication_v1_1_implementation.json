@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "parent_protocol": "gold-ratio-momentum-independent-replication-v1",
+  "frozen_before_outcome": true,
+  "data_admissibility_only": true,
+  "rules": {
+    "align_on_common_calendar_date": true,
+    "weekdays_only_monday_through_friday": true,
+    "minimum_tick_volume_each_instrument_gt": 1,
+    "drop_duplicate_dates_keep_last": true,
+    "require_positive_finite_ohlc": true,
+    "rolling_windows_count_only_admitted_common_trading_days": true
+  },
+  "strategy_parameters_changed": false,
+  "economic_gates_changed": false
+}
