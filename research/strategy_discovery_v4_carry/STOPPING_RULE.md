@@ -1,0 +1,1 @@
+Stopping rule: do not open the v4 locked holdout or test leverage because the frozen development gate produced zero candidates. A future carry protocol must introduce a structurally new mechanism before outcomes; it must not relax the 60% positive-fold requirement or retune around the observed 8/15 near-miss.

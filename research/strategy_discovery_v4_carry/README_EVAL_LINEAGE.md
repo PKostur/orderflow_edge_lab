@@ -1,0 +1,1 @@
+Evaluation lineage: `research/strategy-discovery-v4-carry-eval` is a child of `research/strategy-discovery-v4-carry`. It freezes execution mechanics before outcomes, reuses the immutable data artifact from workflow run 34875908501, reproduces the development precheck canonically, and does not open the internal holdout because no candidate clears the frozen development gate.

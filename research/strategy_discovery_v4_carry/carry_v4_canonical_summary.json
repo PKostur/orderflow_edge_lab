@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "protocol": "strategy-discovery-v4-funding-basis-carry",
+  "source_data_workflow_run": 34875908501,
+  "canonical_eval_workflow_run": 34880103885,
+  "canonical_eval_source_head": "93aa6cfb8852e5fc3b36572f417f1a83ece0dcd7",
+  "single_symbol_cells": 122,
+  "cross_sectional_cells": 18,
+  "state_pass_single_symbol": 10,
+  "state_pass_cross_sectional": 18,
+  "preliminary_development_pass_single_symbol": 0,
+  "preliminary_development_pass_cross_sectional": 0,
+  "best_cross_sectional": {
+    "params": {"k": 2, "nsett": 5, "hold": 72},
+    "state_median_rho": 0.23089158637620416,
+    "state_positive_fold_fraction": 0.8666666666666667,
+    "trades": 89,
+    "primary_median_fold_net_bps": 6.757970357024187,
+    "primary_median_fold_pf": 1.1297613939956916,
+    "primary_positive_fold_fraction": 0.5333333333333333,
+    "high_cost_median_fold_net_bps": 2.757970357024187,
+    "development_gate_pass": false,
+    "failure_reason": "8/15 positive economic folds is below the frozen 9/15 minimum"
+  },
+  "holdout_opened": false,
+  "leverage_tested": false,
+  "claims": {
+    "verified_oos": false,
+    "profitable_edge_established": false,
+    "live_enabled": false
+  }
+}

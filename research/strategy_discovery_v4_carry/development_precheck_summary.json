@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "protocol": "strategy-discovery-v4-funding-basis-carry",
+  "source_artifact": {
+    "workflow_run": 34875908501,
+    "artifact_id": 10360367682,
+    "sha256": "fa1800b26ea555a68338f708fef2dec1ed87842170b48c85601175cff1397a11"
+  },
+  "status": "development_precheck",
+  "single_symbol_cells": 122,
+  "cross_sectional_cells": 18,
+  "state_pass_single_symbol": 10,
+  "state_pass_cross_sectional": 18,
+  "preliminary_development_pass_single_symbol": 0,
+  "preliminary_development_pass_cross_sectional": 0,
+  "best_cross_sectional": {
+    "family": "cross_sectional_funding_spread",
+    "top_bottom_k": 2,
+    "funding_lookback_settlements": 5,
+    "hold_hours": 72,
+    "state_folds": 15,
+    "state_median_spearman": 0.23089158637620416,
+    "state_positive_fold_fraction": 0.8666666666666667,
+    "trades": 89,
+    "symbol_count": 10,
+    "low_cost_median_fold_net_bps": 10.757970357024186,
+    "low_cost_median_fold_pf": 1.2119937334585393,
+    "low_cost_positive_fold_fraction": 0.5333333333333333,
+    "primary_cost_median_fold_net_bps": 6.757970357024187,
+    "primary_cost_median_fold_pf": 1.1297613939956916,
+    "primary_cost_positive_fold_fraction": 0.5333333333333333,
+    "primary_cost_mean_net_bps": 8.847077423069976,
+    "high_cost_median_fold_net_bps": 2.757970357024187,
+    "high_cost_median_fold_pf": 1.0516345151198498,
+    "high_cost_positive_fold_fraction": 0.5333333333333333,
+    "frozen_gate_positive_fold_fraction_required": 0.60,
+    "passes": false,
+    "failure_reason": "positive PnL in only 8/15 development dependence folds"
+  },
+  "representative_single_symbol_state_signal": {
+    "family": "positive_funding_cash_and_carry",
+    "minimum_funding_rate": 0.00005,
+    "minimum_perp_premium_bps": 0.0,
+    "hold_hours": 24,
+    "state_folds": 14,
+    "state_median_spearman": 0.244,
+    "state_positive_fold_fraction": 0.714,
+    "trades": 644,
+    "symbols": 10,
+    "primary_median_fold_net_bps": -14.2,
+    "interpretation": "funding persistence is predictable but too small to clear both-leg execution friction in this rule"
+  },
+  "holdout_opened": false,
+  "leverage_tested": false,
+  "claims": {
+    "verified_oos": false,
+    "profitable_edge_established": false,
+    "live_enabled": false
+  },
+  "audit_note": "This file records the deterministic local precheck against the immutable GitHub Actions data artifact. It does not open the locked holdout or promote a candidate. Canonical workflow reproduction remains required before merge into the main research lineage."
+}
