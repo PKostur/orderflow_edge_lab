@@ -7,6 +7,7 @@ on:
     paths:
       - "config/gold_social_claims_v1_1.json"
       - "scripts/run_gold_social_claims_v1_1.py"
+      - "scripts/run_gold_social_claims_v1_1_fixed.py"
       - ".github/workflows/gold-social-claims-v1-1.yml"
 
 permissions:
@@ -40,14 +41,16 @@ jobs:
           sha256sum artifacts/gold_social_claims_v1_1/data/*.csv > artifacts/gold_social_claims_v1_1/data/SHA256SUMS.txt
       - name: Run development-only social claims tournament
         run: |
-          python scripts/run_gold_social_claims_v1_1.py \
+          python scripts/run_gold_social_claims_v1_1_fixed.py \
             --data-dir artifacts/gold_social_claims_v1_1/data \
             --output artifacts/gold_social_claims_v1_1/development_results.json
-      - name: Keep holdout sealed and claims conservative
+      - name: Enforce valid development result and sealed holdout
         run: |
           python - <<'PY'
           import json
           r=json.load(open('artifacts/gold_social_claims_v1_1/development_results.json'))
+          if r['error_count'] != 0:
+              raise SystemExit(f"strategy trial errors: {r['error_count']}")
           if r['holdout_opened']:
               raise SystemExit('holdout was opened')
           if any(r['claims'].values()):
