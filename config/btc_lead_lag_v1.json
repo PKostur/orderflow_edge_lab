@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "protocol_name": "btc-lead-lag-v1-state-first",
+  "frozen_at_intent": "2026-09-14",
+  "outcomes_inspected_before_freeze": false,
+  "status": "development_screening",
+  "purpose": "Test whether lagged BTC impulses predict subsequent altcoin residual direction before evaluating any executable strategy economics.",
+  "lineage": {
+    "parent_lane": "unrelated-strategy-tournament-v2-wave-b",
+    "preceding_basis_lane": "basis-convergence-v1-state-first",
+    "preserves_discovery_v1": true,
+    "preserves_regime_research_v1": true,
+    "basis_v1_result_not_used_for_parameter_selection": true
+  },
+  "pods": [
+    "btc_cross_asset_context",
+    "trend_structure",
+    "research_validity_statistics",
+    "execution_economics",
+    "indicator_orthogonality",
+    "adversarial_lead"
+  ],
+  "data": {
+    "source": "MEXC public futures klines",
+    "start": "2026-03-01",
+    "end_exclusive": "2026-09-14",
+    "interval": "1h",
+    "context_symbol": "BTC_USDT",
+    "symbols": ["ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "universe_selection_uses_strategy_pnl": false,
+    "missing_data_must_not_be_invented": true
+  },
+  "dependence": {
+    "calendar_fold_days": 21,
+    "calendar_time_fold_is_dependence_cluster": true,
+    "minimum_folds": 6,
+    "minimum_symbols": 6,
+    "all_trials_retained": true
+  },
+  "feature_family": {
+    "name": "lagged_btc_impulse_for_alt_residual_momentum",
+    "btc_impulse_lookback_bars": [1, 4],
+    "lead_lag_bars": [1, 2],
+    "rolling_beta_window_bars": [96, 192],
+    "future_horizon_bars": [4, 8],
+    "definition": "At completed bar t, compute BTC impulse over the frozen lookback ending at t minus lag. Estimate alt beta to BTC using only returns available through t. Target is the future alt return over the frozen horizon minus beta times contemporaneous future BTC return over the same horizon.",
+    "no_same_bar_future_information": true
+  },
+  "state_layer": {
+    "required_before_strategy_pnl": true,
+    "target": "future_beta_residual_return",
+    "metric": "Spearman of signed lagged BTC impulse versus future beta residual return within 21 day calendar dependence folds",
+    "median_fold_spearman_gt": 0.0,
+    "minimum_positive_fold_fraction": 0.60,
+    "minimum_positive_symbol_fraction": 0.60,
+    "minimum_total_observations": 500,
+    "clustered_permutations": 2000,
+    "permutation_unit": "within symbol x 21 day dependence fold",
+    "permutation_p_lt": 0.05,
+    "strategy_pnl_not_used_for_state_selection": true
+  },
+  "orthogonality": {
+    "one_feature_family_only_in_v1": true,
+    "no_second_indicator_in_v1": true,
+    "redundancy_reporting_required_across_parameter_variants": true,
+    "high_redundancy_abs_spearman": 0.80
+  },
+  "strategy_translation": {
+    "allowed_only_after_state_pass": true,
+    "entry": "next bar open after completed signal bar",
+    "exit": "open after future_horizon_bars",
+    "direction": "sign of lagged BTC impulse",
+    "one_active_trade_per_symbol_variant": true,
+    "exit_must_remain_inside_signal_fold": true,
+    "primary_structure": "single leg alt futures directional trade",
+    "beta_hedged_two_leg_result_is_control_only": true,
+    "round_trip_cost_bps": [12.0, 16.0, 20.0],
+    "primary_cost_bps": 16.0,
+    "funding": "excluded from v1 because this short horizon directional translation does not have pre-frozen complete historical funding coverage for every symbol; no missing funding value may be invented",
+    "minimum_total_trades": 80
+  },
+  "controls": {
+    "reversed_direction": true,
+    "btc_impulse_time_shift_placebo_bars": 24,
+    "beta_hedged_two_leg_control": true,
+    "clustered_direction_randomization": 2000,
+    "randomization_unit": "within symbol x dependence fold"
+  },
+  "screening_gate": {
+    "state_pass_required": true,
+    "median_fold_net_expectancy_bps_gt": 0.0,
+    "median_fold_profit_factor_gt": 1.0,
+    "minimum_positive_fold_fraction": 0.60,
+    "minimum_positive_symbol_fraction": 0.60,
+    "minimum_total_trades": 80,
+    "must_beat_reversed_direction_control": true,
+    "must_beat_time_shift_placebo": true,
+    "requires_parameter_neighborhood_support": true,
+    "no_best_cell_auto_promotion": true,
+    "requires_future_after_freeze_validation": true
+  },
+  "risk_path": {
+    "mae_mfe_required_before_promotion": true,
+    "stop_rr_grid_only_after_economic_screen": true,
+    "no_stop_optimization_to_rescue_negative_edge": true
+  },
+  "promotion": {
+    "candidate_freeze_required": true,
+    "holdout_audit_required": true,
+    "paper_shadow_reliability_required": true,
+    "reconciliation_required": true,
+    "ruflo_gate_required": true,
+    "deterministic_multi_agent_release_manager_required": true,
+    "automatic_live_transmission": false,
+    "separate_user_approval_required_for_live": true
+  },
+  "claims": {
+    "development_only": true,
+    "profitable_edge_established": false,
+    "untouched_oos": false,
+    "live_order_transmission_supported": false
+  }
+}
