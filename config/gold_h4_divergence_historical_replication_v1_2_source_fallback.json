@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold-h4-divergence-historical-replication-v1.2-source-fallback",
+  "base_protocol": "gold-h4-divergence-historical-replication-v1",
+  "frozen_at_intent": "2026-09-14",
+  "outcomes_inspected_before_amendment": false,
+  "reason": "Two independent Dukascopy acquisition attempts failed before strategy evaluation because the hosted runner was rate-limited. The second attempt successfully downloaded 2010-2014 but was repeatedly throttled at 2015; no partial market result was scored.",
+  "changes_only": [
+    "replace the unavailable Dukascopy transport with the public fokan/xauusd-2009-2026 mirror of HistData.com yearly XAUUSD M1 files",
+    "download exactly calendar years 2010 through 2019 and preserve per-year SHA256 hashes",
+    "parse the published MetaTrader-format rows as date,time,open,high,low,close,volume",
+    "treat published timestamps as UTC labels solely for deterministic indexing; no session/time-of-day rule is used in the frozen five strategy cells",
+    "causally aggregate M1 into left-closed, left-labeled 4-hour OHLC bars using first open, maximum high, minimum low and last close",
+    "retain an H4 bar only when it contains at least 30 source M1 rows and require median retained M1 count per H4 bar to be at least 120 before strategy evaluation",
+    "concatenate annual H4 outputs, sort timestamps and remove exact duplicate timestamps before running the existing evaluator"
+  ],
+  "unchanged": [
+    "the exact five frozen divergence cells",
+    "2010-01-01 through 2020-01-01 replication window",
+    "365-day dependence clusters",
+    "minimum eight scorable clusters and minimum five events per scored cluster",
+    "20000 dependence-cluster-preserving permutations per cell and 0.01 permutation alpha",
+    "2, 5 and 10 bps cost cases with 5 bps primary",
+    "minimum 80 trades and all frozen state/economic gates",
+    "reversed-direction control",
+    "2024-2025 holdout remains sealed",
+    "no leverage, no retuning, no OOS/profitable-edge/live claim"
+  ],
+  "evidence_class": "independent historical source replication, not future OOS"
+}
