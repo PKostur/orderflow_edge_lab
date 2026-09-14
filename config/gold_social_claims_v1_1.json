@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold-social-claims-v1.1",
+  "frozen_at_intent": "2026-09-14",
+  "relationship_to_v1": "additional source-driven claims discovered after v1 freeze; v1 results are not used to choose these families",
+  "data": {
+    "xau_source": "simom1/XAUUSD-history",
+    "xag_source": "simom1/XAUUSD-history",
+    "timeframes": ["M1","M15","H1"],
+    "development_start": "2020-01-01",
+    "development_end_exclusive": "2024-01-01",
+    "locked_internal_holdout_start": "2024-01-01",
+    "locked_internal_holdout_end_exclusive": "2026-01-01"
+  },
+  "economics": {
+    "round_trip_cost_bps": [2.0,5.0,10.0],
+    "primary_cost_bps": 5.0,
+    "next_bar_entry": true,
+    "no_same_bar_fill": true,
+    "leverage_only_after_unlevered_holdout_pass": [2,5,10]
+  },
+  "families": {
+    "youtube_ema21_50_rsi_session": {
+      "source_claim": "EMA21/50 trend confirmation + RSI14, London/NY sessions, marketed as high-accuracy gold scalping",
+      "timeframes": ["M1","M15"],
+      "rsi_thresholds": [52,55,60],
+      "session_windows_utc": [[7,11],[13,17]],
+      "holds": [5,15,30,60]
+    },
+    "youtube_double_rsi_ema9_fib_proxy": {
+      "source_claim": "1-minute gold strategy marketed as ~90% win rate using two RSI configurations, RSI-MA crossover, EMA9 and Fibonacci confirmation",
+      "timeframes": ["M1"],
+      "rsi_fast": [7,9],
+      "rsi_slow": [14,21],
+      "ema": [9],
+      "fib_retrace_zone": [[0.382,0.618]],
+      "swing_lookback": [30,60],
+      "holds": [5,15,30],
+      "mechanical_status": "proxy because exact RSI MA settings and Fibonacci anchoring are not fully exposed in searchable description"
+    },
+    "gold_silver_smt_reversal": {
+      "source_claim": "Reddit ICT users report XAUUSD/XAGUSD divergence as an SMT confirmation pair",
+      "timeframes": ["M15","H1"],
+      "swing_lookback": [20,48,96],
+      "divergence_threshold_z": [0.5,1.0],
+      "holds": [4,8,16]
+    },
+    "gold_silver_relative_strength_momentum_control": {
+      "purpose": "reversed-mechanism control for SMT reversion",
+      "timeframes": ["M15","H1"],
+      "lookback": [20,48,96],
+      "threshold_z": [0.5,1.0],
+      "holds": [4,8,16]
+    },
+    "new_york_sweep_choch_proxy": {
+      "source_claim": "NY AM sweep of Asia/London/previous-day liquidity, displacement/CHOCH then reversal",
+      "timeframes": ["M15"],
+      "swing_lookback": [20,48],
+      "displacement_atr": [0.75,1.25],
+      "holds": [4,8,16]
+    }
+  },
+  "dependence": {
+    "calendar_fold_days": 63,
+    "state_before_pnl": true,
+    "minimum_folds": 12,
+    "minimum_trades": 80,
+    "minimum_positive_fold_fraction": 0.60
+  },
+  "development_gate": {
+    "median_state_spearman_gt": 0.0,
+    "state_positive_fold_fraction_gte": 0.60,
+    "primary_median_fold_net_bps_gt": 0.0,
+    "primary_median_fold_pf_gt": 1.0,
+    "primary_positive_fold_fraction_gte": 0.60,
+    "high_cost_median_fold_net_bps_gte": 0.0,
+    "must_beat_reversed_direction_control": true,
+    "parameter_neighborhood_stability": true
+  },
+  "selection": {
+    "max_holdout_candidates": 3,
+    "candidate_freeze_before_holdout": true,
+    "no_retuning_after_holdout_open": true
+  },
+  "claims": {"development_only":true,"verified_oos":false,"profitable_edge_established":false,"live_enabled":false}
+}
