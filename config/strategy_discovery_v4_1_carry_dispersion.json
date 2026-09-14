@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "protocol_name": "strategy-discovery-v4.1-carry-dispersion",
+  "parent_protocol": "strategy-discovery-v4-funding-basis-carry",
+  "status": "exploratory_development_only_with_parent_holdout_sealed",
+  "frozen_at_intent": "2026-09-14",
+  "motivation": "Test a structurally lower-turnover funding-spread mechanism after v4 showed state predictability but insufficient 21-day fold stability. This is a new development search and cannot reuse the parent holdout for promotion without a fresh candidate freeze.",
+  "data": {
+    "source_artifact_run": 34875908501,
+    "symbols": ["BTC","ETH","SOL","XRP","DOGE","BNB","ADA","LINK","SUI","ENA"],
+    "interval": "1h",
+    "development_start": "2025-09-01",
+    "development_end_exclusive": "2026-08-01"
+  },
+  "dependence": {"calendar_fold_days":21,"development_folds":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],"parent_locked_holdout_opened":false},
+  "families": {
+    "funding_spread_long_horizon": {
+      "top_bottom_k": [1,2,3],
+      "funding_lookback_settlements": [3,5,10],
+      "holds_hours": [72,168,336]
+    },
+    "funding_spread_high_dispersion": {
+      "top_bottom_k": [1,2,3],
+      "funding_lookback_settlements": [3,5,10],
+      "holds_hours": [72,168,336],
+      "dispersion_gate": ["rolling_90d_q60","rolling_90d_q75"],
+      "rolling_quantile_uses_past_only": true
+    },
+    "funding_basis_agreement": {
+      "top_bottom_k": [1,2],
+      "funding_lookback_settlements": [3,5,10],
+      "holds_hours": [72,168,336],
+      "require_high_funding_short_leg_mean_basis_bps_gte": [0,5],
+      "require_low_funding_long_leg_mean_basis_bps_lte": [0,5]
+    }
+  },
+  "economics": {"round_trip_cost_bps_normalized":[12,16,20],"primary":16,"funding_cashflows_realized_only":true,"lagged_192h_btc_beta_neutralization":true},
+  "state_before_pnl": {"target":"future realized funding differential over frozen hold","minimum_state_folds":10,"median_fold_spearman_gt":0,"minimum_positive_fold_fraction":0.60},
+  "development_gate": {"minimum_total_trades":40,"primary_median_fold_net_expectancy_bps_gt":0,"primary_median_fold_profit_factor_gt":1,"minimum_positive_fold_fraction":0.60,"high_cost_median_expectancy_nonnegative":true,"must_beat_reversed_portfolio_control":true,"parameter_neighborhood_stability_required":true},
+  "selection": {"parent_holdout_remains_sealed":true,"no_leverage_testing":true,"no_live_promotion":true},
+  "claims": {"verified_oos":false,"profitable_edge_established":false,"live_enabled":false}
+}
