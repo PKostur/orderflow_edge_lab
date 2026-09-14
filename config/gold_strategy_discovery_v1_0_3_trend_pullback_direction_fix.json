@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold-strategy-discovery-v1.0.3-trend-pullback-direction-fix",
+  "base_protocol": "gold-strategy-discovery-v1.0.2-data-admissibility",
+  "frozen_at_intent": "2026-09-14",
+  "reason": "Audit found the trend_pullback score trend*(-distance) is always positive when eligibility requires sign(distance) == -trend. That unintentionally makes both uptrend and downtrend pullbacks long.",
+  "outcomes_from_bugged_trend_pullback_are_invalid": true,
+  "correction_only": "keep the existing eligibility rule; set score = trend_sign * abs(price_minus_ema_in_atr_units), so uptrend pullbacks are long and downtrend pullbacks are short",
+  "unchanged": [
+    "EMA periods",
+    "pullback ATR thresholds",
+    "holding horizons",
+    "data admissibility dates",
+    "cost cases",
+    "dependence folds",
+    "all development gates and holdout restrictions"
+  ]
+}
