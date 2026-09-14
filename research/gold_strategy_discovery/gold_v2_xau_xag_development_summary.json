@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "protocol": "gold-v2-xau-xag-relative-value",
+  "development_period": {"start":"2018-03-19","end_exclusive":"2024-01-01"},
+  "trial_count": 180,
+  "error_count": 0,
+  "state_pass_count": 58,
+  "full_development_pass_count": 0,
+  "validation_opened": false,
+  "state_economics_separation": {
+    "best_state_valid_economic_cell": {
+      "family":"log_ratio_reversion","window_hours":168,"entry_z":1.0,"hold_hours":168,"trades":174,
+      "state_median_spearman":0.131835,"state_positive_fold_fraction":0.735294,
+      "primary_10bps_median_fold_net_bps":-4.863526,"primary_median_fold_pf":0.909375,"primary_positive_fold_fraction":0.411765
+    },
+    "best_headline_economic_cell": {
+      "family":"rolling_ols_residual_momentum","window_hours":336,"entry_z":1.0,"hold_hours":168,"trades":157,
+      "primary_10bps_median_fold_net_bps":22.468085,"primary_median_fold_pf":1.456824,"primary_positive_fold_fraction":0.617647,
+      "high_cost_20bps_median_fold_net_bps":12.468085,
+      "state_median_spearman":-0.161929,"state_positive_fold_fraction":0.323529,
+      "decision":"fails state-first directional validity"
+    },
+    "interpretation":"The relative-value state signal is predominantly reversionary, but its executable translations do not clear friction/stability; economically positive momentum translations contradict the all-event state evidence and are not promotable."
+  },
+  "decision":"No XAU-XAG candidate may open strategy-specific validation or leverage testing.",
+  "claims":{"verified_oos":false,"profitable_edge_established":false,"live_enabled":false}
+}
