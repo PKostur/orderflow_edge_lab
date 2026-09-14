@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold-social-claims-v1.3-rule-specific-implementation",
+  "base_protocol": "gold-social-claims-v1.3-rule-specific",
+  "outcomes_inspected_before_amendment": false,
+  "changes_only": [
+    "London ORB uses Europe/London 08:00 as session open. Opening range is the first declared 15m bars. A breakout requires a completed close outside the range and agreement with the declared EMA. The breakout bar is never entered. Within the declared max-retest bars price must touch the broken boundary and close back on the breakout side; an engulfing confirmation requires the confirmation candle body to engulf the immediately prior candle body in the breakout direction. Entry is next bar open after confirmation.",
+    "VWAP wick-touch continuation computes tick-volume-weighted typical-price VWAP anchored either to UTC day or UTC ISO week. A valid long candle has low <= VWAP while both open and close are above VWAP; short is symmetric. Only the first valid signal per UTC day is retained. Directional score is signed close-to-VWAP distance in ATR units.",
+    "Bollinger-RSI recovery: a band touch must have occurred within the declared completed-bar recovery window. Long triggers when RSI crosses upward through the declared recovery level after a lower-band touch; short triggers when RSI crosses downward through 100 minus the declared recovery level after an upper-band touch. SMA-context=50 requires the SMA 5-bar slope to agree with trade direction; SMA-context=0 applies no filter.",
+    "H4 Bollinger-RSI divergence: bullish requires close below the lower 120-bar two-sigma band, a lower close versus the declared lookback bar, and higher RSI versus that bar; bearish is symmetric. The signal score is signed band-extension magnitude plus RSI-divergence magnitude.",
+    "YouTube RSI-divergence re-entry: regular bullish/bearish divergence is defined versus the declared lookback bar. A divergence remains eligible for three completed bars. Entry signal occurs only when RSI crosses back above 30 after bullish divergence or below 70 after bearish divergence. trend_filter_ema=50 requires close above/below EMA50 in trade direction; 0 applies no trend filter.",
+    "YouTube VWAP momentum: break requires a completed close crossing daily VWAP. No breakout-bar entry. Within four completed bars, a retest must come within the declared ATR tolerance of VWAP and close on the breakout side. level_filter=previous_day_direction additionally requires long close above the prior completed UTC-day close or short close below it.",
+    "YouTube VWAP extreme mean reversion: signal score is minus signed distance from daily VWAP in ATR units and is eligible only when absolute distance reaches the declared ATR threshold.",
+    "All fixed-horizon strategies enter at next-bar open, exit at the open after the frozen hold bars, permit one active trade at a time per strategy cell, and cannot cross a 63-day dependence-fold boundary or development/holdout boundary."
+  ],
+  "unchanged": ["strategy families","parameter grids","development/holdout dates","cost cases","development gates","candidate limit","leverage restriction"]
+}
