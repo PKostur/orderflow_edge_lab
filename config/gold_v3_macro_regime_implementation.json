@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold-v3-macro-regime-implementation",
+  "base_protocol": "gold-v3-macro-regime",
+  "outcomes_inspected_before_amendment": false,
+  "changes_only": [
+    "DFII10 and DGS10 impulses are arithmetic percentage-point changes over the declared business-day lookback.",
+    "DTWEXBGS impulse is the log change over the declared business-day lookback.",
+    "Breakeven proxy is DGS10 minus DFII10; its impulse is the arithmetic percentage-point change over the declared lookback.",
+    "Each continuous impulse is normalized by its trailing 252-observation mean and population standard deviation, using only macro values already available after the one-gold-bar causal lag.",
+    "real_yield_change score is minus the normalized DFII10 impulse; broad_usd_change score is minus the normalized DTWEXBGS impulse; breakeven_change score is plus the normalized breakeven impulse.",
+    "combined_real_yield_usd score is -(z_real_yield_impulse + z_broad_usd_impulse)/sqrt(2).",
+    "real_yield_usd_agreement is eligible only when the raw lagged real-yield and broad-dollar impulses have the same sign. Score sign is negative of that common sign; score magnitude is the smaller absolute z-score of the two impulses. The same frozen absolute-z entry thresholds apply.",
+    "State scoring uses all eligible non-null signal events before trade non-overlap. A 126-day fold is scorable with at least 10 eligible events.",
+    "Trading then applies one-active-position non-overlap; signal t enters next XAUUSD daily open and exits after the frozen 5, 20, or 60 completed holding bars; trades crossing a 126-day dependence-fold boundary are excluded."
+  ],
+  "unchanged": ["feature families","lookbacks","threshold grid","holding horizons","cost cases","development and validation dates","development gates","candidate limit"]
+}
