@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "protocol_name": "strategy-discovery-v4.2-funding-generalization",
+  "parent_protocol": "strategy-discovery-v4.1-carry-dispersion",
+  "status": "retrospective_cross_symbol_generalization_with_parent_holdout_sealed",
+  "frozen_at_intent": "2026-09-14",
+  "motivation": "Test whether the two v4.1 k=3/72h funding-spread preliminaries survive a PnL-independent expansion beyond the original 10-symbol panel, specifically attacking the documented leave-one-symbol-out concentration. This is transfer/generalization, not untouched OOS.",
+  "source_observation": {
+    "original_symbols": ["BTC","ETH","SOL","XRP","DOGE","BNB","ADA","LINK","SUI","ENA"],
+    "frozen_cells_only": [
+      {"top_bottom_k":3,"funding_lookback_settlements":3,"hold_hours":72},
+      {"top_bottom_k":3,"funding_lookback_settlements":5,"hold_hours":72}
+    ],
+    "no_new_parameter_search": true
+  },
+  "universe_construction": {
+    "snapshot_date": "2026-09-14",
+    "market": "MEXC",
+    "quote": "USDT",
+    "require_current_spot_pair": true,
+    "require_current_linear_usdt_perpetual": true,
+    "exclude_original_10_from_primary_panel": true,
+    "exclude_stablecoin_like_bases": ["USDC","USDE","DAI","FDUSD","TUSD","USDP","PYUSD","USD1","USDG","EURC"],
+    "pre_fetch_rank": "descending current spot 24h quoteVolume",
+    "maximum_historical_fetch_candidates": 40,
+    "historical_admission": {
+      "development_start": "2025-09-01",
+      "development_end_exclusive": "2026-08-01",
+      "minimum_common_spot_perp_hour_coverage": 0.90,
+      "minimum_funding_rows": 500,
+      "minimum_median_spot_hourly_notional_usdt": 50000
+    },
+    "primary_panel_size": 20,
+    "final_rank_after_admission": "descending median development spot hourly notional USDT",
+    "minimum_primary_panel_size": 12,
+    "selection_must_not_use_returns_strategy_pnl_profit_factor_or_future_funding_target": true,
+    "survivorship_note": "Current-market intersection introduces survivorship and is acceptable only for retrospective transfer/generalization; it cannot support an untouched-OOS claim."
+  },
+  "data": {
+    "interval": "1h",
+    "spot_endpoint_family": "/api/v3",
+    "futures_endpoint_family": "/api/v1/contract",
+    "official_futures_domain_after_2026_01_19": "https://api.mexc.com",
+    "development_start": "2025-09-01",
+    "development_end_exclusive": "2026-08-01"
+  },
+  "dependence": {
+    "calendar_fold_days": 21,
+    "development_folds": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],
+    "same_timestamp_cross_symbol_observations_are_one_dependence_cluster": true,
+    "no_trade_crosses_fold_boundary": true,
+    "parent_locked_holdout_opened": false
+  },
+  "mechanics": {
+    "portfolio": "cross-sectional funding spread",
+    "long_leg": "three lowest lagged realized-funding-score symbols",
+    "short_leg": "three highest lagged realized-funding-score symbols",
+    "funding_score": "mean of the frozen number of most recently published settlements at or before signal time",
+    "entry": "next completed hourly open after signal",
+    "exit": "open after 72 hours",
+    "one_active_portfolio_at_a_time": true,
+    "lagged_192h_btc_beta_neutralization": true,
+    "realized_funding_cashflows_only": true,
+    "no_future_funding_rate_used": true
+  },
+  "economics": {
+    "round_trip_cost_bps_normalized": [12,16,20],
+    "primary": 16,
+    "leverage_tested": false
+  },
+  "state_before_pnl": {
+    "target": "future realized funding differential over the frozen 72h hold",
+    "minimum_state_folds": 10,
+    "median_fold_spearman_gt": 0,
+    "positive_fold_fraction_gte": 0.60
+  },
+  "generalization_gate": {
+    "minimum_total_trades": 40,
+    "primary_median_fold_net_expectancy_bps_gt": 0,
+    "primary_median_fold_profit_factor_gt": 1,
+    "primary_positive_fold_fraction_gte": 0.60,
+    "high_cost_median_expectancy_nonnegative": true,
+    "must_beat_reversed_portfolio_control": true,
+    "leave_one_symbol_out_positive_median_expectancy_fraction_gte": 0.80,
+    "remove_strongest_fold_still_meets_positive_fold_fraction": true,
+    "both_frozen_lookback_cells_must_have_same_directional_state_sign": true
+  },
+  "diagnostics": {
+    "also_evaluate_combined_original_plus_expansion_panel": true,
+    "combined_panel_is_diagnostic_only": true,
+    "report_symbol_selection_manifest_and_all_rejections": true,
+    "report_per_fold_and_per_symbol_contributions": true
+  },
+  "selection": {
+    "parent_holdout_remains_sealed": true,
+    "no_retuning_after_generalization": true,
+    "no_leverage_testing": true,
+    "future_after_freeze_validation_required_for_any_promotion": true
+  },
+  "claims": {"verified_oos":false,"profitable_edge_established":false,"live_enabled":false}
+}
