@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold-social-claims-v1.2",
+  "frozen_at_intent": "2026-09-14",
+  "status": "development_with_locked_internal_holdout",
+  "purpose": "Test recurring Reddit/YouTube gold session-liquidity claims with deterministic mechanical rules, without treating claimed win rates as evidence.",
+  "data": {
+    "primary_instrument": "XAUUSD",
+    "context_instrument": "XAGUSD where explicitly required",
+    "source": "public historical XAUUSD/XAGUSD archive already preserved in conversation artifact",
+    "development_start": "2020-01-01",
+    "development_end_exclusive": "2024-01-01",
+    "locked_holdout_start": "2024-01-01",
+    "locked_holdout_end_exclusive": "2026-01-01",
+    "post_holdout_replication_start": "2026-01-01",
+    "timeframes": ["M1", "M5", "M15"],
+    "M5_is_causally_resampled_from_M1": true
+  },
+  "timezones": {
+    "source": "UTC",
+    "london_sessions": "Europe/London DST-aware",
+    "new_york_sessions": "America/New_York DST-aware"
+  },
+  "economics": {
+    "round_trip_cost_bps": [2.0, 5.0, 10.0],
+    "primary_cost_bps": 5.0,
+    "signal_on_completed_bar": true,
+    "market_entry": "next bar open unless family specifies later deterministic retracement fill",
+    "same_bar_stop_and_target_collision": "count stop first",
+    "leverage_after_holdout_pass_only": [2,5,10]
+  },
+  "dependence": {
+    "calendar_fold_days": 63,
+    "minimum_development_folds": 12,
+    "minimum_total_trades": 80,
+    "minimum_positive_fold_fraction": 0.60,
+    "state_before_pnl": true,
+    "no_trade_crosses_fold_boundary": true
+  },
+  "families": {
+    "london_sweep_asia_reclaim": {
+      "source_basis": "Reddit: London sweeps Asia high/low, fails to close beyond it, then reverses; 5m/15m.",
+      "timeframes": ["M5","M15"],
+      "asia_window_london_local": ["00:00","07:00"],
+      "entry_window_london_local": ["07:00","11:00"],
+      "confirmations": ["reclaim_only","engulfing"],
+      "hold_bars": [4,8,16]
+    },
+    "london_sweep_asia_stoch_divergence": {
+      "source_basis": "Reddit: Asia-range sweep during London plus stochastic divergence, usually 5m/15m.",
+      "timeframes": ["M5","M15"],
+      "stochastic_specs": [[14,3],[40,4]],
+      "divergence_lookback_bars": [12,24],
+      "hold_bars": [4,8,16]
+    },
+    "ny_sweep_session_level_reversal": {
+      "source_basis": "Reddit: NY AM sweep of Asia/London/previous-day liquidity followed by reversal confirmation.",
+      "timeframes": ["M5","M15"],
+      "entry_window_new_york_local": ["07:00","10:00"],
+      "level_sets": ["london", "asia_london_previous_day"],
+      "confirmation_bars": [1,2],
+      "hold_bars": [4,8,16]
+    },
+    "ny_sweep_choch_fvg_proxy": {
+      "source_basis": "Reddit/YouTube: NY liquidity sweep, 1m CHOCH/displacement, retrace into resulting FVG, target 1.5R-2R.",
+      "timeframes": ["M1"],
+      "entry_window_new_york_local": ["07:00","10:00"],
+      "choch_lookback_bars": [5,10],
+      "displacement_atr": [0.75,1.25],
+      "rr": [1.5,2.0],
+      "max_setup_bars": 10,
+      "max_trade_bars": 60,
+      "mechanical_status": "proxy; proprietary liquidity-pool indicators and subjective order blocks excluded"
+    },
+    "tokyo_london_push_ny_reversal": {
+      "source_basis": "Reddit: Tokyo range, London breakout/push, New York break-of-structure reversal.",
+      "timeframes": ["M5","M15"],
+      "tokyo_window_utc": ["00:00","06:00"],
+      "london_push_end_london_local": "11:00",
+      "ny_entry_window_local": ["07:00","11:00"],
+      "bos_lookback_bars": [3,5],
+      "hold_bars": [4,8,16]
+    },
+    "three_am_ifvg_proxy": {
+      "source_basis": "YouTube social claim advertised around a 3AM iFVG gold setup; exact proprietary rules unavailable.",
+      "timeframes": ["M1","M5"],
+      "anchor_time_new_york_local": "03:00",
+      "anchor_window_minutes": [30,60],
+      "prior_range_minutes": [60,120],
+      "displacement_atr": [0.75,1.25],
+      "hold_minutes": [30,60,120],
+      "mechanical_status": "proxy only; not represented as creator-exact system"
+    }
+  },
+  "development_gate": {
+    "state_median_spearman_gt": 0.0,
+    "state_positive_fold_fraction_gte": 0.60,
+    "primary_median_fold_net_expectancy_bps_gt": 0.0,
+    "primary_median_fold_profit_factor_gt": 1.0,
+    "primary_positive_fold_fraction_gte": 0.60,
+    "minimum_total_trades": 80,
+    "must_beat_reversed_direction_control": true,
+    "high_cost_median_expectancy_nonnegative": true,
+    "parameter_neighborhood_stability_required": true
+  },
+  "selection": {
+    "max_candidates_opened_on_locked_holdout": 3,
+    "holdout_remains_sealed_until_candidate_freeze": true,
+    "no_retuning_after_holdout_open": true,
+    "locked_holdout_is_not_genuine_future_oos": true
+  },
+  "claims": {
+    "development_only": true,
+    "holdout_opened": false,
+    "verified_oos": false,
+    "profitable_edge_established": false,
+    "live_enabled": false
+  }
+}
