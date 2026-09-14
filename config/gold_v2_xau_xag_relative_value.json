@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold-v2-xau-xag-relative-value",
+  "frozen_at_intent": "2026-09-14",
+  "status": "development_with_strategy_specific_internal_validation_reserved",
+  "data": {
+    "instruments": ["XAUUSD","XAGUSD"],
+    "timeframe": "H1",
+    "development_start": "2018-03-19",
+    "development_end_exclusive": "2024-01-01",
+    "strategy_specific_validation_start": "2024-01-01",
+    "strategy_specific_validation_end_exclusive": "2026-01-01",
+    "validation_is_not_globally_untouched": true,
+    "reason": "gold behavior in 2024-2025 has been inspected in unrelated prior experiments, but no XAU-XAG v2 outcome has been evaluated"
+  },
+  "economics": {
+    "normalized_round_trip_cost_bps": [5.0,10.0,20.0],
+    "primary_cost_bps": 10.0,
+    "two_leg_weights": {"xau_abs":0.5,"xag_abs":0.5},
+    "all_entries": "next completed H1 bar open",
+    "same_bar_fill_forbidden": true,
+    "one_active_trade_per_cell": true
+  },
+  "dependence": {
+    "calendar_fold_days": 63,
+    "minimum_development_folds": 12,
+    "minimum_total_trades": 80,
+    "minimum_positive_fold_fraction": 0.60,
+    "no_trade_crosses_fold_boundary": true
+  },
+  "families": {
+    "log_ratio_reversion": {"relationship_window_hours":[168,336,720],"entry_z":[1.0,1.5,2.0],"hold_hours":[24,72,168]},
+    "log_ratio_momentum": {"relationship_window_hours":[168,336,720],"entry_z":[1.0,1.5,2.0],"hold_hours":[24,72,168]},
+    "rolling_ols_residual_reversion": {"relationship_window_hours":[336,720,1440],"entry_z":[1.0,1.5,2.0],"hold_hours":[24,72,168]},
+    "rolling_ols_residual_momentum": {"relationship_window_hours":[336,720,1440],"entry_z":[1.0,1.5,2.0],"hold_hours":[24,72,168]},
+    "relative_return_reversion": {"return_lookback_hours":[24,72,168],"entry_z":[1.0,1.5],"normalization_window_hours":720,"hold_hours":[24,72,168]},
+    "relative_return_momentum": {"return_lookback_hours":[24,72,168],"entry_z":[1.0,1.5],"normalization_window_hours":720,"hold_hours":[24,72,168]},
+    "silver_lead_gold_continuation": {"silver_return_lookback_hours":[4,8,24],"entry_z":[1.0,1.5],"normalization_window_hours":720,"hold_hours":[4,8,24]},
+    "silver_lead_gold_reversal": {"silver_return_lookback_hours":[4,8,24],"entry_z":[1.0,1.5],"normalization_window_hours":720,"hold_hours":[4,8,24]}
+  },
+  "state_before_pnl": {
+    "relative_value_target": "future equal-gross XAU-minus-XAG return in candidate direction before costs",
+    "lead_lag_target": "future XAU return before costs",
+    "median_fold_spearman_gt": 0.0,
+    "positive_state_fold_fraction_gte": 0.60
+  },
+  "development_gate": {
+    "primary_median_fold_net_expectancy_bps_gt": 0.0,
+    "primary_median_fold_profit_factor_gt": 1.0,
+    "primary_positive_fold_fraction_gte": 0.60,
+    "high_cost_median_expectancy_bps_gte": 0.0,
+    "must_beat_reversed_direction_control": true,
+    "parameter_neighborhood_stability_required": true
+  },
+  "selection": {
+    "max_candidates_opened_on_strategy_specific_validation": 3,
+    "candidate_freeze_before_validation": true,
+    "no_retuning_after_validation_open": true,
+    "leverage_forbidden_until_unlevered_validation_pass": true
+  },
+  "claims": {"verified_oos":false,"profitable_edge_established":false,"live_enabled":false}
+}
