@@ -1,0 +1,376 @@
+name: Winner Condition Replication v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/winner-condition-replication-v1]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: winner-condition-replication-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  prepare-fast-data:
+    name: prepare-fast-${{ matrix.interval }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        interval: [5m, 15m, 1h]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Fetch immutable MEXC discovery history
+        run: |
+          orderflow-strategy-tournament-data \
+            --config config/price_strategy_tournament_v1_1.json \
+            --interval "${{ matrix.interval }}" \
+            --output-dir "artifacts/winner_v1/data/fast/${{ matrix.interval }}" \
+            --max-workers 8
+      - uses: actions/upload-artifact@v4
+        with:
+          name: winner-v1-fast-data-${{ matrix.interval }}
+          path: artifacts/winner_v1/data/fast/${{ matrix.interval }}/
+          retention-days: 7
+          if-no-files-found: error
+
+  fast-price-family:
+    name: fast-${{ matrix.family }}-${{ matrix.interval }}
+    needs: prepare-fast-data
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      max-parallel: 18
+      matrix:
+        family:
+          - donchian_breakout
+          - ema_tsmom
+          - bb_mean_reversion
+          - bb_squeeze_breakout
+          - intraday_reversal
+          - trend_pullback
+          - vol_scaled_momentum
+        interval: [5m, 15m, 1h]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - uses: actions/download-artifact@v4
+        with:
+          name: winner-v1-fast-data-${{ matrix.interval }}
+          path: artifacts/winner_v1/data/fast/${{ matrix.interval }}
+      - name: Run frozen family cell
+        run: |
+          mkdir -p artifacts/winner_v1/results/fast
+          orderflow-strategy-tournament \
+            --config config/price_strategy_tournament_v1_1.json \
+            --family "${{ matrix.family }}" \
+            --interval "${{ matrix.interval }}" \
+            --data-dir "artifacts/winner_v1/data/fast/${{ matrix.interval }}" \
+            --output "artifacts/winner_v1/results/fast/${{ matrix.family }}_${{ matrix.interval }}.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: winner-v1-fast-${{ matrix.family }}-${{ matrix.interval }}
+          path: artifacts/winner_v1/results/fast/*.json
+          retention-days: 30
+          if-no-files-found: error
+
+  prepare-slow-data:
+    name: prepare-slow-${{ matrix.interval }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        interval: [4h, 8h, 1d]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Fetch immutable MEXC slow-horizon history
+        run: |
+          orderflow-strategy-tournament-data \
+            --config config/evidence_backed_strategies_v2.json \
+            --interval "${{ matrix.interval }}" \
+            --output-dir "artifacts/winner_v1/data/slow/${{ matrix.interval }}" \
+            --max-workers 8
+      - uses: actions/upload-artifact@v4
+        with:
+          name: winner-v1-slow-data-${{ matrix.interval }}
+          path: artifacts/winner_v1/data/slow/${{ matrix.interval }}/
+          retention-days: 7
+          if-no-files-found: error
+
+  slow-price-family:
+    name: slow-${{ matrix.family }}-${{ matrix.interval }}
+    needs: prepare-slow-data
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      max-parallel: 9
+      matrix:
+        family: [donchian_breakout, ema_tsmom, vol_scaled_momentum]
+        interval: [4h, 8h, 1d]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - uses: actions/download-artifact@v4
+        with:
+          name: winner-v1-slow-data-${{ matrix.interval }}
+          path: artifacts/winner_v1/data/slow/${{ matrix.interval }}
+      - name: Run frozen slow family cell
+        run: |
+          mkdir -p artifacts/winner_v1/results/slow
+          orderflow-strategy-tournament \
+            --config config/evidence_backed_strategies_v2.json \
+            --family "${{ matrix.family }}" \
+            --interval "${{ matrix.interval }}" \
+            --data-dir "artifacts/winner_v1/data/slow/${{ matrix.interval }}" \
+            --output "artifacts/winner_v1/results/slow/${{ matrix.family }}_${{ matrix.interval }}.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: winner-v1-slow-${{ matrix.family }}-${{ matrix.interval }}
+          path: artifacts/winner_v1/results/slow/*.json
+          retention-days: 30
+          if-no-files-found: error
+
+  basis-convergence:
+    name: basis-convergence
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run two-leg basis/funding grid
+        run: |
+          mkdir -p artifacts/winner_v1/basis
+          orderflow-basis-convergence \
+            --config config/evidence_backed_strategies_v2.json \
+            --output artifacts/winner_v1/basis/basis_convergence.json \
+            --max-workers 5
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: winner-v1-basis
+          path: artifacts/winner_v1/basis/
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate-price:
+    name: aggregate-price-and-shortlist
+    needs: [fast-price-family, slow-price-family]
+    if: always() && needs.fast-price-family.result == 'success' && needs.slow-price-family.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Download every price trial report
+        uses: actions/download-artifact@v4
+        with:
+          pattern: winner-v1-*-*
+          path: artifacts/winner_v1/all_price
+          merge-multiple: false
+      - name: Build broad leaderboard
+        run: |
+          mkdir -p artifacts/winner_v1/aggregate
+          orderflow-strategy-tournament-aggregate \
+            artifacts/winner_v1/all_price \
+            --minimum-trades 40 \
+            --minimum-folds 5 \
+            --minimum-symbols 8 \
+            --minimum-positive-symbol-fraction 0.60 \
+            --minimum-pf-symbol-fraction 0.60 \
+            --top 300 \
+            --output artifacts/winner_v1/aggregate/price_leaderboard.json
+      - name: Apply frozen exceptional-winner shortlist gate
+        run: |
+          python - <<'PY'
+          import json, math
+          from pathlib import Path
+
+          src = Path('artifacts/winner_v1/aggregate/price_leaderboard.json')
+          board = json.loads(src.read_text(encoding='utf-8'))
+
+          def pf_value(value):
+              if value == 'INF':
+                  return math.inf
+              try:
+                  x = float(value)
+              except (TypeError, ValueError):
+                  return None
+              return x if math.isfinite(x) else None
+
+          shortlist = []
+          for row in board.get('leaderboard', []):
+              pf = pf_value(row.get('median_fold_profit_factor'))
+              exp = row.get('median_fold_expectancy_bps')
+              pos = row.get('positive_fold_fraction')
+              trades = int(row.get('total_trades_across_folds') or 0)
+              folds = int(row.get('fold_observations') or 0)
+              cost = float(row.get('round_trip_cost_bps') or 0.0)
+              if not row.get('robust_screening_eligible'):
+                  continue
+              if folds < 5 or trades < 60:
+                  continue
+              if pf is None or pf <= 1.20:
+                  continue
+              if exp is None or float(exp) <= 0.0:
+                  continue
+              if pos is None or float(pos) < 0.60:
+                  continue
+              # Require survival at the strongest existing one-leg price cost stress.
+              if cost < 20.0:
+                  continue
+              shortlist.append(row)
+
+          shortlist.sort(
+              key=lambda r: (
+                  float(r.get('median_fold_expectancy_bps') or -1e18),
+                  pf_value(r.get('median_fold_profit_factor')) or -1e18,
+                  float(r.get('positive_fold_fraction') or 0.0),
+              ),
+              reverse=True,
+          )
+          out = {
+              'schema_version': 1,
+              'experiment': 'winner_condition_replication_v1_stage1',
+              'status': 'provisional_discovery_shortlist',
+              'source_leaderboard_rows': len(board.get('leaderboard', [])),
+              'candidate_count': len(shortlist),
+              'candidates': shortlist[:50],
+              'gate': {
+                  'minimum_independent_time_clusters': 5,
+                  'minimum_trades': 60,
+                  'minimum_profit_factor_after_cost': 1.20,
+                  'minimum_positive_cluster_fraction': 0.60,
+                  'minimum_round_trip_cost_stress_bps': 20.0,
+                  'requires_robust_cross_symbol_screen': True,
+              },
+              'claims': {
+                  'discovery_only': True,
+                  'full_execution_model_applied': False,
+                  'profitable_edge_established': False,
+                  'verified_out_of_sample_evidence': False,
+                  'standalone_strategy_promotable': False,
+                  'replication_started': False,
+              },
+          }
+          dst = Path('artifacts/winner_v1/aggregate/winner_shortlist.json')
+          dst.write_text(json.dumps(out, indent=2), encoding='utf-8')
+          print(json.dumps({
+              'candidate_count': len(shortlist),
+              'top': [
+                  {
+                      'family': x.get('family'),
+                      'interval': x.get('interval'),
+                      'params': x.get('params'),
+                      'cost_bps': x.get('round_trip_cost_bps'),
+                      'median_expectancy_bps': x.get('median_fold_expectancy_bps'),
+                      'median_pf': x.get('median_fold_profit_factor'),
+                      'positive_fold_fraction': x.get('positive_fold_fraction'),
+                      'trades': x.get('total_trades_across_folds'),
+                  }
+                  for x in shortlist[:10]
+              ],
+          }, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: winner-v1-price-shortlist
+          path: artifacts/winner_v1/aggregate/
+          retention-days: 30
+          if-no-files-found: error
+
+  winner-manifest:
+    name: winner-discovery-manifest
+    needs: [aggregate-price, basis-convergence]
+    if: always() && needs.aggregate-price.result == 'success' && needs.basis-convergence.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download price shortlist
+        uses: actions/download-artifact@v4
+        with:
+          name: winner-v1-price-shortlist
+          path: artifacts/winner_v1/final/price
+      - name: Download basis report
+        uses: actions/download-artifact@v4
+        with:
+          name: winner-v1-basis
+          path: artifacts/winner_v1/final/basis
+      - name: Build stage-1 manifest without promoting a winner
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          price_path = Path('artifacts/winner_v1/final/price/winner_shortlist.json')
+          basis_path = Path('artifacts/winner_v1/final/basis/basis_convergence.json')
+          price = json.loads(price_path.read_text(encoding='utf-8'))
+          basis = json.loads(basis_path.read_text(encoding='utf-8'))
+          basis_candidates = [v for v in basis.get('variants', []) if v.get('screening_eligible')]
+          manifest = {
+              'schema_version': 1,
+              'experiment': 'winner_condition_replication_v1_stage1',
+              'status': 'discovery_complete_condition_decomposition_not_started',
+              'price_candidate_count': price.get('candidate_count', 0),
+              'price_candidates': price.get('candidates', []),
+              'basis_screening_candidate_count': len(basis_candidates),
+              'basis_candidates': basis_candidates[:25],
+              'comparison_note': 'Price-family and two-leg basis economics are retained separately until a common full execution model is applied; no cross-family winner is declared here.',
+              'next_gate': 'Select only a discovery candidate that survives parameter-neighborhood, concentration, multiple-testing, and full execution-cost review before condition decomposition.',
+              'claims': {
+                  'discovery_only': True,
+                  'winning_conditions_identified': False,
+                  'profitable_edge_established': False,
+                  'verified_out_of_sample_evidence': False,
+                  'standalone_strategy_promotable': False,
+              },
+          }
+          out = Path('artifacts/winner_v1/final/stage1_manifest.json')
+          out.write_text(json.dumps(manifest, indent=2), encoding='utf-8')
+          print(json.dumps({
+              'price_candidates': manifest['price_candidate_count'],
+              'basis_candidates': manifest['basis_screening_candidate_count'],
+              'status': manifest['status'],
+          }, indent=2))
+          PY
+      - name: Run deterministic research release gate
+        run: |
+          python -m pip install -e ".[research]"
+          orderflow-multi-agent --output artifacts/winner_v1/final/multi_agent_report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: winner-condition-replication-v1-stage1
+          path: artifacts/winner_v1/final/
+          retention-days: 30
+          if-no-files-found: error
