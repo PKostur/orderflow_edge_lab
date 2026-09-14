@@ -1,0 +1,75 @@
+name: Gold Strategy Discovery v1.2 Scalping
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/gold-strategy-discovery-v1-2-scalping]
+    paths:
+      - "config/gold_strategy_discovery_v1_2_scalping.json"
+      - "scripts/run_gold_strategy_discovery_v1_2.py"
+      - ".github/workflows/gold-strategy-discovery-v1-2.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gold-strategy-discovery-v1-2-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tournament:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install runtime
+        run: python -m pip install pandas numpy
+      - name: Fetch pinned public XAUUSD M1 history
+        run: |
+          mkdir -p artifacts/gold_strategy_discovery_v1_2/data
+          src="https://raw.githubusercontent.com/simom1/XAUUSD-history/bda79c6c5ce09a5b488d4cd2c20fcd19bdd2ed3a/Gold-Cash/XAUUSD/XAUUSD_M1_2023_2026.csv"
+          curl -fL --retry 3 "$src" -o artifacts/gold_strategy_discovery_v1_2/data/XAUUSD_M1_2023_2026.csv
+          sha256sum artifacts/gold_strategy_discovery_v1_2/data/XAUUSD_M1_2023_2026.csv > artifacts/gold_strategy_discovery_v1_2/data/SHA256SUMS.txt
+      - name: Run development-only M1/M5 tournament
+        run: |
+          python scripts/run_gold_strategy_discovery_v1_2.py \
+            --m1 artifacts/gold_strategy_discovery_v1_2/data/XAUUSD_M1_2023_2026.csv \
+            --output artifacts/gold_strategy_discovery_v1_2/development_results.json
+      - name: Guard data and evidence boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/gold_strategy_discovery_v1_2/development_results.json', encoding='utf-8'))
+          if r['holdout_opened']:
+              raise SystemExit('2025 holdout must remain sealed')
+          if any(r['claims'].values()):
+              raise SystemExit(f"claim escalation: {r['claims']}")
+          if r['trial_count'] < 100:
+              raise SystemExit(f"unexpected trial ledger: {r['trial_count']}")
+          if r['integrity']['M1']['development_rows'] < 200000:
+              raise SystemExit(f"M1 development coverage too low: {r['integrity']['M1']}")
+          if r['integrity']['M5']['development_rows'] < 40000:
+              raise SystemExit(f"M5 development coverage too low: {r['integrity']['M5']}")
+          print({k:r[k] for k in ['trial_count','error_count','prelim_pass_count','holdout_opened']})
+          PY
+      - name: Deterministic release-manager guard
+        run: |
+          python -m pip install -e ".[research]"
+          orderflow-multi-agent --output artifacts/gold_strategy_discovery_v1_2/multi_agent_report.json
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/gold_strategy_discovery_v1_2/multi_agent_report.json', encoding='utf-8'))
+          if r['release_manager']['status'] != 'reviewable':
+              raise SystemExit(r['release_manager']['next_actions'])
+          PY
+      - name: Preserve pinned scalping evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-strategy-discovery-v1-2-scalping-development
+          path: artifacts/gold_strategy_discovery_v1_2/
+          retention-days: 30
+          if-no-files-found: error
