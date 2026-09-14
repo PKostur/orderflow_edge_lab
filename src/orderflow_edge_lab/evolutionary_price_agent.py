@@ -40,24 +40,49 @@ def raw_feature_matrix(frame: pd.DataFrame) -> pd.DataFrame:
     return out.replace([np.inf, -np.inf], np.nan).fillna(0.0)
 
 
-def _window_vector(features: np.ndarray, index: int, lookback: int, maximum_lookback: int) -> np.ndarray:
-    start = index - lookback + 1
-    window = features[start : index + 1]
-    flat = window.reshape(-1)
-    result = np.zeros(maximum_lookback * FEATURES_PER_BAR, dtype=float)
-    result[-len(flat) :] = flat
-    scale = float(np.std(flat))
-    if scale > 1e-12:
-        result[-len(flat) :] /= scale
-    return result
-
-
-def signal_scores(frame: pd.DataFrame, genome: Genome, maximum_lookback: int) -> np.ndarray:
+def prepare_feature_windows(
+    frame: pd.DataFrame,
+    lookbacks: Sequence[int],
+    maximum_lookback: int,
+) -> dict[int, np.ndarray]:
     features = raw_feature_matrix(frame).to_numpy(dtype=float)
-    scores = np.zeros(len(frame), dtype=float)
-    for i in range(maximum_lookback - 1, len(frame)):
-        vector = _window_vector(features, i, genome.lookback, maximum_lookback)
-        scores[i] = genome.bias + float(np.dot(genome.weights, vector)) / math.sqrt(max(1, genome.lookback * FEATURES_PER_BAR))
+    n = len(features)
+    full_width = maximum_lookback * FEATURES_PER_BAR
+    prepared: dict[int, np.ndarray] = {}
+    for lookback in sorted({int(v) for v in lookbacks}):
+        if lookback <= 0 or lookback > maximum_lookback:
+            raise ValueError(f"invalid lookback: {lookback}")
+        blocks = []
+        for lag in range(lookback - 1, -1, -1):
+            shifted = np.zeros_like(features)
+            if lag == 0:
+                shifted[:] = features
+            else:
+                shifted[lag:] = features[:-lag]
+            blocks.append(shifted)
+        compact = np.concatenate(blocks, axis=1)
+        scales = np.std(compact, axis=1)
+        scales = np.where(scales > 1e-12, scales, 1.0)
+        compact = compact / scales[:, None]
+        compact[: lookback - 1] = 0.0
+        matrix = np.zeros((n, full_width), dtype=float)
+        matrix[:, -compact.shape[1] :] = compact
+        prepared[lookback] = matrix
+    return prepared
+
+
+def signal_scores(
+    frame: pd.DataFrame,
+    genome: Genome,
+    maximum_lookback: int,
+    *,
+    prepared_windows: Mapping[int, np.ndarray] | None = None,
+) -> np.ndarray:
+    if prepared_windows is None:
+        prepared_windows = prepare_feature_windows(frame, [genome.lookback], maximum_lookback)
+    matrix = prepared_windows[int(genome.lookback)]
+    scores = genome.bias + matrix @ genome.weights / math.sqrt(max(1, genome.lookback * FEATURES_PER_BAR))
+    scores[: maximum_lookback - 1] = 0.0
     return scores
 
 
@@ -67,22 +92,24 @@ def simulate_trades(
     *,
     maximum_lookback: int,
     round_trip_cost_bps: float,
+    prepared_windows: Mapping[int, np.ndarray] | None = None,
 ) -> list[dict[str, Any]]:
     if len(frame) <= maximum_lookback + genome.hold_bars + 2:
         return []
-    scores = signal_scores(frame, genome, maximum_lookback)
+    scores = signal_scores(frame, genome, maximum_lookback, prepared_windows=prepared_windows)
     opens = frame["open"].astype(float).to_numpy()
     timestamps = frame.index
     cost = float(round_trip_cost_bps) / 10_000.0
     trades: list[dict[str, Any]] = []
-    i = maximum_lookback - 1
+    candidates = np.flatnonzero((scores >= genome.threshold) | (scores <= -genome.threshold))
     last_signal = len(frame) - genome.hold_bars - 2
-    while i <= last_signal:
-        score = float(scores[i])
-        side = 1 if score >= genome.threshold else (-1 if score <= -genome.threshold else 0)
-        if side == 0:
-            i += 1
+    next_allowed = maximum_lookback - 1
+    for i_raw in candidates:
+        i = int(i_raw)
+        if i < next_allowed or i > last_signal:
             continue
+        score = float(scores[i])
+        side = 1 if score >= genome.threshold else -1
         entry_i = i + 1
         exit_i = entry_i + genome.hold_bars
         gross = side * (opens[exit_i] / opens[entry_i] - 1.0)
@@ -98,21 +125,14 @@ def simulate_trades(
                 "net_return": float(net),
             }
         )
-        i = exit_i
+        next_allowed = exit_i
     return trades
 
 
 def trade_stats(trades: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
     values = np.asarray([float(t["net_return"]) for t in trades], dtype=float)
     if len(values) == 0:
-        return {
-            "trades": 0,
-            "expectancy_bps": None,
-            "profit_factor": None,
-            "win_rate": None,
-            "total_return": 0.0,
-            "max_drawdown": None,
-        }
+        return {"trades": 0, "expectancy_bps": None, "profit_factor": None, "win_rate": None, "total_return": 0.0, "max_drawdown": None}
     gains = float(values[values > 0].sum())
     losses = float(-values[values < 0].sum())
     pf: float | str | None = gains / losses if losses > 0 else ("INF" if gains > 0 else None)
@@ -148,12 +168,14 @@ def evaluate_genome(
     minimum_trades_per_fold: int,
     minimum_folds: int,
     fitness_weights: Mapping[str, float],
+    prepared_windows: Mapping[int, np.ndarray] | None = None,
 ) -> dict[str, Any]:
     trades = simulate_trades(
         frame,
         genome,
         maximum_lookback=maximum_lookback,
         round_trip_cost_bps=round_trip_cost_bps,
+        prepared_windows=prepared_windows,
     )
     if not trades:
         return {"fitness": -1e9, "trades": 0, "per_fold": [], "aggregate": trade_stats([])}
@@ -163,10 +185,7 @@ def evaluate_genome(
         ts = pd.Timestamp(trade["entry_time"])
         fold = int((ts - anchor).days // int(fold_days))
         by_fold.setdefault(fold, []).append(trade)
-    fold_rows = []
-    for fold, members in sorted(by_fold.items()):
-        stats = trade_stats(members)
-        fold_rows.append({"fold": fold, **stats})
+    fold_rows = [{"fold": fold, **trade_stats(members)} for fold, members in sorted(by_fold.items())]
     valid = [row for row in fold_rows if int(row["trades"]) >= minimum_trades_per_fold]
     if len(valid) < minimum_folds:
         aggregate = trade_stats(trades)
@@ -212,13 +231,7 @@ def random_genome(rng: np.random.Generator, cfg: Mapping[str, Any], maximum_look
     lookback = int(rng.choice(cfg["lookbacks"]))
     hold = int(rng.choice(cfg["holding_period_bars"]))
     lo, hi = map(float, cfg["entry_threshold_range"])
-    return Genome(
-        lookback=lookback,
-        hold_bars=hold,
-        threshold=float(rng.uniform(lo, hi)),
-        bias=float(rng.normal(0.0, 0.2)),
-        weights=rng.normal(0.0, 1.0, maximum_lookback * FEATURES_PER_BAR),
-    )
+    return Genome(lookback, hold, float(rng.uniform(lo, hi)), float(rng.normal(0.0, 0.2)), rng.normal(0.0, 1.0, maximum_lookback * FEATURES_PER_BAR))
 
 
 def mutate(parent: Genome, rng: np.random.Generator, cfg: Mapping[str, Any], maximum_lookback: int) -> Genome:
@@ -226,10 +239,7 @@ def mutate(parent: Genome, rng: np.random.Generator, cfg: Mapping[str, Any], max
     scale = float(cfg["mutation_scale"])
     child.weights += rng.normal(0.0, scale, child.weights.shape)
     child.bias += float(rng.normal(0.0, scale * 0.25))
-    child.threshold = max(
-        float(cfg["entry_threshold_range"][0]),
-        min(float(cfg["entry_threshold_range"][1]), child.threshold * math.exp(float(rng.normal(0.0, scale * 0.20)))),
-    )
+    child.threshold = max(float(cfg["entry_threshold_range"][0]), min(float(cfg["entry_threshold_range"][1]), child.threshold * math.exp(float(rng.normal(0.0, scale * 0.20)))))
     if rng.random() < 0.15:
         child.lookback = int(rng.choice(cfg["lookbacks"]))
     if rng.random() < 0.15:
@@ -244,6 +254,7 @@ def evolve(frame: pd.DataFrame, cfg: Mapping[str, Any]) -> dict[str, Any]:
     ecfg = cfg["evolution"]
     rng = np.random.default_rng(int(ecfg["seed"]))
     population_size = int(ecfg["population"])
+    prepared_windows = prepare_feature_windows(frame, ecfg["lookbacks"], maximum_lookback)
     population = [random_genome(rng, ecfg, maximum_lookback) for _ in range(population_size)]
     history: list[dict[str, Any]] = []
     best_genome: Genome | None = None
@@ -261,6 +272,7 @@ def evolve(frame: pd.DataFrame, cfg: Mapping[str, Any]) -> dict[str, Any]:
                 minimum_trades_per_fold=int(ecfg["minimum_trades_per_fold"]),
                 minimum_folds=int(ecfg["minimum_folds"]),
                 fitness_weights=ecfg["fitness_weights"],
+                prepared_windows=prepared_windows,
             )
             scored.append((float(evaluation["fitness"]), genome, evaluation))
         scored.sort(key=lambda item: item[0], reverse=True)
@@ -268,31 +280,27 @@ def evolve(frame: pd.DataFrame, cfg: Mapping[str, Any]) -> dict[str, Any]:
         if best_eval is None or top_fit > float(best_eval["fitness"]):
             best_genome = top_genome.clone()
             best_eval = dict(top_eval)
-        history.append(
-            {
-                "generation": generation,
-                "best_fitness": top_fit,
-                "median_population_fitness": float(np.median([row[0] for row in scored])),
-                "best_median_fold_expectancy_bps": top_eval.get("median_fold_expectancy_bps"),
-                "best_median_fold_win_rate": top_eval.get("median_fold_win_rate"),
-                "best_median_fold_profit_factor": top_eval.get("median_fold_profit_factor"),
-                "best_positive_fold_fraction": top_eval.get("positive_fold_fraction"),
-                "best_trades": top_eval.get("trades"),
-            }
-        )
+        history.append({
+            "generation": generation,
+            "best_fitness": top_fit,
+            "median_population_fitness": float(np.median([row[0] for row in scored])),
+            "best_median_fold_expectancy_bps": top_eval.get("median_fold_expectancy_bps"),
+            "best_median_fold_win_rate": top_eval.get("median_fold_win_rate"),
+            "best_median_fold_profit_factor": top_eval.get("median_fold_profit_factor"),
+            "best_positive_fold_fraction": top_eval.get("positive_fold_fraction"),
+            "best_trades": top_eval.get("trades"),
+        })
         elite_n = max(2, int(population_size * float(ecfg["elite_fraction"])))
         random_n = max(0, int(population_size * float(ecfg["random_survivor_fraction"])))
         survivors = [row[1].clone() for row in scored[:elite_n]]
-        if random_n:
-            pool = scored[elite_n:]
-            if pool:
-                indexes = rng.choice(len(pool), size=min(random_n, len(pool)), replace=False)
-                survivors.extend(pool[int(i)][1].clone() for i in indexes)
-        new_population = [g.clone() for g in survivors]
-        while len(new_population) < population_size:
+        pool = scored[elite_n:]
+        if random_n and pool:
+            indexes = rng.choice(len(pool), size=min(random_n, len(pool)), replace=False)
+            survivors.extend(pool[int(i)][1].clone() for i in indexes)
+        population = [g.clone() for g in survivors]
+        while len(population) < population_size:
             parent = survivors[int(rng.integers(0, len(survivors)))]
-            new_population.append(mutate(parent, rng, ecfg, maximum_lookback))
-        population = new_population
+            population.append(mutate(parent, rng, ecfg, maximum_lookback))
 
     assert best_genome is not None and best_eval is not None
     return {
@@ -309,10 +317,4 @@ def evolve(frame: pd.DataFrame, cfg: Mapping[str, Any]) -> dict[str, Any]:
 
 
 def genome_from_dict(payload: Mapping[str, Any]) -> Genome:
-    return Genome(
-        lookback=int(payload["lookback"]),
-        hold_bars=int(payload["hold_bars"]),
-        threshold=float(payload["threshold"]),
-        bias=float(payload["bias"]),
-        weights=np.asarray(payload["weights"], dtype=float),
-    )
+    return Genome(int(payload["lookback"]), int(payload["hold_bars"]), float(payload["threshold"]), float(payload["bias"]), np.asarray(payload["weights"], dtype=float))
