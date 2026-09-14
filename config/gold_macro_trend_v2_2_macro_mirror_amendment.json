@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold-macro-trend-v2.2-macro-mirror-amendment",
+  "parent_protocol": "gold-macro-trend-v2",
+  "amended_before_any_strategy_outcome_inspection": true,
+  "reason": "The canonical FRED fredgraph transport repeatedly timed out on hosted GitHub runners. No strategy tournament had run and no strategy outcome existed at amendment time.",
+  "semantics": "Transport/source mirror change only. Series IDs, dates, strategy definitions, folds, costs, state gates and economic gates are unchanged.",
+  "pinned_macro_sources": {
+    "DFII10": {
+      "repository": "Arqaen/financial-forecasting-xgboost",
+      "commit": "0df20d1021807d8e89fa46a6f026806bebaa9123",
+      "path": "models/data/DFII10.csv",
+      "expected_header": "observation_date,DFII10"
+    },
+    "DGS10": {
+      "repository": "Arqaen/financial-forecasting-xgboost",
+      "commit": "0df20d1021807d8e89fa46a6f026806bebaa9123",
+      "path": "models/data/DGS10.csv",
+      "expected_header": "observation_date,DGS10"
+    },
+    "DTWEXBGS": {
+      "repository": "Lilas-Bertot/ETUDE-DE-CAS-2",
+      "commit": "3c957c05a93a5398b67271783cd6a32ae0214385",
+      "path": "DXY.csv",
+      "expected_header": "observation_date,DTWEXBGS"
+    }
+  },
+  "integrity": {
+    "require_series_id_header_match": true,
+    "require_coverage_through_2020_development_end": true,
+    "require_minimum_non_null_values": 1800,
+    "record_sha256_of_downloaded_bytes": true
+  },
+  "unchanged": [
+    "Yahoo_GC=F_and_SI=F_futures_proxy_source_amendment",
+    "2010-2020_development_window",
+    "sealed_2021-2023_internal_validation",
+    "all_138_predeclared_strategy_cells",
+    "126_day_dependence_folds",
+    "2_5_10_bps_cost_schedule",
+    "state_before_pnl",
+    "reversed_direction_control",
+    "equal_timing_long_gold_benchmark",
+    "maximum_four_candidate_freeze",
+    "no_leverage",
+    "no_live_claim"
+  ],
+  "claims": {
+    "verified_oos": false,
+    "profitable_edge_established": false,
+    "live_enabled": false
+  }
+}
