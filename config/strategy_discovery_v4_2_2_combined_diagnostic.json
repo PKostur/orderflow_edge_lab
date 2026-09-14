@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "protocol_name": "strategy-discovery-v4.2.2-combined-diagnostic-clarification",
+  "base_protocol": "strategy-discovery-v4.2-funding-generalization",
+  "outcomes_inspected_before_amendment": false,
+  "changes_only": [
+    "The primary transfer test ranks expansion-panel symbols only; all original 10 are excluded from alpha sleeves.",
+    "The combined-panel diagnostic ranks the expansion panel plus the nine original non-BTC alpha symbols ETH, SOL, XRP, DOGE, BNB, ADA, LINK, SUI and ENA.",
+    "BTC remains hedge/context only in both primary and combined diagnostics and is never ranked into an alpha sleeve.",
+    "The combined-panel result cannot rescue a failed expansion-only primary generalization gate."
+  ],
+  "unchanged": ["two frozen cells", "all costs", "all state/economic/concentration gates", "parent holdout sealed", "no leverage", "no promotion"]
+}
