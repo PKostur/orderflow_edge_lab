@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold-h4-divergence-historical-replication-v1",
+  "source_protocol": "gold-social-claims-v1.3-rule-specific",
+  "status": "backward_historical_replication_not_oos",
+  "frozen_at_intent": "2026-09-14",
+  "selection_note": "Exact sparse H4 rules selected after 2020-2023 development inspection. This older-period test may reject or support historical transfer but cannot be called prospective OOS.",
+  "data": {"instrument":"XAUUSD","timeframe":"H4","replication_start":"2010-01-01","replication_end_exclusive":"2020-01-01","source":"same public XAUUSD archive"},
+  "dependence": {"calendar_cluster_days":365,"minimum_scorable_clusters":8,"minimum_events_per_cluster_for_rank_score":5,"cluster_preserving_permutation_epochs":20000,"permutation_alpha":0.01},
+  "frozen_cells": [
+    {"family":"reddit_h4_bb_rsi_divergence","lookback":3,"hold_bars":6},
+    {"family":"reddit_h4_bb_rsi_divergence","lookback":6,"hold_bars":6},
+    {"family":"youtube_rsi_divergence_range_reentry","lookback":5,"trend_filter_ema":0,"hold_bars":8},
+    {"family":"youtube_rsi_divergence_range_reentry","lookback":10,"trend_filter_ema":0,"hold_bars":8},
+    {"family":"youtube_rsi_divergence_range_reentry","lookback":10,"trend_filter_ema":0,"hold_bars":16}
+  ],
+  "state_gate": {"median_cluster_spearman_gt":0,"positive_cluster_fraction_gte":0.60,"permutation_p_lte":0.01},
+  "economics": {"round_trip_cost_bps":[2,5,10],"primary":5,"next_bar_entry":true,"one_active_trade":true,"no_trade_crosses_cluster_boundary":true},
+  "replication_gate": {"state_gate_required":true,"minimum_total_trades":80,"primary_median_cluster_net_bps_gt":0,"primary_median_cluster_pf_gt":1,"positive_cluster_fraction_gte":0.60,"high_cost_median_net_nonnegative":true,"must_beat_reversed_direction":true},
+  "selection": {"2024_2025_holdout_remains_sealed":true,"no_leverage":true,"no_retuning_from_replication":true},
+  "claims": {"verified_oos":false,"profitable_edge_established":false,"live_enabled":false}
+}
