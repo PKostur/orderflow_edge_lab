@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "protocol": "gold-v1.5-long-donchian-replication",
+  "candidate": {"family":"donchian_breakout","direction":"long_only","timeframe":"D1","lookback":55,"hold_bars":4},
+  "selection_disclosure": "new hypothesis inspired by v1.4 holdout; 2024-2025 does not validate this interpretation; 2026 is historical replication, not future OOS",
+  "replication_period": {"start":"2026-01-01","end_exclusive":"2026-07-23"},
+  "state": {"eligible_events":9,"continuation_fraction":0.6666666666666666,"mean_raw_forward_return_bps":163.86275988305948},
+  "primary_5bps": {"nonoverlapping_trades":3,"mean_net_bps":87.21159015291188,"median_net_bps":59.334382405133454,"profit_factor":1.5237679517823097,"positive_trade_fraction":0.6666666666666666,"mean_after_removing_best_trade_bps":-220.09491200404295,"best_trade_net_bps":701.8245944668216,"positive_trade_months":1},
+  "high_cost_10bps": {"mean_net_bps":82.21159015291188,"profit_factor":1.488846258164935},
+  "failed_frozen_gates": [
+    "minimum 10 eligible events",
+    "minimum 5 nonoverlapping trades",
+    "mean after removing single best trade > 0",
+    "at least three positive trade months"
+  ],
+  "replication_pass": false,
+  "leverage_tested": false,
+  "decision": "retire this long-only Donchian candidate; do not use leverage or further threshold tuning to rescue it",
+  "claims": {"verified_oos":false,"profitable_edge_established":false,"live_enabled":false}
+}
