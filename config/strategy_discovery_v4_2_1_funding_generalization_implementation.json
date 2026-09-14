@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "protocol_name": "strategy-discovery-v4.2.1-funding-generalization-implementation",
+  "base_protocol": "strategy-discovery-v4.2-funding-generalization",
+  "outcomes_inspected_before_amendment": false,
+  "changes_only": [
+    "BTC is always fetched as context/hedge but is never eligible for the expansion-panel top/bottom funding ranks.",
+    "Each expansion symbol beta is estimated causally from hourly perpetual close returns versus BTC using the frozen 192h rolling covariance/variance estimator, shifted one completed hour.",
+    "Before normalization, expansion long and short sleeves each carry 0.5 gross notional and the BTC hedge weight offsets their lagged net BTC beta. All weights are then normalized to unit gross exposure.",
+    "Price PnL and realized funding cash flow include every nonzero leg including the BTC hedge. The frozen normalized round-trip cost case is applied to total unit gross exposure.",
+    "Funding scores use only settlements published at or before signal time. Cross-sectional ranking is recomputed hourly from the latest frozen 3- or 5-settlement mean.",
+    "A signal is admissible only when at least six expansion symbols have finite funding score, price history and lagged beta; one portfolio may be active at a time and a trade must remain inside its 21-day fold.",
+    "Leave-one-symbol-out diagnostics remove one expansion alpha symbol at a time and recompute ranks, beta hedge and trades from scratch."
+  ],
+  "unchanged": [
+    "two frozen k=3/72h cells",
+    "universe selection rules and thresholds",
+    "development dates and 21-day folds",
+    "12/16/20 bps normalized cost cases",
+    "state target and gates",
+    "generalization and concentration gates",
+    "parent holdout remains sealed",
+    "no leverage and no promotion"
+  ]
+}
