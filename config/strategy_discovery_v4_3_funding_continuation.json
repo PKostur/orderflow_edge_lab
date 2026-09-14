@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "protocol_name": "strategy-discovery-v4.3-funding-continuation",
+  "parent": "strategy-discovery-v4.2-funding-generalization",
+  "frozen_at_intent": "2026-09-14",
+  "status": "post_observation_hypothesis_with_retrospective_temporal_diagnostic_and_future_shadow",
+  "motivation": "v4.2 showed strong cross-symbol funding-dispersion state predictability but failed economically in the carry direction; both frozen reversed-direction controls had positive mean return. Test whether high-funding names continue to outperform low-funding names in price strongly enough to overcome adverse funding cashflows and realistic costs.",
+  "universe": {
+    "alpha_symbols": ["TRX","ZEC","LTC","HYPE","TAO","NEAR","BCH","ASTER","DOT","XMR","XLM","ETHFI","UNI","SHIB","DASH","ARB","INJ"],
+    "btc_hedge_only": true,
+    "universe_is_frozen_from_v4_2_before_v4_3_outcomes": true
+  },
+  "signal": {
+    "top_bottom_k": 3,
+    "funding_lookback_settlements": [3,5],
+    "direction": "long highest funding / short lowest funding",
+    "hold_hours": 72,
+    "btc_beta_window_hours": 192,
+    "entry": "next completed hourly open",
+    "one_active_portfolio_per_cell": true,
+    "no_same_bar_fill": true
+  },
+  "retrospective_temporal_diagnostic": {
+    "start": "2026-08-01T00:00:00Z",
+    "end_exclusive": "2026-09-14T19:00:00Z",
+    "evidence_class": "later_period_retrospective_diagnostic_not_oos",
+    "cannot_establish_verified_oos": true
+  },
+  "future_shadow": {
+    "signal_boundary": "2026-09-15T00:00:00Z",
+    "no_backfill": true,
+    "minimum_completed_portfolios_for_review": 18,
+    "minimum_independent_calendar_clusters": 8,
+    "calendar_cluster_days": 7,
+    "no_position_crosses_cluster": true,
+    "paper_shadow_only": true
+  },
+  "state_before_pnl": {
+    "score": "cross-sectional funding spread between frozen top and bottom sleeves",
+    "target": "future 72h BTC-beta-neutral price spread, excluding funding and trading costs",
+    "median_cluster_spearman_gt": 0.0,
+    "positive_cluster_fraction_gte": 0.60
+  },
+  "economics": {
+    "round_trip_cost_bps": [12,16,20],
+    "primary_cost_bps": 16,
+    "realized_public_funding_cashflows_only": true,
+    "btc_hedge_leg_costs_and_funding_included": true,
+    "leverage": 1.0
+  },
+  "controls": {
+    "opposite_carry_direction_control": true,
+    "must_beat_control": true,
+    "no_parameter_search": true,
+    "no_symbol_selection_by_pnl": true
+  },
+  "promotion": {
+    "retrospective_diagnostic_can_only_reject_or_support_shadow_launch": true,
+    "future_after_freeze_evidence_required": true,
+    "verified_oos_requires_future_shadow_gate": true,
+    "no_leverage_testing_before_unlevered_future_pass": true,
+    "no_live_transmission_without_separate_user_approval": true
+  },
+  "claims": {
+    "verified_oos": false,
+    "profitable_edge_established": false,
+    "live_enabled": false
+  }
+}
