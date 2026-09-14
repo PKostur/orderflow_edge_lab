@@ -1,0 +1,98 @@
+{
+  "schema_version": "self-improvement-v1",
+  "created_utc": "2026-09-14T12:17:00Z",
+  "purpose": "Twenty controlled state-prediction research epochs over existing orderflow evidence. This protocol is exploratory and does not modify discovery-v1 or regime-research-v1 definitions.",
+  "source_commit": "9a8cfb42084063e427295946067b101bac62a8ab",
+  "dependence_unit": "capture_batch",
+  "development_batches": [
+    "migration_34713860394",
+    "migration_34722292643",
+    "migration_34726915671",
+    "migration_34738674959",
+    "migration_34778909541",
+    "migration_34785464157",
+    "migration_34786634811",
+    "migration_34792199968",
+    "migration_34792698211"
+  ],
+  "locked_holdout_batches": [
+    "20260914T052714Z",
+    "20260914T104810Z",
+    "20260914T110424Z"
+  ],
+  "selection_rule": "Run leave-one-batch-out development scoring for all 20 epochs. Select exactly one winner per target family using median batch Spearman as primary metric, positive-fold fraction as first tiebreaker, and median normalized MAE as second tiebreaker. Only those four family winners may be evaluated once on the locked holdout.",
+  "no_pnl_selection": true,
+  "holdout_is_untouched_oos": false,
+  "holdout_note": "This is an internal locked holdout carved from already existing research data, not genuine future untouched OOS evidence.",
+  "redundancy_rules": {
+    "exclude_together": [
+      ["rolling_trade_count_10s", "trade_velocity_per_second"],
+      ["book_imbalance_10", "abs_book_imbalance_10"],
+      ["microprice_edge_spread_units", "abs_microprice_edge_spread_units"],
+      ["depth_flow_imbalance", "abs_depth_flow_imbalance"],
+      ["flow_ratio_10s", "abs_flow_ratio_10s"]
+    ],
+    "preferred_representatives": [
+      "rolling_trade_count_10s",
+      "book_imbalance_10",
+      "microprice_edge_spread_units",
+      "depth_flow_imbalance",
+      "flow_ratio_10s"
+    ]
+  },
+  "target_families": {
+    "directionality_chop": "directionality_efficiency_60s",
+    "volatility_expansion": "volatility_expansion_ratio_60s",
+    "liquidity_deterioration": "spread_expansion_ratio_15s",
+    "future_direction": "signed_return_bps_30s"
+  },
+  "feature_sets": {
+    "directionality_primary": ["local_range_to_spread_15s"],
+    "directionality_domain": ["local_range_to_spread_15s", "flow_ratio_10s", "btc_return_15s_bps"],
+    "volatility_primary": ["local_range_to_spread_15s"],
+    "volatility_domain": ["local_range_to_spread_15s", "rolling_trade_count_10s", "spread_bps"],
+    "liquidity_primary": ["spread_bps"],
+    "liquidity_domain": ["spread_bps", "top_depth_notional", "book_imbalance_10"],
+    "direction_primary": ["flow_ratio_10s"],
+    "direction_domain": ["flow_ratio_10s", "microprice_edge_spread_units", "btc_return_15s_bps"],
+    "orthogonal_core": [
+      "spread_bps",
+      "top_depth_notional",
+      "book_imbalance_10",
+      "microprice_edge_spread_units",
+      "depth_flow_imbalance",
+      "flow_ratio_10s",
+      "rolling_trade_count_10s",
+      "local_return_15s_bps",
+      "local_range_to_spread_15s",
+      "btc_return_15s_bps"
+    ]
+  },
+  "epochs": [
+    {"epoch": 1, "family": "directionality_chop", "model": "ridge", "features": "directionality_primary"},
+    {"epoch": 2, "family": "directionality_chop", "model": "ridge", "features": "directionality_domain"},
+    {"epoch": 3, "family": "directionality_chop", "model": "elastic_net", "features": "orthogonal_core"},
+    {"epoch": 4, "family": "directionality_chop", "model": "random_forest", "features": "orthogonal_core"},
+    {"epoch": 5, "family": "directionality_chop", "model": "hist_gradient_boosting", "features": "orthogonal_core"},
+    {"epoch": 6, "family": "volatility_expansion", "model": "ridge", "features": "volatility_primary"},
+    {"epoch": 7, "family": "volatility_expansion", "model": "ridge", "features": "volatility_domain"},
+    {"epoch": 8, "family": "volatility_expansion", "model": "elastic_net", "features": "orthogonal_core"},
+    {"epoch": 9, "family": "volatility_expansion", "model": "random_forest", "features": "orthogonal_core"},
+    {"epoch": 10, "family": "volatility_expansion", "model": "hist_gradient_boosting", "features": "orthogonal_core"},
+    {"epoch": 11, "family": "liquidity_deterioration", "model": "ridge", "features": "liquidity_primary"},
+    {"epoch": 12, "family": "liquidity_deterioration", "model": "ridge", "features": "liquidity_domain"},
+    {"epoch": 13, "family": "liquidity_deterioration", "model": "elastic_net", "features": "orthogonal_core"},
+    {"epoch": 14, "family": "liquidity_deterioration", "model": "random_forest", "features": "orthogonal_core"},
+    {"epoch": 15, "family": "liquidity_deterioration", "model": "hist_gradient_boosting", "features": "orthogonal_core"},
+    {"epoch": 16, "family": "future_direction", "model": "ridge", "features": "direction_primary"},
+    {"epoch": 17, "family": "future_direction", "model": "ridge", "features": "direction_domain"},
+    {"epoch": 18, "family": "future_direction", "model": "elastic_net", "features": "orthogonal_core"},
+    {"epoch": 19, "family": "future_direction", "model": "random_forest", "features": "orthogonal_core"},
+    {"epoch": 20, "family": "future_direction", "model": "hist_gradient_boosting", "features": "orthogonal_core"}
+  ],
+  "claims": {
+    "profitable_edge_established": false,
+    "verified_untouched_oos": false,
+    "live_execution_authorized": false
+  }
+}

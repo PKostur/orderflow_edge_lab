@@ -1,0 +1,36 @@
+{
+  "schema_version": "self-improvement-v1-summary",
+  "source_commit": "9a8cfb42084063e427295946067b101bac62a8ab",
+  "n_epochs": 20,
+  "development_batch_count": 9,
+  "locked_holdout_batch_count": 3,
+  "epochs": [
+    {"epoch":1,"family":"directionality_chop","model":"ridge","features":"directionality_primary","target":"directionality_efficiency_60s","dev_median_spearman":0.037,"dev_positive_fold_fraction":0.67,"dev_median_normalized_mae":0.570},
+    {"epoch":2,"family":"directionality_chop","model":"ridge","features":"directionality_domain","target":"directionality_efficiency_60s","dev_median_spearman":-0.004,"dev_positive_fold_fraction":0.44,"dev_median_normalized_mae":0.569},
+    {"epoch":3,"family":"directionality_chop","model":"elastic_net","features":"orthogonal_core","target":"directionality_efficiency_60s","dev_median_spearman":-0.019,"dev_positive_fold_fraction":0.33,"dev_median_normalized_mae":0.571},
+    {"epoch":4,"family":"directionality_chop","model":"random_forest","features":"orthogonal_core","target":"directionality_efficiency_60s","dev_median_spearman":-0.053,"dev_positive_fold_fraction":0.22,"dev_median_normalized_mae":0.582},
+    {"epoch":5,"family":"directionality_chop","model":"hist_gradient_boosting","features":"orthogonal_core","target":"directionality_efficiency_60s","dev_median_spearman":-0.043,"dev_positive_fold_fraction":0.22,"dev_median_normalized_mae":0.587},
+    {"epoch":6,"family":"volatility_expansion","model":"ridge","features":"volatility_primary","target":"volatility_expansion_ratio_60s","dev_median_spearman":0.239,"dev_positive_fold_fraction":1.0,"dev_median_normalized_mae":0.829},
+    {"epoch":7,"family":"volatility_expansion","model":"ridge","features":"volatility_domain","target":"volatility_expansion_ratio_60s","dev_median_spearman":0.269,"dev_positive_fold_fraction":1.0,"dev_median_normalized_mae":0.808},
+    {"epoch":8,"family":"volatility_expansion","model":"elastic_net","features":"orthogonal_core","target":"volatility_expansion_ratio_60s","dev_median_spearman":0.215,"dev_positive_fold_fraction":1.0,"dev_median_normalized_mae":0.820},
+    {"epoch":9,"family":"volatility_expansion","model":"random_forest","features":"orthogonal_core","target":"volatility_expansion_ratio_60s","dev_median_spearman":0.261,"dev_positive_fold_fraction":1.0,"dev_median_normalized_mae":0.790},
+    {"epoch":10,"family":"volatility_expansion","model":"hist_gradient_boosting","features":"orthogonal_core","target":"volatility_expansion_ratio_60s","dev_median_spearman":0.213,"dev_positive_fold_fraction":1.0,"dev_median_normalized_mae":0.866},
+    {"epoch":11,"family":"liquidity_deterioration","model":"ridge","features":"liquidity_primary","target":"spread_expansion_ratio_15s","dev_median_spearman":0.019,"dev_positive_fold_fraction":0.78,"dev_median_normalized_mae":0.680},
+    {"epoch":12,"family":"liquidity_deterioration","model":"ridge","features":"liquidity_domain","target":"spread_expansion_ratio_15s","dev_median_spearman":-0.009,"dev_positive_fold_fraction":0.44,"dev_median_normalized_mae":0.679},
+    {"epoch":13,"family":"liquidity_deterioration","model":"elastic_net","features":"orthogonal_core","target":"spread_expansion_ratio_15s","dev_median_spearman":0.222,"dev_positive_fold_fraction":1.0,"dev_median_normalized_mae":0.687},
+    {"epoch":14,"family":"liquidity_deterioration","model":"random_forest","features":"orthogonal_core","target":"spread_expansion_ratio_15s","dev_median_spearman":0.297,"dev_positive_fold_fraction":1.0,"dev_median_normalized_mae":0.678},
+    {"epoch":15,"family":"liquidity_deterioration","model":"hist_gradient_boosting","features":"orthogonal_core","target":"spread_expansion_ratio_15s","dev_median_spearman":0.305,"dev_positive_fold_fraction":1.0,"dev_median_normalized_mae":0.699},
+    {"epoch":16,"family":"future_direction","model":"ridge","features":"direction_primary","target":"signed_return_bps_30s","dev_median_spearman":-0.071,"dev_positive_fold_fraction":0.22,"dev_median_normalized_mae":0.639},
+    {"epoch":17,"family":"future_direction","model":"ridge","features":"direction_domain","target":"signed_return_bps_30s","dev_median_spearman":0.047,"dev_positive_fold_fraction":0.78,"dev_median_normalized_mae":0.647},
+    {"epoch":18,"family":"future_direction","model":"elastic_net","features":"orthogonal_core","target":"signed_return_bps_30s","dev_median_spearman":0.120,"dev_positive_fold_fraction":0.89,"dev_median_normalized_mae":0.652},
+    {"epoch":19,"family":"future_direction","model":"random_forest","features":"orthogonal_core","target":"signed_return_bps_30s","dev_median_spearman":0.106,"dev_positive_fold_fraction":0.56,"dev_median_normalized_mae":0.650},
+    {"epoch":20,"family":"future_direction","model":"hist_gradient_boosting","features":"orthogonal_core","target":"signed_return_bps_30s","dev_median_spearman":0.041,"dev_positive_fold_fraction":0.67,"dev_median_normalized_mae":0.683}
+  ],
+  "family_winners": {
+    "directionality_chop":{"epoch":1,"model":"ridge","dev_median_spearman":0.037,"holdout_median_spearman":0.187,"holdout_positive_fold_fraction":0.67},
+    "volatility_expansion":{"epoch":7,"model":"ridge","dev_median_spearman":0.269,"holdout_median_spearman":0.253,"holdout_positive_fold_fraction":1.0},
+    "liquidity_deterioration":{"epoch":15,"model":"hist_gradient_boosting","dev_median_spearman":0.305,"holdout_median_spearman":0.327,"holdout_positive_fold_fraction":1.0},
+    "future_direction":{"epoch":18,"model":"elastic_net","dev_median_spearman":0.120,"holdout_median_spearman":-0.070,"holdout_positive_fold_fraction":0.33,"holdout_median_sign_accuracy":0.457}
+  },
+  "claims":{"profitable_edge_established":false,"verified_untouched_oos":false,"live_execution_authorized":false,"pnl_used_for_selection":false}
+}
