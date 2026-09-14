@@ -5,7 +5,9 @@ on:
     branches: [main]
     paths:
       - "config/microprice_imbalance_forward_v1.json"
+      - "config/microprice_imbalance_forward_v1_1_amendment.json"
       - "scripts/run_microprice_imbalance_forward_v1.py"
+      - "tests/test_microprice_imbalance_forward_v1.py"
       - ".github/workflows/microprice-imbalance-forward-v1.yml"
   workflow_dispatch:
   schedule:
@@ -35,9 +37,11 @@ jobs:
       - name: Validate frozen state-only protocol
         run: |
           python -m py_compile scripts/run_microprice_imbalance_forward_v1.py
+          python -m unittest tests.test_microprice_imbalance_forward_v1
           python - <<'PY'
           import json
           p=json.load(open('config/microprice_imbalance_forward_v1.json', encoding='utf-8'))
+          a=json.load(open('config/microprice_imbalance_forward_v1_1_amendment.json', encoding='utf-8'))
           assert p['protocol_name'] == 'microprice-imbalance-forward-v1'
           assert p['source']['historical_backfill_allowed'] is False
           assert p['capture']['independent_capture_batch_is_dependence_cluster'] is True
@@ -46,6 +50,10 @@ jobs:
           assert p['promotion']['ruflo_gate_required'] is True
           assert p['promotion']['deterministic_multi_agent_release_manager_required'] is True
           assert p['promotion']['automatic_live_transmission'] is False
+          assert a['outcomes_inspected_before_amendment'] is False
+          assert a['implementation_requirements']['serialize_nonfinite_statistics_as_null'] is True
+          assert a['implementation_requirements']['future_lookup_max_delay_ms'] == 2000
+          assert a['implementation_requirements']['prior_unamended_batch_output_admissible'] is False
           PY
       - name: Capture fixed public MEXC panel for 15 minutes
         run: |
@@ -119,6 +127,7 @@ jobs:
             artifacts/microprice/aggregate.json
             artifacts/microprice/multi_agent_report.json
             config/microprice_imbalance_forward_v1.json
+            config/microprice_imbalance_forward_v1_1_amendment.json
           retention-days: 90
           if-no-files-found: error
       - name: Preserve current raw replay batch
