@@ -1,0 +1,1 @@
+Evidence boundary: all v4 conclusions in this branch are development-only. The internal holdout (folds 16-17) has not been opened and cannot be opened from this branch because zero candidates passed the frozen development gate.
