@@ -1,0 +1,65 @@
+name: Gold v3 Macro Regime
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/gold-v3-macro-regime]
+    paths:
+      - "config/gold_v3_macro_regime.json"
+      - "config/gold_v3_macro_regime_implementation.json"
+      - "scripts/run_gold_v3_macro_regime.py"
+      - ".github/workflows/gold-v3-macro-regime.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gold-v3-macro-regime-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  development:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install runtime
+        run: python -m pip install pandas numpy
+      - name: Run frozen development tournament
+        run: |
+          python scripts/run_gold_v3_macro_regime.py \
+            --output artifacts/gold_v3_macro_regime/development_results.json
+      - name: Guard validation and claims
+        run: |
+          python - <<'PY'
+          import json
+          p='artifacts/gold_v3_macro_regime/development_results.json'
+          r=json.load(open(p))
+          assert r['validation_opened'] is False
+          assert r['claims']['verified_oos'] is False
+          assert r['claims']['profitable_edge_established'] is False
+          assert r['claims']['live_enabled'] is False
+          if r['error_count']:
+              raise SystemExit(f"macro tournament errors: {r['error_count']}")
+          PY
+      - name: Deterministic release-manager guard
+        run: |
+          python -m pip install -e ".[research]"
+          orderflow-multi-agent --output artifacts/gold_v3_macro_regime/multi_agent_report.json
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/gold_v3_macro_regime/multi_agent_report.json'))
+          if r['release_manager']['status'] != 'reviewable':
+              raise SystemExit(r['release_manager']['next_actions'])
+          PY
+      - name: Preserve evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-v3-macro-regime-development
+          path: artifacts/gold_v3_macro_regime/
+          retention-days: 30
+          if-no-files-found: error
