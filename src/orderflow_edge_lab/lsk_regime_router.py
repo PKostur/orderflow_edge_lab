@@ -64,6 +64,22 @@ def _pf_numeric(value: float | str | None) -> float | None:
     return None
 
 
+def _directional_price_response_efficiency(
+    local_return_bps: Any,
+    signal_side: Any,
+    signal_strength_multiple: Any,
+) -> float | None:
+    ret = _finite(local_return_bps)
+    strength = _finite(signal_strength_multiple)
+    try:
+        side = int(signal_side or 0)
+    except (TypeError, ValueError):
+        return None
+    if ret is None or strength is None or strength <= 0 or side not in {-1, 1}:
+        return None
+    return float(side) * ret / max(strength, 1e-9)
+
+
 def _pair_key(row: dict[str, Any]) -> tuple[int, str, int, float]:
     return (
         int(row["signal_observed_at_ns"]),
@@ -109,9 +125,12 @@ def _state_for_observation(
             abs_return_to_spread = abs(float(local["return_bps"])) / spread
         if local["range_bps"] is not None:
             range_to_spread = float(local["range_bps"]) / spread
-    response_efficiency = None
-    if local["return_bps"] is not None and strength is not None and strength > 0:
-        response_efficiency = abs(float(local["return_bps"])) / max(float(strength), 1e-9)
+    signal_side = observation.get("signal_side", observation.get("side", 0))
+    response_efficiency = _directional_price_response_efficiency(
+        local["return_bps"],
+        signal_side,
+        strength,
+    )
     return {
         "signal_observed_at_ns": observed_ns,
         "spread_bps": spread,
@@ -122,7 +141,7 @@ def _state_for_observation(
         "signal_strength_multiple": strength,
         "abs_return_to_spread_15s": abs_return_to_spread,
         "range_to_spread_15s": range_to_spread,
-        "price_response_efficiency": response_efficiency,
+        "directional_price_response_efficiency": response_efficiency,
         "btc_flow_alignment": _btc_alignment(observation),
     }
 
@@ -149,7 +168,7 @@ def _classify(
         "rolling_trade_count_10s",
         "signal_strength_multiple",
         "abs_return_to_spread_15s",
-        "price_response_efficiency",
+        "directional_price_response_efficiency",
     }
     if len(history) < min_prior or any(_finite(state.get(key)) is None for key in required):
         return "no_trade", {"reason": "insufficient_causal_baseline"}
@@ -172,7 +191,7 @@ def _classify(
     exhausted = bool(
         common
         and float(state["abs_return_to_spread_15s"]) >= baselines["abs_return_to_spread_15s_q75"]
-        and float(state["price_response_efficiency"]) <= baselines["price_response_efficiency_q25"]
+        and float(state["directional_price_response_efficiency"]) <= baselines["directional_price_response_efficiency_q25"]
         and (
             float(state["rolling_trade_count_10s"]) < baselines["rolling_trade_count_10s_median"]
             or float(state["local_quote_updates_per_second_15s"]) < baselines["local_quote_updates_per_second_15s_median"]
@@ -185,7 +204,7 @@ def _classify(
         and float(state["rolling_trade_count_10s"]) >= baselines["rolling_trade_count_10s_median"]
         and float(state["local_quote_updates_per_second_15s"]) >= baselines["local_quote_updates_per_second_15s_median"]
         and float(state["local_range_15s_bps"]) >= baselines["local_range_15s_bps_median"]
-        and float(state["price_response_efficiency"]) >= baselines["price_response_efficiency_median"]
+        and float(state["directional_price_response_efficiency"]) > max(0.0, baselines["directional_price_response_efficiency_median"])
         and float(state["abs_return_to_spread_15s"]) < baselines["abs_return_to_spread_15s_q75"]
         and spread_vs_med <= 1.25
     )
@@ -256,6 +275,7 @@ def evaluate_lsk_regime_router(
                 "batch_id": batch_id,
                 "fee_bps_round_trip": fee,
                 "route": route,
+                "baseline_ready": not str(diagnostic.get("reason", "")).startswith("insufficient_"),
                 "state": state,
                 "diagnostic": diagnostic,
                 "original_net_bps": float(orig["net_bps"]),
@@ -270,13 +290,20 @@ def evaluate_lsk_regime_router(
             router_values: list[float] = []
             always_original: list[float] = []
             always_reversed: list[float] = []
+            always_original_matched: list[float] = []
+            always_reversed_matched: list[float] = []
             by_batch: dict[str, list[float]] = defaultdict(list)
             route_counts = defaultdict(int)
+            post_warmup_route_counts = defaultdict(int)
             for row in fee_rows:
                 route = str(row["route"])
                 route_counts[route] += 1
                 always_original.append(float(row["original_net_bps"]) - stress)
                 always_reversed.append(float(row["reversed_net_bps"]) - stress)
+                if bool(row.get("baseline_ready")):
+                    post_warmup_route_counts[route] += 1
+                    always_original_matched.append(float(row["original_net_bps"]) - stress)
+                    always_reversed_matched.append(float(row["reversed_net_bps"]) - stress)
                 if route == "no_trade":
                     continue
                 value = float(row["original_net_bps"] if route == "original" else row["reversed_net_bps"]) - stress
@@ -313,12 +340,17 @@ def evaluate_lsk_regime_router(
                 "additional_execution_stress_bps_round_trip": stress,
                 "router": summary,
                 "route_counts": dict(route_counts),
+                "post_warmup_route_counts": dict(post_warmup_route_counts),
+                "baseline_ready_signals": len(always_original_matched),
                 "independent_clusters_with_trades": len(batch_means),
                 "positive_cluster_fraction": positive_cluster_fraction,
                 "batch_net_mean_bps": batch_means,
                 "maximum_single_cluster_positive_profit_share": max_profit_share,
                 "always_original": _summarize(always_original),
                 "always_reversed": _summarize(always_reversed),
+                "always_original_matched_post_warmup": _summarize(always_original_matched),
+                "always_reversed_matched_post_warmup": _summarize(always_reversed_matched),
+                "control_scope_note": "Matched controls use exactly the post-warmup signals on which the router had a causal baseline; all-signal controls are retained for unconditional context.",
                 "numeric_forward_screen_would_pass": numeric_screen,
             })
 
