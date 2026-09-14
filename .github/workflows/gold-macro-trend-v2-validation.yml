@@ -1,0 +1,61 @@
+name: Gold Macro Trend v2 Internal Validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/gold-macro-trend-v2]
+    paths:
+      - "config/gold_macro_trend_v2_validation.json"
+      - "scripts/run_gold_macro_trend_v2_validation.py"
+      - ".github/workflows/gold-macro-trend-v2-validation.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gold-macro-trend-v2-validation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-frozen-candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install pandas numpy requests yfinance
+      - name: Rebuild source bundle and enforce canonical hashes in validator
+        run: |
+          mkdir -p artifacts/gold_macro_trend_v2_validation/data
+          python scripts/prepare_gold_macro_trend_v2.py --output-dir artifacts/gold_macro_trend_v2_validation/data
+      - name: Run exactly one frozen 2021-2023 candidate
+        run: |
+          python scripts/run_gold_macro_trend_v2_validation.py \
+            --config config/gold_macro_trend_v2_validation.json \
+            --data-dir artifacts/gold_macro_trend_v2_validation/data \
+            --output artifacts/gold_macro_trend_v2_validation/validation.json
+      - name: Guard claim boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/gold_macro_trend_v2_validation/validation.json'))
+          assert r['evidence_class']=='locked_internal_retrospective_validation_not_future_oos'
+          assert r['candidate']['window']==126
+          assert r['candidate']['entry_abs_z']==1.0
+          assert r['candidate']['hold_trading_bars']==21
+          assert r['source_hashes_verified'] is True
+          assert r['claims']['verified_oos'] is False
+          assert r['claims']['profitable_edge_established'] is False
+          assert r['claims']['live_enabled'] is False
+          PY
+      - name: Preserve validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-macro-trend-v2-internal-validation
+          path: artifacts/gold_macro_trend_v2_validation/
+          retention-days: 30
+          if-no-files-found: warn
