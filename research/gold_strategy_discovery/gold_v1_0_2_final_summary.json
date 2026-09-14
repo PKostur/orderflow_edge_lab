@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "protocol": "gold-strategy-discovery-v1.0.2-data-admissibility-plus-v1.0.3-trend-pullback-fix",
+  "data_correction": {
+    "reason":"public files labeled intraday contain daily bars before true intraday coverage begins",
+    "admissible_starts":{"M15":"2018-09-14","H1":"2018-03-19","H4":"2018-03-19","D1":"2010-01-01"}
+  },
+  "development": {"trial_count":234,"error_count":0,"preliminary_pass_count":0,"holdout_opened":false},
+  "trend_pullback_audit": {
+    "bug":"original score trend*(-distance) was always positive under the frozen eligibility condition and therefore made downtrend pullbacks long",
+    "bugged_results_invalid":true,
+    "corrected_score":"trend_sign * abs(price_minus_ema_in_atr_units)",
+    "corrected_family_pass_count":0,
+    "example_prior_h4_ema100_pullback1_hold8_corrected_primary_median_fold_net_bps":-4.29
+  },
+  "notable_nonpasses": [
+    {"family":"donchian_breakout","timeframe":"D1","lookback":55,"hold":4,"development_mean_5bps":25.04,"development_pf":1.438,"positive_63d_fold_fraction":0.544,"decision":"did not pass original sparse-fold/state gates; followed only under separately frozen post-selection v1.4 protocol"},
+    {"family":"rsi_mean_reversion","timeframe":"H4","level":25,"hold":4,"median_fold_net_5bps":5.43,"overall_mean_5bps":-1.39,"decision":"reject"}
+  ],
+  "decision":"No broad conventional/community gold cell passes the original development gates. Preserve v1.4/v1.5 as explicit post-selection follow-ups rather than retroactively promoting a v1.0.2 cell.",
+  "claims":{"verified_oos":false,"profitable_edge_established":false,"live_enabled":false}
+}
