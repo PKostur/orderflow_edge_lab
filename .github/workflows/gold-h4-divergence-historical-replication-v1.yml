@@ -7,6 +7,7 @@ on:
     paths:
       - "config/gold_h4_divergence_historical_replication_v1.json"
       - "config/gold_h4_divergence_historical_replication_v1_1_amendment.json"
+      - "config/gold_h4_divergence_historical_replication_v1_2_source_fallback.json"
       - "scripts/run_gold_h4_divergence_historical_replication_v1.py"
       - ".github/workflows/gold-h4-divergence-historical-replication-v1.yml"
 
@@ -20,75 +21,75 @@ concurrency:
 jobs:
   replicate:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: Install Python runtime
         run: python -m pip install pandas numpy
-      - name: Download independent Dukascopy XAUUSD H4 bid history in yearly chunks
+      - name: Build independent HistData XAUUSD H4 history from yearly M1 files
         run: |
           set -euo pipefail
-          mkdir -p artifacts/gold_h4_divergence_replication/data/chunks
+          mkdir -p artifacts/gold_h4_divergence_replication/data/raw artifacts/gold_h4_divergence_replication/data/h4
+          : > artifacts/gold_h4_divergence_replication/data/SOURCE_SHA256SUMS.txt
           for year in $(seq 2010 2019); do
-            next=$((year + 1))
-            out="XAUUSD_DUKASCOPY_H4_${year}_${next}.csv"
-            ok=0
-            for attempt in 1 2 3 4; do
-              if npx --yes dukascopy-node@latest \
-                -i xauusd \
-                -from "${year}-01-01" \
-                -to "${next}-01-01" \
-                -t h4 \
-                -p bid \
-                -v true \
-                -f csv \
-                -dir artifacts/gold_h4_divergence_replication/data/chunks \
-                -fn "$out" \
-                -r 3 \
-                -re true; then
-                ok=1
-                break
-              fi
-              sleep $((attempt * 8))
-            done
-            test "$ok" -eq 1
-            sleep 3
+            raw="artifacts/gold_h4_divergence_replication/data/raw/DAT_MT_XAUUSD_M1_${year}.csv"
+            url="https://huggingface.co/datasets/fokan/xauusd-2009-2026/resolve/main/DAT_MT_XAUUSD_M1_${year}.csv?download=true"
+            curl -fL --retry 5 --retry-delay 3 --retry-all-errors "$url" -o "$raw"
+            sha256sum "$raw" >> artifacts/gold_h4_divergence_replication/data/SOURCE_SHA256SUMS.txt
+            YEAR="$year" RAW="$raw" python - <<'PY'
+          import os
+          from pathlib import Path
+          import pandas as pd
+
+          year = int(os.environ['YEAR'])
+          raw = Path(os.environ['RAW'])
+          names = ['date','time','open','high','low','close','volume']
+          d = pd.read_csv(raw, header=None, names=names)
+          ts = pd.to_datetime(d['date'].astype(str) + ' ' + d['time'].astype(str), format='%Y.%m.%d %H:%M', errors='coerce')
+          d = d.assign(timestamp=ts).dropna(subset=['timestamp']).set_index('timestamp').sort_index()
+          for c in ['open','high','low','close','volume']:
+              d[c] = pd.to_numeric(d[c], errors='coerce')
+          d = d.dropna(subset=['open','high','low','close'])
+          agg = d.resample('4h', origin='start_day', label='left', closed='left').agg(
+              open=('open','first'), high=('high','max'), low=('low','min'), close=('close','last'),
+              volume=('volume','sum'), m1_count=('close','count'))
+          agg = agg.dropna(subset=['open','high','low','close'])
+          agg = agg[agg['m1_count'] >= 30]
+          if agg.empty:
+              raise SystemExit(f'no admissible H4 bars for {year}')
+          dest = Path(f'artifacts/gold_h4_divergence_replication/data/h4/XAUUSD_H4_{year}.csv')
+          agg.reset_index().to_csv(dest, index=False)
+          print({'year':year,'source_m1_rows':len(d),'retained_h4_rows':len(agg),'median_m1_count':float(agg.m1_count.median())})
+          PY
+            rm -f "$raw"
           done
           python - <<'PY'
           from pathlib import Path
           import pandas as pd
-
-          root = Path('artifacts/gold_h4_divergence_replication/data/chunks')
-          files = sorted(root.rglob('*.csv'))
+          files=sorted(Path('artifacts/gold_h4_divergence_replication/data/h4').glob('XAUUSD_H4_*.csv'))
           if len(files) != 10:
-              raise SystemExit(f'expected 10 yearly csv chunks, found {len(files)}: {files}')
-          frames = []
-          for p in files:
-              d = pd.read_csv(p)
-              d['_source_file'] = p.name
-              frames.append(d)
-          out = pd.concat(frames, ignore_index=True)
-          time_col = next((c for c in out.columns if c.lower() in {'timestamp','time','date','datetime'}), out.columns[0])
-          ts = pd.to_datetime(out[time_col], utc=True, errors='coerce')
-          out = out.assign(_parsed_ts=ts).dropna(subset=['_parsed_ts']).sort_values('_parsed_ts')
-          data_cols = [c for c in out.columns if c not in {'_source_file','_parsed_ts'}]
-          out = out.drop_duplicates(subset=data_cols, keep='first').drop(columns=['_source_file','_parsed_ts'])
-          dest = Path('artifacts/gold_h4_divergence_replication/data/XAUUSD_DUKASCOPY_H4_2010_2020.csv')
-          out.to_csv(dest, index=False)
-          print({'chunks': len(files), 'rows': len(out), 'first': str(ts.min()), 'last': str(ts.max())})
+              raise SystemExit(f'expected 10 annual H4 files, got {len(files)}')
+          frames=[pd.read_csv(p, parse_dates=['timestamp']) for p in files]
+          d=pd.concat(frames, ignore_index=True).sort_values('timestamp').drop_duplicates('timestamp', keep='last')
+          if d.empty:
+              raise SystemExit('combined H4 dataset empty')
+          med=float(pd.to_numeric(d['m1_count'], errors='coerce').median())
+          if med < 120:
+              raise SystemExit(f'median retained M1 count per H4 below frozen floor: {med}')
+          if d['timestamp'].min() > pd.Timestamp('2010-01-15') or d['timestamp'].max() < pd.Timestamp('2019-12-15'):
+              raise SystemExit(f'historical span incomplete: {d.timestamp.min()} .. {d.timestamp.max()}')
+          dest=Path('artifacts/gold_h4_divergence_replication/data/XAUUSD_HISTDATA_H4_2010_2020.csv')
+          d.to_csv(dest,index=False)
+          print({'rows':len(d),'start':str(d.timestamp.min()),'end':str(d.timestamp.max()),'median_m1_count':med})
           PY
-          find artifacts/gold_h4_divergence_replication/data -maxdepth 2 -type f -print
-          sha256sum artifacts/gold_h4_divergence_replication/data/XAUUSD_DUKASCOPY_H4_2010_2020.csv > artifacts/gold_h4_divergence_replication/data/SHA256SUMS.txt
+          sha256sum artifacts/gold_h4_divergence_replication/data/XAUUSD_HISTDATA_H4_2010_2020.csv > artifacts/gold_h4_divergence_replication/data/H4_SHA256SUM.txt
       - name: Run frozen five-cell replication and 20k cluster permutations per cell
         run: |
           python scripts/run_gold_h4_divergence_historical_replication_v1.py \
-            --data artifacts/gold_h4_divergence_replication/data/XAUUSD_DUKASCOPY_H4_2010_2020.csv \
+            --data artifacts/gold_h4_divergence_replication/data/XAUUSD_HISTDATA_H4_2010_2020.csv \
             --output artifacts/gold_h4_divergence_replication/result.json
       - name: Guard holdout and claims
         run: |
@@ -100,6 +101,7 @@ jobs:
           assert r['claims']['verified_oos'] is False
           assert r['claims']['profitable_edge_established'] is False
           assert r['claims']['live_enabled'] is False
+          assert len(r['cells']) == 5
           PY
       - name: Preserve evidence
         if: always()
