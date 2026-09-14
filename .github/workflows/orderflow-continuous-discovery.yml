@@ -60,31 +60,36 @@ jobs:
             --symbol ENA_USDT \
             --context-symbol BTC_USDT \
             --output artifacts/orderflow/market_state.json
-      - name: Recover cumulative validated discovery ledger
+      - name: Recover newest structurally valid cumulative discovery ledger
         shell: bash
         run: |
           set -euo pipefail
-          rm -rf /tmp/discovery_previous /tmp/discovery_migration
-          mkdir -p /tmp/discovery_previous /tmp/discovery_migration artifacts/orderflow/history
+          rm -rf /tmp/discovery_previous /tmp/discovery_candidate /tmp/discovery_migration
+          mkdir -p /tmp/discovery_previous /tmp/discovery_candidate /tmp/discovery_migration artifacts/orderflow/history
           PREV_ID=""
           while IFS=$'\t' read -r ARTIFACT_ID RUN_ID; do
             [[ -z "${ARTIFACT_ID:-}" || -z "${RUN_ID:-}" ]] && continue
-            CONCLUSION="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}" --jq '.conclusion // ""' 2>/dev/null || true)"
-            if [[ "$CONCLUSION" == "success" ]]; then
-              PREV_ID="$ARTIFACT_ID"
-              break
+            rm -rf /tmp/discovery_candidate/*
+            if ! gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" > /tmp/discovery_candidate.zip 2>/dev/null; then
+              continue
             fi
+            if ! unzip -q /tmp/discovery_candidate.zip -d /tmp/discovery_candidate 2>/dev/null; then
+              continue
+            fi
+            PRIOR_HISTORY="$(find /tmp/discovery_candidate -type d -path '*/artifacts/orderflow/history' -print -quit || true)"
+            [[ -n "$PRIOR_HISTORY" ]] || continue
+            if ! find "$PRIOR_HISTORY" -type f -name market_state.json -print -quit | grep -q .; then
+              continue
+            fi
+            PREV_ID="$ARTIFACT_ID"
+            cp -a /tmp/discovery_candidate/. /tmp/discovery_previous/
+            cp -a "$PRIOR_HISTORY"/. artifacts/orderflow/history/
+            echo "Recovered structurally valid ledger artifact $PREV_ID from workflow run $RUN_ID"
+            break
           done < <(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=orderflow-discovery-ledger-v1&per_page=20" \
             --jq '.artifacts | map(select(.expired == false)) | sort_by(.created_at) | reverse | .[] | [.id, .workflow_run.id] | @tsv' || true)
 
-          if [[ -n "$PREV_ID" ]]; then
-            gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${PREV_ID}/zip" > /tmp/discovery_previous.zip
-            unzip -q /tmp/discovery_previous.zip -d /tmp/discovery_previous
-            PRIOR_HISTORY="$(find /tmp/discovery_previous -type d -path '*/artifacts/orderflow/history' -print -quit || true)"
-            if [[ -n "$PRIOR_HISTORY" ]]; then
-              cp -a "$PRIOR_HISTORY"/. artifacts/orderflow/history/
-            fi
-          else
+          if [[ -z "$PREV_ID" ]]; then
             # One-time migration of validated compact reports into the cumulative ledger.
             gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=orderflow-discovery-report&per_page=100" \
               --jq '.artifacts | map(select(.expired == false)) | sort_by(.created_at) | reverse | .[].workflow_run.id' \
@@ -147,7 +152,50 @@ jobs:
             --protocol config/state_candidate_registry_v1.json \
             "${REGISTRY_ARGS[@]}" \
             --output artifacts/orderflow/state_candidate_registry_v1.json
+      - name: Recover canonical conditioning epoch if present
+        id: conditioning_epoch
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t MAPS < <(find artifacts/orderflow/history -type f -name strategy_state_mapping_v1.json | sort)
+          if [[ "${#MAPS[@]}" -eq 0 ]]; then
+            echo "reuse=false" >> "$GITHUB_OUTPUT"
+            echo "No persisted conditioning epoch found; this run may establish one before PnL."
+            exit 0
+          fi
+
+          mapfile -t MANIFESTS < <(for MAP in "${MAPS[@]}"; do jq -r '.manifest_sha256 // empty' "$MAP"; done | sort -u)
+          if [[ "${#MANIFESTS[@]}" -ne 1 || -z "${MANIFESTS[0]:-}" ]]; then
+            echo "Multiple or invalid conditioning epochs found in the active ledger; refusing to pool them." >&2
+            exit 1
+          fi
+
+          CANONICAL_DIR="$(dirname "${MAPS[0]}")"
+          for F in strategy_conditioning_registry_binding_v1.json state_threshold_freeze_v1.json strategy_state_mapping_v1.json; do
+            test -f "$CANONICAL_DIR/$F"
+            cp "$CANONICAL_DIR/$F" "artifacts/orderflow/$F"
+          done
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          registry = json.loads(Path('artifacts/orderflow/state_candidate_registry_v1.json').read_text())
+          mapping = json.loads(Path('artifacts/orderflow/strategy_state_mapping_v1.json').read_text())
+          locked = registry.get('locked_candidate')
+          hypothesis = mapping.get('state_hypothesis')
+          if not isinstance(locked, dict) or not isinstance(hypothesis, dict):
+              raise SystemExit('canonical conditioning epoch lacks candidate identity')
+          keys = ('research_family', 'feature', 'target')
+          if tuple(str(locked.get(k)) for k in keys) != tuple(str(hypothesis.get(k)) for k in keys):
+              raise SystemExit('canonical conditioning epoch does not match the locked PnL-independent candidate')
+          if mapping.get('status') != 'frozen':
+              raise SystemExit('canonical strategy-state mapping is not frozen')
+          PY
+          echo "reuse=true" >> "$GITHUB_OUTPUT"
+          echo "Reusing canonical conditioning mapping manifest ${MANIFESTS[0]}"
       - name: Bind conditioning freeze to deterministic state candidate before strategy PnL
+        if: steps.conditioning_epoch.outputs.reuse != 'true'
         shell: bash
         run: |
           orderflow-strategy-conditioning-registry-binding-v1 \
@@ -157,6 +205,7 @@ jobs:
             --conditioning-protocol config/strategy_conditioning_v1_1.json \
             --output artifacts/orderflow/strategy_conditioning_registry_binding_v1.json
       - name: Freeze PnL-independent market-state thresholds before strategy PnL
+        if: steps.conditioning_epoch.outputs.reuse != 'true'
         shell: bash
         run: |
           STATE_REPORTS=(artifacts/orderflow/market_state.json)
@@ -170,6 +219,7 @@ jobs:
             --protocol config/state_threshold_freeze_v1.json \
             --output artifacts/orderflow/state_threshold_freeze_v1.json
       - name: Freeze PnL-independent strategy-state bucket mapping before strategy PnL
+        if: steps.conditioning_epoch.outputs.reuse != 'true'
         shell: bash
         run: |
           orderflow-strategy-state-mapping-v1 \
@@ -212,7 +262,7 @@ jobs:
             artifacts/orderflow/market_state.json \
             artifacts/orderflow/strategy_state_mapping_v1.json \
             --output artifacts/orderflow/conditioned_experiment_v1.json
-      - name: Append current validated reports to cumulative ledger
+      - name: Append current validated reports and conditioning provenance to cumulative ledger
         shell: bash
         run: |
           set -euo pipefail
@@ -221,19 +271,40 @@ jobs:
           BATCH_ID=$(basename "$FEATURE" _mexc_features.jsonl)
           DEST="artifacts/orderflow/history/${BATCH_ID}"
           mkdir -p "$DEST"
-          for F in market_state.json state_candidate_registry_v1.json conditioned_experiment_v1.json backtest.json conditions.json direction_pair.json stop_risk.json; do
+          for F in market_state.json state_candidate_registry_v1.json strategy_conditioning_registry_binding_v1.json state_threshold_freeze_v1.json strategy_state_mapping_v1.json conditioned_experiment_v1.json backtest.json conditions.json direction_pair.json stop_risk.json; do
             test -f "artifacts/orderflow/$F"
             cp "artifacts/orderflow/$F" "$DEST/$F"
           done
-      - name: Aggregate conditioned results by overlap-aware dependence cluster
+      - name: Aggregate conditioned results only within the canonical conditioning epoch
         shell: bash
         run: |
-          mapfile -t CONDITIONED_REPORTS < <(find artifacts/orderflow/history -type f -name conditioned_experiment_v1.json | sort)
-          test "${#CONDITIONED_REPORTS[@]}" -ge 1
+          set -euo pipefail
+          CURRENT_MANIFEST="$(jq -r '.manifest_sha256 // empty' artifacts/orderflow/strategy_state_mapping_v1.json)"
+          test -n "$CURRENT_MANIFEST"
+          CONDITIONED_REPORTS=()
           STATE_ARGS=()
-          while IFS= read -r REPORT; do
-            STATE_ARGS+=(--state-report "$REPORT")
-          done < <(find artifacts/orderflow/history -type f -name market_state.json | sort)
+          INCLUDED_BATCHES=0
+          QUARANTINED_BATCHES=0
+          while IFS= read -r DIR; do
+            MAP="$DIR/strategy_state_mapping_v1.json"
+            CONDITIONED="$DIR/conditioned_experiment_v1.json"
+            STATE="$DIR/market_state.json"
+            if [[ ! -f "$MAP" || ! -f "$CONDITIONED" || ! -f "$STATE" ]]; then
+              QUARANTINED_BATCHES=$((QUARANTINED_BATCHES + 1))
+              continue
+            fi
+            MANIFEST="$(jq -r '.manifest_sha256 // empty' "$MAP")"
+            if [[ "$MANIFEST" != "$CURRENT_MANIFEST" ]]; then
+              QUARANTINED_BATCHES=$((QUARANTINED_BATCHES + 1))
+              continue
+            fi
+            CONDITIONED_REPORTS+=("$CONDITIONED")
+            STATE_ARGS+=(--state-report "$STATE")
+            INCLUDED_BATCHES=$((INCLUDED_BATCHES + 1))
+          done < <(find artifacts/orderflow/history -mindepth 1 -maxdepth 1 -type d | sort)
+
+          test "${#CONDITIONED_REPORTS[@]}" -ge 1
+          echo "Conditioning epoch $CURRENT_MANIFEST includes $INCLUDED_BATCHES comparable batches; quarantined $QUARANTINED_BATCHES legacy or mismatched batches."
           orderflow-conditioned-result-aggregate-v1 \
             "${CONDITIONED_REPORTS[@]}" \
             "${STATE_ARGS[@]}" \
@@ -261,14 +332,20 @@ jobs:
           from pathlib import Path
           root=Path('artifacts/orderflow/history')
           batches=sorted(p.name for p in root.iterdir() if p.is_dir()) if root.exists() else []
+          mapping_path=Path('artifacts/orderflow/strategy_state_mapping_v1.json')
+          mapping_manifest=None
+          if mapping_path.exists():
+              mapping_manifest=json.loads(mapping_path.read_text(encoding='utf-8')).get('manifest_sha256')
           payload={
               'schema_version': 1,
               'ledger': 'orderflow-discovery-ledger-v1',
               'updated_at_utc': datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),
               'batch_count': len(batches),
               'batches': batches,
+              'active_conditioning_epoch_manifest_sha256': mapping_manifest,
               'raw_replay_retained_for_this_run': '${{ steps.retention.outputs.keep_raw }}' == 'true',
               'claims': {
+                  'mixed_conditioning_epochs_pooled': False,
                   'verified_out_of_sample_edge_established': False,
                   'profitable_edge_established': False,
                   'live_order_transmission_supported': False,
