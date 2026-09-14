@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold-social-claims-v1.3-rule-specific",
+  "frozen_at_intent": "2026-09-14",
+  "status": "development_with_locked_internal_holdout",
+  "purpose": "Test additional rule-specific Reddit/YouTube XAUUSD strategies discovered after v1.2 was already frozen, without modifying earlier experiments.",
+  "data": {
+    "instrument": "XAUUSD",
+    "development_start": "2020-01-01",
+    "development_end_exclusive": "2024-01-01",
+    "locked_holdout_start": "2024-01-01",
+    "locked_holdout_end_exclusive": "2026-01-01",
+    "timeframes": ["M5","M15","H1","H4"],
+    "M5_is_causally_resampled_from_M1": true
+  },
+  "economics": {"round_trip_cost_bps":[2,5,10],"primary_cost_bps":5,"signal_on_completed_bar":true,"entry":"next bar open","same_bar_fill_forbidden":true,"leverage_after_holdout_pass_only":[2,5,10]},
+  "dependence": {"calendar_fold_days":63,"minimum_development_folds":12,"minimum_total_trades":80,"minimum_positive_fold_fraction":0.60,"state_before_pnl":true,"no_trade_crosses_fold_boundary":true},
+  "families": {
+    "reddit_london_orb_ema_retest_engulfing": {
+      "source_basis": "Reddit XAUUSD post reporting 100+ trades across about seven months: London opening range breakout, EMA direction filter, no first-break entry, wait for retest and engulfing confirmation.",
+      "timeframe":"M15",
+      "opening_range_bars":[1,2,4],
+      "ema_period":[20,50,200],
+      "max_retest_bars":[4,8],
+      "hold_bars":[4,8,16],
+      "mechanical_status":"proxy because source did not disclose EMA period, ORB duration or exit rule"
+    },
+    "reddit_vwap_wick_touch_continuation": {
+      "source_basis":"Reddit 5m VWAP strategy reportedly backtested about one year: wick touches daily/weekly VWAP, candle opens and closes same side, first valid setup of day, stop-order style continuation entry.",
+      "timeframe":"M5",
+      "vwap_anchor":["daily","weekly"],
+      "first_setup_only":[true],
+      "hold_bars":[6,12,24],
+      "mechanical_status":"fixed-horizon proxy; source stop-band and exact Asian-target execution not fully specified"
+    },
+    "reddit_bollinger_rsi50_recovery": {
+      "source_basis":"Reddit gold system: lower/upper Bollinger-band touch followed by RSI recovery back toward 50, with optional SMA momentum context.",
+      "timeframes":["M15","H1"],
+      "bb_length":[20],
+      "bb_stdev":[2.0],
+      "rsi_recovery_level":[45,50,55],
+      "max_recovery_bars":[4,8],
+      "sma_context":[0,50],
+      "hold_bars":[4,8,16]
+    },
+    "reddit_h4_bb_rsi_divergence": {
+      "source_basis":"Recent Reddit gold setup: H4 RSI divergence combined with roughly 20-day Bollinger extension/squeeze; entry after two-standard-deviation extension and three-candle divergence.",
+      "timeframe":"H4",
+      "bb_length_bars":[120],
+      "bb_stdev":[2.0],
+      "divergence_lookback_bars":[3,6],
+      "hold_bars":[6,12,24]
+    },
+    "youtube_rsi_divergence_range_reentry": {
+      "source_basis":"YouTube RSI Divergence (GOLD) strategy: divergence alone is not entry; wait for RSI to re-enter the 30-70 range and align with momentum.",
+      "timeframes":["H1","H4"],
+      "divergence_lookback_bars":[5,10,20],
+      "reentry_level":[30,70],
+      "trend_filter_ema":[0,50],
+      "hold_bars":[4,8,16],
+      "mechanical_status":"mechanical interpretation of publicly described process"
+    },
+    "youtube_vwap_momentum_retest": {
+      "source_basis":"YouTube XAUUSD VWAP playbook: momentum mode uses VWAP break and retest, with previous-day levels and ATR context.",
+      "timeframes":["M5","M15"],
+      "vwap_anchor":["daily"],
+      "retest_tolerance_atr":[0.10,0.25],
+      "level_filter":["none","previous_day_direction"],
+      "hold_bars":[4,8,16]
+    },
+    "youtube_vwap_extreme_mean_reversion": {
+      "source_basis":"Same YouTube playbook mean-reversion mode: fade extensions from VWAP/anchored average with ATR-sized distance.",
+      "timeframes":["M5","M15"],
+      "vwap_anchor":["daily"],
+      "distance_atr":[1.0,1.5,2.0],
+      "hold_bars":[4,8,16]
+    }
+  },
+  "development_gate": {"state_median_spearman_gt":0,"state_positive_fold_fraction_gte":0.60,"primary_median_fold_net_expectancy_bps_gt":0,"primary_median_fold_profit_factor_gt":1,"primary_positive_fold_fraction_gte":0.60,"minimum_total_trades":80,"must_beat_reversed_direction_control":true,"high_cost_median_expectancy_nonnegative":true,"parameter_neighborhood_stability_required":true},
+  "selection": {"max_candidates_opened_on_locked_holdout":3,"holdout_remains_sealed_until_candidate_freeze":true,"no_retuning_after_holdout_open":true,"locked_holdout_is_not_genuine_future_oos":true},
+  "claims": {"development_only":true,"holdout_opened":false,"verified_oos":false,"profitable_edge_established":false,"live_enabled":false}
+}
