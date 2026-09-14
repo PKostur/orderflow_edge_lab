@@ -6,11 +6,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from orderflow_edge_lab.evolutionary_price_agent import (
-    evaluate_genome,
-    evolve,
-    genome_from_dict,
-)
+from orderflow_edge_lab.evolutionary_price_agent import evaluate_genome, evolve, genome_from_dict
 from orderflow_edge_lab.mexc_history import fetch_mexc_futures_klines
 
 
@@ -26,12 +22,7 @@ def main() -> None:
     ecfg = protocol["evolution"]
     selection = protocol["selection"]
 
-    full = fetch_mexc_futures_klines(
-        str(data["symbol"]),
-        str(data["interval"]),
-        str(data["start"]),
-        str(data["holdout_end_exclusive"]),
-    )
+    full = fetch_mexc_futures_klines(str(data["symbol"]), str(data["interval"]), str(data["start"]), str(data["holdout_end_exclusive"]))
     discovery_end = pd.Timestamp(str(data["discovery_end_exclusive"]), tz="UTC")
     holdout_end = pd.Timestamp(str(data["holdout_end_exclusive"]), tz="UTC")
     discovery = full[full.index < discovery_end].copy()
@@ -41,14 +32,11 @@ def main() -> None:
     if len(holdout) < 200:
         raise SystemExit(f"holdout sample too small: {len(holdout)} bars")
 
-    evolve_cfg = {
-        "maximum_lookback_bars": int(inputs["maximum_lookback_bars"]),
-        "evolution": ecfg,
-    }
+    evolve_cfg = {"maximum_lookback_bars": int(inputs["maximum_lookback_bars"]), "evolution": ecfg}
     result = evolve(discovery, evolve_cfg)
     champion = genome_from_dict(result["best_genome"])
 
-    # This is intentionally the first and only use of the holdout in this run.
+    # Holdout is not available to evolution or selection. It is evaluated exactly once after the champion is frozen.
     holdout_eval = evaluate_genome(
         holdout,
         champion,
@@ -72,10 +60,7 @@ def main() -> None:
         int(holdout_aggregate.get("trades") or 0) >= 10
         and float(holdout_aggregate.get("expectancy_bps") or -1e9) > 0.0
         and float(holdout_aggregate.get("win_rate") or 0.0) > 0.50
-        and (
-            holdout_aggregate.get("profit_factor") == "INF"
-            or float(holdout_aggregate.get("profit_factor") or 0.0) > 1.0
-        )
+        and (holdout_aggregate.get("profit_factor") == "INF" or float(holdout_aggregate.get("profit_factor") or 0.0) > 1.0)
     )
 
     report = {
@@ -104,13 +89,14 @@ def main() -> None:
         "holdout_evaluation": holdout_eval,
         "holdout_survived_basic_economic_test": holdout_survived,
         "interpretation": (
-            "Champion survived the one-time holdout basic economic test; still exploratory and requires independent replication."
+            "Champion survived the one-time holdout basic economic test; this is promising but remains exploratory until independent replication."
             if holdout_survived
             else "Champion did not survive the one-time holdout basic economic test; treat the evolved discovery behavior as overfit or regime-dependent until disproven."
         ),
         "claims": {
             "profitable_edge_established": False,
-            "verified_out_of_sample_evidence": holdout_survived,
+            "single_untouched_holdout_positive": holdout_survived,
+            "verified_out_of_sample_evidence": False,
             "standalone_strategy_promotable": False,
             "live_order_transmission_supported": False,
         },
