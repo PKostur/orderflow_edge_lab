@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "protocol": "gold-social-claims-v1.3-rule-specific",
+  "development_period": {"start":"2020-01-01","end_exclusive":"2024-01-01"},
+  "attempted_cells": 216,
+  "no_trade_cells": 12,
+  "error_cells": 0,
+  "preliminary_development_passes": 0,
+  "holdout_opened": false,
+  "leverage_tested": false,
+  "best_by_family": {
+    "reddit_london_orb_ema_retest_engulfing": {"best_primary_median_fold_net_bps":-2.436,"profit_factor":0.747,"positive_fold_fraction":0.417,"trades":190},
+    "reddit_vwap_wick_touch_continuation": {"best_primary_median_fold_net_bps":-2.735,"profit_factor":0.747,"positive_fold_fraction":0.208,"state_median_spearman":0.017,"trades":694},
+    "reddit_bollinger_rsi50_recovery": {"best_primary_median_fold_net_bps":3.538,"profit_factor":1.131,"positive_fold_fraction":0.565,"state_median_spearman":-0.0615,"decision":"fails state and fold-stability gates"},
+    "reddit_h4_bb_rsi_divergence": {"best_primary_median_fold_net_bps":16.065,"profit_factor":1.847,"positive_fold_fraction":0.667,"trades":77,"decision":"fails minimum trades and scorable state evidence"},
+    "youtube_rsi_divergence_range_reentry": {"headline_example_primary_median_fold_net_bps":91.594,"headline_example_profit_factor":2.725,"headline_example_trades":34,"decision":"tiny sample and no usable state evidence; not promotable"},
+    "youtube_vwap_momentum_retest": {"best_primary_median_fold_net_bps":-4.060,"profit_factor":0.571,"positive_fold_fraction":0.083,"state_median_spearman":-0.0373,"trades":862},
+    "youtube_vwap_extreme_mean_reversion": {"best_primary_median_fold_net_bps":-4.546,"profit_factor":0.506,"positive_fold_fraction":0.0,"state_median_spearman":0.0381,"trades":10515}
+  },
+  "decision": "No rule-specific Reddit/YouTube gold claim passes the frozen development gates. Keep 2024-2025 holdout sealed and do not test leverage.",
+  "claims": {"verified_oos":false,"profitable_edge_established":false,"live_enabled":false}
+}
