@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "protocol_name": "strategy-discovery-v4.1-funding-events",
+  "frozen_at_intent": "2026-09-14",
+  "status": "development_with_locked_internal_holdout",
+  "purpose": "Test whether actual funding settlements and spot-perp dislocations predict executable one-leg perpetual returns after cash-and-carry state signals failed both-leg economics.",
+  "data": {
+    "source_artifact_workflow_run": 34875908501,
+    "source_artifact_id": 10360367682,
+    "source_artifact_sha256": "fa1800b26ea555a68338f708fef2dec1ed87842170b48c85601175cff1397a11",
+    "symbols": ["BTC","ETH","SOL","XRP","DOGE","BNB","ADA","LINK","SUI","ENA"],
+    "interval": "1h",
+    "development_end_exclusive": "2026-08-01",
+    "locked_holdout_folds": [16,17]
+  },
+  "dependence": {"calendar_fold_days":21,"development_folds":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],"discard_boundary_fold":15,"no_position_crosses_fold":true},
+  "causality": {"signal_at_completed_hour":true,"latest_funding_record_at_or_before_signal_only":true,"entry":"next perpetual hourly open","exit":"open after frozen hold hours","no_same_bar_fill":true,"one_active_trade_per_symbol":true},
+  "economics": {"perpetual_round_trip_cost_bps":[12.0,16.0,20.0],"primary_cost_bps":16.0,"leverage_after_unlevered_holdout_only":[2,5,10]},
+  "families": {
+    "extreme_funding_reversal": {"absolute_funding_threshold":[0.00010,0.00020,0.00040],"direction":"short positive funding / long negative funding","holds_hours":[8,24,72]},
+    "extreme_funding_continuation_control": {"absolute_funding_threshold":[0.00010,0.00020,0.00040],"direction":"long positive funding / short negative funding","holds_hours":[8,24,72]},
+    "funding_acceleration_reversal": {"settlement_lookback":[2,3,5],"acceleration_z":[1.0,1.5,2.0],"holds_hours":[8,24,72]},
+    "post_settlement_drift": {"funding_threshold":[0.00005,0.00010,0.00020],"settlement_lag_hours":[0,1,2],"direction_modes":["with_funding_sign","against_funding_sign"],"holds_hours":[4,8,24]},
+    "basis_extreme_reversal": {"basis_z_window_hours":[96,192,336],"entry_abs_z":[1.5,2.0,2.5],"direction":"short positive premium / long discount","holds_hours":[8,24,72]},
+    "funding_basis_disagreement": {"funding_threshold":[0.00005,0.00010],"basis_z_threshold":[1.0,1.5],"holds_hours":[8,24,72],"hypothesis":"funding sign and basis displacement disagree before repricing"},
+    "funding_basis_crowding_reversal": {"funding_threshold":[0.00005,0.00010,0.00020],"basis_z_threshold":[1.0,1.5,2.0],"holds_hours":[8,24,72],"hypothesis":"same-sign funding and basis extremes indicate crowded positioning that subsequently reverses"}
+  },
+  "state_before_pnl": {"target":"signed future perpetual return over matching hold horizon","median_fold_spearman_gt":0.0,"positive_fold_fraction_gte":0.60,"minimum_events":80,"pnl_not_used_for_state_selection":true},
+  "development_gate": {"median_fold_net_bps_gt":0.0,"median_fold_pf_gt":1.0,"positive_fold_fraction_gte":0.60,"minimum_total_trades":60,"minimum_symbol_breadth_fraction":0.60,"must_beat_reversed_direction_control":true,"high_cost_median_net_nonnegative":true,"parameter_neighborhood_stability":true},
+  "selection": {"maximum_holdout_candidates":3,"freeze_before_holdout":true,"no_retuning_after_holdout":true,"locked_holdout_is_not_genuine_future_oos":true},
+  "claims": {"verified_oos":false,"profitable_edge_established":false,"live_enabled":false}
+}
