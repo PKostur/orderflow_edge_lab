@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold-macro-trend-v2-internal-validation",
+  "candidate_freeze_commit": "cb35e41df289e18ba2725350b462687fa5561c20",
+  "development_source_head": "d67c36dc364cbef315c85db9acd29b64fd82e346",
+  "development_workflow_run": 34891740737,
+  "development_artifact_id": 10366559477,
+  "development_artifact_digest": "sha256:2440c9339c087fa6ae0e72482843968ce401618fc79ca61bd21016bfede02296",
+  "evidence_class": "locked_internal_retrospective_validation_not_future_oos",
+  "validation": {
+    "start": "2021-01-01T00:00:00Z",
+    "end_exclusive": "2024-01-01T00:00:00Z",
+    "calendar_fold_days": 126,
+    "no_trade_crosses_fold": true,
+    "minimum_state_folds": 5,
+    "minimum_nonoverlapping_trades": 18
+  },
+  "candidate": {
+    "id": "gold_silver_ratio_momentum_126_z1_hold21_v2",
+    "family": "gold_silver_ratio_state",
+    "window": 126,
+    "entry_abs_z": 1.0,
+    "mode": "gold_relative_momentum",
+    "hold_trading_bars": 21,
+    "signal": "completed daily close",
+    "entry": "next daily open",
+    "exit": "open after frozen hold",
+    "one_active_trade": true,
+    "same_bar_fill": false
+  },
+  "source_hashes": {
+    "gold_stooq_daily.csv": "2e1d8da22d691e21389e988a588c468c5898b732a44852ca0d0bd78fc8a567d4",
+    "silver_stooq_daily.csv": "f53952b5975599308115a3c0adcd708ce5ed5abf6bcb01e84981340bc86ec686",
+    "real_yield_DFII10.csv": "1e8c49f6325b5aadc6d53a82d400889a99bdcb8854bb668972a10127656897e4",
+    "nominal_yield_DGS10.csv": "065cb8c7eb270a00df2ab0215a8e0d86b8bd039756d5f0243fa2e691c8e048a6",
+    "broad_usd_DTWEXBGS.csv": "d73cc0dcbe3f9ff7fc0a026a8678689cae41f97f444a0c5be3700fd82cca2f78"
+  },
+  "economics": {
+    "round_trip_cost_bps": [2.0, 5.0, 10.0],
+    "primary_cost_bps": 5.0
+  },
+  "gate": {
+    "median_state_spearman_gt": 0.0,
+    "positive_state_fold_fraction_gte": 0.60,
+    "median_fold_net_primary_gt_bps": 0.0,
+    "median_fold_profit_factor_primary_gt": 1.0,
+    "positive_economic_fold_fraction_gte": 0.60,
+    "high_cost_median_fold_net_gte_bps": 0.0,
+    "must_beat_reversed_direction_mean": true,
+    "must_beat_equal_timing_long_gold_median_fold_risk_adjusted": true
+  },
+  "adversarial_reporting": {
+    "report_long_and_short_subsets": true,
+    "negative_short_side_is_warning_not_hidden": true,
+    "report_equal_timing_long_gold_mean_and_risk_adjusted": true
+  },
+  "promotion_boundary": {
+    "validation_pass_does_not_establish_verified_oos": true,
+    "validation_pass_only_authorizes_independent_source_replication_or_future_shadow_design": true,
+    "no_leverage": true,
+    "no_live_transmission": true
+  },
+  "claims": {
+    "verified_oos": false,
+    "profitable_edge_established": false,
+    "live_enabled": false
+  }
+}
