@@ -7,6 +7,7 @@ on:
     paths:
       - "config/gold_strategy_discovery_v1.json"
       - "scripts/run_gold_strategy_discovery_v1.py"
+      - "scripts/run_gold_strategy_discovery_v1_jsonsafe.py"
       - ".github/workflows/gold-strategy-discovery-v1.yml"
 
 permissions:
@@ -38,7 +39,7 @@ jobs:
           sha256sum artifacts/gold_strategy_discovery_v1/data/*.csv > artifacts/gold_strategy_discovery_v1/data/SHA256SUMS.txt
       - name: Run development tournament without opening holdout
         run: |
-          python scripts/run_gold_strategy_discovery_v1.py \
+          python scripts/run_gold_strategy_discovery_v1_jsonsafe.py \
             --data-dir artifacts/gold_strategy_discovery_v1/data \
             --output artifacts/gold_strategy_discovery_v1/development_results.json
       - name: Enforce data integrity floor
