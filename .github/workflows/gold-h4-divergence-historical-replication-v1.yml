@@ -1,0 +1,75 @@
+name: Gold H4 Divergence Historical Replication v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/gold-strategy-discovery-v1]
+    paths:
+      - "config/gold_h4_divergence_historical_replication_v1.json"
+      - "scripts/run_gold_h4_divergence_historical_replication_v1.py"
+      - ".github/workflows/gold-h4-divergence-historical-replication-v1.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gold-h4-divergence-historical-replication-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  replicate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Python runtime
+        run: python -m pip install pandas numpy
+      - name: Download independent Dukascopy XAUUSD H4 bid history
+        run: |
+          mkdir -p artifacts/gold_h4_divergence_replication/data
+          npx --yes dukascopy-node@latest \
+            -i xauusd \
+            -from 2010-01-01 \
+            -to 2020-01-01 \
+            -t h4 \
+            -p bid \
+            -v true \
+            -f csv \
+            -dir artifacts/gold_h4_divergence_replication/data \
+            -fn XAUUSD_DUKASCOPY_H4_2010_2020.csv \
+            -r 3 \
+            -re true
+          find artifacts/gold_h4_divergence_replication/data -maxdepth 2 -type f -print
+          sha256sum artifacts/gold_h4_divergence_replication/data/*.csv > artifacts/gold_h4_divergence_replication/data/SHA256SUMS.txt
+      - name: Run frozen five-cell replication and 20k cluster permutations per cell
+        run: |
+          data_file=$(find artifacts/gold_h4_divergence_replication/data -type f -name '*.csv' | head -n 1)
+          test -n "$data_file"
+          python scripts/run_gold_h4_divergence_historical_replication_v1.py \
+            --data "$data_file" \
+            --output artifacts/gold_h4_divergence_replication/result.json
+      - name: Guard holdout and claims
+        run: |
+          python - <<'PY'
+          import json
+          p='artifacts/gold_h4_divergence_replication/result.json'
+          r=json.load(open(p))
+          assert r['holdout_opened'] is False
+          assert r['claims']['verified_oos'] is False
+          assert r['claims']['profitable_edge_established'] is False
+          assert r['claims']['live_enabled'] is False
+          PY
+      - name: Preserve evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-h4-divergence-historical-replication-v1
+          path: artifacts/gold_h4_divergence_replication/
+          retention-days: 30
+          if-no-files-found: warn
