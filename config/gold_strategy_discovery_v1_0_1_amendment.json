@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold-strategy-discovery-v1.0.1",
+  "base_protocol": "gold-strategy-discovery-v1",
+  "frozen_at_intent": "2026-09-14",
+  "reason": "The original development computation reached final serialization but strict JSON rejected a NaN diagnostic value. No development leaderboard was persisted or inspected.",
+  "source_failed_run": {
+    "workflow_run": 34877800446,
+    "artifact_id": 10362726740,
+    "artifact_digest": "sha256:64defa307ae1f845d258f3fffc791ed85bb97bc37905601325ef80e2035262c6",
+    "head_sha": "1d3a8d221c5aafe9a90246cfa5ae0f4ee803283e"
+  },
+  "changes_only": [
+    "convert non-finite numeric diagnostics to JSON null before strict serialization",
+    "reuse the exact preserved XAUUSD data artifact from the failed run rather than refetching mutable upstream files"
+  ],
+  "unchanged": [
+    "all strategy families and parameter grids",
+    "all timeframes and development dates",
+    "all cost assumptions",
+    "all state-before-PnL and economic gates",
+    "all 63-day dependence folds",
+    "locked 2024-2025 internal holdout remains unopened",
+    "2026 replication remains inaccessible until an internal-holdout pass",
+    "leverage remains forbidden until an unlevered holdout pass",
+    "no verified-OOS, profitable-edge, or live-execution claim"
+  ],
+  "outcomes_inspected_before_amendment": false
+}
