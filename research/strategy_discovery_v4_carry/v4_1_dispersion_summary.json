@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "protocol": "strategy-discovery-v4.1-carry-dispersion",
+  "development_cells": 153,
+  "state_pass_cells": 38,
+  "preliminary_economic_passes": 2,
+  "holdout_opened": false,
+  "leverage_tested": false,
+  "preliminary_candidates": [
+    {
+      "family":"funding_spread_long_horizon","top_bottom_k":3,"funding_lookback_settlements":3,"hold_hours":72,
+      "trades":89,"state_median_spearman":0.2391402442,"state_positive_fold_fraction":0.9333333333,
+      "primary_median_fold_net_bps":16.0237,"primary_median_fold_pf":1.32695,"primary_positive_fold_fraction":0.60,"primary_mean_net_bps":11.0181,"high_cost_median_fold_net_bps":12.0237,
+      "adversarial_result":"fails fold stability: after removing strongest 21-day fold, positive-fold fraction falls to 57.14%; leave-one-symbol-out is also negative for BNB, ADA and ENA"
+    },
+    {
+      "family":"funding_spread_long_horizon","top_bottom_k":3,"funding_lookback_settlements":5,"hold_hours":72,
+      "trades":89,"state_median_spearman":0.19145546,"state_positive_fold_fraction":0.80,
+      "primary_median_fold_net_bps":10.23663,"primary_median_fold_pf":1.24888,"primary_positive_fold_fraction":0.6666666667,"primary_mean_net_bps":10.5301,"high_cost_median_fold_net_bps":6.23663,
+      "adversarial_result":"survives strongest-fold removal but fails leave-one-symbol-out breadth: removing XRP, DOGE or ADA turns median-fold expectancy negative"
+    }
+  ],
+  "decision":"No v4.1 candidate is broad enough to open the parent carry holdout. Preserve funding-spread state signal as a research clue, but do not claim edge or use leverage.",
+  "claims":{"verified_oos":false,"profitable_edge_established":false,"live_enabled":false}
+}
