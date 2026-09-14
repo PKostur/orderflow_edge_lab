@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold-social-claims-v1.3-neighborhood-gate",
+  "frozen_at_intent": "2026-09-14",
+  "outcomes_inspected_before_amendment": false,
+  "rule": {
+    "definition": "direct neighbors are cells in the same family and timeframe differing by one ordered grid step in exactly one parameter, including hold length",
+    "minimum_direct_neighbors_when_available": 2,
+    "required_fraction_of_direct_neighbors": 0.5,
+    "neighbor_requirements": [
+      "primary 5-bps median-fold net expectancy > 0",
+      "primary median-fold profit factor > 1",
+      "state median Spearman has the same sign as the candidate when finite"
+    ],
+    "if_fewer_than_two_neighbors_exist": "all available direct neighbors must satisfy the requirements"
+  },
+  "unchanged": [
+    "strategy families and parameter grids",
+    "development and holdout dates",
+    "cost cases",
+    "dependence folds",
+    "state-before-PnL rules",
+    "candidate count limit",
+    "leverage only after unlevered holdout pass"
+  ]
+}
