@@ -33,10 +33,11 @@ jobs:
             --config config/strategy_discovery_v4_carry.json \
             --output-dir artifacts/strategy_discovery_v4_carry/data \
             --max-workers 3
-      - name: Preserve immutable dataset
+      - name: Preserve immutable dataset and failed-admission diagnostics
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: strategy-discovery-v4-carry-data
           path: artifacts/strategy_discovery_v4_carry/data/
           retention-days: 30
-          if-no-files-found: error
+          if-no-files-found: warn
