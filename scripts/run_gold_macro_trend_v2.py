@@ -36,8 +36,12 @@ def load_price(path: Path):
     return d[['open','high','low','close']].dropna()
 
 def load_fred(path: Path):
-    d=pd.read_csv(path); d.iloc[:,0]=pd.to_datetime(d.iloc[:,0],utc=True,errors='coerce'); d=d.dropna(subset=[d.columns[0]]).set_index(d.columns[0]).sort_index()
-    s=pd.to_numeric(d.iloc[:,0].replace('.',np.nan),errors='coerce'); return s
+    d=pd.read_csv(path)
+    dates=pd.to_datetime(d.iloc[:,0],utc=True,errors='coerce')
+    vals=pd.to_numeric(d.iloc[:,1].replace('.',np.nan),errors='coerce')
+    s=pd.Series(vals.to_numpy(float),index=pd.DatetimeIndex(dates),name=str(d.columns[1]))
+    s=s[~s.index.isna()].sort_index()
+    return s[~s.index.duplicated(keep='last')]
 
 def atr(d,n=20):
     pc=d.close.shift(1); tr=pd.concat([(d.high-d.low),(d.high-pc).abs(),(d.low-pc).abs()],axis=1).max(axis=1)
