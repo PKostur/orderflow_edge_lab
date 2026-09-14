@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold-macro-trend-v2.1-source-amendment",
+  "parent_protocol": "gold-macro-trend-v2",
+  "amended_before_any_strategy_outcome_inspection": true,
+  "reason": "The hosted Stooq endpoint returned an unusable two-row browser-verification response. The development tournament never ran and no strategy result was produced.",
+  "source_change": {
+    "gold": "Yahoo Finance GC=F daily OHLC continuous front gold futures proxy",
+    "silver": "Yahoo Finance SI=F daily OHLC continuous front silver futures proxy",
+    "macro": "unchanged FRED DFII10, DGS10 and DTWEXBGS",
+    "caveat": "Continuous futures proxies contain contract-roll and futures-basis effects and are not equivalent to spot XAUUSD/XAGUSD. Any candidate must later replicate on an independent spot/second source before promotion."
+  },
+  "unchanged": [
+    "development_start_2010-01-01",
+    "development_end_exclusive_2021-01-01",
+    "locked_2021-2023_internal_validation",
+    "all_strategy_families_and_parameter_grids",
+    "126_day_dependence_folds",
+    "2_5_10_bps_costs",
+    "state_before_pnl_gates",
+    "buy_and_hold_and_reversed_controls",
+    "maximum_four_candidates",
+    "no_leverage",
+    "no_live_claim"
+  ],
+  "claims": {
+    "verified_oos": false,
+    "profitable_edge_established": false,
+    "live_enabled": false
+  }
+}
