@@ -1,0 +1,52 @@
+{
+  "schema_version": "continuous-self-improvement-v1-summary",
+  "epochs_executed": 332,
+  "valid_state_transfer": {
+    "volatility_60s": {
+      "model": "range-only ridge trained on 12 pre-transfer ENA batches",
+      "median_cross_symbol_spearman": 0.352,
+      "positive_symbols": 6,
+      "symbols": 6,
+      "dependence_clusters": 1
+    },
+    "liquidity_15s": {
+      "model": "v2 E12 HGB trained on 12 pre-transfer ENA batches",
+      "median_cross_symbol_spearman": 0.163,
+      "positive_symbols": 4,
+      "symbols": 6,
+      "dependence_clusters": 1
+    },
+    "direction_300s_adversarial": {
+      "median_cross_symbol_spearman": 0.019,
+      "status": "rejected"
+    }
+  },
+  "gross_expectancy_median_bps": {
+    "5s": -0.9224147839251509,
+    "15s": -0.5129551189488556,
+    "30s": -0.4801997805910579
+  },
+  "valid_gate_delta_median_bps_at_4bps": {
+    "liquidity": {
+      "5s": -0.07144315386833888,
+      "15s": 0.009893382156543229,
+      "30s": -0.17343600683522054
+    },
+    "volatility": {
+      "5s": -0.40758335098552223,
+      "15s": -0.5847399648423273,
+      "30s": -0.2928191328519558
+    }
+  },
+  "stop_risk_median_pf_4bps_025pct": {
+    "rr1": 0.069,
+    "rr2": 0.107,
+    "rr3": 0.13
+  },
+  "conclusion": "No tradable edge in the current frozen strategy family. Preserve volatility-state predictor for future independent validation; version a new directional/payoff protocol before future evidence.",
+  "claims": {
+    "profitable_edge_established": false,
+    "verified_untouched_oos": false,
+    "live_execution_authorized": false
+  }
+}
