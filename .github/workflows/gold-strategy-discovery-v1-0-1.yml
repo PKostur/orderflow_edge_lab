@@ -1,0 +1,84 @@
+name: Gold Strategy Discovery v1.0.1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/gold-strategy-discovery-v1]
+    paths:
+      - "config/gold_strategy_discovery_v1_0_1_amendment.json"
+      - "scripts/run_gold_strategy_discovery_v1_0_1.py"
+      - ".github/workflows/gold-strategy-discovery-v1-0-1.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: gold-strategy-discovery-v1-0-1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tournament:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install runtime
+        run: python -m pip install pandas numpy
+      - name: Download exact preserved v1 data artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: gold-strategy-discovery-v1-development
+          path: artifacts/gold_strategy_discovery_v1
+          github-token: ${{ github.token }}
+          repository: PKostur/orderflow_edge_lab
+          run-id: 34877800446
+      - name: Verify preserved data artifact
+        run: |
+          test -f artifacts/gold_strategy_discovery_v1/data/SHA256SUMS.txt
+          cd artifacts/gold_strategy_discovery_v1/data
+          sha256sum -c SHA256SUMS.txt
+      - name: Run unchanged development tournament with finite JSON serialization
+        run: |
+          python scripts/run_gold_strategy_discovery_v1_0_1.py \
+            --data-dir artifacts/gold_strategy_discovery_v1/data \
+            --output artifacts/gold_strategy_discovery_v1/development_results_v1_0_1.json
+      - name: Enforce development-only integrity and claim boundary
+        run: |
+          python - <<'PY'
+          import json
+          p='artifacts/gold_strategy_discovery_v1/development_results_v1_0_1.json'
+          r=json.load(open(p, encoding='utf-8'))
+          floors={'M15':40,'H1':8,'H4':2,'D1':0.8}
+          bad={tf:v for tf,v in r['integrity'].items() if v['median_bars_per_day'] < floors[tf]}
+          if bad:
+              raise SystemExit(f'data integrity floor failed: {bad}')
+          if r['holdout_opened']:
+              raise SystemExit('locked 2024-2025 holdout must remain sealed')
+          if r['claims']['verified_oos'] or r['claims']['profitable_edge_established'] or r['claims']['live_enabled']:
+              raise SystemExit('development workflow attempted claim escalation')
+          if not r.get('serialization_only_amendment'):
+              raise SystemExit('v1.0.1 provenance marker missing')
+          print({k:r[k] for k in ['trial_count','error_count','prelim_pass_count','holdout_opened']})
+          PY
+      - name: Deterministic release-manager guard
+        run: |
+          python -m pip install -e ".[research]"
+          orderflow-multi-agent --output artifacts/gold_strategy_discovery_v1/multi_agent_report_v1_0_1.json
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/gold_strategy_discovery_v1/multi_agent_report_v1_0_1.json', encoding='utf-8'))
+          if r['release_manager']['status'] != 'reviewable':
+              raise SystemExit(r['release_manager']['next_actions'])
+          PY
+      - name: Preserve v1.0.1 development evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-strategy-discovery-v1-0-1-development
+          path: artifacts/gold_strategy_discovery_v1/
+          retention-days: 30
+          if-no-files-found: error
