@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold-social-claims-v1.2-implementation",
+  "base_protocol": "gold-social-claims-v1.2",
+  "outcomes_inspected_before_amendment": false,
+  "changes_only": [
+    "London-Asia strategies define the Asia range from 00:00 inclusive to 07:00 exclusive in Europe/London local time and permit entries from 07:00 inclusive to 11:00 exclusive Europe/London time.",
+    "NY-session strategies define NY AM from 07:00 inclusive to 10:00 exclusive America/New_York time. Asia liquidity is the UTC 00:00-06:00 range for that UTC date; London liquidity is the Europe/London 07:00-open range observed causally up to the NY signal time; previous-day liquidity is the completed prior UTC day high/low.",
+    "For confirmation_bars=1, the sweep/reclaim candle itself is sufficient. For confirmation_bars=2, the immediately following completed candle must close further in the reversal direction before the signal is emitted.",
+    "Stochastic divergence proxy requires a fresh price extreme versus the prior frozen lookback while the stochastic D value does not make a corresponding oscillator extreme; stochastic is computed from percent-K then smoothed by the declared D length.",
+    "Tokyo-London-NY reversal defines Tokyo as UTC 00:00-06:00. A London push is any completed bar before 11:00 Europe/London that closes outside the Tokyo range. A NY reversal signal requires reclaim of the Tokyo boundary plus a close through the prior declared BOS-lookback opposite extreme.",
+    "NY sweep-CHOCH-FVG proxy: after a qualifying sweep/reclaim, within 10 completed M1 bars a displacement candle must close through the prior declared CHOCH-lookback extreme and have true body at least the declared ATR multiple. A three-candle fair-value gap must exist in the reversal direction. Entry is the first later touch of the FVG midpoint within the remaining setup window; stop is beyond the original sweep wick; target is the declared R multiple. If stop and target are both touched in one bar, stop is counted first.",
+    "3AM iFVG proxy: at 03:00 America/New_York, build the completed prior-range window of the declared length. During the following declared anchor-window minutes, require an ATR-sized displacement that breaks the range and leaves a three-candle FVG. A reversal signal occurs only if price closes back through the FVG midpoint within five bars. Entry is next bar open and direction is opposite the displacement. This is explicitly a mechanical proxy, not the creator-exact system.",
+    "All fixed-horizon state targets are signed next-open-to-exit-open returns over the same frozen hold horizon. Bracket-family state screening uses signed 30-minute next-open forward return before bracket PnL is examined.",
+    "No signal or trade may cross a 63-day dependence-cluster boundary or the development/holdout boundary."
+  ],
+  "unchanged": [
+    "strategy families",
+    "parameter grids",
+    "development and holdout dates",
+    "cost cases",
+    "state-before-PnL rule",
+    "development gates",
+    "candidate limit",
+    "leverage prohibition before unlevered holdout pass"
+  ]
+}
