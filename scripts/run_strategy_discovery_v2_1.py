@@ -11,6 +11,9 @@ import numpy as np
 import pandas as pd
 
 
+PF_ALL_WIN_SENTINEL = 1_000_000.0
+
+
 def load_frame(path: Path) -> pd.DataFrame:
     frame = pd.read_csv(path, index_col=0)
     frame.index = pd.to_datetime(frame.index, utc=True)
@@ -149,6 +152,10 @@ def forward_return(frame: pd.DataFrame, hold: int) -> pd.Series:
     return exit_ / entry - 1.0
 
 
+def exit_timestamp(index: pd.DatetimeIndex, hold: int) -> pd.Series:
+    return pd.Series(index, index=index).shift(-(1 + int(hold)))
+
+
 def fold_labels(index: pd.DatetimeIndex, start: pd.Timestamp, fold_days: int) -> pd.Series:
     delta = (index - start) / pd.Timedelta(days=fold_days)
     return pd.Series(np.floor(delta).astype(int), index=index)
@@ -169,7 +176,7 @@ def pf(values: list[float]) -> float:
     pos = sum(v for v in values if v > 0)
     neg = -sum(v for v in values if v < 0)
     if neg <= 0:
-        return float("inf") if pos > 0 else 0.0
+        return PF_ALL_WIN_SENTINEL if pos > 0 else 0.0
     return pos / neg
 
 
@@ -198,9 +205,18 @@ def run(config: dict[str, Any], data_dir: Path, interval: str) -> dict[str, Any]
                 f, b = aligned_pair(f0, btc)
                 score, eligible = score_family(f, b, family, params)
                 fr = forward_return(f, hold)
+                exits = exit_timestamp(f.index, hold)
                 folds = fold_labels(f.index, global_start, fold_days)
-                d = pd.DataFrame({"score": score, "eligible": eligible, "fwd": fr, "fold": folds}, index=f.index)
-                d = d[d["eligible"] & d["score"].notna() & d["fwd"].notna() & (d["fold"] >= 0)]
+                exit_folds = fold_labels(pd.DatetimeIndex(exits.dropna()), global_start, fold_days).reindex(f.index)
+                d = pd.DataFrame({"score": score, "eligible": eligible, "fwd": fr, "fold": folds, "exit_fold": exit_folds, "exit_ts": exits}, index=f.index)
+                d = d[
+                    d["eligible"]
+                    & d["score"].notna()
+                    & d["fwd"].notna()
+                    & d["exit_ts"].notna()
+                    & (d["fold"] >= 0)
+                    & (d["exit_fold"] == d["fold"])
+                ]
                 per_symbol[symbol] = d
                 for row in d.itertuples():
                     obs.append({"symbol": symbol, "timestamp": row.Index, "fold": int(row.fold), "score": float(row.score), "fwd": float(row.fwd)})
@@ -245,9 +261,7 @@ def run(config: dict[str, Any], data_dir: Path, interval: str) -> dict[str, Any]
                         fold_trades.setdefault(fold, []).append(net)
                         reversed_fold.setdefault(fold, []).append(-gross - cost)
                         symbol_trades[symbol].append(net)
-                        pos = frames[symbol].index.searchsorted(ts)
-                        exit_pos = min(pos + hold, len(frames[symbol].index) - 1)
-                        next_allowed = frames[symbol].index[exit_pos]
+                        next_allowed = pd.Timestamp(row["exit_ts"])
                 fold_exps = [float(np.mean(v)) for v in fold_trades.values() if v]
                 fold_pfs = [pf(v) for v in fold_trades.values() if v]
                 rev_exps = [float(np.mean(v)) for v in reversed_fold.values() if v]
@@ -279,8 +293,9 @@ def run(config: dict[str, Any], data_dir: Path, interval: str) -> dict[str, Any]
     primary.sort(key=lambda r: (r["economic_pass"], r["median_fold_net_expectancy_bps"]), reverse=True)
     state_sorted = sorted(state_trials, key=lambda r: (r["state_pass"], r["median_fold_spearman"]), reverse=True)
     return {
-        "schema_version": 1, "protocol_name": config["protocol_name"], "interval": interval,
-        "symbols": symbols, "state_trial_count": len(state_trials), "state_pass_count": sum(x["state_pass"] for x in state_trials),
+        "schema_version": 1, "protocol_name": "strategy-discovery-v2.1.1-low-turnover", "interval": interval,
+        "base_protocol": config["protocol_name"], "symbols": symbols,
+        "state_trial_count": len(state_trials), "state_pass_count": sum(x["state_pass"] for x in state_trials),
         "translation_count": len(translations), "economic_pass_count_primary": sum(x["economic_pass"] for x in primary),
         "top_state": state_sorted[:30], "primary_cost_leaderboard": primary[:60],
         "all_state_trials": state_trials, "all_translations": translations,
