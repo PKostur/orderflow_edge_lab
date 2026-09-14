@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "protocol_name": "strategy-discovery-v3-market-neutral",
+  "frozen_at_intent": "2026-09-14",
+  "status": "development_with_locked_internal_holdout",
+  "purpose": "Test true two-leg market-neutral relative-value strategies after one-leg directional and residual-momentum families failed robust economic replication.",
+  "data": {
+    "source": "MEXC public futures klines",
+    "intervals": ["1h"],
+    "start": "2025-09-01",
+    "end_exclusive": "2026-09-12",
+    "development_end_exclusive": "2026-08-01",
+    "locked_internal_holdout_start": "2026-08-01",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "market_factor": "BTC_USDT",
+    "universe_selection_uses_strategy_pnl": false
+  },
+  "dependence": {
+    "calendar_fold_days": 21,
+    "minimum_development_folds": 10,
+    "minimum_symbols": 7,
+    "all_calendar_contemporaneous_symbols_share_one_fold_cluster": true,
+    "no_trade_may_cross_fold_or_development_holdout_boundary": true
+  },
+  "causality": {
+    "signal_uses_completed_bar_t": true,
+    "entry": "next bar open t+1 on both legs",
+    "exit": "open after frozen hold_bars on both legs",
+    "rolling_relationships_use_past_and_current_completed_bars_only": true,
+    "hedge_ratio_is_lagged_one_bar_before_entry": true,
+    "no_same_bar_fill": true,
+    "one_active_position_per_strategy_instrument_set": true
+  },
+  "relationship_validity": {
+    "runs_before_state_or_pnl_screen": true,
+    "adf_max_pvalue_for_reversion": 0.10,
+    "half_life_hours_min": 2.0,
+    "half_life_hours_max": 168.0,
+    "minimum_training_observations": 96,
+    "pair_discovery": {
+      "candidate_pool": "all non-BTC pair combinations",
+      "select_top_n_per_training_fold": 12,
+      "ranking": "absolute training return correlation then ADF p-value; never strategy PnL",
+      "minimum_abs_return_correlation": 0.50
+    },
+    "cointegration_wording_boundary": "Only call a relationship cointegrated when the frozen ADF residual gate passes; otherwise call it a rolling relative-value residual."
+  },
+  "state_screen": {
+    "required_before_economic_translation": true,
+    "metric": "Spearman between signed convergence score and future two-leg residual return within each calendar dependence fold",
+    "median_development_spearman_gt": 0.0,
+    "minimum_positive_development_fold_fraction": 0.60,
+    "minimum_state_events": 80,
+    "strategy_pnl_not_used_for_relationship_or_state_selection": true
+  },
+  "economics": {
+    "portfolio_returns_are_on_gross_notional_normalized_weights": true,
+    "round_trip_leg_cost_bps_cases": {
+      "low": {"alt": 12.0, "btc": 6.0},
+      "primary": {"alt": 16.0, "btc": 8.0},
+      "high": {"alt": 20.0, "btc": 10.0}
+    },
+    "alt_alt_round_trip_leg_cost_bps_cases": {"low": 12.0, "primary": 16.0, "high": 20.0},
+    "hedge_rebalance_cost_bps_per_unit_turnover": 2.0,
+    "funding": "excluded unless a legitimate historical funding series is separately frozen and joined causally; absence cannot be treated as zero-cost evidence",
+    "primary_case": "primary"
+  },
+  "holds_hours": [4, 8, 12, 24, 48],
+  "families": {
+    "rolling_beta_residual_reversion": {
+      "tier": "simple_market_neutral",
+      "beta_windows": [96, 192, 336],
+      "z_thresholds": [1.5, 2.0],
+      "holds_hours": [4, 8, 12, 24, 48],
+      "requires_adf": true
+    },
+    "rolling_ols_logspread_reversion": {
+      "tier": "classical_stat_arb",
+      "regression_windows": [96, 192, 336],
+      "z_thresholds": [1.5, 2.0],
+      "holds_hours": [4, 8, 12, 24, 48],
+      "requires_adf": true
+    },
+    "kalman_beta_residual_reversion": {
+      "tier": "adaptive_stat_arb",
+      "process_variances": [0.00001, 0.0001],
+      "observation_variances": [0.001, 0.01],
+      "z_thresholds": [1.5, 2.0],
+      "holds_hours": [4, 8, 12, 24, 48],
+      "requires_adf": true
+    },
+    "cross_sectional_beta_residual_reversion": {
+      "tier": "cross_sectional_market_neutral",
+      "residual_lookbacks": [4, 12, 24],
+      "top_bottom_k": [1, 2],
+      "holds_hours": [4, 8, 12, 24, 48],
+      "requires_adf": false
+    },
+    "cross_sectional_beta_residual_momentum_control": {
+      "tier": "cross_sectional_control",
+      "residual_lookbacks": [4, 12, 24],
+      "top_bottom_k": [1, 2],
+      "holds_hours": [4, 8, 12, 24, 48],
+      "requires_adf": false
+    },
+    "pca_one_factor_residual_reversion": {
+      "tier": "institutionally_inspired_factor_neutral",
+      "pca_windows": [96, 192, 336],
+      "z_thresholds": [1.5, 2.0],
+      "holds_hours": [4, 8, 12, 24, 48],
+      "requires_adf": false
+    },
+    "pca_one_factor_residual_momentum_control": {
+      "tier": "factor_control",
+      "pca_windows": [96, 192, 336],
+      "z_thresholds": [1.5, 2.0],
+      "holds_hours": [4, 8, 12, 24, 48],
+      "requires_adf": false
+    },
+    "alt_alt_cointegration_reversion": {
+      "tier": "pair_stat_arb",
+      "pair_selection": "training-only relationship gate",
+      "regression_windows": [192, 336],
+      "z_thresholds": [1.5, 2.0],
+      "holds_hours": [8, 24, 48],
+      "requires_adf": true
+    }
+  },
+  "estimated_core_epoch_count": 384,
+  "selection": {
+    "development_only_ranking": ["median_fold_net_expectancy_bps", "positive_fold_fraction", "median_fold_profit_factor", "lower_cost_sensitivity"],
+    "minimum_total_trades": 80,
+    "minimum_positive_development_fold_fraction": 0.60,
+    "minimum_positive_symbol_or_pair_fraction": 0.60,
+    "median_development_net_expectancy_bps_gt": 0.0,
+    "median_development_profit_factor_gt": 1.0,
+    "must_beat_reversed_direction_control": true,
+    "requires_parameter_neighborhood_stability": true,
+    "maximum_candidates_opened_on_locked_internal_holdout": 3,
+    "locked_holdout_is_not_genuine_future_oos": true
+  },
+  "locked_internal_holdout_gate": {
+    "parameters_and_direction_frozen_before_open": true,
+    "median_net_expectancy_bps_gt": 0.0,
+    "profit_factor_gt": 1.0,
+    "positive_holdout_cluster_fraction_gt_or_equal": 0.50,
+    "no_retuning_after_open": true
+  },
+  "risk_and_leverage": {
+    "mae_mfe_of_combined_two_leg_portfolio_required_before_any_promotion": true,
+    "leverage_grid_only_after_unlevered_development_and_locked_holdout_pass": [2, 5, 10],
+    "leverage_cannot_rescue_negative_expectancy": true,
+    "live_execution_supported": false
+  },
+  "claims": {
+    "development_screening_only": true,
+    "locked_holdout_is_internal_not_future_oos": true,
+    "profitable_edge_established": false,
+    "live_enabled": false
+  }
+}
