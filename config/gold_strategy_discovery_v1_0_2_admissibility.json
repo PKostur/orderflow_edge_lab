@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold-strategy-discovery-v1.0.2-data-admissibility",
+  "base_protocol": "gold-strategy-discovery-v1",
+  "frozen_at_intent": "2026-09-14",
+  "reason": "The public archive contains daily bars in files labeled M15/H1/H4 before their true intraday history begins. The original integrity floor correctly rejected the mixed-granularity run.",
+  "outcomes_from_rejected_run_used_for_strategy_changes": false,
+  "admissible_start_by_timeframe": {
+    "M15": "2018-09-14",
+    "H1": "2018-03-19",
+    "H4": "2018-03-19",
+    "D1": "2010-01-01"
+  },
+  "admission_basis": {
+    "M15": "first date with >=80 bars/day followed by sustained ~92 bars/day coverage",
+    "H1": "first date with >=20 bars/day followed by sustained ~23 bars/day coverage",
+    "H4": "first date with >=5 bars/day followed by sustained ~6 bars/day coverage",
+    "D1": "daily granularity is valid from 2010"
+  },
+  "unchanged": [
+    "all strategy families and parameter grids",
+    "development end 2024-01-01",
+    "locked holdout 2024-01-01 through 2026-01-01",
+    "costs 2/5/10 bps",
+    "63-day dependence folds",
+    "state-before-PnL and all development gates",
+    "no leverage before unlevered holdout pass"
+  ]
+}
