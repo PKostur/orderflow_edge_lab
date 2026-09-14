@@ -6,6 +6,7 @@ on:
     branches: [research/gold-strategy-discovery-v1]
     paths:
       - "config/gold_h4_divergence_historical_replication_v1.json"
+      - "config/gold_h4_divergence_historical_replication_v1_1_amendment.json"
       - "scripts/run_gold_h4_divergence_historical_replication_v1.py"
       - ".github/workflows/gold-h4-divergence-historical-replication-v1.yml"
 
@@ -30,29 +31,64 @@ jobs:
           python-version: "3.12"
       - name: Install Python runtime
         run: python -m pip install pandas numpy
-      - name: Download independent Dukascopy XAUUSD H4 bid history
+      - name: Download independent Dukascopy XAUUSD H4 bid history in yearly chunks
         run: |
-          mkdir -p artifacts/gold_h4_divergence_replication/data
-          npx --yes dukascopy-node@latest \
-            -i xauusd \
-            -from 2010-01-01 \
-            -to 2020-01-01 \
-            -t h4 \
-            -p bid \
-            -v true \
-            -f csv \
-            -dir artifacts/gold_h4_divergence_replication/data \
-            -fn XAUUSD_DUKASCOPY_H4_2010_2020.csv \
-            -r 3 \
-            -re true
+          set -euo pipefail
+          mkdir -p artifacts/gold_h4_divergence_replication/data/chunks
+          for year in $(seq 2010 2019); do
+            next=$((year + 1))
+            out="XAUUSD_DUKASCOPY_H4_${year}_${next}.csv"
+            ok=0
+            for attempt in 1 2 3 4; do
+              if npx --yes dukascopy-node@latest \
+                -i xauusd \
+                -from "${year}-01-01" \
+                -to "${next}-01-01" \
+                -t h4 \
+                -p bid \
+                -v true \
+                -f csv \
+                -dir artifacts/gold_h4_divergence_replication/data/chunks \
+                -fn "$out" \
+                -r 3 \
+                -re true; then
+                ok=1
+                break
+              fi
+              sleep $((attempt * 8))
+            done
+            test "$ok" -eq 1
+            sleep 3
+          done
+          python - <<'PY'
+          from pathlib import Path
+          import pandas as pd
+
+          root = Path('artifacts/gold_h4_divergence_replication/data/chunks')
+          files = sorted(root.rglob('*.csv'))
+          if len(files) != 10:
+              raise SystemExit(f'expected 10 yearly csv chunks, found {len(files)}: {files}')
+          frames = []
+          for p in files:
+              d = pd.read_csv(p)
+              d['_source_file'] = p.name
+              frames.append(d)
+          out = pd.concat(frames, ignore_index=True)
+          time_col = next((c for c in out.columns if c.lower() in {'timestamp','time','date','datetime'}), out.columns[0])
+          ts = pd.to_datetime(out[time_col], utc=True, errors='coerce')
+          out = out.assign(_parsed_ts=ts).dropna(subset=['_parsed_ts']).sort_values('_parsed_ts')
+          data_cols = [c for c in out.columns if c not in {'_source_file','_parsed_ts'}]
+          out = out.drop_duplicates(subset=data_cols, keep='first').drop(columns=['_source_file','_parsed_ts'])
+          dest = Path('artifacts/gold_h4_divergence_replication/data/XAUUSD_DUKASCOPY_H4_2010_2020.csv')
+          out.to_csv(dest, index=False)
+          print({'chunks': len(files), 'rows': len(out), 'first': str(ts.min()), 'last': str(ts.max())})
+          PY
           find artifacts/gold_h4_divergence_replication/data -maxdepth 2 -type f -print
-          sha256sum artifacts/gold_h4_divergence_replication/data/*.csv > artifacts/gold_h4_divergence_replication/data/SHA256SUMS.txt
+          sha256sum artifacts/gold_h4_divergence_replication/data/XAUUSD_DUKASCOPY_H4_2010_2020.csv > artifacts/gold_h4_divergence_replication/data/SHA256SUMS.txt
       - name: Run frozen five-cell replication and 20k cluster permutations per cell
         run: |
-          data_file=$(find artifacts/gold_h4_divergence_replication/data -type f -name '*.csv' | head -n 1)
-          test -n "$data_file"
           python scripts/run_gold_h4_divergence_historical_replication_v1.py \
-            --data "$data_file" \
+            --data artifacts/gold_h4_divergence_replication/data/XAUUSD_DUKASCOPY_H4_2010_2020.csv \
             --output artifacts/gold_h4_divergence_replication/result.json
       - name: Guard holdout and claims
         run: |
