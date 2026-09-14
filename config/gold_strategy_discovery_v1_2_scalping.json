@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold-strategy-discovery-v1.2-scalping",
+  "frozen_at_intent": "2026-09-14",
+  "status": "development_with_locked_internal_holdout",
+  "parent_source_head": "1e95c1f22c02e58cc88bb1c8674eb4cad77dcba1",
+  "purpose": "Test Reddit/YouTube XAUUSD scalping claims on their advertised 1m/5m geometry instead of approximating them on M15.",
+  "source_boundary": {
+    "community_claims_are_hypothesis_sources_only": true,
+    "headline_win_rates_are_not_evidence": true,
+    "incomplete_video_rules_are_named_mechanical_proxies": true,
+    "gold_v1_0_1_results_inspected_before_freeze": false,
+    "gold_v1_1_results_inspected_before_freeze": false
+  },
+  "data": {
+    "instrument": "XAUUSD cash-gold proxy",
+    "public_source": "simom1/XAUUSD-history Gold-Cash/XAUUSD/XAUUSD_M1_2023_2026.csv",
+    "native_timeframe": "M1",
+    "derived_timeframe": "M5 causal OHLCV resample",
+    "development_start": "2023-01-01",
+    "development_end_exclusive": "2025-01-01",
+    "locked_internal_holdout_start": "2025-01-01",
+    "locked_internal_holdout_end_exclusive": "2026-01-01",
+    "post_holdout_replication_start": "2026-01-01",
+    "post_holdout_replication_end_exclusive": "2026-09-01"
+  },
+  "dependence": {
+    "calendar_fold_days": 42,
+    "minimum_development_folds": 10,
+    "locked_holdout_opened": false,
+    "no_trade_may_cross_fold_boundary": true
+  },
+  "economics": {
+    "round_trip_cost_bps": [2.0,5.0,10.0],
+    "primary_cost_bps": 5.0,
+    "note": "cash-XAU proxy cost cases are sensitivity assumptions; no broker-specific spread claim"
+  },
+  "families": {
+    "youtube_ema50_rsi8_macd_proxy": {
+      "timeframes": ["M1","M5"],
+      "source_claim": "EMA50 trend + RSI8 pullback/momentum + MACD confirmation",
+      "ema": 50,
+      "rsi_length": 8,
+      "rsi_long_threshold": [50,55],
+      "macd": [[12,26,9]],
+      "entry": "trend-aligned candle after pullback with MACD histogram agreeing",
+      "holds_bars": [3,5,10,20]
+    },
+    "youtube_ema50_100_rsi_proxy": {
+      "timeframe": "M5",
+      "source_claim": "EMA50/100 + RSI high-profitability gold scalping claim",
+      "rsi_length": 14,
+      "rsi_threshold": [50,55,60],
+      "entry": "EMA50/100 trend alignment with RSI confirmation",
+      "holds_bars": [3,5,10,20]
+    },
+    "youtube_ema200_rsi_proxy": {
+      "timeframe": "M5",
+      "source_claim": "EMA200 + RSI gold scalping strategy tested over 100 trades",
+      "rsi_length": 14,
+      "rsi_threshold": [50,55,60],
+      "entry": "price/EMA200 trend filter with RSI confirmation after one-bar pullback",
+      "holds_bars": [3,5,10,20]
+    },
+    "reddit_ema9_21_rsi7_session_scalp": {
+      "timeframe": "M5",
+      "source_claim": "EMA9/21 + RSI7 restricted to London/New York sessions",
+      "rsi_threshold": [52,55,60],
+      "session": ["london","new_york","both"],
+      "holds_bars": [3,5,10,20]
+    },
+    "smc_session_sweep_displacement_proxy": {
+      "timeframes": ["M1","M5"],
+      "source_claim": "Asia/London/PDH-PDL sweep followed by displacement/structure shift and FVG-style continuation/reversal",
+      "sweep_lookback": [30,60,120],
+      "displacement_atr": [0.75,1.25],
+      "holds_bars": [3,5,10,20]
+    }
+  },
+  "state_before_pnl": {
+    "required": true,
+    "target": "signed causal forward return over frozen hold horizon",
+    "median_fold_spearman_gt": 0.0,
+    "minimum_positive_fold_fraction": 0.60
+  },
+  "development_gate": {
+    "minimum_development_folds": 10,
+    "minimum_trades": 150,
+    "median_primary_net_expectancy_bps_gt": 0.0,
+    "median_primary_profit_factor_gt": 1.0,
+    "minimum_positive_economic_fold_fraction": 0.60,
+    "high_cost_median_expectancy_nonnegative": true,
+    "must_beat_reversed_direction_control": true,
+    "requires_parameter_neighborhood_stability_before_holdout": true
+  },
+  "selection": {
+    "maximum_candidates_opened_on_locked_holdout": 5,
+    "candidate_must_be_frozen_before_holdout": true,
+    "no_retuning_after_holdout_open": true,
+    "holdout_is_not_genuine_future_oos": true
+  },
+  "risk_and_leverage": {
+    "leverage_grid_after_unlevered_holdout_pass_only": [2,5,10],
+    "leverage_cannot_rescue_negative_expectancy": true
+  },
+  "claims": {"verified_oos":false,"profitable_edge_established":false,"live_enabled":false}
+}
