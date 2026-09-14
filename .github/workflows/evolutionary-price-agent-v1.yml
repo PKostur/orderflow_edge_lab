@@ -1,0 +1,64 @@
+name: Evolutionary Price Agent v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/evolutionary-price-agent-v1]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: evolutionary-price-agent-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  evolve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Evolve raw-price agent and evaluate untouched holdout once
+        run: |
+          mkdir -p artifacts/evolutionary_price_agent
+          python -m orderflow_edge_lab.cli.evolutionary_price_agent \
+            --config config/evolutionary_price_agent_v1.json \
+            --output artifacts/evolutionary_price_agent/report.json
+      - name: Print compact result
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('artifacts/evolutionary_price_agent/report.json')
+          if not p.exists():
+              raise SystemExit('report not produced')
+          r=json.loads(p.read_text())
+          d=r['best_discovery_evaluation']
+          h=r['holdout_evaluation']['aggregate']
+          print(json.dumps({
+              'technical_indicators_used': r['technical_indicators_used'],
+              'discovery_gate_passed': r['discovery_gate_passed'],
+              'holdout_survived_basic_economic_test': r['holdout_survived_basic_economic_test'],
+              'champion': {k:v for k,v in r['best_genome'].items() if k != 'weights'},
+              'discovery_median_expectancy_bps': d.get('median_fold_expectancy_bps'),
+              'discovery_median_win_rate': d.get('median_fold_win_rate'),
+              'discovery_median_pf': d.get('median_fold_profit_factor'),
+              'discovery_positive_fold_fraction': d.get('positive_fold_fraction'),
+              'discovery_trades': d.get('trades'),
+              'holdout': h,
+          }, indent=2))
+          PY
+      - name: Preserve generations, champion and holdout result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evolutionary-price-agent-v1
+          path: artifacts/evolutionary_price_agent/
+          retention-days: 30
+          if-no-files-found: warn
