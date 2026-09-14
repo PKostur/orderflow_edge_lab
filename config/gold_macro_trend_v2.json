@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold-macro-trend-v2",
+  "frozen_at_intent": "2026-09-14",
+  "status": "historical_mechanism_discovery_with_locked_internal_validation",
+  "purpose": "Test whether gold trend/breakout returns become more stable when conditioned on causal macro and cross-metal states, while controlling explicitly for gold's long-run upward drift and buy-and-hold exposure.",
+  "evidence_boundary": {
+    "development_start": "2010-01-01",
+    "development_end_exclusive": "2021-01-01",
+    "locked_internal_validation_start": "2021-01-01",
+    "locked_internal_validation_end_exclusive": "2024-01-01",
+    "post_2024_data_is_not_to_be_opened_in_v2": true,
+    "locked_validation_is_not_future_oos": true,
+    "future_after_freeze_validation_required_for_promotion": true
+  },
+  "data": {
+    "gold": "XAUUSD daily OHLC from an independent public history source",
+    "silver": "XAGUSD daily close from an independent public history source",
+    "real_yield": "FRED DFII10 daily 10-year TIPS real yield",
+    "nominal_yield": "FRED DGS10 daily 10-year Treasury yield",
+    "broad_usd": "FRED DTWEXBGS broad trade-weighted U.S. dollar index",
+    "missing_macro_values": "forward-fill only after original publication date; never backfill future observations",
+    "decision_frequency": "daily completed bar"
+  },
+  "dependence": {
+    "calendar_fold_days": 126,
+    "minimum_development_folds": 12,
+    "no_trade_crosses_fold_or_validation_boundary": true,
+    "state_before_pnl": true
+  },
+  "economics": {
+    "round_trip_cost_bps": [2,5,10],
+    "primary_cost_bps": 5,
+    "entry": "next daily open",
+    "same_bar_fill_forbidden": true,
+    "one_active_trade_per_cell": true,
+    "leverage_after_unlevered_validation_pass_only": [2,5,10]
+  },
+  "families": {
+    "time_series_momentum": {
+      "lookback_days": [63,126,252],
+      "hold_days": [21,42,63],
+      "direction": "sign of lagged gold return"
+    },
+    "donchian_breakout": {
+      "lookback_days": [55,120,252],
+      "hold_days": [21,42,63]
+    },
+    "ema_trend": {
+      "fast_slow": [[20,100],[50,200],[100,300]],
+      "hold_days": [21,42,63]
+    },
+    "volatility_breakout": {
+      "atr_length": [20],
+      "range_z_window": [126],
+      "entry_range_z": [1.0,1.5,2.0],
+      "hold_days": [10,21,42]
+    },
+    "real_yield_gold_state": {
+      "real_yield_change_days": [20,63,126],
+      "gold_trend_days": [63,126],
+      "hold_days": [21,42,63],
+      "hypothesis": "falling real yields reinforce long gold trend and rising real yields reinforce short/flat gold trend"
+    },
+    "usd_real_yield_confluence": {
+      "macro_change_days": [20,63],
+      "gold_trend_days": [63,126],
+      "hold_days": [21,42,63],
+      "hypothesis": "gold trend is strongest when broad USD and real-yield changes align inversely with gold"
+    },
+    "gold_silver_ratio_state": {
+      "ratio_z_window_days": [126,252],
+      "entry_abs_z": [1.0,1.5,2.0],
+      "modes": ["gold_relative_momentum","gold_relative_reversion"],
+      "hold_days": [21,42,63]
+    },
+    "macro_residual_gold": {
+      "rolling_regression_days": [126,252],
+      "residual_z_entry": [1.0,1.5,2.0],
+      "modes": ["residual_momentum","residual_reversion"],
+      "hold_days": [21,42,63],
+      "regressors": ["broad_usd_return","real_yield_change","silver_return"]
+    }
+  },
+  "state_gate": {
+    "target": "signed future gold return over matching frozen hold horizon",
+    "median_fold_spearman_gt": 0,
+    "positive_fold_fraction_gte": 0.60,
+    "minimum_state_folds": 12,
+    "pnl_not_used_for_state_selection": true
+  },
+  "development_gate": {
+    "minimum_total_trades": 60,
+    "primary_median_fold_net_expectancy_bps_gt": 0,
+    "primary_median_fold_profit_factor_gt": 1,
+    "primary_positive_fold_fraction_gte": 0.60,
+    "high_cost_median_expectancy_nonnegative": true,
+    "must_beat_reversed_direction_control": true,
+    "must_beat_equal_exposure_buy_and_hold_or_cash_control_on_risk_adjusted_basis": true,
+    "parameter_neighborhood_stability_required": true
+  },
+  "selection": {
+    "maximum_candidates_opened_on_locked_validation": 4,
+    "candidate_freeze_before_validation": true,
+    "no_retuning_after_validation_open": true,
+    "no_social_media_claim_weighting": true
+  },
+  "claims": {
+    "development_only": true,
+    "verified_oos": false,
+    "profitable_edge_established": false,
+    "live_enabled": false
+  }
+}
