@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "protocol_name": "strategy-discovery-v3.1-long-horizon-market-neutral",
+  "freeze_status": "frozen_before_locked_internal_holdout_open",
+  "candidate_count": 1,
+  "candidate": {
+    "family": "cross_sectional_beta_residual_momentum",
+    "residual_lookback_hours": 48,
+    "top_bottom_k": 1,
+    "hold_hours": 48,
+    "btc_beta_window_hours": 192,
+    "direction": "long highest BTC-beta-neutral residual asset and short lowest residual asset, then add BTC hedge to neutralize estimated portfolio beta",
+    "entry": "next 1h bar open after completed signal bar",
+    "exit": "48 hours after entry at bar open",
+    "primary_costs_bps": {"alt_round_trip": 16.0, "btc_round_trip": 8.0}
+  },
+  "development_evidence": {
+    "trades": 147,
+    "state_median_spearman": 0.103030303030303,
+    "state_positive_fold_fraction": 0.7857142857142857,
+    "median_fold_net_bps_primary": 17.849104670612878,
+    "median_fold_profit_factor_primary": 1.157039642964105,
+    "positive_fold_fraction_primary": 0.60,
+    "median_reversed_direction_bps": -46.87422913943441,
+    "median_fold_net_bps_low_cost": 21.477245229215566,
+    "median_fold_net_bps_high_cost": 14.220964112010185,
+    "median_fold_profit_factor_high_cost": 1.1235583800385063,
+    "leave_one_symbol_out_positive_median_count": 8,
+    "leave_one_symbol_out_total": 9,
+    "concentration_warning": "Removing ENA changes median development-fold net expectancy to approximately -30.50 bps; candidate passes the predeclared 60% LOSO breadth gate but is not considered broad or proven.",
+    "adjacent_parameter_support": {
+      "params": {"residual_lookback_hours": 24, "top_bottom_k": 1, "hold_hours": 48},
+      "median_fold_net_bps_primary": 25.512763802265777,
+      "note": "Same directional family and non-negative adjacent parameter setting; no holdout result used."
+    }
+  },
+  "locked_holdout": {
+    "folds": [16,17],
+    "opened_at_freeze_time": false,
+    "retuning_after_open": false,
+    "maximum_candidates_allowed": 3
+  },
+  "claims": {
+    "internal_holdout_is_not_future_oos": true,
+    "profitable_edge_established": false,
+    "live_enabled": false,
+    "leverage_test_allowed_yet": false
+  }
+}
