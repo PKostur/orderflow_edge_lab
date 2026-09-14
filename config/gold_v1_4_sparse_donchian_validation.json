@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold-v1.4-sparse-donchian-validation",
+  "frozen_at_intent": "2026-09-14",
+  "status": "single_post_selection_candidate_with_locked_internal_holdout",
+  "selection_disclosure": {
+    "post_selection": true,
+    "source_development_protocol": "gold-strategy-discovery-v1.0.2-data-admissibility",
+    "reason_for_followup": "D1 Donchian lookback 55 / hold 4 was the only conventional gold near-miss with positive development economics on both long and short sides, positive 1%-trimmed expectancy, positive expectancy after removing the best development year, and a positive 5th percentile in 100000 dependence-cluster bootstrap epochs.",
+    "not_a_development_pass": true,
+    "original_gate_failures": [
+      "63-day sparse-event state folds were not scorable often enough",
+      "positive 63-day PnL fold fraction was below the original 60% requirement"
+    ]
+  },
+  "candidate": {
+    "instrument": "XAUUSD cash-gold proxy",
+    "timeframe": "D1",
+    "family": "donchian_breakout",
+    "lookback_completed_bars": 55,
+    "hold_bars": 4,
+    "signal": "long when completed close exceeds the maximum high of the prior 55 completed D1 bars; short when completed close is below the minimum low of the prior 55 completed D1 bars",
+    "entry": "next D1 bar open",
+    "exit": "open after four completed holding bars, matching the frozen development implementation",
+    "one_active_trade_at_a_time": true,
+    "same_bar_signal_and_fill_forbidden": true
+  },
+  "data": {
+    "development_seen_end_exclusive": "2024-01-01",
+    "locked_internal_holdout_start": "2024-01-01",
+    "locked_internal_holdout_end_exclusive": "2026-01-01",
+    "post_holdout_replication_start": "2026-01-01",
+    "post_holdout_replication_end_exclusive": "2026-09-01",
+    "holdout_is_not_genuine_future_oos": true,
+    "post_holdout_replication_is_historical_not_future_oos": true
+  },
+  "economics": {
+    "round_trip_cost_bps": [2.0, 5.0, 10.0],
+    "primary_cost_bps": 5.0,
+    "high_cost_bps": 10.0,
+    "leverage_test_after_unlevered_holdout_pass_only": [2, 5, 10]
+  },
+  "dependence": {
+    "holdout_clusters": "calendar_year",
+    "no_trade_crosses_calendar_year_boundary": true,
+    "minimum_total_holdout_trades": 15,
+    "minimum_trades_per_calendar_year": 5
+  },
+  "state_before_pnl": {
+    "score": "signed Donchian channel extension in ATR14 units on each eligible breakout event",
+    "target": "signed next-open-to-frozen-exit gross return before costs",
+    "require_combined_spearman_gt": 0.0,
+    "require_each_scorable_calendar_year_spearman_gt": 0.0,
+    "minimum_events_for_year_spearman": 5
+  },
+  "holdout_gate": {
+    "combined_primary_mean_net_bps_gt": 0.0,
+    "combined_primary_profit_factor_gt": 1.0,
+    "each_calendar_year_primary_mean_net_bps_gt": 0.0,
+    "high_cost_combined_mean_net_bps_gte": 0.0,
+    "original_direction_mean_must_beat_reversed_direction_mean": true,
+    "mean_after_removing_single_best_trade_gt": 0.0,
+    "both_long_and_short_sides_must_have_at_least_3_trades": true
+  },
+  "after_holdout": {
+    "if_fail": "retire candidate; do not test leverage or 2026 replication",
+    "if_pass": "freeze exact candidate again before opening the 2026 historical replication; leverage remains a risk diagnostic and cannot create an edge"
+  },
+  "claims": {
+    "verified_oos": false,
+    "profitable_edge_established": false,
+    "live_enabled": false
+  }
+}
