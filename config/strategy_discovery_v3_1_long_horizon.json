@@ -21,6 +21,14 @@
     "locked_holdout_folds": [16,17],
     "holdout_opened": false
   },
+  "implementation_freeze": {
+    "cross_sectional_btc_beta_window_hours": 192,
+    "beta_is_lagged_one_completed_bar": true,
+    "pair_basket_weighting": "each selected pair receives equal gross-notional allocation; each pair's two legs are internally normalized by 1+abs(hedge_beta); overlapping symbol exposures are netted before cost calculation",
+    "pair_basket_selection": "rank only training-qualified relationships by lower ADF p-value then shorter valid half-life; never by strategy PnL",
+    "leave_one_symbol_out_breadth": "reconstruct the entire portfolio after removing one alt symbol from the universe; at least 60% of nine removals must retain positive median development-fold net expectancy",
+    "parameter_neighborhood": "at least one directly adjacent frozen parameter setting in the same family must have non-negative median development-fold net expectancy and the same directional interpretation"
+  },
   "economics": {
     "alt_leg_round_trip_bps": [12.0,16.0,20.0],
     "btc_leg_round_trip_bps": [6.0,8.0,10.0],
@@ -77,7 +85,7 @@
       "regression_windows_hours": [192,336],
       "entry_z": [1.5,2.0],
       "holds_hours": [72,120,168],
-      "construction": "equal-risk basket of training-qualified independent pair residuals"
+      "construction": "equal-gross-risk basket of training-qualified independent pair residuals using implementation_freeze pair-basket rules"
     }
   },
   "state_before_pnl": {
