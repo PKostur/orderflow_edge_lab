@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "protocol_name": "strategy-discovery-v3.1-long-horizon-market-neutral",
+  "frozen_at_intent": "2026-09-14",
+  "parent_protocol": "strategy-discovery-v3-market-neutral",
+  "status": "development_only_holdout_still_locked",
+  "purpose": "Test whether slower market-neutral payoff structures produce larger and more stable gross moves without reopening or retuning v3 cells.",
+  "data": {
+    "source": "MEXC public futures klines",
+    "interval": "1h",
+    "start": "2025-09-01",
+    "development_end_exclusive": "2026-08-01",
+    "locked_internal_holdout_start": "2026-08-01",
+    "end_exclusive": "2026-09-12",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"]
+  },
+  "dependence": {
+    "calendar_fold_days": 21,
+    "development_folds": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],
+    "discard_boundary_fold": 15,
+    "locked_holdout_folds": [16,17],
+    "holdout_opened": false
+  },
+  "economics": {
+    "alt_leg_round_trip_bps": [12.0,16.0,20.0],
+    "btc_leg_round_trip_bps": [6.0,8.0,10.0],
+    "primary_case_index": 1,
+    "both_legs_charged": true,
+    "gross_notional_normalized": true,
+    "funding_excluded_without_frozen_legitimate_series": true
+  },
+  "families": {
+    "cross_sectional_beta_residual_momentum": {
+      "residual_lookbacks_hours": [12,24,48],
+      "top_bottom_k": [1,2,3],
+      "holds_hours": [48,72,120,168],
+      "breadth_gate": "leave_one_symbol_out_portfolio_stability"
+    },
+    "cross_sectional_beta_residual_reversion": {
+      "residual_lookbacks_hours": [12,24,48],
+      "top_bottom_k": [1,2,3],
+      "holds_hours": [48,72,120,168],
+      "breadth_gate": "leave_one_symbol_out_portfolio_stability"
+    },
+    "pca_factor_neutral_reversion": {
+      "pca_windows_hours": [96,192,336,504],
+      "z_thresholds": [1.5,2.0,2.5],
+      "holds_hours": [48,72,120,168],
+      "breadth_gate": "leave_one_symbol_out_portfolio_stability"
+    },
+    "dispersion_compression": {
+      "lookbacks_hours": [12,24,48],
+      "dispersion_z_thresholds": [1.0,1.5,2.0],
+      "holds_hours": [48,72,120,168],
+      "construction": "long bottom residual decile proxy and short top residual decile proxy, beta-neutralized to BTC"
+    },
+    "dispersion_expansion_control": {
+      "lookbacks_hours": [12,24,48],
+      "dispersion_z_thresholds": [1.0,1.5,2.0],
+      "holds_hours": [48,72,120,168],
+      "construction": "reverse dispersion-compression direction"
+    },
+    "alt_alt_half_life_reversion": {
+      "training_only_pair_selection": true,
+      "top_relationships_per_fold": 12,
+      "regression_windows_hours": [192,336,504],
+      "entry_z": [1.5,2.0],
+      "exit_abs_z": [0.25,0.50],
+      "max_holds_hours": [72,120,168],
+      "adf_max_pvalue": 0.10,
+      "half_life_hours_min": 4,
+      "half_life_hours_max": 168
+    },
+    "alt_alt_pair_basket_reversion": {
+      "training_only_pair_selection": true,
+      "basket_sizes": [3,5],
+      "regression_windows_hours": [192,336],
+      "entry_z": [1.5,2.0],
+      "holds_hours": [72,120,168],
+      "construction": "equal-risk basket of training-qualified independent pair residuals"
+    }
+  },
+  "state_before_pnl": {
+    "required": true,
+    "metric": "dependence-fold Spearman between frozen strategy score and future hedged portfolio return",
+    "minimum_positive_fold_fraction": 0.60,
+    "median_spearman_gt": 0.0,
+    "minimum_events": 80
+  },
+  "development_economic_gate": {
+    "median_fold_net_expectancy_bps_gt": 0.0,
+    "median_fold_profit_factor_gt": 1.0,
+    "minimum_positive_fold_fraction": 0.60,
+    "minimum_total_trades": 80,
+    "must_beat_reversed_direction_control": true,
+    "breadth": {
+      "single_pair": "minimum 10 active development folds",
+      "portfolio": "at least 60 percent of leave-one-symbol-out portfolio replays remain positive"
+    },
+    "requires_cost_sensitivity": "must remain non-negative in primary case and not collapse under high case",
+    "requires_parameter_neighborhood_stability": true
+  },
+  "selection": {
+    "maximum_candidates_opened_on_locked_holdout": 3,
+    "no_holdout_open_until_all_development_gates_pass": true,
+    "no_retuning_after_holdout_open": true
+  },
+  "risk_and_leverage": {
+    "combined_portfolio_mae_mfe_required_before_promotion": true,
+    "leverage_grid_after_unlevered_holdout_pass_only": [2,5,10],
+    "leverage_cannot_rescue_negative_expectancy": true
+  },
+  "claims": {
+    "development_only": true,
+    "holdout_opened": false,
+    "verified_oos": false,
+    "profitable_edge_established": false,
+    "live_enabled": false
+  }
+}
