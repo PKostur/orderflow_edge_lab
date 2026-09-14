@@ -13,6 +13,7 @@ SPEC = importlib.util.spec_from_file_location("strategy_discovery_v2_1_2", SCRIP
 assert SPEC is not None and SPEC.loader is not None
 MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
+PATCHED = MODULE.namespace
 
 
 def _frame(periods: int = 240) -> pd.DataFrame:
@@ -31,7 +32,8 @@ def _frame(periods: int = 240) -> pd.DataFrame:
 
 
 def test_adapter_declares_v2_1_2_protocol() -> None:
-    assert MODULE.run.__globals__["__name__"] == "strategy_discovery_v2_1_2_patched"
+    assert PATCHED["run"].__globals__["__name__"] == "strategy_discovery_v2_1_2_patched"
+    assert callable(PATCHED["main"])
     source = SCRIPT.read_text(encoding="utf-8")
     assert 'strategy-discovery-v2.1.2-low-turnover' in source
 
@@ -40,7 +42,7 @@ def test_exit_fold_values_keep_signal_index() -> None:
     frame = _frame()
     start = frame.index[0]
     hold = 8
-    exits = MODULE.exit_timestamp(frame.index, hold)
+    exits = PATCHED["exit_timestamp"](frame.index, hold)
     exit_folds = pd.Series(np.nan, index=frame.index, dtype=float)
     mask = exits.notna()
     delta = (pd.DatetimeIndex(exits.loc[mask]) - start) / pd.Timedelta(days=1)
@@ -56,21 +58,38 @@ def test_cross_fold_signal_is_excluded_with_aligned_exit_fold() -> None:
     hold = 8
     score = pd.Series(1.0, index=frame.index)
     eligible = pd.Series(True, index=frame.index)
-    fr = MODULE.forward_return(frame, hold)
-    exits = MODULE.exit_timestamp(frame.index, hold)
-    folds = MODULE.fold_labels(frame.index, start, 1)
+    fr = PATCHED["forward_return"](frame, hold)
+    exits = PATCHED["exit_timestamp"](frame.index, hold)
+    folds = PATCHED["fold_labels"](frame.index, start, 1)
     exit_folds = pd.Series(np.nan, index=frame.index, dtype=float)
     mask = exits.notna()
     delta = (pd.DatetimeIndex(exits.loc[mask]) - start) / pd.Timedelta(days=1)
     exit_folds.loc[mask] = np.floor(delta).astype(int)
-    d = pd.DataFrame({"score": score, "eligible": eligible, "fwd": fr, "fold": folds, "exit_fold": exit_folds, "exit_ts": exits}, index=frame.index)
-    d = d[d["eligible"] & d["fwd"].notna() & d["exit_ts"].notna() & (d["exit_fold"] == d["fold"])]
-    assert frame.index[80] in d.index
-    assert frame.index[90] not in d.index
+    data = pd.DataFrame(
+        {
+            "score": score,
+            "eligible": eligible,
+            "fwd": fr,
+            "fold": folds,
+            "exit_fold": exit_folds,
+            "exit_ts": exits,
+        },
+        index=frame.index,
+    )
+    data = data[
+        data["eligible"]
+        & data["fwd"].notna()
+        & data["exit_ts"].notna()
+        & (data["exit_fold"] == data["fold"])
+    ]
+    assert frame.index[80] in data.index
+    assert frame.index[90] not in data.index
 
 
 def test_amendment_preserves_base_research_semantics() -> None:
-    amendment = json.loads((ROOT / "config" / "strategy_discovery_v2_1_2_amendment.json").read_text(encoding="utf-8"))
+    amendment = json.loads(
+        (ROOT / "config" / "strategy_discovery_v2_1_2_amendment.json").read_text(encoding="utf-8")
+    )
     assert amendment["outcomes_inspected_before_amendment"] is False
     assert amendment["base_config"] == "config/strategy_discovery_v2_1.json"
     assert amendment["changes_only"] == [
