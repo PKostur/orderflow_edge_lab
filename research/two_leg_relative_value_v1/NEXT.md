@@ -1,0 +1,1 @@
+Next step: run the pull-request workflow against the exact frozen branch head. Inspect state-screen results before interpreting any portfolio PnL. If the workflow fails for implementation or data-integrity reasons, correct only those defects and version the amendment before inspecting economic outcomes.
