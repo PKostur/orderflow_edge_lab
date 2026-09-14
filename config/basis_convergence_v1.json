@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "protocol_name": "basis-convergence-v1-state-first",
+  "frozen_at_intent": "2026-09-14",
+  "outcomes_inspected_before_freeze": false,
+  "parent_eligibility_protocol": "unrelated-strategy-tournament-v2.2-institutional-data-eligibility",
+  "pods": ["derivatives_positioning", "execution_economics", "research_validity_statistics", "risk_path"],
+  "purpose": "Test whether directly observed MEXC fair-minus-index basis predicts subsequent basis convergence before testing whether the frozen convergence trade is executable after costs and observed funding.",
+  "data": {
+    "source": "MEXC public futures REST",
+    "start": "2026-03-01",
+    "end_exclusive": "2026-09-14",
+    "interval": "1h",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "universe_selection_uses_strategy_pnl": false,
+    "required_series": ["contract_ohlcv", "index_price_ohlcv", "fair_price_ohlcv", "funding_rate_history"],
+    "basis_definition_bps": "10000 * (fair_close / index_close - 1)",
+    "missing_fields_must_not_be_imputed": true
+  },
+  "dependence": {
+    "fold_days": 21,
+    "calendar_fold_is_dependence_cluster": true,
+    "minimum_folds": 6,
+    "minimum_symbols": 8,
+    "all_trials_retained": true
+  },
+  "state_layer": {
+    "required_before_strategy_pnl": true,
+    "score": "signed basis z-score computed from completed bar t using rolling historical basis only",
+    "target": "basis convergence over h bars: -sign(basis_t) * (basis_t_plus_h - basis_t)",
+    "windows": [96, 192],
+    "threshold_z": [1.0, 1.5, 2.0],
+    "hold_bars": [4, 8],
+    "gate": {
+      "median_fold_spearman_gt": 0.0,
+      "minimum_positive_fold_fraction": 0.60,
+      "minimum_positive_symbol_fraction": 0.60
+    },
+    "strategy_pnl_not_used_for_state_selection": true
+  },
+  "strategy_translation": {
+    "allowed_only_after_state_pass": true,
+    "signal": "when abs(basis_z) >= threshold, trade the contract toward index convergence: short positive basis, long negative basis",
+    "entry": "contract next-bar open t+1",
+    "exit": "contract open at t+1+hold_bars",
+    "one_active_trade_per_symbol_variant": true,
+    "entry_and_exit_must_remain_in_same_fold": true,
+    "round_trip_execution_cost_bps": [12.0, 16.0, 20.0],
+    "primary_cost_bps": 16.0,
+    "funding": {
+      "include_observed_funding_cashflows": true,
+      "only_apply_records_with_settlement_timestamp_inside_position": true,
+      "position_side_sign_must_be_respected": true,
+      "positive_rate_long_pays_short_receives": true,
+      "history_must_cover_entire_symbol_study_period": true,
+      "maximum_allowed_gap_hours_between_records": 12,
+      "incomplete_symbol_funding_history_blocks_symbol_economics": true,
+      "missing_funding_record_blocks_affected_trade_economics": true
+    }
+  },
+  "controls": {
+    "reversed_direction": "same entry times and exits, invert the frozen convergence side",
+    "within_symbol_fold_sign_permutation_iterations": 2000,
+    "basis_sign_removed_placebo": "same abs(z) entry trigger and exits, but replace basis sign with a deterministic alternating long/short side ordered within each symbol-fold, starting long; this preserves trigger timing and approximate side balance while removing basis-direction information"
+  },
+  "screening_gate": {
+    "minimum_total_trades": 80,
+    "median_fold_net_expectancy_bps_gt": 0.0,
+    "median_fold_profit_factor_gt": 1.0,
+    "minimum_positive_fold_fraction": 0.60,
+    "minimum_positive_symbol_fraction": 0.60,
+    "must_beat_reversed_direction_control": true,
+    "must_beat_basis_sign_removed_placebo": true,
+    "randomized_direction_p_lt": 0.05,
+    "requires_parameter_neighborhood_support": true,
+    "parameter_neighborhood_definition": "at least one one-axis adjacent variant among rolling window, z threshold, or hold bars must independently satisfy the base economic gate at 16 bps",
+    "no_best_cell_auto_promotion": true
+  },
+  "orthogonality": {
+    "single_feature_family": true,
+    "no_second_indicator_in_v1": true,
+    "future_feature_addition_requires_incremental_state_information_or_predeclared_interaction": true
+  },
+  "risk_path": {
+    "mae_mfe_only_after_economic_pass": true,
+    "stop_rr_grid_only_after_candidate_freeze": true,
+    "no_stop_optimization_to_rescue_negative_edge": true
+  },
+  "promotion": {
+    "future_after_freeze_validation_required": true,
+    "cross_pair_transfer_is_not_untouched_oos": true,
+    "paper_requires_separate_candidate_freeze_and_reconciliation": true,
+    "automatic_live_transmission": false
+  },
+  "claims": {
+    "development_only": true,
+    "profitable_edge_established": false,
+    "untouched_oos": false,
+    "live_order_transmission_supported": false
+  }
+}
