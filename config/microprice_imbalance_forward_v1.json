@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "protocol_name": "microprice-imbalance-forward-v1",
+  "status": "prospective_state_research_only",
+  "frozen_at_utc": "2026-09-14T23:45:00Z",
+  "purpose": "Test whether public MEXC microprice displacement or top-10 displayed-book imbalance predicts short-horizon future price direction before any strategy-PnL conditioning.",
+  "architecture": {
+    "meta_harness": "Ruflo",
+    "domain_orchestrator": "DeerFlow",
+    "specialist_pod": "liquidity_microstructure",
+    "executable_source_of_truth": "orderflow_edge_lab"
+  },
+  "source": {
+    "venue": "MEXC Futures",
+    "data": "public order book and public trade stream only",
+    "feature_schema_version": 2,
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "target_symbols": ["ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "universe_selection_uses_strategy_pnl": false,
+    "historical_backfill_allowed": false
+  },
+  "capture": {
+    "duration_seconds": 900,
+    "target_cadence_minutes": 60,
+    "independent_capture_batch_is_dependence_cluster": true,
+    "same_time_cross_symbol_rows_are_not_independent_clusters": true,
+    "overlapping_capture_windows_may_not_be_counted_as_independent": true
+  },
+  "features": {
+    "microprice_displacement_bps": {
+      "definition": "10000 * (microprice - mid) / mid, where mid=(best_bid+best_ask)/2",
+      "source_fields": ["microprice", "best_bid", "best_ask"]
+    },
+    "book_imbalance_10": {
+      "definition": "existing FeatureEngine top-10 displayed contract-volume imbalance",
+      "source_field": "book_imbalance_10"
+    }
+  },
+  "state_targets": {
+    "future_mid_return_bps": {
+      "horizons_seconds": [5, 15, 30, 60],
+      "definition": "10000 * (future_mid / current_mid - 1)",
+      "future_observation_must_remain_inside_capture_batch": true
+    }
+  },
+  "sampling": {
+    "event_types": ["depth", "trade"],
+    "minimum_spacing_ms_per_symbol": 1000,
+    "require_uncrossed_positive_bbo": true,
+    "minimum_samples_per_symbol_batch_horizon": 50
+  },
+  "state_gate": {
+    "metric": "Spearman association between each single feature and future_mid_return_bps, computed within symbol and capture batch, then collapsed to one median statistic per capture batch",
+    "minimum_independent_capture_batches": 6,
+    "median_batch_spearman_gt": 0.02,
+    "minimum_positive_batch_fraction": 0.6666666667,
+    "two_sided_sign_test_p_lte": 0.10,
+    "minimum_target_symbols_per_batch": 6,
+    "strategy_pnl_may_not_be_inspected_before_state_pass": true
+  },
+  "orthogonality": {
+    "association_metric": "Spearman",
+    "high_redundancy_abs_rho_gte": 0.80,
+    "combine_features_in_v1": false,
+    "rule": "Report microprice/book-imbalance association first. If highly redundant, retain one representative only. A later version may add the second feature only after a pre-specified incremental-information test."
+  },
+  "controls": {
+    "within_symbol_batch_time_permutation_epochs": 1000,
+    "feature_sign_reversal_reported": true,
+    "no_parameter_search_after_outcome": true
+  },
+  "strategy_translation": {
+    "enabled_in_v1": false,
+    "rule": "If and only if a feature-horizon state candidate passes prospectively, freeze a separately versioned economic-conditioning protocol before inspecting strategy PnL."
+  },
+  "promotion": {
+    "candidate_freeze_required_before_later_validation": true,
+    "future_after_freeze_validation_required": true,
+    "holdout_audit_required": true,
+    "paper_shadow_reliability_required": true,
+    "reconciliation_required": true,
+    "ruflo_gate_required": true,
+    "deterministic_multi_agent_release_manager_required": true,
+    "automatic_live_transmission": false
+  },
+  "claims": {
+    "development_only": true,
+    "profitable_edge_established": false,
+    "untouched_oos": false,
+    "live_order_transmission_supported": false
+  }
+}
