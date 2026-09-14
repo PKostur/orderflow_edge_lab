@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "protocol_name": "strategy-discovery-v4-carry-eval-amendment",
+  "base_protocol": "strategy-discovery-v4-funding-basis-carry",
+  "frozen_at_intent": "2026-09-14",
+  "outcomes_inspected_before_amendment": false,
+  "changes_only": [
+    "define current funding signal as the most recently published funding settlement at or before completed hour t, never a future rate",
+    "define basis_bps as 10000 * (perpetual_close / spot_close - 1)",
+    "for cash-and-carry use +0.5 spot and -0.5 perpetual gross-notional weights frozen at entry",
+    "apply round-trip cost cases to each leg and weight them by absolute entry notional; primary normalized two-leg friction is therefore 0.5*20 + 0.5*16 = 18 bps",
+    "realized positive funding is received by the short perpetual leg and counted only for settlements strictly after entry and at or before exit",
+    "one active trade per symbol for single-symbol carry families; a new signal may enter only after the prior position exits",
+    "no trade may cross a 21-day dependence-fold boundary or the development/holdout boundary",
+    "reverse negative-funding carry remains diagnostic-only because spot borrow is not modeled",
+    "cross-sectional funding-spread positions are evaluated as one portfolio trade with equal long/short gross sleeves before lagged-beta neutralization"
+  ],
+  "unchanged": [
+    "candidate universe and data-admission rule",
+    "all signal thresholds and holding horizons",
+    "all cost cases",
+    "state-before-PnL requirements",
+    "development and locked-holdout folds",
+    "development gates and maximum holdout candidates",
+    "leverage only after an unlevered holdout pass",
+    "no OOS, profitable-edge, or live-execution claim"
+  ]
+}
