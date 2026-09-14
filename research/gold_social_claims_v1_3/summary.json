@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "protocol": "gold-social-claims-v1.3-rule-specific",
+  "development_period": ["2020-01-01", "2024-01-01"],
+  "trial_count": 216,
+  "state_pass_count": 20,
+  "preliminary_development_pass_count": 0,
+  "holdout_opened": false,
+  "leverage_tested": false,
+  "family_summary": {
+    "reddit_london_orb_ema_retest_engulfing": {"cells":54,"best_primary_median_fold_net_bps":-1.816442,"max_trades":202,"passes":0},
+    "reddit_vwap_wick_touch_continuation": {"cells":6,"best_primary_median_fold_net_bps":-2.734910,"max_trades":1031,"passes":0},
+    "reddit_bollinger_rsi50_recovery": {"cells":72,"state_passes":2,"best_primary_median_fold_net_bps":0.319962,"best_high_cost_median_fold_net_bps":-4.680038,"passes":0},
+    "reddit_h4_bb_rsi_divergence": {"cells":6,"best_primary_median_fold_net_bps":16.065115,"best_cell_trades":77,"state_scorable_folds":0,"passes":0},
+    "youtube_rsi_divergence_range_reentry": {"cells":36,"best_primary_median_fold_net_bps":61.916284,"best_values_are_tiny_sample":true,"best_cell_with_at_least_80_trades":{"lookback":5,"trend_ema":0,"hold":8,"trades":81,"primary_median_fold_net_bps":6.015579,"primary_median_pf":1.103230,"positive_fold_fraction":0.5,"state_scorable_folds":0},"passes":0},
+    "youtube_vwap_momentum_retest": {"cells":24,"best_primary_median_fold_net_bps":-4.460360,"max_trades":8686,"passes":0},
+    "youtube_vwap_extreme_mean_reversion": {"cells":18,"state_passes":18,"best_primary_median_fold_net_bps":-4.546059,"max_trades":47860,"passes":0}
+  },
+  "conclusion": "No rule-specific Reddit/YouTube gold strategy passes the frozen development gate. ORB and VWAP claims are negative after costs; Bollinger-RSI recovery is unstable and fails high-cost economics. H4 RSI-divergence rules show positive but sparse development economics and are routed only to a separately frozen older-calendar replication, not to the locked 2024-2025 holdout.",
+  "claims": {"verified_oos":false,"profitable_edge_established":false,"live_enabled":false}
+}
