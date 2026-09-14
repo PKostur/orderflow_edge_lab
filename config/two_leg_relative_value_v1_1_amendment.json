@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "protocol_name": "two-leg-relative-value-v1.1-amendment",
+  "amends": "two-leg-relative-value-v1",
+  "amendment_timing": "before any two-leg market outcome was produced or inspected",
+  "reason": "The first exact-head workflow failed at import time because numpy was absent. Subsequent static review identified implementation-validity gaps before any state or PnL result existed.",
+  "frozen_research_hypotheses_unchanged": true,
+  "frozen_data_universe_unchanged": true,
+  "frozen_dates_unchanged": true,
+  "frozen_parameter_grids_unchanged": true,
+  "frozen_cost_cases_unchanged": true,
+  "corrections": [
+    "Install numpy and pandas in the dedicated research workflow without changing package-wide runtime dependencies.",
+    "Require every forward state target to remain inside its 21-day dependence fold.",
+    "For spread-cross exits, observe a completed post-entry bar before exiting at the following bar open; never use bar-close information to exit at that same bar open.",
+    "Enforce the frozen minimum scored folds and minimum symbol coverage at the state gate.",
+    "Evaluate all frozen 6/8/10 bps per-leg cost sensitivities while retaining 8 bps as primary.",
+    "Implement the predeclared beta=1 and randomized within-symbol-fold direction controls in addition to reversed-direction and single-leg controls.",
+    "Emit PnL-independent feature association diagnostics for the predeclared orthogonality feature set; do not add a second feature in v1.1.",
+    "Report parameter-neighborhood support separately and do not allow an isolated highest-PF cell to promote.",
+    "Retain development-only, no-OOS, no-edge and no-live claims."
+  ],
+  "outcomes_inspected_before_amendment": false,
+  "promotion_boundary_unchanged": true
+}

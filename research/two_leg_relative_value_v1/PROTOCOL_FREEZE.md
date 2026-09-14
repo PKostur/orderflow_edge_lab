@@ -1,0 +1,1 @@
+Protocol freeze commit lineage: base research commit `4a39c1d762c5e43a875a4254d7879b92cac09c36`; frozen configuration `config/two_leg_relative_value_v1.json`; no two-leg strategy outcome had been inspected when this protocol and evaluator were committed.
