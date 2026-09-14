@@ -1,0 +1,71 @@
+name: Strategy Discovery v4.3 Funding Continuation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/strategy-discovery-v4-3-funding-continuation]
+    paths:
+      - "config/strategy_discovery_v4_3_funding_continuation.json"
+      - "scripts/prepare_strategy_discovery_v4_3_funding_continuation.py"
+      - "scripts/run_strategy_discovery_v4_3_funding_continuation.py"
+      - ".github/workflows/strategy-discovery-v4-3-funding-continuation.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: strategy-discovery-v4-3-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  retrospective-diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]" requests
+      - name: Fetch frozen post-development temporal panel
+        run: |
+          mkdir -p artifacts/strategy_discovery_v4_3/data
+          python scripts/prepare_strategy_discovery_v4_3_funding_continuation.py \
+            --config config/strategy_discovery_v4_3_funding_continuation.json \
+            --output-dir artifacts/strategy_discovery_v4_3/data
+      - name: Evaluate only the two frozen continuation cells
+        run: |
+          python scripts/run_strategy_discovery_v4_3_funding_continuation.py \
+            --config config/strategy_discovery_v4_3_funding_continuation.json \
+            --data-dir artifacts/strategy_discovery_v4_3/data \
+            --output artifacts/strategy_discovery_v4_3/diagnostic.json
+      - name: Guard evidence boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/strategy_discovery_v4_3/diagnostic.json'))
+          assert r['evidence_class']=='later_period_retrospective_diagnostic_not_oos'
+          assert sorted(x['nsett'] for x in r['results']) == [3,5]
+          assert r['future_signal_boundary']=='2026-09-15T00:00:00Z'
+          assert r['claims']['verified_oos'] is False
+          assert r['claims']['profitable_edge_established'] is False
+          assert r['claims']['live_enabled'] is False
+          PY
+      - name: Deterministic multi-agent release-manager guard
+        run: |
+          orderflow-multi-agent --output artifacts/strategy_discovery_v4_3/multi_agent_report.json
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/strategy_discovery_v4_3/multi_agent_report.json'))
+          if r['release_manager']['status'] != 'reviewable':
+              raise SystemExit(r['release_manager']['next_actions'])
+          PY
+      - name: Preserve evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: strategy-discovery-v4-3-funding-continuation
+          path: artifacts/strategy_discovery_v4_3/
+          retention-days: 30
+          if-no-files-found: warn
