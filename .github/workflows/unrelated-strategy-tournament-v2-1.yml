@@ -21,7 +21,7 @@ jobs:
       - name: Install package and research dependencies
         run: |
           python -m pip install -e .
-          python -m pip install numpy pandas
+          python -m pip install numpy pandas scipy
       - name: Compile corrected evaluator
         run: python -m py_compile scripts/run_unrelated_strategy_tournament_v2_1_1.py
       - name: Validate frozen protocol
