@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold-h4-divergence-historical-replication-v1.1-acquisition-amendment",
+  "base_protocol": "gold-h4-divergence-historical-replication-v1",
+  "frozen_at_intent": "2026-09-14",
+  "outcomes_inspected_before_amendment": false,
+  "reason": "The first replication attempt failed in data acquisition with HTTP 429 before any strategy result was computed.",
+  "changes_only": [
+    "use independent Dukascopy XAUUSD H4 bid history as the replication feed",
+    "download 2010-2020 in one-calendar-year chunks instead of one decade-long request",
+    "retry failed yearly chunks with increasing sleep intervals",
+    "concatenate chunks deterministically, sort timestamps, and remove exact duplicate rows before evaluation"
+  ],
+  "unchanged": [
+    "five frozen strategy cells",
+    "2010-01-01 through 2020-01-01 replication window",
+    "365-day dependence clusters",
+    "20000 cluster-preserving permutations per cell",
+    "state and economics gates",
+    "2/5/10 bps costs",
+    "no leverage",
+    "2024-2025 holdout remains sealed",
+    "no retuning from replication",
+    "no OOS, profitable-edge, or live-execution claim"
+  ]
+}
