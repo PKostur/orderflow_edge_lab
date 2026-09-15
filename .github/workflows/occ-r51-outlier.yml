@@ -1,0 +1,66 @@
+name: OCC R5.1 External Outlier
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/occ_r51_outlier.py"
+      - "research/outliers/occ_r51/**"
+      - ".github/workflows/occ-r51-outlier.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: occ-r51-outlier-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  study:
+    name: frozen-outlier-study
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Syntax check isolated OCC study
+        run: python -m py_compile scripts/occ_r51_outlier.py
+      - name: Run frozen external outlier study
+        run: |
+          python scripts/occ_r51_outlier.py \
+            --start 2026-06-01 \
+            --end 2026-09-12 \
+            --output-dir artifacts/occ_r51_outlier
+      - name: Print decision-relevant comparison
+        if: success()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          p = Path('artifacts/occ_r51_outlier/report.json')
+          r = json.loads(p.read_text(encoding='utf-8'))
+          print('OCC R5.1 ISOLATED OUTLIER STUDY')
+          print('candidate_status:', r['protocol']['status'])
+          for cost in ('0.0', '12.0', '16.0', '20.0'):
+              a = r['aggregate'].get(cost, {})
+              impact = r['lookahead_impact'].get(cost, {})
+              print('\nround_trip_cost_bps:', cost)
+              for variant in ('original_lookahead', 'confirmed_htf', 'same_tf'):
+                  x = a.get(variant, {})
+                  print(variant, json.dumps(x, sort_keys=True))
+              print('lookahead_impact', json.dumps(impact, sort_keys=True))
+          PY
+      - name: Preserve complete OCC outlier evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: occ-r51-outlier-results
+          path: artifacts/occ_r51_outlier/
+          retention-days: 30
+          if-no-files-found: warn
