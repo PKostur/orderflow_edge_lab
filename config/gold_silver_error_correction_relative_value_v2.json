@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold_silver_error_correction_relative_value_v2",
+  "evidence_class": "post_observation_retrospective_development_with_locked_validation_not_future_oos",
+  "motivation": "Gold/silver ratio extremes showed durable information about future hedged relative state in v1, but fixed-horizon ratio-z trading failed the frozen executable-economic gate. This protocol changes the mechanism to a rolling log-price residual with causal hedge estimation, an explicit mean-reversion/half-life admission gate, and convergence-based exits. It is a new mechanism and must not relax or reinterpret the rejected v1 grid.",
+  "source": {
+    "repository": "simom1/XAUUSD-history",
+    "commit": "bda79c6c5ce09a5b488d4cd2c20fcd19bdd2ed3a",
+    "gold_path": "Gold-Cash/XAUUSD/XAUUSD_D1_2010_2026.csv",
+    "silver_path": "Silver-Cash/XAGUSD/XAGUSD_D1.csv",
+    "instrument_semantics": "independent MT5-style cash XAUUSD and XAGUSD daily bars"
+  },
+  "data_admission": {
+    "common_dates_only": true,
+    "weekdays_only": true,
+    "minimum_tick_volume_each_leg": 2,
+    "positive_ohlc_required": true,
+    "duplicate_policy": "keep_last",
+    "no_interpolation": true
+  },
+  "periods": {
+    "development": {"start": "2010-01-01", "end_exclusive": "2021-01-01"},
+    "locked_internal_validation": {"start": "2021-01-01", "end_exclusive": "2024-01-01", "opened_during_development": false},
+    "retrospective_extension": {
+      "start": "2024-01-01",
+      "end_exclusive": "2026-09-15",
+      "opened_during_development": false,
+      "claim_boundary": "Retrospective only; related gold/silver evidence from this era has already been inspected."
+    },
+    "future_shadow_earliest_utc": "2026-09-16T00:00:00Z"
+  },
+  "residual_grid": {
+    "model": "rolling OLS of log(gold_close) on intercept plus log(silver_close), using completed observations only",
+    "lookback_trading_days": [252, 504],
+    "entry_abs_z_gte": [1.5, 2.0],
+    "exit_abs_z_lte": [0.25, 0.5],
+    "max_hold_trading_bars": [42, 84],
+    "minimum_hold_trading_bars": 2,
+    "direction": "mean reversion: positive residual => short gold/long silver; negative residual => long gold/short silver",
+    "residual_z_definition": "current frozen-model residual divided by trailing residual standard deviation from the same entry-time OLS fit"
+  },
+  "relationship_admission": {
+    "ar1_definition": "OLS residual_t = c + phi * residual_t-1 on the same trailing entry window",
+    "phi_gt": 0.0,
+    "phi_lt": 0.98,
+    "half_life_trading_days_gte": 3.0,
+    "half_life_trading_days_lte": 84.0,
+    "beta_gt": 0.05,
+    "beta_lt": 3.0,
+    "minimum_residual_std": 1e-6
+  },
+  "hedge": {
+    "method": "entry-time rolling log-price OLS beta",
+    "beta_frozen_for_trade": true,
+    "gross_normalization": "gold_weight=1/(1+abs(beta)); silver_weight=abs(beta)/(1+abs(beta))",
+    "no_rebalancing_during_trade": true,
+    "uses_completed_data_only": true
+  },
+  "execution": {
+    "signal_time": "completed daily close",
+    "entry": "next common daily open",
+    "exit": "after minimum hold, first completed close whose frozen-model residual satisfies the exit band; fill next common open; otherwise next common open after max hold",
+    "same_bar_fill": false,
+    "one_active_trade": true,
+    "both_legs_enter_and_exit_together": true,
+    "round_trip_cost_bps_on_total_gross_notional": [5.0, 10.0, 20.0],
+    "primary_cost_bps": 10.0,
+    "high_cost_bps": 20.0,
+    "note": "Absolute portfolio weights sum to one, so the stated cost is charged to the complete two-leg gross notional."
+  },
+  "state_first": {
+    "horizon_trading_bars": 21,
+    "predictor": "absolute entry residual z-score",
+    "target": "-sign(entry_z) * (frozen-model residual at t+21 - entry residual) / entry residual standard deviation; positive means convergence toward equilibrium",
+    "dependence_cluster_calendar_days": 126,
+    "minimum_events_per_state_fold": 5,
+    "minimum_scorable_state_folds": 10,
+    "minimum_median_fold_spearman": 0.0,
+    "minimum_positive_state_fold_fraction": 0.60,
+    "sign_flip_epochs": 20000,
+    "sign_flip_seed": 20260915,
+    "maximum_bh_fdr_q": 0.10
+  },
+  "economic_gate": {
+    "minimum_non_overlapping_trades": 30,
+    "minimum_primary_median_fold_net_bps": 0.0,
+    "minimum_primary_median_fold_pf": 1.10,
+    "minimum_primary_positive_fold_fraction": 0.60,
+    "minimum_high_cost_median_fold_net_bps": 0.0,
+    "minimum_overall_mean_primary_net_bps": 0.0,
+    "require_original_mean_gt_reversed_mean": true,
+    "require_primary_median_fold_risk_adjusted_gt_unhedged_gold_control": true,
+    "require_primary_median_fold_risk_adjusted_gt_static_equal_dollar_spread_control": true,
+    "minimum_long_spread_trades": 6,
+    "minimum_short_spread_trades": 6,
+    "require_positive_mean_primary_net_both_directions": true
+  },
+  "controls": {
+    "reversed_direction": true,
+    "unhedged_gold_same_entries_and_exits": true,
+    "static_equal_dollar_gold_minus_silver_same_entries_and_exits": true,
+    "forced_max_hold_without_convergence_exit": true,
+    "report_trade_return_correlation_with_unhedged_gold": true,
+    "report_long_and_short_spread_subsets": true,
+    "report_realized_holding_period_distribution": true,
+    "report_entry_beta_and_half_life_distribution": true
+  },
+  "neighborhood_gate": {
+    "definition": "differs in exactly one adjacent value among lookback, entry-z, exit-z, or max-hold",
+    "minimum_supporting_neighbors": 2,
+    "supporter_requires": {
+      "state_bh_q_lte": 0.10,
+      "primary_median_fold_net_bps_gt": 0.0,
+      "primary_median_fold_pf_gt": 1.0,
+      "overall_mean_primary_net_bps_gt": 0.0,
+      "high_cost_median_fold_net_bps_gte": 0.0
+    }
+  },
+  "candidate_selection": {
+    "maximum_candidates": 2,
+    "ranking": [
+      "higher state median fold Spearman",
+      "higher primary positive economic fold fraction",
+      "higher primary median fold net bps",
+      "lower median realized holding period",
+      "lexicographic candidate id"
+    ],
+    "locked_validation_may_open_only_after_separate_candidate_freeze_commit": true
+  },
+  "claims": {
+    "verified_future_oos": false,
+    "profitable_edge_established": false,
+    "leverage_authorized": false,
+    "live_enabled": false
+  }
+}
