@@ -1,0 +1,138 @@
+name: Gold Scheduled Macro Reaction v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/gold-scheduled-macro-reaction-v1]
+    paths:
+      - "config/gold_scheduled_macro_reaction_v1.json"
+      - "research/gold_scheduled_macro_reaction_v1/EVENT_CALENDAR.csv"
+      - "research/gold_scheduled_macro_reaction_v1/PROTOCOL.md"
+      - "scripts/run_gold_scheduled_macro_reaction_v1.py"
+      - ".github/workflows/gold-scheduled-macro-reaction-v1.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gold-scheduled-macro-reaction-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  development-state:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install state runtime
+        run: python -m pip install pandas numpy
+
+      - name: Fetch pinned MT5 XAUUSD M1 source
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/gold_scheduled_macro_reaction_v1/data
+          base="https://raw.githubusercontent.com/simom1/XAUUSD-history/9b1f323866d0150ed2422c0e0cf1b97aa1bfcb22"
+          curl --fail --location --retry 3 --retry-delay 2 \
+            "$base/Gold-Cash/XAUUSD/XAUUSD_M1.csv" \
+            -o artifacts/gold_scheduled_macro_reaction_v1/data/XAUUSD_M1_pinned.csv
+          sha256sum artifacts/gold_scheduled_macro_reaction_v1/data/XAUUSD_M1_pinned.csv \
+            > artifacts/gold_scheduled_macro_reaction_v1/data/SOURCE_SHA256.txt
+          head -n 3 artifacts/gold_scheduled_macro_reaction_v1/data/XAUUSD_M1_pinned.csv
+
+      - name: Materialize only warmup plus open development data
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          import pandas as pd
+
+          src=Path('artifacts/gold_scheduled_macro_reaction_v1/data/XAUUSD_M1_pinned.csv')
+          dst=Path('artifacts/gold_scheduled_macro_reaction_v1/data/XAUUSD_M1_dev.csv')
+          d=pd.read_csv(src)
+          d.columns=[str(c).strip().lower() for c in d.columns]
+          d['time']=pd.to_datetime(d['time'], utc=True, errors='coerce')
+          d=d.dropna(subset=['time'])
+          warmup=pd.Timestamp('2020-11-01T00:00:00Z')
+          locked=pd.Timestamp('2023-01-01T00:00:00Z')
+          d=d[(d.time>=warmup)&(d.time<locked)].copy()
+          if d.empty:
+              raise SystemExit('no development rows')
+          if d.time.max() >= locked:
+              raise SystemExit('locked 2023 leaked into development materialization')
+          d.to_csv(dst,index=False)
+          manifest={
+            'source_repository':'simom1/XAUUSD-history',
+            'source_commit':'9b1f323866d0150ed2422c0e0cf1b97aa1bfcb22',
+            'source_file':'Gold-Cash/XAUUSD/XAUUSD_M1.csv',
+            'source_timestamp_timezone':'UTC',
+            'warmup_start_utc':str(d.time.min()),
+            'development_end_exclusive_utc':'2023-01-01 00:00:00+00:00',
+            'locked_2023_materialized':False,
+            'rows':int(len(d)),
+            'last_row_utc':str(d.time.max()),
+            'development_sha256':hashlib.sha256(dst.read_bytes()).hexdigest(),
+          }
+          Path('artifacts/gold_scheduled_macro_reaction_v1/data/MANIFEST.json').write_text(json.dumps(manifest,indent=2,sort_keys=True),encoding='utf-8')
+          print(json.dumps(manifest,indent=2,sort_keys=True))
+          PY
+          rm artifacts/gold_scheduled_macro_reaction_v1/data/XAUUSD_M1_pinned.csv
+
+      - name: Guard frozen calendar and protocol before scoring
+        run: |
+          python - <<'PY'
+          import json
+          import pandas as pd
+          cfg=json.load(open('config/gold_scheduled_macro_reaction_v1.json',encoding='utf-8'))
+          cal=pd.read_csv('research/gold_scheduled_macro_reaction_v1/EVENT_CALENDAR.csv')
+          assert cfg['state_scoring_enabled'] is True
+          assert cfg['economic_scoring_enabled'] is False
+          assert cfg['evidence_boundary']['validation_opened'] is False
+          assert len(cal)==64
+          counts=cal['event_type'].value_counts().to_dict()
+          assert counts=={'cpi':24,'employment':24,'fomc':16}, counts
+          assert set(cal['date_local'].astype(str).str[:4])=={'2021','2022'}
+          assert len(cfg['primary_hypotheses'])==6
+          PY
+
+      - name: Run frozen development state study
+        run: |
+          python scripts/run_gold_scheduled_macro_reaction_v1.py \
+            --config config/gold_scheduled_macro_reaction_v1.json \
+            --calendar research/gold_scheduled_macro_reaction_v1/EVENT_CALENDAR.csv \
+            --gold artifacts/gold_scheduled_macro_reaction_v1/data/XAUUSD_M1_dev.csv \
+            --output artifacts/gold_scheduled_macro_reaction_v1/state_result.json
+
+      - name: Guard evidence boundary and claims
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/gold_scheduled_macro_reaction_v1/state_result.json',encoding='utf-8'))
+          assert r['stage']=='development_state_only'
+          assert r['calendar_events']==64
+          assert r['primary_hypothesis_count']==6
+          assert r['holdout_opened'] is False
+          assert r['economic_scoring_run'] is False
+          assert r['claims']['executable_edge_established'] is False
+          assert r['claims']['profitable_edge_established'] is False
+          assert r['claims']['verified_future_oos'] is False
+          assert r['claims']['leverage_authorized'] is False
+          assert r['claims']['live_enabled'] is False
+          PY
+
+      - name: Preserve evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-scheduled-macro-reaction-v1
+          path: |
+            artifacts/gold_scheduled_macro_reaction_v1/state_result.json
+            artifacts/gold_scheduled_macro_reaction_v1/data/MANIFEST.json
+            artifacts/gold_scheduled_macro_reaction_v1/data/SOURCE_SHA256.txt
+          retention-days: 30
+          if-no-files-found: warn
