@@ -4,7 +4,12 @@
 
 Protocol frozen before any HistData state statistic is scored. Economic and directional PnL scoring are disabled.
 
-A source-provenance correction was made before any archive was parsed or any state statistic was scored. Workflow run `34993556143` stopped at the checksum guard because the initially transcribed LFS OIDs were incorrect. The exact Git LFS pointer text at the already frozen source commit was then re-read and the archive hashes below were corrected. No candidate definition, gate, statistic, window, anchor, or threshold changed.
+Two engineering corrections occurred before the first valid state result. Neither changed the candidate, gate, statistic, window, anchor grid, baseline length, test direction, or promotion threshold.
+
+1. Workflow run `34993556143` stopped at the checksum guard before parsing because the initially transcribed Git LFS OIDs were incorrect. The exact pointer text at the already frozen source commit was re-read and the archive hashes below were corrected.
+2. Workflow run `34993995480` passed source verification but stopped before state computation because each HistData archive contains both a CSV data member and a TXT companion. The fail-closed archive selector was changed only to prefer a unique CSV member, with a single TXT member permitted only as fallback when no CSV exists.
+
+The first valid result-bearing execution is workflow run `34994222100` at repository head `e90c3ff27372832ba7f8952201edabcce22edad6`.
 
 ## Frozen candidate
 
