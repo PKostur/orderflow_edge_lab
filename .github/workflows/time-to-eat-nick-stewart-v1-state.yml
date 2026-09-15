@@ -52,6 +52,7 @@ jobs:
           import gc
           import hashlib
           import json
+          import re
           from pathlib import Path
 
           import pandas as pd
@@ -68,7 +69,36 @@ jobs:
               'sources': {},
           }
 
-          def norm(df, ts_col):
+          def canonical_name(value):
+              text = str(value).strip().lower()
+              text = text.replace('<', '').replace('>', '')
+              text = re.sub(r'[^a-z0-9]+', '_', text).strip('_')
+              return text
+
+          def canonicalize_columns(df):
+              out = df.copy()
+              out.columns = [canonical_name(c) for c in out.columns]
+              # pandas writes an index column as Unnamed: 0 when the index has no name.
+              if 'datetime' not in out.columns:
+                  unnamed = [c for c in out.columns if c.startswith('unnamed') or c in {'index', ''}]
+                  if unnamed:
+                      out = out.rename(columns={unnamed[0]: 'datetime'})
+              # Common MT export uses separate date and time columns.
+              if 'datetime' not in out.columns and 'date' in out.columns and 'time' in out.columns:
+                  out['datetime'] = out['date'].astype(str).str.strip() + ' ' + out['time'].astype(str).str.strip()
+              return out
+
+          def norm(df, ts_col=None):
+              df = canonicalize_columns(df)
+              if ts_col is not None:
+                  ts_col = canonical_name(ts_col)
+              if not ts_col or ts_col not in df.columns:
+                  ts_col = 'datetime' if 'datetime' in df.columns else ('timestamp' if 'timestamp' in df.columns else None)
+              if ts_col is None:
+                  raise ValueError(f'no timestamp column after canonicalization: {list(df.columns)}')
+              missing = [c for c in ('open', 'high', 'low', 'close') if c not in df.columns]
+              if missing:
+                  raise ValueError(f'missing OHLC {missing}; canonical columns={list(df.columns)}')
               ts = pd.to_datetime(df[ts_col], utc=True, errors='coerce')
               out = pd.DataFrame({
                   'timestamp': ts,
@@ -81,13 +111,31 @@ jobs:
               out = out.drop_duplicates('timestamp', keep='last').sort_values('timestamp')
               return out
 
+          def sniff_csv(path):
+              with open(path, 'r', encoding='utf-8-sig', errors='replace') as fh:
+                  header = fh.readline().rstrip('\r\n')
+              counts = {sep: header.count(sep) for sep in (',', ';', '\t')}
+              sep = max(counts, key=counts.get)
+              if counts[sep] == 0:
+                  raise ValueError(f'could not infer delimiter from header: {header[:300]!r}')
+              print({'source': str(path), 'header': header[:300], 'separator': repr(sep)})
+              return sep
+
           # XAUUSD cash development proxy. Read source CSV in chunks and retain only open development years.
           xau_path = hf_hub_download(repo_id='Pcitycrypto/xauusd', filename='XAUUSD_1m.csv', repo_type='dataset')
+          xau_sep = sniff_csv(xau_path)
           xparts = []
-          for chunk in pd.read_csv(xau_path, chunksize=500_000):
-              x = norm(chunk.rename(columns={c: c.lower() for c in chunk.columns}), 'datetime')
+          observed_xau_columns = None
+          for chunk in pd.read_csv(xau_path, sep=xau_sep, chunksize=500_000, encoding='utf-8-sig'):
+              cc = canonicalize_columns(chunk)
+              if observed_xau_columns is None:
+                  observed_xau_columns = list(cc.columns)
+                  print({'xau_canonical_columns': observed_xau_columns})
+              x = norm(cc)
               if len(x):
                   xparts.append(x)
+          if not xparts:
+              raise SystemExit(f'XAU source produced no 2021-2022 rows; columns={observed_xau_columns}')
           xau = pd.concat(xparts, ignore_index=True).sort_values('timestamp')
           xau_out = OUT / 'XAUUSD_1m_dev_2021_2022.parquet'
           xau.to_parquet(xau_out, index=False)
@@ -95,6 +143,7 @@ jobs:
               'repo': 'Pcitycrypto/xauusd',
               'file': 'XAUUSD_1m.csv',
               'role': 'cash-gold development proxy, not GC independent replication',
+              'canonical_columns': observed_xau_columns,
               'rows': len(xau),
               'start': xau.timestamp.min().isoformat(),
               'end': xau.timestamp.max().isoformat(),
@@ -105,8 +154,9 @@ jobs:
           # NQ futures dataset. Export only 2021-2022 to the scorer.
           nqds = load_dataset('mdelcristo/NQ-F_1min_OHLCV_Parquet', split='train')
           nqraw = nqds.to_pandas()
-          nqraw.columns = [str(c).lower() for c in nqraw.columns]
           nq = norm(nqraw, 'timestamp')
+          if nq.empty:
+              raise SystemExit('NQ source produced no 2021-2022 rows')
           nq_out = OUT / 'NQ_1m_dev_2021_2022.parquet'
           nq.to_parquet(nq_out, index=False)
           manifest['sources']['NQ'] = {
@@ -119,12 +169,13 @@ jobs:
           del nqds, nqraw, nq
           gc.collect()
 
-          # ES transfer dataset. Remove the UTC dates containing an explicit contract-id transition.
+          # ES transfer dataset. Remove UTC dates containing an explicit contract-id transition.
           esds = load_dataset('msj-21/es-futures-1m', split='train')
-          esraw = esds.to_pandas()
-          esraw.columns = [str(c).lower() for c in esraw.columns]
-          ts = pd.to_datetime(esraw['datetime'], utc=True, errors='coerce')
-          esraw = esraw.assign(_ts=ts)
+          esraw = canonicalize_columns(esds.to_pandas())
+          if 'datetime' not in esraw.columns:
+              raise SystemExit(f'ES datetime missing: {list(esraw.columns)}')
+          es_ts = pd.to_datetime(esraw['datetime'], utc=True, errors='coerce')
+          esraw = esraw.assign(_ts=es_ts)
           if 'instrument_id' in esraw.columns:
               transition = esraw.instrument_id.astype(str).ne(esraw.instrument_id.astype(str).shift(1))
               bad_dates = set(esraw.loc[transition & esraw._ts.notna(), '_ts'].dt.date.astype(str))
@@ -133,6 +184,8 @@ jobs:
           es = norm(esraw.drop(columns=['_ts']), 'datetime')
           if bad_dates:
               es = es[~es.timestamp.dt.date.astype(str).isin(bad_dates)].copy()
+          if es.empty:
+              raise SystemExit('ES source produced no 2021-2022 rows after roll-date removal')
           es_out = OUT / 'ES_1m_dev_2021_2022.parquet'
           es.to_parquet(es_out, index=False)
           manifest['sources']['ES'] = {
@@ -147,11 +200,11 @@ jobs:
           # Hard boundary: the scorer must never receive 2023 rows in development.
           for p in [xau_out, nq_out, es_out]:
               d = pd.read_parquet(p, columns=['timestamp'])
-              mx = pd.to_datetime(d.timestamp, utc=True).max()
-              if mx >= END:
-                  raise SystemExit(f'locked 2023 leaked into {p}: {mx}')
-              if pd.to_datetime(d.timestamp, utc=True).min() < START:
-                  raise SystemExit(f'pre-development rows leaked into {p}')
+              ts = pd.to_datetime(d.timestamp, utc=True)
+              if ts.max() >= END:
+                  raise SystemExit(f'locked 2023 leaked into {p}: {ts.max()}')
+              if ts.min() < START:
+                  raise SystemExit(f'pre-development rows leaked into {p}: {ts.min()}')
 
           for p in [xau_out, nq_out, es_out]:
               digest = hashlib.sha256(p.read_bytes()).hexdigest()
