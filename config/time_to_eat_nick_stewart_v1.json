@@ -105,6 +105,7 @@
   },
   "state_targets": {
     "forward_horizons_execution_bars": [1, 2, 4],
+    "primary_fdr_horizon_execution_bars": 2,
     "primary_measure": "signed forward close return divided by ATR14",
     "benchmark": "same-symbol same-day same-session same-bias eligible-bar median forward signed ATR return",
     "cell_effect": "setup event return minus matched daily benchmark",
@@ -118,7 +119,7 @@
     "median_daily_excess_must_be_positive": true,
     "minimum_positive_horizons": 2,
     "permutation_epochs": 20000,
-    "fdr_method": "Benjamini-Hochberg",
+    "fdr_method": "Benjamini-Hochberg on the 2-bar primary-horizon p-value across the complete state family",
     "fdr_q_max": 0.10,
     "primary_timeframe_required_for_promotion": "30m",
     "robustness_requirement": "same setup/symbol directionally positive on at least one adjacent execution timeframe",
