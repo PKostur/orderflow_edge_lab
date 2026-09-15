@@ -1,0 +1,74 @@
+name: Gold Macro Event Pre-Release State v2 Repaired
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/gold-macro-event-prerelease-state-v2]
+    paths:
+      - "scripts/run_gold_macro_event_prerelease_state_v2_fixed.py"
+      - ".github/workflows/gold-macro-event-prerelease-state-v2-repaired.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gold-macro-event-prerelease-state-v2-repaired-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  state-study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install runtime
+        run: python -m pip install pandas numpy
+      - name: Fetch pinned XAUUSD M15 and materialize frozen official calendars
+        run: |
+          set -euo pipefail
+          root=artifacts/gold_macro_event_prerelease_state_v2
+          mkdir -p "$root/data"
+          base="https://raw.githubusercontent.com/simom1/XAUUSD-history/bda79c6c5ce09a5b488d4cd2c20fcd19bdd2ed3a"
+          curl --fail --location --retry 3 --retry-delay 2 \
+            "$base/Gold-Cash/XAUUSD/XAUUSD_M15_2010_2026.csv" \
+            -o "$root/data/XAUUSD_M15.csv"
+          cp research/gold_macro_event_reaction_v1/BLS_RELEASE_CALENDAR_2018_2022.csv \
+            "$root/data/BLS_RELEASE_CALENDAR_2018_2022.csv"
+          cp research/gold_macro_event_reaction_v1/FOMC_REGULAR_DECISION_DATES_2018_2022.csv \
+            "$root/data/FOMC_REGULAR_DECISION_DATES_2018_2022.csv"
+          sha256sum "$root/data/"* > "$root/data/SHA256SUMS.txt"
+      - name: Run frozen state-only study with positional-index repair
+        run: |
+          PYTHONPATH=scripts python scripts/run_gold_macro_event_prerelease_state_v2_fixed.py \
+            --config config/gold_macro_event_prerelease_state_v2.json \
+            --gold artifacts/gold_macro_event_prerelease_state_v2/data/XAUUSD_M15.csv \
+            --bls artifacts/gold_macro_event_prerelease_state_v2/data/BLS_RELEASE_CALENDAR_2018_2022.csv \
+            --fomc artifacts/gold_macro_event_prerelease_state_v2/data/FOMC_REGULAR_DECISION_DATES_2018_2022.csv \
+            --output artifacts/gold_macro_event_prerelease_state_v2/result.json
+      - name: Guard research boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/gold_macro_event_prerelease_state_v2/result.json'))
+          assert r['protocol'] == 'gold_macro_event_prerelease_state_v2'
+          assert r['grid']['hypotheses'] == 12
+          assert r['pnl_tested'] is False
+          assert r['temporal_validation_opened'] is False
+          assert r['retrospective_extension_opened'] is False
+          assert r['leverage_tested'] is False
+          assert r['claims']['verified_future_oos'] is False
+          assert r['claims']['profitable_edge_established'] is False
+          assert r['claims']['leverage_authorized'] is False
+          assert r['claims']['live_enabled'] is False
+          PY
+      - name: Preserve evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-macro-event-prerelease-state-v2-repaired
+          path: artifacts/gold_macro_event_prerelease_state_v2/
+          retention-days: 30
+          if-no-files-found: warn
