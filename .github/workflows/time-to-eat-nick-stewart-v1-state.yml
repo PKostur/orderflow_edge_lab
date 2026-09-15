@@ -77,13 +77,15 @@ jobs:
 
           def canonicalize_columns(df):
               out = df.copy()
+              if out.index.name and canonical_name(out.index.name) in {'datetime', 'timestamp'}:
+                  idx_name = canonical_name(out.index.name)
+                  if idx_name not in [canonical_name(c) for c in out.columns]:
+                      out = out.reset_index()
               out.columns = [canonical_name(c) for c in out.columns]
-              # pandas writes an index column as Unnamed: 0 when the index has no name.
               if 'datetime' not in out.columns:
                   unnamed = [c for c in out.columns if c.startswith('unnamed') or c in {'index', ''}]
                   if unnamed:
                       out = out.rename(columns={unnamed[0]: 'datetime'})
-              # Common MT export uses separate date and time columns.
               if 'datetime' not in out.columns and 'date' in out.columns and 'time' in out.columns:
                   out['datetime'] = out['date'].astype(str).str.strip() + ' ' + out['time'].astype(str).str.strip()
               return out
@@ -143,6 +145,8 @@ jobs:
               'repo': 'Pcitycrypto/xauusd',
               'file': 'XAUUSD_1m.csv',
               'role': 'cash-gold development proxy, not GC independent replication',
+              'source_timezone_documented': False,
+              'parser_timezone_assumption': 'UTC for naive source timestamps; must be treated as a source limitation',
               'canonical_columns': observed_xau_columns,
               'rows': len(xau),
               'start': xau.timestamp.min().isoformat(),
@@ -151,7 +155,7 @@ jobs:
           del xau, xparts
           gc.collect()
 
-          # NQ futures dataset. Export only 2021-2022 to the scorer.
+          # NQ futures dataset. The visible session start around 23:00 in winter is consistent with UTC Globex timing.
           nqds = load_dataset('mdelcristo/NQ-F_1min_OHLCV_Parquet', split='train')
           nqraw = nqds.to_pandas()
           nq = norm(nqraw, 'timestamp')
@@ -162,6 +166,7 @@ jobs:
           manifest['sources']['NQ'] = {
               'repo': 'mdelcristo/NQ-F_1min_OHLCV_Parquet',
               'role': 'native secondary futures market',
+              'timestamp_interpretation': 'UTC',
               'rows': len(nq),
               'start': nq.timestamp.min().isoformat(),
               'end': nq.timestamp.max().isoformat(),
@@ -169,9 +174,13 @@ jobs:
           del nqds, nqraw, nq
           gc.collect()
 
-          # ES transfer dataset. Remove UTC dates containing an explicit contract-id transition.
-          esds = load_dataset('msj-21/es-futures-1m', split='train')
-          esraw = canonicalize_columns(esds.to_pandas())
+          # ES transfer dataset. Download only the canonical continuous-price file, not the incompatible feature parquet.
+          es_path = hf_hub_download(
+              repo_id='msj-21/es-futures-1m',
+              filename='es_continuous_1m.parquet',
+              repo_type='dataset',
+          )
+          esraw = canonicalize_columns(pd.read_parquet(es_path))
           if 'datetime' not in esraw.columns:
               raise SystemExit(f'ES datetime missing: {list(esraw.columns)}')
           es_ts = pd.to_datetime(esraw['datetime'], utc=True, errors='coerce')
@@ -190,7 +199,9 @@ jobs:
           es.to_parquet(es_out, index=False)
           manifest['sources']['ES'] = {
               'repo': 'msj-21/es-futures-1m',
+              'file': 'es_continuous_1m.parquet',
               'role': 'predeclared transfer-only futures market',
+              'timestamp_interpretation': 'UTC from source schema',
               'roll_transition_utc_dates_removed': sorted(bad_dates),
               'rows': len(es),
               'start': es.timestamp.min().isoformat(),
