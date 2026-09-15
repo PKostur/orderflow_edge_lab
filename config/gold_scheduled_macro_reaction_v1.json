@@ -12,12 +12,30 @@
     "validation_opened": false,
     "future_oos_claim_allowed": false
   },
+  "source_amendment": {
+    "status": "pre_score_implementation_amendment",
+    "reason": "The originally pinned MT5 XAUUSD M1 file contained only recent 2026 intraday history and therefore produced zero 2021-2022 development rows.",
+    "prior_source_scored": false,
+    "prior_source_state_result_produced": false,
+    "hypotheses_changed": false,
+    "event_calendar_changed": false,
+    "state_definitions_changed": false,
+    "statistical_gates_changed": false
+  },
   "gold_source": {
-    "repository": "simom1/XAUUSD-history",
-    "commit": "9b1f323866d0150ed2422c0e0cf1b97aa1bfcb22",
-    "file": "Gold-Cash/XAUUSD/XAUUSD_M1.csv",
-    "instrument": "XAUUSD cash / MT5",
+    "repository": "kevingtlin/Market-Data-Lab",
+    "commit": "922f83a60cc574e7395fb27397077288055a1ef6",
+    "dataset_id": "XAUUSD-DUKASCOPY-M1-BID-ASK",
+    "files": [
+      "xauusd/bid/m1/xauusd_bid_m1_YYYY_MM.csv",
+      "xauusd/ask/m1/xauusd_ask_m1_YYYY_MM.csv"
+    ],
+    "months_materialized": "2020-11 through 2022-12 only",
+    "instrument": "XAUUSD spot gold / Dukascopy",
+    "timestamp_column": "timestamp",
+    "timestamp_unit": "milliseconds",
     "timestamp_timezone": "UTC",
+    "state_price": "inner-joined bid/ask midpoint OHLC at identical timestamps",
     "role": "development source; not future OOS or independent replication"
   },
   "event_calendar": {
