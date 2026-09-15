@@ -86,6 +86,10 @@
     "paired_sign_flip_epochs": 20000,
     "paired_sign_flip_seed": 20260915,
     "maximum_incremental_sign_flip_p": 0.05,
+    "macro_permutation_epochs": 5000,
+    "macro_permutation_seed": 20260916,
+    "macro_permutation_scheme": "shuffle the four macro-derived feature columns jointly across scored events within each calendar year, preserving price-derived features and target chronology; rerun the same causal expanding ridge forecast for each epoch",
+    "maximum_macro_permutation_p": 0.05,
     "side_breadth": "Report metrics separately for positive and negative innovations. A state pass requires at least 20 scored events on each side, but does not require either side to be profitable because PnL is not evaluated in v4."
   },
   "controls": {
