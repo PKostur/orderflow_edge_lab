@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold_silver_pair_regime_v5",
+  "evidence_class": "post_observation_retrospective_development_with_locked_validation_not_future_oos",
+  "motivation": "v2-v4 repeatedly found strong relative-state information but asymmetric executable outcomes, and simple lagged macro state did not explain that asymmetry. v5 asks a new state-first question internal to the pair: at an extreme adaptive dislocation, do causal pair trend, innovation persistence, volatility and hedge instability predict whether the dislocation will revert or continue? Economic direction is determined by the regime score rather than by the sign of gold or by deleting one trade side post hoc.",
+  "source": {
+    "repository": "simom1/XAUUSD-history",
+    "commit": "bda79c6c5ce09a5b488d4cd2c20fcd19bdd2ed3a",
+    "gold_path": "Gold-Cash/XAUUSD/XAUUSD_D1_2010_2026.csv",
+    "silver_path": "Silver-Cash/XAGUSD/XAGUSD_D1.csv"
+  },
+  "data_admission": {
+    "common_dates_only": true,
+    "weekdays_only": true,
+    "minimum_tick_volume_each_leg": 2,
+    "positive_ohlc_required": true,
+    "duplicate_policy": "keep_last",
+    "no_interpolation": true
+  },
+  "periods": {
+    "development": {"start": "2010-01-01", "end_exclusive": "2021-01-01"},
+    "locked_internal_validation": {"start": "2021-01-01", "end_exclusive": "2024-01-01", "opened_during_development": false},
+    "retrospective_extension": {"start": "2024-01-01", "end_exclusive": "2026-09-15", "opened_during_development": false},
+    "future_shadow_earliest_utc": "2026-09-16T00:00:00Z"
+  },
+  "pair_model": {
+    "type": "recursive least squares on log(gold_close) = alpha + beta * log(silver_close)",
+    "initial_warmup_trading_days": 252,
+    "forgetting_factor": 0.995,
+    "event_abs_innovation_z_gte": 1.5,
+    "beta_gt": 0.05,
+    "beta_lt": 3.0,
+    "innovation_is_pre_update": true,
+    "selection_rationale": "fixed from v3 by strongest state evidence, not by economic PnL"
+  },
+  "feature_engineering": {
+    "standardization_window_trading_days": 252,
+    "standardization_uses_prior_values_only": true,
+    "features": {
+      "trend_reversion_support_21": "negative sign(event_z) times causally standardized trailing 21-day beta-normalized pair return; positive means recent pair trend runs against the current dislocation and therefore supports reversion",
+      "innovation_reversal_support_5": "negative sign(event_z) times causally standardized mean of the prior five adaptive innovation z-scores, excluding the current event; positive means recent innovations oppose the current dislocation",
+      "low_pair_volatility_support_21": "negative causally standardized trailing 21-day realized volatility of daily beta-normalized pair returns",
+      "stable_beta_support_21": "negative causally standardized absolute 21-day percentage change in the adaptive beta",
+      "equal_weight_pair_regime_support": "arithmetic mean of the four support scores when all are finite"
+    }
+  },
+  "state_first": {
+    "event_filter": "only dates with |pre-update adaptive innovation z| >= 1.5",
+    "horizon_trading_bars": 21,
+    "target": "mean-reversion payoff state: -sign(event_z) times the future 21-trading-day beta-normalized hedged pair close return using signal-time beta; positive means the dislocation reverted profitably, negative means continuation would have been preferable",
+    "predictor": "one of the five causal pair-regime support scores",
+    "dependence_cluster_calendar_days": 126,
+    "minimum_events_per_fold": 5,
+    "minimum_scorable_folds": 10,
+    "minimum_total_events": 120,
+    "minimum_positive_score_event_fraction": 0.20,
+    "minimum_negative_score_event_fraction": 0.20,
+    "minimum_median_fold_spearman": 0.0,
+    "minimum_positive_fold_fraction": 0.60,
+    "sign_flip_epochs": 20000,
+    "sign_flip_seed": 20260915,
+    "maximum_bh_fdr_q": 0.10,
+    "multiple_testing_family": "five unique pair-regime features"
+  },
+  "economic_translation": {
+    "direction": "score > 0 => mean reversion side (-sign event_z); score < 0 => continuation side (+sign event_z)",
+    "minimum_abs_regime_score": [0.0, 0.5],
+    "hold_trading_bars": [21, 42],
+    "entry": "next common daily open after completed signal close",
+    "exit": "common daily open after frozen hold",
+    "one_active_trade": true,
+    "entry_beta_frozen_for_trade": true,
+    "gross_normalization": "gold_weight=1/(1+abs(beta)); silver_weight=abs(beta)/(1+abs(beta))",
+    "round_trip_cost_bps_on_total_gross_notional": [5.0, 10.0, 20.0],
+    "primary_cost_bps": 10.0,
+    "high_cost_bps": 20.0
+  },
+  "economic_gate": {
+    "state_feature_must_pass_before_translation": true,
+    "minimum_non_overlapping_trades": 18,
+    "minimum_primary_median_fold_net_bps": 0.0,
+    "minimum_primary_median_fold_pf": 1.10,
+    "minimum_primary_positive_fold_fraction": 0.60,
+    "minimum_high_cost_median_fold_net_bps": 0.0,
+    "minimum_overall_mean_primary_net_bps": 0.0,
+    "require_original_mean_gt_reversed_regime_score": true,
+    "require_primary_median_fold_risk_adjusted_gt_always_mean_reversion_control": true,
+    "require_primary_median_fold_risk_adjusted_gt_always_continuation_control": true,
+    "require_primary_median_fold_risk_adjusted_gt_static_equal_dollar_pair_control": true,
+    "minimum_long_gold_short_silver_trades": 5,
+    "minimum_short_gold_long_silver_trades": 5,
+    "require_positive_mean_primary_net_both_pair_directions": true
+  },
+  "controls": {
+    "always_mean_reversion_at_same_events": true,
+    "always_continuation_at_same_events": true,
+    "reversed_regime_score": true,
+    "static_equal_dollar_pair_same_regime_direction": true,
+    "unhedged_gold_same_regime_direction": true,
+    "report_trade_return_correlation_with_unhedged_gold": true,
+    "report_pair_direction_subsets": true,
+    "report_reversion_vs_continuation_decision_counts": true
+  },
+  "neighborhood_gate": {
+    "definition": "same state feature; differs in exactly one adjacent value among regime threshold or hold",
+    "minimum_supporting_neighbors": 1,
+    "supporter_requires": {
+      "primary_median_fold_net_bps_gt": 0.0,
+      "primary_median_fold_pf_gt": 1.0,
+      "overall_mean_primary_net_bps_gt": 0.0,
+      "high_cost_median_fold_net_bps_gte": 0.0
+    }
+  },
+  "candidate_selection": {
+    "maximum_candidates": 2,
+    "locked_validation_may_open_only_after_separate_candidate_freeze_commit": true
+  },
+  "claims": {
+    "verified_future_oos": false,
+    "profitable_edge_established": false,
+    "leverage_authorized": false,
+    "live_enabled": false
+  }
+}
