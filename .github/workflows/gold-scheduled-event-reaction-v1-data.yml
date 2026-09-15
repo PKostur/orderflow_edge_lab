@@ -1,0 +1,68 @@
+name: Gold Scheduled Event Reaction v1 Data
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/gold-scheduled-event-reaction-v1]
+    paths:
+      - "config/gold_scheduled_event_reaction_v1.json"
+      - "scripts/prepare_gold_scheduled_event_reaction_v1_data.py"
+      - ".github/workflows/gold-scheduled-event-reaction-v1-data.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gold-scheduled-event-reaction-v1-data-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install runtime
+        run: python -m pip install pandas numpy requests beautifulsoup4
+      - name: Download pinned annual XAUUSD M1 files
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/gold_scheduled_event_reaction_v1/raw
+          base="https://raw.githubusercontent.com/tiumbj/M1_XAUUSD/f72f8fe278f88258123347b0c4ca893573ec67a9"
+          for year in 2014 2015 2016 2017 2018 2019 2020 2021 2022 2023; do
+            echo "Fetching ${year}"
+            curl --fail --location --retry 4 --retry-delay 3 \
+              "$base/DAT_MT_XAUUSD_M1_${year}.csv" \
+              -o "artifacts/gold_scheduled_event_reaction_v1/raw/DAT_MT_XAUUSD_M1_${year}.csv"
+          done
+      - name: Build official event/calendar coverage manifest
+        run: |
+          python scripts/prepare_gold_scheduled_event_reaction_v1_data.py \
+            --config config/gold_scheduled_event_reaction_v1.json \
+            --data-dir artifacts/gold_scheduled_event_reaction_v1/raw \
+            --output-dir artifacts/gold_scheduled_event_reaction_v1/precheck
+      - name: Guard data-only research boundary
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('artifacts/gold_scheduled_event_reaction_v1/precheck/manifest.json')
+          if not p.exists():
+              raise SystemExit('manifest missing')
+          r=json.loads(p.read_text())
+          assert r['protocol'] == 'gold_scheduled_event_reaction_v1'
+          assert r['research_semantics_changed'] is False
+          assert r['strategy_scoring_performed'] is False
+          PY
+      - name: Preserve precheck evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-scheduled-event-reaction-v1-data
+          path: artifacts/gold_scheduled_event_reaction_v1/
+          retention-days: 30
+          if-no-files-found: warn
