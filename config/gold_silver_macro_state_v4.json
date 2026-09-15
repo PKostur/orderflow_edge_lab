@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold_silver_macro_state_v4",
+  "evidence_class": "post_observation_retrospective_state_research_with_locked_validation_not_future_oos",
+  "motivation": "v1-v3 repeatedly found statistically durable gold/silver convergence-state information but symmetric executable reversion failed because positive and negative dislocations behaved asymmetrically. This protocol tests whether independent macro state variables explain that asymmetry before any conditioned PnL is evaluated. It is not an economic rescue of v3 and contains no conditioned trading rule.",
+  "price_source": {
+    "repository": "simom1/XAUUSD-history",
+    "commit": "bda79c6c5ce09a5b488d4cd2c20fcd19bdd2ed3a",
+    "gold_path": "Gold-Cash/XAUUSD/XAUUSD_D1_2010_2026.csv",
+    "silver_path": "Silver-Cash/XAGUSD/XAGUSD_D1.csv"
+  },
+  "macro_sources": {
+    "real_yield": {
+      "provider": "FRED",
+      "series": "DFII10",
+      "frequency": "daily",
+      "definition": "10-year inflation-indexed Treasury constant-maturity yield"
+    },
+    "broad_usd": {
+      "provider": "FRED",
+      "series": "DTWEXBGS",
+      "frequency": "daily",
+      "definition": "Nominal Broad U.S. Dollar Index"
+    },
+    "causal_lag": "For each gold/silver signal date t, only the latest macro observation with observation_date < t may be used. Same-day macro values are forbidden.",
+    "missing_policy": "forward-fill previously observed macro values for at most 5 calendar days; otherwise event is inadmissible"
+  },
+  "periods": {
+    "development": {"start": "2010-01-01", "end_exclusive": "2021-01-01"},
+    "locked_internal_validation": {"start": "2021-01-01", "end_exclusive": "2024-01-01", "opened_during_development": false},
+    "retrospective_extension": {"start": "2024-01-01", "end_exclusive": "2026-09-15", "opened_during_development": false},
+    "future_shadow_earliest_utc": "2026-09-16T00:00:00Z"
+  },
+  "base_relative_state": {
+    "model": "recursive least squares log(gold)=alpha+beta*log(silver)",
+    "initial_warmup_trading_days": 252,
+    "forgetting_factor": 0.995,
+    "initial_covariance_scale": 1000.0,
+    "minimum_innovation_std": 0.0001,
+    "beta_gt": 0.05,
+    "beta_lt": 3.0,
+    "event_abs_innovation_z_gte": 1.5,
+    "state_horizon_trading_bars": 21,
+    "choice_boundary": "The fixed lambda=0.995 and |z|>=1.5 state definition is inherited from the strongest pre-existing v3 state hypothesis. It is not re-searched in v4."
+  },
+  "macro_features": {
+    "real_yield_change_trading_bars": 63,
+    "broad_usd_log_return_trading_bars": 63,
+    "features": [
+      "abs_innovation_z",
+      "innovation_sign",
+      "real_yield_63d_change",
+      "broad_usd_63d_log_return",
+      "innovation_sign_x_real_yield_change",
+      "innovation_sign_x_broad_usd_return"
+    ],
+    "standardization": "within each causal training sample only; intercept is not standardized"
+  },
+  "walk_forward_model": {
+    "target": "signed 21-trading-bar residual convergence measured using the signal-time alpha, beta, innovation and innovation standard deviation; positive means convergence in the reversion direction",
+    "baseline_features": ["abs_innovation_z", "innovation_sign"],
+    "macro_model_features": [
+      "abs_innovation_z",
+      "innovation_sign",
+      "real_yield_63d_change",
+      "broad_usd_63d_log_return",
+      "innovation_sign_x_real_yield_change",
+      "innovation_sign_x_broad_usd_return"
+    ],
+    "estimator": "causal expanding ridge linear regression implemented deterministically with closed-form linear algebra",
+    "ridge_alpha": 1.0,
+    "minimum_completed_training_events": 80,
+    "training_label_embargo_trading_bars": 21,
+    "prediction_rule": "At each event, train only on earlier events whose full 21-bar target is already observable before the current event date."
+  },
+  "evaluation": {
+    "dependence_cluster_calendar_days": 126,
+    "minimum_events_per_fold": 5,
+    "minimum_scorable_folds": 10,
+    "primary_metric": "Spearman correlation between causal forecast and realized signed convergence target within dependence folds",
+    "incremental_metric": "macro-model fold rho minus baseline-model fold rho",
+    "minimum_macro_median_fold_rho": 0.0,
+    "minimum_macro_positive_fold_fraction": 0.60,
+    "minimum_median_incremental_rho": 0.05,
+    "minimum_positive_incremental_fold_fraction": 0.60,
+    "paired_sign_flip_epochs": 20000,
+    "paired_sign_flip_seed": 20260915,
+    "maximum_incremental_sign_flip_p": 0.05,
+    "side_breadth": "Report metrics separately for positive and negative innovations. A state pass requires at least 20 scored events on each side, but does not require either side to be profitable because PnL is not evaluated in v4."
+  },
+  "controls": {
+    "baseline_without_macro": true,
+    "macro_feature_permutation_within_calendar_year": true,
+    "report_positive_and_negative_innovation_subsets": true,
+    "economic_translation_prohibited": true,
+    "leverage_prohibited": true
+  },
+  "promotion": {
+    "if_state_passes": "Freeze a separate v4.1 economic translation protocol before evaluating any conditioned PnL.",
+    "if_state_fails": "Close the macro-conditioning hypothesis and do not open locked validation.",
+    "locked_validation_may_open_in_v4": false
+  },
+  "claims": {
+    "verified_future_oos": false,
+    "profitable_edge_established": false,
+    "leverage_authorized": false,
+    "live_enabled": false
+  }
+}
