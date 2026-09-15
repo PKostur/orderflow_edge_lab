@@ -1,0 +1,170 @@
+{
+  "protocol_id": "gold-scheduled-macro-reaction-v1",
+  "protocol_status": "state_protocol_frozen",
+  "state_scoring_enabled": true,
+  "economic_scoring_enabled": false,
+  "base_lineage": "research/gold-silver-trend-exhaustion-v6",
+  "evidence_boundary": {
+    "development_start": "2021-01-01",
+    "development_end_exclusive": "2023-01-01",
+    "locked_historical_validation_start": "2023-01-01",
+    "locked_historical_validation_end_exclusive": "2024-01-01",
+    "validation_opened": false,
+    "future_oos_claim_allowed": false
+  },
+  "source_amendment": {
+    "status": "pre_score_implementation_amendment",
+    "reason": "The originally pinned MT5 XAUUSD M1 file contained only recent 2026 intraday history and therefore produced zero 2021-2022 development rows.",
+    "prior_source_scored": false,
+    "prior_source_state_result_produced": false,
+    "hypotheses_changed": false,
+    "event_calendar_changed": false,
+    "state_definitions_changed": false,
+    "statistical_gates_changed": false
+  },
+  "gold_source": {
+    "repository": "kevingtlin/Market-Data-Lab",
+    "commit": "922f83a60cc574e7395fb27397077288055a1ef6",
+    "dataset_id": "XAUUSD-DUKASCOPY-M1-BID-ASK",
+    "files": [
+      "xauusd/bid/m1/xauusd_bid_m1_YYYY_MM.csv",
+      "xauusd/ask/m1/xauusd_ask_m1_YYYY_MM.csv"
+    ],
+    "months_materialized": "2020-11 through 2022-12 only",
+    "instrument": "XAUUSD spot gold / Dukascopy",
+    "timestamp_column": "timestamp",
+    "timestamp_unit": "milliseconds",
+    "timestamp_timezone": "UTC",
+    "state_price": "inner-joined bid/ask midpoint OHLC at identical timestamps",
+    "role": "development source; not future OOS or independent replication"
+  },
+  "event_calendar": {
+    "file": "research/gold_scheduled_macro_reaction_v1/EVENT_CALENDAR.csv",
+    "expected_total_events": 64,
+    "event_types": {
+      "cpi": {"expected_count": 24, "scheduled_time_local": "08:30", "source": "U.S. Bureau of Labor Statistics annual release calendars"},
+      "employment": {"expected_count": 24, "scheduled_time_local": "08:30", "source": "U.S. Bureau of Labor Statistics annual release calendars"},
+      "fomc": {"expected_count": 16, "scheduled_time_local": "14:00", "source": "Federal Reserve FOMC meeting calendar and statements"}
+    },
+    "timezone": "America/New_York"
+  },
+  "event_state_definition": {
+    "bar_time_semantics": "source timestamp is one-minute bar open time UTC",
+    "pre_event_price": "close of bar opening one minute before scheduled event",
+    "initial_reaction_minutes": 15,
+    "initial_reaction_end_price": "close of bar opening 14 minutes after scheduled event",
+    "continuation_horizons_minutes_after_initial": [30, 60, 120],
+    "primary_horizon_minutes_after_initial": 60,
+    "pre_event_scale_minutes": 120,
+    "pre_event_scale": "high-low range across the 120 complete one-minute bars ending one minute before event",
+    "minimum_scale_price_fraction": 0.0001,
+    "continuation_score": "sign(initial_reaction) * (future_close - initial_reaction_end_price) / pre_event_scale",
+    "interpretation": "positive is continuation of the initial event shock; negative is reversal after the initial shock",
+    "zero_initial_reaction": "drop event from directional state scoring",
+    "missing_required_bar": "drop event; no interpolation"
+  },
+  "matched_placebo_control": {
+    "offset_calendar_days": [-7, 7],
+    "same_local_clock_time": true,
+    "exclude_dates_containing_any_frozen_target_event": true,
+    "minimum_valid_placebos_per_event": 1,
+    "event_excess_continuation": "event continuation score minus median valid matched-placebo continuation score",
+    "purpose": "control ordinary same-time intraday continuation/reversal unrelated to the frozen scheduled event"
+  },
+  "pre_existing_features": {
+    "trend_4h": {
+      "definition": "close(t0-1m) / close(t0-241m) - 1",
+      "alignment": "sign(initial_reaction) * sign(pre_event_4h_return)",
+      "note": "pre-event trend is known before the event; alignment uses the subsequent initial shock direction"
+    },
+    "compression": {
+      "definition": "pre_event_120m_range / median full-day high-low range of the prior 20 completed New York trading dates",
+      "history_days": 20,
+      "note": "strictly causal pre-event volatility/compression measure"
+    },
+    "shock_size": {
+      "definition": "abs(initial_reaction) / pre_event_120m_range",
+      "note": "post-event reaction-state variable, not pre-existing"
+    }
+  },
+  "primary_hypotheses": [
+    {
+      "id": "cpi_excess_continuation",
+      "family": "event_type_base",
+      "event_type": "cpi",
+      "statistic": "median event_excess_continuation"
+    },
+    {
+      "id": "employment_excess_continuation",
+      "family": "event_type_base",
+      "event_type": "employment",
+      "statistic": "median event_excess_continuation"
+    },
+    {
+      "id": "fomc_excess_continuation",
+      "family": "event_type_base",
+      "event_type": "fomc",
+      "statistic": "median event_excess_continuation"
+    },
+    {
+      "id": "trend_alignment_effect",
+      "family": "pre_existing_regime",
+      "event_type": "all",
+      "statistic": "median continuation_score when alignment=+1 minus median continuation_score when alignment=-1"
+    },
+    {
+      "id": "pre_event_compression_effect",
+      "family": "pre_existing_regime",
+      "event_type": "all",
+      "statistic": "Spearman correlation between compression and continuation_score"
+    },
+    {
+      "id": "initial_shock_size_effect",
+      "family": "reaction_state",
+      "event_type": "all",
+      "statistic": "Spearman correlation between shock_size and continuation_score"
+    }
+  ],
+  "statistics": {
+    "primary_horizon_only_for_fdr": true,
+    "permutation_epochs": 20000,
+    "random_seed_namespace": "gold-scheduled-macro-reaction-v1",
+    "p_values": "two-sided",
+    "multiple_testing": "Benjamini-Hochberg across all six primary hypotheses",
+    "fdr_q_max": 0.10
+  },
+  "state_gate": {
+    "event_type_min_events": 16,
+    "event_type_min_valid_placebo_fraction": 0.80,
+    "event_type_min_abs_median_excess": 0.10,
+    "event_type_min_direction_consistency": 0.60,
+    "regime_min_group_events": 15,
+    "regime_min_abs_median_difference": 0.10,
+    "continuous_min_events": 45,
+    "continuous_min_abs_spearman": 0.25,
+    "minimum_same_sign_horizons": 2,
+    "event_type_robustness_for_pooled_features": "primary-horizon effect sign must agree in at least two of three event types when each subtype has at least 8 scorable events",
+    "fdr_q_max": 0.10,
+    "candidate_requires_all_applicable_gates": true
+  },
+  "controls_and_claims": {
+    "reversed_direction_control_required": true,
+    "matched_placebo_required": true,
+    "economic_pnl_disabled": true,
+    "costs_not_applicable_until_economic_stage": true,
+    "same_period_cross_source_is_future_oos": false,
+    "leverage_can_rescue_negative_unlevered_expectancy": false,
+    "engineering_success_is_edge_evidence": false,
+    "live_enabled": false
+  },
+  "promotion_path": [
+    "development_state",
+    "economic_spec_freeze_only_if_state_candidate_exists",
+    "development_economics",
+    "candidate_freeze",
+    "locked_2023_validation",
+    "independent_replication",
+    "future_shadow",
+    "leverage_live_only_if_all_gates_pass"
+  ]
+}
