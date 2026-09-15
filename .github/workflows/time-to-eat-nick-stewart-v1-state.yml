@@ -1,0 +1,261 @@
+name: Time To Eat Nick Stewart v1 State
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/time-to-eat-nick-stewart-v1]
+    paths:
+      - "config/time_to_eat_nick_stewart_v1.json"
+      - "scripts/check_time_to_eat_nick_stewart_v1_ready.py"
+      - "scripts/run_time_to_eat_nick_stewart_v1_state.py"
+      - "research/time_to_eat_nick_stewart_v1/STATE_PROTOCOL.md"
+      - ".github/workflows/time-to-eat-nick-stewart-v1-state.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: time-to-eat-nick-stewart-v1-state-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  development-state:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install state-research runtime
+        run: python -m pip install pandas numpy pyarrow datasets huggingface_hub
+
+      - name: Enforce frozen state gate and blocked economics
+        run: |
+          python scripts/check_time_to_eat_nick_stewart_v1_ready.py --stage state
+          if python scripts/check_time_to_eat_nick_stewart_v1_ready.py --stage economics; then
+            echo "economics unexpectedly enabled" >&2
+            exit 1
+          else
+            echo "economics correctly remains blocked"
+          fi
+
+      - name: Build development-only minute datasets
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/time_to_eat_v1_state/data
+          python - <<'PY'
+          from __future__ import annotations
+
+          import gc
+          import hashlib
+          import json
+          import re
+          from pathlib import Path
+
+          import pandas as pd
+          from datasets import load_dataset
+          from huggingface_hub import hf_hub_download
+
+          OUT = Path('artifacts/time_to_eat_v1_state/data')
+          START = pd.Timestamp('2021-01-01T00:00:00Z')
+          END = pd.Timestamp('2023-01-01T00:00:00Z')
+          manifest = {
+              'development_start_utc': START.isoformat(),
+              'exclusive_end_utc': END.isoformat(),
+              'locked_2023_materialized_for_scoring': False,
+              'sources': {},
+          }
+
+          def canonical_name(value):
+              text = str(value).strip().lower()
+              text = text.replace('<', '').replace('>', '')
+              text = re.sub(r'[^a-z0-9]+', '_', text).strip('_')
+              return text
+
+          def canonicalize_columns(df):
+              out = df.copy()
+              if out.index.name and canonical_name(out.index.name) in {'datetime', 'timestamp'}:
+                  idx_name = canonical_name(out.index.name)
+                  if idx_name not in [canonical_name(c) for c in out.columns]:
+                      out = out.reset_index()
+              out.columns = [canonical_name(c) for c in out.columns]
+              if 'datetime' not in out.columns:
+                  unnamed = [c for c in out.columns if c.startswith('unnamed') or c in {'index', ''}]
+                  if unnamed:
+                      out = out.rename(columns={unnamed[0]: 'datetime'})
+              if 'datetime' not in out.columns and 'date' in out.columns and 'time' in out.columns:
+                  out['datetime'] = out['date'].astype(str).str.strip() + ' ' + out['time'].astype(str).str.strip()
+              return out
+
+          def norm(df, ts_col=None):
+              df = canonicalize_columns(df)
+              if ts_col is not None:
+                  ts_col = canonical_name(ts_col)
+              if not ts_col or ts_col not in df.columns:
+                  ts_col = 'datetime' if 'datetime' in df.columns else ('timestamp' if 'timestamp' in df.columns else None)
+              if ts_col is None:
+                  raise ValueError(f'no timestamp column after canonicalization: {list(df.columns)}')
+              missing = [c for c in ('open', 'high', 'low', 'close') if c not in df.columns]
+              if missing:
+                  raise ValueError(f'missing OHLC {missing}; canonical columns={list(df.columns)}')
+              ts = pd.to_datetime(df[ts_col], utc=True, errors='coerce')
+              out = pd.DataFrame({
+                  'timestamp': ts,
+                  'open': pd.to_numeric(df['open'], errors='coerce'),
+                  'high': pd.to_numeric(df['high'], errors='coerce'),
+                  'low': pd.to_numeric(df['low'], errors='coerce'),
+                  'close': pd.to_numeric(df['close'], errors='coerce'),
+              }).dropna()
+              out = out[(out.timestamp >= START) & (out.timestamp < END)]
+              out = out.drop_duplicates('timestamp', keep='last').sort_values('timestamp')
+              return out
+
+          def sniff_csv(path):
+              with open(path, 'r', encoding='utf-8-sig', errors='replace') as fh:
+                  header = fh.readline().rstrip('\r\n')
+              counts = {sep: header.count(sep) for sep in (',', ';', '\t')}
+              sep = max(counts, key=counts.get)
+              if counts[sep] == 0:
+                  raise ValueError(f'could not infer delimiter from header: {header[:300]!r}')
+              print({'source': str(path), 'header': header[:300], 'separator': repr(sep)})
+              return sep
+
+          # XAUUSD cash development proxy. Read source CSV in chunks and retain only open development years.
+          xau_path = hf_hub_download(repo_id='Pcitycrypto/xauusd', filename='XAUUSD_1m.csv', repo_type='dataset')
+          xau_sep = sniff_csv(xau_path)
+          xparts = []
+          observed_xau_columns = None
+          for chunk in pd.read_csv(xau_path, sep=xau_sep, chunksize=500_000, encoding='utf-8-sig'):
+              cc = canonicalize_columns(chunk)
+              if observed_xau_columns is None:
+                  observed_xau_columns = list(cc.columns)
+                  print({'xau_canonical_columns': observed_xau_columns})
+              x = norm(cc)
+              if len(x):
+                  xparts.append(x)
+          if not xparts:
+              raise SystemExit(f'XAU source produced no 2021-2022 rows; columns={observed_xau_columns}')
+          xau = pd.concat(xparts, ignore_index=True).sort_values('timestamp')
+          xau_out = OUT / 'XAUUSD_1m_dev_2021_2022.parquet'
+          xau.to_parquet(xau_out, index=False)
+          manifest['sources']['XAUUSD'] = {
+              'repo': 'Pcitycrypto/xauusd',
+              'file': 'XAUUSD_1m.csv',
+              'role': 'cash-gold development proxy, not GC independent replication',
+              'source_timezone_documented': False,
+              'parser_timezone_assumption': 'UTC for naive source timestamps; must be treated as a source limitation',
+              'canonical_columns': observed_xau_columns,
+              'rows': len(xau),
+              'start': xau.timestamp.min().isoformat(),
+              'end': xau.timestamp.max().isoformat(),
+          }
+          del xau, xparts
+          gc.collect()
+
+          # NQ futures dataset. The visible session start around 23:00 in winter is consistent with UTC Globex timing.
+          nqds = load_dataset('mdelcristo/NQ-F_1min_OHLCV_Parquet', split='train')
+          nqraw = nqds.to_pandas()
+          nq = norm(nqraw, 'timestamp')
+          if nq.empty:
+              raise SystemExit('NQ source produced no 2021-2022 rows')
+          nq_out = OUT / 'NQ_1m_dev_2021_2022.parquet'
+          nq.to_parquet(nq_out, index=False)
+          manifest['sources']['NQ'] = {
+              'repo': 'mdelcristo/NQ-F_1min_OHLCV_Parquet',
+              'role': 'native secondary futures market',
+              'timestamp_interpretation': 'UTC',
+              'rows': len(nq),
+              'start': nq.timestamp.min().isoformat(),
+              'end': nq.timestamp.max().isoformat(),
+          }
+          del nqds, nqraw, nq
+          gc.collect()
+
+          # ES transfer dataset. Download only the canonical continuous-price file, not the incompatible feature parquet.
+          es_path = hf_hub_download(
+              repo_id='msj-21/es-futures-1m',
+              filename='es_continuous_1m.parquet',
+              repo_type='dataset',
+          )
+          esraw = canonicalize_columns(pd.read_parquet(es_path))
+          if 'datetime' not in esraw.columns:
+              raise SystemExit(f'ES datetime missing: {list(esraw.columns)}')
+          es_ts = pd.to_datetime(esraw['datetime'], utc=True, errors='coerce')
+          esraw = esraw.assign(_ts=es_ts)
+          if 'instrument_id' in esraw.columns:
+              transition = esraw.instrument_id.astype(str).ne(esraw.instrument_id.astype(str).shift(1))
+              bad_dates = set(esraw.loc[transition & esraw._ts.notna(), '_ts'].dt.date.astype(str))
+          else:
+              bad_dates = set()
+          es = norm(esraw.drop(columns=['_ts']), 'datetime')
+          if bad_dates:
+              es = es[~es.timestamp.dt.date.astype(str).isin(bad_dates)].copy()
+          if es.empty:
+              raise SystemExit('ES source produced no 2021-2022 rows after roll-date removal')
+          es_out = OUT / 'ES_1m_dev_2021_2022.parquet'
+          es.to_parquet(es_out, index=False)
+          manifest['sources']['ES'] = {
+              'repo': 'msj-21/es-futures-1m',
+              'file': 'es_continuous_1m.parquet',
+              'role': 'predeclared transfer-only futures market',
+              'timestamp_interpretation': 'UTC from source schema',
+              'roll_transition_utc_dates_removed': sorted(bad_dates),
+              'rows': len(es),
+              'start': es.timestamp.min().isoformat(),
+              'end': es.timestamp.max().isoformat(),
+          }
+
+          # Hard boundary: the scorer must never receive 2023 rows in development.
+          for p in [xau_out, nq_out, es_out]:
+              d = pd.read_parquet(p, columns=['timestamp'])
+              ts = pd.to_datetime(d.timestamp, utc=True)
+              if ts.max() >= END:
+                  raise SystemExit(f'locked 2023 leaked into {p}: {ts.max()}')
+              if ts.min() < START:
+                  raise SystemExit(f'pre-development rows leaked into {p}: {ts.min()}')
+
+          for p in [xau_out, nq_out, es_out]:
+              digest = hashlib.sha256(p.read_bytes()).hexdigest()
+              manifest.setdefault('sha256', {})[p.name] = digest
+
+          (OUT / 'SOURCE_MANIFEST.json').write_text(json.dumps(manifest, indent=2, sort_keys=True), encoding='utf-8')
+          print(json.dumps(manifest, indent=2, sort_keys=True))
+          PY
+
+      - name: Run frozen state-only development study
+        run: |
+          python scripts/run_time_to_eat_nick_stewart_v1_state.py \
+            --xau artifacts/time_to_eat_v1_state/data/XAUUSD_1m_dev_2021_2022.parquet \
+            --nq artifacts/time_to_eat_v1_state/data/NQ_1m_dev_2021_2022.parquet \
+            --es artifacts/time_to_eat_v1_state/data/ES_1m_dev_2021_2022.parquet \
+            --output artifacts/time_to_eat_v1_state/state_result.json
+
+      - name: Guard claims and sealed validation
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/time_to_eat_v1_state/state_result.json', encoding='utf-8'))
+          assert r['stage'] == 'development_state_only'
+          assert r['holdout_opened'] is False
+          assert r['economic_scoring_run'] is False
+          assert r['cell_count'] == 72
+          assert r['claims']['claimed_75pct_win_rate_verified'] is False
+          assert r['claims']['profitable_edge_established'] is False
+          assert r['claims']['verified_future_oos'] is False
+          assert r['claims']['leverage_authorized'] is False
+          assert r['claims']['live_enabled'] is False
+          PY
+
+      - name: Preserve state evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: time-to-eat-nick-stewart-v1-state
+          path: |
+            artifacts/time_to_eat_v1_state/state_result.json
+            artifacts/time_to_eat_v1_state/data/SOURCE_MANIFEST.json
+          retention-days: 30
+          if-no-files-found: warn

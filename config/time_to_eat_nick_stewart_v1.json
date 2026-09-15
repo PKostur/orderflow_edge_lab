@@ -1,0 +1,166 @@
+{
+  "protocol_id": "time-to-eat-nick-stewart-v1",
+  "protocol_status": "state_protocol_frozen",
+  "state_scoring_enabled": true,
+  "economic_scoring_enabled": false,
+  "evidence_date": "2026-09-15",
+  "base_lineage": "research/gold-silver-trend-exhaustion-v6",
+  "source_priority": [
+    "recovered_prior_chat_verbatim",
+    "first_party_tte_material",
+    "first_party_video_transcript",
+    "lineage_corroboration_only"
+  ],
+  "primary_source": {
+    "title": "The Play Book 2.0",
+    "creator": "Time To Eat Trading",
+    "published": "2026-08-29",
+    "youtube_video_id": "shc8w71iK_o"
+  },
+  "claims": {
+    "claimed_win_rate": 0.75,
+    "historical_phrase": "75 percent-plus",
+    "claim_is_evidence": false,
+    "claim_testing_deferred_until_economics": true
+  },
+  "markets": {
+    "gold_development_proxy": "XAUUSD cash minute data",
+    "native_primary": ["GC"],
+    "native_secondary": ["NQ"],
+    "predeclared_transfer_only": ["ES"],
+    "no_symbol_specific_parameter_tuning": true
+  },
+  "timeframes": {
+    "higher_context": ["1D", "4H"],
+    "execution_primary": "30m",
+    "execution_robustness": ["15m", "1H"],
+    "higher_timeframe_anchor_timezone": "America/New_York",
+    "four_hour_anchor": "00:00 America/New_York"
+  },
+  "historical_splits": {
+    "development_open": ["2021-01-01", "2022-12-31"],
+    "locked_historical_validation": ["2023-01-01", "2023-12-31"],
+    "validation_opened": false,
+    "future_oos_claim_allowed": false
+  },
+  "sessions": {
+    "source_preference": "New York / high volume",
+    "state_operationalization": {
+      "timezone": "America/New_York",
+      "start": "08:30",
+      "end": "11:30",
+      "rationale": "common high-activity New York window covering US macro releases and NYSE open; proxy only"
+    },
+    "scheduled_news_rule": "no separate event filter in state v1; session window is the only volume proxy"
+  },
+  "setup_families": [
+    "breakout",
+    "onion",
+    "celery_booby_trap",
+    "fade"
+  ],
+  "source_resolved_rules": {
+    "confirmation_close_required_except_fade": true,
+    "fade_normal_confirmation_candle_required": false,
+    "entry_trigger_styles": [
+      "break_current_candle_high_low",
+      "break_previous_candle_high_low"
+    ],
+    "celery_confirmation_must_remain_outside_range": true,
+    "celery_confirmation_body_direction_matters": false,
+    "breakout_trade_inside_range": false,
+    "onion_requires_pullback_before_confirmation": true,
+    "fade_requires_target_reached_context": true,
+    "preferred_execution_timeframe": "30m"
+  },
+  "state_operationalization": {
+    "label": "research proxy, not claimed exact Nick Stewart mechanics",
+    "higher_timeframe_bias": {
+      "long": "last fully closed Daily candle bullish AND last fully closed 4H candle bullish",
+      "short": "last fully closed Daily candle bearish AND last fully closed 4H candle bearish",
+      "otherwise": "no directional setup eligibility"
+    },
+    "atr_length_execution_bars": 14,
+    "range_proxy_grid": [
+      {"lookback_bars": 4, "max_width_atr": 1.5},
+      {"lookback_bars": 6, "max_width_atr": 1.5},
+      {"lookback_bars": 8, "max_width_atr": 1.5}
+    ],
+    "range_wickiness_filter": {
+      "max_median_body_fraction": 0.60,
+      "description": "median abs(close-open)/(high-low) across range bars must be <= 0.60"
+    },
+    "breakout": "confirmation close strictly beyond the frozen range boundary in higher-timeframe bias direction",
+    "celery_booby_trap": "bar immediately after a breakout confirmation also closes outside the same range boundary; body color is ignored",
+    "onion": {
+      "prior_impulse_min_bars": 2,
+      "pullback_min_bars": 1,
+      "confirmation": "bias-direction candle whose low is <= lows of prior two bars for longs, or high >= highs of prior two bars for shorts, after at least one opposite-direction pullback bar"
+    },
+    "fade": {
+      "target_proxy": "current execution close is within 0.15 execution ATR of the bias-direction rolling 20-bar 4H extreme",
+      "failure_proxy": "current execution bar fails to extend the prior execution-bar extreme in bias direction and closes opposite the bias",
+      "trade_direction_for_state": "opposite higher-timeframe bias"
+    }
+  },
+  "state_targets": {
+    "forward_horizons_execution_bars": [1, 2, 4],
+    "primary_fdr_horizon_execution_bars": 2,
+    "primary_measure": "signed forward close return divided by ATR14",
+    "benchmark": "same-symbol same-day same-session same-bias eligible-bar median forward signed ATR return",
+    "cell_effect": "setup event return minus matched daily benchmark",
+    "dependence_cluster": "New York trading date",
+    "reverse_control": "sign-reversed setup direction"
+  },
+  "state_gate": {
+    "minimum_events": 25,
+    "minimum_active_days": 15,
+    "minimum_positive_day_fraction": 0.60,
+    "median_daily_excess_must_be_positive": true,
+    "minimum_positive_horizons": 2,
+    "permutation_epochs": 20000,
+    "fdr_method": "Benjamini-Hochberg on the 2-bar primary-horizon p-value across the complete state family",
+    "fdr_q_max": 0.10,
+    "primary_timeframe_required_for_promotion": "30m",
+    "robustness_requirement": "same setup/symbol directionally positive on at least one adjacent execution timeframe",
+    "economics_authorized_if_state_passes": true
+  },
+  "unresolved_economic_fields": {
+    "exact_range_construction": null,
+    "exact_support_resistance_construction": null,
+    "exact_strong_level_definition": null,
+    "exact_target_tapped_definition": null,
+    "exact_wick_fill_target_definition": null,
+    "exact_volume_metric_and_threshold": null,
+    "current_vs_previous_trigger_selector": null,
+    "stop_selector": null,
+    "partial_fraction": null,
+    "runner_exit": null,
+    "break_even_trigger": null,
+    "order_expiry": null,
+    "reentry_rule": null,
+    "max_trades_per_session": null,
+    "setup_precedence": null,
+    "gc_contract_roll_policy": null
+  },
+  "research_rules": {
+    "state_before_pnl": true,
+    "freeze_before_results": true,
+    "locked_validation_retuning": false,
+    "cross_symbol_same_period_is_future_oos": false,
+    "realistic_costs_required_for_economics": true,
+    "reversed_control_required": true,
+    "session_matched_benchmark_required": true,
+    "leverage_can_rescue_negative_unlevered_expectancy": false,
+    "engineering_success_is_edge_evidence": false
+  },
+  "promotion_path": [
+    "development_state",
+    "development_economics_if_state_passes",
+    "candidate_freeze",
+    "locked_historical_validation",
+    "independent_replication",
+    "future_shadow",
+    "leverage_live_if_all_gates_pass"
+  ]
+}
