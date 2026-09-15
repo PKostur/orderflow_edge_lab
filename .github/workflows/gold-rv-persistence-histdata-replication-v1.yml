@@ -1,0 +1,156 @@
+name: Gold RV Persistence HistData Replication v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/gold-rv-persistence-histdata-replication-v1]
+    paths:
+      - "config/gold_rv_persistence_histdata_replication_v1.json"
+      - "research/gold_rv_persistence_histdata_replication_v1/PROTOCOL_FREEZE.md"
+      - "scripts/run_gold_rv_persistence_histdata_replication_v1.py"
+      - ".github/workflows/gold-rv-persistence-histdata-replication-v1.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gold-rv-persistence-histdata-replication-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  independent-source-state-replication:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install runtime
+        run: python -m pip install pandas numpy
+
+      - name: Guard frozen protocol before source download
+        run: |
+          python - <<'PY'
+          import json
+          cfg=json.load(open('config/gold_rv_persistence_histdata_replication_v1.json',encoding='utf-8'))
+          assert cfg['protocol_status']=='independent_source_replication_frozen'
+          assert cfg['economic_scoring_enabled'] is False
+          assert cfg['parent_candidate']['candidate_id']=='rv_persistence'
+          assert cfg['parent_candidate']['frozen_sign']=='positive'
+          assert cfg['parent_candidate']['locked_validation_result_commit']=='549d8f5928b26bd6ea2de55779047875fb463448'
+          assert cfg['replication_classification']['source_independent'] is True
+          assert cfg['replication_classification']['instrument_independent'] is False
+          assert cfg['replication_classification']['genuine_future_oos'] is False
+          assert cfg['source']['repository']=='blackmoon87/forex-histdata-m1'
+          assert cfg['source']['commit']=='208e67d7bda5cd5536df27531704e07fe4d54641'
+          assert cfg['source']['warmup_archive']['lfs_sha256']=='e752b9d8982961a51bde00d9d82ffb09238e743699ec8ff0e4e76b7f0e2883be'
+          assert cfg['source']['warmup_archive']['size_bytes']==4364035
+          assert cfg['source']['replication_archive']['lfs_sha256']=='89a4f3f7b98731f877abaa4e40003ee3d08492ee15b0f809db30be1ebdb8c299'
+          assert cfg['source']['replication_archive']['size_bytes']==3629564
+          assert cfg['observation_grid']['anchor_hours_local']==[0,2,4,6,8,10,12,14,16,18,20,22]
+          assert cfg['observation_grid']['pre_window_minutes']==60
+          assert cfg['observation_grid']['forward_window_minutes']==60
+          assert cfg['observation_grid']['same_clock_baseline_lookback_observations']==20
+          assert cfg['statistics']['permutation_epochs']==20000
+          assert cfg['statistics']['test_direction']=='one-sided positive'
+          assert cfg['replication_gate']['minimum_scorable_dates']==160
+          assert cfg['replication_gate']['minimum_median_daily_effect']==0.15
+          assert cfg['replication_gate']['minimum_daily_positive_fraction']==0.58
+          assert cfg['replication_gate']['minimum_positive_anchor_slots']==8
+          assert cfg['replication_gate']['minimum_anchor_slot_observations']==80
+          PY
+
+      - name: Download only pinned 2022 and 2023 HistData XAUUSD archives
+        run: |
+          set -euo pipefail
+          root="artifacts/gold_rv_persistence_histdata_replication_v1/data"
+          mkdir -p "$root"
+          base="https://media.githubusercontent.com/media/blackmoon87/forex-histdata-m1/208e67d7bda5cd5536df27531704e07fe4d54641/histdata_zips"
+          curl --fail --location --retry 3 --retry-delay 2 \
+            "$base/HISTDATA_COM_ASCII_XAUUSD_M12022.zip" \
+            -o "$root/HISTDATA_COM_ASCII_XAUUSD_M12022.zip"
+          curl --fail --location --retry 3 --retry-delay 2 \
+            "$base/HISTDATA_COM_ASCII_XAUUSD_M12023.zip" \
+            -o "$root/HISTDATA_COM_ASCII_XAUUSD_M12023.zip"
+          test "$(stat -c%s "$root/HISTDATA_COM_ASCII_XAUUSD_M12022.zip")" -eq 4364035
+          test "$(stat -c%s "$root/HISTDATA_COM_ASCII_XAUUSD_M12023.zip")" -eq 3629564
+          echo 'e752b9d8982961a51bde00d9d82ffb09238e743699ec8ff0e4e76b7f0e2883be  artifacts/gold_rv_persistence_histdata_replication_v1/data/HISTDATA_COM_ASCII_XAUUSD_M12022.zip' | sha256sum -c -
+          echo '89a4f3f7b98731f877abaa4e40003ee3d08492ee15b0f809db30be1ebdb8c299  artifacts/gold_rv_persistence_histdata_replication_v1/data/HISTDATA_COM_ASCII_XAUUSD_M12023.zip' | sha256sum -c -
+          sha256sum "$root"/*.zip | sort > "$root/SOURCE_SHA256.txt"
+
+      - name: Record immutable source manifest
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('artifacts/gold_rv_persistence_histdata_replication_v1/data')
+          files={
+            '2022':root/'HISTDATA_COM_ASCII_XAUUSD_M12022.zip',
+            '2023':root/'HISTDATA_COM_ASCII_XAUUSD_M12023.zip',
+          }
+          manifest={
+            'source_repository':'blackmoon87/forex-histdata-m1',
+            'source_commit':'208e67d7bda5cd5536df27531704e07fe4d54641',
+            'provider':'HistData',
+            'instrument':'XAUUSD spot gold',
+            'resolution':'1m',
+            'raw_timestamp_timezone':'fixed UTC-05:00 EST without DST',
+            'timestamp_conversion':'fixed UTC-05:00 -> UTC -> America/New_York',
+            'archives':{}
+          }
+          for year,p in files.items():
+            b=p.read_bytes()
+            manifest['archives'][year]={
+              'filename':p.name,
+              'size_bytes':len(b),
+              'sha256':hashlib.sha256(b).hexdigest(),
+            }
+          (root/'MANIFEST.json').write_text(json.dumps(manifest,indent=2,sort_keys=True),encoding='utf-8')
+          print(json.dumps(manifest,indent=2,sort_keys=True))
+          PY
+
+      - name: Run frozen independent-source state replication
+        run: |
+          python scripts/run_gold_rv_persistence_histdata_replication_v1.py \
+            --config config/gold_rv_persistence_histdata_replication_v1.json \
+            --zip2022 artifacts/gold_rv_persistence_histdata_replication_v1/data/HISTDATA_COM_ASCII_XAUUSD_M12022.zip \
+            --zip2023 artifacts/gold_rv_persistence_histdata_replication_v1/data/HISTDATA_COM_ASCII_XAUUSD_M12023.zip \
+            --output artifacts/gold_rv_persistence_histdata_replication_v1/replication_result.json \
+            --daily-output artifacts/gold_rv_persistence_histdata_replication_v1/daily_effects.csv \
+            --anchor-output artifacts/gold_rv_persistence_histdata_replication_v1/anchor_effects.csv
+
+      - name: Guard result claims
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/gold_rv_persistence_histdata_replication_v1/replication_result.json',encoding='utf-8'))
+          assert r['stage']=='independent_source_same_instrument_state_replication'
+          assert r['economic_scoring_run'] is False
+          assert r['directional_scoring_run'] is False
+          assert r['future_oos_claim'] is False
+          assert r['replication_classification']['source_independent'] is True
+          assert r['replication_classification']['instrument_independent'] is False
+          assert r['replication_classification']['genuine_future_oos'] is False
+          assert r['claim_boundary']['future_oos'] is False
+          assert r['claim_boundary']['directional_edge'] is False
+          assert r['claim_boundary']['economic_edge'] is False
+          assert r['claim_boundary']['leverage_authorized'] is False
+          assert r['claim_boundary']['live_enabled'] is False
+          PY
+
+      - name: Preserve replication evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-rv-persistence-histdata-replication-v1
+          path: |
+            artifacts/gold_rv_persistence_histdata_replication_v1/replication_result.json
+            artifacts/gold_rv_persistence_histdata_replication_v1/daily_effects.csv
+            artifacts/gold_rv_persistence_histdata_replication_v1/anchor_effects.csv
+            artifacts/gold_rv_persistence_histdata_replication_v1/data/MANIFEST.json
+            artifacts/gold_rv_persistence_histdata_replication_v1/data/SOURCE_SHA256.txt
+          retention-days: 30
+          if-no-files-found: warn
