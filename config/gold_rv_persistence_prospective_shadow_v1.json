@@ -32,11 +32,13 @@
     "utc_offset_minutes": 0,
     "format": "csv",
     "raw_time_basis": "UTC",
+    "raw_timestamp_format": "Unix milliseconds",
     "bar_timestamp_semantics": "one-minute candle timestamp",
     "warmup_acquisition_start_utc": "2026-08-01T00:00:00Z",
     "scoring_start_utc": "2026-09-16T04:00:00Z",
-    "closed_day_policy": "score only fully completed New York dates; acquisition end must be no later than the end of the previous New York calendar date",
-    "snapshot_policy": "each shadow run records client version, requested interval, raw file SHA256, byte size, and scorer commit; later downloads may not overwrite prior recorded evidence"
+    "closed_day_policy": "the acquisition may contain later source bars, but the scorer must hard-truncate anchors to fully completed New York dates as of the recorded run timestamp; an incomplete current New York date is never scored",
+    "snapshot_policy": "each shadow run records client version, requested interval, raw file SHA256, byte size, and scorer commit; every run artifact is preserved separately so a later download cannot replace prior recorded evidence",
+    "prelaunch_adapter_clarification": "made before the prospective start and before any post-start state observation existed; the direct CLI emits Unix-millisecond timestamps and may cap a future date-to request at current time; no candidate parameter or statistical gate changed"
   },
   "observation_grid": {
     "timezone": "America/New_York",
