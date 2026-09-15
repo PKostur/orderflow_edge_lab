@@ -13,11 +13,16 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
-UA = {'User-Agent': 'orderflow-edge-lab research/1.0'}
+UA = {
+    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/140.0 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml',
+    'Accept-Language': 'en-US,en;q=0.9',
+}
 NY = ZoneInfo('America/New_York')
 FIXED_EST = timezone(timedelta(hours=-5))
 MONTHS = {m.lower(): i for i, m in enumerate(['January','February','March','April','May','June','July','August','September','October','November','December'], 1)}
 MONTHS.update({m[:3].lower(): i for m, i in list(MONTHS.items())})
+FETCH_LOG: dict[str, dict] = {}
 
 
 def sha256_file(path: Path) -> str:
@@ -29,9 +34,29 @@ def sha256_file(path: Path) -> str:
 
 
 def get(url: str) -> str:
-    r = requests.get(url, headers=UA, timeout=45)
-    r.raise_for_status()
-    return r.text
+    candidates: list[tuple[str, str]] = []
+    if url.startswith('https://www.bls.gov/'):
+        candidates.append(('r.jina.ai_read_only_relay_of_official_bls_page', 'https://r.jina.ai/' + url))
+        candidates.append(('direct_official', url))
+    else:
+        candidates.append(('direct_official', url))
+    last_error: Exception | None = None
+    for transport, fetch_url in candidates:
+        try:
+            r = requests.get(fetch_url, headers=UA, timeout=45)
+            r.raise_for_status()
+            text = r.text
+            FETCH_LOG[url] = {
+                'transport': transport,
+                'fetch_url': fetch_url,
+                'http_status': int(r.status_code),
+                'bytes_utf8': int(len(text.encode('utf-8'))),
+                'sha256_utf8': hashlib.sha256(text.encode('utf-8')).hexdigest(),
+            }
+            return text
+        except Exception as exc:
+            last_error = exc
+    raise RuntimeError(f'failed to fetch official source {url}: {last_error}')
 
 
 def official_to_data_clock(day: datetime, hour: int, minute: int) -> tuple[str, str]:
@@ -41,14 +66,10 @@ def official_to_data_clock(day: datetime, hour: int, minute: int) -> tuple[str, 
 
 
 def parse_bls_archive(url: str, prefix: str, event_type: str, years: set[int]) -> list[dict]:
-    html = get(url)
-    soup = BeautifulSoup(html, 'html.parser')
+    text = get(url)
     pat = re.compile(rf'{re.escape(prefix)}_(\d{{8}})\.htm', re.I)
     out = {}
-    for a in soup.find_all('a', href=True):
-        m = pat.search(a['href'])
-        if not m:
-            continue
+    for m in pat.finditer(text):
         ds = m.group(1)
         day = datetime.strptime(ds, '%m%d%Y')
         if day.year not in years:
@@ -231,6 +252,7 @@ def main() -> None:
         'strategy_scoring_performed': False,
         'market_source_commit': cfg['market_data']['commit'],
         'file_sha256': file_hashes,
+        'official_source_fetches': FETCH_LOG,
         'official_event_count': int(len(audit)),
         'counts': counts.to_dict(orient='records'),
         'development_admission_failures': failures,
