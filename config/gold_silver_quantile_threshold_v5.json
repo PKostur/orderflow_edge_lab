@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold_silver_quantile_threshold_v5",
+  "evidence_class": "post_observation_retrospective_state_research_with_locked_validation_not_future_oos",
+  "motivation": "v1-v3 repeatedly found gold/silver convergence-state information but asymmetric trade outcomes, while v4 found no robust real-yield/VIX macro conditioner. Published gold/silver evidence also supports state-dependent and asymmetric long-run relationships. This protocol therefore tests lower-tail and upper-tail residual states directly, with no PnL scoring.",
+  "source": {
+    "repository": "simom1/XAUUSD-history",
+    "commit": "bda79c6c5ce09a5b488d4cd2c20fcd19bdd2ed3a",
+    "gold_path": "Gold-Cash/XAUUSD/XAUUSD_D1_2010_2026.csv",
+    "silver_path": "Silver-Cash/XAGUSD/XAGUSD_D1.csv",
+    "instrument_semantics": "MT5-style cash XAUUSD and XAGUSD daily bars"
+  },
+  "data_admission": {
+    "common_dates_only": true,
+    "weekdays_only": true,
+    "minimum_tick_volume_each_leg": 2,
+    "positive_ohlc_required": true,
+    "duplicate_policy": "keep_last",
+    "no_interpolation": true
+  },
+  "periods": {
+    "development": {
+      "start": "2010-01-01",
+      "end_exclusive": "2021-01-01"
+    },
+    "locked_internal_validation": {
+      "start": "2021-01-01",
+      "end_exclusive": "2024-01-01",
+      "opened_during_v5": false
+    },
+    "retrospective_extension": {
+      "start": "2024-01-01",
+      "end_exclusive": "2026-09-15",
+      "opened_during_v5": false,
+      "claim_boundary": "Even if later opened, this period is retrospective and not future OOS because related gold/silver evidence from this era has already been inspected."
+    },
+    "future_shadow_earliest_utc": "2026-09-16T00:00:00Z"
+  },
+  "relationship_model": {
+    "type": "rolling_ols_log_price_equilibrium",
+    "lookback_trading_days": 252,
+    "fit_uses_completed_bars_before_signal_only": true,
+    "beta_gt": 0.05,
+    "beta_lt": 3.0,
+    "minimum_residual_std": 0.001,
+    "note": "252 days is fixed from prior state evidence; there is no relationship-model grid in v5."
+  },
+  "tail_hypotheses": [
+    {
+      "name": "lower_q10",
+      "side": "long_spread",
+      "tail_quantile": 0.10
+    },
+    {
+      "name": "lower_q20",
+      "side": "long_spread",
+      "tail_quantile": 0.20
+    },
+    {
+      "name": "upper_q80",
+      "side": "short_spread",
+      "tail_quantile": 0.80
+    },
+    {
+      "name": "upper_q90",
+      "side": "short_spread",
+      "tail_quantile": 0.90
+    }
+  ],
+  "state_target": {
+    "horizon_trading_bars": 21,
+    "definition": "side-adjusted convergence of the frozen signal-time residual over 21 trading bars, normalized by signal-time residual standard deviation",
+    "predictor": "tail depth beyond the causal empirical residual quantile, normalized by signal-time residual standard deviation"
+  },
+  "state_first": {
+    "unique_hypotheses": 4,
+    "dependence_cluster_calendar_days": 126,
+    "minimum_events_per_state_fold": 6,
+    "minimum_scorable_state_folds": 12,
+    "minimum_median_fold_spearman": 0.0,
+    "minimum_positive_spearman_fold_fraction": 0.60,
+    "minimum_median_fold_target": 0.0,
+    "minimum_positive_target_fold_fraction": 0.60,
+    "sign_flip_epochs": 20000,
+    "sign_flip_seed": 20260915,
+    "maximum_bh_fdr_q": 0.10,
+    "maximum_state_tails_to_freeze": 2
+  },
+  "controls": {
+    "mirror_tail_comparison_reported": true,
+    "tail_event_count_and_fold_breadth_reported": true,
+    "no_pnl_scoring_in_v5": true
+  },
+  "candidate_selection": {
+    "ranking": [
+      "lower BH-FDR q",
+      "higher median fold Spearman",
+      "higher positive target fold fraction",
+      "higher median fold target",
+      "lexicographic hypothesis id"
+    ],
+    "separate_freeze_required_before_any_pnl_translation": true
+  },
+  "claims": {
+    "pnl_tested": false,
+    "verified_future_oos": false,
+    "profitable_edge_established": false,
+    "leverage_authorized": false,
+    "live_enabled": false
+  }
+}
