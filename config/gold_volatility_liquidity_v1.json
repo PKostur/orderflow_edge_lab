@@ -1,0 +1,144 @@
+{
+  "protocol_id": "gold-volatility-liquidity-v1",
+  "protocol_status": "state_protocol_frozen",
+  "state_scoring_enabled": true,
+  "economic_scoring_enabled": false,
+  "base_lineage": "research/gold-silver-trend-exhaustion-v6",
+  "motivation": {
+    "mechanism": "test whether pre-existing Gold volatility and bid-ask liquidity state predicts the magnitude of the next hour, before attempting any directional or executable strategy",
+    "orthogonal_to_closed_lanes": [
+      "gold social-strategy claims",
+      "gold-silver relative value and ratio momentum",
+      "scheduled macro reaction continuation versus reversal"
+    ],
+    "literature_notes": [
+      "Intraday gold volatility is forecastable from prior intraday realized-volatility information.",
+      "Commodity bid-ask spreads are related to volatility and market quality.",
+      "Gold intraday liquidity and volatility exhibit strong time-of-day seasonality, so every raw state variable is compared with a trailing same-clock baseline where applicable."
+    ]
+  },
+  "evidence_boundary": {
+    "warmup_start": "2020-11-01",
+    "development_start": "2021-01-01",
+    "development_end_exclusive": "2023-01-01",
+    "locked_historical_validation_start": "2023-01-01",
+    "locked_historical_validation_end_exclusive": "2024-01-01",
+    "validation_opened": false,
+    "future_oos_claim_allowed": false
+  },
+  "gold_source": {
+    "repository": "kevingtlin/Market-Data-Lab",
+    "commit": "922f83a60cc574e7395fb27397077288055a1ef6",
+    "dataset_id": "XAUUSD-DUKASCOPY-M1-BID-ASK",
+    "instrument": "XAUUSD spot gold",
+    "provider": "Dukascopy",
+    "resolution": "1m",
+    "timestamp_unit": "milliseconds",
+    "timestamp_timezone": "UTC",
+    "files": [
+      "xauusd/bid/m1/xauusd_bid_m1_YYYY_MM.csv",
+      "xauusd/ask/m1/xauusd_ask_m1_YYYY_MM.csv"
+    ],
+    "months_materialized": "2020-11 through 2022-12 only",
+    "midpoint_ohlc": "(bid + ask) / 2 at identical timestamps",
+    "relative_spread_bps": "10000 * (ask_close - bid_close) / midpoint_close"
+  },
+  "observation_grid": {
+    "timezone": "America/New_York",
+    "weekday_only": true,
+    "anchor_hours_local": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22],
+    "anchor_minute": 0,
+    "pre_window_minutes": 60,
+    "spread_recent_minutes": 15,
+    "spread_prior_minutes": 45,
+    "forward_window_minutes": 60,
+    "same_clock_baseline_lookback_observations": 20,
+    "minimum_daily_anchor_count_for_inference": 8
+  },
+  "state_variables": {
+    "pre_rv_ratio": "pre-60m realized volatility divided by trailing 20-observation same-clock median pre-60m realized volatility",
+    "spread_level_ratio": "pre-15m median relative spread divided by trailing 20-observation same-clock median pre-15m spread",
+    "spread_deterioration_ratio": "pre-15m median relative spread divided by preceding 45m median relative spread",
+    "pre_range_ratio": "pre-60m high-low range divided by trailing 20-observation same-clock median pre-60m range",
+    "negative_semivariance_share": "sum of squared negative one-minute pre-window midpoint log returns divided by total pre-window realized variance"
+  },
+  "targets": {
+    "primary": "future_rv_ratio",
+    "future_rv_ratio": "next-60m realized volatility divided by trailing 20-observation same-clock median next-60m realized volatility",
+    "secondary": "future_range_ratio",
+    "future_range_ratio": "next-60m high-low range divided by trailing 20-observation same-clock median next-60m range"
+  },
+  "primary_hypotheses": [
+    {
+      "id": "rv_persistence",
+      "feature": "pre_rv_ratio",
+      "statistic": "median New-York-date Spearman(feature, future_rv_ratio)",
+      "control": null
+    },
+    {
+      "id": "spread_level_incremental",
+      "feature": "spread_level_ratio",
+      "statistic": "median New-York-date partial Spearman(feature, future_rv_ratio | pre_rv_ratio)",
+      "control": "pre_rv_ratio"
+    },
+    {
+      "id": "spread_deterioration_incremental",
+      "feature": "spread_deterioration_ratio",
+      "statistic": "median New-York-date partial Spearman(feature, future_rv_ratio | pre_rv_ratio)",
+      "control": "pre_rv_ratio"
+    },
+    {
+      "id": "range_state_incremental",
+      "feature": "pre_range_ratio",
+      "statistic": "median New-York-date partial Spearman(feature, future_rv_ratio | pre_rv_ratio)",
+      "control": "pre_rv_ratio"
+    },
+    {
+      "id": "negative_semivariance_incremental",
+      "feature": "negative_semivariance_share",
+      "statistic": "median New-York-date partial Spearman(feature, future_rv_ratio | pre_rv_ratio)",
+      "control": "pre_rv_ratio"
+    }
+  ],
+  "statistics": {
+    "date_is_dependence_unit": true,
+    "daily_effect_requires_minimum_anchors": 8,
+    "permutation_method": "two-sided sign-flip test on daily correlation or partial-correlation effects",
+    "permutation_epochs": 20000,
+    "random_seed_namespace": "gold-volatility-liquidity-v1",
+    "multiple_testing": "Benjamini-Hochberg across all five primary hypotheses",
+    "fdr_q_max": 0.10
+  },
+  "state_gate": {
+    "minimum_scorable_dates": 350,
+    "minimum_abs_median_daily_effect": 0.15,
+    "minimum_daily_discovered_sign_fraction": 0.58,
+    "minimum_anchor_slots_with_primary_sign": 8,
+    "minimum_anchor_slot_observations": 100,
+    "both_calendar_years_must_share_primary_sign": true,
+    "secondary_target_median_daily_effect_must_share_primary_sign": true,
+    "fdr_q_max": 0.10,
+    "candidate_requires_all_applicable_gates": true
+  },
+  "controls_and_claims": {
+    "intraday_seasonality_controlled_by_same_clock_baselines": true,
+    "non_overlapping_forward_windows_by_design": true,
+    "economic_pnl_disabled": true,
+    "directional_edge_claim_allowed": false,
+    "volatility_state_edge_is_not_profitable_edge": true,
+    "same_period_cross_source_is_future_oos": false,
+    "leverage_can_rescue_negative_unlevered_expectancy": false,
+    "engineering_success_is_edge_evidence": false,
+    "live_enabled": false
+  },
+  "promotion_path": [
+    "development_volatility_state",
+    "economic_breakout_or_options_mechanism_freeze_only_if_state_passes",
+    "development_economics",
+    "candidate_freeze",
+    "locked_2023_validation",
+    "independent_replication",
+    "future_shadow",
+    "leverage_live_only_if_all_gates_pass"
+  ]
+}
