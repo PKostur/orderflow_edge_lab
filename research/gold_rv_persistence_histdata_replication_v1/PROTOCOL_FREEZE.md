@@ -4,6 +4,8 @@
 
 Protocol frozen before any HistData state statistic is scored. Economic and directional PnL scoring are disabled.
 
+A source-provenance correction was made before any archive was parsed or any state statistic was scored. Workflow run `34993556143` stopped at the checksum guard because the initially transcribed LFS OIDs were incorrect. The exact Git LFS pointer text at the already frozen source commit was then re-read and the archive hashes below were corrected. No candidate definition, gate, statistic, window, anchor, or threshold changed.
+
 ## Frozen candidate
 
 This is the exact `rv_persistence` state candidate that passed the locked 2023 Dukascopy XAUUSD validation at commit `549d8f5928b26bd6ea2de55779047875fb463448`.
@@ -21,10 +23,10 @@ No candidate definition, anchor, baseline length, window length, statistic, or p
 
 Repository pin: `blackmoon87/forex-histdata-m1@208e67d7bda5cd5536df27531704e07fe4d54641`.
 
-Frozen archives:
+Frozen archives, corrected directly from the Git LFS pointer text before scoring:
 
-- 2022: `HISTDATA_COM_ASCII_XAUUSD_M12022.zip`, LFS SHA256 `e752b9d8982961a51bde00d9d82ffb09238e743699ec8ff0e4e76b7f0e2883be`, 4,364,035 bytes.
-- 2023: `HISTDATA_COM_ASCII_XAUUSD_M12023.zip`, LFS SHA256 `89a4f3f7b98731f877abaa4e40003ee3d08492ee15b0f809db30be1ebdb8c299`, 3,629,564 bytes.
+- 2022: `HISTDATA_COM_ASCII_XAUUSD_M12022.zip`, LFS SHA256 `e752b9d83a14b934099de372c1419ab476278e7cd949c313c3af06207960b1d8`, 4,364,035 bytes.
+- 2023: `HISTDATA_COM_ASCII_XAUUSD_M12023.zip`, LFS SHA256 `89a4f3f7ec2a52b29fbce8d4ca2ab650971817ae371b332f5fe471a488bcffc2`, 3,629,564 bytes.
 
 The workflow must verify both byte size and SHA256 before parsing.
 
