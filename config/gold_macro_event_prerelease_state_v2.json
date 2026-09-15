@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold_macro_event_prerelease_state_v2",
+  "evidence_class": "post_observation_retrospective_state_discovery_with_separate_temporal_validation_required",
+  "motivation": "Gold Macro Event Reaction v1 rejected unconditional continuation/reversal after CPI, Employment Situation and FOMC releases. This protocol asks a distinct state-first question: whether causal pre-release positioning/volatility and normalized initial-shock information explain which events subsequently continue or reverse. Development on 2018-2022 is hypothesis discovery only because v1 outcomes from this era were already inspected; any passing state must be frozen and tested on 2023 before economic translation.",
+  "price_source": {
+    "repository": "simom1/XAUUSD-history",
+    "commit": "bda79c6c5ce09a5b488d4cd2c20fcd19bdd2ed3a",
+    "path": "Gold-Cash/XAUUSD/XAUUSD_M15_2010_2026.csv",
+    "timestamp_semantics": "UTC bar-open timestamps",
+    "instrument": "MT5-style cash XAUUSD"
+  },
+  "event_calendar_source": {
+    "bls_snapshot": "research/gold_macro_event_reaction_v1/BLS_RELEASE_CALENDAR_2018_2022.csv",
+    "fomc_snapshot": "research/gold_macro_event_reaction_v1/FOMC_REGULAR_DECISION_DATES_2018_2022.csv",
+    "official_semantics": {
+      "cpi": "08:30 America/New_York",
+      "employment_situation": "08:30 America/New_York",
+      "fomc": "14:00 America/New_York"
+    }
+  },
+  "periods": {
+    "development": {"start": "2018-01-01T00:00:00Z", "end_exclusive": "2023-01-01T00:00:00Z"},
+    "temporal_validation": {"start": "2023-01-01T00:00:00Z", "end_exclusive": "2024-01-01T00:00:00Z", "opened_during_development": false},
+    "retrospective_extension": {"start": "2024-01-01T00:00:00Z", "end_exclusive": "2026-09-15T00:00:00Z", "opened_during_development": false},
+    "future_shadow_earliest_utc": "2026-09-16T00:00:00Z"
+  },
+  "data_admission": {
+    "positive_ohlc_required": true,
+    "minimum_tick_volume": 1,
+    "duplicate_policy": "keep_last",
+    "no_interpolation": true,
+    "required_bar_interval_minutes": 15,
+    "event_requires_exact_bars": true
+  },
+  "event_measurement": {
+    "initial_reaction_minutes": 30,
+    "initial_reaction": "log(close of second M15 release bar / open of release-time M15 bar)",
+    "post_entry_horizon_minutes": 180,
+    "future_return": "log(open at +210 minutes from release / open at +30 minutes from release)",
+    "pre_event_window_minutes": 240,
+    "pre_event_window": "16 completed M15 bars ending immediately before the release bar",
+    "pre_event_drift": "log(release-bar open / open 240 minutes before release)",
+    "pre_event_realized_vol": "sqrt(sum(square(M15 log close-to-close returns))) over the 16 completed pre-release bars",
+    "volatility_floor": 0.0001,
+    "compression_reference": "median pre_event_realized_vol measured at the same UTC release clock over the previous 20 admissible weekdays, using only timestamps before the event",
+    "compression_minimum_reference_days": 10
+  },
+  "state_hypotheses": [
+    {
+      "name": "shock_exhaustion",
+      "predictor": "abs(initial_reaction) / max(pre_event_realized_vol, volatility_floor)",
+      "target": "-sign(initial_reaction) * future_return",
+      "semantic": "larger normalized first-30m shock predicts stronger subsequent reversal"
+    },
+    {
+      "name": "drift_alignment_exhaustion",
+      "predictor": "sign(initial_reaction) * pre_event_drift / max(pre_event_realized_vol, volatility_floor)",
+      "target": "-sign(initial_reaction) * future_return",
+      "semantic": "an initial reaction that extends the prior 4h drift predicts subsequent reversal"
+    },
+    {
+      "name": "compression_continuation",
+      "predictor": "-log(pre_event_realized_vol / compression_reference)",
+      "target": "sign(initial_reaction) * future_return",
+      "semantic": "greater pre-event volatility compression predicts stronger continuation of the first-30m move"
+    },
+    {
+      "name": "aligned_shock_exhaustion",
+      "predictor": "(abs(initial_reaction) / max(pre_event_realized_vol, volatility_floor)) * (sign(initial_reaction) * pre_event_drift / max(pre_event_realized_vol, volatility_floor))",
+      "target": "-sign(initial_reaction) * future_return",
+      "semantic": "a large initial shock that extends the pre-event drift predicts stronger reversal"
+    }
+  ],
+  "state_first": {
+    "event_types": ["cpi", "employment_situation", "fomc"],
+    "hypotheses": "4 frozen predictors x 3 event types = 12",
+    "dependence_cluster_calendar_days": 182,
+    "minimum_events_per_scorable_fold": 3,
+    "minimum_scorable_folds": 6,
+    "minimum_median_fold_spearman": 0.0,
+    "minimum_positive_fold_fraction": 0.60,
+    "minimum_positive_year_fraction": 0.60,
+    "minimum_years_with_at_least_5_events": 4,
+    "fold_sign_flip_epochs": 20000,
+    "fold_sign_flip_seed": 20260915,
+    "maximum_bh_fdr_q": 0.10,
+    "permutation_control": {
+      "enabled": true,
+      "epochs": 5000,
+      "seed": 20260916,
+      "scheme": "shuffle predictor values within event type and calendar year while preserving target chronology and dependence folds",
+      "maximum_p": 0.05
+    }
+  },
+  "selection": {
+    "maximum_state_hypotheses_for_temporal_validation": 2,
+    "ranking": ["lower BH-FDR q", "lower within-year permutation p", "higher median fold Spearman", "higher positive-fold fraction", "lexicographic hypothesis id"],
+    "temporal_validation_requires_separate_freeze_commit": true
+  },
+  "economic_boundary": {
+    "pnl_evaluation_in_v2": false,
+    "cost_model_in_v2": null,
+    "leverage_tested": false,
+    "live_enabled": false
+  },
+  "claims": {
+    "verified_future_oos": false,
+    "profitable_edge_established": false,
+    "leverage_authorized": false,
+    "live_enabled": false
+  }
+}
