@@ -16,6 +16,8 @@ This lane is orthogonal to the closed Gold/Silver relative-value lineage. It doe
 6. Treat 2023 as locked historical validation, not future OOS.
 7. Require independent replication and later genuinely future shadow evidence before any leverage/live discussion.
 
+The first pinned intraday source failed before state scoring because it contained no 2021-2022 rows. The replacement source below is therefore a pre-score data-implementation amendment, not a post-result retune. The exact audit is recorded in `SOURCE_AMENDMENT_PRE_SCORE.md`.
+
 ## Official event calendar
 
 The committed `EVENT_CALENDAR.csv` contains exactly 64 scheduled events from 2021-2022:
@@ -45,13 +47,19 @@ No 2023 event is present in the development calendar.
 
 Development Gold data are pinned to:
 
-- repository: `simom1/XAUUSD-history`
-- commit: `9b1f323866d0150ed2422c0e0cf1b97aa1bfcb22`
-- file: `Gold-Cash/XAUUSD/XAUUSD_M1.csv`
+- repository: `kevingtlin/Market-Data-Lab`
+- commit: `922f83a60cc574e7395fb27397077288055a1ef6`
+- dataset ID: `XAUUSD-DUKASCOPY-M1-BID-ASK`
+- provider: Dukascopy
+- instrument: XAUUSD spot gold
+- resolution: M1
+- monthly files used: 2020-11 through 2022-12 only
 
-The repository documents the bars as MetaTrader 5 exports and the timestamps as UTC. This removes the timestamp ambiguity found in the earlier Time To Eat XAU proxy.
+The source documentation specifies schema `timestamp,open,high,low,close`, Unix epoch timestamps in milliseconds, and UTC time. Bid and ask are stored separately.
 
-The source remains cash XAUUSD, not exchange-traded GC futures. A favorable result would therefore still require independent source/instrument replication before promotion.
+At this state-only stage, same-timestamp bid and ask bars are inner-joined and midpoint OHLC is calculated as `(bid + ask) / 2`. This avoids choosing one executable spread side when no entry, exit, cost, or PnL model exists yet.
+
+The source remains spot XAUUSD, not exchange-traded GC futures. A favorable result would therefore still require independent source/instrument replication before promotion.
 
 ## Event clock
 
