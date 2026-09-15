@@ -46,9 +46,12 @@ jobs:
           assert cfg['replication_classification']['genuine_future_oos'] is False
           assert cfg['source']['repository']=='blackmoon87/forex-histdata-m1'
           assert cfg['source']['commit']=='208e67d7bda5cd5536df27531704e07fe4d54641'
-          assert cfg['source']['warmup_archive']['lfs_sha256']=='e752b9d8982961a51bde00d9d82ffb09238e743699ec8ff0e4e76b7f0e2883be'
+          assert cfg['source']['provenance_correction']['failed_workflow_run']=='34993556143'
+          assert cfg['source']['provenance_correction']['failed_before_parse_or_scoring'] is True
+          assert cfg['source']['provenance_correction']['candidate_or_gate_changed'] is False
+          assert cfg['source']['warmup_archive']['lfs_sha256']=='e752b9d83a14b934099de372c1419ab476278e7cd949c313c3af06207960b1d8'
           assert cfg['source']['warmup_archive']['size_bytes']==4364035
-          assert cfg['source']['replication_archive']['lfs_sha256']=='89a4f3f7b98731f877abaa4e40003ee3d08492ee15b0f809db30be1ebdb8c299'
+          assert cfg['source']['replication_archive']['lfs_sha256']=='89a4f3f7ec2a52b29fbce8d4ca2ab650971817ae371b332f5fe471a488bcffc2'
           assert cfg['source']['replication_archive']['size_bytes']==3629564
           assert cfg['observation_grid']['anchor_hours_local']==[0,2,4,6,8,10,12,14,16,18,20,22]
           assert cfg['observation_grid']['pre_window_minutes']==60
@@ -77,8 +80,8 @@ jobs:
             -o "$root/HISTDATA_COM_ASCII_XAUUSD_M12023.zip"
           test "$(stat -c%s "$root/HISTDATA_COM_ASCII_XAUUSD_M12022.zip")" -eq 4364035
           test "$(stat -c%s "$root/HISTDATA_COM_ASCII_XAUUSD_M12023.zip")" -eq 3629564
-          echo 'e752b9d8982961a51bde00d9d82ffb09238e743699ec8ff0e4e76b7f0e2883be  artifacts/gold_rv_persistence_histdata_replication_v1/data/HISTDATA_COM_ASCII_XAUUSD_M12022.zip' | sha256sum -c -
-          echo '89a4f3f7b98731f877abaa4e40003ee3d08492ee15b0f809db30be1ebdb8c299  artifacts/gold_rv_persistence_histdata_replication_v1/data/HISTDATA_COM_ASCII_XAUUSD_M12023.zip' | sha256sum -c -
+          echo 'e752b9d83a14b934099de372c1419ab476278e7cd949c313c3af06207960b1d8  artifacts/gold_rv_persistence_histdata_replication_v1/data/HISTDATA_COM_ASCII_XAUUSD_M12022.zip' | sha256sum -c -
+          echo '89a4f3f7ec2a52b29fbce8d4ca2ab650971817ae371b332f5fe471a488bcffc2  artifacts/gold_rv_persistence_histdata_replication_v1/data/HISTDATA_COM_ASCII_XAUUSD_M12023.zip' | sha256sum -c -
           sha256sum "$root"/*.zip | sort > "$root/SOURCE_SHA256.txt"
 
       - name: Record immutable source manifest
