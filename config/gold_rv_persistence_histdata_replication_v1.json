@@ -30,16 +30,23 @@
     "raw_timestamp_timezone": "fixed EST UTC-05:00 without daylight-saving adjustment",
     "timestamp_conversion": "parse raw timestamp as fixed UTC-05:00, convert instant to UTC, then convert to America/New_York for frozen anchor matching",
     "bar_timestamp_semantics": "minute timestamp identifies the source minute bar",
+    "provenance_correction": {
+      "classification": "pre_score_source_identity_correction_only",
+      "failed_workflow_run": "34993556143",
+      "failed_before_parse_or_scoring": true,
+      "candidate_or_gate_changed": false,
+      "reason": "initial LFS OIDs were transcribed incorrectly; corrected directly from Git LFS pointer text at the already frozen repository commit"
+    },
     "warmup_archive": {
       "year": 2022,
       "path": "histdata_zips/HISTDATA_COM_ASCII_XAUUSD_M12022.zip",
-      "lfs_sha256": "e752b9d8982961a51bde00d9d82ffb09238e743699ec8ff0e4e76b7f0e2883be",
+      "lfs_sha256": "e752b9d83a14b934099de372c1419ab476278e7cd949c313c3af06207960b1d8",
       "size_bytes": 4364035
     },
     "replication_archive": {
       "year": 2023,
       "path": "histdata_zips/HISTDATA_COM_ASCII_XAUUSD_M12023.zip",
-      "lfs_sha256": "89a4f3f7b98731f877abaa4e40003ee3d08492ee15b0f809db30be1ebdb8c299",
+      "lfs_sha256": "89a4f3f7ec2a52b29fbce8d4ca2ab650971817ae371b332f5fe471a488bcffc2",
       "size_bytes": 3629564
     },
     "scorer_warmup_start_ny": "2022-11-01",
@@ -113,7 +120,7 @@
   },
   "promotion_path_if_pass": [
     "independent_source_state_replication_complete",
-    "integrate_with_existing MGC robustness evidence without upgrading MGC breadth failure",
+    "integrate_with existing MGC robustness evidence without upgrading MGC breadth failure",
     "separately_frozen monetization mechanism or future state shadow",
     "future shadow",
     "leverage live only if executable economic gates later pass"
