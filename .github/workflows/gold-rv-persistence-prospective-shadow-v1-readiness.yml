@@ -57,7 +57,7 @@ jobs:
             -utc 0 \
             -f csv \
             -dir "$root" \
-            -fn xauusd_readiness.csv
+            -fn xauusd_readiness
           test -s "$root/xauusd_readiness.csv"
           sha256sum "$root/xauusd_readiness.csv" > "$root/SOURCE_SHA256.txt"
           wc -c "$root/xauusd_readiness.csv"
