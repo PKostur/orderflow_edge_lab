@@ -1,0 +1,81 @@
+name: Gold Silver Macro Regime Relative Value v4
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/gold-silver-macro-regime-relative-value-v4]
+    paths:
+      - "config/gold_silver_macro_regime_relative_value_v4.json"
+      - "scripts/run_gold_silver_macro_regime_relative_value_v4.py"
+      - ".github/workflows/gold-silver-macro-regime-relative-value-v4.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gold-silver-macro-regime-relative-value-v4-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  develop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install runtime
+        run: python -m pip install pandas numpy
+      - name: Fetch pinned metals and FRED macro data
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/gold_silver_macro_regime_relative_value_v4/data
+          base="https://raw.githubusercontent.com/simom1/XAUUSD-history/bda79c6c5ce09a5b488d4cd2c20fcd19bdd2ed3a"
+          curl --fail --location --retry 3 --retry-delay 2 \
+            "$base/Gold-Cash/XAUUSD/XAUUSD_D1_2010_2026.csv" \
+            -o artifacts/gold_silver_macro_regime_relative_value_v4/data/XAUUSD_D1.csv
+          curl --fail --location --retry 3 --retry-delay 2 \
+            "$base/Silver-Cash/XAGUSD/XAGUSD_D1.csv" \
+            -o artifacts/gold_silver_macro_regime_relative_value_v4/data/XAGUSD_D1.csv
+          for id in VIXCLS DTWEXBGS DFII10; do
+            curl --fail --location --retry 3 --retry-delay 2 \
+              "https://fred.stlouisfed.org/graph/fredgraph.csv?id=${id}" \
+              -o "artifacts/gold_silver_macro_regime_relative_value_v4/data/${id}.csv"
+          done
+          sha256sum artifacts/gold_silver_macro_regime_relative_value_v4/data/*.csv \
+            > artifacts/gold_silver_macro_regime_relative_value_v4/data/SHA256SUMS.txt
+      - name: Run frozen development study
+        run: |
+          python scripts/run_gold_silver_macro_regime_relative_value_v4.py \
+            --config config/gold_silver_macro_regime_relative_value_v4.json \
+            --gold artifacts/gold_silver_macro_regime_relative_value_v4/data/XAUUSD_D1.csv \
+            --silver artifacts/gold_silver_macro_regime_relative_value_v4/data/XAGUSD_D1.csv \
+            --vix artifacts/gold_silver_macro_regime_relative_value_v4/data/VIXCLS.csv \
+            --usd artifacts/gold_silver_macro_regime_relative_value_v4/data/DTWEXBGS.csv \
+            --real-yield artifacts/gold_silver_macro_regime_relative_value_v4/data/DFII10.csv \
+            --output artifacts/gold_silver_macro_regime_relative_value_v4/result.json
+      - name: Guard research boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/gold_silver_macro_regime_relative_value_v4/result.json'))
+          assert r['protocol'] == 'gold_silver_macro_regime_relative_value_v4'
+          assert r['grid']['state_hypotheses'] == 4
+          assert r['grid']['economic_cells'] == 4
+          assert r['locked_internal_validation_opened'] is False
+          assert r['retrospective_extension_opened'] is False
+          assert r['leverage_tested'] is False
+          assert r['claims']['verified_future_oos'] is False
+          assert r['claims']['profitable_edge_established'] is False
+          assert r['claims']['leverage_authorized'] is False
+          assert r['claims']['live_enabled'] is False
+          PY
+      - name: Preserve evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-silver-macro-regime-relative-value-v4
+          path: artifacts/gold_silver_macro_regime_relative_value_v4/
+          retention-days: 30
+          if-no-files-found: warn
