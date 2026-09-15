@@ -1,0 +1,194 @@
+name: Gold RV Persistence MGC Replication v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/gold-rv-persistence-mgc-replication-v1]
+    paths:
+      - "config/gold_rv_persistence_mgc_replication_v1.json"
+      - "research/gold_rv_persistence_mgc_replication_v1/PROTOCOL.md"
+      - "scripts/run_gold_rv_persistence_mgc_replication_v1.py"
+      - ".github/workflows/gold-rv-persistence-mgc-replication-v1.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gold-rv-persistence-mgc-replication-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  independent-state-replication:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install runtime
+        run: python -m pip install pandas numpy
+
+      - name: Discover pinned MGC 2023 files without checking out future data
+        run: |
+          set -euo pipefail
+          root="artifacts/gold_rv_persistence_mgc_replication_v1/data"
+          mkdir -p "$root/source"
+          tmp="$(mktemp -d)"
+          git -C "$tmp" init -q
+          git -C "$tmp" remote add origin https://github.com/domzack/mgc-ohlcv-data.git
+          git -C "$tmp" fetch -q --depth 1 origin bf75ac4587e7995ceae64c3d696e076c37be12cc
+          test "$(git -C "$tmp" rev-parse FETCH_HEAD)" = "bf75ac4587e7995ceae64c3d696e076c37be12cc"
+          git -C "$tmp" ls-tree -r --name-only FETCH_HEAD data \
+            | grep '^data/ohlcv_MGC_2023-[0-9][0-9]-[0-9][0-9]\.csv$' \
+            | sort > "$root/FILELIST.txt"
+          test -s "$root/FILELIST.txt"
+          count="$(wc -l < "$root/FILELIST.txt")"
+          test "$count" -ge 300
+          test "$count" -le 366
+          rm -rf "$tmp"
+          echo "Pinned 2023 MGC daily files: $count"
+
+      - name: Download only pinned 2023 MGC one-minute files
+        run: |
+          set -euo pipefail
+          root="artifacts/gold_rv_persistence_mgc_replication_v1/data"
+          base="https://raw.githubusercontent.com/domzack/mgc-ohlcv-data/bf75ac4587e7995ceae64c3d696e076c37be12cc"
+          while IFS= read -r path; do
+            file="$(basename "$path")"
+            curl --fail --location --retry 3 --retry-delay 2 "$base/$path" -o "$root/source/$file"
+          done < "$root/FILELIST.txt"
+          expected="$(wc -l < "$root/FILELIST.txt")"
+          actual="$(find "$root/source" -type f -name 'ohlcv_MGC_2023-*.csv' | wc -l)"
+          test "$actual" -eq "$expected"
+          sha256sum "$root"/source/*.csv | sort > "$root/SOURCE_SHA256.txt"
+
+      - name: Materialize only 2023 MGC source
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          import pandas as pd
+
+          root=Path('artifacts/gold_rv_persistence_mgc_replication_v1/data')
+          files=sorted((root/'source').glob('ohlcv_MGC_2023-*.csv'))
+          if len(files) < 300:
+              raise SystemExit(f'too few 2023 MGC files: {len(files)}')
+          frames=[]
+          per_file={}
+          for f in files:
+              d=pd.read_csv(f)
+              d.columns=[str(c).strip().lower() for c in d.columns]
+              required={'timestamp','open','high','low','close'}
+              if not required.issubset(d.columns):
+                  raise SystemExit(f'schema mismatch in {f.name}: {list(d.columns)}')
+              d['timestamp']=pd.to_datetime(d['timestamp'],utc=True,errors='coerce')
+              for c in ('open','high','low','close'):
+                  d[c]=pd.to_numeric(d[c],errors='coerce')
+              if 'volume' in d.columns:
+                  d['volume']=pd.to_numeric(d['volume'],errors='coerce')
+              d=d.dropna(subset=['timestamp','open','high','low','close'])
+              d=d[(d[['open','high','low','close']]>0).all(axis=1)]
+              per_file[f.name]=int(len(d))
+              frames.append(d)
+          x=pd.concat(frames,ignore_index=True)
+          x=x.drop_duplicates('timestamp',keep='last').sort_values('timestamp')
+          start=pd.Timestamp('2023-01-02T00:00:00Z')
+          end=pd.Timestamp('2024-01-01T00:00:00Z')
+          x=x[(x.timestamp>=start)&(x.timestamp<end)].copy()
+          if x.empty:
+              raise SystemExit('empty 2023 MGC materialization')
+          if x.timestamp.min() < start:
+              raise SystemExit('pre-2023 source leaked')
+          if x.timestamp.max() >= end:
+              raise SystemExit('post-2023 source leaked')
+          if x.timestamp.max() < pd.Timestamp('2023-12-28T00:00:00Z'):
+              raise SystemExit(f'2023 coverage ends too early: {x.timestamp.max()}')
+          dst=root/'MGC_1m_2023.csv'
+          x.to_csv(dst,index=False)
+          manifest={
+              'source_repository':'domzack/mgc-ohlcv-data',
+              'source_commit':'bf75ac4587e7995ceae64c3d696e076c37be12cc',
+              'instrument':'CME Micro Gold Futures MGC',
+              'provider':'Databento',
+              'resolution':'1m OHLCV',
+              'timestamp_timezone':'UTC',
+              'bar_timestamp_semantics':'interval start',
+              'daily_file_count':len(files),
+              'per_file_rows':per_file,
+              'rows':int(len(x)),
+              'start_utc':str(x.timestamp.min()),
+              'end_utc':str(x.timestamp.max()),
+              'post_2023_materialized':False,
+              'materialized_sha256':hashlib.sha256(dst.read_bytes()).hexdigest(),
+          }
+          (root/'MANIFEST.json').write_text(json.dumps(manifest,indent=2,sort_keys=True),encoding='utf-8')
+          print(json.dumps({k:v for k,v in manifest.items() if k!='per_file_rows'},indent=2,sort_keys=True))
+          PY
+          rm -rf artifacts/gold_rv_persistence_mgc_replication_v1/data/source
+
+      - name: Guard frozen independent replication protocol
+        run: |
+          python - <<'PY'
+          import json
+          cfg=json.load(open('config/gold_rv_persistence_mgc_replication_v1.json',encoding='utf-8'))
+          m=json.load(open('artifacts/gold_rv_persistence_mgc_replication_v1/data/MANIFEST.json',encoding='utf-8'))
+          assert cfg['protocol_status']=='independent_instrument_replication_frozen'
+          assert cfg['economic_scoring_enabled'] is False
+          assert cfg['parent_candidate']['candidate_id']=='rv_persistence'
+          assert cfg['parent_candidate']['frozen_sign']=='positive'
+          assert cfg['parent_candidate']['locked_validation_result_commit']=='549d8f5928b26bd6ea2de55779047875fb463448'
+          assert cfg['source']['repository']=='domzack/mgc-ohlcv-data'
+          assert cfg['source']['commit']=='bf75ac4587e7995ceae64c3d696e076c37be12cc'
+          assert cfg['observation_grid']['anchor_hours_local']==[0,2,4,6,8,10,12,14,16,18,20,22]
+          assert cfg['observation_grid']['same_clock_baseline_lookback_observations']==20
+          assert cfg['statistics']['permutation_epochs']==20000
+          assert cfg['statistics']['test_direction']=='one-sided positive'
+          assert cfg['replication_gate']['minimum_median_daily_effect']==0.15
+          assert cfg['replication_gate']['minimum_daily_positive_fraction']==0.58
+          assert cfg['replication_classification']['genuine_future_oos'] is False
+          assert m['post_2023_materialized'] is False
+          assert m['daily_file_count']>=300
+          PY
+
+      - name: Run frozen MGC independent state replication
+        run: |
+          python scripts/run_gold_rv_persistence_mgc_replication_v1.py \
+            --config config/gold_rv_persistence_mgc_replication_v1.json \
+            --mgc artifacts/gold_rv_persistence_mgc_replication_v1/data/MGC_1m_2023.csv \
+            --output artifacts/gold_rv_persistence_mgc_replication_v1/replication_result.json
+
+      - name: Guard claims
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/gold_rv_persistence_mgc_replication_v1/replication_result.json',encoding='utf-8'))
+          assert r['stage']=='independent_source_instrument_state_replication'
+          assert r['economic_scoring_run'] is False
+          assert r['directional_scoring_run'] is False
+          assert r['future_oos_claim'] is False
+          assert r['replication_classification']['genuine_future_oos'] is False
+          assert r['claims']['directional_edge_established'] is False
+          assert r['claims']['executable_edge_established'] is False
+          assert r['claims']['profitable_edge_established'] is False
+          assert r['claims']['verified_future_oos'] is False
+          assert r['claims']['leverage_authorized'] is False
+          assert r['claims']['live_enabled'] is False
+          PY
+
+      - name: Preserve replication evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-rv-persistence-mgc-replication-v1
+          path: |
+            artifacts/gold_rv_persistence_mgc_replication_v1/replication_result.json
+            artifacts/gold_rv_persistence_mgc_replication_v1/data/MANIFEST.json
+            artifacts/gold_rv_persistence_mgc_replication_v1/data/FILELIST.txt
+            artifacts/gold_rv_persistence_mgc_replication_v1/data/SOURCE_SHA256.txt
+          retention-days: 30
+          if-no-files-found: warn
