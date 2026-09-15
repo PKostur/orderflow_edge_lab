@@ -16,7 +16,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - name: Probe official sources
+      - name: Probe official sources and read-only BLS transport mirror
         run: |
           set +e
           mkdir -p artifacts/gold_event_http_diag
@@ -26,6 +26,9 @@ jobs:
             'https://www.bls.gov/bls/news-release/empsit.htm'
             'https://www.federalreserve.gov/monetarypolicy/fomchistorical2019.htm'
             'https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm'
+            'https://r.jina.ai/https://www.bls.gov/bls/news-release/cpi.htm'
+            'https://r.jina.ai/https://www.bls.gov/bls/news-release/empsit.htm'
+            'https://r.jina.ai/https://www.bls.gov/schedule/2014/home.htm'
           )
           i=0
           : > artifacts/gold_event_http_diag/status.txt
