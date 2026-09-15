@@ -1,0 +1,118 @@
+{
+  "protocol_id": "gold-rv-persistence-histdata-temporal-v2",
+  "protocol_status": "later_historical_temporal_replication_frozen",
+  "economic_scoring_enabled": false,
+  "parent_candidate": {
+    "candidate_id": "rv_persistence",
+    "locked_validation_result_commit": "549d8f5928b26bd6ea2de55779047875fb463448",
+    "histdata_v1_result_commit": "2c99caf24347a68efbba6a2fca0f6c9676124454",
+    "frozen_feature": "pre_rv_ratio",
+    "frozen_target": "future_rv_ratio",
+    "frozen_sign": "positive",
+    "selection_or_retuning_after_v1": false,
+    "follow_on_reason": "HistData 2023 v1 reproduced the state strongly but failed only the pre-frozen 160-scorable-date breadth gate; v2 extends the exact unchanged candidate to the next historical year without gate relaxation"
+  },
+  "replication_classification": {
+    "source_independent_from_original_development": true,
+    "source_same_as_histdata_v1": true,
+    "instrument_independent": false,
+    "same_instrument": true,
+    "later_period_than_locked_2023_validation": true,
+    "later_historical_oos_relative_to_2021_2023_research": true,
+    "genuine_prospective_future_oos": false,
+    "description": "2024 HistData XAUUSD is later historical temporal replication on an independent source relative to the original Dukascopy research path; it is not a prospective future shadow"
+  },
+  "source": {
+    "repository": "blackmoon87/forex-histdata-m1",
+    "commit": "208e67d7bda5cd5536df27531704e07fe4d54641",
+    "instrument": "XAUUSD spot gold",
+    "provider": "HistData",
+    "resolution": "1m OHLCV",
+    "archive_format": "Generic ASCII M1 ZIP",
+    "raw_timestamp_timezone": "fixed EST UTC-05:00 without daylight-saving adjustment",
+    "timestamp_conversion": "parse raw timestamp as fixed UTC-05:00, convert instant to UTC, then convert to America/New_York for frozen anchor matching",
+    "warmup_archive": {
+      "year": 2023,
+      "path": "histdata_zips/HISTDATA_COM_ASCII_XAUUSD_M12023.zip",
+      "lfs_sha256": "89a4f3f7ec2a52b29fbce8d4ca2ab650971817ae371b332f5fe471a488bcffc2",
+      "size_bytes": 3629564
+    },
+    "replication_archive": {
+      "year": 2024,
+      "path": "histdata_zips/HISTDATA_COM_ASCII_XAUUSD_M12024.zip",
+      "lfs_sha256": "6d47f5cb269e0c4f35c63c7532713aae7dcf98901f605458b00dd6a69e7105de",
+      "size_bytes": 4358732
+    },
+    "scorer_warmup_start_ny": "2023-11-01",
+    "replication_start_ny": "2024-01-01",
+    "replication_end_exclusive_ny": "2025-01-01",
+    "half_split_ny": "2024-07-01",
+    "archive_granularity_note": "full 2023 archive is materialized because the source is annual; anchors before 2023-11-01 are excluded from baseline construction and inference; 2024 is the only scored year"
+  },
+  "observation_grid": {
+    "timezone": "America/New_York",
+    "weekday_only": true,
+    "anchor_hours_local": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22],
+    "anchor_minute": 0,
+    "pre_window_minutes": 60,
+    "forward_window_minutes": 60,
+    "same_clock_baseline_lookback_observations": 20,
+    "minimum_daily_anchor_count_for_inference": 8,
+    "missing_bar_policy": "drop anchor; no interpolation",
+    "baseline_policy": "each clock slot becomes scorable only after 20 prior valid same-source observations at that same New York clock slot"
+  },
+  "state_definition": {
+    "realized_volatility": "square root of sum of squared one-minute log close returns",
+    "pre_rv_ratio": "pre-60m realized volatility divided by trailing 20-valid-observation same-clock median pre-60m realized volatility",
+    "future_rv_ratio": "next-60m realized volatility divided by trailing 20-valid-observation same-clock median next-60m realized volatility",
+    "future_range_ratio": "next-60m high-low range divided by trailing 20-valid-observation same-clock median next-60m range",
+    "primary_daily_effect": "Spearman(pre_rv_ratio, future_rv_ratio) across valid frozen anchors on each New York date",
+    "secondary_daily_effect": "Spearman(pre_rv_ratio, future_range_ratio) across valid frozen anchors on each New York date",
+    "dependence_unit": "New York date"
+  },
+  "statistics": {
+    "single_candidate": true,
+    "test_direction": "one-sided positive",
+    "permutation_method": "20,000-epoch sign-flip test on daily primary effects against frozen positive sign",
+    "permutation_epochs": 20000,
+    "random_seed_namespace": "gold-rv-persistence-histdata-temporal-v2",
+    "multiple_testing": "none; one frozen candidate",
+    "primary_p_max": 0.05
+  },
+  "replication_gate": {
+    "minimum_scorable_dates": 160,
+    "minimum_median_daily_effect": 0.15,
+    "minimum_daily_positive_fraction": 0.58,
+    "minimum_positive_anchor_slots": 8,
+    "minimum_anchor_slot_observations": 80,
+    "first_half_median_effect_must_be_positive": true,
+    "second_half_median_effect_must_be_positive": true,
+    "secondary_range_effect_must_be_positive": true,
+    "primary_p_max": 0.05,
+    "candidate_requires_all_gates": true,
+    "origin": "unchanged from MGC replication and HistData 2023 v1 gates"
+  },
+  "data_quality_controls": {
+    "verify_archive_sha256_before_parse": true,
+    "verify_archive_size_before_parse": true,
+    "prefer_unique_csv_member": true,
+    "require_semicolon_six_column_rows": true,
+    "require_positive_ohlc": true,
+    "require_high_low_consistency": true,
+    "drop_duplicate_timestamps_keep_last": true,
+    "report_max_abs_one_minute_log_return": true,
+    "report_top_five_abs_one_minute_log_return_timestamps": true,
+    "no_interpolation": true
+  },
+  "claims_and_controls": {
+    "no_parameter_retuning_allowed": true,
+    "historical_later_period_is_prospective_future_shadow": false,
+    "economic_pnl_disabled": true,
+    "directional_edge_claim_allowed": false,
+    "volatility_state_replication_is_not_profitable_edge": true,
+    "leverage_authorized": false,
+    "live_enabled": false
+  },
+  "decision_if_pass": "classify exact state as having passed later-historical independent-source temporal replication; next gate remains prospective state shadow or a separately frozen monetization mechanism, not automatic PnL promotion",
+  "decision_if_fail": "close HistData temporal replication without threshold changes; retain prior robustness evidence but do not promote"
+}
