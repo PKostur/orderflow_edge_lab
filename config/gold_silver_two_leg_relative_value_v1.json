@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold_silver_two_leg_relative_value_v1",
+  "evidence_class": "post_observation_retrospective_development_with_locked_validation_not_future_oos",
+  "motivation": "The frozen one-leg gold/silver ratio timing candidate preserved state structure and raw economics across an independent cash feed but failed its predeclared benchmark because returns remained materially exposed to long-gold beta. This protocol changes the traded object to an explicitly two-leg gold-versus-silver spread and must not be interpreted as a rescue of the rejected one-leg candidate.",
+  "source": {
+    "repository": "simom1/XAUUSD-history",
+    "commit": "bda79c6c5ce09a5b488d4cd2c20fcd19bdd2ed3a",
+    "gold_path": "Gold-Cash/XAUUSD/XAUUSD_D1_2010_2026.csv",
+    "silver_path": "Silver-Cash/XAGUSD/XAGUSD_D1.csv",
+    "instrument_semantics": "independent MT5-style cash XAUUSD and XAGUSD daily bars"
+  },
+  "data_admission": {
+    "common_dates_only": true,
+    "weekdays_only": true,
+    "minimum_tick_volume_each_leg": 2,
+    "positive_ohlc_required": true,
+    "duplicate_policy": "keep_last",
+    "no_interpolation": true
+  },
+  "periods": {
+    "development": {
+      "start": "2010-01-01",
+      "end_exclusive": "2021-01-01"
+    },
+    "locked_internal_validation": {
+      "start": "2021-01-01",
+      "end_exclusive": "2024-01-01",
+      "opened_during_development": false
+    },
+    "retrospective_extension": {
+      "start": "2024-01-01",
+      "end_exclusive": "2026-09-15",
+      "opened_during_development": false,
+      "claim_boundary": "Even if later opened, this period is retrospective and is not future OOS because related one-leg evidence from this era was already inspected."
+    },
+    "future_shadow_earliest_utc": "2026-09-16T00:00:00Z"
+  },
+  "signal_grid": {
+    "ratio_definition": "gold_close / silver_close",
+    "rolling_z_windows_trading_days": [126, 252],
+    "activation_abs_z_gte": [1.0, 1.5],
+    "modes": ["momentum", "reversion"],
+    "hold_trading_bars": [21, 42]
+  },
+  "hedge_grid": {
+    "methods": [
+      {
+        "name": "rolling_return_beta_126",
+        "definition": "cov(log_return_gold, log_return_silver) / var(log_return_silver) over 126 completed trading bars"
+      },
+      {
+        "name": "rolling_vol_ratio_63",
+        "definition": "std(log_return_gold,63) / std(log_return_silver,63)"
+      }
+    ],
+    "hedge_ratio_clip": [0.1, 2.5],
+    "weighting": "gross-normalized: gold_weight=1/(1+h), silver_weight=h/(1+h); spread_return=gold_weight*gold_return-silver_weight*silver_return",
+    "hedge_ratio_frozen_for_trade": true,
+    "hedge_estimation_uses_completed_data_only": true
+  },
+  "execution": {
+    "signal_time": "completed daily close",
+    "entry": "next common daily open",
+    "exit": "common daily open after frozen hold",
+    "same_bar_fill": false,
+    "one_active_trade": true,
+    "both_legs_enter_and_exit_together": true,
+    "round_trip_cost_bps_on_total_gross_notional": [5.0, 10.0, 20.0],
+    "primary_cost_bps": 10.0,
+    "high_cost_bps": 20.0,
+    "note": "Because absolute portfolio weights sum to one, the stated cost is charged to full two-leg gross notional and therefore includes both legs."
+  },
+  "state_first": {
+    "target": "future uncosted two-leg spread return over the frozen hold using the causal hedge ratio fixed at signal time",
+    "predictor": "momentum uses z; reversion uses -z",
+    "dependence_cluster_calendar_days": 126,
+    "minimum_events_per_state_fold": 6,
+    "minimum_scorable_state_folds": 12,
+    "minimum_median_fold_spearman": 0.0,
+    "minimum_positive_state_fold_fraction": 0.60,
+    "sign_flip_epochs": 10000,
+    "sign_flip_seed": 20260915,
+    "maximum_bh_fdr_q": 0.10
+  },
+  "economic_gate": {
+    "minimum_non_overlapping_trades": 50,
+    "minimum_primary_median_fold_net_bps": 0.0,
+    "minimum_primary_median_fold_pf": 1.10,
+    "minimum_primary_positive_fold_fraction": 0.60,
+    "minimum_high_cost_median_fold_net_bps": 0.0,
+    "require_original_mean_gt_reversed_mean": true,
+    "require_primary_median_fold_risk_adjusted_gt_unhedged_gold_control": true,
+    "minimum_long_spread_trades": 8,
+    "minimum_short_spread_trades": 8,
+    "require_positive_mean_primary_net_both_directions": true
+  },
+  "controls": {
+    "reversed_direction": true,
+    "unhedged_gold_same_signal": true,
+    "static_equal_dollar_gold_minus_silver": true,
+    "report_trade_return_correlation_with_unhedged_gold": true,
+    "report_long_and_short_spread_subsets": true
+  },
+  "neighborhood_gate": {
+    "definition": "same mode and hedge method; differs in exactly one of z-window, z-threshold, or hold by one adjacent grid value",
+    "minimum_supporting_neighbors": 2,
+    "supporter_requires": {
+      "state_bh_q_lte": 0.10,
+      "primary_median_fold_net_bps_gt": 0.0,
+      "primary_median_fold_pf_gt": 1.0,
+      "high_cost_median_fold_net_bps_gte": 0.0
+    }
+  },
+  "candidate_selection": {
+    "maximum_candidates": 3,
+    "ranking": [
+      "higher state median fold Spearman",
+      "higher primary positive economic fold fraction",
+      "higher primary median fold net bps",
+      "lexicographic candidate id"
+    ],
+    "locked_validation_may_open_only_after_separate_candidate_freeze_commit": true
+  },
+  "claims": {
+    "verified_future_oos": false,
+    "profitable_edge_established": false,
+    "leverage_authorized": false,
+    "live_enabled": false
+  }
+}
