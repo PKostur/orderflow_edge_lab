@@ -32,10 +32,16 @@ The deliberately biased variant exists only to quantify how much of the TradingV
 ## Data freeze
 
 - Source: MEXC public futures klines
-- Period: 2026-06-01 through 2026-09-12 exclusive
+- Scored period: 2026-06-01 through 2026-09-12 exclusive
+- Indicator prehistory: 7 calendar days before the scored period
+- Prehistory is used only to initialize SMMA and regime state; trades with entry before 2026-06-01 are excluded from scoring
 - Symbols: BTC_USDT, ETH_USDT, SOL_USDT, XRP_USDT, DOGE_USDT, LINK_USDT, SUI_USDT, ENA_USDT
 - Chart timeframes: 5m, 15m, 1h
 - Order timing: crossover detected at bar close, market fill at the next chart bar open
+
+### Engineering correction after run 1
+
+Run 1 fetched data starting exactly at the scored-period boundary. Inspection showed that a small number of early 1h trades were affected by indicator initialization and the regime classifier was still in warmup. Before interpreting per-symbol or per-regime results, the implementation was corrected to fetch seven days of prehistory while leaving the scored period, OCC parameters, symbols, timeframes, costs, and execution rule unchanged. Run 1 is therefore a preliminary engineering diagnostic, not the final evidence run. The warmup length was selected to exceed both the 8-period SMMA requirement at the slowest 3h alternate resolution and the 48-bar descriptive regime lookback, not from PnL optimization.
 
 ## Economics freeze
 
