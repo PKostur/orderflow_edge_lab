@@ -1,0 +1,197 @@
+name: Time To Eat Nick Stewart v1 State
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/time-to-eat-nick-stewart-v1]
+    paths:
+      - "config/time_to_eat_nick_stewart_v1.json"
+      - "scripts/check_time_to_eat_nick_stewart_v1_ready.py"
+      - "scripts/run_time_to_eat_nick_stewart_v1_state.py"
+      - "research/time_to_eat_nick_stewart_v1/STATE_PROTOCOL.md"
+      - ".github/workflows/time-to-eat-nick-stewart-v1-state.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: time-to-eat-nick-stewart-v1-state-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  development-state:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install state-research runtime
+        run: python -m pip install pandas numpy pyarrow datasets huggingface_hub
+
+      - name: Enforce frozen state gate and blocked economics
+        run: |
+          python scripts/check_time_to_eat_nick_stewart_v1_ready.py --stage state
+          if python scripts/check_time_to_eat_nick_stewart_v1_ready.py --stage economics; then
+            echo "economics unexpectedly enabled" >&2
+            exit 1
+          else
+            echo "economics correctly remains blocked"
+          fi
+
+      - name: Build development-only minute datasets
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/time_to_eat_v1_state/data
+          python - <<'PY'
+          from __future__ import annotations
+
+          import gc
+          import hashlib
+          import json
+          from pathlib import Path
+
+          import pandas as pd
+          from datasets import load_dataset
+          from huggingface_hub import hf_hub_download
+
+          OUT = Path('artifacts/time_to_eat_v1_state/data')
+          START = pd.Timestamp('2021-01-01T00:00:00Z')
+          END = pd.Timestamp('2023-01-01T00:00:00Z')
+          manifest = {
+              'development_start_utc': START.isoformat(),
+              'exclusive_end_utc': END.isoformat(),
+              'locked_2023_materialized_for_scoring': False,
+              'sources': {},
+          }
+
+          def norm(df, ts_col):
+              ts = pd.to_datetime(df[ts_col], utc=True, errors='coerce')
+              out = pd.DataFrame({
+                  'timestamp': ts,
+                  'open': pd.to_numeric(df['open'], errors='coerce'),
+                  'high': pd.to_numeric(df['high'], errors='coerce'),
+                  'low': pd.to_numeric(df['low'], errors='coerce'),
+                  'close': pd.to_numeric(df['close'], errors='coerce'),
+              }).dropna()
+              out = out[(out.timestamp >= START) & (out.timestamp < END)]
+              out = out.drop_duplicates('timestamp', keep='last').sort_values('timestamp')
+              return out
+
+          # XAUUSD cash development proxy. Read source CSV in chunks and retain only open development years.
+          xau_path = hf_hub_download(repo_id='Pcitycrypto/xauusd', filename='XAUUSD_1m.csv', repo_type='dataset')
+          xparts = []
+          for chunk in pd.read_csv(xau_path, chunksize=500_000):
+              x = norm(chunk.rename(columns={c: c.lower() for c in chunk.columns}), 'datetime')
+              if len(x):
+                  xparts.append(x)
+          xau = pd.concat(xparts, ignore_index=True).sort_values('timestamp')
+          xau_out = OUT / 'XAUUSD_1m_dev_2021_2022.parquet'
+          xau.to_parquet(xau_out, index=False)
+          manifest['sources']['XAUUSD'] = {
+              'repo': 'Pcitycrypto/xauusd',
+              'file': 'XAUUSD_1m.csv',
+              'role': 'cash-gold development proxy, not GC independent replication',
+              'rows': len(xau),
+              'start': xau.timestamp.min().isoformat(),
+              'end': xau.timestamp.max().isoformat(),
+          }
+          del xau, xparts
+          gc.collect()
+
+          # NQ futures dataset. Export only 2021-2022 to the scorer.
+          nqds = load_dataset('mdelcristo/NQ-F_1min_OHLCV_Parquet', split='train')
+          nqraw = nqds.to_pandas()
+          nqraw.columns = [str(c).lower() for c in nqraw.columns]
+          nq = norm(nqraw, 'timestamp')
+          nq_out = OUT / 'NQ_1m_dev_2021_2022.parquet'
+          nq.to_parquet(nq_out, index=False)
+          manifest['sources']['NQ'] = {
+              'repo': 'mdelcristo/NQ-F_1min_OHLCV_Parquet',
+              'role': 'native secondary futures market',
+              'rows': len(nq),
+              'start': nq.timestamp.min().isoformat(),
+              'end': nq.timestamp.max().isoformat(),
+          }
+          del nqds, nqraw, nq
+          gc.collect()
+
+          # ES transfer dataset. Remove the UTC dates containing an explicit contract-id transition.
+          esds = load_dataset('msj-21/es-futures-1m', split='train')
+          esraw = esds.to_pandas()
+          esraw.columns = [str(c).lower() for c in esraw.columns]
+          ts = pd.to_datetime(esraw['datetime'], utc=True, errors='coerce')
+          esraw = esraw.assign(_ts=ts)
+          if 'instrument_id' in esraw.columns:
+              transition = esraw.instrument_id.astype(str).ne(esraw.instrument_id.astype(str).shift(1))
+              bad_dates = set(esraw.loc[transition & esraw._ts.notna(), '_ts'].dt.date.astype(str))
+          else:
+              bad_dates = set()
+          es = norm(esraw.drop(columns=['_ts']), 'datetime')
+          if bad_dates:
+              es = es[~es.timestamp.dt.date.astype(str).isin(bad_dates)].copy()
+          es_out = OUT / 'ES_1m_dev_2021_2022.parquet'
+          es.to_parquet(es_out, index=False)
+          manifest['sources']['ES'] = {
+              'repo': 'msj-21/es-futures-1m',
+              'role': 'predeclared transfer-only futures market',
+              'roll_transition_utc_dates_removed': sorted(bad_dates),
+              'rows': len(es),
+              'start': es.timestamp.min().isoformat(),
+              'end': es.timestamp.max().isoformat(),
+          }
+
+          # Hard boundary: the scorer must never receive 2023 rows in development.
+          for p in [xau_out, nq_out, es_out]:
+              d = pd.read_parquet(p, columns=['timestamp'])
+              mx = pd.to_datetime(d.timestamp, utc=True).max()
+              if mx >= END:
+                  raise SystemExit(f'locked 2023 leaked into {p}: {mx}')
+              if pd.to_datetime(d.timestamp, utc=True).min() < START:
+                  raise SystemExit(f'pre-development rows leaked into {p}')
+
+          for p in [xau_out, nq_out, es_out]:
+              digest = hashlib.sha256(p.read_bytes()).hexdigest()
+              manifest.setdefault('sha256', {})[p.name] = digest
+
+          (OUT / 'SOURCE_MANIFEST.json').write_text(json.dumps(manifest, indent=2, sort_keys=True), encoding='utf-8')
+          print(json.dumps(manifest, indent=2, sort_keys=True))
+          PY
+
+      - name: Run frozen state-only development study
+        run: |
+          python scripts/run_time_to_eat_nick_stewart_v1_state.py \
+            --xau artifacts/time_to_eat_v1_state/data/XAUUSD_1m_dev_2021_2022.parquet \
+            --nq artifacts/time_to_eat_v1_state/data/NQ_1m_dev_2021_2022.parquet \
+            --es artifacts/time_to_eat_v1_state/data/ES_1m_dev_2021_2022.parquet \
+            --output artifacts/time_to_eat_v1_state/state_result.json
+
+      - name: Guard claims and sealed validation
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/time_to_eat_v1_state/state_result.json', encoding='utf-8'))
+          assert r['stage'] == 'development_state_only'
+          assert r['holdout_opened'] is False
+          assert r['economic_scoring_run'] is False
+          assert r['cell_count'] == 72
+          assert r['claims']['claimed_75pct_win_rate_verified'] is False
+          assert r['claims']['profitable_edge_established'] is False
+          assert r['claims']['verified_future_oos'] is False
+          assert r['claims']['leverage_authorized'] is False
+          assert r['claims']['live_enabled'] is False
+          PY
+
+      - name: Preserve state evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: time-to-eat-nick-stewart-v1-state
+          path: |
+            artifacts/time_to_eat_v1_state/state_result.json
+            artifacts/time_to_eat_v1_state/data/SOURCE_MANIFEST.json
+          retention-days: 30
+          if-no-files-found: warn
