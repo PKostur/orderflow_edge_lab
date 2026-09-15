@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "protocol_id": "markov_ev_overlay_v1",
+  "frozen_at_utc": "2026-09-15T18:58:00Z",
+  "purpose": "Diagnostic/counterfactual Markov reward analysis only. Do not modify any frozen strategy, forward PnL, position, sizing, cost rule, funding accounting, or promotion status.",
+  "source_markov_protocol": "config/markov_price_diagnostics_v1.json",
+  "fit_policy": {
+    "use_same_pre_freeze_training_windows_as_markov_price_diagnostics_v1": true,
+    "use_strategy_pnl_for_reward_fit": false,
+    "use_post_freeze_returns_for_reward_fit": false,
+    "allow_post_freeze_prices_for_current_state_only": true,
+    "retune_after_results": false
+  },
+  "reward_model": {
+    "type": "first_order_markov_reward_process",
+    "state_reward": "pre_freeze_mean_next_close_to_close_log_return_bps",
+    "expected_cumulative_reward": "sum_k state_distribution_k dot state_reward_vector",
+    "candidate_actions": ["LONG", "SHORT", "FLAT"],
+    "fresh_entry_round_trip_cost_bps": 20.0,
+    "funding_forecast_bps": 0.0,
+    "funding_note": "No future funding alpha is assumed. Existing forward reports continue to account for realized public MEXC funding independently.",
+    "minimum_state_transition_count_for_actionable_label": 20,
+    "minimum_expected_net_bps_for_positive_label": 0.0,
+    "uncertainty_method": "state_reward_standard_error_propagation_independence_approximation",
+    "conservative_score_z": 1.0,
+    "selection_score": "expected_net_bps_minus_1se",
+    "flat_ev_bps": 0.0
+  },
+  "candidate_horizons": {
+    "ena_bb40_rsi25_75_atr15_v1": [1, 3, 6, 12, 20],
+    "mexc_8h_ema24_96_atr025_v1": [1, 3, 6],
+    "mexc_xs_mom30_7_dn_v1": [1, 3, 7]
+  },
+  "portfolio_policy": {
+    "report_existing_frozen_portfolio_ev": true,
+    "report_counterfactual_long_short_flat_best_action": true,
+    "do_not_apply_counterfactual_actions_to_frozen_positions": true,
+    "cross_sectional_primary_horizon_days": 7,
+    "trend_primary_horizon_bars": 3,
+    "ena_primary_horizon_bars": 6,
+    "portfolio_dependence_warning": true
+  },
+  "claims": {
+    "diagnostic_only": true,
+    "candidate_specifications_modified": false,
+    "forward_strategy_signals_modified": false,
+    "verified_out_of_sample_edge": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  }
+}
