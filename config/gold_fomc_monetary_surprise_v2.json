@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold_fomc_monetary_surprise_v2",
+  "evidence_class": "post_observation_retrospective_development_with_locked_validation_not_future_oos",
+  "motivation": "Gold Macro Event Reaction v1 rejected strategies that inferred FOMC information from gold's own first 30-minute price move. This protocol changes the information source: direction is determined by an independently measured money-market monetary-policy surprise from the Federal Reserve Bank of San Francisco, not by XAUUSD price action.",
+  "price_source": {
+    "repository": "simom1/XAUUSD-history",
+    "commit": "bda79c6c5ce09a5b488d4cd2c20fcd19bdd2ed3a",
+    "path": "Gold-Cash/XAUUSD/XAUUSD_M15_2010_2026.csv",
+    "instrument": "MT5-style cash XAUUSD",
+    "timestamp_semantics": "UTC bar-open timestamps"
+  },
+  "surprise_source": {
+    "provider": "Federal Reserve Bank of San Francisco",
+    "page": "https://www.frbsf.org/research-and-insights/data-and-indicators/monetary-policy-surprises/",
+    "download_url": "https://www.frbsf.org/wp-content/uploads/monetary-policy-surprises-data.xlsx",
+    "expected_sha256_from_pre_protocol_data_audit": "708606624de050cdaf6fd850a320b38d45099ab7c2398e01ba12dcece5743668",
+    "sheet": "FOMC (update 2023)",
+    "date_column": "Date",
+    "time_column": "Time",
+    "unscheduled_column": "Unscheduled",
+    "raw_surprise_column": "MPS",
+    "orthogonalized_surprise_column": "MPS_ORTH",
+    "interpretation": "positive monetary-policy surprise is hawkish / upward rate-path news; negative is dovish",
+    "data_audit": {
+      "workflow_run": 34972641511,
+      "artifact_id": 10398181491,
+      "development_regular_meetings_2018_2022": 39,
+      "raw_surprise_non_null": 39,
+      "orthogonalized_surprise_non_null": 33
+    }
+  },
+  "periods": {
+    "development": {"start": "2018-01-01T00:00:00Z", "end_exclusive": "2023-01-01T00:00:00Z"},
+    "locked_internal_validation": {"start": "2023-01-01T00:00:00Z", "end_exclusive": "2024-01-01T00:00:00Z", "opened_during_development": false},
+    "retrospective_extension": {"start": "2024-01-01T00:00:00Z", "end_exclusive": "2026-09-15T00:00:00Z", "opened_during_development": false},
+    "future_shadow_earliest_utc": "2026-09-16T00:00:00Z"
+  },
+  "data_admission": {
+    "scheduled_only": true,
+    "required_fomc_local_time": "14:00",
+    "required_fomc_timezone": "America/New_York",
+    "event_requires_exact_1430_entry_bar": true,
+    "event_requires_exact_exit_bar": true,
+    "no_price_interpolation": true,
+    "positive_ohlc_required": true,
+    "minimum_tick_volume": 1,
+    "duplicate_policy": "keep_last"
+  },
+  "signal_grid": {
+    "surprise_variants": ["MPS", "MPS_ORTH"],
+    "side_rule": "side = -sign(surprise): hawkish surprise shorts gold; dovish surprise longs gold",
+    "entry": "exact XAUUSD M15 open 30 minutes after the 14:00 ET announcement, after the 30-minute surprise window is fully observable",
+    "holding_minutes": [60, 180],
+    "zero_surprise_policy": "skip"
+  },
+  "state_first": {
+    "hypotheses": "surprise_variant x holding_minutes = 4",
+    "predictor": "absolute surprise magnitude",
+    "target": "candidate-side signed XAUUSD return from 14:30 ET entry to frozen exit before costs",
+    "matched_placebo": {
+      "enabled": true,
+      "definition": "same UTC clock time exactly 7 calendar days before and 7 calendar days after, where exact bars exist and the date is not another scheduled FOMC decision",
+      "state_excess_metric": "event candidate-side signed return minus mean available matched-placebo candidate-side signed return using the event's surprise-determined side"
+    },
+    "dependence_cluster_calendar_days": 182,
+    "minimum_events_per_scorable_fold": 2,
+    "minimum_scorable_folds": 6,
+    "minimum_median_fold_spearman": 0.0,
+    "minimum_positive_spearman_fold_fraction": 0.60,
+    "minimum_median_fold_excess_bps": 0.0,
+    "minimum_positive_excess_fold_fraction": 0.60,
+    "fold_sign_flip_epochs": 20000,
+    "fold_sign_flip_seed": 20260915,
+    "maximum_bh_fdr_q": 0.10
+  },
+  "execution": {
+    "round_trip_cost_bps": [3.0, 5.0, 10.0],
+    "primary_cost_bps": 5.0,
+    "high_cost_bps": 10.0,
+    "one_trade_per_event": true,
+    "same_bar_fill": false,
+    "slippage_model": "included only in stated round-trip cost stress"
+  },
+  "economic_gate": {
+    "minimum_trades": 25,
+    "minimum_primary_median_fold_net_bps": 0.0,
+    "minimum_primary_median_fold_pf": 1.10,
+    "minimum_primary_positive_fold_fraction": 0.60,
+    "minimum_high_cost_median_fold_net_bps": 0.0,
+    "require_primary_mean_net_positive": true,
+    "require_original_mean_gt_reversed_mean": true,
+    "require_event_mean_gt_placebo_mean": true,
+    "minimum_long_trades": 5,
+    "minimum_short_trades": 5,
+    "require_positive_mean_primary_net_both_directions": true
+  },
+  "controls": {
+    "reversed_surprise_direction": true,
+    "matched_time_placebo": true,
+    "raw_vs_orthogonalized_surprise_comparison": true,
+    "report_long_and_short_subsets": true
+  },
+  "family_consistency": {
+    "definition": "a candidate requires the same surprise variant at the other frozen holding horizon to have nonnegative median state excess and nonnegative primary median fold net",
+    "maximum_candidates": 1
+  },
+  "candidate_selection": {
+    "ranking": ["lower BH-FDR q", "higher median fold state Spearman", "higher median state excess", "higher primary positive fold fraction", "higher primary median fold net", "shorter holding horizon"],
+    "locked_validation_may_open_only_after_separate_candidate_freeze_commit": true
+  },
+  "claims": {
+    "verified_future_oos": false,
+    "profitable_edge_established": false,
+    "leverage_authorized": false,
+    "live_enabled": false
+  }
+}
