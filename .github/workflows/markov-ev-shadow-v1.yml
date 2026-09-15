@@ -1,0 +1,89 @@
+name: Markov EV Shadow v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/markov-ev-shadow-v1]
+    paths:
+      - "config/markov_ev_shadow_v1.json"
+      - "config/markov_ev_overlay_v1.json"
+      - "config/markov_price_diagnostics_v1.json"
+      - "src/orderflow_edge_lab/markov_ev_shadow.py"
+      - "src/orderflow_edge_lab/cli/markov_ev_shadow.py"
+      - "tests/test_markov_ev_shadow.py"
+      - ".github/workflows/markov-ev-shadow-v1.yml"
+      - "pyproject.toml"
+  schedule:
+    - cron: "17 */4 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: markov-ev-shadow-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run Markov EV guardrail tests
+        run: python -m unittest tests.test_markov_ev_shadow -v
+      - name: Run prospective veto-only shadow clones
+        run: |
+          orderflow-markov-ev-shadow \
+            --shadow-config config/markov_ev_shadow_v1.json \
+            --markov-config config/markov_price_diagnostics_v1.json \
+            --ev-config config/markov_ev_overlay_v1.json \
+            --output artifacts/markov_ev_shadow/report.json \
+            --source-dir artifacts/markov_ev_shadow/source
+      - name: Build comparison summary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.load(open('artifacts/markov_ev_shadow/report.json', encoding='utf-8'))
+          lines=['# Markov EV Shadow v1','',f"As of UTC: **{r['as_of_utc']}**",'',
+                 'Base candidates are untouched. The shadow clone may PASS or VETO fresh base entries only.','',
+                 '| Shadow clone | Status | Pass | Veto | Open | Forward PnL / $1,000 |','|---|---|---:|---:|---:|---:|']
+          for cid,x in r['reports'].items():
+              m=x['metrics']
+              pnl=m.get('net_pnl_per_1000_usdt', m.get('forward_pnl_per_1000_usdt_completed_net_plus_open_gross', 0.0))
+              open_count=m.get('open_symbol_positions', m.get('open_positions', 0))
+              lines.append(f"| `{cid}` | {x['status']} | {m.get('pass_count',0)} | {m.get('veto_count',0)} | {open_count} | ${float(pnl):,.2f} |")
+          lines += ['', '**Boundary:** diagnostic paper/shadow only; no base PnL is rewritten; no Markov reversal, leverage increase, or live transmission.','']
+          text='\n'.join(lines)
+          Path('artifacts/markov_ev_shadow/SUMMARY.md').write_text(text, encoding='utf-8')
+          print(text)
+          PY
+          cat artifacts/markov_ev_shadow/SUMMARY.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Enforce immutable safety boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/markov_ev_shadow/report.json', encoding='utf-8'))
+          c=r['claims']
+          if not c.get('paper_shadow_only') or c.get('base_candidate_specifications_modified') or c.get('base_forward_results_modified'):
+              raise SystemExit('shadow/base separation boundary violated')
+          if c.get('verified_out_of_sample_edge') or c.get('profitable_edge_established') or c.get('live_order_transmission_supported'):
+              raise SystemExit('forbidden promotion/live claim')
+          for x in r['reports'].values():
+              claims=x['claims']
+              if claims.get('base_candidate_modified') or claims.get('markov_can_reverse') or claims.get('live_order_transmission_supported'):
+                  raise SystemExit('clone guardrail violated')
+          PY
+      - name: Preserve shadow evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: markov-ev-shadow-v1
+          path: artifacts/markov_ev_shadow/
+          retention-days: 30
+          if-no-files-found: warn
