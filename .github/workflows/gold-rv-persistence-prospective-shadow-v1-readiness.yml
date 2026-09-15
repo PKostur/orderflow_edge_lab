@@ -1,0 +1,85 @@
+name: Gold RV Persistence Prospective Shadow Source Readiness
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/gold-rv-persistence-prospective-shadow-v1]
+    paths:
+      - "config/gold_rv_persistence_prospective_shadow_v1.json"
+      - "research/gold_rv_persistence_prospective_shadow_v1/PROTOCOL_FREEZE.md"
+      - ".github/workflows/gold-rv-persistence-prospective-shadow-v1-readiness.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  source-readiness-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Guard prospective freeze before acquisition
+        run: |
+          python - <<'PY'
+          import json
+          cfg=json.load(open('config/gold_rv_persistence_prospective_shadow_v1.json',encoding='utf-8'))
+          assert cfg['protocol_status']=='prospective_state_shadow_frozen'
+          assert cfg['economic_scoring_enabled'] is False
+          assert cfg['directional_scoring_enabled'] is False
+          assert cfg['parent_candidate']['candidate_id']=='rv_persistence'
+          assert cfg['evidence_classification']['shadow_start_new_york']=='2026-09-16T00:00:00-04:00'
+          assert cfg['evidence_classification']['shadow_start_utc']=='2026-09-16T04:00:00Z'
+          assert cfg['source']['acquisition_client']=='dukascopy-node'
+          assert cfg['source']['acquisition_client_version']=='1.50.0'
+          assert cfg['source']['instrument']=='xauusd'
+          assert cfg['source']['price_type']=='bid'
+          assert cfg['source']['timeframe']=='m1'
+          assert cfg['observation_grid']['same_clock_baseline_lookback_observations']==20
+          assert cfg['full_shadow_gate']['minimum_scorable_dates']==160
+          PY
+
+      - name: Acquire pre-freeze schema sample only
+        run: |
+          set -euo pipefail
+          root="artifacts/gold_rv_persistence_prospective_shadow_v1/readiness"
+          mkdir -p "$root"
+          npx -y dukascopy-node@1.50.0 \
+            -i xauusd \
+            -from 2026-09-14 \
+            -to 2026-09-16 \
+            -t m1 \
+            -p bid \
+            -utc 0 \
+            -f csv \
+            -dir "$root" \
+            -fn xauusd_readiness
+          test -s "$root/xauusd_readiness.csv"
+          sha256sum "$root/xauusd_readiness.csv" > "$root/SOURCE_SHA256.txt"
+          wc -c "$root/xauusd_readiness.csv"
+          echo '--- CSV head ---'
+          head -n 5 "$root/xauusd_readiness.csv"
+          echo '--- CSV tail ---'
+          tail -n 5 "$root/xauusd_readiness.csv"
+
+      - name: Guard that readiness sample cannot contain prospective shadow data
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('artifacts/gold_rv_persistence_prospective_shadow_v1/readiness/xauusd_readiness.csv')
+          text=p.read_text(encoding='utf-8',errors='replace')
+          assert '2026-09-16' not in text, 'readiness sample unexpectedly contains prospective-start date'
+          PY
+
+      - name: Preserve source-readiness evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-rv-persistence-prospective-shadow-source-readiness
+          path: artifacts/gold_rv_persistence_prospective_shadow_v1/readiness/
+          retention-days: 30
+          if-no-files-found: warn

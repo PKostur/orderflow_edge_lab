@@ -1,0 +1,162 @@
+name: Gold RV Persistence Prospective Shadow v1
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 13 * * *"
+  push:
+    branches: [research/gold-rv-persistence-prospective-shadow-v1]
+    paths:
+      - "config/gold_rv_persistence_prospective_shadow_v1.json"
+      - "research/gold_rv_persistence_prospective_shadow_v1/PROTOCOL_FREEZE.md"
+      - "scripts/run_gold_rv_persistence_prospective_shadow_v1.py"
+      - ".github/workflows/gold-rv-persistence-prospective-shadow-v1.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gold-rv-persistence-prospective-shadow-v1
+  cancel-in-progress: false
+
+jobs:
+  prospective-state-shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Install frozen runtime
+        run: |
+          python -m pip install pandas numpy
+          test "$(npm view dukascopy-node@1.50.0 version)" = "1.50.0"
+
+      - name: Guard frozen prospective protocol
+        run: |
+          python - <<'PY'
+          import json
+          cfg=json.load(open('config/gold_rv_persistence_prospective_shadow_v1.json',encoding='utf-8'))
+          assert cfg['protocol_status']=='prospective_state_shadow_frozen'
+          assert cfg['economic_scoring_enabled'] is False
+          assert cfg['directional_scoring_enabled'] is False
+          assert cfg['parent_candidate']['candidate_id']=='rv_persistence'
+          assert cfg['parent_candidate']['frozen_sign']=='positive'
+          assert cfg['evidence_classification']['prospective'] is True
+          assert cfg['evidence_classification']['shadow_only'] is True
+          assert cfg['evidence_classification']['shadow_start_utc']=='2026-09-16T04:00:00Z'
+          assert cfg['source']['provider']=='Dukascopy public datafeed'
+          assert cfg['source']['acquisition_client']=='dukascopy-node'
+          assert cfg['source']['acquisition_client_version']=='1.50.0'
+          assert cfg['source']['instrument']=='xauusd'
+          assert cfg['source']['price_type']=='bid'
+          assert cfg['source']['timeframe']=='m1'
+          assert cfg['source']['warmup_acquisition_start_utc']=='2026-08-01T00:00:00Z'
+          assert cfg['observation_grid']['anchor_hours_local']==[0,2,4,6,8,10,12,14,16,18,20,22]
+          assert cfg['observation_grid']['pre_window_minutes']==60
+          assert cfg['observation_grid']['forward_window_minutes']==60
+          assert cfg['observation_grid']['same_clock_baseline_lookback_observations']==20
+          assert cfg['observation_grid']['minimum_daily_anchor_count_for_inference']==8
+          assert cfg['statistics']['permutation_epochs']==20000
+          assert cfg['monitoring_checkpoints']['informational_only_scorable_dates']==[20,60,120]
+          assert cfg['monitoring_checkpoints']['checkpoint_can_promote'] is False
+          assert cfg['full_shadow_gate']['minimum_scorable_dates']==160
+          assert cfg['full_shadow_gate']['minimum_median_daily_effect']==0.15
+          assert cfg['full_shadow_gate']['minimum_daily_positive_fraction']==0.58
+          assert cfg['full_shadow_gate']['minimum_positive_anchor_slots']==8
+          assert cfg['full_shadow_gate']['minimum_anchor_slot_observations']==80
+          assert cfg['full_shadow_gate']['primary_p_max']==0.05
+          assert cfg['claims_and_controls']['leverage_authorized'] is False
+          assert cfg['claims_and_controls']['live_enabled'] is False
+          PY
+
+      - name: Record as-of timestamp
+        run: |
+          set -euo pipefail
+          root="artifacts/gold_rv_persistence_prospective_shadow_v1"
+          mkdir -p "$root/data"
+          date -u +%Y-%m-%dT%H:%M:%SZ | tee "$root/ASOF_UTC.txt"
+          git rev-parse HEAD | tee "$root/SCORER_COMMIT.txt"
+          printf '%s\n' 'dukascopy-node@1.50.0' > "$root/ACQUISITION_CLIENT.txt"
+
+      - name: Acquire cumulative Dukascopy source snapshot
+        run: |
+          set -euo pipefail
+          root="artifacts/gold_rv_persistence_prospective_shadow_v1"
+          npx -y dukascopy-node@1.50.0 \
+            -i xauusd \
+            -from 2026-08-01 \
+            -to now \
+            -t m1 \
+            -p bid \
+            -utc 0 \
+            -f csv \
+            -dir "$root/data" \
+            -fn shadow_source
+          test -s "$root/data/shadow_source.csv"
+          sha256sum "$root/data/shadow_source.csv" | tee "$root/data/SOURCE_SHA256.txt"
+          stat -c '%s' "$root/data/shadow_source.csv" | tee "$root/data/SOURCE_SIZE_BYTES.txt"
+          head -n 2 "$root/data/shadow_source.csv"
+          tail -n 2 "$root/data/shadow_source.csv"
+
+      - name: Run frozen prospective shadow scorer
+        run: |
+          set -euo pipefail
+          root="artifacts/gold_rv_persistence_prospective_shadow_v1"
+          ASOF_UTC="$(cat "$root/ASOF_UTC.txt")"
+          python scripts/run_gold_rv_persistence_prospective_shadow_v1.py \
+            --config config/gold_rv_persistence_prospective_shadow_v1.json \
+            --csv "$root/data/shadow_source.csv" \
+            --asof-utc "$ASOF_UTC" \
+            --output "$root/shadow_result.json" \
+            --daily-output "$root/daily_effects.csv" \
+            --anchor-output "$root/anchor_effects.csv"
+
+      - name: Guard claims and prospective boundary
+        run: |
+          python - <<'PY'
+          import json,pandas as pd
+          r=json.load(open('artifacts/gold_rv_persistence_prospective_shadow_v1/shadow_result.json',encoding='utf-8'))
+          assert r['stage']=='prospective_state_shadow'
+          assert r['candidate_id']=='rv_persistence'
+          assert r['candidate_sign']=='positive'
+          assert r['economic_scoring_run'] is False
+          assert r['directional_scoring_run'] is False
+          assert r['claim_boundary']['prospective_state_shadow_only'] is True
+          assert r['claim_boundary']['directional_edge'] is False
+          assert r['claim_boundary']['economic_edge'] is False
+          assert r['claim_boundary']['leverage_authorized'] is False
+          assert r['claim_boundary']['live_enabled'] is False
+          assert r['monitoring']['checkpoint_can_promote'] is False
+          start=pd.Timestamp('2026-09-16T04:00:00Z')
+          if r['first_prospective_anchor_utc'] is not None:
+              assert pd.Timestamp(r['first_prospective_anchor_utc']) >= start
+          if r['scorable_dates'] < 160:
+              assert r['full_shadow_pass'] is False
+              assert r['monitoring']['full_shadow_decision_eligible'] is False
+          PY
+
+      - name: Preserve cumulative prospective evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-rv-persistence-prospective-shadow-v1-${{ github.run_id }}
+          path: |
+            artifacts/gold_rv_persistence_prospective_shadow_v1/shadow_result.json
+            artifacts/gold_rv_persistence_prospective_shadow_v1/daily_effects.csv
+            artifacts/gold_rv_persistence_prospective_shadow_v1/anchor_effects.csv
+            artifacts/gold_rv_persistence_prospective_shadow_v1/ASOF_UTC.txt
+            artifacts/gold_rv_persistence_prospective_shadow_v1/SCORER_COMMIT.txt
+            artifacts/gold_rv_persistence_prospective_shadow_v1/ACQUISITION_CLIENT.txt
+            artifacts/gold_rv_persistence_prospective_shadow_v1/data/shadow_source.csv
+            artifacts/gold_rv_persistence_prospective_shadow_v1/data/SOURCE_SHA256.txt
+            artifacts/gold_rv_persistence_prospective_shadow_v1/data/SOURCE_SIZE_BYTES.txt
+          retention-days: 90
+          if-no-files-found: warn
