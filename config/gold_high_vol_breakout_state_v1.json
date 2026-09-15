@@ -1,0 +1,108 @@
+{
+  "protocol_id": "gold-high-vol-breakout-state-v1",
+  "protocol_status": "post_observation_mechanism_state_frozen",
+  "economic_scoring_enabled": false,
+  "parent_state_candidate": {
+    "protocol": "gold-volatility-liquidity-v1",
+    "candidate": "rv_persistence",
+    "parent_result_commit": "66bf7193d5c377b3a137680d96e67d8e7ddf4004",
+    "evidence_class": "hypothesis generated from 2021-2022 development state evidence; this child study is not independent confirmation"
+  },
+  "evidence_boundary": {
+    "warmup_start": "2020-11-01",
+    "development_start": "2021-01-01",
+    "development_end_exclusive": "2023-01-01",
+    "locked_historical_validation_start": "2023-01-01",
+    "locked_historical_validation_end_exclusive": "2024-01-01",
+    "validation_opened": false,
+    "future_oos_claim_allowed": false
+  },
+  "source": {
+    "repository": "kevingtlin/Market-Data-Lab",
+    "commit": "922f83a60cc574e7395fb27397077288055a1ef6",
+    "dataset_id": "XAUUSD-DUKASCOPY-M1-BID-ASK",
+    "instrument": "XAUUSD spot gold",
+    "resolution": "1m",
+    "timezone": "UTC",
+    "months_materialized": "2020-11 through 2022-12 only"
+  },
+  "observation_grid": {
+    "timezone": "America/New_York",
+    "weekday_only": true,
+    "anchor_hours_local": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22],
+    "anchor_minute": 0,
+    "pre_window_minutes": 60,
+    "rv_baseline_lookback_same_clock": 20
+  },
+  "state_activation": {
+    "primary_high_rv_ratio_gte": 1.25,
+    "normal_control_rv_ratio_gte": 0.75,
+    "normal_control_rv_ratio_lt": 1.0,
+    "robustness_high_rv_thresholds": [1.0, 1.5]
+  },
+  "breakout_definition": {
+    "pre_range": "midpoint high-low over t0-60m through t0-1m",
+    "confirmation_search_minutes": 30,
+    "confirmation_price": "first one-minute midpoint close beyond the buffered prior-hour boundary",
+    "buffer_fraction_of_pre_range": 0.05,
+    "long": "close > pre_high + 0.05 * pre_range",
+    "short": "close < pre_low - 0.05 * pre_range",
+    "no_confirmation": "no breakout event",
+    "direction": "sign of first confirmed boundary break"
+  },
+  "state_score": {
+    "horizons_minutes_after_breakout_confirmation": [15, 30, 60],
+    "primary_horizon_minutes": 30,
+    "formula": "breakout_direction * (future_midpoint_close - breakout_confirmation_close) / pre_range",
+    "positive": "post-breakout continuation",
+    "negative": "post-breakout reversal",
+    "no_pnl_interpretation": true
+  },
+  "primary_hypothesis": {
+    "id": "high_rv_breakout_continuation_excess",
+    "daily_contrast": "median 30m breakout continuation score for high-RV events minus median 30m score for normal-control events on the same New York date",
+    "inference_unit": "New York date"
+  },
+  "statistics": {
+    "permutation_method": "two-sided sign-flip test on daily high-minus-normal contrasts",
+    "permutation_epochs": 20000,
+    "random_seed_namespace": "gold-high-vol-breakout-state-v1",
+    "primary_p_max": 0.05
+  },
+  "state_gate": {
+    "minimum_high_breakout_events": 250,
+    "minimum_normal_breakout_events": 250,
+    "minimum_daily_contrast_dates": 150,
+    "minimum_abs_median_daily_contrast": 0.10,
+    "minimum_daily_primary_sign_fraction": 0.58,
+    "minimum_high_state_median_continuation": 0.05,
+    "minimum_high_state_positive_fraction": 0.55,
+    "minimum_breakout_events_each_direction": 100,
+    "both_breakout_directions_median_must_be_positive": true,
+    "both_calendar_years_daily_contrast_must_share_primary_sign": true,
+    "minimum_horizons_sharing_primary_sign": 2,
+    "robustness_thresholds_must_share_primary_sign": true,
+    "primary_p_max": 0.05,
+    "candidate_requires_all_gates": true
+  },
+  "claims_and_controls": {
+    "normal_rv_same_day_control_required": true,
+    "long_and_short_direction_audit_required": true,
+    "threshold_robustness_required": true,
+    "economic_pnl_disabled": true,
+    "costs_disabled": true,
+    "directional_state_is_not_profitable_edge": true,
+    "locked_2023_opened": false,
+    "live_enabled": false
+  },
+  "promotion_path": [
+    "post_observation_directional_state_development",
+    "execution_spec_freeze_if_state_passes",
+    "development_economics",
+    "candidate_freeze",
+    "locked_2023_validation",
+    "independent_replication",
+    "future_shadow",
+    "leverage_live_only_if_all_gates_pass"
+  ]
+}
