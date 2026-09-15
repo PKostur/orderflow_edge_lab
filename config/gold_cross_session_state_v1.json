@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold_cross_session_state_v1",
+  "evidence_class": "post_observation_retrospective_state_research_with_locked_validation_not_future_oos",
+  "motivation": "Gold/silver relative-value v1-v6 repeatedly produced interesting state structure without a robust executable chain. This protocol switches to a structurally distinct XAUUSD intraday mechanism: return transmission across global trading sessions. A recent 2026 working paper motivates the question but its 2024-2026 sample is not used for development and is not treated as evidence for this project.",
+  "source": {
+    "repository": "simom1/XAUUSD-history",
+    "commit": "bda79c6c5ce09a5b488d4cd2c20fcd19bdd2ed3a",
+    "path": "Gold-Cash/XAUUSD/XAUUSD_M15_2010_2026.csv",
+    "instrument_semantics": "MT5-style cash XAUUSD M15 bars",
+    "timestamp_semantics": "UTC according to the pinned repository README"
+  },
+  "periods": {
+    "development": {"start": "2010-01-01", "end_exclusive": "2021-01-01"},
+    "locked_internal_validation": {"start": "2021-01-01", "end_exclusive": "2024-01-01", "opened_during_v1": false},
+    "retrospective_extension": {
+      "start": "2024-01-01",
+      "end_exclusive": "2026-09-15",
+      "opened_during_v1": false,
+      "claim_boundary": "This period overlaps the recently published session-decomposition study and other already-inspected gold evidence; it can never count as untouched future OOS."
+    },
+    "future_shadow_earliest_utc": "2026-09-16T00:00:00Z"
+  },
+  "sessions_utc": {
+    "asia": {"start": "00:00", "end_exclusive": "08:00", "expected_m15_bars": 32},
+    "europe": {"start": "08:00", "end_exclusive": "14:30", "expected_m15_bars": 26},
+    "us_liquid": {"start": "14:30", "end_exclusive": "21:00", "expected_m15_bars": 26},
+    "note": "US ends at 21:00 UTC rather than 24:00 UTC. This is predeclared to avoid broker daily-close/maintenance hours and is not intended as an exact replication of the 2026 paper."
+  },
+  "data_admission": {
+    "weekdays_only": true,
+    "positive_ohlc_required": true,
+    "minimum_tick_volume": 1,
+    "duplicate_policy": "keep_last",
+    "no_interpolation": true,
+    "session_exact_first_bar_required": true,
+    "session_exact_last_bar_required": true,
+    "minimum_fraction_expected_bars_per_session": 0.80,
+    "daily_row_is_admitted_only_if_all_three_sessions_admitted": true
+  },
+  "session_return": {
+    "definition": "log(last admitted M15 close / exact session first M15 open)",
+    "same_day_entry_semantics": "a source session must be fully complete before its target session begins",
+    "previous_us_to_next_asia": "previous admitted trading day's US-liquid return predicts the next admitted trading day's Asia return"
+  },
+  "relations": [
+    {"name": "asia_to_europe", "source": "asia", "target": "europe"},
+    {"name": "asia_to_us", "source": "asia", "target": "us_liquid"},
+    {"name": "europe_to_us", "source": "europe", "target": "us_liquid"},
+    {"name": "pre_us_to_us", "source": "asia_plus_europe", "target": "us_liquid"},
+    {"name": "previous_us_to_asia", "source": "previous_us_liquid", "target": "asia"}
+  ],
+  "directions": ["momentum", "reversal"],
+  "state_first": {
+    "unique_hypotheses": 10,
+    "predictor": "momentum uses source session return; reversal uses negative source session return",
+    "target": "future target-session return",
+    "dependence_cluster_calendar_days": 21,
+    "minimum_events_per_fold": 8,
+    "minimum_scorable_folds": 80,
+    "minimum_median_fold_spearman": 0.05,
+    "minimum_positive_spearman_fold_fraction": 0.60,
+    "sign_flip_epochs": 20000,
+    "sign_flip_seed": 20260915,
+    "maximum_bh_fdr_q": 0.10,
+    "maximum_state_relations_to_freeze": 3
+  },
+  "controls": {
+    "report_unconditional_target_mean_by_session": true,
+    "report_source_target_raw_correlation": true,
+    "report_year_breadth": true,
+    "no_pnl_scoring_in_v1": true
+  },
+  "candidate_selection": {
+    "ranking": ["lower BH-FDR q", "higher median fold Spearman", "higher positive fold fraction", "higher year breadth", "lexicographic hypothesis id"],
+    "separate_freeze_required_before_any_pnl_translation": true
+  },
+  "claims": {
+    "pnl_tested": false,
+    "verified_future_oos": false,
+    "profitable_edge_established": false,
+    "leverage_authorized": false,
+    "live_enabled": false
+  }
+}
