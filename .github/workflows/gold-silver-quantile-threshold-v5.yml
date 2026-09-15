@@ -1,0 +1,73 @@
+name: Gold Silver Quantile Threshold v5
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/gold-silver-quantile-threshold-v5]
+    paths:
+      - "config/gold_silver_quantile_threshold_v5.json"
+      - "scripts/run_gold_silver_quantile_threshold_v5.py"
+      - ".github/workflows/gold-silver-quantile-threshold-v5.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gold-silver-quantile-threshold-v5-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  state-study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install runtime
+        run: python -m pip install pandas numpy
+      - name: Fetch pinned XAUUSD and XAGUSD cash data
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/gold_silver_quantile_threshold_v5/data
+          base="https://raw.githubusercontent.com/simom1/XAUUSD-history/bda79c6c5ce09a5b488d4cd2c20fcd19bdd2ed3a"
+          curl --fail --location --retry 3 --retry-delay 2 \
+            "$base/Gold-Cash/XAUUSD/XAUUSD_D1_2010_2026.csv" \
+            -o artifacts/gold_silver_quantile_threshold_v5/data/XAUUSD_D1.csv
+          curl --fail --location --retry 3 --retry-delay 2 \
+            "$base/Silver-Cash/XAGUSD/XAGUSD_D1.csv" \
+            -o artifacts/gold_silver_quantile_threshold_v5/data/XAGUSD_D1.csv
+          sha256sum artifacts/gold_silver_quantile_threshold_v5/data/*.csv \
+            > artifacts/gold_silver_quantile_threshold_v5/data/SHA256SUMS.txt
+      - name: Run frozen quantile-threshold state study
+        run: |
+          python scripts/run_gold_silver_quantile_threshold_v5.py \
+            --config config/gold_silver_quantile_threshold_v5.json \
+            --gold artifacts/gold_silver_quantile_threshold_v5/data/XAUUSD_D1.csv \
+            --silver artifacts/gold_silver_quantile_threshold_v5/data/XAGUSD_D1.csv \
+            --output artifacts/gold_silver_quantile_threshold_v5/result.json
+      - name: Guard research boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/gold_silver_quantile_threshold_v5/result.json'))
+          assert r['protocol'] == 'gold_silver_quantile_threshold_v5'
+          assert r['grid']['hypotheses'] == 4
+          assert r['pnl_tested'] is False
+          assert r['locked_internal_validation_opened'] is False
+          assert r['retrospective_extension_opened'] is False
+          assert r['leverage_tested'] is False
+          assert r['claims']['verified_future_oos'] is False
+          assert r['claims']['profitable_edge_established'] is False
+          assert r['claims']['leverage_authorized'] is False
+          assert r['claims']['live_enabled'] is False
+          PY
+      - name: Preserve evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-silver-quantile-threshold-v5
+          path: artifacts/gold_silver_quantile_threshold_v5/
+          retention-days: 30
+          if-no-files-found: warn
