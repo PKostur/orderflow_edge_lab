@@ -1,0 +1,86 @@
+name: Gold Silver Adaptive Equilibrium v3
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/gold-silver-adaptive-equilibrium-v3]
+    paths:
+      - "config/gold_silver_adaptive_equilibrium_v3.json"
+      - "scripts/run_gold_silver_adaptive_equilibrium_v3.py"
+      - ".github/workflows/gold-silver-adaptive-equilibrium-v3.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gold-silver-adaptive-equilibrium-v3-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  develop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install runtime
+        run: python -m pip install pandas numpy
+      - name: Fetch pinned XAUUSD and XAGUSD cash data
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/gold_silver_adaptive_equilibrium_v3/data
+          base="https://raw.githubusercontent.com/simom1/XAUUSD-history/bda79c6c5ce09a5b488d4cd2c20fcd19bdd2ed3a"
+          curl --fail --location --retry 3 --retry-delay 2 \
+            "$base/Gold-Cash/XAUUSD/XAUUSD_D1_2010_2026.csv" \
+            -o artifacts/gold_silver_adaptive_equilibrium_v3/data/XAUUSD_D1.csv
+          curl --fail --location --retry 3 --retry-delay 2 \
+            "$base/Silver-Cash/XAGUSD/XAGUSD_D1.csv" \
+            -o artifacts/gold_silver_adaptive_equilibrium_v3/data/XAGUSD_D1.csv
+          sha256sum artifacts/gold_silver_adaptive_equilibrium_v3/data/*.csv \
+            > artifacts/gold_silver_adaptive_equilibrium_v3/data/SHA256SUMS.txt
+      - name: Run frozen development tournament
+        run: |
+          python scripts/run_gold_silver_adaptive_equilibrium_v3.py \
+            --config config/gold_silver_adaptive_equilibrium_v3.json \
+            --gold artifacts/gold_silver_adaptive_equilibrium_v3/data/XAUUSD_D1.csv \
+            --silver artifacts/gold_silver_adaptive_equilibrium_v3/data/XAGUSD_D1.csv \
+            --output artifacts/gold_silver_adaptive_equilibrium_v3/result.json
+      - name: Guard research boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/gold_silver_adaptive_equilibrium_v3/result.json'))
+          assert r['protocol'] == 'gold_silver_adaptive_equilibrium_v3'
+          assert r['grid']['state_hypotheses'] == 6
+          assert r['grid']['cells_evaluated'] == 12
+          assert r['locked_internal_validation_opened'] is False
+          assert r['retrospective_extension_opened'] is False
+          assert r['leverage_tested'] is False
+          assert r['claims']['verified_future_oos'] is False
+          assert r['claims']['profitable_edge_established'] is False
+          assert r['claims']['leverage_authorized'] is False
+          assert r['claims']['live_enabled'] is False
+          PY
+      - name: Deterministic multi-agent guard
+        run: |
+          if command -v orderflow-multi-agent >/dev/null 2>&1; then
+            orderflow-multi-agent --output artifacts/gold_silver_adaptive_equilibrium_v3/multi_agent_report.json
+            python - <<'PY'
+          import json
+          r=json.load(open('artifacts/gold_silver_adaptive_equilibrium_v3/multi_agent_report.json'))
+          if r['release_manager']['status'] != 'reviewable':
+              raise SystemExit(r['release_manager']['next_actions'])
+          PY
+          else
+            echo '{"status":"not_installed_in_minimal_research_runtime"}' > artifacts/gold_silver_adaptive_equilibrium_v3/multi_agent_report.json
+          fi
+      - name: Preserve evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-silver-adaptive-equilibrium-v3
+          path: artifacts/gold_silver_adaptive_equilibrium_v3/
+          retention-days: 30
+          if-no-files-found: warn
