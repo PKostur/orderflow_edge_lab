@@ -10,6 +10,7 @@ on:
       - "research/gold_scheduled_macro_reaction_v1/PROTOCOL.md"
       - "research/gold_scheduled_macro_reaction_v1/SOURCE_AMENDMENT_PRE_SCORE.md"
       - "scripts/run_gold_scheduled_macro_reaction_v1.py"
+      - "scripts/run_gold_scheduled_macro_reaction_v1_jsonsafe.py"
       - ".github/workflows/gold-scheduled-macro-reaction-v1.yml"
 
 permissions:
@@ -180,7 +181,7 @@ jobs:
 
       - name: Run frozen development state study
         run: |
-          python scripts/run_gold_scheduled_macro_reaction_v1.py \
+          python scripts/run_gold_scheduled_macro_reaction_v1_jsonsafe.py \
             --config config/gold_scheduled_macro_reaction_v1.json \
             --calendar research/gold_scheduled_macro_reaction_v1/EVENT_CALENDAR.csv \
             --gold artifacts/gold_scheduled_macro_reaction_v1/data/XAUUSD_M1_dev.csv \
