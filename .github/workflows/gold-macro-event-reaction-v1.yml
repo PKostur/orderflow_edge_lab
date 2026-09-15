@@ -8,6 +8,7 @@ on:
       - "config/gold_macro_event_reaction_v1.json"
       - "scripts/run_gold_macro_event_reaction_v1.py"
       - "scripts/run_gold_macro_event_reaction_v1_deterministic.py"
+      - "research/gold_macro_event_reaction_v1/BLS_RELEASE_CALENDAR_2018_2022.csv"
       - ".github/workflows/gold-macro-event-reaction-v1.yml"
 
 permissions:
@@ -28,57 +29,55 @@ jobs:
           python-version: "3.12"
       - name: Install runtime
         run: python -m pip install pandas numpy beautifulsoup4
-      - name: Fetch pinned XAUUSD M15 and official event-source pages
+
+      - name: Fetch pinned XAUUSD M15 and official FOMC pages
         run: |
           set -euo pipefail
           root=artifacts/gold_macro_event_reaction_v1
-          mkdir -p "$root/data/fed" "$root/data/bls"
+          mkdir -p "$root/data/fed"
           base="https://raw.githubusercontent.com/simom1/XAUUSD-history/bda79c6c5ce09a5b488d4cd2c20fcd19bdd2ed3a"
           curl --fail --location --retry 3 --retry-delay 2 \
             "$base/Gold-Cash/XAUUSD/XAUUSD_M15_2010_2026.csv" \
             -o "$root/data/XAUUSD_M15.csv"
-          # BLS archive-index endpoints reject hosted runners. Use the official
-          # immutable yearly schedule pages, then emit the same date tokens that
-          # the frozen runner consumes. This changes transport only, not event semantics.
           for y in 2018 2019 2020 2021 2022; do
-            curl --fail --location --retry 4 --retry-delay 3 -A "Mozilla/5.0" \
-              "https://www.bls.gov/schedule/${y}/home.htm" \
-              -o "$root/data/bls/schedule_${y}.html"
             curl --fail --location --retry 4 --retry-delay 3 -A "Mozilla/5.0" \
               "https://www.federalreserve.gov/monetarypolicy/fomchistorical${y}.htm" \
               -o "$root/data/fed/fomc_${y}.html"
           done
+
+      - name: Materialize vendored official BLS release-date snapshot
+        run: |
+          set -euo pipefail
+          root=artifacts/gold_macro_event_reaction_v1
+          cp research/gold_macro_event_reaction_v1/BLS_RELEASE_CALENDAR_2018_2022.csv \
+            "$root/data/BLS_RELEASE_CALENDAR_2018_2022.csv"
           python - <<'PY'
-          from bs4 import BeautifulSoup
-          from pathlib import Path
+          import csv
           from datetime import datetime
+          from pathlib import Path
           root=Path('artifacts/gold_macro_event_reaction_v1/data')
+          src=root/'BLS_RELEASE_CALENDAR_2018_2022.csv'
           cpi=[]; emp=[]
-          for p in sorted((root/'bls').glob('schedule_*.html')):
-              soup=BeautifulSoup(p.read_text(encoding='utf-8', errors='ignore'),'html.parser')
-              for tr in soup.find_all('tr'):
-                  cells=[' '.join(td.get_text(' ',strip=True).split()) for td in tr.find_all(['td','th'])]
-                  if len(cells) < 3:
-                      continue
-                  try:
-                      dt=datetime.strptime(cells[0], '%A, %B %d, %Y')
-                  except ValueError:
-                      continue
-                  release=cells[2].lower()
+          with src.open(newline='',encoding='utf-8') as f:
+              for row in csv.DictReader(f):
+                  dt=datetime.strptime(row['date'],'%Y-%m-%d')
+                  if row['release_time_et'] != '08:30':
+                      raise SystemExit(f"unexpected frozen BLS release time: {row}")
                   token=dt.strftime('%m%d%Y')
-                  if 'consumer price index' in release:
-                      cpi.append(token)
-                  if 'employment situation' in release:
-                      emp.append(token)
+                  if row['event_type']=='cpi': cpi.append(token)
+                  elif row['event_type']=='employment_situation': emp.append(token)
+                  else: raise SystemExit(f"unexpected event type: {row['event_type']}")
           cpi=sorted(set(cpi)); emp=sorted(set(emp))
-          if len(cpi) < 55 or len(emp) < 55:
-              raise SystemExit(f'insufficient BLS schedule dates: cpi={len(cpi)} emp={len(emp)}')
+          if len(cpi) != 60 or len(emp) != 60:
+              raise SystemExit(f'unexpected BLS snapshot counts: cpi={len(cpi)} emp={len(emp)}')
           (root/'cpi.html').write_text('\n'.join(f'cpi_{x}.htm' for x in cpi),encoding='utf-8')
           (root/'empsit.html').write_text('\n'.join(f'empsit_{x}.htm' for x in emp),encoding='utf-8')
           print({'cpi_dates':len(cpi),'employment_dates':len(emp)})
           PY
-          sha256sum "$root/data/XAUUSD_M15.csv" "$root/data/cpi.html" "$root/data/empsit.html" "$root/data/bls/"*.html "$root/data/fed/"*.html \
+          sha256sum "$root/data/XAUUSD_M15.csv" "$root/data/BLS_RELEASE_CALENDAR_2018_2022.csv" \
+            "$root/data/cpi.html" "$root/data/empsit.html" "$root/data/fed/"*.html \
             > "$root/data/SHA256SUMS.txt"
+
       - name: Run frozen development tournament
         run: |
           PYTHONPATH=scripts python scripts/run_gold_macro_event_reaction_v1_deterministic.py \
@@ -88,6 +87,7 @@ jobs:
             --empsit-html artifacts/gold_macro_event_reaction_v1/data/empsit.html \
             --fed-dir artifacts/gold_macro_event_reaction_v1/data/fed \
             --output artifacts/gold_macro_event_reaction_v1/result.json
+
       - name: Guard research boundary
         run: |
           python - <<'PY'
@@ -105,6 +105,7 @@ jobs:
           assert r['claims']['leverage_authorized'] is False
           assert r['claims']['live_enabled'] is False
           PY
+
       - name: Preserve evidence
         if: always()
         uses: actions/upload-artifact@v4
