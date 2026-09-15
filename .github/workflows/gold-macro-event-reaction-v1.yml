@@ -9,6 +9,7 @@ on:
       - "scripts/run_gold_macro_event_reaction_v1.py"
       - "scripts/run_gold_macro_event_reaction_v1_deterministic.py"
       - "research/gold_macro_event_reaction_v1/BLS_RELEASE_CALENDAR_2018_2022.csv"
+      - "research/gold_macro_event_reaction_v1/FOMC_REGULAR_DECISION_DATES_2018_2022.csv"
       - ".github/workflows/gold-macro-event-reaction-v1.yml"
 
 permissions:
@@ -30,7 +31,7 @@ jobs:
       - name: Install runtime
         run: python -m pip install pandas numpy beautifulsoup4
 
-      - name: Fetch pinned XAUUSD M15 and official FOMC pages
+      - name: Fetch pinned XAUUSD M15
         run: |
           set -euo pipefail
           root=artifacts/gold_macro_event_reaction_v1
@@ -39,26 +40,25 @@ jobs:
           curl --fail --location --retry 3 --retry-delay 2 \
             "$base/Gold-Cash/XAUUSD/XAUUSD_M15_2010_2026.csv" \
             -o "$root/data/XAUUSD_M15.csv"
-          for y in 2018 2019 2020 2021 2022; do
-            curl --fail --location --retry 4 --retry-delay 3 -A "Mozilla/5.0" \
-              "https://www.federalreserve.gov/monetarypolicy/fomchistorical${y}.htm" \
-              -o "$root/data/fed/fomc_${y}.html"
-          done
 
-      - name: Materialize vendored official BLS release-date snapshot
+      - name: Materialize vendored official event-calendar snapshots
         run: |
           set -euo pipefail
           root=artifacts/gold_macro_event_reaction_v1
           cp research/gold_macro_event_reaction_v1/BLS_RELEASE_CALENDAR_2018_2022.csv \
             "$root/data/BLS_RELEASE_CALENDAR_2018_2022.csv"
+          cp research/gold_macro_event_reaction_v1/FOMC_REGULAR_DECISION_DATES_2018_2022.csv \
+            "$root/data/FOMC_REGULAR_DECISION_DATES_2018_2022.csv"
           python - <<'PY'
           import csv
+          from collections import defaultdict
           from datetime import datetime
           from pathlib import Path
+
           root=Path('artifacts/gold_macro_event_reaction_v1/data')
-          src=root/'BLS_RELEASE_CALENDAR_2018_2022.csv'
+
           cpi=[]; emp=[]
-          with src.open(newline='',encoding='utf-8') as f:
+          with (root/'BLS_RELEASE_CALENDAR_2018_2022.csv').open(newline='',encoding='utf-8') as f:
               for row in csv.DictReader(f):
                   dt=datetime.strptime(row['date'],'%Y-%m-%d')
                   if row['release_time_et'] != '08:30':
@@ -66,15 +66,33 @@ jobs:
                   token=dt.strftime('%m%d%Y')
                   if row['event_type']=='cpi': cpi.append(token)
                   elif row['event_type']=='employment_situation': emp.append(token)
-                  else: raise SystemExit(f"unexpected event type: {row['event_type']}")
+                  else: raise SystemExit(f"unexpected BLS event type: {row['event_type']}")
           cpi=sorted(set(cpi)); emp=sorted(set(emp))
           if len(cpi) != 60 or len(emp) != 60:
               raise SystemExit(f'unexpected BLS snapshot counts: cpi={len(cpi)} emp={len(emp)}')
           (root/'cpi.html').write_text('\n'.join(f'cpi_{x}.htm' for x in cpi),encoding='utf-8')
           (root/'empsit.html').write_text('\n'.join(f'empsit_{x}.htm' for x in emp),encoding='utf-8')
-          print({'cpi_dates':len(cpi),'employment_dates':len(emp)})
+
+          by_year=defaultdict(list)
+          with (root/'FOMC_REGULAR_DECISION_DATES_2018_2022.csv').open(newline='',encoding='utf-8') as f:
+              for row in csv.DictReader(f):
+                  dt=datetime.strptime(row['decision_date'],'%Y-%m-%d')
+                  if int(row['year']) != dt.year:
+                      raise SystemExit(f"FOMC year/date mismatch: {row}")
+                  by_year[dt.year].append(dt)
+          expected={2018:8,2019:8,2020:7,2021:8,2022:8}
+          if {y:len(set(ds)) for y,ds in by_year.items()} != expected:
+              raise SystemExit(f'unexpected FOMC snapshot counts: {dict((y,len(set(ds))) for y,ds in by_year.items())}')
+          fed=root/'fed'; fed.mkdir(exist_ok=True)
+          for year in sorted(expected):
+              tags=[]
+              for dt in sorted(set(by_year[year])):
+                  tags.append(f'<h5>{dt.strftime("%B")} {dt.day} Meeting - {year}</h5>')
+              (fed/f'fomc_{year}.html').write_text('\n'.join(tags),encoding='utf-8')
+          print({'cpi_dates':len(cpi),'employment_dates':len(emp),'fomc_dates':sum(expected.values())})
           PY
           sha256sum "$root/data/XAUUSD_M15.csv" "$root/data/BLS_RELEASE_CALENDAR_2018_2022.csv" \
+            "$root/data/FOMC_REGULAR_DECISION_DATES_2018_2022.csv" \
             "$root/data/cpi.html" "$root/data/empsit.html" "$root/data/fed/"*.html \
             > "$root/data/SHA256SUMS.txt"
 
