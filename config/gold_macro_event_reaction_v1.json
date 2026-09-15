@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold_macro_event_reaction_v1",
+  "evidence_class": "post_observation_retrospective_development_with_locked_validation_not_future_oos",
+  "motivation": "Previous gold indicator, relative-value, and macro-conditioned convergence studies failed promotion. This protocol tests a structurally orthogonal mechanism: whether scheduled U.S. macro releases create reproducible short-horizon continuation or reversal in XAUUSD after the first 30 minutes.",
+  "price_source": {
+    "repository": "simom1/XAUUSD-history",
+    "commit": "bda79c6c5ce09a5b488d4cd2c20fcd19bdd2ed3a",
+    "path": "Gold-Cash/XAUUSD/XAUUSD_M15_2010_2026.csv",
+    "timestamp_semantics": "UTC bar-open timestamps per repository README",
+    "instrument": "MT5-style cash XAUUSD"
+  },
+  "event_sources": {
+    "cpi": {
+      "provider": "U.S. Bureau of Labor Statistics",
+      "archive_index": "https://www.bls.gov/bls/news-release/cpi.htm",
+      "date_extraction": "unique archive links matching cpi_MMDDYYYY.htm",
+      "release_time_local": "08:30",
+      "timezone": "America/New_York"
+    },
+    "employment_situation": {
+      "provider": "U.S. Bureau of Labor Statistics",
+      "archive_index": "https://www.bls.gov/bls/news-release/empsit.htm",
+      "date_extraction": "unique archive links matching empsit_MMDDYYYY.htm",
+      "release_time_local": "08:30",
+      "timezone": "America/New_York"
+    },
+    "fomc": {
+      "provider": "Board of Governors of the Federal Reserve System",
+      "historical_page_template": "https://www.federalreserve.gov/monetarypolicy/fomchistorical{year}.htm",
+      "date_extraction": "regular scheduled FOMC meeting decision date from meeting heading; exclude headings containing unscheduled or cancelled",
+      "release_time_local": "14:00",
+      "timezone": "America/New_York"
+    }
+  },
+  "periods": {
+    "development": {
+      "start": "2018-01-01T00:00:00Z",
+      "end_exclusive": "2023-01-01T00:00:00Z"
+    },
+    "locked_internal_validation": {
+      "start": "2023-01-01T00:00:00Z",
+      "end_exclusive": "2024-01-01T00:00:00Z",
+      "opened_during_development": false
+    },
+    "retrospective_extension": {
+      "start": "2024-01-01T00:00:00Z",
+      "end_exclusive": "2026-09-15T00:00:00Z",
+      "opened_during_development": false
+    },
+    "future_shadow_earliest_utc": "2026-09-16T00:00:00Z"
+  },
+  "data_admission": {
+    "positive_ohlc_required": true,
+    "minimum_tick_volume": 1,
+    "duplicate_policy": "keep_last",
+    "no_interpolation": true,
+    "required_bar_interval_minutes": 15,
+    "minimum_median_bars_per_full_trading_day": 80,
+    "event_requires_exact_release_bar": true,
+    "event_requires_exact_entry_and_exit_bars": true
+  },
+  "signal_definition": {
+    "initial_reaction_minutes": 30,
+    "initial_reaction": "close of second M15 event bar / open of event-time M15 bar - 1",
+    "entry": "open of M15 bar exactly 30 minutes after release",
+    "modes": ["continuation", "reversal"],
+    "continuation_side": "sign(initial_reaction)",
+    "reversal_side": "-sign(initial_reaction)",
+    "zero_reaction_policy": "skip",
+    "holding_minutes": [60, 180]
+  },
+  "state_first": {
+    "event_types": ["cpi", "employment_situation", "fomc"],
+    "hypotheses": "event_type x mode x holding_minutes = 12",
+    "dependence_cluster_calendar_days": 182,
+    "state_metric": "candidate-side signed future XAUUSD return from entry to frozen exit, before costs",
+    "matched_placebo": {
+      "enabled": true,
+      "definition": "same UTC event time on exactly 7 calendar days before and 7 calendar days after when both timestamps exist and neither date is another event of the same family",
+      "state_excess_metric": "event signed return minus mean available matched-placebo signed return using the same candidate side determined by the event initial reaction"
+    },
+    "minimum_events_per_scorable_fold": 2,
+    "minimum_scorable_folds": 6,
+    "minimum_median_fold_excess_bps": 0.0,
+    "minimum_positive_fold_fraction": 0.60,
+    "fold_mean_sign_flip_epochs": 20000,
+    "fold_mean_sign_flip_seed": 20260915,
+    "maximum_bh_fdr_q": 0.10
+  },
+  "execution": {
+    "round_trip_cost_bps": [3.0, 5.0, 10.0],
+    "primary_cost_bps": 5.0,
+    "high_cost_bps": 10.0,
+    "one_trade_per_event": true,
+    "same_bar_fill": false,
+    "slippage_model": "included in stated round-trip cost stress only"
+  },
+  "economic_gate": {
+    "minimum_trades": 25,
+    "minimum_primary_median_fold_net_bps": 0.0,
+    "minimum_primary_median_fold_pf": 1.10,
+    "minimum_primary_positive_fold_fraction": 0.60,
+    "minimum_high_cost_median_fold_net_bps": 0.0,
+    "require_primary_mean_net_positive": true,
+    "require_original_mean_gt_reversed_mean": true,
+    "require_event_mean_gt_placebo_mean": true,
+    "minimum_long_trades": 8,
+    "minimum_short_trades": 8,
+    "require_positive_mean_primary_net_both_directions": true
+  },
+  "family_consistency": {
+    "definition": "a candidate requires the same event type and mode at the other frozen holding horizon to have nonnegative median fold gross state excess and nonnegative primary median fold net",
+    "maximum_candidates": 2
+  },
+  "candidate_selection": {
+    "locked_validation_may_open_only_after_separate_candidate_freeze_commit": true,
+    "ranking": [
+      "lower BH-FDR q",
+      "higher median fold state excess bps",
+      "higher primary positive fold fraction",
+      "higher primary median fold net bps",
+      "shorter holding horizon"
+    ]
+  },
+  "claims": {
+    "verified_future_oos": false,
+    "profitable_edge_established": false,
+    "leverage_authorized": false,
+    "live_enabled": false
+  }
+}
