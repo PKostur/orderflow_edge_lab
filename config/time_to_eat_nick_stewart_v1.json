@@ -1,0 +1,98 @@
+{
+  "protocol_id": "time-to-eat-nick-stewart-v1",
+  "protocol_status": "rule_recovery_frozen",
+  "scoring_enabled": false,
+  "evidence_date": "2026-09-15",
+  "base_lineage": "research/gold-silver-trend-exhaustion-v6",
+  "source_priority": [
+    "recovered_prior_chat_verbatim",
+    "first_party_tte_material",
+    "first_party_video_transcript",
+    "secondary_locator_only"
+  ],
+  "primary_source": {
+    "title": "The Play Book 2.0",
+    "creator": "Time To Eat Trading",
+    "published": "2026-08-29",
+    "youtube_video_id": "shc8w71iK_o"
+  },
+  "claims": {
+    "claimed_win_rate": 0.75,
+    "historical_phrase": "75 percent-plus",
+    "claim_is_evidence": false
+  },
+  "markets": {
+    "native_primary": ["GC"],
+    "native_secondary": ["NQ"],
+    "predeclared_transfer_only": ["ES"]
+  },
+  "timeframes": {
+    "higher_context": ["1D", "4H"],
+    "execution_preferred": "30m",
+    "execution_supported": ["15m", "30m", "1H"]
+  },
+  "sessions": {
+    "source_preference": "New York",
+    "high_volume_required_by_source": true,
+    "deterministic_volume_rule": null
+  },
+  "setup_families": [
+    "breakout",
+    "onion",
+    "celery_booby_trap",
+    "fade"
+  ],
+  "resolved_rules": {
+    "confirmation_close_required_except_fade": true,
+    "fade_normal_confirmation_candle_required": false,
+    "entry_trigger_styles": [
+      "break_current_candle_high_low",
+      "break_previous_candle_high_low"
+    ],
+    "celery_confirmation_must_remain_outside_range": true,
+    "celery_confirmation_body_direction_matters": false,
+    "breakout_trade_inside_range": false,
+    "onion_requires_pullback_before_confirmation": true,
+    "fade_requires_target_reached_context": true
+  },
+  "unresolved_required_fields": {
+    "higher_timeframe_bias_algorithm": null,
+    "trend_definition": null,
+    "range_definition": null,
+    "support_resistance_definition": null,
+    "strong_level_definition": null,
+    "target_tapped_definition": null,
+    "wick_fill_target_definition": null,
+    "volume_metric_and_threshold": null,
+    "scheduled_news_rule": null,
+    "current_vs_previous_trigger_selector": null,
+    "stop_selector": null,
+    "partial_fraction": null,
+    "runner_exit": null,
+    "break_even_trigger": null,
+    "order_expiry": null,
+    "reentry_rule": null,
+    "max_trades_per_session": null,
+    "setup_precedence": null,
+    "contract_roll_policy": null
+  },
+  "research_rules": {
+    "state_before_pnl": true,
+    "freeze_before_results": true,
+    "locked_validation_retuning": false,
+    "cross_symbol_same_period_is_future_oos": false,
+    "realistic_costs_required": true,
+    "reversed_control_required": true,
+    "session_matched_benchmark_required": true,
+    "leverage_can_rescue_negative_unlevered_expectancy": false,
+    "engineering_success_is_edge_evidence": false
+  },
+  "promotion_path": [
+    "development",
+    "candidate_freeze",
+    "locked_validation",
+    "independent_replication",
+    "future_shadow",
+    "leverage_live_if_all_gates_pass"
+  ]
+}
