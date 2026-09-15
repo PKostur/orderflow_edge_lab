@@ -1,0 +1,95 @@
+{
+  "protocol_id": "gold-rv-persistence-locked-validation-v1",
+  "protocol_status": "candidate_state_validation_frozen",
+  "economic_scoring_enabled": false,
+  "candidate_freeze": {
+    "parent_protocol": "gold-volatility-liquidity-v1",
+    "parent_result_commit": "66bf7193d5c377b3a137680d96e67d8e7ddf4004",
+    "parent_canonical_run": "34986544522",
+    "parent_artifact_id": "10403373273",
+    "candidate_id": "rv_persistence",
+    "candidate_feature": "pre_rv_ratio",
+    "candidate_target": "future_rv_ratio",
+    "frozen_sign": "positive",
+    "development_primary_effect": 0.287121,
+    "development_daily_positive_fraction": 0.7704,
+    "development_secondary_range_effect": 0.140909,
+    "development_evidence_only": true
+  },
+  "evidence_boundary": {
+    "warmup_start": "2022-11-01",
+    "locked_validation_start": "2023-01-01",
+    "locked_validation_end_exclusive": "2024-01-01",
+    "validation_opened_by_this_protocol": true,
+    "development_period_reused_for_scoring": false,
+    "future_oos_claim_allowed": false
+  },
+  "gold_source": {
+    "repository": "kevingtlin/Market-Data-Lab",
+    "commit": "922f83a60cc574e7395fb27397077288055a1ef6",
+    "dataset_id": "XAUUSD-DUKASCOPY-M1-BID-ASK",
+    "instrument": "XAUUSD spot gold",
+    "provider": "Dukascopy",
+    "resolution": "1m",
+    "timestamp_unit": "milliseconds",
+    "timestamp_timezone": "UTC",
+    "months_materialized": "2022-11 through 2023-12 only",
+    "midpoint_ohlc": "(bid + ask) / 2 at identical timestamps"
+  },
+  "observation_grid": {
+    "timezone": "America/New_York",
+    "weekday_only": true,
+    "anchor_hours_local": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22],
+    "anchor_minute": 0,
+    "pre_window_minutes": 60,
+    "forward_window_minutes": 60,
+    "same_clock_baseline_lookback_observations": 20,
+    "minimum_daily_anchor_count_for_inference": 8
+  },
+  "state_definition": {
+    "pre_rv_ratio": "pre-60m realized volatility divided by trailing 20-observation same-clock median pre-60m realized volatility",
+    "future_rv_ratio": "next-60m realized volatility divided by trailing 20-observation same-clock median next-60m realized volatility",
+    "secondary_future_range_ratio": "next-60m high-low range divided by trailing 20-observation same-clock median next-60m range",
+    "primary_statistic": "median New-York-date Spearman(pre_rv_ratio, future_rv_ratio)",
+    "secondary_statistic": "median New-York-date Spearman(pre_rv_ratio, future_range_ratio)",
+    "dependence_unit": "New York date"
+  },
+  "statistics": {
+    "test_direction": "one-sided positive",
+    "permutation_method": "sign-flip test on daily Spearman effects against frozen positive sign",
+    "permutation_epochs": 20000,
+    "random_seed_namespace": "gold-rv-persistence-locked-validation-v1",
+    "multiple_testing": "none; exactly one frozen candidate",
+    "primary_p_max": 0.05
+  },
+  "validation_gate": {
+    "minimum_scorable_dates": 175,
+    "minimum_median_daily_effect": 0.15,
+    "minimum_daily_positive_fraction": 0.58,
+    "minimum_positive_anchor_slots": 8,
+    "minimum_anchor_slot_observations": 100,
+    "first_half_median_effect_must_be_positive": true,
+    "second_half_median_effect_must_be_positive": true,
+    "secondary_range_effect_must_be_positive": true,
+    "primary_p_max": 0.05,
+    "candidate_requires_all_gates": true
+  },
+  "controls_and_claims": {
+    "intraday_seasonality_controlled_by_same_clock_baselines": true,
+    "non_overlapping_forward_windows_by_design": true,
+    "no_parameter_retuning_allowed": true,
+    "economic_pnl_disabled": true,
+    "directional_edge_claim_allowed": false,
+    "volatility_state_validation_is_not_profitable_edge": true,
+    "same_source_locked_validation_is_future_oos": false,
+    "independent_replication_still_required": true,
+    "leverage_authorized": false,
+    "live_enabled": false
+  },
+  "promotion_path_if_pass": [
+    "independent_source_or_instrument_replication",
+    "separately_frozen_monetization_mechanism",
+    "future_shadow",
+    "leverage_live_only_if_all_gates_pass"
+  ]
+}

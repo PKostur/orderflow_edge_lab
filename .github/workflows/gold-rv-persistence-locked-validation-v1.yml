@@ -1,0 +1,173 @@
+name: Gold RV Persistence Locked Validation v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/gold-rv-persistence-locked-validation-v1]
+    paths:
+      - "config/gold_rv_persistence_locked_validation_v1.json"
+      - "research/gold_rv_persistence_locked_validation_v1/CANDIDATE_FREEZE.md"
+      - "scripts/run_gold_rv_persistence_locked_validation_v1.py"
+      - "scripts/run_gold_volatility_liquidity_v1.py"
+      - "scripts/run_gold_volatility_liquidity_v1_warm.py"
+      - ".github/workflows/gold-rv-persistence-locked-validation-v1.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gold-rv-persistence-locked-validation-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  locked-state-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install runtime
+        run: python -m pip install pandas numpy
+
+      - name: Fetch pinned Dukascopy warmup plus locked 2023 months
+        run: |
+          set -euo pipefail
+          root="artifacts/gold_rv_persistence_locked_validation_v1/data"
+          src="$root/source"
+          mkdir -p "$src"
+          base="https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/922f83a60cc574e7395fb27397077288055a1ef6"
+          months=(2022_11 2022_12)
+          for month in {01..12}; do months+=("2023_${month}"); done
+          for ym in "${months[@]}"; do
+            for side in bid ask; do
+              file="xauusd_${side}_m1_${ym}.csv"
+              curl --fail --location --retry 3 --retry-delay 2 "$base/xauusd/$side/m1/$file" -o "$src/$file"
+            done
+          done
+          test "$(find "$src" -type f -name 'xauusd_*_m1_*.csv' | wc -l)" -eq 28
+          sha256sum "$src"/*.csv | sort > "$root/SOURCE_SHA256.txt"
+
+      - name: Materialize midpoint state data with 2023 locked boundary
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          import pandas as pd
+
+          root=Path('artifacts/gold_rv_persistence_locked_validation_v1/data')
+          src=root/'source'
+          dst=root/'XAUUSD_M1_locked_2023.csv'
+          required={'timestamp','open','high','low','close'}
+          frames=[]
+          month_rows={}
+          bids=sorted(src.glob('xauusd_bid_m1_*.csv'))
+          if len(bids)!=14: raise SystemExit(f'expected 14 bid files, found {len(bids)}')
+          for bp in bids:
+              ym=bp.stem.replace('xauusd_bid_m1_','')
+              ap=src/f'xauusd_ask_m1_{ym}.csv'
+              if not ap.exists(): raise SystemExit(f'missing ask file for {ym}')
+              bid=pd.read_csv(bp); ask=pd.read_csv(ap)
+              bid.columns=[str(c).strip().lower() for c in bid.columns]
+              ask.columns=[str(c).strip().lower() for c in ask.columns]
+              if not required.issubset(bid.columns) or not required.issubset(ask.columns): raise SystemExit(f'schema mismatch for {ym}')
+              b=bid[['timestamp','open','high','low','close']].copy()
+              a=ask[['timestamp','open','high','low','close']].copy()
+              merged=b.merge(a,on='timestamp',how='inner',suffixes=('_bid','_ask'),validate='one_to_one')
+              out=pd.DataFrame({'time':pd.to_datetime(merged.timestamp,unit='ms',utc=True,errors='coerce')})
+              for c in ('open','high','low','close'):
+                  out[c]=(pd.to_numeric(merged[f'{c}_bid'],errors='coerce')+pd.to_numeric(merged[f'{c}_ask'],errors='coerce'))/2.0
+              mid=out['close']
+              out['spread_bps']=10000.0*(pd.to_numeric(merged['close_ask'],errors='coerce')-pd.to_numeric(merged['close_bid'],errors='coerce'))/mid
+              out=out.dropna().drop_duplicates('time',keep='last').sort_values('time')
+              out=out[(out[['open','high','low','close']]>0).all(axis=1) & (out.spread_bps>=0)]
+              if out.empty: raise SystemExit(f'no synchronized rows for {ym}')
+              month_rows[ym]=int(len(out)); frames.append(out)
+          d=pd.concat(frames,ignore_index=True).drop_duplicates('time',keep='last').sort_values('time')
+          warm=pd.Timestamp('2022-11-01T00:00:00Z'); end=pd.Timestamp('2024-01-01T00:00:00Z')
+          d=d[(d.time>=warm)&(d.time<end)].copy()
+          if d.empty: raise SystemExit('no materialized rows')
+          if d.time.min()>pd.Timestamp('2022-11-03T00:00:00Z'): raise SystemExit(f'warmup begins too late: {d.time.min()}')
+          if d.time.max()<pd.Timestamp('2023-12-28T00:00:00Z'): raise SystemExit(f'validation ends too early: {d.time.max()}')
+          if d.time.max()>=end: raise SystemExit('2024 leaked into locked validation materialization')
+          d.to_csv(dst,index=False)
+          manifest={
+              'source_repository':'kevingtlin/Market-Data-Lab',
+              'source_commit':'922f83a60cc574e7395fb27397077288055a1ef6',
+              'dataset_id':'XAUUSD-DUKASCOPY-M1-BID-ASK',
+              'source_months':'2022-11 through 2023-12',
+              'source_file_count':28,
+              'month_rows':month_rows,
+              'rows':int(len(d)),
+              'start_utc':str(d.time.min()),
+              'end_utc':str(d.time.max()),
+              'post_2023_materialized':False,
+              'locked_input_sha256':hashlib.sha256(dst.read_bytes()).hexdigest()
+          }
+          (root/'MANIFEST.json').write_text(json.dumps(manifest,indent=2,sort_keys=True),encoding='utf-8')
+          print(json.dumps({k:v for k,v in manifest.items() if k!='month_rows'},indent=2,sort_keys=True))
+          PY
+          rm -rf artifacts/gold_rv_persistence_locked_validation_v1/data/source
+
+      - name: Guard candidate freeze before validation
+        run: |
+          python - <<'PY'
+          import json
+          cfg=json.load(open('config/gold_rv_persistence_locked_validation_v1.json',encoding='utf-8'))
+          m=json.load(open('artifacts/gold_rv_persistence_locked_validation_v1/data/MANIFEST.json',encoding='utf-8'))
+          assert cfg['protocol_status']=='candidate_state_validation_frozen'
+          assert cfg['candidate_freeze']['candidate_id']=='rv_persistence'
+          assert cfg['candidate_freeze']['frozen_sign']=='positive'
+          assert cfg['candidate_freeze']['parent_result_commit']=='66bf7193d5c377b3a137680d96e67d8e7ddf4004'
+          assert cfg['evidence_boundary']['locked_validation_start']=='2023-01-01'
+          assert cfg['evidence_boundary']['locked_validation_end_exclusive']=='2024-01-01'
+          assert cfg['economic_scoring_enabled'] is False
+          assert cfg['statistics']['permutation_epochs']==20000
+          assert cfg['statistics']['test_direction']=='one-sided positive'
+          assert cfg['validation_gate']['minimum_median_daily_effect']==0.15
+          assert cfg['validation_gate']['minimum_daily_positive_fraction']==0.58
+          assert m['source_file_count']==28
+          assert m['post_2023_materialized'] is False
+          PY
+
+      - name: Run locked 2023 state validation
+        run: |
+          python scripts/run_gold_rv_persistence_locked_validation_v1.py \
+            --config config/gold_rv_persistence_locked_validation_v1.json \
+            --gold artifacts/gold_rv_persistence_locked_validation_v1/data/XAUUSD_M1_locked_2023.csv \
+            --output artifacts/gold_rv_persistence_locked_validation_v1/validation_result.json
+
+      - name: Guard claims
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/gold_rv_persistence_locked_validation_v1/validation_result.json',encoding='utf-8'))
+          assert r['stage']=='locked_2023_state_validation'
+          assert r['development_reused_for_selection'] is False
+          assert r['economic_scoring_run'] is False
+          assert r['directional_scoring_run'] is False
+          assert r['future_oos_claim'] is False
+          assert r['claims']['directional_edge_established'] is False
+          assert r['claims']['executable_edge_established'] is False
+          assert r['claims']['profitable_edge_established'] is False
+          assert r['claims']['independent_replication_complete'] is False
+          assert r['claims']['verified_future_oos'] is False
+          assert r['claims']['leverage_authorized'] is False
+          assert r['claims']['live_enabled'] is False
+          PY
+
+      - name: Preserve validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-rv-persistence-locked-validation-v1
+          path: |
+            artifacts/gold_rv_persistence_locked_validation_v1/validation_result.json
+            artifacts/gold_rv_persistence_locked_validation_v1/data/MANIFEST.json
+            artifacts/gold_rv_persistence_locked_validation_v1/data/SOURCE_SHA256.txt
+          retention-days: 30
+          if-no-files-found: warn
