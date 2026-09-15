@@ -8,6 +8,7 @@ on:
       - "config/gold_scheduled_macro_reaction_v1.json"
       - "research/gold_scheduled_macro_reaction_v1/EVENT_CALENDAR.csv"
       - "research/gold_scheduled_macro_reaction_v1/PROTOCOL.md"
+      - "research/gold_scheduled_macro_reaction_v1/SOURCE_AMENDMENT_PRE_SCORE.md"
       - "scripts/run_gold_scheduled_macro_reaction_v1.py"
       - ".github/workflows/gold-scheduled-macro-reaction-v1.yml"
 
@@ -32,45 +33,110 @@ jobs:
       - name: Install state runtime
         run: python -m pip install pandas numpy
 
-      - name: Fetch pinned MT5 XAUUSD M1 source
+      - name: Fetch pinned Dukascopy XAUUSD M1 bid and ask months
         run: |
           set -euo pipefail
-          mkdir -p artifacts/gold_scheduled_macro_reaction_v1/data
-          base="https://raw.githubusercontent.com/simom1/XAUUSD-history/9b1f323866d0150ed2422c0e0cf1b97aa1bfcb22"
-          curl --fail --location --retry 3 --retry-delay 2 \
-            "$base/Gold-Cash/XAUUSD/XAUUSD_M1.csv" \
-            -o artifacts/gold_scheduled_macro_reaction_v1/data/XAUUSD_M1_pinned.csv
-          sha256sum artifacts/gold_scheduled_macro_reaction_v1/data/XAUUSD_M1_pinned.csv \
-            > artifacts/gold_scheduled_macro_reaction_v1/data/SOURCE_SHA256.txt
-          head -n 3 artifacts/gold_scheduled_macro_reaction_v1/data/XAUUSD_M1_pinned.csv
+          root="artifacts/gold_scheduled_macro_reaction_v1/data"
+          src="$root/source"
+          mkdir -p "$src"
+          base="https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/922f83a60cc574e7395fb27397077288055a1ef6"
+
+          months=(2020_11 2020_12)
+          for year in 2021 2022; do
+            for month in {01..12}; do
+              months+=("${year}_${month}")
+            done
+          done
+
+          for ym in "${months[@]}"; do
+            for side in bid ask; do
+              file="xauusd_${side}_m1_${ym}.csv"
+              curl --fail --location --retry 3 --retry-delay 2 \
+                "$base/xauusd/$side/m1/$file" \
+                -o "$src/$file"
+            done
+          done
+
+          test "$(find "$src" -type f -name 'xauusd_*_m1_*.csv' | wc -l)" -eq 52
+          sha256sum "$src"/*.csv | sort > "$root/SOURCE_SHA256.txt"
+          head -n 3 "$src/xauusd_bid_m1_2021_01.csv"
+          head -n 3 "$src/xauusd_ask_m1_2021_01.csv"
 
       - name: Materialize only warmup plus open development data
         run: |
+          set -euo pipefail
           python - <<'PY'
           import hashlib
           import json
           from pathlib import Path
           import pandas as pd
 
-          src=Path('artifacts/gold_scheduled_macro_reaction_v1/data/XAUUSD_M1_pinned.csv')
-          dst=Path('artifacts/gold_scheduled_macro_reaction_v1/data/XAUUSD_M1_dev.csv')
-          d=pd.read_csv(src)
-          d.columns=[str(c).strip().lower() for c in d.columns]
-          d['time']=pd.to_datetime(d['time'], utc=True, errors='coerce')
-          d=d.dropna(subset=['time'])
+          root=Path('artifacts/gold_scheduled_macro_reaction_v1/data')
+          src=root/'source'
+          dst=root/'XAUUSD_M1_dev.csv'
+          required={'timestamp','open','high','low','close'}
+          frames=[]
+          month_rows={}
+
+          bid_files=sorted(src.glob('xauusd_bid_m1_*.csv'))
+          if len(bid_files) != 26:
+              raise SystemExit(f'expected 26 bid months, found {len(bid_files)}')
+
+          for bp in bid_files:
+              ym=bp.stem.replace('xauusd_bid_m1_','')
+              ap=src/f'xauusd_ask_m1_{ym}.csv'
+              if not ap.exists():
+                  raise SystemExit(f'missing ask month for {ym}')
+              bid=pd.read_csv(bp)
+              ask=pd.read_csv(ap)
+              bid.columns=[str(c).strip().lower() for c in bid.columns]
+              ask.columns=[str(c).strip().lower() for c in ask.columns]
+              if not required.issubset(bid.columns) or not required.issubset(ask.columns):
+                  raise SystemExit(f'schema mismatch for {ym}: bid={list(bid.columns)}, ask={list(ask.columns)}')
+              b=bid[['timestamp','open','high','low','close']].copy()
+              a=ask[['timestamp','open','high','low','close']].copy()
+              merged=b.merge(a,on='timestamp',how='inner',suffixes=('_bid','_ask'),validate='one_to_one')
+              out=pd.DataFrame({'time':pd.to_datetime(merged['timestamp'],unit='ms',utc=True,errors='coerce')})
+              for c in ('open','high','low','close'):
+                  out[c]=(pd.to_numeric(merged[f'{c}_bid'],errors='coerce')+pd.to_numeric(merged[f'{c}_ask'],errors='coerce'))/2.0
+              out=out.dropna().drop_duplicates('time',keep='last').sort_values('time')
+              if out.empty:
+                  raise SystemExit(f'no valid synchronized rows for {ym}')
+              month_rows[ym]=int(len(out))
+              frames.append(out)
+
+          d=pd.concat(frames,ignore_index=True).drop_duplicates('time',keep='last').sort_values('time')
           warmup=pd.Timestamp('2020-11-01T00:00:00Z')
           locked=pd.Timestamp('2023-01-01T00:00:00Z')
           d=d[(d.time>=warmup)&(d.time<locked)].copy()
           if d.empty:
               raise SystemExit('no development rows')
+          if d.time.min() > pd.Timestamp('2020-11-03T00:00:00Z'):
+              raise SystemExit(f'warmup coverage starts too late: {d.time.min()}')
+          if d.time.max() < pd.Timestamp('2022-12-29T00:00:00Z'):
+              raise SystemExit(f'development coverage ends too early: {d.time.max()}')
           if d.time.max() >= locked:
               raise SystemExit('locked 2023 leaked into development materialization')
+          if not (d[['open','high','low','close']] > 0).all().all():
+              raise SystemExit('non-positive OHLC after midpoint construction')
+          if not ((d['high'] >= d[['open','close']].max(axis=1)) & (d['low'] <= d[['open','close']].min(axis=1))).all():
+              raise SystemExit('invalid midpoint OHLC ordering')
+
           d.to_csv(dst,index=False)
           manifest={
-            'source_repository':'simom1/XAUUSD-history',
-            'source_commit':'9b1f323866d0150ed2422c0e0cf1b97aa1bfcb22',
-            'source_file':'Gold-Cash/XAUUSD/XAUUSD_M1.csv',
+            'amendment_status':'pre_score_implementation_amendment',
+            'prior_source_state_result_produced':False,
+            'source_repository':'kevingtlin/Market-Data-Lab',
+            'source_commit':'922f83a60cc574e7395fb27397077288055a1ef6',
+            'dataset_id':'XAUUSD-DUKASCOPY-M1-BID-ASK',
+            'provider':'Dukascopy',
+            'instrument':'XAUUSD spot gold',
+            'source_timestamp_unit':'milliseconds',
             'source_timestamp_timezone':'UTC',
+            'state_price':'inner-joined bid/ask midpoint OHLC',
+            'source_months':'2020-11 through 2022-12',
+            'source_file_count':52,
+            'month_rows':month_rows,
             'warmup_start_utc':str(d.time.min()),
             'development_end_exclusive_utc':'2023-01-01 00:00:00+00:00',
             'locked_2023_materialized':False,
@@ -78,10 +144,10 @@ jobs:
             'last_row_utc':str(d.time.max()),
             'development_sha256':hashlib.sha256(dst.read_bytes()).hexdigest(),
           }
-          Path('artifacts/gold_scheduled_macro_reaction_v1/data/MANIFEST.json').write_text(json.dumps(manifest,indent=2,sort_keys=True),encoding='utf-8')
-          print(json.dumps(manifest,indent=2,sort_keys=True))
+          (root/'MANIFEST.json').write_text(json.dumps(manifest,indent=2,sort_keys=True),encoding='utf-8')
+          print(json.dumps({k:v for k,v in manifest.items() if k!='month_rows'},indent=2,sort_keys=True))
           PY
-          rm artifacts/gold_scheduled_macro_reaction_v1/data/XAUUSD_M1_pinned.csv
+          rm -rf artifacts/gold_scheduled_macro_reaction_v1/data/source
 
       - name: Guard frozen calendar and protocol before scoring
         run: |
@@ -90,14 +156,26 @@ jobs:
           import pandas as pd
           cfg=json.load(open('config/gold_scheduled_macro_reaction_v1.json',encoding='utf-8'))
           cal=pd.read_csv('research/gold_scheduled_macro_reaction_v1/EVENT_CALENDAR.csv')
+          manifest=json.load(open('artifacts/gold_scheduled_macro_reaction_v1/data/MANIFEST.json',encoding='utf-8'))
           assert cfg['state_scoring_enabled'] is True
           assert cfg['economic_scoring_enabled'] is False
           assert cfg['evidence_boundary']['validation_opened'] is False
+          assert cfg['source_amendment']['status']=='pre_score_implementation_amendment'
+          assert cfg['source_amendment']['prior_source_state_result_produced'] is False
+          assert cfg['source_amendment']['hypotheses_changed'] is False
+          assert cfg['gold_source']['repository']=='kevingtlin/Market-Data-Lab'
+          assert cfg['gold_source']['commit']=='922f83a60cc574e7395fb27397077288055a1ef6'
+          assert cfg['gold_source']['timestamp_unit']=='milliseconds'
+          assert cfg['gold_source']['timestamp_timezone']=='UTC'
+          assert manifest['locked_2023_materialized'] is False
+          assert manifest['source_file_count']==52
           assert len(cal)==64
           counts=cal['event_type'].value_counts().to_dict()
           assert counts=={'cpi':24,'employment':24,'fomc':16}, counts
           assert set(cal['date_local'].astype(str).str[:4])=={'2021','2022'}
           assert len(cfg['primary_hypotheses'])==6
+          assert int(cfg['statistics']['permutation_epochs'])==20000
+          assert float(cfg['statistics']['fdr_q_max'])==0.10
           PY
 
       - name: Run frozen development state study
