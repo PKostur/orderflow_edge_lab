@@ -25,6 +25,14 @@ DEFAULT_INTERVALS = ["5m", "15m", "1h"]
 BASE_MINUTES = {"5m": 5, "15m": 15, "1h": 60}
 VARIANTS = ["original_lookahead", "confirmed_htf", "same_tf"]
 DEFAULT_COSTS_BPS = [0.0, 12.0, 16.0, 20.0]
+DEFAULT_WARMUP_DAYS = 7
+
+
+def _as_utc(value: str | pd.Timestamp) -> pd.Timestamp:
+    ts = pd.Timestamp(value)
+    if ts.tzinfo is None:
+        return ts.tz_localize("UTC")
+    return ts.tz_convert("UTC")
 
 
 def smma(series: pd.Series, length: int) -> pd.Series:
@@ -79,7 +87,7 @@ def occ_lines(
         source_bins = bins
     elif variant == "confirmed_htf":
         # Causal equivalent: only the last fully completed HTF candle is known.
-        source_bins = bins - pd.Timedelta(minutes=base_minutes * multiplier)
+        source_bins = bins - pd.Timedelta(base_minutes * multiplier, unit="min")
     else:
         raise ValueError(f"unsupported OCC variant: {variant}")
 
@@ -239,15 +247,21 @@ def run_study(
     multiplier: int = 3,
     costs_bps: list[float] | None = None,
     max_workers: int = 8,
+    warmup_days: int = DEFAULT_WARMUP_DAYS,
 ) -> dict[str, object]:
     costs = costs_bps or DEFAULT_COSTS_BPS
     output_dir.mkdir(parents=True, exist_ok=True)
+
+    score_start = _as_utc(start)
+    score_end = _as_utc(end)
+    fetch_start = score_start - pd.Timedelta(days=warmup_days)
+    fetch_start_arg = fetch_start.isoformat()
 
     data: dict[tuple[str, str], pd.DataFrame] = {}
     fetch_errors: list[dict[str, str]] = []
     with ThreadPoolExecutor(max_workers=max_workers) as pool:
         futures = {
-            pool.submit(_fetch_one, symbol, interval, start, end): (symbol, interval)
+            pool.submit(_fetch_one, symbol, interval, fetch_start_arg, end): (symbol, interval)
             for interval in intervals
             for symbol in symbols
         }
@@ -285,6 +299,11 @@ def run_study(
                     interval=interval,
                     variant=variant,
                 )
+                if not trades.empty:
+                    trades = trades[
+                        (pd.to_datetime(trades["entry_time"], utc=True) >= score_start)
+                        & (pd.to_datetime(trades["exit_time"], utc=True) < score_end)
+                    ].copy()
                 if not trades.empty:
                     all_trades.append(trades)
                 for cost in costs:
@@ -338,6 +357,7 @@ def run_study(
         "status": "external_outlier_only_not_candidate",
         "candidate_registry_mutated": False,
         "parameter_search_performed": False,
+        "engineering_note": "Indicators initialize on prehistory; only the frozen scoring window contributes trades.",
         "frozen_parameters": {
             "ma_type": "SMMA",
             "length": length,
@@ -353,8 +373,10 @@ def run_study(
         },
         "data": {
             "source": "MEXC public futures klines",
-            "start": start,
-            "end_exclusive": end,
+            "warmup_start": fetch_start_arg,
+            "warmup_days": warmup_days,
+            "score_start": score_start.isoformat(),
+            "end_exclusive": score_end.isoformat(),
             "symbols": symbols,
             "intervals": intervals,
         },
@@ -414,6 +436,7 @@ def main() -> None:
     parser.add_argument("--multiplier", type=int, default=3)
     parser.add_argument("--costs-bps", nargs="+", type=float, default=DEFAULT_COSTS_BPS)
     parser.add_argument("--max-workers", type=int, default=8)
+    parser.add_argument("--warmup-days", type=int, default=DEFAULT_WARMUP_DAYS)
     args = parser.parse_args()
     run_study(
         start=args.start,
@@ -425,6 +448,7 @@ def main() -> None:
         multiplier=args.multiplier,
         costs_bps=list(args.costs_bps),
         max_workers=args.max_workers,
+        warmup_days=args.warmup_days,
     )
 
 
