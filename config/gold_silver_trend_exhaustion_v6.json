@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold_silver_trend_exhaustion_v6",
+  "evidence_class": "post_observation_temporal_validation_not_future_oos",
+  "motivation": "v5 failed because all predeclared pair-regime feature signs were opposite to their frozen semantics. The strongest post-result diagnostic was the sign-reversed 21-day pair-trend feature, suggesting trend exhaustion: when an extreme adaptive gold/silver dislocation extends the established pair trend, mean reversion may be more likely; when the dislocation runs against that trend, continuation may be more likely. v6 freezes that single hypothesis and tests it only on the separate 2021-2023 period. This is retrospective temporal validation, not future OOS.",
+  "source": {
+    "repository": "simom1/XAUUSD-history",
+    "commit": "bda79c6c5ce09a5b488d4cd2c20fcd19bdd2ed3a",
+    "gold_path": "Gold-Cash/XAUUSD/XAUUSD_D1_2010_2026.csv",
+    "silver_path": "Silver-Cash/XAGUSD/XAGUSD_D1.csv"
+  },
+  "data_admission": {
+    "common_dates_only": true,
+    "weekdays_only": true,
+    "minimum_tick_volume_each_leg": 2,
+    "positive_ohlc_required": true,
+    "duplicate_policy": "keep_last",
+    "no_interpolation": true
+  },
+  "period": {
+    "start": "2021-01-01",
+    "end_exclusive": "2024-01-01"
+  },
+  "future_shadow_earliest_utc": "2026-09-16T00:00:00Z",
+  "pair_model": {
+    "type": "recursive least squares on log(gold_close) = alpha + beta * log(silver_close)",
+    "history_initialization_start": "2010-01-01",
+    "initial_warmup_trading_days": 252,
+    "forgetting_factor": 0.995,
+    "event_abs_innovation_z_gte": 1.5,
+    "beta_gt": 0.05,
+    "beta_lt": 3.0,
+    "innovation_is_pre_update": true,
+    "rationale": "fixed from the strongest v3 state hypothesis, not selected using 2021-2023 outcomes"
+  },
+  "feature": {
+    "name": "trend_exhaustion_support_21",
+    "definition": "positive sign(event_z) times the causally standardized trailing 21-trading-day beta-normalized pair close return; positive means the established pair trend runs in the same direction as the current extreme dislocation and therefore supports exhaustion/mean reversion",
+    "standardization_window_trading_days": 252,
+    "standardization_uses_prior_values_only": true,
+    "origin": "sign reversal was generated only after v5 completed; v5 development data cannot count as confirmation"
+  },
+  "state_test": {
+    "horizon_trading_bars": 21,
+    "target": "mean-reversion payoff state: -sign(event_z) times future 21-trading-day beta-normalized hedged pair close return using signal-time beta",
+    "dependence_cluster_calendar_days": 126,
+    "minimum_events_per_fold": 4,
+    "minimum_scorable_folds": 5,
+    "minimum_total_events": 35,
+    "minimum_positive_score_event_fraction": 0.20,
+    "minimum_negative_score_event_fraction": 0.20,
+    "minimum_median_fold_spearman": 0.0,
+    "minimum_positive_fold_fraction": 0.60,
+    "sign_flip_epochs": 20000,
+    "sign_flip_seed": 20260915,
+    "maximum_p_value": 0.10,
+    "multiple_testing_family": "one frozen hypothesis"
+  },
+  "economic_translation": {
+    "direction": "score > 0 => mean reversion side (-sign event_z); score < 0 => continuation side (+sign event_z)",
+    "minimum_abs_regime_score": 0.0,
+    "hold_trading_bars": 21,
+    "entry": "next common daily open after completed signal close",
+    "exit": "common daily open after 21 trading bars",
+    "one_active_trade": true,
+    "entry_beta_frozen_for_trade": true,
+    "gross_normalization": "gold_weight=1/(1+abs(beta)); silver_weight=abs(beta)/(1+abs(beta))",
+    "round_trip_cost_bps_on_total_gross_notional": [5.0, 10.0, 20.0],
+    "primary_cost_bps": 10.0,
+    "high_cost_bps": 20.0
+  },
+  "economic_gate": {
+    "state_must_pass_before_economics_can_pass": true,
+    "minimum_non_overlapping_trades": 12,
+    "minimum_primary_median_fold_net_bps": 0.0,
+    "minimum_primary_median_fold_pf": 1.10,
+    "minimum_primary_positive_fold_fraction": 0.60,
+    "minimum_high_cost_median_fold_net_bps": 0.0,
+    "minimum_overall_mean_primary_net_bps": 0.0,
+    "require_original_mean_gt_original_v5_sign_control": true,
+    "require_primary_median_fold_risk_adjusted_gt_always_mean_reversion_control": true,
+    "require_primary_median_fold_risk_adjusted_gt_always_continuation_control": true,
+    "minimum_long_gold_short_silver_trades": 3,
+    "minimum_short_gold_long_silver_trades": 3,
+    "require_positive_mean_primary_net_both_pair_directions": true
+  },
+  "controls": {
+    "original_v5_sign": true,
+    "always_mean_reversion": true,
+    "always_continuation": true,
+    "static_equal_dollar_pair": true,
+    "unhedged_gold": true,
+    "report_pair_direction_subsets": true,
+    "report_reversion_vs_continuation_decision_counts": true
+  },
+  "decision": {
+    "pass_requires_state_and_economic_gate": true,
+    "on_pass": "freeze for prospective shadow only; no leverage or live trading until genuine future OOS exists",
+    "on_fail": "close trend-exhaustion hypothesis and move to structurally orthogonal gold event research"
+  },
+  "claims": {
+    "verified_future_oos": false,
+    "profitable_edge_established": false,
+    "leverage_authorized": false,
+    "live_enabled": false
+  }
+}
