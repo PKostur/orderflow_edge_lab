@@ -30,7 +30,7 @@ Only observations whose anchor time is on or after `2026-09-16T04:00:00Z` may en
 
 Historical data from before the start may be downloaded only to construct the causal trailing 20-valid-observation same-clock baselines. It cannot contribute a prospective daily effect.
 
-Every scoring run must use only fully completed New York dates. An incomplete current New York date is never scored.
+Every scoring run must use only fully completed New York dates. An incomplete current New York date is never scored. The acquisition client may return bars from the current partial day; the scorer hard-truncates inference at the current New York midnight recorded by the run's UTC as-of timestamp.
 
 ## Forward source
 
@@ -47,19 +47,27 @@ Frozen acquisition arguments:
 - CSV output;
 - no interpolation of missing source minutes.
 
+The readiness run completed before the prospective start and verified the client output schema as:
+
+`timestamp,open,high,low,close`
+
+The raw `timestamp` is Unix milliseconds in UTC. This adapter clarification was completed before any post-start state observation existed and did not change the candidate, windows, baselines, inference family, or gates.
+
 Warmup acquisition may begin at `2026-08-01T00:00:00Z`, but inference begins only at the prospective start.
 
-Each run must record:
+Each run must record and preserve:
 
 - acquisition client and exact version;
-- requested UTC interval;
-- raw downloaded file SHA256;
+- requested/acquired UTC interval;
+- raw downloaded CSV itself;
+- raw file SHA256;
 - raw byte size;
 - scorer commit SHA;
 - first and last source timestamps;
-- first and last scored prospective anchors.
+- first and last scored prospective anchors;
+- result, daily-effect and anchor-effect files.
 
-A later source download must never silently replace already preserved evidence. If the same requested interval produces different bytes on a later run, the discrepancy must be surfaced as a provenance failure rather than reconciled post hoc.
+Every workflow run uses a run-specific artifact name. A later source snapshot must not overwrite an earlier run's evidence. If a later cumulative source download differs for overlapping historical rows, the prior artifact remains the record of what that earlier shadow run actually used.
 
 ## Frozen state definition
 
