@@ -1,0 +1,110 @@
+{
+  "protocol_id": "gold-rv-persistence-prospective-shadow-v1",
+  "protocol_status": "prospective_state_shadow_frozen",
+  "economic_scoring_enabled": false,
+  "directional_scoring_enabled": false,
+  "parent_candidate": {
+    "candidate_id": "rv_persistence",
+    "development_result": "gold-volatility-liquidity-v1",
+    "locked_2023_validation_commit": "549d8f5928b26bd6ea2de55779047875fb463448",
+    "later_2024_replication_result_commit": "70717699ff74c40ce3ef3fb4f8d64391bab71ca1",
+    "later_2024_canonical_run": "35001509877",
+    "frozen_feature": "pre_rv_ratio",
+    "frozen_target": "future_rv_ratio",
+    "frozen_sign": "positive"
+  },
+  "evidence_classification": {
+    "prospective": true,
+    "shadow_only": true,
+    "shadow_start_new_york": "2026-09-16T00:00:00-04:00",
+    "shadow_start_utc": "2026-09-16T04:00:00Z",
+    "no_pre_start_anchor_may_enter_inference": true,
+    "pre_start_data_may_only_supply_causal_baseline_warmup": true,
+    "description": "Forward state-only observation beginning strictly after protocol freeze. No historical date on or before 2026-09-15 New York time may enter prospective inference."
+  },
+  "source": {
+    "provider": "Dukascopy public datafeed",
+    "acquisition_client": "dukascopy-node",
+    "acquisition_client_version": "1.50.0",
+    "instrument": "xauusd",
+    "price_type": "bid",
+    "timeframe": "m1",
+    "utc_offset_minutes": 0,
+    "format": "csv",
+    "raw_time_basis": "UTC",
+    "bar_timestamp_semantics": "one-minute candle timestamp",
+    "warmup_acquisition_start_utc": "2026-08-01T00:00:00Z",
+    "scoring_start_utc": "2026-09-16T04:00:00Z",
+    "closed_day_policy": "score only fully completed New York dates; acquisition end must be no later than the end of the previous New York calendar date",
+    "snapshot_policy": "each shadow run records client version, requested interval, raw file SHA256, byte size, and scorer commit; later downloads may not overwrite prior recorded evidence"
+  },
+  "observation_grid": {
+    "timezone": "America/New_York",
+    "weekday_only": true,
+    "anchor_hours_local": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22],
+    "anchor_minute": 0,
+    "pre_window_minutes": 60,
+    "forward_window_minutes": 60,
+    "same_clock_baseline_lookback_observations": 20,
+    "minimum_daily_anchor_count_for_inference": 8,
+    "missing_bar_policy": "drop anchor; no interpolation",
+    "baseline_policy": "each clock slot is normalized only against its preceding 20 valid same-source observations at that same New York clock slot"
+  },
+  "state_definition": {
+    "realized_volatility": "square root of sum of squared one-minute log close returns",
+    "pre_rv_ratio": "pre-60m realized volatility divided by trailing 20-valid-observation same-clock median pre-60m realized volatility",
+    "future_rv_ratio": "next-60m realized volatility divided by trailing 20-valid-observation same-clock median next-60m realized volatility",
+    "future_range_ratio": "next-60m high-low range divided by trailing 20-valid-observation same-clock median next-60m range",
+    "primary_daily_effect": "Spearman(pre_rv_ratio, future_rv_ratio) across valid frozen anchors on each complete post-freeze New York date",
+    "secondary_daily_effect": "Spearman(pre_rv_ratio, future_range_ratio) across valid frozen anchors on each complete post-freeze New York date",
+    "dependence_unit": "New York date"
+  },
+  "statistics": {
+    "single_candidate": true,
+    "test_direction": "one-sided positive",
+    "permutation_method": "20,000-epoch sign-flip test on completed prospective daily primary effects against frozen positive sign",
+    "permutation_epochs": 20000,
+    "random_seed_namespace": "gold-rv-persistence-prospective-shadow-v1",
+    "multiple_testing": "none; one frozen candidate",
+    "primary_p_max": 0.05
+  },
+  "monitoring_checkpoints": {
+    "informational_only_scorable_dates": [20, 60, 120],
+    "checkpoint_can_promote": false,
+    "checkpoint_can_authorize_economics": false,
+    "checkpoint_can_authorize_leverage_or_live": false
+  },
+  "full_shadow_gate": {
+    "minimum_scorable_dates": 160,
+    "minimum_median_daily_effect": 0.15,
+    "minimum_daily_positive_fraction": 0.58,
+    "minimum_positive_anchor_slots": 8,
+    "minimum_anchor_slot_observations": 80,
+    "first_chronological_half_median_effect_must_be_positive": true,
+    "second_chronological_half_median_effect_must_be_positive": true,
+    "secondary_range_effect_must_be_positive": true,
+    "primary_p_max": 0.05,
+    "candidate_requires_all_gates": true,
+    "origin": "effect, breadth and significance thresholds retained from the frozen replication gate; calendar-half check converted only to chronological shadow halves because the prospective window has no fixed year end"
+  },
+  "futility_policy": {
+    "no_early_failure_rule": true,
+    "reason": "interim checkpoints are descriptive only; the frozen full-shadow decision is not made before 160 scorable dates"
+  },
+  "claims_and_controls": {
+    "no_parameter_retuning_allowed": true,
+    "no_backfill_before_shadow_start_into_inference": true,
+    "no_economic_pnl": true,
+    "no_directional_edge_claim": true,
+    "volatility_state_shadow_is_not_profitable_edge": true,
+    "leverage_authorized": false,
+    "live_enabled": false
+  },
+  "promotion_path_if_full_shadow_passes": [
+    "prospective_state_relationship_confirmed",
+    "separately_freeze any monetization mechanism before its results",
+    "development economics on the separately frozen executable mechanism",
+    "locked economic validation and independent replication",
+    "leverage and live only after all executable gates and separate user approval"
+  ]
+}
