@@ -7,6 +7,7 @@ on:
     paths:
       - "config/gold_macro_event_reaction_v1.json"
       - "scripts/run_gold_macro_event_reaction_v1.py"
+      - "scripts/run_gold_macro_event_reaction_v1_deterministic.py"
       - ".github/workflows/gold-macro-event-reaction-v1.yml"
 
 permissions:
@@ -80,7 +81,7 @@ jobs:
             > "$root/data/SHA256SUMS.txt"
       - name: Run frozen development tournament
         run: |
-          python scripts/run_gold_macro_event_reaction_v1.py \
+          PYTHONPATH=scripts python scripts/run_gold_macro_event_reaction_v1_deterministic.py \
             --config config/gold_macro_event_reaction_v1.json \
             --gold artifacts/gold_macro_event_reaction_v1/data/XAUUSD_M15.csv \
             --cpi-html artifacts/gold_macro_event_reaction_v1/data/cpi.html \
