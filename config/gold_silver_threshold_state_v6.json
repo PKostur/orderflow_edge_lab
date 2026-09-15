@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold_silver_threshold_state_v6",
+  "evidence_class": "post_observation_retrospective_state_research_with_locked_validation_not_future_oos",
+  "motivation": "v5 found strong lower-tail convergence point estimates but did not pass its tail-depth/breadth gate. Threshold cointegration is fundamentally a conditional-state hypothesis: crossing a threshold may change average adjustment without requiring deeper tail observations to converge monotonically faster. v6 therefore tests tail-state convergence relative to a same-side non-tail baseline, with no PnL scoring.",
+  "source": {
+    "repository": "simom1/XAUUSD-history",
+    "commit": "bda79c6c5ce09a5b488d4cd2c20fcd19bdd2ed3a",
+    "gold_path": "Gold-Cash/XAUUSD/XAUUSD_D1_2010_2026.csv",
+    "silver_path": "Silver-Cash/XAGUSD/XAGUSD_D1.csv"
+  },
+  "data_admission": {
+    "common_dates_only": true,
+    "weekdays_only": true,
+    "minimum_tick_volume_each_leg": 2,
+    "positive_ohlc_required": true,
+    "duplicate_policy": "keep_last",
+    "no_interpolation": true
+  },
+  "periods": {
+    "development": {"start": "2010-01-01", "end_exclusive": "2021-01-01"},
+    "locked_internal_validation": {"start": "2021-01-01", "end_exclusive": "2024-01-01", "opened_during_v6": false},
+    "retrospective_extension": {
+      "start": "2024-01-01",
+      "end_exclusive": "2026-09-15",
+      "opened_during_v6": false,
+      "claim_boundary": "Even if later opened, this period is retrospective and not future OOS because related gold/silver evidence from this era has already been inspected."
+    },
+    "future_shadow_earliest_utc": "2026-09-16T00:00:00Z"
+  },
+  "relationship_model": {
+    "type": "rolling_ols_log_price_equilibrium",
+    "lookback_trading_days": 252,
+    "fit_uses_completed_bars_before_signal_only": true,
+    "beta_gt": 0.05,
+    "beta_lt": 3.0,
+    "minimum_residual_std": 0.001
+  },
+  "tail_hypotheses": [
+    {"name": "lower_q10", "side": "long_spread", "tail_quantile": 0.10},
+    {"name": "lower_q20", "side": "long_spread", "tail_quantile": 0.20},
+    {"name": "upper_q80", "side": "short_spread", "tail_quantile": 0.80},
+    {"name": "upper_q90", "side": "short_spread", "tail_quantile": 0.90}
+  ],
+  "state_target": {
+    "horizon_trading_bars": 21,
+    "definition": "side-adjusted frozen-equilibrium residual convergence over 21 trading bars, normalized by signal-time residual standard deviation",
+    "tail_effect": "within each dependence fold, median target in the tail minus median target for same-side non-tail residual states"
+  },
+  "state_first": {
+    "unique_hypotheses": 4,
+    "dependence_cluster_calendar_days": 252,
+    "minimum_tail_events_per_fold": 8,
+    "minimum_baseline_events_per_fold": 20,
+    "minimum_scorable_folds": 10,
+    "minimum_median_tail_effect": 0.0,
+    "minimum_positive_tail_effect_fold_fraction": 0.65,
+    "minimum_median_tail_target": 0.0,
+    "minimum_positive_tail_target_fold_fraction": 0.60,
+    "sign_flip_epochs": 20000,
+    "sign_flip_seed": 20260915,
+    "maximum_bh_fdr_q": 0.10,
+    "maximum_state_tails_to_freeze": 2
+  },
+  "controls": {
+    "same_side_non_tail_baseline_required": true,
+    "fold_level_tail_and_baseline_counts_reported": true,
+    "no_pnl_scoring_in_v6": true
+  },
+  "candidate_selection": {
+    "ranking": [
+      "lower BH-FDR q",
+      "higher median fold tail effect",
+      "higher positive tail-effect fold fraction",
+      "higher median tail target",
+      "lexicographic hypothesis id"
+    ],
+    "separate_freeze_required_before_any_pnl_translation": true
+  },
+  "claims": {
+    "pnl_tested": false,
+    "verified_future_oos": false,
+    "profitable_edge_established": false,
+    "leverage_authorized": false,
+    "live_enabled": false
+  }
+}
