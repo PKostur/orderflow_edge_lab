@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold_silver_macro_conditioned_relative_value_v4",
+  "evidence_class": "post_observation_retrospective_development_with_locked_validation_not_future_oos",
+  "motivation": "Gold/silver relative-state convergence has reproduced across ratio-z, rolling error-correction, and adaptive-equilibrium models, but executable returns are directionally asymmetric. This protocol treats that asymmetry as a new state-prediction problem. It does not permit a post-hoc long-spread-only rule. A macro-conditioned model must predict which dislocations are tradable out-of-fold while retaining positive economics in both spread directions.",
+  "price_source": {
+    "repository": "simom1/XAUUSD-history",
+    "commit": "bda79c6c5ce09a5b488d4cd2c20fcd19bdd2ed3a",
+    "gold_path": "Gold-Cash/XAUUSD/XAUUSD_D1_2010_2026.csv",
+    "silver_path": "Silver-Cash/XAGUSD/XAGUSD_D1.csv",
+    "instrument_semantics": "independent MT5-style cash XAUUSD and XAGUSD daily bars"
+  },
+  "macro_source": {
+    "provider": "FRED",
+    "series": {
+      "VIXCLS": "CBOE Volatility Index: VIX, daily close",
+      "DFII10": "10-Year Treasury Inflation-Indexed Constant Maturity real yield, daily percent",
+      "DTWEXBGS": "Nominal Broad U.S. Dollar Index, daily"
+    },
+    "download_template": "https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_id}",
+    "vintage_controlled": false,
+    "claim_boundary": "Latest-available historical FRED observations are used retrospectively. This lane cannot establish future OOS even if locked internal validation later passes."
+  },
+  "data_admission": {
+    "price_common_dates_only": true,
+    "weekdays_only": true,
+    "minimum_tick_volume_each_price_leg": 2,
+    "positive_price_ohlc_required": true,
+    "price_duplicate_policy": "keep_last",
+    "price_interpolation": false,
+    "macro_asof_join": "backward_only",
+    "macro_completed_observation_lag_common_bars": 1,
+    "macro_forward_fill_after_lag_only": true,
+    "macro_max_staleness_calendar_days": 7
+  },
+  "periods": {
+    "development": {
+      "start": "2010-01-01",
+      "end_exclusive": "2021-01-01"
+    },
+    "locked_internal_validation": {
+      "start": "2021-01-01",
+      "end_exclusive": "2024-01-01",
+      "opened_during_development": false
+    },
+    "retrospective_extension": {
+      "start": "2024-01-01",
+      "end_exclusive": "2026-09-15",
+      "opened_during_development": false
+    },
+    "future_shadow_earliest_utc": "2026-09-16T00:00:00Z"
+  },
+  "base_relative_state": {
+    "relationship_model": "recursive_least_squares_log_gold_on_log_silver",
+    "initial_warmup_trading_days": 252,
+    "forgetting_factor": 0.995,
+    "initial_covariance_scale": 10.0,
+    "innovation_variance_update": "lambda*var + (1-lambda)*innovation^2",
+    "minimum_innovation_std": 0.001,
+    "beta_gt": 0.0,
+    "beta_lt": 3.0,
+    "entry_abs_innovation_z_gte": 1.5,
+    "mean_reversion_side": "side = -sign(innovation_z)",
+    "hedge_ratio": "absolute pre-update beta frozen at signal time",
+    "weighting": "gross-normalized: gold_weight=1/(1+abs(beta)), silver_weight=abs(beta)/(1+abs(beta))"
+  },
+  "macro_features": {
+    "vix_percentile_window_common_bars": 252,
+    "real_yield_change_common_bars": 20,
+    "dollar_log_return_common_bars": 20,
+    "feature_vector": [
+      "abs_innovation_z",
+      "innovation_side",
+      "vix_percentile_252",
+      "dfii10_change_20",
+      "dtwexbgs_log_return_20",
+      "innovation_side_x_vix_percentile_252",
+      "innovation_side_x_dfii10_change_20",
+      "innovation_side_x_dtwexbgs_log_return_20"
+    ],
+    "standardization": "training_history_only"
+  },
+  "state_model": {
+    "type": "logistic_regression_l2",
+    "solver": "lbfgs",
+    "C": 1.0,
+    "max_iter": 2000,
+    "class_weight": null,
+    "training_scheme": "expanding_prequential_by_dependence_fold",
+    "dependence_cluster_calendar_days": 126,
+    "minimum_prior_training_folds": 8,
+    "minimum_prior_training_events": 80,
+    "minimum_test_events_per_fold": 6,
+    "state_horizons_trading_bars": [21, 42],
+    "binary_target": "1 when frozen mean-reversion side has positive uncosted beta-hedged spread return from next common open to horizon common open, else 0",
+    "state_metrics": [
+      "fold_auc",
+      "fold_brier",
+      "fold_constant_rate_brier"
+    ],
+    "minimum_scorable_oof_folds": 8,
+    "minimum_median_fold_auc": 0.55,
+    "minimum_positive_auc_fold_fraction": 0.60,
+    "require_median_fold_brier_lt_constant_rate_baseline": true,
+    "fold_auc_sign_flip_epochs": 20000,
+    "fold_auc_sign_flip_seed": 20260915,
+    "maximum_bh_fdr_q": 0.10,
+    "fdr_family": "two state horizons only"
+  },
+  "economic_translation": {
+    "oof_predicted_success_probability_gte": 0.60,
+    "entry": "next common daily open",
+    "holds_trading_bars": [21, 42],
+    "hold_must_match_state_horizon": true,
+    "same_bar_fill": false,
+    "one_active_trade": true,
+    "both_legs_enter_and_exit_together": true,
+    "round_trip_cost_bps_on_total_gross_notional": [5.0, 10.0, 20.0],
+    "primary_cost_bps": 10.0,
+    "high_cost_bps": 20.0
+  },
+  "economic_gate": {
+    "minimum_non_overlapping_trades": 25,
+    "minimum_primary_median_fold_net_bps": 0.0,
+    "minimum_primary_median_fold_pf": 1.10,
+    "minimum_primary_positive_fold_fraction": 0.60,
+    "minimum_high_cost_median_fold_net_bps": 0.0,
+    "require_primary_mean_net_positive": true,
+    "require_original_mean_gt_reversed_mean": true,
+    "require_filtered_risk_adjusted_gt_unfiltered_base_control": true,
+    "minimum_long_spread_trades": 8,
+    "minimum_short_spread_trades": 8,
+    "require_positive_mean_primary_net_both_directions": true
+  },
+  "controls": {
+    "unfiltered_base_adaptive_reversion_same_horizon": true,
+    "reversed_direction": true,
+    "unhedged_gold_same_filtered_signals": true,
+    "static_equal_dollar_gold_minus_silver_same_filtered_signals": true,
+    "report_trade_return_correlation_with_unhedged_gold": true,
+    "report_long_and_short_spread_subsets": true,
+    "report_probability_deciles": true
+  },
+  "family_consistency_gate": {
+    "definition": "a candidate horizon may be frozen only if the other frozen horizon has median fold AUC >= 0.50 and primary median fold net >= 0 bps, even if it does not independently pass all gates",
+    "maximum_candidates": 1
+  },
+  "candidate_selection": {
+    "locked_validation_may_open_only_after_separate_candidate_freeze_commit": true,
+    "ranking": [
+      "higher median fold AUC",
+      "higher primary positive economic fold fraction",
+      "higher primary median fold net bps",
+      "shorter horizon"
+    ]
+  },
+  "claims": {
+    "verified_future_oos": false,
+    "profitable_edge_established": false,
+    "leverage_authorized": false,
+    "live_enabled": false
+  }
+}
