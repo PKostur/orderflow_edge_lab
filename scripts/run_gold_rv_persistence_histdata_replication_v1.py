@@ -95,15 +95,19 @@ def verify_archive(path: Path, meta: dict) -> dict:
 
 
 def _data_member(zf: zipfile.ZipFile) -> str:
-    members = [
+    files = [
         n for n in zf.namelist()
-        if not n.endswith("/")
-        and n.lower().endswith((".csv", ".txt"))
-        and "__macosx/" not in n.lower()
+        if not n.endswith("/") and "__macosx/" not in n.lower()
     ]
-    if len(members) != 1:
-        raise ValueError(f"expected exactly one CSV/TXT data member in HistData archive, found {members}")
-    return members[0]
+    csv_members = [n for n in files if n.lower().endswith(".csv")]
+    if len(csv_members) == 1:
+        return csv_members[0]
+    if len(csv_members) > 1:
+        raise ValueError(f"expected exactly one HistData CSV member, found {csv_members}")
+    txt_members = [n for n in files if n.lower().endswith(".txt")]
+    if len(txt_members) == 1:
+        return txt_members[0]
+    raise ValueError(f"expected one HistData CSV member, or one TXT fallback, found {files}")
 
 
 def load_histdata_zip(path: Path) -> tuple[pd.DataFrame, dict]:
