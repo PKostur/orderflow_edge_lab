@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "experiment_id": "markov_ev_shadow_v1",
+  "frozen_at_utc": "2026-09-15T18:58:18Z",
+  "purpose": "Prospective paper-shadow comparison of untouched base strategies versus a Markov EV veto-only clone. Base candidates remain unchanged.",
+  "source_protocols": {
+    "markov_state": "config/markov_price_diagnostics_v1.json",
+    "markov_ev": "config/markov_ev_overlay_v1.json"
+  },
+  "policy": {
+    "allowed_actions": ["PASS", "VETO"],
+    "may_reverse_base_signal": false,
+    "may_increase_position_size": false,
+    "may_add_leverage": false,
+    "may_change_base_exit_logic": false,
+    "may_refit_markov_after_original_freeze": false,
+    "use_post_freeze_prices_for_state_identification_only": true,
+    "minimum_pre_freeze_current_state_transitions": 20,
+    "fresh_entry_round_trip_cost_bps": 20.0,
+    "conservative_score_z": 1.0,
+    "pass_rule": "base proposes fresh side AND current state transition count >= 20 AND same-side expected net EV after 20 bps minus 1SE > 0",
+    "veto_persistence": "if a fresh base entry is vetoed, remain flat until the base target resets to flat or changes side; do not reconsider every bar",
+    "cross_sectional_weighting": "retain exact base leg weight when passed; vetoed legs are zero; never renormalize surviving legs"
+  },
+  "clones": [
+    {
+      "shadow_candidate_id": "ena_bb40_rsi25_75_atr15_markov_ev_v1",
+      "base_candidate_id": "ena_bb40_rsi25_75_atr15_v1",
+      "base_candidate_config": "config/ena_mean_reversion_candidate_v1.json",
+      "interval": "1h",
+      "training_start_utc": "2026-03-01T00:00:00Z",
+      "training_end_exclusive_utc": "2026-09-12T00:00:00Z",
+      "primary_horizon_bars": 6,
+      "shadow_execution_start_utc": "2026-09-15T20:00:00Z",
+      "start_policy": "flat; first eligible entry must come from a fully post-freeze completed 1h signal bar"
+    },
+    {
+      "shadow_candidate_id": "mexc_8h_ema24_96_atr025_markov_ev_v1",
+      "base_candidate_id": "mexc_8h_ema24_96_atr025_v1",
+      "base_candidate_config": "config/htf_trend_candidate_v1.json",
+      "interval": "8h",
+      "training_start_utc": "2026-07-01T00:00:00Z",
+      "training_end_exclusive_utc": "2026-09-12T00:00:00Z",
+      "primary_horizon_bars": 3,
+      "shadow_execution_start_utc": "2026-09-16T00:00:00Z",
+      "start_policy": "flat; first eligible entry evaluated at the next 8h execution boundary"
+    },
+    {
+      "shadow_candidate_id": "mexc_xs_mom30_7_dn_markov_ev_v1",
+      "base_candidate_id": "mexc_xs_mom30_7_dn_v1",
+      "base_candidate_config": "config/cross_sectional_candidate_v1.json",
+      "interval": "1d",
+      "training_start_utc": "2026-01-01T00:00:00Z",
+      "training_end_exclusive_utc": "2026-09-12T00:00:00Z",
+      "primary_horizon_bars": 7,
+      "shadow_execution_start_utc": "2026-09-21T00:00:00Z",
+      "start_policy": "flat; begin only at the next untouched scheduled 7-day base rebalance after freeze"
+    }
+  ],
+  "comparison": {
+    "base_forward_results_are_never_rewritten": true,
+    "shadow_has_independent_forward_clock": true,
+    "primary_metrics": [
+      "net_pnl_per_1000_usdt",
+      "max_drawdown",
+      "completed_trades_or_periods",
+      "veto_count",
+      "pass_count",
+      "avoided_base_losses",
+      "missed_base_winners"
+    ],
+    "minimum_completed_shadow_observations_before_review": 20
+  },
+  "claims": {
+    "paper_shadow_only": true,
+    "base_candidate_specifications_modified": false,
+    "base_forward_results_modified": false,
+    "verified_out_of_sample_edge": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  }
+}
