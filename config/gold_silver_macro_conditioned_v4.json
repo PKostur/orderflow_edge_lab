@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold_silver_macro_conditioned_v4",
+  "evidence_class": "post_observation_retrospective_development_with_locked_validation_not_future_oos",
+  "motivation": "v2 and v3 independently found strong gold/silver relative-state information but repeated directional asymmetry: long-gold/short-silver relative trades were often positive while the opposite sleeve was negative. v4 does not delete the losing side. It asks a new state-first question: can strictly lagged macro conditions predict the direction of the hedged gold/silver move after an extreme relative dislocation?",
+  "price_source": {
+    "repository": "simom1/XAUUSD-history",
+    "commit": "bda79c6c5ce09a5b488d4cd2c20fcd19bdd2ed3a",
+    "gold_path": "Gold-Cash/XAUUSD/XAUUSD_D1_2010_2026.csv",
+    "silver_path": "Silver-Cash/XAGUSD/XAGUSD_D1.csv"
+  },
+  "macro_sources": {
+    "DFII10": {
+      "repository": "Arqaen/financial-forecasting-xgboost",
+      "commit": "0df20d1021807d8e89fa46a6f026806bebaa9123",
+      "path": "models/data/DFII10.csv"
+    },
+    "DGS10": {
+      "repository": "Arqaen/financial-forecasting-xgboost",
+      "commit": "0df20d1021807d8e89fa46a6f026806bebaa9123",
+      "path": "models/data/DGS10.csv"
+    },
+    "DTWEXBGS": {
+      "repository": "Lilas-Bertot/ETUDE-DE-CAS-2",
+      "commit": "3c957c05a93a5398b67271783cd6a32ae0214385",
+      "path": "DXY.csv"
+    }
+  },
+  "data_admission": {
+    "common_price_dates_only": true,
+    "weekdays_only": true,
+    "minimum_tick_volume_each_price_leg": 2,
+    "positive_ohlc_required": true,
+    "macro_value_must_be_dated_strictly_before_signal_date": true,
+    "macro_missing_policy": "use latest non-null observation with source date < signal date; never backfill",
+    "no_price_interpolation": true
+  },
+  "periods": {
+    "development": {"start": "2010-01-01", "end_exclusive": "2021-01-01"},
+    "locked_internal_validation": {"start": "2021-01-01", "end_exclusive": "2024-01-01", "opened_during_development": false},
+    "retrospective_extension": {"start": "2024-01-01", "end_exclusive": "2026-09-15", "opened_during_development": false},
+    "future_shadow_earliest_utc": "2026-09-16T00:00:00Z"
+  },
+  "pair_event_model": {
+    "type": "recursive least squares on log(gold_close) = alpha + beta * log(silver_close)",
+    "initial_warmup_trading_days": 252,
+    "forgetting_factor": 0.995,
+    "entry_abs_innovation_z_gte": 1.5,
+    "beta_gt": 0.05,
+    "beta_lt": 3.0,
+    "innovation_is_pre_update": true,
+    "entry_beta_frozen_for_state_target_and_trade": true,
+    "selection_rationale": "fixed from v3 by strongest state evidence, not by economic PnL"
+  },
+  "macro_features": {
+    "raw_change_horizon_trading_days": 21,
+    "standardization_window_trading_days": 252,
+    "standardization_uses_prior_values_only": true,
+    "features": {
+      "falling_real_yield_support": "negative z-score of 21-trading-day change in lagged DFII10",
+      "weaker_usd_support": "negative z-score of 21-trading-day log change in lagged DTWEXBGS",
+      "rising_breakeven_support": "positive z-score of 21-trading-day change in lagged (DGS10-DFII10)",
+      "equal_weight_macro_support": "arithmetic mean of the three support scores when all are finite"
+    },
+    "score_semantics": "positive score predicts gold outperforming silver; negative predicts silver outperforming gold"
+  },
+  "state_first": {
+    "event_filter": "only pair-event dates with |pre-update adaptive innovation z| >= 1.5",
+    "horizon_trading_bars": 21,
+    "target": "21-trading-day close-to-close beta-normalized hedged relative return: gold weight * gold return minus silver weight * silver return, using the signal-time beta",
+    "predictor": "one of the four lagged macro support scores",
+    "dependence_cluster_calendar_days": 126,
+    "minimum_events_per_fold": 5,
+    "minimum_scorable_folds": 10,
+    "minimum_total_events": 120,
+    "minimum_positive_score_event_fraction": 0.20,
+    "minimum_negative_score_event_fraction": 0.20,
+    "minimum_median_fold_spearman": 0.0,
+    "minimum_positive_fold_fraction": 0.60,
+    "sign_flip_epochs": 20000,
+    "sign_flip_seed": 20260915,
+    "maximum_bh_fdr_q": 0.10,
+    "multiple_testing_family": "four unique macro features"
+  },
+  "economic_translation": {
+    "direction": "at an extreme pair event, long gold/short silver when macro score > 0 and short gold/long silver when macro score < 0",
+    "minimum_abs_macro_score": [0.0, 0.5],
+    "hold_trading_bars": [21, 42],
+    "entry": "next common daily open after completed signal close",
+    "exit": "common daily open after frozen hold",
+    "one_active_trade": true,
+    "gross_normalization": "gold_weight=1/(1+abs(beta)); silver_weight=abs(beta)/(1+abs(beta))",
+    "round_trip_cost_bps_on_total_gross_notional": [5.0, 10.0, 20.0],
+    "primary_cost_bps": 10.0,
+    "high_cost_bps": 20.0
+  },
+  "economic_gate": {
+    "state_feature_must_pass_before_translation": true,
+    "minimum_non_overlapping_trades": 18,
+    "minimum_primary_median_fold_net_bps": 0.0,
+    "minimum_primary_median_fold_pf": 1.10,
+    "minimum_primary_positive_fold_fraction": 0.60,
+    "minimum_high_cost_median_fold_net_bps": 0.0,
+    "minimum_overall_mean_primary_net_bps": 0.0,
+    "require_original_mean_gt_reversed_macro_direction": true,
+    "require_primary_median_fold_risk_adjusted_gt_same_timing_mean_reversion_control": true,
+    "require_primary_median_fold_risk_adjusted_gt_static_equal_dollar_pair_control": true,
+    "require_primary_median_fold_risk_adjusted_gt_macro_only_without_dislocation_control": true,
+    "minimum_long_spread_trades": 5,
+    "minimum_short_spread_trades": 5,
+    "require_positive_mean_primary_net_both_directions": true
+  },
+  "controls": {
+    "same_event_mean_reversion_direction": true,
+    "reversed_macro_direction": true,
+    "static_equal_dollar_pair_same_macro_direction": true,
+    "unhedged_gold_same_macro_direction": true,
+    "macro_only_without_dislocation_filter": true,
+    "report_trade_return_correlation_with_unhedged_gold": true,
+    "report_positive_and_negative_macro_score_subsets": true
+  },
+  "neighborhood_gate": {
+    "definition": "same macro feature; differs in exactly one adjacent value among macro threshold or hold",
+    "minimum_supporting_neighbors": 1,
+    "supporter_requires": {
+      "primary_median_fold_net_bps_gt": 0.0,
+      "primary_median_fold_pf_gt": 1.0,
+      "overall_mean_primary_net_bps_gt": 0.0,
+      "high_cost_median_fold_net_bps_gte": 0.0
+    }
+  },
+  "candidate_selection": {
+    "maximum_candidates": 2,
+    "locked_validation_may_open_only_after_separate_candidate_freeze_commit": true
+  },
+  "claims": {
+    "verified_future_oos": false,
+    "profitable_edge_established": false,
+    "leverage_authorized": false,
+    "live_enabled": false
+  }
+}
