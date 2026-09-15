@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold_silver_macro_regime_v4",
+  "evidence_class": "post_observation_retrospective_state_research_with_locked_validation_not_future_oos",
+  "motivation": "v1-v3 repeatedly found statistically durable gold/silver relative-state convergence, but executable returns were directionally asymmetric: negative relative innovations followed by long-gold/short-silver often worked while positive innovations followed by short-gold/long-silver did not. This protocol does not delete the losing side post hoc. It tests whether lagged macro state predicts subsequent relative convergence separately by side before any conditioned PnL is evaluated.",
+  "price_source": {
+    "repository": "simom1/XAUUSD-history",
+    "commit": "bda79c6c5ce09a5b488d4cd2c20fcd19bdd2ed3a",
+    "gold_path": "Gold-Cash/XAUUSD/XAUUSD_D1_2010_2026.csv",
+    "silver_path": "Silver-Cash/XAGUSD/XAGUSD_D1.csv",
+    "instrument_semantics": "MT5-style cash XAUUSD and XAGUSD daily bars"
+  },
+  "macro_source": {
+    "provider": "FRED",
+    "series": {
+      "DFII10": "10-Year Treasury Inflation-Indexed Security, Constant Maturity",
+      "VIXCLS": "CBOE Volatility Index: VIX"
+    },
+    "fetch_semantics": "raw FRED CSV is fetched during the canonical workflow, hashed, and preserved in the artifact",
+    "causal_lag_trading_days": 1
+  },
+  "data_admission": {
+    "common_gold_silver_dates_only": true,
+    "weekdays_only": true,
+    "minimum_tick_volume_each_leg": 2,
+    "positive_ohlc_required": true,
+    "duplicate_policy": "keep_last",
+    "no_price_interpolation": true,
+    "macro_join": "asof backward after one-trading-day lag; no future macro observation may be used",
+    "minimum_macro_coverage_fraction": 0.9
+  },
+  "periods": {
+    "development": {
+      "start": "2010-01-01",
+      "end_exclusive": "2021-01-01"
+    },
+    "locked_internal_validation": {
+      "start": "2021-01-01",
+      "end_exclusive": "2024-01-01",
+      "opened_during_v4": false
+    },
+    "retrospective_extension": {
+      "start": "2024-01-01",
+      "end_exclusive": "2026-09-15",
+      "opened_during_v4": false,
+      "claim_boundary": "Even if later opened, this period is retrospective and not future OOS because related gold/silver evidence from this era has already been inspected."
+    },
+    "future_shadow_earliest_utc": "2026-09-16T00:00:00Z"
+  },
+  "relationship_model": {
+    "type": "recursive_least_squares_log_price_equilibrium",
+    "initial_warmup_trading_days": 252,
+    "forgetting_factor": 0.995,
+    "entry_abs_innovation_z_gte": 1.5,
+    "beta_gt": 0.05,
+    "beta_lt": 3.0,
+    "minimum_innovation_std": 0.001,
+    "note": "These are fixed from the previously frozen v3 state model; no relationship-model grid is searched in v4."
+  },
+  "state_target": {
+    "horizon_trading_bars": 21,
+    "definition": "side-adjusted normalized convergence of the frozen signal-time residual over 21 trading bars",
+    "long_spread_side": "negative innovation; positive target means residual moved upward toward equilibrium",
+    "short_spread_side": "positive innovation; positive target means residual moved downward toward equilibrium"
+  },
+  "macro_features": {
+    "rolling_standardization_window_trading_days": 126,
+    "features": [
+      {
+        "name": "real_yield_level_gold_favorability",
+        "definition": "negative 126-day z-score of lagged DFII10 level"
+      },
+      {
+        "name": "real_yield_change21_gold_favorability",
+        "definition": "negative 126-day z-score of 21-trading-day change in lagged DFII10"
+      },
+      {
+        "name": "vix_level_gold_favorability",
+        "definition": "126-day z-score of lagged VIXCLS level"
+      },
+      {
+        "name": "vix_change21_gold_favorability",
+        "definition": "126-day z-score of 21-trading-day change in lagged VIXCLS"
+      },
+      {
+        "name": "safe_haven_composite",
+        "definition": "mean(real_yield_change21_gold_favorability, vix_level_gold_favorability)"
+      },
+      {
+        "name": "stress_shift_composite",
+        "definition": "mean(real_yield_change21_gold_favorability, vix_change21_gold_favorability)"
+      }
+    ],
+    "side_alignment": "for long-spread events predictor=gold_favorability; for short-spread events predictor=-gold_favorability, so positive predictor always means macro state aligns with the trade side"
+  },
+  "state_first": {
+    "sides": [
+      "long_spread",
+      "short_spread"
+    ],
+    "unique_hypotheses": 12,
+    "dependence_cluster_calendar_days": 126,
+    "minimum_events_per_state_fold": 6,
+    "minimum_scorable_state_folds": 10,
+    "minimum_median_fold_spearman": 0.0,
+    "minimum_positive_state_fold_fraction": 0.6,
+    "sign_flip_epochs": 20000,
+    "sign_flip_seed": 20260915,
+    "maximum_bh_fdr_q": 0.1,
+    "require_positive_median_fold_target": true,
+    "maximum_state_conditioners_to_freeze": 2
+  },
+  "controls": {
+    "unconditioned_side_baseline_reported": true,
+    "feature_sign_reversal_reported": true,
+    "event_count_and_fold_breadth_reported": true,
+    "no_pnl_scoring_in_v4": true
+  },
+  "candidate_selection": {
+    "ranking": [
+      "lower BH-FDR q",
+      "higher median fold Spearman",
+      "higher positive state fold fraction",
+      "higher median fold target",
+      "lexicographic hypothesis id"
+    ],
+    "separate_freeze_required_before_any_conditioned_pnl_translation": true
+  },
+  "claims": {
+    "conditioned_pnl_tested": false,
+    "verified_future_oos": false,
+    "profitable_edge_established": false,
+    "leverage_authorized": false,
+    "live_enabled": false
+  }
+}
