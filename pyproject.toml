@@ -10,7 +10,7 @@ requires-python = ">=3.10"
 dependencies = ["websockets>=12,<16"]
 
 [project.optional-dependencies]
-research = ["numpy>=2,<3", "pandas>=2,<3"]
+research = ["numpy>=2,<3", "pandas>=2,<3", "scipy>=1.14,<2"]
 
 [project.scripts]
 orderflow-paper = "orderflow_edge_lab.cli.paper:main"

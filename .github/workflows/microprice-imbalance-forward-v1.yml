@@ -1,0 +1,144 @@
+name: Microprice Imbalance Forward V1
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "config/microprice_imbalance_forward_v1.json"
+      - "config/microprice_imbalance_forward_v1_1_amendment.json"
+      - "scripts/run_microprice_imbalance_forward_v1.py"
+      - "tests/test_microprice_imbalance_forward_v1.py"
+      - ".github/workflows/microprice-imbalance-forward-v1.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: microprice-imbalance-forward-v1-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  capture-and-state:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: |
+          python -m pip install -e ".[research]"
+          python -m pip install scipy
+      - name: Validate frozen state-only protocol
+        run: |
+          python -m py_compile scripts/run_microprice_imbalance_forward_v1.py
+          python -m unittest tests.test_microprice_imbalance_forward_v1
+          python - <<'PY'
+          import json
+          p=json.load(open('config/microprice_imbalance_forward_v1.json', encoding='utf-8'))
+          a=json.load(open('config/microprice_imbalance_forward_v1_1_amendment.json', encoding='utf-8'))
+          assert p['protocol_name'] == 'microprice-imbalance-forward-v1'
+          assert p['source']['historical_backfill_allowed'] is False
+          assert p['capture']['independent_capture_batch_is_dependence_cluster'] is True
+          assert p['orthogonality']['combine_features_in_v1'] is False
+          assert p['strategy_translation']['enabled_in_v1'] is False
+          assert p['promotion']['ruflo_gate_required'] is True
+          assert p['promotion']['deterministic_multi_agent_release_manager_required'] is True
+          assert p['promotion']['automatic_live_transmission'] is False
+          assert a['outcomes_inspected_before_amendment'] is False
+          assert a['implementation_requirements']['serialize_nonfinite_statistics_as_null'] is True
+          assert a['implementation_requirements']['future_lookup_max_delay_ms'] == 2000
+          assert a['implementation_requirements']['prior_unamended_batch_output_admissible'] is False
+          PY
+      - name: Capture fixed public MEXC panel for 15 minutes
+        run: |
+          mkdir -p artifacts/microprice
+          orderflow-mexc-record \
+            --symbol BTC_USDT \
+            --symbol ETH_USDT \
+            --symbol SOL_USDT \
+            --symbol XRP_USDT \
+            --symbol DOGE_USDT \
+            --symbol BNB_USDT \
+            --symbol ADA_USDT \
+            --symbol LINK_USDT \
+            --symbol SUI_USDT \
+            --symbol ENA_USDT \
+            --duration-seconds 900 \
+            --output-dir artifacts/microprice
+      - name: Evaluate current prospective state batch
+        shell: bash
+        run: |
+          set -euo pipefail
+          FEATURE=$(find artifacts/microprice -name '*_mexc_features.jsonl' -print -quit)
+          test -n "$FEATURE"
+          BATCH_ID=$(basename "$FEATURE" _mexc_features.jsonl)
+          mkdir -p artifacts/microprice/history
+          python scripts/run_microprice_imbalance_forward_v1.py batch \
+            --features "$FEATURE" \
+            --batch-id "$BATCH_ID" \
+            --out "artifacts/microprice/history/${BATCH_ID}.json"
+      - name: Recover prior prospective batch ledger
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/microprice_previous
+          mkdir -p /tmp/microprice_previous
+          PREV_ID="$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=microprice-imbalance-ledger-v1&per_page=20" \
+            --jq '.artifacts | map(select(.expired == false)) | sort_by(.created_at) | reverse | .[0].id // empty' || true)"
+          if [[ -n "$PREV_ID" ]]; then
+            gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${PREV_ID}/zip" > /tmp/microprice_previous.zip
+            unzip -q /tmp/microprice_previous.zip -d /tmp/microprice_previous
+            PRIOR="$(find /tmp/microprice_previous -type d -path '*/artifacts/microprice/history' -print -quit || true)"
+            if [[ -n "$PRIOR" ]]; then
+              cp -n "$PRIOR"/*.json artifacts/microprice/history/ 2>/dev/null || true
+            fi
+          fi
+      - name: Aggregate independent prospective capture batches
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t BATCHES < <(find artifacts/microprice/history -maxdepth 1 -type f -name '*.json' | sort)
+          test "${#BATCHES[@]}" -ge 1
+          python scripts/run_microprice_imbalance_forward_v1.py aggregate "${BATCHES[@]}" \
+            --out artifacts/microprice/aggregate.json
+          cat artifacts/microprice/aggregate.json
+      - name: Deterministic release-manager integrity check
+        run: |
+          orderflow-multi-agent --output artifacts/microprice/multi_agent_report.json
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/microprice/multi_agent_report.json', encoding='utf-8'))
+          if r['release_manager']['status'] != 'reviewable':
+              raise SystemExit('release manager blocked prospective state evidence')
+          PY
+      - name: Preserve cumulative prospective state ledger
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: microprice-imbalance-ledger-v1
+          path: |
+            artifacts/microprice/history/
+            artifacts/microprice/aggregate.json
+            artifacts/microprice/multi_agent_report.json
+            config/microprice_imbalance_forward_v1.json
+            config/microprice_imbalance_forward_v1_1_amendment.json
+          retention-days: 90
+          if-no-files-found: error
+      - name: Preserve current raw replay batch
+        if: ${{ always() && hashFiles('artifacts/microprice/*_mexc_raw.jsonl*', 'artifacts/microprice/*_mexc_features.jsonl*') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: microprice-imbalance-replay-${{ github.run_id }}
+          path: |
+            artifacts/microprice/*_mexc_raw.jsonl*
+            artifacts/microprice/*_mexc_features.jsonl*
+          retention-days: 14
+          if-no-files-found: error
