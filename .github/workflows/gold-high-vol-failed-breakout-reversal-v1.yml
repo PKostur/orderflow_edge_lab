@@ -1,0 +1,192 @@
+name: Gold High Vol Failed Breakout Reversal v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/gold-high-vol-failed-breakout-reversal-v1]
+    paths:
+      - "config/gold_high_vol_failed_breakout_reversal_v1.json"
+      - "config/gold_high_vol_breakout_state_v1.json"
+      - "config/gold_volatility_liquidity_v1.json"
+      - "research/gold_high_vol_failed_breakout_reversal_v1/PROTOCOL.md"
+      - "scripts/run_gold_high_vol_failed_breakout_reversal_v1.py"
+      - "scripts/run_gold_high_vol_breakout_state_v1.py"
+      - "scripts/run_gold_volatility_liquidity_v1.py"
+      - "scripts/run_gold_volatility_liquidity_v1_warm.py"
+      - ".github/workflows/gold-high-vol-failed-breakout-reversal-v1.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gold-high-vol-failed-breakout-reversal-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  development-reversal-state:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install state runtime
+        run: python -m pip install pandas numpy
+
+      - name: Fetch pinned Dukascopy XAUUSD M1 bid and ask months
+        run: |
+          set -euo pipefail
+          root="artifacts/gold_high_vol_failed_breakout_reversal_v1/data"
+          src="$root/source"
+          mkdir -p "$src"
+          base="https://raw.githubusercontent.com/kevingtlin/Market-Data-Lab/922f83a60cc574e7395fb27397077288055a1ef6"
+          months=(2020_11 2020_12)
+          for year in 2021 2022; do
+            for month in {01..12}; do months+=("${year}_${month}"); done
+          done
+          for ym in "${months[@]}"; do
+            for side in bid ask; do
+              file="xauusd_${side}_m1_${ym}.csv"
+              curl --fail --location --retry 3 --retry-delay 2 "$base/xauusd/$side/m1/$file" -o "$src/$file"
+            done
+          done
+          test "$(find "$src" -type f -name 'xauusd_*_m1_*.csv' | wc -l)" -eq 52
+          sha256sum "$src"/*.csv | sort > "$root/SOURCE_SHA256.txt"
+
+      - name: Materialize midpoint and spread state data only through 2022
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          import pandas as pd
+
+          root=Path('artifacts/gold_high_vol_failed_breakout_reversal_v1/data')
+          src=root/'source'
+          dst=root/'XAUUSD_M1_state_dev.csv'
+          required={'timestamp','open','high','low','close'}
+          frames=[]
+          month_rows={}
+          bids=sorted(src.glob('xauusd_bid_m1_*.csv'))
+          if len(bids)!=26:
+              raise SystemExit(f'expected 26 bid files, found {len(bids)}')
+          for bp in bids:
+              ym=bp.stem.replace('xauusd_bid_m1_','')
+              ap=src/f'xauusd_ask_m1_{ym}.csv'
+              if not ap.exists(): raise SystemExit(f'missing ask file for {ym}')
+              bid=pd.read_csv(bp); ask=pd.read_csv(ap)
+              bid.columns=[str(c).strip().lower() for c in bid.columns]
+              ask.columns=[str(c).strip().lower() for c in ask.columns]
+              if not required.issubset(bid.columns) or not required.issubset(ask.columns):
+                  raise SystemExit(f'schema mismatch for {ym}')
+              b=bid[['timestamp','open','high','low','close']].copy()
+              a=ask[['timestamp','open','high','low','close']].copy()
+              merged=b.merge(a,on='timestamp',how='inner',suffixes=('_bid','_ask'),validate='one_to_one')
+              out=pd.DataFrame({'time':pd.to_datetime(merged.timestamp,unit='ms',utc=True,errors='coerce')})
+              for c in ('open','high','low','close'):
+                  out[c]=(pd.to_numeric(merged[f'{c}_bid'],errors='coerce')+pd.to_numeric(merged[f'{c}_ask'],errors='coerce'))/2.0
+              mid=out['close']
+              out['spread_bps']=10000.0*(pd.to_numeric(merged['close_ask'],errors='coerce')-pd.to_numeric(merged['close_bid'],errors='coerce'))/mid
+              out=out.dropna().drop_duplicates('time',keep='last').sort_values('time')
+              out=out[(out[['open','high','low','close']]>0).all(axis=1) & (out.spread_bps>=0)]
+              if out.empty: raise SystemExit(f'no synchronized rows for {ym}')
+              month_rows[ym]=int(len(out)); frames.append(out)
+          d=pd.concat(frames,ignore_index=True).drop_duplicates('time',keep='last').sort_values('time')
+          warm=pd.Timestamp('2020-11-01T00:00:00Z'); locked=pd.Timestamp('2023-01-01T00:00:00Z')
+          d=d[(d.time>=warm)&(d.time<locked)].copy()
+          if d.empty: raise SystemExit('no materialized rows')
+          if d.time.min()>pd.Timestamp('2020-11-03T00:00:00Z'): raise SystemExit(f'warmup begins too late: {d.time.min()}')
+          if d.time.max()<pd.Timestamp('2022-12-29T00:00:00Z'): raise SystemExit(f'development ends too early: {d.time.max()}')
+          if d.time.max()>=locked: raise SystemExit('locked 2023 leaked into source materialization')
+          if not ((d.high>=d[['open','close']].max(axis=1)) & (d.low<=d[['open','close']].min(axis=1))).all():
+              raise SystemExit('invalid midpoint OHLC ordering')
+          d.to_csv(dst,index=False)
+          manifest={
+              'source_repository':'kevingtlin/Market-Data-Lab',
+              'source_commit':'922f83a60cc574e7395fb27397077288055a1ef6',
+              'dataset_id':'XAUUSD-DUKASCOPY-M1-BID-ASK',
+              'provider':'Dukascopy',
+              'state_price':'inner-joined bid/ask midpoint OHLC',
+              'spread_measure':'10000*(ask_close-bid_close)/midpoint_close',
+              'source_months':'2020-11 through 2022-12',
+              'source_file_count':52,
+              'month_rows':month_rows,
+              'rows':int(len(d)),
+              'start_utc':str(d.time.min()),
+              'end_utc':str(d.time.max()),
+              'locked_2023_materialized':False,
+              'development_sha256':hashlib.sha256(dst.read_bytes()).hexdigest()
+          }
+          (root/'MANIFEST.json').write_text(json.dumps(manifest,indent=2,sort_keys=True),encoding='utf-8')
+          print(json.dumps({k:v for k,v in manifest.items() if k!='month_rows'},indent=2,sort_keys=True))
+          PY
+          rm -rf artifacts/gold_high_vol_failed_breakout_reversal_v1/data/source
+
+      - name: Guard frozen reversal state protocol before scoring
+        run: |
+          python - <<'PY'
+          import json
+          cfg=json.load(open('config/gold_high_vol_failed_breakout_reversal_v1.json',encoding='utf-8'))
+          bo=json.load(open('config/gold_high_vol_breakout_state_v1.json',encoding='utf-8'))
+          vol=json.load(open('config/gold_volatility_liquidity_v1.json',encoding='utf-8'))
+          m=json.load(open('artifacts/gold_high_vol_failed_breakout_reversal_v1/data/MANIFEST.json',encoding='utf-8'))
+          assert cfg['protocol_status']=='post_observation_reversal_state_frozen'
+          assert cfg['economic_scoring_enabled'] is False
+          assert cfg['evidence_boundary']['validation_opened'] is False
+          assert cfg['evidence_boundary']['development_end_exclusive']=='2023-01-01'
+          assert cfg['parent_observation']['parent_result_commit']=='d8bcbcfb88bd28e7a9140fa4f1c5412d1bde398b'
+          assert cfg['state_activation']['primary_high_rv_ratio_gte']==1.25
+          assert cfg['breakout_definition']['buffer_fraction_of_pre_range']==0.05
+          assert cfg['failure_definition']['search_minutes_after_breakout_confirmation']==15
+          assert cfg['state_score']['horizons_minutes_after_failure_confirmation']==[15,30,60]
+          assert cfg['state_score']['primary_horizon_minutes']==30
+          assert cfg['statistics']['permutation_epochs']==20000
+          assert cfg['statistics']['primary_p_max']==0.05
+          assert bo['protocol_id']=='gold-high-vol-breakout-state-v1'
+          assert bo['economic_scoring_enabled'] is False
+          assert vol['protocol_id']=='gold-volatility-liquidity-v1'
+          assert vol['economic_scoring_enabled'] is False
+          assert m['locked_2023_materialized'] is False
+          assert m['source_file_count']==52
+          PY
+
+      - name: Run frozen failed-breakout reversal state study
+        run: |
+          python scripts/run_gold_high_vol_failed_breakout_reversal_v1.py \
+            --config config/gold_high_vol_failed_breakout_reversal_v1.json \
+            --breakout-config config/gold_high_vol_breakout_state_v1.json \
+            --parent-vol-config config/gold_volatility_liquidity_v1.json \
+            --gold artifacts/gold_high_vol_failed_breakout_reversal_v1/data/XAUUSD_M1_state_dev.csv \
+            --output artifacts/gold_high_vol_failed_breakout_reversal_v1/state_result.json
+
+      - name: Guard evidence boundary and claims
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/gold_high_vol_failed_breakout_reversal_v1/state_result.json',encoding='utf-8'))
+          assert r['stage']=='post_observation_failed_breakout_reversal_state_development'
+          assert r['holdout_opened'] is False
+          assert r['economic_scoring_run'] is False
+          assert r['costs_scored'] is False
+          assert r['claims']['independent_confirmation'] is False
+          assert r['claims']['executable_edge_established'] is False
+          assert r['claims']['profitable_edge_established'] is False
+          assert r['claims']['verified_future_oos'] is False
+          assert r['claims']['leverage_authorized'] is False
+          assert r['claims']['live_enabled'] is False
+          PY
+
+      - name: Preserve reversal state evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-high-vol-failed-breakout-reversal-v1
+          path: |
+            artifacts/gold_high_vol_failed_breakout_reversal_v1/state_result.json
+            artifacts/gold_high_vol_failed_breakout_reversal_v1/data/MANIFEST.json
+            artifacts/gold_high_vol_failed_breakout_reversal_v1/data/SOURCE_SHA256.txt
+          retention-days: 30
+          if-no-files-found: warn
