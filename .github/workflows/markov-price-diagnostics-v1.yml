@@ -1,0 +1,102 @@
+name: Markov Price Diagnostics v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "config/markov_price_diagnostics_v1.json"
+      - "src/orderflow_edge_lab/markov_price_diagnostics.py"
+      - "src/orderflow_edge_lab/cli/markov_price_diagnostics.py"
+      - "tests/test_markov_price_diagnostics.py"
+      - ".github/workflows/markov-price-diagnostics-v1.yml"
+  schedule:
+    - cron: "25 */4 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: markov-price-diagnostics-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  diagnostics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run Markov unit tests
+        run: python -m unittest tests.test_markov_price_diagnostics -v
+      - name: Run frozen pre-freeze Markov diagnostics
+        run: |
+          mkdir -p artifacts/markov
+          python -m orderflow_edge_lab.cli.markov_price_diagnostics \
+            --config config/markov_price_diagnostics_v1.json \
+            --output artifacts/markov/report.json \
+            --source-dir artifacts/markov/source
+      - name: Build readable summary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = json.load(open('artifacts/markov/report.json', encoding='utf-8'))
+          lines = [
+              '# Markov Price Diagnostics v1',
+              '',
+              f"As of UTC: **{report['as_of_utc']}**",
+              '',
+              'Transition matrices are fitted on pre-freeze prices only. Post-freeze prices identify the current state but do not refit the chain.',
+              '',
+          ]
+          for candidate_id, candidate in report['candidates'].items():
+              lines += [f'## {candidate_id}', '', f"Interval: `{candidate['interval']}`", '']
+              if candidate['errors']:
+                  lines += ['Errors:', '```json', json.dumps(candidate['errors'], indent=2), '```', '']
+              lines += [
+                  '| Symbol | Current state | State count | Reliability | P(next +) | Mean next bps |',
+                  '|---|---|---:|---|---:|---:|',
+              ]
+              for symbol, item in candidate['symbols'].items():
+                  stats = item['conditional_next_return']
+                  p = stats['prob_next_positive']
+                  bps = stats['mean_next_return_bps']
+                  p_text = 'N/A' if p is None else f'{100*p:.1f}%'
+                  bps_text = 'N/A' if bps is None else f'{bps:+.2f}'
+                  lines.append(
+                      f"| {symbol} | {item['current_state']} | {item['current_state_transition_count']} | "
+                      f"{item['current_state_reliability']} | {p_text} | {bps_text} |"
+                  )
+              lines += ['', 'Diagnostic only. This report cannot change or promote any candidate.', '']
+          text = '\n'.join(lines) + '\n'
+          Path('artifacts/markov/SUMMARY.md').write_text(text, encoding='utf-8')
+          print(text)
+          PY
+          cat artifacts/markov/SUMMARY.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Enforce claim boundary
+        run: |
+          python - <<'PY'
+          import json
+          report=json.load(open('artifacts/markov/report.json', encoding='utf-8'))
+          claims=report['claims']
+          if not claims.get('diagnostic_only'):
+              raise SystemExit('Markov report lost diagnostic-only boundary')
+          if claims.get('candidate_specifications_modified'):
+              raise SystemExit('Markov report claims candidate modification')
+          if claims.get('verified_out_of_sample_edge') or claims.get('profitable_edge_established') or claims.get('live_order_transmission_supported'):
+              raise SystemExit('forbidden promotion claim in Markov diagnostics')
+          PY
+      - name: Preserve Markov diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: markov-price-diagnostics-v1
+          path: artifacts/markov/
+          retention-days: 14
+          if-no-files-found: warn
