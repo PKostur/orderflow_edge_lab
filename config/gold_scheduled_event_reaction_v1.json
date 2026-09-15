@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold_scheduled_event_reaction_v1",
+  "evidence_class": "retrospective_development_with_locked_temporal_validation_not_future_oos",
+  "motivation": "Gold/silver convergence, error-correction, adaptive-equilibrium, macro-conditioned and pair-regime lineages did not establish executable edge. This protocol moves to a structurally orthogonal mechanism: intraday XAUUSD reaction, continuation and reversal around scheduled U.S. CPI, Employment Situation and FOMC statement releases.",
+  "market_data": {
+    "repository": "tiumbj/M1_XAUUSD",
+    "commit": "f72f8fe278f88258123347b0c4ca893573ec67a9",
+    "file_pattern": "DAT_MT_XAUUSD_M1_{year}.csv",
+    "years": [2014,2015,2016,2017,2018,2019,2020,2021,2022,2023],
+    "format": "HistData MetaTrader M1: date,time,open,high,low,close,volume",
+    "price_semantics": "bid OHLC bars",
+    "source_timezone": "fixed EST UTC-05:00 with no daylight-saving adjustment",
+    "no_interpolation": true,
+    "duplicate_policy": "keep_last"
+  },
+  "event_sources": {
+    "cpi": {
+      "official_source": "https://www.bls.gov/bls/news-release/cpi.htm",
+      "release_time": "08:30 America/New_York",
+      "archive_link_pattern": "news.release/archives/cpi_MMDDYYYY.htm"
+    },
+    "employment_situation": {
+      "official_source": "https://www.bls.gov/bls/news-release/empsit.htm",
+      "release_time": "08:30 America/New_York",
+      "archive_link_pattern": "news.release/archives/empsit_MMDDYYYY.htm"
+    },
+    "fomc": {
+      "historical_year_pages_2014_2020": "https://www.federalreserve.gov/monetarypolicy/fomchistorical{year}.htm",
+      "calendar_2021_2023": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "scheduled_statement_time": "14:00 America/New_York",
+      "exclude_unscheduled": true,
+      "exclude_cancelled": true,
+      "exclude_notation_votes": true
+    },
+    "event_clock_conversion": "convert official America/New_York release timestamp to UTC, then to fixed UTC-05:00 HistData clock; this handles EDT/EST correctly without altering market data timestamps"
+  },
+  "periods": {
+    "development": {"start":"2014-01-01","end_exclusive":"2021-01-01"},
+    "locked_validation": {"start":"2021-01-01","end_exclusive":"2024-01-01","opened_during_development":false},
+    "retrospective_extension": {"start":"2024-01-01","end_exclusive":"2026-01-01","opened_during_development":false},
+    "future_shadow_earliest_utc": "2026-09-16T00:00:00Z"
+  },
+  "data_admission": {
+    "required_pre_event_minutes": 60,
+    "required_post_event_minutes": 90,
+    "maximum_missing_minutes_in_pre_window": 2,
+    "maximum_missing_minutes_in_first_60_post": 2,
+    "event_minute_bar_required": true,
+    "event_types_required_for_tournament": ["cpi","employment_situation","fomc"],
+    "minimum_admitted_development_events": {"cpi":70,"employment_situation":70,"fomc":40},
+    "manifest_must_be_frozen_before_strategy_scoring": true
+  },
+  "state_families": {
+    "impulse5_continuation": {
+      "signal_window_minutes": 5,
+      "direction": "sign of event-open to fifth-minute-close return",
+      "strength": "absolute signal return divided by pre-event 60-minute high-low range percentage"
+    },
+    "impulse5_reversal": {
+      "signal_window_minutes": 5,
+      "direction": "negative sign of event-open to fifth-minute-close return",
+      "strength": "absolute signal return divided by pre-event 60-minute high-low range percentage"
+    },
+    "range_breakout5_continuation": {
+      "signal_window_minutes": 5,
+      "eligibility": "fifth-minute close is above pre-event 60-minute high or below pre-event 60-minute low",
+      "direction": "direction of close breakout",
+      "strength": "distance of fifth-minute close beyond breached pre-event boundary divided by pre-event range"
+    },
+    "liquidity_sweep5_reversal": {
+      "signal_window_minutes": 5,
+      "eligibility": "first-five-minute high breaches pre-event high and fifth-minute close returns at/below it, or first-five-minute low breaches pre-event low and fifth-minute close returns at/above it; skip if both sides sweep",
+      "direction": "reversal away from swept side",
+      "strength": "maximum boundary overshoot divided by pre-event range"
+    }
+  },
+  "horizons_minutes": [15,30,60],
+  "state_first": {
+    "target": "uncosted signed open-to-open return from first tradable minute after completed signal window to frozen horizon exit",
+    "dependence_cluster": "calendar half-year within event type",
+    "minimum_events_per_fold": 3,
+    "minimum_scorable_folds": 8,
+    "minimum_total_events": {"impulse":45,"conditional":18},
+    "minimum_median_fold_spearman": 0.0,
+    "minimum_positive_fold_fraction": 0.60,
+    "sign_flip_epochs": 20000,
+    "sign_flip_seed": 20260915,
+    "maximum_bh_fdr_q": 0.10,
+    "multiple_testing_family": "all event-type x state-family x horizon hypotheses in this frozen protocol"
+  },
+  "execution": {
+    "signal_completion": "after the first five event minutes are fully observed",
+    "entry": "open of the next available one-minute bar after signal completion",
+    "exit": "open after 15, 30 or 60 frozen holding minutes",
+    "same_bar_fill": false,
+    "one_trade_per_event_per_cell": true,
+    "round_trip_all_in_cost_bps": [5.0,10.0,20.0],
+    "primary_cost_bps": 10.0,
+    "high_cost_bps": 20.0,
+    "cost_note": "M1 source contains bid bars but no contemporaneous ask; cost stress therefore represents spread plus slippage and must not be reduced after inspection"
+  },
+  "controls": {
+    "reversed_direction": true,
+    "same_clock_seven_calendar_days_prior_placebo": true,
+    "placebo_uses_identical_family_logic_and_horizon": true,
+    "minimum_placebo_coverage_fraction": 0.70,
+    "report_by_event_type_and_calendar_year": true
+  },
+  "economic_gate": {
+    "state_must_pass_before_economics_can_pass": true,
+    "minimum_trades": 20,
+    "minimum_primary_median_fold_net_bps": 0.0,
+    "minimum_primary_median_fold_pf": 1.10,
+    "minimum_primary_positive_fold_fraction": 0.60,
+    "minimum_high_cost_median_fold_net_bps": 0.0,
+    "minimum_overall_mean_primary_net_bps": 0.0,
+    "require_original_mean_gt_reversed_mean": true,
+    "require_original_mean_gt_placebo_mean": true,
+    "minimum_placebo_coverage_fraction": 0.70
+  },
+  "neighborhood_gate": {
+    "definition": "same event type and family; adjacent horizon is the only neighborhood dimension",
+    "minimum_supporting_neighbors": 1,
+    "supporter_requires": {
+      "state_bh_q_lte": 0.10,
+      "primary_median_fold_net_bps_gt": 0.0,
+      "primary_median_fold_pf_gt": 1.0,
+      "high_cost_median_fold_net_bps_gte": 0.0
+    }
+  },
+  "candidate_selection": {
+    "maximum_candidates": 3,
+    "locked_validation_may_open_only_after_separate_candidate_freeze_commit": true
+  },
+  "claims": {
+    "verified_future_oos": false,
+    "profitable_edge_established": false,
+    "leverage_authorized": false,
+    "live_enabled": false
+  }
+}
