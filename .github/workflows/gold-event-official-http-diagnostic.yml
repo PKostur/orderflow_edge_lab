@@ -1,0 +1,44 @@
+name: Gold Event Official HTTP Diagnostic
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/gold-scheduled-event-reaction-v1]
+    paths:
+      - ".github/workflows/gold-event-official-http-diagnostic.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Probe official sources
+        run: |
+          set +e
+          mkdir -p artifacts/gold_event_http_diag
+          ua='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/140.0 Safari/537.36'
+          urls=(
+            'https://www.bls.gov/bls/news-release/cpi.htm'
+            'https://www.bls.gov/bls/news-release/empsit.htm'
+            'https://www.federalreserve.gov/monetarypolicy/fomchistorical2019.htm'
+            'https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm'
+          )
+          i=0
+          : > artifacts/gold_event_http_diag/status.txt
+          for url in "${urls[@]}"; do
+            i=$((i+1))
+            code=$(curl -A "$ua" -L -sS --max-time 30 -o "artifacts/gold_event_http_diag/page_${i}.html" -w '%{http_code}' "$url")
+            bytes=$(wc -c < "artifacts/gold_event_http_diag/page_${i}.html" 2>/dev/null || echo 0)
+            echo "$i $code $bytes $url" | tee -a artifacts/gold_event_http_diag/status.txt
+          done
+          exit 0
+      - name: Preserve diagnostic
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-event-official-http-diagnostic
+          path: artifacts/gold_event_http_diag/
+          retention-days: 7
