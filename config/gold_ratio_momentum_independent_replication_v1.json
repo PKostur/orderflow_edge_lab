@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold-ratio-momentum-independent-replication-v1",
+  "frozen_at": "2026-09-14",
+  "parent_candidate": "gold_silver_ratio_momentum_126_z1_hold21_v2",
+  "parent_validation_head": "4e9930925c807573d4fb9c6458fe61ebb8a2d231",
+  "evidence_class": "cross_source_retrospective_replication_not_future_oos",
+  "external_source": {
+    "repository": "simom1/XAUUSD-history",
+    "commit": "bda79c6c5ce09a5b488d4cd2c20fcd19bdd2ed3a",
+    "gold_path": "Gold-Cash/XAUUSD/XAUUSD_D1_2010_2026.csv",
+    "silver_path": "Silver-Cash/XAGUSD/XAGUSD_D1.csv",
+    "instrument_semantics": "MT5 cash XAUUSD and XAGUSD daily bars from one independent public data family"
+  },
+  "candidate": {
+    "ratio": "gold_close / silver_close",
+    "rolling_z_window_trading_days": 126,
+    "activation_abs_z_gte": 1.0,
+    "mode": "gold_relative_momentum",
+    "direction": "long_gold_if_z_positive_short_gold_if_z_negative",
+    "hold_trading_bars": 21,
+    "signal": "completed_daily_close",
+    "entry": "next_common_daily_open",
+    "exit": "common_daily_open_after_21_trading_bars",
+    "one_active_trade": true,
+    "same_bar_fill_forbidden": true,
+    "round_trip_cost_bps": [2, 5, 10],
+    "primary_cost_bps": 5,
+    "dependence_cluster_calendar_days": 126
+  },
+  "periods": {
+    "source_robustness": {
+      "start": "2010-01-01",
+      "end_exclusive": "2024-01-01",
+      "purpose": "same broad historical era as development plus locked validation, but different cash instrument/feed"
+    },
+    "historical_extension": {
+      "start": "2024-01-01",
+      "end_exclusive": "2026-09-15",
+      "purpose": "later retrospective extension; explicitly not future OOS"
+    }
+  },
+  "primary_source_robustness_gate": {
+    "minimum_state_folds": 20,
+    "median_state_spearman_gt": 0,
+    "positive_state_fold_fraction_gte": 0.60,
+    "minimum_trades": 60,
+    "primary_median_fold_net_bps_gt": 0,
+    "primary_median_fold_pf_gt": 1,
+    "primary_positive_economic_fold_fraction_gte": 0.60,
+    "high_cost_median_fold_net_bps_gte": 0,
+    "original_mean_net_gt_reversed_mean_net": true,
+    "risk_adjusted_gt_equal_timing_long_gold": true,
+    "minimum_long_trades": 15,
+    "minimum_short_trades": 10,
+    "long_mean_net_bps_gt": 0,
+    "short_mean_net_bps_gt": 0
+  },
+  "extension_consistency_gate": {
+    "minimum_trades": 8,
+    "primary_mean_net_bps_gt": 0,
+    "high_cost_mean_net_bps_gte": 0,
+    "original_mean_net_gt_reversed_mean_net": true,
+    "both_directions_reported": true
+  },
+  "promotion_boundary": {
+    "replication_pass_requires_both_period_gates": true,
+    "future_shadow_may_start_only_after_replication_pass": true,
+    "future_shadow_start_not_before": "2026-09-15T00:00:00Z",
+    "leverage_authorized": false,
+    "verified_oos": false,
+    "profitable_edge_established": false,
+    "live_enabled": false
+  },
+  "no_retuning": true
+}

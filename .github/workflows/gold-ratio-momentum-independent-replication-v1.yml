@@ -1,0 +1,87 @@
+name: Gold Ratio Momentum Independent Replication v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/gold-ratio-momentum-independent-replication-v1]
+    paths:
+      - "config/gold_ratio_momentum_independent_replication_v1.json"
+      - "config/gold_ratio_momentum_independent_replication_v1_1_implementation.json"
+      - "scripts/run_gold_ratio_momentum_independent_replication_v1.py"
+      - ".github/workflows/gold-ratio-momentum-independent-replication-v1.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gold-ratio-momentum-independent-replication-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  replicate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install runtime
+        run: python -m pip install pandas numpy
+      - name: Fetch pinned independent MT5 cash data
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/gold_ratio_momentum_independent_replication/data
+          base="https://raw.githubusercontent.com/simom1/XAUUSD-history/bda79c6c5ce09a5b488d4cd2c20fcd19bdd2ed3a"
+          curl --fail --location --retry 3 --retry-delay 2 \
+            "$base/Gold-Cash/XAUUSD/XAUUSD_D1_2010_2026.csv" \
+            -o artifacts/gold_ratio_momentum_independent_replication/data/XAUUSD_D1.csv
+          curl --fail --location --retry 3 --retry-delay 2 \
+            "$base/Silver-Cash/XAGUSD/XAGUSD_D1.csv" \
+            -o artifacts/gold_ratio_momentum_independent_replication/data/XAGUSD_D1.csv
+          sha256sum artifacts/gold_ratio_momentum_independent_replication/data/*.csv \
+            > artifacts/gold_ratio_momentum_independent_replication/data/SHA256SUMS.txt
+          head -n 3 artifacts/gold_ratio_momentum_independent_replication/data/XAUUSD_D1.csv
+          head -n 3 artifacts/gold_ratio_momentum_independent_replication/data/XAGUSD_D1.csv
+      - name: Run exact frozen candidate
+        run: |
+          python scripts/run_gold_ratio_momentum_independent_replication_v1.py \
+            --config config/gold_ratio_momentum_independent_replication_v1.json \
+            --gold artifacts/gold_ratio_momentum_independent_replication/data/XAUUSD_D1.csv \
+            --silver artifacts/gold_ratio_momentum_independent_replication/data/XAGUSD_D1.csv \
+            --output artifacts/gold_ratio_momentum_independent_replication/result.json
+      - name: Guard evidence boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/gold_ratio_momentum_independent_replication/result.json'))
+          assert r['evidence_class'] == 'cross_source_retrospective_replication_not_future_oos'
+          assert r['leverage_tested'] is False
+          assert r['claims']['verified_oos'] is False
+          assert r['claims']['profitable_edge_established'] is False
+          assert r['claims']['live_enabled'] is False
+          assert r['candidate']['rolling_z_window_trading_days'] == 126
+          assert r['candidate']['activation_abs_z_gte'] == 1.0
+          assert r['candidate']['hold_trading_bars'] == 21
+          PY
+      - name: Deterministic multi-agent guard
+        run: |
+          if command -v orderflow-multi-agent >/dev/null 2>&1; then
+            orderflow-multi-agent --output artifacts/gold_ratio_momentum_independent_replication/multi_agent_report.json
+            python - <<'PY'
+          import json
+          r=json.load(open('artifacts/gold_ratio_momentum_independent_replication/multi_agent_report.json'))
+          if r['release_manager']['status'] != 'reviewable':
+              raise SystemExit(r['release_manager']['next_actions'])
+          PY
+          else
+            echo '{"status":"not_installed_in_minimal_replication_runtime"}' > artifacts/gold_ratio_momentum_independent_replication/multi_agent_report.json
+          fi
+      - name: Preserve evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gold-ratio-momentum-independent-replication-v1
+          path: artifacts/gold_ratio_momentum_independent_replication/
+          retention-days: 30
+          if-no-files-found: warn
