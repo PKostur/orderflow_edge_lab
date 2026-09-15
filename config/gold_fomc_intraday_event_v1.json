@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "protocol_name": "gold_fomc_intraday_event_v1",
+  "evidence_class": "post_observation_retrospective_event_development_with_locked_internal_validation_not_future_oos",
+  "motivation": "Prior gold daily macro and gold/silver relative-value mechanisms failed frozen promotion gates. This protocol changes information structure to scheduled discrete FOMC policy statements and tests post-release XAUUSD price discovery using only information observable before entry.",
+  "sources": {
+    "event_calendar_path": "data/fomc_regular_decision_dates_2018_2023.csv",
+    "event_authority": "Federal Reserve FOMC historical and current meeting calendars",
+    "statement_release_time": "14:00 America/New_York",
+    "gold_repository": "simom1/XAUUSD-history",
+    "gold_commit": "bda79c6c5ce09a5b488d4cd2c20fcd19bdd2ed3a",
+    "gold_path": "Gold-Cash/XAUUSD/XAUUSD_M15_2010_2026.csv",
+    "gold_timestamp_semantics": "UTC bar-open timestamps"
+  },
+  "event_universe": {
+    "development_years": [2018, 2019, 2020, 2021, 2022],
+    "locked_internal_validation_years": [2023],
+    "development_regular_decisions_expected": 39,
+    "validation_regular_decisions_expected": 8,
+    "scheduled_regular_meetings_only": true,
+    "exclude_unscheduled_emergency_meetings": true,
+    "exclude_notation_votes": true,
+    "exclude_cancelled_meetings": true,
+    "event_independence_unit": "one regular FOMC policy decision"
+  },
+  "data_admission": {
+    "m15_required": true,
+    "utc_timestamp_required": true,
+    "positive_ohlc_required": true,
+    "minimum_tick_volume_per_required_bar": 1,
+    "required_exact_bars": ["release_bar", "entry_bar", "exit_bar"],
+    "no_bar_interpolation": true,
+    "no_nearest_bar_substitution": true,
+    "minimum_development_events_with_complete_bars": 34
+  },
+  "state_signal": {
+    "release_bar": "14:00-14:15 America/New_York M15 bar",
+    "release_impulse": "log(release_bar_close / release_bar_open)",
+    "pre_event_volatility": "sample standard deviation of close-to-close M15 log returns over the 32 completed bars immediately preceding the 14:00 release bar",
+    "minimum_pre_event_bars": 32,
+    "normalized_impulse": "release_impulse / pre_event_volatility",
+    "absolute_thresholds": [0.75, 1.25],
+    "modes": ["continuation", "reversal"],
+    "forward_horizons_minutes_after_entry": [60, 120],
+    "unique_hypotheses": 8
+  },
+  "execution": {
+    "signal_available": "14:15 America/New_York after release bar closes",
+    "entry": "14:15 America/New_York exact M15 open",
+    "exits": {
+      "60": "15:15 America/New_York exact M15 open",
+      "120": "16:15 America/New_York exact M15 open"
+    },
+    "same_release_bar_fill": false,
+    "one_trade_per_meeting_per_hypothesis": true,
+    "round_trip_cost_bps": [3.0, 5.0, 10.0],
+    "primary_cost_bps": 5.0,
+    "high_cost_bps": 10.0,
+    "press_conference_note": "Any press conference beginning after the statement release is part of the post-entry event path and is not used as pre-entry information."
+  },
+  "state_first": {
+    "predictor": "continuation uses signed normalized release impulse; reversal uses its negative",
+    "target": "uncosted XAUUSD return from 14:15 entry open to the frozen exit open",
+    "permutation_unit": "FOMC meeting event",
+    "permutation_method": "shuffle future event targets across admissible meeting events within each frozen hypothesis",
+    "permutation_epochs": 50000,
+    "permutation_seed": 20260915,
+    "minimum_events": 12,
+    "minimum_calendar_years_represented": 4,
+    "minimum_median_spearman": 0.0,
+    "minimum_positive_calendar_year_fraction": 0.60,
+    "maximum_bh_fdr_q": 0.10,
+    "fdr_family": "all 8 predeclared state hypotheses"
+  },
+  "economic_gate": {
+    "minimum_trades": 12,
+    "minimum_positive_impulse_side_trades": 4,
+    "minimum_negative_impulse_side_trades": 4,
+    "minimum_primary_mean_net_bps": 0.0,
+    "minimum_primary_profit_factor": 1.10,
+    "minimum_positive_calendar_year_fraction": 0.60,
+    "minimum_high_cost_mean_net_bps": 0.0,
+    "require_original_mean_gt_reversed_mean": true,
+    "require_primary_risk_adjusted_gt_equal_timing_long_gold": true,
+    "require_positive_mean_primary_net_both_trade_directions": true
+  },
+  "controls": {
+    "reversed_direction": true,
+    "equal_timing_long_gold": true,
+    "report_positive_and_negative_release_impulse_subsets": true,
+    "report_year_by_year_results": true,
+    "report_threshold_event_counts": true
+  },
+  "candidate_selection": {
+    "maximum_candidates": 1,
+    "ranking": [
+      "lower state BH-FDR q",
+      "higher state Spearman",
+      "higher primary mean net bps",
+      "lexicographic hypothesis id"
+    ],
+    "locked_validation_may_open_only_after_separate_candidate_freeze_commit": true
+  },
+  "validation_policy": {
+    "locked_internal_validation_year": 2023,
+    "validation_is_retrospective_not_future_oos": true,
+    "no_parameter_changes_after_development": true,
+    "no_leverage_before_validation_pass": true
+  },
+  "claims": {
+    "verified_future_oos": false,
+    "profitable_edge_established": false,
+    "leverage_authorized": false,
+    "live_enabled": false
+  }
+}
