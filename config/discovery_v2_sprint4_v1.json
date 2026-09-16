@@ -1,0 +1,113 @@
+{
+  "protocol": "discovery_v2_sprint4_v1",
+  "status": "FROZEN_BEFORE_MARKET_RESULTS",
+  "frozen_at_utc": "2026-09-16T16:00:00Z",
+  "purpose": "Falsify three economically distinct mechanisms while leaving every frozen candidate and every failed prior family unchanged.",
+  "prior_family_exclusions": [
+    "residual momentum variants",
+    "volume-confirmed momentum variants",
+    "funding carry/reversal variants",
+    "Sprint 1 dispersion momentum",
+    "Sprint 1 BTC-residual reversal",
+    "Sprint 2 intraday skewness rescue variants"
+  ],
+  "data": {
+    "venue": "MEXC perpetuals",
+    "development_start_utc": "2026-01-01T00:00:00Z",
+    "development_end_utc_exclusive": "2026-09-12T00:00:00Z",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "actual_public_funding_required": true,
+    "survivorship_warning": "Fixed present liquid universe; historical results do not remove survivorship risk."
+  },
+  "execution": {
+    "gross_exposure": 1.0,
+    "intended_net_exposure": 0.0,
+    "transaction_cost_bps_per_side_on_turnover": 10.0,
+    "cost_multipliers": [1.0, 1.5, 2.0],
+    "signal_on_completed_data_only": true,
+    "execution": "next available UTC daily open after signal",
+    "hold_days": 1,
+    "leverage": 1.0,
+    "terminal_liquidation_for_D0_comparability": true
+  },
+  "families": {
+    "volatility_compression_breakout": {
+      "hypothesis": "Directional moves that emerge while a symbol's recent realized volatility is compressed relative to its own prior state contain next-day continuation information.",
+      "timeframe": "1d",
+      "recent_vol_days": 5,
+      "reference_vol_days": 20,
+      "compression_ratio_threshold_variants": [0.60, 0.75, 0.90, 1.05],
+      "common_comparison_warmup_days": 25,
+      "compression_ratio": "sample std of completed close-to-close returns over t-4..t divided by sample std over t-24..t-5",
+      "score": "completed signal-day close-to-close return if compression_ratio is below the frozen threshold; otherwise unavailable",
+      "portfolio": "if at least four symbols are active, long the two highest scores and short the two lowest scores at 25% absolute weight each; otherwise flat",
+      "principal_control": "same active set and exact reversed direction"
+    },
+    "liquidity_range_shock_reversal": {
+      "hypothesis": "Large completed open-to-close directional moves accompanied by unusually wide true range proxy temporary liquidity exhaustion and reverse on the next daily open-to-open period.",
+      "timeframe": "1d",
+      "range_baseline_days_variants": [10, 20, 30, 45],
+      "common_comparison_warmup_days": 45,
+      "true_range": "max(high-low, abs(high-prior_close), abs(low-prior_close)) on the completed signal day",
+      "score": "completed open-to-close return multiplied by current true range divided by median true range of the strictly prior N completed days",
+      "direction": "long the two lowest scores and short the two highest scores",
+      "portfolio": "25% absolute weight per selected leg, 1x gross, zero intended net",
+      "principal_control": "exact momentum direction, long highest two and short lowest two"
+    },
+    "fixed_pair_relative_value_reversion": {
+      "hypothesis": "Large deviations in fixed economically related crypto price ratios partially mean-revert over the next daily open-to-open period.",
+      "timeframe": "1d",
+      "fixed_pairs": [
+        ["ETH_USDT", "SOL_USDT"],
+        ["ETH_USDT", "BNB_USDT"],
+        ["SOL_USDT", "SUI_USDT"],
+        ["ETH_USDT", "LINK_USDT"],
+        ["ETH_USDT", "ENA_USDT"],
+        ["XRP_USDT", "ADA_USDT"],
+        ["XRP_USDT", "DOGE_USDT"]
+      ],
+      "pair_selection_rule": "Pairs are frozen before results and may not be replaced, removed, reordered by performance, or selected by observed sample correlation.",
+      "ratio_lookback_days_variants": [10, 20, 30, 45],
+      "common_comparison_warmup_days": 45,
+      "entry_abs_z_threshold": 1.5,
+      "score": "z-score of completed close log-price ratio versus strictly prior N completed ratio observations, excluding the signal-day ratio from its own mean and std",
+      "direction": "for positive z short first leg and long second; for negative z long first leg and short second",
+      "portfolio": "equal gross allocation across active pairs, each active pair internally dollar-neutral; aggregate symbol weights renormalized to 1x gross",
+      "principal_control": "exact reversed pair direction using the same active pair set"
+    }
+  },
+  "family_falsification_gate": {
+    "minimum_baseline_positive_variants": 3,
+    "minimum_adjacent_variants_positive_at_1_5x_cost": 2,
+    "bootstrap_95pct_lower_bound_must_be_positive_for_selected_variant": true,
+    "minimum_candidate_minus_reversed_control_mean_bps": 5.0,
+    "minimum_leave_one_symbol_out_mean_bps": 0.0,
+    "maximum_best_symbol_positive_pnl_share": 0.50,
+    "maximum_best_calendar_month_positive_pnl_share": 0.50,
+    "maximum_top5_positive_period_share": 0.50,
+    "selection_if_family_passes": "Among variants belonging to an adjacent 1.5x-cost-positive neighborhood, select the upper median parameter; never select by maximum PnL."
+  },
+  "trial_accounting": {
+    "directional_candidate_variants": 12,
+    "all_12_variants_count": true,
+    "all_reversed_controls_count_as_controls": true,
+    "no_grid_expansion_after_results": true,
+    "failed_family_closes": true,
+    "positive_control_can_only_generate_a_new_candidate_id": true,
+    "family_variants_share_common_max_lookback_warmup_for_selection_diagnostics": true,
+    "no_regime_router_selection_inside_this_sprint": true
+  },
+  "evidence_boundary": {
+    "this_sprint_is": "D0 hypothesis falsification",
+    "same_period_cross_symbol_is_independent_validation": false,
+    "positive_sprint_result_establishes_edge": false,
+    "positive_sprint_result_only_allows": "new frozen candidate followed by independent-engine reproduction and D2/D3/D4 evidence"
+  },
+  "claims": {
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "leverage_supported": false,
+    "existing_candidates_modified": false,
+    "failed_prior_family_rescued": false
+  }
+}
