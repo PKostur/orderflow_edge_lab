@@ -1,0 +1,87 @@
+{
+  "protocol": "discovery_v2_sprint6_v1",
+  "status": "FROZEN_BEFORE_MARKET_RESULTS",
+  "frozen_at_utc": "2026-09-16T16:29:00Z",
+  "purpose": "Falsify three new OHLC-only cross-sectional mechanisms distinct from Discovery v2 Sprints 1-5.",
+  "data": {
+    "venue": "MEXC perpetuals",
+    "development_start_utc": "2026-01-01T00:00:00Z",
+    "development_end_utc_exclusive": "2026-09-12T00:00:00Z",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "actual_public_funding_required": true,
+    "survivorship_warning": "Fixed present liquid universe; historical results do not remove survivorship risk."
+  },
+  "execution": {
+    "gross_exposure": 1.0,
+    "intended_net_exposure": 0.0,
+    "transaction_cost_bps_per_side_on_turnover": 10.0,
+    "cost_multipliers": [1.0, 1.5, 2.0],
+    "signal_on_completed_data_only": true,
+    "execution": "next UTC daily open after signal",
+    "hold_days": 1,
+    "leverage": 1.0,
+    "terminal_liquidation_for_D0_comparability": true
+  },
+  "families": {
+    "wick_rejection_followthrough": {
+      "hypothesis": "Persistent lower-wick rejection versus upper-wick rejection on completed daily candles contains directional follow-through information into the next daily period.",
+      "lookback_days_variants": [1, 3, 5, 10],
+      "common_comparison_warmup_days": 10,
+      "daily_score": "(lower_wick - upper_wick) / (high-low), where lower_wick=min(open,close)-low and upper_wick=high-max(open,close)",
+      "score": "mean daily_score over the most recent N completed bars ending at t",
+      "direction": "long highest two scores and short lowest two scores",
+      "principal_control": "exact reversed direction"
+    },
+    "return_efficiency_continuation": {
+      "hypothesis": "Assets whose multi-day net move is large relative to total path length are in cleaner directional trends and exhibit next-day continuation.",
+      "lookback_days_variants": [5, 10, 20, 40],
+      "common_comparison_warmup_days": 40,
+      "score": "sum of completed close-to-close returns over N bars divided by sum of absolute completed close-to-close returns over the same N bars",
+      "direction": "long highest two scores and short lowest two scores",
+      "principal_control": "exact reversed direction"
+    },
+    "realized_semivariance_balance": {
+      "hypothesis": "Persistent asymmetry between positive and negative realized squared returns captures directional pressure beyond total volatility and predicts next-day relative continuation.",
+      "lookback_days_variants": [5, 10, 20, 40],
+      "common_comparison_warmup_days": 40,
+      "score": "(sum positive_return_squared - sum negative_return_squared) / sum all_return_squared over the most recent N completed returns",
+      "direction": "long highest two scores and short lowest two scores",
+      "principal_control": "exact reversed direction"
+    }
+  },
+  "family_falsification_gate": {
+    "minimum_baseline_positive_variants": 3,
+    "minimum_adjacent_variants_positive_at_1_5x_cost": 2,
+    "bootstrap_95pct_lower_bound_must_be_positive_for_selected_variant": true,
+    "minimum_candidate_minus_reversed_control_mean_bps": 5.0,
+    "minimum_leave_one_symbol_out_mean_bps": 0.0,
+    "maximum_best_symbol_positive_pnl_share": 0.50,
+    "maximum_best_calendar_month_positive_pnl_share": 0.50,
+    "maximum_top5_positive_period_share": 0.50,
+    "selection_if_family_passes": "Among variants belonging to an adjacent 1.5x-cost-positive neighborhood, select the upper median parameter; never select by maximum PnL."
+  },
+  "trial_accounting": {
+    "directional_candidate_variants_added_this_sprint": 12,
+    "all_12_variants_count": true,
+    "all_reversed_controls_count_as_controls": true,
+    "no_grid_expansion_after_results": true,
+    "failed_family_closes": true,
+    "positive_control_can_only_generate_a_new_candidate_id": true,
+    "family_variants_share_common_max_lookback_warmup_for_selection_diagnostics": true,
+    "sequential_discovery_debt_acknowledged": true,
+    "no_prior_sprint_failure_or_success_reduces_this_sprints_thresholds": true,
+    "no_regime_router_selection_inside_this_sprint": true
+  },
+  "evidence_boundary": {
+    "this_sprint_is": "D0 hypothesis falsification",
+    "positive_sprint_result_establishes_edge": false,
+    "positive_sprint_result_only_allows": "new frozen candidate followed by independent reproduction, different-source D2, non-overlapping temporal D3 and prospective D4"
+  },
+  "claims": {
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "leverage_supported": false,
+    "existing_candidates_modified": false,
+    "failed_prior_family_rescued": false
+  }
+}
