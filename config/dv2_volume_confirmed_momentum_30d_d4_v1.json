@@ -1,0 +1,43 @@
+{
+  "shadow_id": "dv2_volume_confirmed_momentum_30d_d4_v1",
+  "status": "FROZEN_BEFORE_FORWARD_START",
+  "frozen_at_utc": "2026-09-16T15:35:00Z",
+  "candidate_id": "dv2_volume_confirmed_momentum_30d_v1",
+  "candidate_freeze_commit": "b2c74be00fdebb78090f972b43a0ea480619c8d6",
+  "forward_start_utc": "2026-09-17T00:00:00Z",
+  "review_after_completed_portfolio_periods": 30,
+  "data": {
+    "venue": "MEXC perpetuals",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "history_start_utc": "2026-01-01T00:00:00Z",
+    "pre_start_data_usage": "warm-up and signal state only; never forward PnL",
+    "actual_public_funding_required": true
+  },
+  "rule": {
+    "volume_baseline_days": 30,
+    "score": "completed one-day close-to-close return multiplied by completed-day volume divided by median volume of the strictly prior 30 completed daily bars",
+    "portfolio": "long highest two +25% each; short lowest two -25% each",
+    "execution": "next UTC daily open",
+    "gross_exposure": 1.0,
+    "intended_net_exposure": 0.0,
+    "transaction_cost_bps_per_side_on_actual_turnover": 10.0,
+    "actual_realized_funding": true,
+    "leverage": 1.0
+  },
+  "forward_accounting": {
+    "flat_at_forward_start": true,
+    "no_pre_start_pnl": true,
+    "no_artificial_terminal_liquidation": true,
+    "completed_periods_only": true,
+    "previous_completed_forward_observations_immutable": true,
+    "first_forward_position_may_only_open_at_or_after_forward_start": true,
+    "review_gate_cannot_be_evaluated_before_30_completed_periods": true
+  },
+  "claims": {
+    "shadow_only": true,
+    "live_order_transmission_supported": false,
+    "persistent_edge_established": false,
+    "leverage_supported": false,
+    "retuning_allowed": false
+  }
+}
