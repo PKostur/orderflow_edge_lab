@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "protocol_name": "discovery-v2-execution-calibration-v1",
+  "status": "execution_calibration_only",
+  "frozen_at_utc": "2026-09-16T11:31:00Z",
+  "candidate_id": "mexc_8h_ema24_96_atr025_v1",
+  "parent_signal_calibration": "discovery-v2-engine-calibration-v1",
+  "purpose": "Verify next-bar-open order timing, fills, reversals, net position state and gross PnL path in an independent event-driven engine after exact multi-engine signal parity.",
+  "data": {
+    "venue": "MEXC Futures",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "interval": "8h",
+    "interval_hours": 8,
+    "start_utc": "2026-07-01T00:00:00Z",
+    "end_exclusive_utc": "2026-09-12T00:00:00Z",
+    "same_source_manifest_as_signal_calibration_required": true
+  },
+  "strategy": {
+    "fast_ema": 24,
+    "slow_ema": 96,
+    "atr_period": 14,
+    "min_atr_spread": 0.25,
+    "signal": "long if (EMA24-EMA96)/ATR14 > 0.25; short if < -0.25; otherwise flat",
+    "signal_information_time": "8h bar close",
+    "execution": "next 8h open",
+    "target_units": 1
+  },
+  "nautilus_execution_fixture": {
+    "engine": "NautilusTrader BacktestEngine 2.x",
+    "instrument_type": "CryptoPerpetual",
+    "oms_type": "NETTING",
+    "account_type": "MARGIN",
+    "gross_fee_rate": 0.0,
+    "bar_execution": false,
+    "signal_to_exchange_latency_nanos": 1,
+    "next_open_quote_offset_nanos": 1,
+    "next_open_quote_spread_bps": 0.0,
+    "explanation": "Calibration fixture only: completed bars are timestamped at interval close; target-changing market orders are delayed by 1 ns; a zero-spread quote at the next bar open arrives 1 ns after the close and releases the order against that exact open. Realistic cost/spread/slippage stress is a later evaluation layer."
+  },
+  "parity_gate": {
+    "fill_count_must_match_expected": true,
+    "fill_side_must_match_expected": true,
+    "fill_quantity_must_match_expected": true,
+    "fill_price_absolute_tolerance": 1e-7,
+    "fill_timestamp_tolerance_nanos": 0,
+    "final_net_target_must_match": true,
+    "gross_realized_pnl_absolute_tolerance_quote": 0.0001,
+    "failure_blocks_discovery_v2_execution_calibration": true
+  },
+  "claims": {
+    "synthetic_zero_spread_quotes_are_market_realism": false,
+    "execution_calibration_is_strategy_edge_evidence": false,
+    "may_modify_existing_frozen_candidates": false,
+    "may_enable_live_execution": false
+  }
+}
