@@ -1,0 +1,159 @@
+{
+  "protocol": "discovery_v2_sprint12_meta_selection_v1",
+  "status": "FROZEN_BEFORE_MARKET_RESULTS",
+  "frozen_at_utc": "2026-09-16T18:16:00Z",
+  "purpose": "Test whether a causal walk-forward meta-selector can identify which already-defined primary setups are worth taking, while explicitly allowing PASS/cash decisions.",
+  "method_change": {
+    "primary_rules_unchanged": true,
+    "selector_unit": "one proposed portfolio setup for one next-open to next-open holding period",
+    "selector_action": ["TRADE", "PASS"],
+    "pass_state": "100% cash",
+    "no_hindsight_filtering": true,
+    "all_features_known_before_entry": true,
+    "all_training_labels_strictly_prior_to_current_setup": true,
+    "one_model_specification_only": true,
+    "one_acceptance_threshold_only": true,
+    "no_threshold_or_hyperparameter_grid": true,
+    "failed_prior_candidate_ids_rescued": false,
+    "new_candidate_ids_required": true
+  },
+  "data": {
+    "venue": "MEXC perpetuals",
+    "development_start_utc": "2026-01-01T00:00:00Z",
+    "development_end_utc_exclusive": "2026-09-12T00:00:00Z",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "actual_public_funding_required": true,
+    "no_2025_data_for_discovery": true,
+    "survivorship_warning": "Fixed present liquid universe; historical results do not remove survivorship risk."
+  },
+  "execution": {
+    "gross_exposure_when_trade": 1.0,
+    "intended_net_exposure_when_trade": 0.0,
+    "gross_exposure_when_pass": 0.0,
+    "transaction_cost_bps_per_side_on_actual_turnover": 10.0,
+    "cost_multipliers": [1.0, 1.5, 2.0],
+    "execution": "next UTC daily open after completed signal day",
+    "holding_period": "one day open-to-open",
+    "rebalance": "daily including transitions to and from cash",
+    "leverage": 1.0,
+    "terminal_liquidation_for_D0_comparability": true
+  },
+  "primary_setup_generators": {
+    "meta_trend_acceleration_5d": {
+      "provenance": "New meta-selection hypothesis using the unchanged Sprint 11 ungated trend-acceleration parent; Sprint 7/8/11 IDs remain closed.",
+      "score": "sum of the most recent 5 completed close-to-close returns minus the preceding non-overlapping 5 completed returns",
+      "direction": "long highest two scores and short lowest two",
+      "primary_state_gate": "BTC Wilder ADX14 >= 25 at the completed signal close",
+      "primary_is_active": "state gate true and at least six finite cross-sectional scores",
+      "score_history_minimum_days": 10
+    },
+    "meta_low_skew_90d": {
+      "provenance": "New meta-selection hypothesis using the unchanged Sprint 11 ungated 90-day low-skew parent; Sprint 10/11 IDs remain closed.",
+      "score": "negative unbiased sample skewness of the most recent 90 completed close-to-close daily returns",
+      "direction": "long highest two negative-skew scores and short lowest two",
+      "primary_is_active": "at least six finite cross-sectional scores",
+      "score_history_minimum_days": 90
+    },
+    "meta_funding_carry_14d": {
+      "provenance": "New meta-selection hypothesis using the unchanged Sprint 11 ungated 14-day funding-carry parent; Sprint 9/11 IDs remain closed.",
+      "score": "negative realized funding burden per calendar day over the strictly prior 14 calendar days",
+      "direction": "long highest two carry scores and short lowest two",
+      "primary_is_active": "at least six finite cross-sectional scores",
+      "score_history_minimum_days": 14
+    }
+  },
+  "meta_features": {
+    "feature_set_is_identical_across_families": true,
+    "features": [
+      "primary_score_spread_p80_minus_p20",
+      "btc_completed_1d_return",
+      "btc_completed_5d_return",
+      "btc_wilder_adx14",
+      "btc_realized_volatility_20d_annualized",
+      "cross_sectional_median_realized_volatility_20d_annualized",
+      "cross_sectional_median_alt_btc_correlation_30d",
+      "cross_sectional_funding_burden_dispersion_prior_3_calendar_days"
+    ],
+    "feature_timing": "All price features end at the completed signal close. Funding feature uses settlements timestamped strictly before the execution open.",
+    "missing_feature_rule": "PASS; setup is not scored until all frozen features are finite."
+  },
+  "meta_label": {
+    "definition": "Whether the proposed primary setup would have produced positive standalone next-open to next-open net PnL after realized funding and a conservative full cash-to-position-to-cash round trip at baseline transaction costs.",
+    "round_trip_cost_bps": 20.0,
+    "why_standalone": "Makes each historical setup label independent of which neighboring setups the meta-selector happened to accept."
+  },
+  "walk_forward_model": {
+    "model": "scikit-learn Pipeline(StandardScaler, LogisticRegression)",
+    "penalty": "l2",
+    "C": 1.0,
+    "solver": "lbfgs",
+    "max_iter": 2000,
+    "class_weight": null,
+    "training_window_prior_primary_setups": 80,
+    "minimum_prior_primary_setups": 60,
+    "refit": "for every new eligible primary setup using only the latest 80 strictly prior labeled primary setups",
+    "accept_if_probability_positive_at_least": 0.60,
+    "insufficient_training_or_single_class_training": "PASS",
+    "random_state": 1212
+  },
+  "controls": {
+    "ungated_parent": "take every eligible primary setup unchanged",
+    "same_meta_decisions_reversed_primary": "apply the exact frozen TRADE/PASS decisions to the exact reversed cross-sectional primary ranking",
+    "anti_meta_diagnostic": "diagnostic only: take eligible setups with predicted positive probability <= 0.40",
+    "accepted_vs_rejected_setup_labels": "diagnostic comparison of standalone realized setup returns"
+  },
+  "d0_research_candidate_gate": {
+    "minimum_accepted_setups": 20,
+    "maximum_acceptance_fraction": 0.60,
+    "calendar_day_mean_net_bps_must_be_positive": true,
+    "calendar_day_mean_net_bps_at_1_5x_cost_must_be_positive": true,
+    "minimum_accepted_setup_mean_net_bps_including_exit_to_cash": 5.0,
+    "minimum_advantage_vs_ungated_parent_active_setup_mean_bps": 3.0,
+    "minimum_advantage_vs_reversed_primary_same_decisions_bps": 5.0,
+    "minimum_accepted_minus_rejected_standalone_label_mean_bps": 3.0,
+    "maximum_best_symbol_positive_pnl_share": 0.70,
+    "maximum_best_calendar_month_positive_pnl_share": 0.70,
+    "maximum_top5_positive_period_share": 0.60,
+    "bootstrap_95pct_lower_bound": "diagnostic_only_at_D0",
+    "minimum_leave_one_symbol_out": "diagnostic_only_at_D0",
+    "walk_forward_auc": "diagnostic_only_at_D0",
+    "selection": "Each family has one frozen meta model and one frozen 0.60 acceptance threshold. No alternative threshold, model, feature subset or hyperparameter may be substituted after results."
+  },
+  "post_freeze_validation_gate": {
+    "applies_from": "D2 and D3",
+    "baseline_positive": true,
+    "one_point_five_x_cost_positive": true,
+    "bootstrap_95pct_lower_bound_positive": true,
+    "minimum_leave_one_symbol_out_mean_bps": 0.0,
+    "maximum_best_symbol_positive_pnl_share": 0.50,
+    "maximum_best_calendar_month_positive_pnl_share": 0.50,
+    "maximum_top5_positive_period_share": 0.50,
+    "minimum_candidate_minus_reversed_control_mean_bps": 5.0,
+    "selector_must_still_beat_ungated_parent": true,
+    "d3_nonoverlapping_temporal_failure_terminal": true
+  },
+  "trial_accounting": {
+    "directional_candidate_rules_added_this_sprint": 3,
+    "one_model_specification_per_family": true,
+    "ungated_parents_are_controls_not_candidate_variants": true,
+    "reversed_rules_are_controls_not_candidate_variants": true,
+    "anti_meta_is_diagnostic_only": true,
+    "no_feature_selection_after_results": true,
+    "no_grid_expansion_after_results": true,
+    "sequential_discovery_debt_acknowledged": true,
+    "prior_sprints_are_hypothesis_generating_contamination": true
+  },
+  "evidence_boundary": {
+    "this_sprint_is": "D0 causal setup-level meta-selection discovery",
+    "research_candidate_means": "deserves freeze and hostile validation, not established edge",
+    "positive_D0_establishes_edge": false,
+    "positive_D0_supports_live": false,
+    "positive_D0_supports_leverage": false,
+    "required_path_after_D0": "candidate freeze -> independent reproduction -> D2 source replication -> D3 non-overlapping temporal -> D4 prospective shadow"
+  },
+  "claims": {
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
+}
