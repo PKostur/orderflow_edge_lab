@@ -1,0 +1,48 @@
+{
+  "protocol": "dv2_residual_momentum_beta45_d4_v1",
+  "candidate_id": "dv2_btc_residual_momentum_beta45_v1",
+  "status": "PROSPECTIVE_SHADOW",
+  "frozen_at_utc": "2026-09-16T12:45:00Z",
+  "forward_start_utc": "2026-09-17T00:00:00Z",
+  "source": "MEXC public perpetual candles and actual public funding",
+  "rule_source": "config/dv2_residual_momentum_beta45_v1.json",
+  "flat_start": true,
+  "no_pre_start_backfill": true,
+  "signal": {
+    "timeframe": "1d",
+    "beta_lookback_completed_days": 45,
+    "beta_model": "OLS with intercept on strictly prior completed daily returns",
+    "direction": "long highest two BTC-residual alts; short lowest two",
+    "weights": "+0.25,+0.25,-0.25,-0.25",
+    "gross_exposure": 1.0,
+    "net_exposure": 0.0,
+    "entry": "next daily open after completed signal day",
+    "holding_period_days": 1
+  },
+  "economics": {
+    "transaction_cost_bps_per_side_on_turnover": 10.0,
+    "baseline_round_trip_convention_bps": 20.0,
+    "actual_funding_required": true,
+    "leverage": 1.0
+  },
+  "review": {
+    "minimum_completed_portfolio_periods": 30,
+    "no_early_edge_verdict": true,
+    "report_baseline_1_5x_and_2x_costs": true,
+    "report_reversed_control": true,
+    "report_concentration": true,
+    "report_max_drawdown": true
+  },
+  "immutability": {
+    "no_parameter_changes": true,
+    "no_symbol_removal": true,
+    "no_cost_reduction": true,
+    "no_leverage_increase": true,
+    "no_live_execution": true
+  },
+  "claims": {
+    "paper_shadow_only": true,
+    "persistent_edge_established": false,
+    "live_eligible": false
+  }
+}
