@@ -113,10 +113,9 @@ def fetch_vision(symbol: str, start: str, end: str) -> tuple[pd.DataFrame, pd.Da
                 raise
             if not partial_month:
                 raise
-            d = max(month.date(), s.date()); last = (e - pd.Timedelta(days=1)).date()
-            while d <= last:
-                ds = d.isoformat(); du = f"{BASE}/daily/fundingRate/{native}/{native}-fundingRate-{ds}.zip"
-                db, do = _verified_zip(du); funding.append(_parse_funding(db)); objects.append(do); d += timedelta(days=1)
+            # Binance Vision does not publish current-month funding consistently.
+            # The D2 transport amendment supplies this tail from the connected Binance
+            # public /fapi/v1/fundingRate source and the runner merges it explicitly.
         month = nxt
     p = pd.concat(prices).sort_index(); p = p[~p.index.duplicated(keep="last")]
     f = pd.concat(funding).sort_index() if funding else pd.DataFrame(columns=["funding_rate"], index=pd.DatetimeIndex([], tz="UTC"))
