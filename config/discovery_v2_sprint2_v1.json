@@ -27,7 +27,7 @@
       "hypothesis": "An asset's mean return on the same weekday in prior weeks positively predicts its cross-sectional return on the next occurrence of that weekday.",
       "timeframe": "1d",
       "lookback_weeks_variants": [4, 8, 12, 16],
-      "score": "mean of strictly prior close-to-close returns having the same UTC weekday as the signal day",
+      "score": "at completed close t, identify the UTC weekday of execution day t+1 and average the asset's strictly prior close-to-close returns from the last N occurrences of that execution weekday",
       "direction": "long highest two scores; short lowest two",
       "rebalance_every_days": 1,
       "hold_days": 1,
