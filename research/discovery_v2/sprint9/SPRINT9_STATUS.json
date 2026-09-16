@@ -1,0 +1,37 @@
+{
+  "protocol": "discovery_v2_sprint9_v1",
+  "protocol_freeze_commit": "7892624b0bf0d544a5db9c5fa7559aa71fe545b6",
+  "execution_commit": "8a9a687364349bf2607ae6680171fc3f13b245a6",
+  "workflow_run_id": 35129060369,
+  "artifact_id": 10459923593,
+  "artifact_sha256": "f2ba51e6c2e420cd47e0257fa667c1dbbc60aab1578a705e8fc23f74617437de",
+  "status": "CLOSED_NO_PROMOTABLE_CANDIDATE",
+  "families": {
+    "adaptive_ar1_forecast": {"state": "FALSIFIED", "note": "All four variants negative after costs."},
+    "cross_sectional_low_btc_beta": {"state": "FALSIFIED", "note": "All four low-beta variants negative; reverse 20d positive but fails bootstrap and LOSO."},
+    "cross_sectional_funding_carry": {
+      "state": "FALSIFIED",
+      "stable_1_5x_neighborhood": ["funding_carry_14d"],
+      "notable_isolated_nonpromotable_cell": {
+        "variant": "funding_carry_14d",
+        "mean_net_bps": 23.582,
+        "mean_net_bps_1_5x_cost": 22.562,
+        "mean_net_bps_2x_cost": 21.543,
+        "bootstrap_95pct_lower_bps": 8.488,
+        "minimum_leave_one_symbol_out_mean_bps": 5.484,
+        "best_symbol_positive_pnl_share": 0.5359,
+        "best_calendar_month_positive_pnl_share": 0.4559,
+        "top5_positive_period_share": 0.2251
+      },
+      "failure_reason": "Only one isolated endpoint variant is positive at 1.5x costs; preregistered breadth and adjacent-neighborhood gates fail. Endpoint may not be promoted or used to expand the grid after results."
+    }
+  },
+  "claims": {
+    "persistent_edge_established": false,
+    "promotable_candidate_exists": false,
+    "isolated_14d_funding_cell_is_candidate": false,
+    "grid_expansion_around_14d_allowed": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
+}
