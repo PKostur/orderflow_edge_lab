@@ -1,0 +1,45 @@
+{
+  "shadow_id": "dv2_liquidity_range_shock_momentum_30d_d4_v1",
+  "status": "FROZEN_BEFORE_FORWARD_START",
+  "frozen_at_utc": "2026-09-16T16:31:00Z",
+  "candidate_id": "dv2_liquidity_range_shock_momentum_30d_v1",
+  "candidate_freeze_commit": "0b47cc8986da030057e7dd4047ce4a60d1efb89a",
+  "freeze_clarification_commit": "cf9d16937ef25f6cebb53c6724ff217a5ac47cf9",
+  "forward_start_utc": "2026-09-17T00:00:00Z",
+  "data": {
+    "venue": "MEXC perpetuals",
+    "source": "public MEXC futures klines and realized funding history",
+    "history_start_utc": "2026-01-01T00:00:00Z",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"]
+  },
+  "rule": {
+    "range_baseline_days": 30,
+    "true_range": "max(high_t-low_t, abs(high_t-close_t-1), abs(low_t-close_t-1))",
+    "score": "(close_t/open_t-1) * true_range_t / median(true_range[t-30:t])",
+    "portfolio": "long highest two +25% each; short lowest two -25% each",
+    "execution": "next UTC daily open",
+    "gross_exposure": 1.0,
+    "intended_net_exposure": 0.0,
+    "transaction_cost_bps_per_side_on_actual_turnover": 10.0,
+    "actual_realized_funding": true,
+    "leverage": 1.0,
+    "principal_control": "exact reversed direction"
+  },
+  "forward_accounting": {
+    "flat_at_forward_start": true,
+    "history_before_forward_start_is_warmup_only": true,
+    "no_pre_start_pnl": true,
+    "no_backfill_of_missed_forward_periods_from_pre_start_positions": true,
+    "no_artificial_terminal_liquidation": true,
+    "completed_periods_immutable": true
+  },
+  "review_after_completed_portfolio_periods": 30,
+  "cost_multipliers_reported": [1.0, 1.5, 2.0],
+  "claims": {
+    "paper_shadow_only": true,
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "leverage_supported": false,
+    "retuning_allowed": false
+  }
+}
