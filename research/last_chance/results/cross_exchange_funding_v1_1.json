@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "protocol_name": "last-chance-structural-edge-v1.1",
+  "status": "data_source_failure",
+  "loaded_symbols": [],
+  "load_failures": [
+    {
+      "symbol": "ADA_USDT",
+      "error_type": "HTTPError",
+      "message": "HTTP Error 403: Forbidden"
+    },
+    {
+      "symbol": "BNB_USDT",
+      "error_type": "HTTPError",
+      "message": "HTTP Error 403: Forbidden"
+    },
+    {
+      "symbol": "BTC_USDT",
+      "error_type": "HTTPError",
+      "message": "HTTP Error 403: Forbidden"
+    },
+    {
+      "symbol": "DOGE_USDT",
+      "error_type": "HTTPError",
+      "message": "HTTP Error 403: Forbidden"
+    },
+    {
+      "symbol": "ENA_USDT",
+      "error_type": "HTTPError",
+      "message": "HTTP Error 403: Forbidden"
+    },
+    {
+      "symbol": "ETH_USDT",
+      "error_type": "HTTPError",
+      "message": "HTTP Error 403: Forbidden"
+    },
+    {
+      "symbol": "LINK_USDT",
+      "error_type": "HTTPError",
+      "message": "HTTP Error 403: Forbidden"
+    },
+    {
+      "symbol": "SOL_USDT",
+      "error_type": "HTTPError",
+      "message": "HTTP Error 403: Forbidden"
+    },
+    {
+      "symbol": "SUI_USDT",
+      "error_type": "HTTPError",
+      "message": "HTTP Error 403: Forbidden"
+    },
+    {
+      "symbol": "XRP_USDT",
+      "error_type": "HTTPError",
+      "message": "HTTP Error 403: Forbidden"
+    }
+  ],
+  "claims": {
+    "research_only": true,
+    "parameters_frozen_before_results": true,
+    "economic_rule_changed_from_v1": false,
+    "modifies_existing_frozen_candidates": false,
+    "verified_persistent_edge": false,
+    "live_order_transmission_supported": false
+  }
+}
