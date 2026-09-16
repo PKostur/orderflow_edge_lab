@@ -1,0 +1,106 @@
+name: DV2 Volume Momentum Validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/dv2-volume-momentum-30d-v1]
+    paths:
+      - 'config/dv2_volume_confirmed_momentum_30d_v1.json'
+      - 'config/dv2_volume_confirmed_momentum_30d_d2_binance_v1.json'
+      - 'research/discovery_v2/volume_momentum_30d/**'
+      - 'src/orderflow_edge_lab/volume_momentum_candidate.py'
+      - 'src/orderflow_edge_lab/binance_vision.py'
+      - 'scripts/dv2_volume_momentum_independent_reproduction.py'
+      - 'scripts/dv2_volume_momentum_d2_binance.py'
+      - 'tests/test_volume_momentum_candidate.py'
+      - '.github/workflows/dv2-volume-momentum-validation.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dv2-volume-momentum-validation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research runtime
+        run: python -m pip install -e '.[research]' pytest
+      - name: Run pre-market candidate guardrails
+        run: python -m pytest -q tests/test_volume_momentum_candidate.py tests/test_discovery_v2_evaluation.py
+      - name: Verify frozen candidate and D2 claims boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c = json.loads(Path('config/dv2_volume_confirmed_momentum_30d_v1.json').read_text())
+          d = json.loads(Path('config/dv2_volume_confirmed_momentum_30d_d2_binance_v1.json').read_text())
+          assert c['status'] == 'FROZEN_CANDIDATE'
+          assert c['candidate_id'] == d['candidate_id']
+          assert c['rule']['volume_baseline_days'] == 30
+          assert c['rule']['leverage'] == 1.0
+          assert c['rule']['transaction_cost_bps_per_side_on_actual_turnover'] == 10.0
+          assert d['status'] == 'FROZEN_BEFORE_D2_RESULT'
+          assert d['data']['volume_semantic_locked_before_result'] is True
+          assert d['data']['no_alternative_quote_or_taker_volume_field_after_result'] is True
+          assert d['claims']['d2_pass_establishes_persistent_edge'] is False
+          assert d['claims']['live_execution_supported'] is False
+          assert d['claims']['retuning_allowed'] is False
+          print('Frozen candidate and D2 contract verified.')
+          PY
+      - name: Independent MEXC engine reproduction
+        run: |
+          python scripts/dv2_volume_momentum_independent_reproduction.py \
+            --output-dir research/discovery_v2/volume_momentum_30d/reproduction/results
+      - name: Enforce zero-disagreement reproduction
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path('research/discovery_v2/volume_momentum_30d/reproduction/results/REPRODUCTION_REPORT.json').read_text())
+          assert r['zero_disagreement_pass'] is True
+          assert r['claims']['independent_engine_replication_complete'] is True
+          assert r['claims']['persistent_edge_established'] is False
+          assert r['claims']['live_eligible'] is False
+          print(r)
+          PY
+      - name: Run locked Binance D2 replication
+        run: |
+          python scripts/dv2_volume_momentum_d2_binance.py \
+            --candidate config/dv2_volume_confirmed_momentum_30d_v1.json \
+            --contract config/dv2_volume_confirmed_momentum_30d_d2_binance_v1.json \
+            --evaluation config/discovery_v2_evaluation_v1.json \
+            --output-dir research/discovery_v2/volume_momentum_30d/d2_binance/results
+      - name: Enforce D2 claims boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path('research/discovery_v2/volume_momentum_30d/d2_binance/results/D2_REPORT.json').read_text())
+          assert r['state'] in {'D2_SOURCE_REPLICATED', 'D2_SOURCE_FAILED'}
+          assert r['claims']['d2_same_period_is_future_oos'] is False
+          assert r['claims']['persistent_edge_established'] is False
+          assert r['claims']['live_eligible'] is False
+          assert r['claims']['leverage_supported'] is False
+          print({'state': r['state'], 'hard_gates': r['hard_gates'], 'diagnostics': r['diagnostics']})
+          PY
+      - name: Upload immutable validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dv2-volume-momentum-validation-v1
+          path: |
+            config/dv2_volume_confirmed_momentum_30d_v1.json
+            config/dv2_volume_confirmed_momentum_30d_d2_binance_v1.json
+            research/discovery_v2/volume_momentum_30d/FREEZE_CLARIFICATION.md
+            research/discovery_v2/volume_momentum_30d/reproduction/results/
+            research/discovery_v2/volume_momentum_30d/d2_binance/results/
+          retention-days: 30
+          if-no-files-found: warn
