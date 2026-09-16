@@ -27,6 +27,7 @@
       "hypothesis": "An asset's mean return on the same weekday in prior weeks positively predicts its cross-sectional return on the next occurrence of that weekday.",
       "timeframe": "1d",
       "lookback_weeks_variants": [4, 8, 12, 16],
+      "common_comparison_warmup_weeks": 16,
       "score": "at completed close t, identify the UTC weekday of execution day t+1 and average the asset's strictly prior close-to-close returns from the last N occurrences of that execution weekday",
       "direction": "long highest two scores; short lowest two",
       "rebalance_every_days": 1,
@@ -37,6 +38,7 @@
       "hypothesis": "After removing BTC market exposure, lower residual volatility earns higher subsequent cross-sectional return than higher residual volatility.",
       "timeframe": "1d",
       "lookback_days_variants": [14, 21, 30, 45],
+      "common_comparison_warmup_days": 45,
       "factor_model": "OLS with intercept of alt daily returns on BTC daily returns using strictly prior completed observations",
       "score": "sample standard deviation of OLS residuals over lookback",
       "direction": "long lowest two residual-volatility assets; short highest two",
@@ -49,6 +51,7 @@
       "signal_timeframe": "4h",
       "execution_timeframe": "1d",
       "lookback_days_variants": [3, 5, 7, 14],
+      "common_comparison_warmup_days": 14,
       "score": "sample skewness of strictly prior completed 4h log returns within the lookback window, using bars ending no later than the completed daily signal boundary",
       "direction": "long lowest two skewness scores; short highest two",
       "rebalance_every_days": 1,
@@ -72,7 +75,8 @@
     "all_reversed_controls_count_as_controls": true,
     "no_grid_expansion_after_results": true,
     "failed_family_closes": true,
-    "positive_control_can_only_generate_a_new_candidate_id": true
+    "positive_control_can_only_generate_a_new_candidate_id": true,
+    "family_variants_share_common_max_lookback_warmup_for_selection_diagnostics": true
   },
   "evidence_boundary": {
     "this_sprint_is": "D0 hypothesis falsification",
