@@ -95,7 +95,8 @@ def fetch_vision(symbol: str, start: str, end: str) -> tuple[pd.DataFrame, pd.Da
     while month < e:
         nxt = month + pd.offsets.MonthBegin(1)
         stamp = month.strftime("%Y-%m")
-        if nxt <= e:
+        partial_month = nxt > e
+        if not partial_month:
             ku = f"{BASE}/monthly/klines/{native}/1d/{native}-1d-{stamp}.zip"
             kb, ko = _verified_zip(ku); prices.append(_parse_kline(kb)); objects.append(ko)
         else:
@@ -103,11 +104,19 @@ def fetch_vision(symbol: str, start: str, end: str) -> tuple[pd.DataFrame, pd.Da
             while d <= last:
                 ds = d.isoformat(); ku = f"{BASE}/daily/klines/{native}/1d/{native}-1d-{ds}.zip"
                 kb, ko = _verified_zip(ku); prices.append(_parse_kline(kb)); objects.append(ko); d += timedelta(days=1)
+
         fu = f"{BASE}/monthly/fundingRate/{native}/{native}-fundingRate-{stamp}.zip"
         try:
             fb, fo = _verified_zip(fu); funding.append(_parse_funding(fb)); objects.append(fo)
         except BinanceVisionError as exc:
-            if "HTTP 404" not in str(exc): raise
+            if "HTTP 404" not in str(exc):
+                raise
+            if not partial_month:
+                raise
+            d = max(month.date(), s.date()); last = (e - pd.Timedelta(days=1)).date()
+            while d <= last:
+                ds = d.isoformat(); du = f"{BASE}/daily/fundingRate/{native}/{native}-fundingRate-{ds}.zip"
+                db, do = _verified_zip(du); funding.append(_parse_funding(db)); objects.append(do); d += timedelta(days=1)
         month = nxt
     p = pd.concat(prices).sort_index(); p = p[~p.index.duplicated(keep="last")]
     f = pd.concat(funding).sort_index() if funding else pd.DataFrame(columns=["funding_rate"], index=pd.DatetimeIndex([], tz="UTC"))
