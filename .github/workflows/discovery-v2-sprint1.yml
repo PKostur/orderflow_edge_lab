@@ -1,0 +1,81 @@
+name: Discovery v2 Sprint 1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/discovery-v2-sprint-1]
+    paths:
+      - 'config/discovery_v2_sprint1_v1.json'
+      - 'research/discovery_v2/sprint1/**'
+      - 'src/orderflow_edge_lab/discovery_v2_sprint1.py'
+      - 'scripts/discovery_v2_sprint1.py'
+      - 'tests/test_discovery_v2_sprint1.py'
+      - '.github/workflows/discovery-v2-sprint1.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: discovery-v2-sprint1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  falsification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research runtime
+        run: python -m pip install -e '.[research]' pytest
+      - name: Run Sprint 1 guardrails before market data
+        run: python -m pytest -q tests/test_discovery_v2_sprint1.py tests/test_discovery_v2_evaluation.py
+      - name: Verify frozen protocol claims boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('config/discovery_v2_sprint1_v1.json').read_text())
+          assert p['protocol_status'] == 'FROZEN_BEFORE_RESULTS'
+          assert p['data']['independence_level'] == 'D0'
+          assert p['execution']['leverage'] == 1.0
+          assert p['execution']['baseline_round_trip_cost_bps'] == 20.0
+          assert p['claims']['development_results_establish_edge'] is False
+          assert p['claims']['evaluation_output_authorizes_live'] is False
+          assert all(len(f['pre_registered_variants']) == 4 for f in p['families'].values())
+          print('Frozen Sprint 1 contract verified.')
+          PY
+      - name: Run frozen D0 falsification sprint
+        run: |
+          python scripts/discovery_v2_sprint1.py \
+            --protocol config/discovery_v2_sprint1_v1.json \
+            --evaluation config/discovery_v2_evaluation_v1.json \
+            --output-dir research/discovery_v2/sprint1/results
+      - name: Enforce result-state boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path('research/discovery_v2/sprint1/results/sprint1_report.json').read_text())
+          assert r['claims']['persistent_edge_established'] is False
+          assert r['claims']['same_period_history_is_future_oos'] is False
+          assert r['claims']['live_order_transmission_supported'] is False
+          assert r['claims']['existing_frozen_candidates_modified'] is False
+          allowed = {'FALSIFIED', 'REPLICATION_PENDING'}
+          for name, family in r['families'].items():
+              assert family['state'] in allowed, (name, family['state'])
+          print({k: v['state'] for k, v in r['families'].items()})
+          PY
+      - name: Upload immutable Sprint 1 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: discovery-v2-sprint1-v1
+          path: |
+            config/discovery_v2_sprint1_v1.json
+            research/discovery_v2/sprint1/IMPLEMENTATION_CONTRACT.md
+            research/discovery_v2/sprint1/results/
+          retention-days: 30
+          if-no-files-found: warn
