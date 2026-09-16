@@ -48,12 +48,19 @@ def fetch_bitget_usdt_futures_klines(
     *,
     request_pause_seconds: float = 0.10,
 ) -> pd.DataFrame:
+    """Return 00:00 UTC opens derived from public 4h Bitget futures candles.
+
+    Bitget historical requests are capped at a 90-day time range and 100 bars.
+    Fifteen-day 4h chunks stay below both limits. 4h bars contain an exact 00:00
+    UTC boundary, which makes the second venue execution timestamp identical to
+    the MEXC daily open used by the frozen protocol.
+    """
     start_ms = int(_utc(start).timestamp() * 1000)
     end_ms = int(_utc(end).timestamp() * 1000)
     if end_ms <= start_ms:
         raise BitgetPublicDataError("end must be after start")
     day_ms = 24 * 60 * 60 * 1000
-    chunk_ms = 80 * day_ms
+    chunk_ms = 15 * day_ms
     rows: dict[int, list[Any]] = {}
     cursor = start_ms
     while cursor < end_ms:
@@ -61,7 +68,7 @@ def fetch_bitget_usdt_futures_klines(
         query = urlencode({
             "category": "USDT-FUTURES",
             "symbol": _symbol(symbol),
-            "interval": "1D",
+            "interval": "4H",
             "startTime": cursor,
             "endTime": chunk_end,
             "type": "market",
@@ -78,13 +85,16 @@ def fetch_bitget_usdt_futures_klines(
                     o, h, l, c, v = (float(row[i]) for i in range(1, 6))
                 except (TypeError, ValueError, IndexError):
                     continue
+                timestamp = pd.to_datetime(ts, unit="ms", utc=True)
+                if timestamp.hour != 0 or timestamp.minute != 0:
+                    continue
                 if start_ms <= ts < end_ms and min(o, h, l, c) > 0 and all(math.isfinite(x) for x in (o, h, l, c, v)):
                     rows[ts] = row
         cursor = chunk_end + 1
         if request_pause_seconds > 0:
             time.sleep(request_pause_seconds)
     if not rows:
-        raise BitgetPublicDataError(f"no usable Bitget daily candles for {symbol}")
+        raise BitgetPublicDataError(f"no usable Bitget 00:00 UTC futures opens for {symbol}")
     ordered = [rows[key] for key in sorted(rows)]
     frame = pd.DataFrame({
         "timestamp": pd.to_datetime([int(r[0]) for r in ordered], unit="ms", utc=True),
@@ -95,7 +105,7 @@ def fetch_bitget_usdt_futures_klines(
         "volume": [float(r[5]) for r in ordered],
     }).set_index("timestamp").sort_index()
     if len(frame) < 20:
-        raise BitgetPublicDataError(f"insufficient Bitget daily candles for {symbol}: {len(frame)}")
+        raise BitgetPublicDataError(f"insufficient Bitget aligned daily opens for {symbol}: {len(frame)}")
     return frame
 
 
