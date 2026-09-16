@@ -1,0 +1,83 @@
+name: DV2 Volume Momentum D3 Binance 2025
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/dv2-volume-momentum-30d-v1]
+    paths:
+      - 'config/dv2_volume_confirmed_momentum_30d_d3_binance_2025_v1.json'
+      - 'scripts/dv2_volume_momentum_d3_binance_2025.py'
+      - 'src/orderflow_edge_lab/volume_momentum_candidate.py'
+      - 'src/orderflow_edge_lab/binance_vision.py'
+      - '.github/workflows/dv2-volume-momentum-d3-binance-2025.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dv2-volume-momentum-d3-binance-2025
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research runtime
+        run: python -m pip install -e '.[research]' pytest
+      - name: Run candidate guardrails
+        run: python -m pytest -q tests/test_volume_momentum_candidate.py tests/test_discovery_v2_evaluation.py
+      - name: Verify locked D3 temporal contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d = json.loads(Path('config/dv2_volume_confirmed_momentum_30d_d3_binance_2025_v1.json').read_text())
+          assert d['status'] == 'FROZEN_BEFORE_D3_RESULT'
+          assert d['data']['start_utc'] == '2025-01-01T00:00:00Z'
+          assert d['data']['end_utc_exclusive'] == '2026-01-01T00:00:00Z'
+          assert d['data']['no_period_substitution_after_result'] is True
+          assert d['rule']['volume_baseline_days'] == 30
+          assert d['rule']['fixed_evaluation_warmup_days'] == 45
+          assert d['rule']['leverage'] == 1.0
+          assert d['rule']['transaction_cost_bps_per_side_on_actual_turnover'] == 10.0
+          assert d['claims']['d3_pass_establishes_persistent_edge'] is False
+          assert d['claims']['d3_pass_is_prospective_future_oos'] is False
+          assert d['claims']['retuning_allowed'] is False
+          print('Locked D3 temporal contract verified.')
+          PY
+      - name: Run locked 2025 Binance temporal holdout
+        run: |
+          unset ORDERFLOW_BINANCE_FUNDING_SNAPSHOT || true
+          python scripts/dv2_volume_momentum_d3_binance_2025.py \
+            --candidate config/dv2_volume_confirmed_momentum_30d_v1.json \
+            --contract config/dv2_volume_confirmed_momentum_30d_d3_binance_2025_v1.json \
+            --evaluation config/discovery_v2_evaluation_v1.json \
+            --output-dir research/discovery_v2/volume_momentum_30d/d3_binance_2025/results
+      - name: Enforce D3 claims boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path('research/discovery_v2/volume_momentum_30d/d3_binance_2025/results/D3_REPORT.json').read_text())
+          assert r['state'] in {'D3_TEMPORAL_REPLICATED', 'D3_TEMPORAL_FAILED'}
+          assert r['claims']['d3_temporal_holdout_is_prospective_future_oos'] is False
+          assert r['claims']['persistent_edge_established'] is False
+          assert r['claims']['live_eligible'] is False
+          assert r['claims']['leverage_supported'] is False
+          print({'state': r['state'], 'hard_gates': r['hard_gates'], 'diagnostics': r['diagnostics']})
+          PY
+      - name: Upload immutable D3 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dv2-volume-momentum-d3-binance-2025-v1
+          path: |
+            config/dv2_volume_confirmed_momentum_30d_d3_binance_2025_v1.json
+            research/discovery_v2/volume_momentum_30d/d3_binance_2025/results/
+          retention-days: 30
+          if-no-files-found: warn
