@@ -65,7 +65,8 @@ def simulate_forward(
         for s in alts:
             y = returns[s].iloc[i-lookback:i].to_numpy(dtype=float); ynow = float(returns[s].iloc[i])
             scores[s] = ynow - _ols(x, y, xnow) if np.isfinite(y).all() and math.isfinite(ynow) else np.nan
-        signals.append((opens.index[i], _target(scores, reverse=reverse)))
+        target = _target(scores, reverse=reverse).reindex(list(symbols), fill_value=0.0)
+        signals.append((opens.index[i], target))
 
     previous = pd.Series(0.0, index=symbols, dtype=float); rows = []; contributions = []; open_position = None
     for signal_time, target in signals:
