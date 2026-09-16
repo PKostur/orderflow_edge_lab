@@ -52,30 +52,37 @@ def fetch_bitget_usdt_futures_klines(
     end_ms = int(_utc(end).timestamp() * 1000)
     if end_ms <= start_ms:
         raise BitgetPublicDataError("end must be after start")
-    query = urlencode({
-        "category": "USDT-FUTURES",
-        "symbol": _symbol(symbol),
-        "interval": "1D",
-        "startTime": start_ms,
-        "endTime": end_ms - 1,
-        "type": "market",
-        "limit": 1000,
-    })
-    payload = _get_json(f"https://api.bitget.com/api/v3/market/history-candles?{query}")
-    items = payload.get("data")
-    if not isinstance(items, list) or not items:
-        raise BitgetPublicDataError(f"no Bitget USDT futures candles for {_symbol(symbol)}")
+    day_ms = 24 * 60 * 60 * 1000
+    chunk_ms = 80 * day_ms
     rows: dict[int, list[Any]] = {}
-    for row in items:
-        if not isinstance(row, list) or len(row) < 6:
-            continue
-        try:
-            ts = int(row[0])
-            o, h, l, c, v = (float(row[i]) for i in range(1, 6))
-        except (TypeError, ValueError, IndexError):
-            continue
-        if start_ms <= ts < end_ms and min(o, h, l, c) > 0 and all(math.isfinite(x) for x in (o, h, l, c, v)):
-            rows[ts] = row
+    cursor = start_ms
+    while cursor < end_ms:
+        chunk_end = min(end_ms - 1, cursor + chunk_ms - 1)
+        query = urlencode({
+            "category": "USDT-FUTURES",
+            "symbol": _symbol(symbol),
+            "interval": "1D",
+            "startTime": cursor,
+            "endTime": chunk_end,
+            "type": "market",
+            "limit": 100,
+        })
+        payload = _get_json(f"https://api.bitget.com/api/v3/market/history-candles?{query}")
+        items = payload.get("data")
+        if isinstance(items, list):
+            for row in items:
+                if not isinstance(row, list) or len(row) < 6:
+                    continue
+                try:
+                    ts = int(row[0])
+                    o, h, l, c, v = (float(row[i]) for i in range(1, 6))
+                except (TypeError, ValueError, IndexError):
+                    continue
+                if start_ms <= ts < end_ms and min(o, h, l, c) > 0 and all(math.isfinite(x) for x in (o, h, l, c, v)):
+                    rows[ts] = row
+        cursor = chunk_end + 1
+        if request_pause_seconds > 0:
+            time.sleep(request_pause_seconds)
     if not rows:
         raise BitgetPublicDataError(f"no usable Bitget daily candles for {symbol}")
     ordered = [rows[key] for key in sorted(rows)]
@@ -89,8 +96,6 @@ def fetch_bitget_usdt_futures_klines(
     }).set_index("timestamp").sort_index()
     if len(frame) < 20:
         raise BitgetPublicDataError(f"insufficient Bitget daily candles for {symbol}: {len(frame)}")
-    if request_pause_seconds > 0:
-        time.sleep(request_pause_seconds)
     return frame
 
 
