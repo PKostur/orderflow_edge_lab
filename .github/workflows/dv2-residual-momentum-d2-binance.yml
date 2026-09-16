@@ -25,6 +25,8 @@ jobs:
   d2-source-replication:
     runs-on: ubuntu-24.04
     timeout-minutes: 25
+    env:
+      ORDERFLOW_BINANCE_FUNDING_SNAPSHOT: research/discovery_v2/residual_momentum_beta45/binance_funding_tail_2026-09-01_2026-09-12.json
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -48,6 +50,26 @@ jobs:
           assert c['evidence_boundary']['same_period_cross_source_is_future_oos'] is False
           assert c['claims']['persistent_edge_established'] is False
           print('Frozen beta45 candidate boundary verified.')
+          PY
+      - name: Verify preserved Binance funding tail before PnL
+        run: |
+          python - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          p = Path(os.environ['ORDERFLOW_BINANCE_FUNDING_SNAPSHOT'])
+          payload = p.read_bytes()
+          expected = 'ba7f10432475e5dc885d309a67ae3f989c028d622e7371c07009e4fa45cdeea8'
+          assert hashlib.sha256(payload).hexdigest() == expected
+          d = json.loads(payload)
+          assert d['query_window']['start_utc'] == '2026-09-01T00:00:00Z'
+          assert d['query_window']['end_utc_exclusive'] == '2026-09-12T00:00:00Z'
+          assert len(d['common_8h_funding_times_ms']) == 33
+          assert set(d['common_8h_rates_by_symbol']) == {
+              'BTCUSDT','ETHUSDT','SOLUSDT','XRPUSDT','DOGEUSDT','BNBUSDT','ADAUSDT','LINKUSDT','SUIUSDT'
+          }
+          assert all(len(v) == 33 for v in d['common_8h_rates_by_symbol'].values())
+          assert len(d['ena_funding_times_ms']) == len(d['ena_funding_rates']) == 66
+          print('Frozen official Binance funding tail verified:', expected)
           PY
       - name: Run exact Binance D2 source replication
         run: |
@@ -78,6 +100,9 @@ jobs:
           path: |
             config/dv2_residual_momentum_beta45_v1.json
             research/discovery_v2/residual_momentum_beta45/D2_CONTRACT.md
+            research/discovery_v2/residual_momentum_beta45/D2_TRANSPORT_AMENDMENT.md
+            research/discovery_v2/residual_momentum_beta45/D2_FUNDING_TAIL_PROVENANCE.md
+            research/discovery_v2/residual_momentum_beta45/binance_funding_tail_2026-09-01_2026-09-12.json
             research/discovery_v2/residual_momentum_beta45/d2_binance/results/
           retention-days: 30
           if-no-files-found: warn
