@@ -1,0 +1,84 @@
+name: Discovery v2 Engine Calibration v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/discovery-process-v2]
+    paths:
+      - 'config/discovery_v2_engine_calibration_v1.json'
+      - 'src/orderflow_edge_lab/discovery_v2_calibration.py'
+      - 'src/orderflow_edge_lab/cli/discovery_v2_calibration.py'
+      - 'research/discovery_v2/adapters/**'
+      - 'tests/test_discovery_v2_calibration.py'
+      - '.github/workflows/discovery-v2-engine-calibration-v1.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: discovery-v2-engine-calibration-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  calibrate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install local research runtime
+        run: python -m pip install -e '.[research]' pytest
+      - name: Run calibration guardrails
+        run: python -m pytest -q tests/test_discovery_v2_calibration.py
+      - name: Build immutable MEXC calibration dataset and reference parity report
+        run: |
+          mkdir -p research/discovery_v2/results research/discovery_v2/calibration_data
+          python -m orderflow_edge_lab.cli.discovery_v2_calibration \
+            --config config/discovery_v2_engine_calibration_v1.json \
+            --data-dir research/discovery_v2/calibration_data \
+            --output research/discovery_v2/results/reference_independent_parity.json
+      - name: Run Freqtrade strategy API reproduction in official stable container
+        run: |
+          mkdir -p research/discovery_v2/results/freqtrade
+          docker pull freqtradeorg/freqtrade:stable
+          docker run --rm \
+            --entrypoint python \
+            -v "$PWD:/workspace" \
+            -w /workspace \
+            freqtradeorg/freqtrade:stable \
+            research/discovery_v2/adapters/run_freqtrade_signal_calibration.py \
+            --config config/discovery_v2_engine_calibration_v1.json \
+            --data-dir research/discovery_v2/calibration_data \
+            --output-dir research/discovery_v2/results/freqtrade
+      - name: Install NautilusTrader 2.x research wheel
+        run: |
+          python -m pip install -U --pre nautilus_trader
+          python -c "import nautilus_trader; print('NautilusTrader', nautilus_trader.__version__)"
+      - name: Run NautilusTrader indicator reproduction
+        run: |
+          mkdir -p research/discovery_v2/results/nautilus
+          python research/discovery_v2/adapters/run_nautilus_signal_calibration.py \
+            --config config/discovery_v2_engine_calibration_v1.json \
+            --data-dir research/discovery_v2/calibration_data \
+            --output-dir research/discovery_v2/results/nautilus
+      - name: Fail closed on external signal disagreement
+        run: |
+          python research/discovery_v2/adapters/compare_external_engine_calibration.py \
+            --config config/discovery_v2_engine_calibration_v1.json \
+            --data-dir research/discovery_v2/calibration_data \
+            --freqtrade-dir research/discovery_v2/results/freqtrade \
+            --nautilus-dir research/discovery_v2/results/nautilus \
+            --output research/discovery_v2/results/external_signal_parity.json
+      - name: Preserve calibration evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: discovery-v2-engine-calibration-v1
+          path: |
+            config/discovery_v2_engine_calibration_v1.json
+            research/discovery_v2/calibration_data/
+            research/discovery_v2/results/
+            research/discovery_v2/adapters/
+          retention-days: 30
+          if-no-files-found: error
