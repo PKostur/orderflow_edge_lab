@@ -1,0 +1,63 @@
+{
+  "contract_id": "dv2_volume_confirmed_momentum_30d_d3_binance_2025_v1",
+  "status": "FROZEN_BEFORE_D3_RESULT",
+  "frozen_at_utc": "2026-09-16T15:46:00Z",
+  "candidate_id": "dv2_volume_confirmed_momentum_30d_v1",
+  "candidate_freeze_commit": "b2c74be00fdebb78090f972b43a0ea480619c8d6",
+  "independence_level": "D3_TEMPORAL_HOLDOUT",
+  "evidence_interpretation": "locked non-overlapping historical time holdout; independent in time from 2026 D0/D2 but not prospective future OOS",
+  "data": {
+    "venue": "Binance USD-M perpetual futures",
+    "source": "official Binance Data Vision archive",
+    "start_utc": "2025-01-01T00:00:00Z",
+    "end_utc_exclusive": "2026-01-01T00:00:00Z",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "kline_interval": "1d",
+    "kline_volume_semantic": "official USD-M kline base-asset volume field, column 5 in the Binance kline archive",
+    "funding": "official completed-month archived realized funding rates",
+    "archive_checksum_policy": "preserve SHA-256 for every downloaded archive object and verify official CHECKSUM when available",
+    "no_period_substitution_after_result": true
+  },
+  "rule": {
+    "volume_baseline_days": 30,
+    "fixed_evaluation_warmup_days": 45,
+    "return_component": "close_t / close_t-1 - 1 using completed UTC daily bars",
+    "volume_component": "base_asset_volume_t divided by median(base_asset_volume) over strictly prior completed bars t-30 through t-1",
+    "score": "return_component multiplied by volume_component",
+    "portfolio": "long highest two +25% each; short lowest two -25% each",
+    "execution": "next UTC daily open t+1",
+    "holding_period": "one day open-to-open",
+    "rebalance": "daily",
+    "gross_exposure": 1.0,
+    "intended_net_exposure": 0.0,
+    "transaction_cost_bps_per_side_on_actual_turnover": 10.0,
+    "actual_realized_funding": true,
+    "leverage": 1.0,
+    "principal_control": "exact reversed cross-sectional direction with identical timing/cost/funding"
+  },
+  "hard_gates": {
+    "positive_net_baseline": true,
+    "positive_net_1_5x_cost": true,
+    "minimum_leave_one_symbol_out_mean_bps_gt": 0.0,
+    "maximum_best_symbol_positive_pnl_share": 0.50,
+    "maximum_best_calendar_month_positive_pnl_share": 0.50,
+    "maximum_top5_positive_period_share": 0.50,
+    "minimum_candidate_minus_reversed_control_mean_bps": 5.0,
+    "chronology_valid": true,
+    "data_complete": true,
+    "funding_complete": true,
+    "execution_valid": true
+  },
+  "diagnostics": {
+    "bootstrap_95pct_lower_bound_positive": "record",
+    "two_x_cost_mean": "record",
+    "btc_and_equal_weight_alt_benchmarks": "record"
+  },
+  "claims": {
+    "d3_pass_establishes_persistent_edge": false,
+    "d3_pass_is_prospective_future_oos": false,
+    "live_execution_supported": false,
+    "leverage_supported": false,
+    "retuning_allowed": false
+  }
+}
