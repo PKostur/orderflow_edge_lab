@@ -1,0 +1,96 @@
+name: Discovery v2 Regime Attribution
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/discovery-v2-sprint-2]
+    paths:
+      - 'config/discovery_v2_regime_attribution_v1.json'
+      - 'scripts/discovery_v2_regime_attribution.py'
+      - '.github/workflows/discovery-v2-regime-attribution.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: discovery-v2-regime-attribution-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  attribution:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install research runtime
+        run: python -m pip install -e '.[research]' pytest
+
+      - name: Verify frozen regime contract before regime PnL
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('config/discovery_v2_regime_attribution_v1.json').read_text())
+          assert p['protocol'] == 'discovery_v2_regime_attribution_v1'
+          assert p['status'] == 'FROZEN_BEFORE_REGIME_RESULTS'
+          assert p['volatility_state']['realized_volatility_window_days'] == 20
+          assert p['volatility_state']['threshold_history_observations'] == 60
+          assert p['trend_state']['period_days'] == 14
+          assert p['trend_state']['trend_threshold'] == 25.0
+          assert p['minimum_cell_observations_for_comparison'] == 20
+          assert p['claims']['regime_attribution_is_validation'] is False
+          assert p['claims']['regime_winner_is_promotable'] is False
+          assert p['claims']['router_supported'] is False
+          assert p['claims']['live_execution_supported'] is False
+          print('Frozen regime attribution contract verified.')
+          PY
+
+      - name: Reproduce frozen Sprint 2 series
+        run: |
+          python scripts/discovery_v2_sprint2.py \
+            --protocol config/discovery_v2_sprint2_v1.json \
+            --evaluation config/discovery_v2_evaluation_v1.json \
+            --output-dir research/discovery_v2/sprint2/results
+
+      - name: Run state-before-PnL regime attribution
+        run: |
+          python scripts/discovery_v2_regime_attribution.py \
+            --protocol config/discovery_v2_regime_attribution_v1.json \
+            --results-root research/discovery_v2/sprint2/results \
+            --output-dir research/discovery_v2/sprint2/regime_attribution
+
+      - name: Enforce diagnostic-only claims boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path('research/discovery_v2/sprint2/regime_attribution/regime_attribution.json').read_text())
+          assert r['status'] == 'DIAGNOSTIC_COMPLETE'
+          assert r['claims']['regime_attribution_is_validation'] is False
+          assert r['claims']['regime_winner_is_promotable'] is False
+          assert r['claims']['router_supported'] is False
+          assert r['claims']['persistent_edge_established'] is False
+          assert r['claims']['live_execution_supported'] is False
+          assert len(r['regime_winners']) == 4
+          for row in r['regime_winners']:
+              if row.get('eligible'):
+                  assert row['selection_status'] == 'DESCRIPTIVE_ONLY_NOT_A_CANDIDATE'
+          print(r['regime_winners'])
+          PY
+
+      - name: Upload immutable regime attribution evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: discovery-v2-regime-attribution-v1
+          path: |
+            config/discovery_v2_sprint2_v1.json
+            config/discovery_v2_regime_attribution_v1.json
+            research/discovery_v2/sprint2/results/sprint2_report.json
+            research/discovery_v2/sprint2/regime_attribution/
+          retention-days: 30
+          if-no-files-found: warn
