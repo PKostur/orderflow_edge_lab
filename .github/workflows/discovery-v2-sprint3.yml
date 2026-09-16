@@ -1,0 +1,82 @@
+name: Discovery v2 Sprint 3
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/discovery-v2-sprint-3]
+    paths:
+      - 'config/discovery_v2_sprint3_v1.json'
+      - 'src/orderflow_edge_lab/discovery_v2_sprint3.py'
+      - 'scripts/discovery_v2_sprint3.py'
+      - 'tests/test_discovery_v2_sprint3.py'
+      - '.github/workflows/discovery-v2-sprint3.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: discovery-v2-sprint3-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  falsification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research runtime
+        run: python -m pip install -e '.[research]' pytest
+      - name: Run Sprint 3 guardrails before market data
+        run: python -m pytest -q tests/test_discovery_v2_sprint3.py tests/test_discovery_v2_evaluation.py
+      - name: Verify frozen Sprint 3 contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('config/discovery_v2_sprint3_v1.json').read_text())
+          assert p['status'] == 'FROZEN_BEFORE_MARKET_RESULTS'
+          assert p['execution']['leverage'] == 1.0
+          assert p['execution']['transaction_cost_bps_per_side_on_turnover'] == 10.0
+          assert p['trial_accounting']['all_12_directional_candidate_variants_count'] is True
+          assert p['trial_accounting']['no_grid_expansion_after_results'] is True
+          assert p['claims']['persistent_edge_established'] is False
+          assert p['claims']['live_execution_supported'] is False
+          assert p['claims']['beta45_modified'] is False
+          assert p['claims']['sprint2_failed_family_modified'] is False
+          print('Frozen Sprint 3 contract verified.')
+          PY
+      - name: Run frozen D0 falsification sprint
+        run: |
+          python scripts/discovery_v2_sprint3.py \
+            --protocol config/discovery_v2_sprint3_v1.json \
+            --evaluation config/discovery_v2_evaluation_v1.json \
+            --output-dir research/discovery_v2/sprint3/results
+      - name: Enforce result-state boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path('research/discovery_v2/sprint3/results/sprint3_report.json').read_text())
+          assert r['claims']['persistent_edge_established'] is False
+          assert r['claims']['live_execution_supported'] is False
+          assert r['claims']['leverage_supported'] is False
+          assert r['claims']['beta45_modified'] is False
+          assert r['claims']['sprint2_failed_family_modified'] is False
+          allowed = {'FALSIFIED', 'REPLICATION_PENDING'}
+          for name, family in r['families'].items():
+              assert family['state'] in allowed, (name, family['state'])
+          print({k: v['state'] for k, v in r['families'].items()})
+          PY
+      - name: Upload immutable Sprint 3 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: discovery-v2-sprint3-v1
+          path: |
+            config/discovery_v2_sprint3_v1.json
+            research/discovery_v2/sprint3/results/
+          retention-days: 30
+          if-no-files-found: warn
