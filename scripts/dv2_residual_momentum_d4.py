@@ -13,7 +13,8 @@ from orderflow_edge_lab.mexc_history import fetch_mexc_futures_klines
 from orderflow_edge_lab.residual_momentum_forward import simulate_forward, summarize
 
 
-WARMUP_START = "2026-07-01T00:00:00Z"
+# Loader warm-up only. The candidate itself still uses exactly 45 prior completed days.
+WARMUP_START = "2026-01-01T00:00:00Z"
 
 
 def _safe(v: Any) -> Any:
