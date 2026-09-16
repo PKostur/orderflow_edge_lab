@@ -1,0 +1,71 @@
+{
+  "candidate_id": "dv2_liquidity_range_shock_momentum_30d_v1",
+  "status": "FROZEN_CANDIDATE",
+  "frozen_at_utc": "2026-09-16T16:14:00Z",
+  "origin": {
+    "protocol": "discovery_v2_sprint4_v1",
+    "protocol_freeze_commit": "de49faa24f5b9203ed548ab5a93a1c86127b9465",
+    "sprint4_execution_commit": "7cf705a2ed3a6b08f4b02c7b22828420246e4ea0",
+    "artifact_sha256": "923971c41fd29d2e44cb29730cf6ca4b6e190653ec9ffc98a8e420a379a17cc5",
+    "evidence_level": "D0_CONTAMINATED_HYPOTHESIS_GENERATION",
+    "development_source": "MEXC perpetuals",
+    "development_window": "2026-01-01T00:00:00Z through 2026-09-12T00:00:00Z exclusive",
+    "provenance": "Exact reversed control of the failed Sprint 4 liquidity_range_shock_reversal family. This is a NEW candidate ID, not a rescue or relabeling of that failed family.",
+    "selection_rule": "The four preregistered reversed-control lookbacks were all positive at baseline and 1.5x costs; applying the already-frozen upper-median adjacent-neighborhood rule selects 30 days, never the maximum-PnL lookback."
+  },
+  "rule": {
+    "universe": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "timeframe": "1d",
+    "range_baseline_days": 30,
+    "signal_boundary": "completed UTC daily bar t",
+    "true_range": "max(high_t-low_t, abs(high_t-close_t-1), abs(low_t-close_t-1))",
+    "range_component": "true_range_t divided by the median true range of the strictly prior 30 completed daily bars t-30 through t-1",
+    "direction_component": "close_t / open_t - 1",
+    "score": "direction_component multiplied by range_component",
+    "ranking": "cross-sectional ascending score",
+    "portfolio": "long highest two scores at +25% each and short lowest two scores at -25% each",
+    "gross_exposure": 1.0,
+    "intended_net_exposure": 0.0,
+    "execution": "next UTC daily open t+1",
+    "holding_period": "1 day",
+    "rebalance": "daily",
+    "transaction_cost_bps_per_side_on_actual_turnover": 10.0,
+    "funding": "actual realized perpetual funding during the holding interval",
+    "leverage": 1.0,
+    "terminal_liquidation": "evaluation may close the final sample position for accounting only; prospective shadow must not create artificial terminal liquidation"
+  },
+  "locked_controls": {
+    "principal_reversed_control": "exact same score and timing with long lowest two and short highest two, identical to the original Sprint 4 range-shock reversal direction",
+    "cost_multipliers": [1.0, 1.5, 2.0],
+    "leave_one_symbol_out": true,
+    "symbol_concentration_max": 0.50,
+    "calendar_month_concentration_max": 0.50,
+    "top5_positive_period_share_max": 0.50
+  },
+  "d0_snapshot": {
+    "observations": 207,
+    "mean_net_bps_per_day": 16.922765665823807,
+    "mean_net_bps_1_5x_cost": 9.531461317997717,
+    "mean_net_bps_2x_cost": 2.14015697017163,
+    "bootstrap_95pct_lower_bps": 1.0520067122657117,
+    "minimum_leave_one_symbol_out_mean_bps": 10.573807977569732,
+    "best_symbol_positive_pnl_share": 0.28645182009252107,
+    "best_calendar_month_positive_pnl_share": 0.3910765353221099,
+    "top5_positive_period_share": 0.2168732728865529,
+    "principal_reversed_control_mean_net_bps": -46.48798305712815,
+    "candidate_minus_reversed_control_bps": 63.41074872295196
+  },
+  "promotion_path": {
+    "independent_engine_reproduction_required": true,
+    "D2_different_source_same_period_required": true,
+    "D3_non_overlapping_temporal_holdout_required": true,
+    "D4_prospective_required": true,
+    "retuning_after_freeze_forbidden": true,
+    "negative_unlevered_expectancy_may_not_be_rescued_with_leverage": true
+  },
+  "claims": {
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
+}
