@@ -1,0 +1,33 @@
+{
+  "amendment_id": "dv2_volume_confirmed_momentum_30d_d2_transport_amendment_v1",
+  "status": "FROZEN_BEFORE_ANY_VALID_D2_ECONOMIC_RESULT",
+  "frozen_at_utc": "2026-09-16T15:40:00Z",
+  "candidate_id": "dv2_volume_confirmed_momentum_30d_v1",
+  "d2_contract_id": "dv2_volume_confirmed_momentum_30d_d2_binance_v1",
+  "reason": "Binance Vision had not yet published the September 2026 USD-M funding archive. The first D2 attempt aborted before creating any D2 economic report, after independent-engine reproduction had passed.",
+  "scope": "transport and data-preservation only; no candidate economics, ranking, volume semantic, costs, universe, controls, gates, window, or evidence interpretation changes",
+  "funding_tail": {
+    "source": "official Binance USD-M public funding-rate history",
+    "endpoint_semantics": "/fapi/v1/fundingRate",
+    "retrieval_date_utc": "2026-09-16",
+    "query_start_utc": "2026-09-01T00:00:00Z",
+    "query_end_utc_exclusive": "2026-09-12T00:00:00Z",
+    "symbols": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "XRPUSDT", "DOGEUSDT", "BNBUSDT", "ADAUSDT", "LINKUSDT", "SUIUSDT", "ENAUSDT"],
+    "preserved_snapshot_origin_commit": "d27ef891483298a9c414198817e0fb31f1562f91",
+    "preserved_snapshot_path": "research/discovery_v2/residual_momentum_beta45/binance_funding_tail_2026-09-01_2026-09-12.json",
+    "immutable_raw_url": "https://raw.githubusercontent.com/PKostur/orderflow_edge_lab/d27ef891483298a9c414198817e0fb31f1562f91/research/discovery_v2/residual_momentum_beta45/binance_funding_tail_2026-09-01_2026-09-12.json",
+    "sha256": "ba7f10432475e5dc885d309a67ae3f989c028d622e7371c07009e4fa45cdeea8",
+    "preserved_fields": ["symbol", "fundingTime", "fundingRate"],
+    "settlement_frequency_preserved": true,
+    "note": "ENAUSDT has 4-hour settlements during part of the frozen interval; the exact exchange timestamps are retained."
+  },
+  "merge_rule": "Use Binance Vision for all available completed-month funding archives and daily klines. Use the frozen official funding snapshot only for the missing September 2026 funding tail. Fail closed on digest mismatch, schema mismatch, incomplete query coverage, missing symbol, duplicate/non-monotonic timestamp, or invalid rate.",
+  "future_reconciliation": "When Binance Vision publishes September 2026 funding, compare the frozen snapshot with the archive. Any material discrepancy is a data-integrity issue and cannot be handled by retuning.",
+  "claims": {
+    "economic_rule_changed": false,
+    "d2_result_seen_before_amendment": false,
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
+}
