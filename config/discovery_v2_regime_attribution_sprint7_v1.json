@@ -1,0 +1,57 @@
+{
+  "protocol": "discovery_v2_regime_attribution_sprint7_v1",
+  "status": "FROZEN_BEFORE_REGIME_RESULTS",
+  "frozen_at_utc": "2026-09-16T17:22:00Z",
+  "purpose": "Post-Sprint-7 diagnostic attribution using a regime classifier that was independently frozen before Sprint 7 existed. Results are hypothesis generation only and cannot rescue a falsified Sprint 7 family.",
+  "source_sprint": "discovery_v2_sprint7_v1",
+  "classifier_provenance": {
+    "original_protocol": "discovery_v2_regime_attribution_v1",
+    "original_freeze_commit": "53649bf6f2cdada0480af4f34a3221462bba0d66",
+    "classifier_changed_for_sprint7": false
+  },
+  "evaluation_scope": {
+    "include_candidate_variants": true,
+    "include_reversed_controls": false,
+    "rank_within_regime_for_description_only": true,
+    "regime_winner_is_candidate": false,
+    "failed_family_can_be_resurrected": false
+  },
+  "state_timing": {
+    "execution_regime_uses_information_through": "previous completed UTC daily close",
+    "future_pnl_used_in_state": false,
+    "execution_day_open_or_later_used_in_state": false
+  },
+  "volatility_state": {
+    "factor_symbol": "BTC_USDT",
+    "return_type": "daily log return",
+    "realized_volatility_window_days": 20,
+    "annualization_days": 365,
+    "threshold": "strictly prior rolling median of realized volatility",
+    "threshold_history_observations": 60,
+    "high_rule": "rv20 > prior_60_rv20_median",
+    "low_rule": "rv20 <= prior_60_rv20_median"
+  },
+  "trend_state": {
+    "factor_symbol": "BTC_USDT",
+    "indicator": "Wilder ADX",
+    "period_days": 14,
+    "trend_threshold": 25.0,
+    "trend_rule": "ADX14 >= 25",
+    "range_rule": "ADX14 < 25"
+  },
+  "primary_regimes": ["HIGH_VOL_TREND", "HIGH_VOL_RANGE", "LOW_VOL_TREND", "LOW_VOL_RANGE"],
+  "secondary_diagnostic": {
+    "trend_direction": "sign of prior completed 20-day BTC log return",
+    "allowed_values": ["UP", "DOWN"]
+  },
+  "reported_metrics_per_strategy_regime": ["observations", "mean_net_bps", "median_net_bps", "positive_fraction", "cumulative_net_bps", "mean_gross_bps", "mean_cost_bps"],
+  "minimum_cell_observations_for_comparison": 20,
+  "claims": {
+    "regime_attribution_is_validation": false,
+    "regime_winner_is_promotable": false,
+    "router_supported": false,
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "sprint7_family_rescued": false
+  }
+}
