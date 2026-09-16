@@ -1,0 +1,44 @@
+{
+  "protocol": "discovery_v2_sprint8_regime_gated_v1",
+  "protocol_freeze_commit": "08bf965cb9b1cd22befd7c0bcdaa21ea48ef097c",
+  "execution_commit": "fa8466375c521b65eb2d33e808a5d7484fcdf35b",
+  "workflow_run_id": 35128440082,
+  "artifact_id": 10460117591,
+  "artifact_sha256": "08ddca104d20e57ee3fb94598dac42091eb2a6fe1b167c2415324b8ad855daae",
+  "status": "CLOSED_NO_PROMOTABLE_CANDIDATE",
+  "families": {
+    "trend_gated_momentum_acceleration": {
+      "state": "FALSIFIED",
+      "stable_1_5x_neighborhood": ["trend_accel_2d", "trend_accel_3d", "trend_accel_5d"],
+      "preregistered_upper_median_selection": "trend_accel_3d",
+      "selected_mean_net_bps": 15.132,
+      "selected_mean_net_bps_1_5x_cost": 12.462,
+      "selected_bootstrap_95pct_lower_bps": -2.073,
+      "selected_minimum_leave_one_symbol_out_mean_bps": 6.445,
+      "failure_reason": "Preregistered selected 3d member fails positive bootstrap-lower-bound gate. Positive 2d and 5d members may not be substituted after results.",
+      "notable_nonselected_cells": {
+        "trend_accel_2d": {"mean_net_bps": 20.703, "mean_net_bps_1_5x_cost": 17.632, "bootstrap_lower_bps": 4.909, "minimum_loso_mean_bps": 10.998},
+        "trend_accel_5d": {"mean_net_bps": 16.702, "mean_net_bps_1_5x_cost": 14.835, "bootstrap_lower_bps": 0.333, "minimum_loso_mean_bps": 5.028}
+      }
+    },
+    "low_vol_range_beta_asymmetry": {
+      "state": "FALSIFIED",
+      "stable_1_5x_neighborhood": ["lvr_betaasym_30d", "lvr_betaasym_45d"],
+      "preregistered_upper_median_selection": "lvr_betaasym_45d",
+      "selected_mean_net_bps": 4.221,
+      "selected_mean_net_bps_1_5x_cost": 3.280,
+      "selected_bootstrap_95pct_lower_bps": -9.261,
+      "selected_minimum_leave_one_symbol_out_mean_bps": 1.875,
+      "selected_best_calendar_month_positive_pnl_share": 0.5804,
+      "failure_reason": "Fails bootstrap-lower-bound and calendar-month concentration gates."
+    }
+  },
+  "claims": {
+    "persistent_edge_established": false,
+    "promotable_candidate_exists": false,
+    "live_execution_supported": false,
+    "leverage_supported": false,
+    "retuning_allowed": false,
+    "nonselected_positive_cells_may_be_promoted": false
+  }
+}
