@@ -1,0 +1,93 @@
+{
+  "protocol": "discovery_v2_sprint7_v1",
+  "status": "FROZEN_BEFORE_MARKET_RESULTS",
+  "frozen_at_utc": "2026-09-16T17:16:00Z",
+  "purpose": "Falsify three new cross-sectional mechanisms after repeated 2026-pass/2025-fail candidate behavior, without using 2025 data for discovery or selection.",
+  "data": {
+    "venue": "MEXC perpetuals",
+    "development_start_utc": "2026-01-01T00:00:00Z",
+    "development_end_utc_exclusive": "2026-09-12T00:00:00Z",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "alt_symbols_for_beta_family": ["ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "actual_public_funding_required": true,
+    "survivorship_warning": "Fixed present liquid universe; historical results do not remove survivorship risk.",
+    "temporal_holdout_protection": "No 2025 market data may be inspected or used for Sprint 7 family selection. Any new candidate must face a separately frozen non-overlapping 2025 D3 after candidate freeze."
+  },
+  "execution": {
+    "gross_exposure": 1.0,
+    "intended_net_exposure": 0.0,
+    "transaction_cost_bps_per_side_on_turnover": 10.0,
+    "cost_multipliers": [1.0, 1.5, 2.0],
+    "signal_on_completed_data_only": true,
+    "execution": "next UTC daily open after completed signal day",
+    "hold_days": 1,
+    "leverage": 1.0,
+    "terminal_liquidation_for_D0_comparability": true
+  },
+  "families": {
+    "vol_adjusted_short_term_reversal": {
+      "hypothesis": "A one-day idiosyncratic-sized move relative to the asset's strictly prior realized volatility partially mean reverts cross-sectionally over the next daily period.",
+      "volatility_lookback_days_variants": [5, 10, 20, 40],
+      "common_comparison_warmup_days": 40,
+      "score": "negative completed close-to-close return at t divided by sample standard deviation of strictly prior completed returns t-N through t-1",
+      "direction": "long highest two scores and short lowest two scores",
+      "principal_control": "exact reversed direction, equivalent to normalized short-term continuation"
+    },
+    "momentum_acceleration": {
+      "hypothesis": "Assets whose recent N-day cumulative return is improving versus the immediately preceding N-day cumulative return exhibit next-day cross-sectional continuation.",
+      "window_days_variants": [2, 3, 5, 10],
+      "common_comparison_warmup_days": 20,
+      "score": "sum completed close-to-close returns over t-N+1 through t minus sum over t-2N+1 through t-N",
+      "direction": "long highest two scores and short lowest two scores",
+      "principal_control": "exact reversed direction"
+    },
+    "upside_downside_beta_asymmetry": {
+      "hypothesis": "Alts with stronger realized beta to BTC on BTC-up days than on BTC-down days exhibit superior relative continuation into the next daily period.",
+      "lookback_days_variants": [20, 30, 45, 60],
+      "common_comparison_warmup_days": 60,
+      "factor": "BTC_USDT completed close-to-close returns",
+      "score": "OLS slope versus BTC on positive-BTC days minus OLS slope versus BTC on negative-BTC days over the most recent N completed returns ending at t; intercept included separately in each subset",
+      "minimum_observations_per_btc_sign_subset": 5,
+      "portfolio_universe": "nine alts only; BTC is factor and receives zero target weight",
+      "direction": "long highest two alt scores and short lowest two alt scores",
+      "principal_control": "exact reversed alt ranking"
+    }
+  },
+  "family_falsification_gate": {
+    "minimum_baseline_positive_variants": 3,
+    "minimum_adjacent_variants_positive_at_1_5x_cost": 2,
+    "bootstrap_95pct_lower_bound_must_be_positive_for_selected_variant": true,
+    "minimum_candidate_minus_reversed_control_mean_bps": 5.0,
+    "minimum_leave_one_symbol_out_mean_bps": 0.0,
+    "maximum_best_symbol_positive_pnl_share": 0.50,
+    "maximum_best_calendar_month_positive_pnl_share": 0.50,
+    "maximum_top5_positive_period_share": 0.50,
+    "selection_if_family_passes": "Among variants belonging to an adjacent 1.5x-cost-positive neighborhood, select the upper median parameter; never select by maximum PnL."
+  },
+  "trial_accounting": {
+    "directional_candidate_variants_added_this_sprint": 12,
+    "all_12_variants_count": true,
+    "all_reversed_controls_count_as_controls": true,
+    "no_grid_expansion_after_results": true,
+    "failed_family_closes": true,
+    "positive_control_can_only_generate_a_new_candidate_id": true,
+    "sequential_discovery_debt_acknowledged": true,
+    "sprints_1_through_6_are_part_of_the_researcher_degrees_of_freedom": true,
+    "no_prior_sprint_failure_or_success_reduces_this_sprints_thresholds": true,
+    "no_regime_filter_or_router_selection_inside_this_sprint": true,
+    "no_2025_temporal_data_for_discovery": true
+  },
+  "evidence_boundary": {
+    "this_sprint_is": "D0 hypothesis falsification",
+    "positive_sprint_result_establishes_edge": false,
+    "positive_sprint_result_only_allows": "new frozen candidate followed by independent reproduction, different-source D2, separately frozen non-overlapping temporal D3, and prospective D4",
+    "d3_failure_is_terminal_for_candidate_id": true
+  },
+  "claims": {
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "leverage_supported": false,
+    "existing_candidates_modified": false,
+    "failed_prior_family_rescued": false
+  }
+}
