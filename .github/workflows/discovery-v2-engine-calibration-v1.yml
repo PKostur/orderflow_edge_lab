@@ -44,6 +44,7 @@ jobs:
           mkdir -p research/discovery_v2/results/freqtrade
           docker pull freqtradeorg/freqtrade:stable
           docker run --rm \
+            --user "$(id -u):$(id -g)" \
             --entrypoint python \
             -v "$PWD:/workspace" \
             -w /workspace \
@@ -72,6 +73,7 @@ jobs:
             --nautilus-dir research/discovery_v2/results/nautilus \
             --output research/discovery_v2/results/external_signal_parity.json
       - name: Preserve calibration evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: discovery-v2-engine-calibration-v1
