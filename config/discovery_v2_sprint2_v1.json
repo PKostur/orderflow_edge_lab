@@ -1,0 +1,88 @@
+{
+  "protocol": "discovery_v2_sprint2_v1",
+  "status": "FROZEN_BEFORE_MARKET_RESULTS",
+  "frozen_at_utc": "2026-09-16T13:05:00Z",
+  "purpose": "Falsify three economically distinct cross-sectional mechanisms without contaminating beta45 or expanding the search after results.",
+  "data": {
+    "venue": "MEXC perpetuals",
+    "development_start_utc": "2026-01-01T00:00:00Z",
+    "development_end_utc_exclusive": "2026-09-12T00:00:00Z",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "actual_public_funding_required": true,
+    "survivorship_warning": "Fixed present liquid universe; historical results do not remove survivorship risk."
+  },
+  "execution": {
+    "gross_exposure": 1.0,
+    "intended_net_exposure": 0.0,
+    "selected_per_side": 2,
+    "weight_per_selected_leg": 0.25,
+    "transaction_cost_bps_per_side_on_turnover": 10.0,
+    "cost_multipliers": [1.0, 1.5, 2.0],
+    "signal_on_completed_data_only": true,
+    "first_execution": "next available open after signal",
+    "leverage": 1.0
+  },
+  "families": {
+    "same_weekday_seasonality": {
+      "hypothesis": "An asset's mean return on the same weekday in prior weeks positively predicts its cross-sectional return on the next occurrence of that weekday.",
+      "timeframe": "1d",
+      "lookback_weeks_variants": [4, 8, 12, 16],
+      "score": "mean of strictly prior close-to-close returns having the same UTC weekday as the signal day",
+      "direction": "long highest two scores; short lowest two",
+      "rebalance_every_days": 1,
+      "hold_days": 1,
+      "principal_control": "exact reversed direction"
+    },
+    "low_idiosyncratic_volatility": {
+      "hypothesis": "After removing BTC market exposure, lower residual volatility earns higher subsequent cross-sectional return than higher residual volatility.",
+      "timeframe": "1d",
+      "lookback_days_variants": [14, 21, 30, 45],
+      "factor_model": "OLS with intercept of alt daily returns on BTC daily returns using strictly prior completed observations",
+      "score": "sample standard deviation of OLS residuals over lookback",
+      "direction": "long lowest two residual-volatility assets; short highest two",
+      "rebalance_every_days": 7,
+      "hold_days": 7,
+      "principal_control": "exact reversed direction"
+    },
+    "intraday_skewness": {
+      "hypothesis": "Lower realized return skewness predicts higher next-day cross-sectional return than higher realized skewness.",
+      "signal_timeframe": "4h",
+      "execution_timeframe": "1d",
+      "lookback_days_variants": [3, 5, 7, 14],
+      "score": "sample skewness of strictly prior completed 4h log returns within the lookback window, using bars ending no later than the completed daily signal boundary",
+      "direction": "long lowest two skewness scores; short highest two",
+      "rebalance_every_days": 1,
+      "hold_days": 1,
+      "principal_control": "exact reversed direction"
+    }
+  },
+  "family_falsification_gate": {
+    "minimum_baseline_positive_variants": 3,
+    "minimum_adjacent_variants_positive_at_1_5x_cost": 2,
+    "bootstrap_95pct_lower_bound_must_be_positive_for_selected_variant": true,
+    "minimum_candidate_minus_reversed_control_mean_bps": 5.0,
+    "minimum_leave_one_symbol_out_mean_bps": 0.0,
+    "maximum_best_symbol_positive_pnl_share": 0.50,
+    "maximum_best_calendar_month_positive_pnl_share": 0.50,
+    "maximum_top5_positive_period_share": 0.50,
+    "selection_if_family_passes": "among variants belonging to an adjacent 1.5x-cost-positive neighborhood, select the upper median parameter; never select by maximum PnL"
+  },
+  "trial_accounting": {
+    "all_12_directional_candidate_variants_count": true,
+    "all_reversed_controls_count_as_controls": true,
+    "no_grid_expansion_after_results": true,
+    "failed_family_closes": true,
+    "positive_control_can_only_generate_a_new_candidate_id": true
+  },
+  "evidence_boundary": {
+    "this_sprint_is": "D0 hypothesis falsification",
+    "same_period_cross_symbol_is_independent_validation": false,
+    "positive_sprint_result_establishes_edge": false,
+    "positive_sprint_result_only_allows": "new frozen candidate followed by D2/D3/D4 and independent-engine replication"
+  },
+  "claims": {
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
+}
