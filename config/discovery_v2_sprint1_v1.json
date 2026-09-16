@@ -1,0 +1,146 @@
+{
+  "protocol_id": "discovery_v2_sprint1_v1",
+  "protocol_status": "FROZEN_BEFORE_RESULTS",
+  "freeze_basis": "The first Git commit containing this file is the immutable protocol freeze. No Sprint 1 strategy result may be inspected before that commit.",
+  "purpose": "Cheap falsification of three economically distinct crypto-perpetual strategy families under Discovery v2. This protocol does not alter any existing frozen candidate and cannot authorize live trading.",
+  "claims": {
+    "same_period_tests_are_future_oos": false,
+    "development_results_establish_edge": false,
+    "evaluation_output_authorizes_live": false,
+    "leverage_can_rescue_negative_expectancy": false
+  },
+  "data": {
+    "venue": "MEXC futures",
+    "market_type": "USDT perpetual",
+    "independence_level": "D0",
+    "development_start_utc": "2026-01-01T00:00:00Z",
+    "development_end_utc_exclusive": "2026-09-12T00:00:00Z",
+    "symbols": [
+      "BTC_USDT",
+      "ETH_USDT",
+      "SOL_USDT",
+      "XRP_USDT",
+      "DOGE_USDT",
+      "BNB_USDT",
+      "ADA_USDT",
+      "LINK_USDT",
+      "SUI_USDT",
+      "ENA_USDT"
+    ],
+    "universe_warning": "Fixed present liquid universe; survivorship bias is explicitly unresolved at D0.",
+    "completed_bars_only": true,
+    "missing_data_policy": "inner-align required symbols for each family; no forward fill of price or funding",
+    "funding_policy": "use historical funding observations with their actual settlement timestamps; if unavailable for a required symbol/interval, fail closed rather than synthesize"
+  },
+  "execution": {
+    "signal_information": "completed bars or completed funding settlements only",
+    "execution_time": "next eligible bar open or next eligible event after signal formation",
+    "maximum_gross_exposure": 1.0,
+    "leverage": 1.0,
+    "pyramiding": false,
+    "baseline_round_trip_cost_bps": 20.0,
+    "cost_multipliers": [1.0, 1.5, 2.0],
+    "funding_included_when_position_crosses_settlement": true,
+    "one_event_delay_stress_required_before_replication": true
+  },
+  "families": {
+    "dispersion_conditioned_xs_momentum": {
+      "family_id": "dv2_s1_dispersion_xs_mom",
+      "timeframe": "1d",
+      "mechanism": "Cross-sectional momentum may be weaker following unusually high cross-sectional dispersion; condition the same causal momentum concept on a low-dispersion state rather than changing the frozen XS candidate.",
+      "signal": {
+        "momentum_lookback_days": 30,
+        "holding_days": 7,
+        "quantile_fraction": 0.25,
+        "portfolio": "dollar_neutral_top_bottom",
+        "dispersion_measure": "cross-sectional standard deviation of same-day close-to-close returns",
+        "dispersion_threshold": "rolling median of PRIOR dispersion observations only",
+        "trade_state": "trade only when completed-day dispersion is <= prior rolling median"
+      },
+      "pre_registered_variants": [
+        {"variant_id": "disp60", "dispersion_median_lookback_days": 60},
+        {"variant_id": "disp90", "dispersion_median_lookback_days": 90},
+        {"variant_id": "disp120", "dispersion_median_lookback_days": 120},
+        {"variant_id": "disp180", "dispersion_median_lookback_days": 180}
+      ],
+      "controls": [
+        "ungated_30d_7d_dollar_neutral_momentum_benchmark",
+        "reversed_rank_direction_control"
+      ],
+      "relationship_to_existing_candidate": "NEW family only. The frozen mexc_xs_mom30_7_dn_v1 rule, clock and positions must not be modified or filtered."
+    },
+    "funding_extreme_reversal": {
+      "family_id": "dv2_s1_funding_extreme_reversal",
+      "timeframe": "funding settlement / 8h context",
+      "mechanism": "Extreme perpetual funding can proxy crowded directional demand. Trade against the crowded side while receiving, or reducing payment of, the contemporaneous funding transfer when direction permits.",
+      "signal": {
+        "z_threshold_abs": 2.0,
+        "direction": "z>=+2 short; z<=-2 long; otherwise flat",
+        "holding_rule": "hold for one funding interval, then recompute from information available at the completed settlement",
+        "portfolio": "equal weight among active symbols, gross exposure capped at 1.0",
+        "funding_accounting": "actual historical funding cash flow only"
+      },
+      "pre_registered_variants": [
+        {"variant_id": "fund20", "funding_z_lookback_settlements": 20},
+        {"variant_id": "fund30", "funding_z_lookback_settlements": 30},
+        {"variant_id": "fund45", "funding_z_lookback_settlements": 45},
+        {"variant_id": "fund60", "funding_z_lookback_settlements": 60}
+      ],
+      "controls": [
+        "same_timing_reversed_direction_control",
+        "funding_cashflow_only_decomposition"
+      ]
+    },
+    "btc_residual_shock_reversal": {
+      "family_id": "dv2_s1_btc_residual_shock_reversal",
+      "timeframe": "1d",
+      "mechanism": "After controlling each altcoin for its recent BTC beta, unusually large idiosyncratic daily shocks may partially reverse over the following day.",
+      "signal": {
+        "beta_fit": "OLS with intercept using PRIOR completed daily returns only",
+        "shock": "completed-day alt return minus beta-model prediction from same completed-day BTC return",
+        "direction": "long bottom residual-shock quartile, short top residual-shock quartile",
+        "holding_days": 1,
+        "portfolio": "equal-dollar neutral across selected alts",
+        "btc_role": "factor only; BTC is not ranked as an alt"
+      },
+      "pre_registered_variants": [
+        {"variant_id": "beta20", "beta_lookback_days": 20},
+        {"variant_id": "beta30", "beta_lookback_days": 30},
+        {"variant_id": "beta45", "beta_lookback_days": 45},
+        {"variant_id": "beta60", "beta_lookback_days": 60}
+      ],
+      "controls": [
+        "same_timing_residual_momentum_direction_control",
+        "raw_return_reversal_without_beta_control"
+      ]
+    }
+  },
+  "cheap_falsification": {
+    "trial_accounting": "all four variants per family are retained; controls are reported separately and never discarded",
+    "family_survival_requires": [
+      "more than half of preregistered variants have positive mean net return at baseline costs",
+      "at least one contiguous parameter neighborhood remains positive at 1.5x baseline friction",
+      "the causal reversed/null control is materially weaker than the corresponding rule",
+      "no unexplained timestamp, funding chronology, or execution-validity failure",
+      "for cross-sectional families, leave-one-symbol-out mean net return is positive for any variant considered for replication",
+      "selection-bias diagnostics are reported whenever sample size permits"
+    ],
+    "selection_rule_if_multiple_variants_survive": "select the median parameter among the contiguous surviving parameter neighborhood; never select the isolated highest-PnL variant",
+    "if_family_fails": "archive as FALSIFIED under this family version; do not expand or retune this frozen grid as a rescue",
+    "if_family_survives": "create a new separately frozen candidate specification before independent-engine replication; prospective D4 clock begins only after that later freeze"
+  },
+  "required_outputs": [
+    "immutable dataset manifest and hashes",
+    "all variant return series",
+    "all controls",
+    "baseline and 1.5x and 2.0x cost results",
+    "block-bootstrap uncertainty",
+    "DSR-style selection adjustment when applicable",
+    "CSCV/PBO when applicable",
+    "Reality-Check-style family test when applicable",
+    "symbol and calendar concentration",
+    "leave-one-symbol-out diagnostics",
+    "one-event delay stress for any surviving family",
+    "explicit FALSIFIED or REPLICATION_PENDING state"
+  ]
+}
