@@ -1,72 +1,17 @@
-name: DV2 Range Shock Momentum D4 Shadow
+name: DV2 Range Shock Momentum D4 Shadow - RETIRED
 
 on:
   workflow_dispatch:
-  push:
-    branches: [research/dv2-range-shock-momentum-30d-v1]
-    paths:
-      - 'config/dv2_liquidity_range_shock_momentum_30d_d4_v1.json'
-      - 'src/orderflow_edge_lab/range_shock_momentum_forward.py'
-      - 'scripts/dv2_range_shock_d4.py'
-      - 'tests/test_range_shock_momentum_forward.py'
-      - '.github/workflows/dv2-range-shock-d4-shadow.yml'
 
 permissions:
   contents: read
 
 jobs:
-  shadow:
+  retired:
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Install research runtime
-        run: python -m pip install -e '.[research]' pytest
-      - name: Run D4 boundary guardrails
-        run: python -m pytest -q tests/test_range_shock_momentum_forward.py tests/test_range_shock_momentum_candidate.py
-      - name: Verify frozen D4 protocol
+      - name: Candidate terminal status
         run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          p=json.loads(Path('config/dv2_liquidity_range_shock_momentum_30d_d4_v1.json').read_text())
-          assert p['status']=='FROZEN_BEFORE_FORWARD_START'
-          assert p['forward_start_utc']=='2026-09-17T00:00:00Z'
-          assert p['review_after_completed_portfolio_periods']==30
-          assert p['rule']['range_baseline_days']==30
-          assert p['rule']['leverage']==1.0
-          assert p['forward_accounting']['flat_at_forward_start'] is True
-          assert p['forward_accounting']['no_pre_start_pnl'] is True
-          assert p['forward_accounting']['no_artificial_terminal_liquidation'] is True
-          assert p['claims']['retuning_allowed'] is False
-          print('Frozen range-shock D4 protocol verified.')
-          PY
-      - name: Run prospective D4 shadow
-        run: python scripts/dv2_range_shock_d4.py --output-dir research/discovery_v2/range_shock_momentum_30d/d4_shadow
-      - name: Enforce forward boundary
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          import pandas as pd
-          r=json.loads(Path('research/discovery_v2/range_shock_momentum_30d/d4_shadow/D4_REPORT.json').read_text()); start=pd.Timestamp(r['forward_start_utc']); asof=pd.Timestamp(r['asof_utc']); n=int(r['exact_candidate']['completed_periods'])
-          assert r['claims']['paper_shadow_only'] is True and r['claims']['live_eligible'] is False and r['claims']['retuning_allowed'] is False
-          assert r['boundary_checks']['no_pre_start_pnl'] is True and r['boundary_checks']['no_artificial_terminal_liquidation'] is True
-          assert r['review_minimum_met']==(n>=30)
-          if asof<start:
-              assert n==0; assert r['exact_candidate']['pnl_per_1000']==0.0; assert r['exact_candidate']['open_position'] is None
-          if n: assert pd.Timestamp(r['exact_candidate']['start'])>=start
-          print({'asof':r['asof_utc'],'completed':n,'hash':r['exact_candidate']['observations_sha256'],'open':r['exact_candidate']['open_position']})
-          PY
-      - name: Upload immutable D4 snapshot
-        uses: actions/upload-artifact@v4
-        with:
-          name: dv2-range-shock-d4-v1-${{ github.run_number }}
-          path: |
-            config/dv2_liquidity_range_shock_momentum_30d_d4_v1.json
-            research/discovery_v2/range_shock_momentum_30d/d4_shadow/
-          retention-days: 90
-          if-no-files-found: error
+          echo "dv2_liquidity_range_shock_momentum_30d_v1 is retired."
+          echo "Reason: frozen non-overlapping Binance 2025 D3 temporal holdout failed."
+          echo "The pre-result D4 boundary remains audit evidence only and must not rescue the dead candidate ID."
