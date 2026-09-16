@@ -1,0 +1,64 @@
+name: Venue Access Probe
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/last-chance-structural-edge-v1]
+    paths:
+      - '.github/workflows/venue-access-probe.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Probe public market-data endpoints
+        run: |
+          mkdir -p research/last_chance/results
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from urllib.request import Request, urlopen
+          from urllib.error import HTTPError, URLError
+          from time import time
+
+          probes = {
+              'gate': ('GET','https://api.gateio.ws/api/v4/futures/usdt/funding_rate?contract=BTC_USDT&limit=2',None),
+              'bitget': ('GET','https://api.bitget.com/api/v2/mix/market/history-fund-rate?symbol=BTCUSDT&productType=usdt-futures&pageSize=2&pageNo=1',None),
+              'okx': ('GET','https://www.okx.com/api/v5/public/funding-rate-history?instId=BTC-USDT-SWAP&limit=2',None),
+              'hyperliquid': ('POST','https://api.hyperliquid.xyz/info',json.dumps({'type':'fundingHistory','coin':'BTC','startTime':int((time()-86400)*1000)}).encode()),
+          }
+          out={}
+          for name,(method,url,body) in probes.items():
+              try:
+                  req=Request(url,data=body,method=method,headers={'Accept':'application/json','Content-Type':'application/json','User-Agent':'orderflow-edge-lab/1.0'})
+                  with urlopen(req,timeout=20) as r:
+                      raw=r.read(2000).decode('utf-8','replace')
+                      out[name]={'ok':200 <= r.status < 300,'status':r.status,'sample':raw[:500]}
+              except HTTPError as e:
+                  out[name]={'ok':False,'status':e.code,'error':str(e)}
+              except Exception as e:
+                  out[name]={'ok':False,'status':None,'error':f'{type(e).__name__}: {e}'}
+          Path('research/last_chance/results/venue_access_probe.json').write_text(json.dumps(out,indent=2),encoding='utf-8')
+          print(json.dumps(out,indent=2))
+          PY
+      - name: Commit probe result
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/last_chance/results/venue_access_probe.json
+          git commit -m 'research: preserve venue access probe' || exit 0
+          for attempt in 1 2 3; do
+            git pull --rebase origin research/last-chance-structural-edge-v1 && git push origin HEAD:research/last-chance-structural-edge-v1 && exit 0
+            sleep 3
+          done
+          exit 1
