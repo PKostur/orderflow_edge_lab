@@ -38,7 +38,7 @@ jobs:
           python -m orderflow_edge_lab.cli.cross_exchange_funding_bitget \
             --config config/last_chance_structural_edge_v1_2.json \
             --output research/last_chance/results/cross_exchange_funding_v1_2.json \
-            --max-workers 5
+            --max-workers 1
           rc=$?
           echo "exit_code=$rc" >> "$GITHUB_OUTPUT"
           exit 0
