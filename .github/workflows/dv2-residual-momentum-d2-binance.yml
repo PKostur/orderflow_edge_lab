@@ -1,0 +1,82 @@
+name: DV2 Residual Momentum D2 Binance
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/dv2-residual-momentum-beta45-v1]
+    paths:
+      - 'config/dv2_residual_momentum_beta45_v1.json'
+      - 'research/discovery_v2/residual_momentum_beta45/**'
+      - 'src/orderflow_edge_lab/binance_history.py'
+      - 'src/orderflow_edge_lab/discovery_v2_sprint1.py'
+      - 'scripts/dv2_residual_momentum_d2_binance.py'
+      - 'tests/test_binance_history.py'
+      - '.github/workflows/dv2-residual-momentum-d2-binance.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dv2-residual-momentum-d2-binance-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  d2-source-replication:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research runtime
+        run: python -m pip install -e '.[research]' pytest
+      - name: Run guardrails before Binance data
+        run: python -m pytest -q tests/test_binance_history.py tests/test_discovery_v2_sprint1.py tests/test_discovery_v2_evaluation.py
+      - name: Verify immutable candidate and D2 boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c = json.loads(Path('config/dv2_residual_momentum_beta45_v1.json').read_text())
+          assert c['candidate_id'] == 'dv2_btc_residual_momentum_beta45_v1'
+          assert c['signal']['beta_lookback_completed_days'] == 45
+          assert c['signal']['direction'] == 'long highest residual two; short lowest residual two'
+          assert c['execution']['baseline_round_trip_cost_bps'] == 20.0
+          assert c['execution']['leverage'] == 1.0
+          assert c['evidence_boundary']['same_period_cross_source_is_future_oos'] is False
+          assert c['claims']['persistent_edge_established'] is False
+          print('Frozen beta45 candidate boundary verified.')
+          PY
+      - name: Run exact Binance D2 source replication
+        run: |
+          python scripts/dv2_residual_momentum_d2_binance.py \
+            --candidate config/dv2_residual_momentum_beta45_v1.json \
+            --evaluation config/discovery_v2_evaluation_v1.json \
+            --output-dir research/discovery_v2/residual_momentum_beta45/d2_binance/results
+      - name: Enforce claims and state boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path('research/discovery_v2/residual_momentum_beta45/d2_binance/results/D2_REPORT.json').read_text())
+          assert r['state'] in {'D2_SOURCE_REPLICATED', 'D2_SOURCE_FAILED'}
+          assert r['independence_level'] == 'D2'
+          assert r['claims']['d2_same_period_is_future_oos'] is False
+          assert r['claims']['persistent_edge_established'] is False
+          assert r['claims']['independent_engine_replication_complete'] is False
+          assert r['claims']['prospective_d4_complete'] is False
+          assert r['claims']['live_eligible'] is False
+          print(r['state'], r['hard_gates'])
+          PY
+      - name: Upload immutable D2 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dv2-residual-momentum-beta45-d2-binance
+          path: |
+            config/dv2_residual_momentum_beta45_v1.json
+            research/discovery_v2/residual_momentum_beta45/D2_CONTRACT.md
+            research/discovery_v2/residual_momentum_beta45/d2_binance/results/
+          retention-days: 30
+          if-no-files-found: warn
