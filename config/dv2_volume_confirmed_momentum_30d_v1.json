@@ -1,0 +1,68 @@
+{
+  "candidate_id": "dv2_volume_confirmed_momentum_30d_v1",
+  "status": "FROZEN_CANDIDATE",
+  "frozen_at_utc": "2026-09-16T15:27:00Z",
+  "origin": {
+    "protocol": "discovery_v2_sprint3_v1",
+    "protocol_freeze_commit": "d5d8ac6f8964a12a15333e4c82e049bca9f478a4",
+    "sprint3_execution_commit": "d0c7b25019844cc515fa91ddd6a1fbcf83c4e721",
+    "artifact_sha256": "64864fa097cad50bb2b2146ba96fd5af023ee69aeeab5617e808d2a283b9454c",
+    "evidence_level": "D0",
+    "development_source": "MEXC perpetuals",
+    "development_window": "2026-01-01T00:00:00Z through 2026-09-12T00:00:00Z exclusive",
+    "selection_rule": "upper median member of the preregistered adjacent 1.5x-cost-positive neighborhood, never maximum PnL"
+  },
+  "rule": {
+    "universe": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "timeframe": "1d",
+    "volume_baseline_days": 30,
+    "signal_boundary": "completed UTC daily close t",
+    "return_component": "close_t / close_t-1 - 1",
+    "volume_component": "completed-day contract volume_t divided by the median contract volume of the strictly prior 30 completed daily bars t-30 through t-1",
+    "score": "return_component multiplied by volume_component",
+    "ranking": "cross-sectional ascending score",
+    "portfolio": "long highest two scores at +25% each and short lowest two scores at -25% each",
+    "gross_exposure": 1.0,
+    "intended_net_exposure": 0.0,
+    "execution": "next UTC daily open t+1",
+    "holding_period": "1 day",
+    "rebalance": "daily",
+    "transaction_cost_bps_per_side_on_actual_turnover": 10.0,
+    "funding": "actual realized perpetual funding during the holding interval",
+    "leverage": 1.0,
+    "terminal_liquidation": "evaluation may close the final sample position for accounting only; prospective shadow must not create artificial terminal liquidation"
+  },
+  "locked_controls": {
+    "principal_reversed_control": "exact same signal and timing with long/short ranking direction reversed",
+    "cost_multipliers": [1.0, 1.5, 2.0],
+    "leave_one_symbol_out": true,
+    "symbol_concentration_max": 0.50,
+    "calendar_month_concentration_max": 0.50,
+    "top5_positive_period_share_max": 0.50
+  },
+  "d0_snapshot": {
+    "observations": 207,
+    "mean_net_bps_per_day": 16.14952044386211,
+    "mean_net_bps_1_5x_cost": 8.649520443862105,
+    "mean_net_bps_2x_cost": 1.1495204438621043,
+    "bootstrap_95pct_lower_bps": 1.3266160961989708,
+    "minimum_leave_one_symbol_out_mean_bps": 8.668140462777481,
+    "best_symbol_positive_pnl_share": 0.3938441660172713,
+    "best_calendar_month_positive_pnl_share": 0.48074524479070746,
+    "top5_positive_period_share": 0.2341375887153489,
+    "reversed_control_mean_net_bps": -46.149520443862095,
+    "candidate_minus_reversed_control_bps": 62.2990408877242
+  },
+  "promotion_path": {
+    "independent_engine_reproduction_required": true,
+    "D2_different_source_same_period_required": true,
+    "D4_prospective_required": true,
+    "retuning_after_freeze_forbidden": true,
+    "negative_unlevered_expectancy_may_not_be_rescued_with_leverage": true
+  },
+  "claims": {
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
+}
