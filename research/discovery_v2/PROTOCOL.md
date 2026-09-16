@@ -37,6 +37,8 @@ A strategy no longer passes because one backtest looks good. It progresses only 
 
 A strategy requiring unavailable exchange support must use an adapter or an alternate venue for research. Venue substitution must be versioned and can never be presented as validation on the original venue.
 
+The initial engine calibration is now complete and recorded in `research/discovery_v2/CALIBRATION_STATUS.md`: the frozen 8h EMA/ATR fixture achieved exact signal parity across the reference implementation, an independently written implementation, Freqtrade and NautilusTrader, followed by exact 24-fill event-driven next-open execution parity in NautilusTrader. This is engineering calibration only and does not upgrade the trading evidence of the fixture strategy.
+
 ## Data architecture
 
 Each experiment receives a `dataset_manifest.json` containing:
@@ -123,6 +125,8 @@ Required comparison:
 
 Material disagreement between engines blocks promotion until explained prospectively.
 
+For execution-sensitive strategies, signal parity alone is insufficient. The candidate must additionally reproduce the relevant fill sequence, order state, position state and PnL accounting in an execution-capable independent engine before locked validation.
+
 ### Phase E — adversarial execution test
 
 The strategy must survive a cost/execution surface, not one fee assumption.
@@ -167,6 +171,8 @@ A failed locked validation closes that exact candidate. Diagnostics may inspire 
 ## Evaluation model
 
 There is no single “promotion score.” A candidate receives a vector of evidence dimensions so a high return cannot compensate for invalid research.
+
+The initial executable evaluator is frozen in `config/discovery_v2_evaluation_v1.json` and implemented in `src/orderflow_edge_lab/discovery_v2_evaluation.py`. It includes dependence-aware block bootstrap, Deflated-Sharpe-style selection adjustment, CSCV/PBO, a centered moving-block Reality-Check-style family test, cost surfaces, break-even friction, concentration diagnostics and leave-one-symbol-out analysis. It deliberately cannot auto-promote a candidate.
 
 ### Validity
 - no lookahead leakage;
