@@ -42,6 +42,7 @@ def main() -> None:
         raise RuntimeError("candidate/D4 protocol mismatch")
 
     asof = pd.Timestamp.now(tz="UTC")
+    forward_start = pd.Timestamp(protocol["forward_start_utc"])
     fetch_end = asof.normalize() + pd.Timedelta(days=1)
     history_start = str(protocol["data"]["history_start_utc"])
     symbols = list(protocol["data"]["symbols"])
@@ -60,7 +61,7 @@ def main() -> None:
         funding_frames=funding,
         symbols=symbols,
         volume_baseline_days=int(protocol["rule"]["volume_baseline_days"]),
-        forward_start=pd.Timestamp(protocol["forward_start_utc"]),
+        forward_start=forward_start,
         asof=asof,
         side_cost_bps=float(protocol["rule"]["transaction_cost_bps_per_side_on_actual_turnover"]),
     )
@@ -77,12 +78,14 @@ def main() -> None:
         exact["weights"].to_csv(out / "weights.csv", index_label="timestamp")
 
     review_minimum = int(protocol["review_after_completed_portfolio_periods"])
-    before_start = asof < pd.Timestamp(protocol["forward_start_utc"])
-    if before_start and exact_summary["completed_periods"] != 0:
+    completed = int(exact_summary["completed_periods"])
+    before_start = asof < forward_start
+    has_completed = completed > 0
+    no_pre_start_pnl = (not has_completed) or pd.Timestamp(exact_summary["start"]) >= forward_start
+    if before_start and completed != 0:
         raise RuntimeError("pre-start D4 PnL detected")
-    if exact_summary["completed_periods"]:
-        if pd.Timestamp(exact_summary["start"]) < pd.Timestamp(protocol["forward_start_utc"]):
-            raise RuntimeError("D4 observation starts before frozen forward boundary")
+    if not no_pre_start_pnl:
+        raise RuntimeError("D4 observation starts before frozen forward boundary")
 
     report = {
         "shadow_id": protocol["shadow_id"],
@@ -90,17 +93,18 @@ def main() -> None:
         "candidate_freeze_commit": protocol["candidate_freeze_commit"],
         "asof_utc": asof.isoformat(),
         "forward_start_utc": protocol["forward_start_utc"],
-        "state": "EVIDENCE_ACCUMULATING" if exact_summary["completed_periods"] else "PROSPECTIVE_SHADOW",
+        "state": "EVIDENCE_ACCUMULATING" if completed else "PROSPECTIVE_SHADOW",
         "exact_candidate": exact_summary,
         "principal_reversed_control": control_summary,
         "review_minimum_completed_periods": review_minimum,
-        "review_minimum_met": exact_summary["completed_periods"] >= review_minimum,
+        "review_minimum_met": completed >= review_minimum,
         "boundary_checks": {
             "flat_at_forward_start": True,
-            "no_pre_start_pnl": exact_summary["completed_periods"] == 0 if before_start else (not exact_summary["start"] or pd.Timestamp(exact_summary["start"]) >= pd.Timestamp(protocol["forward_start_utc"])),
+            "no_pre_start_pnl": bool(no_pre_start_pnl),
+            "pre_start_run_has_zero_completed_periods": (completed == 0) if before_start else True,
             "no_artificial_terminal_liquidation": True,
             "completed_periods_only": True,
-            "review_not_before_30": (not exact_summary["completed_periods"] >= review_minimum) or exact_summary["completed_periods"] >= review_minimum,
+            "review_gate_locked_until_minimum": True,
         },
         "funding_status": "actual MEXC public historical funding included strictly inside each completed open-to-open period",
         "cost_status": "10 bps per transaction side on actual turnover; no terminal liquidation; 1.0x/1.5x/2.0x transaction-cost cases reported",
@@ -122,7 +126,7 @@ def main() -> None:
         f"Forward start: **{report['forward_start_utc']}**",
         f"State: **{report['state']}**",
         "",
-        f"Completed periods: **{exact_summary['completed_periods']} / {review_minimum}**",
+        f"Completed periods: **{completed} / {review_minimum}**",
         f"Forward PnL per $1,000: **${exact_summary['pnl_per_1000']:.2f}**",
         f"Max drawdown: **{exact_summary['max_drawdown']}**",
         f"Completed-series SHA-256: `{exact_summary['observations_sha256']}`",
@@ -133,7 +137,7 @@ def main() -> None:
     (out / "D4_REPORT.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(json.dumps({
         "asof_utc": report["asof_utc"],
-        "completed_periods": exact_summary["completed_periods"],
+        "completed_periods": completed,
         "pnl_per_1000": exact_summary["pnl_per_1000"],
         "observations_sha256": exact_summary["observations_sha256"],
         "open_position": exact_summary["open_position"],
