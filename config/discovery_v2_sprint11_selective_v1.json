@@ -43,12 +43,12 @@
   "families": {
     "selective_trend_acceleration_5d": {
       "provenance": "New hypothesis generated from Sprint 7/8 diagnostics; not a rescue of those families.",
-      "score": "5-day return minus 20-day return divided by four, computed from completed closes",
+      "score": "sum of the most recent 5 completed close-to-close daily returns minus the sum of the preceding 5 completed daily returns",
       "direction": "long highest two acceleration scores and short lowest two",
       "state_gate": "BTC Wilder ADX14 >= 25 using information through the prior completed daily close",
       "opportunity_quality": "cross-sectional P80 minus P20 of acceleration scores",
       "opportunity_rule": "state gate true AND current quality > strictly-prior 60-day 75th percentile",
-      "principal_controls": ["same gate with reversed ranking", "same score traded every eligible day without opportunity gate"]
+      "principal_controls": ["same gate with reversed ranking", "same score traded every eligible trend day without opportunity-quality gate"]
     },
     "selective_low_skew_90d": {
       "provenance": "New hypothesis generated from Sprint 10 low-skew diagnostics; Sprint 10 family remains falsified.",
