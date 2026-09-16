@@ -1,0 +1,118 @@
+{
+  "protocol": "discovery_v2_sprint11_selective_v1",
+  "status": "FROZEN_BEFORE_MARKET_RESULTS",
+  "frozen_at_utc": "2026-09-16T17:48:00Z",
+  "purpose": "Test whether explicit abstention on ordinary setups improves conditional expectancy. This sprint separates earning more research from proving a persistent edge.",
+  "method_change": {
+    "principle": "The strategy may remain in cash when opportunity quality is not high enough.",
+    "why": "Prior sprints often forced a daily portfolio even when score separation or market state was weak. Sprint 11 tests predeclared opportunity qualification instead of treating every signal as equally tradeable.",
+    "no_hindsight_filtering": true,
+    "all_gate_inputs_known_before_execution": true,
+    "inactive_state": "100% cash with real turnover costs charged on entry and exit",
+    "failed_prior_candidate_ids_rescued": false,
+    "new_hypothesis_ids_required": true
+  },
+  "data": {
+    "venue": "MEXC perpetuals",
+    "development_start_utc": "2026-01-01T00:00:00Z",
+    "development_end_utc_exclusive": "2026-09-12T00:00:00Z",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "actual_public_funding_required": true,
+    "no_2025_data_for_discovery": true,
+    "survivorship_warning": "Fixed present liquid universe; historical results do not remove survivorship risk."
+  },
+  "execution": {
+    "gross_exposure_when_active": 1.0,
+    "intended_net_exposure_when_active": 0.0,
+    "gross_exposure_when_inactive": 0.0,
+    "transaction_cost_bps_per_side_on_actual_turnover": 10.0,
+    "cost_multipliers": [1.0, 1.5, 2.0],
+    "execution": "next UTC daily open after completed signal day",
+    "holding_period": "one day open-to-open",
+    "rebalance": "daily including transitions to and from cash",
+    "leverage": 1.0,
+    "terminal_liquidation_for_D0_comparability": true
+  },
+  "opportunity_gate": {
+    "history_days": 60,
+    "quality_percentile": 0.75,
+    "threshold_timing": "quality threshold at signal t uses only quality observations strictly before t",
+    "single_threshold_only": true,
+    "no_threshold_grid": true
+  },
+  "families": {
+    "selective_trend_acceleration_5d": {
+      "provenance": "New hypothesis generated from Sprint 7/8 diagnostics; not a rescue of those families.",
+      "score": "5-day return minus 20-day return divided by four, computed from completed closes",
+      "direction": "long highest two acceleration scores and short lowest two",
+      "state_gate": "BTC Wilder ADX14 >= 25 using information through the prior completed daily close",
+      "opportunity_quality": "cross-sectional P80 minus P20 of acceleration scores",
+      "opportunity_rule": "state gate true AND current quality > strictly-prior 60-day 75th percentile",
+      "principal_controls": ["same gate with reversed ranking", "same score traded every eligible day without opportunity gate"]
+    },
+    "selective_low_skew_90d": {
+      "provenance": "New hypothesis generated from Sprint 10 low-skew diagnostics; Sprint 10 family remains falsified.",
+      "score": "negative unbiased sample skewness of the most recent 90 completed close-to-close daily returns",
+      "direction": "long lowest-skew two and short highest-skew two",
+      "opportunity_quality": "cross-sectional P80 minus P20 of the negative-skew score",
+      "opportunity_rule": "current quality > strictly-prior 60-day 75th percentile",
+      "principal_controls": ["same gate with reversed ranking", "same score traded every eligible day without opportunity gate"]
+    },
+    "selective_funding_carry_14d": {
+      "provenance": "New hypothesis generated from Sprint 9 isolated 14-day funding-carry result; Sprint 9 family remains falsified.",
+      "score": "negative realized funding burden per calendar day over the strictly prior 14 calendar days",
+      "direction": "long lowest funding-burden two and short highest funding-burden two",
+      "opportunity_quality": "cross-sectional P80 minus P20 of the carry score",
+      "opportunity_rule": "current quality > strictly-prior 60-day 75th percentile",
+      "principal_controls": ["same gate with reversed ranking", "same score traded every eligible day without opportunity gate"]
+    }
+  },
+  "d0_research_candidate_gate": {
+    "minimum_active_periods": 20,
+    "calendar_day_mean_net_bps_must_be_positive": true,
+    "calendar_day_mean_net_bps_at_1_5x_cost_must_be_positive": true,
+    "minimum_active_day_mean_net_bps": 5.0,
+    "minimum_active_day_advantage_vs_reversed_same_gate_bps": 5.0,
+    "minimum_active_day_advantage_vs_ungated_parent_bps": 3.0,
+    "maximum_best_symbol_positive_pnl_share": 0.65,
+    "maximum_best_calendar_month_positive_pnl_share": 0.70,
+    "maximum_top5_positive_period_share": 0.60,
+    "bootstrap_95pct_lower_bound": "diagnostic_only_at_D0",
+    "minimum_leave_one_symbol_out": "diagnostic_only_at_D0",
+    "selection": "Each family has one frozen selective rule. No parameter competition and no choosing the best threshold."
+  },
+  "post_freeze_validation_gate": {
+    "applies_from": "D2 and D3",
+    "baseline_positive": true,
+    "one_point_five_x_cost_positive": true,
+    "bootstrap_95pct_lower_bound_positive": true,
+    "minimum_leave_one_symbol_out_mean_bps": 0.0,
+    "maximum_best_symbol_positive_pnl_share": 0.50,
+    "maximum_best_calendar_month_positive_pnl_share": 0.50,
+    "maximum_top5_positive_period_share": 0.50,
+    "minimum_candidate_minus_reversed_control_mean_bps": 5.0,
+    "d3_nonoverlapping_temporal_failure_terminal": true
+  },
+  "trial_accounting": {
+    "directional_candidate_variants_added_this_sprint": 3,
+    "single_frozen_selectivity_threshold_per_family": true,
+    "ungated_parents_are_controls_not_candidate_variants": true,
+    "reversed_rules_are_controls_not_candidate_variants": true,
+    "no_grid_expansion_after_results": true,
+    "sequential_discovery_debt_acknowledged": true,
+    "prior_sprints_are_hypothesis_generating_contamination": true
+  },
+  "evidence_boundary": {
+    "this_sprint_is": "D0 selective opportunity qualification discovery",
+    "research_candidate_means": "deserves freeze and hostile validation, not established edge",
+    "positive_D0_establishes_edge": false,
+    "positive_D0_supports_live": false,
+    "positive_D0_supports_leverage": false,
+    "required_path_after_D0": "candidate freeze -> independent reproduction -> D2 source replication -> D3 non-overlapping temporal -> D4 prospective shadow"
+  },
+  "claims": {
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
+}
