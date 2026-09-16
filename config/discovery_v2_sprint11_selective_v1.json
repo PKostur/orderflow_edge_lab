@@ -37,12 +37,14 @@
     "history_days": 60,
     "quality_percentile": 0.75,
     "threshold_timing": "quality threshold at signal t uses only quality observations strictly before t",
+    "quality_history_accumulates_as_soon_as_family_score_is_defined": true,
     "single_threshold_only": true,
     "no_threshold_grid": true
   },
   "families": {
     "selective_trend_acceleration_5d": {
       "provenance": "New hypothesis generated from Sprint 7/8 diagnostics; not a rescue of those families.",
+      "score_warmup_days": 10,
       "score": "sum of the most recent 5 completed close-to-close daily returns minus the sum of the preceding 5 completed daily returns",
       "direction": "long highest two acceleration scores and short lowest two",
       "state_gate": "BTC Wilder ADX14 >= 25 using information through the prior completed daily close",
@@ -52,6 +54,7 @@
     },
     "selective_low_skew_90d": {
       "provenance": "New hypothesis generated from Sprint 10 low-skew diagnostics; Sprint 10 family remains falsified.",
+      "score_warmup_days": 90,
       "score": "negative unbiased sample skewness of the most recent 90 completed close-to-close daily returns",
       "direction": "long lowest-skew two and short highest-skew two",
       "opportunity_quality": "cross-sectional P80 minus P20 of the negative-skew score",
@@ -60,6 +63,7 @@
     },
     "selective_funding_carry_14d": {
       "provenance": "New hypothesis generated from Sprint 9 isolated 14-day funding-carry result; Sprint 9 family remains falsified.",
+      "score_warmup_days": 14,
       "score": "negative realized funding burden per calendar day over the strictly prior 14 calendar days",
       "direction": "long lowest funding-burden two and short highest funding-burden two",
       "opportunity_quality": "cross-sectional P80 minus P20 of the carry score",
