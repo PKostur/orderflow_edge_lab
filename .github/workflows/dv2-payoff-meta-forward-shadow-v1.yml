@@ -1,0 +1,95 @@
+name: DV2 Payoff Meta Forward Shadow v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/dv2-payoff-meta-trend-accel-shadow-v1]
+    paths:
+      - 'config/dv2_payoff_meta_trend_accel_shadow_v1.json'
+      - 'src/orderflow_edge_lab/payoff_meta_forward.py'
+      - 'scripts/dv2_payoff_meta_forward_shadow.py'
+      - 'tests/test_payoff_meta_forward.py'
+      - '.github/workflows/dv2-payoff-meta-forward-shadow-v1.yml'
+  # Scheduled workflows execute from the repository default branch. This cron becomes active
+  # only if the frozen workflow is deliberately placed on the default branch without changing
+  # the research rule or prospective start boundary.
+  schedule:
+    - cron: '15 1 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dv2-payoff-meta-forward-shadow-v1
+  cancel-in-progress: true
+
+jobs:
+  shadow:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research runtime
+        run: python -m pip install -e '.[research]' pytest
+      - name: Run prospective-shadow guardrails
+        run: python -m pytest -q tests/test_payoff_meta_forward.py tests/test_discovery_v2_sprint13.py
+      - name: Verify frozen research-shadow boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('config/dv2_payoff_meta_trend_accel_shadow_v1.json').read_text())
+          assert c['status']=='FROZEN_RESEARCH_SHADOW_BEFORE_PROSPECTIVE_START'
+          assert c['prospective_start_utc']=='2026-09-17T00:00:00Z'
+          assert c['provenance']['source_rule_status']=='FALSIFIED_D0_NEAR_SURVIVOR'
+          assert c['provenance']['source_rule_promoted'] is False
+          assert c['provenance']['not_D4_candidate_validation'] is True
+          assert c['payoff_model']['ridge_alpha']==10.0
+          assert c['payoff_model']['training_window_prior_primary_setups']==80
+          assert c['payoff_model']['minimum_prior_primary_setups']==60
+          assert c['payoff_model']['trade_if_predicted_standalone_net_bps_greater_than']==0.0
+          assert c['execution']['leverage']==1.0
+          assert c['claims']['candidate_promoted'] is False
+          assert c['claims']['D4_validation'] is False
+          print('Frozen payoff-meta research-shadow boundary verified.')
+          PY
+      - name: Recompute frozen prospective research shadow
+        run: python scripts/dv2_payoff_meta_forward_shadow.py --config config/dv2_payoff_meta_trend_accel_shadow_v1.json --output-dir research/discovery_v2/payoff_meta_shadow_v1/latest
+      - name: Enforce claims and pre-start boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('research/discovery_v2/payoff_meta_shadow_v1/latest/report.json').read_text())
+          c=r['claims']
+          assert c['persistent_edge_established'] is False
+          assert c['D0_passed'] is False
+          assert c['candidate_promoted'] is False
+          assert c['D4_validation'] is False
+          assert c['live_execution_supported'] is False
+          assert c['leverage_supported'] is False
+          if r['status']=='PRE_START':
+              assert r['completed_forward_setups']==0
+              assert r['accepted_completed_setups']==0
+          print({
+              'shadow_id': r['shadow_id'],
+              'status': r['status'],
+              'as_of_utc': r['as_of_utc'],
+              'completed_forward_setups': r.get('completed_forward_setups',0),
+              'accepted_completed_setups': r.get('accepted_completed_setups',0),
+              'latest_open_decision': r.get('latest_open_decision'),
+          })
+          PY
+      - name: Preserve immutable forward-shadow snapshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dv2-payoff-meta-forward-shadow-v1
+          path: |
+            config/dv2_payoff_meta_trend_accel_shadow_v1.json
+            research/discovery_v2/payoff_meta_shadow_v1/latest/
+          retention-days: 30
+          if-no-files-found: warn

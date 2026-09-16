@@ -1,0 +1,125 @@
+{
+  "protocol": "discovery_v2_sprint13_payoff_meta_v1",
+  "status": "FROZEN_BEFORE_MARKET_RESULTS",
+  "frozen_at_utc": "2026-09-16T18:25:00Z",
+  "purpose": "Test one new payoff-aware setup-selection hypothesis for the unchanged 5-day trend-acceleration primary. Predict continuous standalone setup net bps instead of binary win/loss.",
+  "provenance": {
+    "generated_from": "Sprint 12 diagnostic lesson that binary classification may not align with payoff magnitude",
+    "sprint12_candidate_rescued": false,
+    "new_candidate_id_required": true,
+    "same_2026_development_sample_is_hypothesis_contaminated": true,
+    "positive_D0_is_not_independent_validation": true
+  },
+  "data": {
+    "venue": "MEXC perpetuals",
+    "development_start_utc": "2026-01-01T00:00:00Z",
+    "development_end_utc_exclusive": "2026-09-12T00:00:00Z",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "actual_public_funding_required": true,
+    "no_2025_data_for_discovery": true,
+    "survivorship_warning": "Fixed present liquid universe; historical results do not remove survivorship risk."
+  },
+  "execution": {
+    "gross_exposure_when_trade": 1.0,
+    "intended_net_exposure_when_trade": 0.0,
+    "gross_exposure_when_pass": 0.0,
+    "transaction_cost_bps_per_side_on_actual_turnover": 10.0,
+    "cost_multipliers": [1.0, 1.5, 2.0],
+    "execution": "next UTC daily open after completed signal day",
+    "holding_period": "one day open-to-open",
+    "rebalance": "daily including transitions to and from cash",
+    "leverage": 1.0,
+    "terminal_liquidation_for_D0_comparability": true
+  },
+  "primary_setup": {
+    "id": "trend_acceleration_5d_parent",
+    "score": "sum of completed close-to-close returns t-4..t minus sum t-9..t-5",
+    "direction": "long highest two scores and short lowest two",
+    "state_gate": "BTC Wilder ADX14 >= 25 at completed signal close",
+    "weighting": "25% absolute weight in each of four selected legs",
+    "primary_rule_changed_from_Sprint12": false
+  },
+  "features": {
+    "inherit_exact_formulas_from": "research/discovery_v2/sprint12/FREEZE_CLARIFICATION.md",
+    "feature_count": 8,
+    "no_feature_selection": true,
+    "missing_feature_rule": "PASS"
+  },
+  "payoff_label": {
+    "target": "continuous standalone next-open to next-open net bps of the proposed primary setup",
+    "costs": "realized funding plus forced cash-to-position-to-cash 10 bps per side",
+    "same_open_exit_label_excluded_from_current_fit": true
+  },
+  "walk_forward_model": {
+    "model": "scikit-learn Pipeline(StandardScaler, Ridge)",
+    "ridge_alpha": 10.0,
+    "fit_intercept": true,
+    "training_window_prior_primary_setups": 80,
+    "minimum_prior_primary_setups": 60,
+    "refit": "every eligible primary setup using the latest 80 strictly prior labeled primary setups",
+    "trade_if_predicted_standalone_net_bps_greater_than": 0.0,
+    "insufficient_training": "PASS",
+    "one_model_specification_only": true,
+    "one_threshold_only": true,
+    "no_grid": true
+  },
+  "controls": {
+    "ungated_parent": "take every eligible primary setup unchanged",
+    "same_payoff_meta_decisions_reversed_primary": "same TRADE/PASS decisions applied to reversed primary ranking",
+    "anti_meta_diagnostic": "diagnostic only: take setups whose predicted standalone net bps is below zero",
+    "accepted_vs_rejected_realized_standalone_payoff": "direct selector-value diagnostic"
+  },
+  "d0_research_candidate_gate": {
+    "minimum_accepted_setups": 20,
+    "minimum_positive_accepted_setups": 10,
+    "maximum_acceptance_fraction": 0.60,
+    "calendar_day_mean_net_bps_must_be_positive": true,
+    "calendar_day_mean_net_bps_at_1_5x_cost_must_be_positive": true,
+    "minimum_accepted_setup_mean_net_bps_including_exit_to_cash": 5.0,
+    "minimum_advantage_vs_ungated_parent_active_setup_mean_bps": 3.0,
+    "minimum_advantage_vs_reversed_primary_same_decisions_bps": 5.0,
+    "minimum_accepted_minus_rejected_standalone_payoff_mean_bps": 3.0,
+    "maximum_best_symbol_positive_pnl_share": 0.70,
+    "maximum_best_calendar_month_positive_pnl_share": 0.70,
+    "maximum_single_positive_period_share": 0.35,
+    "top5_positive_period_share": "diagnostic_only_for_sparse_D0",
+    "bootstrap_95pct_lower_bound": "diagnostic_only_at_D0",
+    "minimum_leave_one_symbol_out": "diagnostic_only_at_D0",
+    "payoff_prediction_rank_correlation": "diagnostic_only_at_D0",
+    "selection": "Single frozen payoff model and zero-net-bps decision threshold. No post-result substitution."
+  },
+  "post_freeze_validation_gate": {
+    "applies_from": "D2 and D3",
+    "baseline_positive": true,
+    "one_point_five_x_cost_positive": true,
+    "bootstrap_95pct_lower_bound_positive": true,
+    "minimum_leave_one_symbol_out_mean_bps": 0.0,
+    "maximum_best_symbol_positive_pnl_share": 0.50,
+    "maximum_best_calendar_month_positive_pnl_share": 0.50,
+    "minimum_candidate_minus_reversed_control_mean_bps": 5.0,
+    "selector_must_still_beat_ungated_parent": true,
+    "d3_nonoverlapping_temporal_failure_terminal": true
+  },
+  "trial_accounting": {
+    "directional_candidate_rules_added_this_sprint": 1,
+    "no_model_grid": true,
+    "no_threshold_grid": true,
+    "no_feature_selection": true,
+    "sequential_discovery_debt_acknowledged": true,
+    "all_prior_sprints_and_Sprint12_result_are_hypothesis_generating_contamination": true,
+    "Sprint12_remains_closed": true
+  },
+  "evidence_boundary": {
+    "this_sprint_is": "D0 payoff-aware meta-selection discovery",
+    "research_candidate_means": "deserves freeze and hostile validation, not established edge",
+    "positive_D0_establishes_edge": false,
+    "positive_D0_supports_live": false,
+    "positive_D0_supports_leverage": false,
+    "required_path_after_D0": "candidate freeze -> independent reproduction -> D2 source replication -> D3 non-overlapping temporal -> D4 prospective shadow"
+  },
+  "claims": {
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
+}
