@@ -1,0 +1,87 @@
+{
+  "protocol": "discovery_v2_sprint9_v1",
+  "status": "FROZEN_BEFORE_MARKET_RESULTS",
+  "frozen_at_utc": "2026-09-16T17:33:00Z",
+  "purpose": "Falsify three structurally distinct daily cross-sectional mechanisms after Sprint 8 closed without a promotable regime-gated candidate.",
+  "data": {
+    "venue": "MEXC perpetuals",
+    "development_start_utc": "2026-01-01T00:00:00Z",
+    "development_end_utc_exclusive": "2026-09-12T00:00:00Z",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "alt_symbols": ["ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "actual_public_funding_required": true,
+    "no_2025_data_for_discovery": true,
+    "survivorship_warning": "Fixed present liquid universe; historical results do not remove survivorship risk."
+  },
+  "execution": {
+    "common_comparison_warmup_days": 100,
+    "gross_exposure": 1.0,
+    "intended_net_exposure": 0.0,
+    "transaction_cost_bps_per_side_on_actual_turnover": 10.0,
+    "cost_multipliers": [1.0, 1.5, 2.0],
+    "execution": "next UTC daily open after completed signal information",
+    "holding_period": "one day open-to-open",
+    "rebalance": "daily",
+    "leverage": 1.0,
+    "terminal_liquidation_for_D0_comparability": true
+  },
+  "families": {
+    "cross_sectional_funding_carry": {
+      "hypothesis": "Perpetuals with low or negative trailing realized funding outperform high-funding perpetuals after accounting for realized next-period funding and trading costs.",
+      "lookback_calendar_days_variants": [1, 3, 7, 14],
+      "score": "negative sum of realized funding rates strictly before execution open and within the trailing N calendar days, divided by N; this normalizes differing settlement cadence such as ENA",
+      "ranking": "long highest two scores +25% each and short lowest two scores -25% each",
+      "principal_control": "exact reversed ranking with identical funding accounting and timing"
+    },
+    "adaptive_ar1_forecast": {
+      "hypothesis": "Asset-specific short-run serial dependence, estimated without pooling signs across assets, contains cross-sectional information about the next daily return.",
+      "lookback_pairs_variants": [20, 40, 60, 90],
+      "model": "for each asset separately fit r_j = alpha + phi*r_j-1 over the most recent N completed predictor-target pairs ending at completed day t; predict r_t+1 = alpha + phi*r_t",
+      "ranking": "long highest two predicted returns +25% each and short lowest two -25% each",
+      "principal_control": "exact reversed predicted-return ranking"
+    },
+    "cross_sectional_low_btc_beta": {
+      "hypothesis": "A market-neutral low-beta factor exists among liquid alt perpetuals, with lower trailing BTC beta outperforming higher trailing BTC beta.",
+      "lookback_days_variants": [20, 30, 45, 60],
+      "factor": "BTC_USDT completed close-to-close returns",
+      "score": "negative OLS slope of each alt return versus BTC over the most recent N completed returns ending at t, with intercept",
+      "portfolio_universe": "nine alts only; BTC is factor and has zero target weight",
+      "ranking": "long highest two scores (lowest beta) +25% each and short lowest two scores (highest beta) -25% each",
+      "principal_control": "exact reversed beta ranking"
+    }
+  },
+  "family_falsification_gate": {
+    "minimum_baseline_positive_variants": 3,
+    "minimum_adjacent_variants_positive_at_1_5x_cost": 2,
+    "bootstrap_95pct_lower_bound_must_be_positive_for_selected_variant": true,
+    "minimum_candidate_minus_reversed_control_mean_bps": 5.0,
+    "minimum_leave_one_symbol_out_mean_bps": 0.0,
+    "maximum_best_symbol_positive_pnl_share": 0.50,
+    "maximum_best_calendar_month_positive_pnl_share": 0.50,
+    "maximum_top5_positive_period_share": 0.50,
+    "selection_if_family_passes": "Among variants in an adjacent 1.5x-cost-positive neighborhood, select the upper median parameter; never select by maximum PnL."
+  },
+  "trial_accounting": {
+    "directional_candidate_variants_added_this_sprint": 12,
+    "all_12_variants_count": true,
+    "all_reversed_controls_count_as_controls": true,
+    "no_grid_expansion_after_results": true,
+    "sequential_discovery_debt_acknowledged": true,
+    "sprints_1_through_8_and_regime_diagnostics_are_part_of_researcher_degrees_of_freedom": true,
+    "no_threshold_relaxation_due_to_prior_failures": true,
+    "failed_family_closes": true,
+    "positive_control_can_only_generate_new_candidate_id": true
+  },
+  "evidence_boundary": {
+    "this_sprint_is": "D0 hypothesis falsification",
+    "positive_result_establishes_edge": false,
+    "positive_result_only_allows": "new frozen candidate followed by independent reproduction, different-source D2, separately frozen non-overlapping temporal D3, and prospective D4",
+    "d3_failure_is_terminal_for_candidate_id": true
+  },
+  "claims": {
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "leverage_supported": false,
+    "prior_failed_candidate_modified": false
+  }
+}
