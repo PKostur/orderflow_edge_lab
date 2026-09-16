@@ -4,7 +4,15 @@ import argparse
 import json
 from pathlib import Path
 
-from orderflow_edge_lab.discovery_v2_calibration import build_calibration_report, canonical_json_sha256
+import pandas as pd
+
+from orderflow_edge_lab.discovery_v2_calibration import (
+    build_calibration_report,
+    canonical_json_sha256,
+    execution_target,
+    independent_target,
+    reference_target,
+)
 from orderflow_edge_lab.mexc_history import fetch_mexc_futures_klines
 
 
@@ -17,6 +25,7 @@ def main() -> None:
 
     protocol = json.loads(Path(args.config).read_text(encoding="utf-8"))
     data = protocol["data"]
+    strategy = protocol["strategy"]
     data_dir = Path(args.data_dir)
     data_dir.mkdir(parents=True, exist_ok=True)
     frames = {}
@@ -29,7 +38,26 @@ def main() -> None:
             request_pause_seconds=0.15,
         )
         frames[str(symbol)] = frame
-        frame.to_csv(data_dir / f"{symbol}_{data['interval']}.csv", index=True)
+        source_path = data_dir / f"{symbol}_{data['interval']}.csv"
+        frame.to_csv(source_path, index=True)
+        kwargs = {
+            "fast": int(strategy["fast_ema"]),
+            "slow": int(strategy["slow_ema"]),
+            "atr_period": int(strategy["atr_period"]),
+            "threshold": float(strategy["min_atr_spread"]),
+        }
+        ref = reference_target(frame, **kwargs)
+        independent = independent_target(frame, **kwargs)
+        targets = pd.DataFrame(
+            {
+                "reference_raw_target": ref,
+                "reference_execution_target": execution_target(ref),
+                "independent_raw_target": independent,
+                "independent_execution_target": execution_target(independent),
+            }
+        )
+        targets.index.name = "timestamp"
+        targets.to_csv(data_dir / f"{symbol}_{data['interval']}_targets.csv", index=True)
 
     report = build_calibration_report(frames, protocol)
     report["protocol_sha256"] = canonical_json_sha256(protocol)
