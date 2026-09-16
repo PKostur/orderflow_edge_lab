@@ -1,0 +1,90 @@
+name: DV2 Volume Momentum D4 Scheduler
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 2 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dv2-volume-momentum-d4-scheduler
+  cancel-in-progress: false
+
+jobs:
+  shadow:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out frozen D4 implementation
+        uses: actions/checkout@v4
+        with:
+          ref: 575430d394c4c908565468ea2112ae97c1853364
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research runtime
+        run: python -m pip install -e '.[research]' pytest
+      - name: Run forward-boundary guardrails
+        run: python -m pytest -q tests/test_volume_momentum_forward.py
+      - name: Verify frozen D4 protocol and implementation pin
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('config/dv2_volume_confirmed_momentum_30d_d4_v1.json').read_text())
+          assert p['status'] == 'FROZEN_BEFORE_FORWARD_START'
+          assert p['forward_start_utc'] == '2026-09-17T00:00:00Z'
+          assert p['review_after_completed_portfolio_periods'] == 30
+          assert p['rule']['volume_baseline_days'] == 30
+          assert p['rule']['gross_exposure'] == 1.0
+          assert p['rule']['leverage'] == 1.0
+          assert p['rule']['transaction_cost_bps_per_side_on_actual_turnover'] == 10.0
+          assert p['forward_accounting']['flat_at_forward_start'] is True
+          assert p['forward_accounting']['no_pre_start_pnl'] is True
+          assert p['forward_accounting']['no_artificial_terminal_liquidation'] is True
+          assert p['claims']['retuning_allowed'] is False
+          print('Frozen D4 protocol and implementation pin verified.')
+          PY
+      - name: Run prospective D4 shadow
+        run: |
+          python scripts/dv2_volume_momentum_d4.py \
+            --protocol config/dv2_volume_confirmed_momentum_30d_d4_v1.json \
+            --candidate config/dv2_volume_confirmed_momentum_30d_v1.json \
+            --output-dir research/discovery_v2/volume_momentum_30d/d4_shadow
+      - name: Enforce forward claims boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import pandas as pd
+          r = json.loads(Path('research/discovery_v2/volume_momentum_30d/d4_shadow/D4_REPORT.json').read_text())
+          start = pd.Timestamp(r['forward_start_utc'])
+          asof = pd.Timestamp(r['asof_utc'])
+          completed = int(r['exact_candidate']['completed_periods'])
+          assert r['claims']['paper_shadow_only'] is True
+          assert r['claims']['persistent_edge_established'] is False
+          assert r['claims']['live_eligible'] is False
+          assert r['claims']['leverage_supported'] is False
+          assert r['claims']['retuning_allowed'] is False
+          assert r['boundary_checks']['no_pre_start_pnl'] is True
+          assert r['boundary_checks']['no_artificial_terminal_liquidation'] is True
+          assert r['review_minimum_met'] == (completed >= 30)
+          if asof < start:
+              assert completed == 0
+              assert r['exact_candidate']['pnl_per_1000'] == 0.0
+              assert r['exact_candidate']['open_position'] is None
+          if completed:
+              assert pd.Timestamp(r['exact_candidate']['start']) >= start
+          print({'asof': r['asof_utc'], 'completed': completed, 'hash': r['exact_candidate']['observations_sha256'], 'open': r['exact_candidate']['open_position']})
+          PY
+      - name: Upload immutable D4 snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: dv2-volume-momentum-d4-scheduled-${{ github.run_number }}
+          path: |
+            config/dv2_volume_confirmed_momentum_30d_d4_v1.json
+            research/discovery_v2/volume_momentum_30d/d4_shadow/
+          retention-days: 90
+          if-no-files-found: error
