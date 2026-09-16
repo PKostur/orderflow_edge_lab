@@ -1,0 +1,126 @@
+name: Discovery v2 Sprint 2
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/discovery-v2-sprint-2]
+    paths:
+      - 'config/discovery_v2_sprint2_v1.json'
+      - 'src/orderflow_edge_lab/discovery_v2_sprint2.py'
+      - 'scripts/discovery_v2_sprint2.py'
+      - '.github/workflows/discovery-v2-sprint2.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: discovery-v2-sprint2-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  falsification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install research runtime
+        run: python -m pip install -e '.[research]' pytest
+
+      - name: Run guardrails before market data
+        run: |
+          python -m pytest -q tests/test_discovery_v2_evaluation.py tests/test_discovery_v2_sprint1.py
+          python - <<'PY'
+          from orderflow_edge_lab.discovery_v2_sprint2 import (
+              evaluate_sprint2_family,
+              intraday_skewness,
+              low_idiosyncratic_volatility,
+              same_weekday_seasonality,
+          )
+          assert callable(evaluate_sprint2_family)
+          assert callable(intraday_skewness)
+          assert callable(low_idiosyncratic_volatility)
+          assert callable(same_weekday_seasonality)
+          print('Sprint 2 implementation import guard passed.')
+          PY
+
+      - name: Verify frozen Sprint 2 contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          p = json.loads(Path('config/discovery_v2_sprint2_v1.json').read_text())
+          assert p['protocol'] == 'discovery_v2_sprint2_v1'
+          assert p['status'] == 'FROZEN_BEFORE_MARKET_RESULTS'
+          assert p['frozen_at_utc'] == '2026-09-16T13:05:00Z'
+          assert p['data']['development_start_utc'] == '2026-01-01T00:00:00Z'
+          assert p['data']['development_end_utc_exclusive'] == '2026-09-12T00:00:00Z'
+          assert p['data']['actual_public_funding_required'] is True
+          assert p['execution']['gross_exposure'] == 1.0
+          assert p['execution']['leverage'] == 1.0
+          assert p['execution']['transaction_cost_bps_per_side_on_turnover'] == 10.0
+          assert p['execution']['cost_multipliers'] == [1.0, 1.5, 2.0]
+          assert p['families']['same_weekday_seasonality']['lookback_weeks_variants'] == [4, 8, 12, 16]
+          assert p['families']['low_idiosyncratic_volatility']['lookback_days_variants'] == [14, 21, 30, 45]
+          assert p['families']['intraday_skewness']['lookback_days_variants'] == [3, 5, 7, 14]
+          gate = p['family_falsification_gate']
+          assert gate['minimum_baseline_positive_variants'] == 3
+          assert gate['minimum_adjacent_variants_positive_at_1_5x_cost'] == 2
+          assert gate['minimum_candidate_minus_reversed_control_mean_bps'] == 5.0
+          assert gate['maximum_best_symbol_positive_pnl_share'] == 0.50
+          assert gate['maximum_best_calendar_month_positive_pnl_share'] == 0.50
+          assert gate['maximum_top5_positive_period_share'] == 0.50
+          assert p['trial_accounting']['no_grid_expansion_after_results'] is True
+          assert p['claims']['persistent_edge_established'] is False
+          assert p['claims']['live_execution_supported'] is False
+          assert p['claims']['leverage_supported'] is False
+          print('Frozen Sprint 2 contract verified.')
+          PY
+
+      - name: Run frozen D0 falsification sprint
+        run: |
+          python scripts/discovery_v2_sprint2.py \
+            --protocol config/discovery_v2_sprint2_v1.json \
+            --evaluation config/discovery_v2_evaluation_v1.json \
+            --output-dir research/discovery_v2/sprint2/results
+
+      - name: Enforce result-state boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          r = json.loads(Path('research/discovery_v2/sprint2/results/sprint2_report.json').read_text())
+          assert r['protocol'] == 'discovery_v2_sprint2_v1'
+          assert r['independence_level'] == 'D0'
+          assert r['claims']['persistent_edge_established'] is False
+          assert r['claims']['live_execution_supported'] is False
+          assert r['claims']['leverage_supported'] is False
+          assert r['claims']['beta45_modified'] is False
+          assert set(r['families']) == {
+              'same_weekday_seasonality',
+              'low_idiosyncratic_volatility',
+              'intraday_skewness',
+          }
+          allowed = {'FALSIFIED', 'REPLICATION_PENDING'}
+          for name, family in r['families'].items():
+              assert family['state'] in allowed, (name, family['state'])
+              assert len(family['variant_summaries']) == 4, (name, len(family['variant_summaries']))
+              assert len(family['control_summaries']) == 4, (name, len(family['control_summaries']))
+          print({k: v['state'] for k, v in r['families'].items()})
+          PY
+
+      - name: Upload immutable Sprint 2 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: discovery-v2-sprint2-v1
+          path: |
+            config/discovery_v2_sprint2_v1.json
+            research/discovery_v2/sprint2/results/
+          retention-days: 30
+          if-no-files-found: warn
