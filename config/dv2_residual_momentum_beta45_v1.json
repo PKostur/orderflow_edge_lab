@@ -1,0 +1,90 @@
+{
+  "candidate_id": "dv2_btc_residual_momentum_beta45_v1",
+  "state": "REPLICATION_PENDING",
+  "freeze_basis": "The first Git commit containing this file is the candidate freeze. Sprint 1 control results are hypothesis-generation evidence only and cannot count as validation.",
+  "origin": {
+    "source_protocol": "discovery_v2_sprint1_v1",
+    "source_run": 35095715401,
+    "source_artifact_sha256": "324981ac31ced927f3836ee8053a2a01fe719113b5e89405340ddd5f7056ac02",
+    "origin_type": "reversed_control_generated_new_hypothesis",
+    "failed_parent_direction": "btc_residual_shock_reversal",
+    "selection_rule": "All four reversed-control lookbacks were positive at 1.5x friction. The preregistered stable-neighborhood upper-median rule over [20,30,45,60] selects 45 days rather than the highest historical PnL at 60 days.",
+    "sprint1_history_is_validation": false
+  },
+  "economic_hypothesis": "Crypto altcoins with unusually positive daily returns relative to their recent BTC beta may exhibit short-horizon continuation rather than reversal, while unusually negative BTC-residual shocks may continue negatively over the next day.",
+  "universe": {
+    "symbols": [
+      "BTC_USDT",
+      "ETH_USDT",
+      "SOL_USDT",
+      "XRP_USDT",
+      "DOGE_USDT",
+      "BNB_USDT",
+      "ADA_USDT",
+      "LINK_USDT",
+      "SUI_USDT",
+      "ENA_USDT"
+    ],
+    "btc_role": "factor_only_not_ranked",
+    "ranked_alts": 9,
+    "fixed_present_universe_warning": "Survivorship bias remains unresolved; a broader point-in-time universe is a later research requirement."
+  },
+  "signal": {
+    "timeframe": "1d",
+    "return_definition": "close_to_close_simple_return",
+    "beta_model": "OLS with intercept",
+    "beta_lookback_completed_days": 45,
+    "fit_window": "strictly prior completed daily returns t-45 through t-1",
+    "current_residual": "alt_return_t - (OLS_intercept + OLS_beta * BTC_return_t)",
+    "ranking": "rank the nine alts by current completed-day residual",
+    "quantile_fraction": 0.25,
+    "selected_count_each_side": 2,
+    "direction": "long highest residual two; short lowest residual two",
+    "weights": "equal dollar, +0.25 each long and -0.25 each short",
+    "gross_exposure": 1.0,
+    "net_exposure": 0.0
+  },
+  "execution": {
+    "decision_time": "after daily candle t is complete",
+    "entry": "next daily open t+1",
+    "holding_period_days": 1,
+    "rebalance": "daily at open using the signal from the prior completed daily candle",
+    "position_transition_costing": "10 bps per side on actual portfolio turnover",
+    "baseline_round_trip_cost_bps": 20.0,
+    "cost_stress_multipliers": [1.0, 1.5, 2.0],
+    "actual_historical_funding_required": true,
+    "leverage": 1.0,
+    "pyramiding": false
+  },
+  "controls": {
+    "principal_reversed_control": "same timing and residual ranks but long lowest residual and short highest residual",
+    "raw_return_momentum_control": "same timing using raw alt daily return ranks without BTC-beta residualization",
+    "btc_and_equal_weight_benchmarks_required": true
+  },
+  "evidence_boundary": {
+    "sprint1_mexc_2026_01_01_to_2026_09_12": "hypothesis_generation_only_D0_contaminated",
+    "next_allowed_historical_test": "D2 independent source with exact frozen rule and no retuning",
+    "future_prospective_evidence": "D4 begins only after this freeze commit for a separately configured shadow",
+    "independent_engine_replication_required": true,
+    "same_period_cross_source_is_future_oos": false,
+    "no_parameter_changes_after_freeze": true,
+    "failed_replication_closes_candidate_id": true
+  },
+  "replication_gates": {
+    "independent_source": "Binance USD-M perpetuals where exact symbols and timestamps are available",
+    "rule_must_be_exact": true,
+    "positive_net_at_baseline_required": true,
+    "positive_net_at_1_5x_cost_required": true,
+    "block_bootstrap_lower_bound_above_zero_preferred_but_not_sufficient_alone": true,
+    "minimum_leave_one_symbol_out_mean_net_must_be_positive": true,
+    "concentration_thresholds_from_discovery_v2_evaluation_v1_apply": true,
+    "principal_reversed_control_must_be_materially_weaker": true,
+    "if_any_validity_failure": "BLOCK"
+  },
+  "claims": {
+    "persistent_edge_established": false,
+    "live_eligible": false,
+    "leverage_permitted_to_rescue_expectancy": false,
+    "existing_frozen_candidates_modified": false
+  }
+}
