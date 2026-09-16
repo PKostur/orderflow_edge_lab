@@ -1,0 +1,22 @@
+{
+  "gate": {
+    "ok": true,
+    "status": 200,
+    "sample": "[{\"r\":\"0.000015\",\"t\":1789545600},{\"r\":\"0.000041\",\"t\":1789516801}]"
+  },
+  "bitget": {
+    "ok": true,
+    "status": 200,
+    "sample": "{\"code\":\"00000\",\"msg\":\"success\",\"requestTime\":1789554149387,\"data\":[{\"symbol\":\"BTCUSDT\",\"fundingRate\":\"0.000052\",\"fundingTime\":\"1789545600000\"},{\"symbol\":\"BTCUSDT\",\"fundingRate\":\"0.000056\",\"fundingTime\":\"1789516800000\"}]}"
+  },
+  "okx": {
+    "ok": true,
+    "status": 200,
+    "sample": "{\"code\":\"0\",\"data\":[{\"formulaType\":\"withRate\",\"fundingRate\":\"0.0000238063433416\",\"fundingTime\":\"1789545600000\",\"instId\":\"BTC-USDT-SWAP\",\"instType\":\"SWAP\",\"method\":\"current_period\",\"realizedRate\":\"0.0000238063433416\"},{\"formulaType\":\"withRate\",\"fundingRate\":\"0.0000579570681267\",\"fundingTime\":\"1789516800000\",\"instId\":\"BTC-USDT-SWAP\",\"instType\":\"SWAP\",\"method\":\"current_period\",\"realizedRate\":\"0.0000579570681267\"}],\"msg\":\"\"}"
+  },
+  "hyperliquid": {
+    "ok": true,
+    "status": 200,
+    "sample": "[{\"coin\":\"BTC\",\"fundingRate\":\"0.0000125\",\"premium\":\"-0.0002075598\",\"time\":1789470000036},{\"coin\":\"BTC\",\"fundingRate\":\"0.0000125\",\"premium\":\"-0.0002634139\",\"time\":1789473600039},{\"coin\":\"BTC\",\"fundingRate\":\"0.0000125\",\"premium\":\"-0.0003002964\",\"time\":1789477200117},{\"coin\":\"BTC\",\"fundingRate\":\"0.0000125\",\"premium\":\"-0.0002426596\",\"time\":1789480800005},{\"coin\":\"BTC\",\"fundingRate\":\"0.0000125\",\"premium\":\"-0.0003446759\",\"time\":1789484400050},{\"coin\":\"BTC\",\"fundingRate\":\"0.0000125\",\"premium\":\"-0.00034"
+  }
+}
