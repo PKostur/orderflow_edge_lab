@@ -40,19 +40,25 @@ jobs:
             --data-dir research/discovery_v2/calibration_data \
             --output research/discovery_v2/results/reference_independent_parity.json
       - name: Run Freqtrade strategy API reproduction in official stable container
+        shell: bash
         run: |
+          set -euo pipefail
           mkdir -p research/discovery_v2/results/freqtrade
           docker pull freqtradeorg/freqtrade:stable
-          docker run --rm \
-            --user "$(id -u):$(id -g)" \
+          cid=$(docker create \
             --entrypoint python \
-            -v "$PWD:/workspace" \
+            -v "$PWD:/workspace:ro" \
             -w /workspace \
             freqtradeorg/freqtrade:stable \
             research/discovery_v2/adapters/run_freqtrade_signal_calibration.py \
             --config config/discovery_v2_engine_calibration_v1.json \
             --data-dir research/discovery_v2/calibration_data \
-            --output-dir research/discovery_v2/results/freqtrade
+            --output-dir /tmp/freqtrade-calibration)
+          trap 'docker rm -f "$cid" >/dev/null 2>&1 || true' EXIT
+          docker start -a "$cid"
+          docker cp "$cid:/tmp/freqtrade-calibration/." research/discovery_v2/results/freqtrade/
+          docker rm "$cid"
+          trap - EXIT
       - name: Install NautilusTrader 2.x research wheel
         run: |
           python -m pip install -U --pre nautilus_trader
