@@ -1,0 +1,82 @@
+name: Discovery v2 Sprint 12 Meta Selection
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/discovery-v2-sprint12-meta-selection]
+    paths:
+      - 'config/discovery_v2_sprint12_meta_selection_v1.json'
+      - 'research/discovery_v2/sprint12/FREEZE_CLARIFICATION.md'
+      - 'src/orderflow_edge_lab/discovery_v2_sprint12.py'
+      - 'scripts/discovery_v2_sprint12.py'
+      - 'tests/test_discovery_v2_sprint12.py'
+      - '.github/workflows/discovery-v2-sprint12.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: discovery-v2-sprint12-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  falsification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research runtime
+        run: python -m pip install -e '.[research]' pytest
+      - name: Run Sprint 12 guardrails before market data
+        run: python -m pytest -q tests/test_discovery_v2_sprint12.py tests/test_discovery_v2_evaluation.py
+      - name: Verify frozen Sprint 12 contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('config/discovery_v2_sprint12_meta_selection_v1.json').read_text())
+          assert p['status']=='FROZEN_BEFORE_MARKET_RESULTS'
+          assert p['execution']['leverage']==1.0
+          assert p['method_change']['one_model_specification_only'] is True
+          assert p['method_change']['one_acceptance_threshold_only'] is True
+          assert p['method_change']['no_threshold_or_hyperparameter_grid'] is True
+          assert p['walk_forward_model']['training_window_prior_primary_setups']==80
+          assert p['walk_forward_model']['minimum_prior_primary_setups']==60
+          assert p['walk_forward_model']['accept_if_probability_positive_at_least']==0.60
+          assert p['trial_accounting']['directional_candidate_rules_added_this_sprint']==3
+          assert p['data']['no_2025_data_for_discovery'] is True
+          assert p['claims']['persistent_edge_established'] is False
+          print('Frozen Sprint 12 contract verified.')
+          PY
+      - name: Run frozen D0 causal meta-selection sprint
+        run: python scripts/discovery_v2_sprint12.py --protocol config/discovery_v2_sprint12_meta_selection_v1.json --evaluation config/discovery_v2_evaluation_v1.json --output-dir research/discovery_v2/sprint12/results
+      - name: Enforce result-state boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('research/discovery_v2/sprint12/results/sprint12_report.json').read_text())
+          assert r['protocol_freeze_commit']=='3bcbcdf92c1de02111a19a22a0bf89c8f54a4661'
+          assert r['pre_result_clarification_commit']=='3ebc6e20148257089e324b78819a64c33e833fb4'
+          assert r['independence_level']=='D0_CAUSAL_META_SELECTION_DISCOVERY'
+          assert r['claims']['persistent_edge_established'] is False
+          assert r['claims']['live_execution_supported'] is False
+          assert r['claims']['leverage_supported'] is False
+          for name,f in r['families'].items():
+              assert f['state'] in {'FALSIFIED','RESEARCH_CANDIDATE_FREEZE_PENDING'},(name,f['state'])
+          print({k:v['state'] for k,v in r['families'].items()})
+          PY
+      - name: Upload immutable Sprint 12 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: discovery-v2-sprint12-meta-selection-v1
+          path: |
+            config/discovery_v2_sprint12_meta_selection_v1.json
+            research/discovery_v2/sprint12/FREEZE_CLARIFICATION.md
+            research/discovery_v2/sprint12/results/
+          retention-days: 30
+          if-no-files-found: warn
