@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "protocol_name": "discovery-v2-engine-calibration-v1",
+  "status": "calibration_only",
+  "frozen_at_utc": "2026-09-16T11:20:00Z",
+  "candidate_id": "mexc_8h_ema24_96_atr025_v1",
+  "purpose": "Calibrate independent research engines on a simple frozen candidate before allowing Discovery v2 to evaluate more complex strategies.",
+  "data": {
+    "venue": "MEXC Futures",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "interval": "8h",
+    "start_utc": "2026-07-01T00:00:00Z",
+    "end_exclusive_utc": "2026-09-12T00:00:00Z",
+    "manifest_hash_each_symbol": true,
+    "same_candles_required_across_engines": true
+  },
+  "strategy": {
+    "fast_ema": 24,
+    "slow_ema": 96,
+    "atr_period": 14,
+    "min_atr_spread": 0.25,
+    "target": "long if (EMA24-EMA96)/ATR14 > 0.25; short if < -0.25; otherwise flat",
+    "signal_time": "completed 8h close",
+    "execution_time": "next 8h open"
+  },
+  "engines": {
+    "reference": "orderflow_edge_lab current vectorized implementation",
+    "independent_numpy": "independent recursive EMA plus rolling true-range implementation; must not call strategy_tournament.generate_target_position",
+    "freqtrade": "external strategy API reproduction plus lookahead/bias audit",
+    "nautilus": "external event-driven indicator/execution reproduction"
+  },
+  "parity_gate": {
+    "timestamp_set_must_match": true,
+    "raw_target_disagreements_allowed_per_symbol": 0,
+    "execution_target_disagreements_allowed_per_symbol": 0,
+    "transition_timestamp_disagreements_allowed_per_symbol": 0,
+    "external_engine_versions_must_be_recorded": true,
+    "external_engine_failure_blocks_calibration": true
+  },
+  "claims": {
+    "calibration_is_strategy_edge_evidence": false,
+    "may_modify_existing_frozen_candidates": false,
+    "may_enable_live_execution": false
+  }
+}
