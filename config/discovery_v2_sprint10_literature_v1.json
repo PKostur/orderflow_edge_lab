@@ -1,0 +1,98 @@
+{
+  "protocol": "discovery_v2_sprint10_literature_v1",
+  "status": "FROZEN_BEFORE_MARKET_RESULTS",
+  "frozen_at_utc": "2026-09-16T17:40:00Z",
+  "purpose": "Test three literature-backed cross-sectional crypto characteristics with directions fixed from published evidence before this sample is evaluated.",
+  "literature_basis": {
+    "max_return": {
+      "reference": "Ozdamar, Akdeniz & Sensoy (2021), Financial Innovation, Lottery-like preferences and the MAX effect in the cryptocurrency market",
+      "documented_direction": "higher prior maximum daily return associated with higher subsequent cryptocurrency return",
+      "adaptation_note": "Published work forms weekly portfolios on prior-month MAX across a broad spot universe. Sprint 10 tests daily next-open transfer to a fixed liquid perpetual universe, so this is a mechanism transfer test, not a paper replication."
+    },
+    "skewness": {
+      "reference": "Liu & Chen (2024), International Review of Financial Analysis, Skewness risk and the cross-section of cryptocurrency returns",
+      "documented_direction": "higher asymmetry/skewness risk associated with lower subsequent returns",
+      "adaptation_note": "Sprint 10 uses trailing daily sample skewness on liquid perpetuals rather than the paper's broader construction."
+    },
+    "kurtosis": {
+      "reference": "Jia et al. (2021), Finance Research Letters, Higher moments, extreme returns, and cross-section of cryptocurrency returns",
+      "documented_direction": "higher historical kurtosis associated with higher future cryptocurrency returns",
+      "adaptation_note": "Published work uses intraday realized higher moments. Sprint 10 uses trailing daily sample excess kurtosis, so this is a coarse transfer test rather than an exact replication."
+    }
+  },
+  "data": {
+    "venue": "MEXC perpetuals",
+    "development_start_utc": "2026-01-01T00:00:00Z",
+    "development_end_utc_exclusive": "2026-09-12T00:00:00Z",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "actual_public_funding_required": true,
+    "no_2025_data_for_discovery": true,
+    "survivorship_warning": "Fixed present liquid universe; historical results do not remove survivorship risk."
+  },
+  "execution": {
+    "common_comparison_warmup_days": 100,
+    "gross_exposure": 1.0,
+    "intended_net_exposure": 0.0,
+    "transaction_cost_bps_per_side_on_actual_turnover": 10.0,
+    "cost_multipliers": [1.0, 1.5, 2.0],
+    "execution": "next UTC daily open after completed signal day",
+    "holding_period": "one day open-to-open",
+    "rebalance": "daily",
+    "leverage": 1.0,
+    "terminal_liquidation_for_D0_comparability": true
+  },
+  "families": {
+    "historical_max_return_momentum": {
+      "lookback_days_variants": [7, 14, 30, 60],
+      "score": "maximum completed close-to-close daily return over the most recent N returns ending at t",
+      "direction": "long highest two MAX scores and short lowest two",
+      "principal_control": "exact reversed direction"
+    },
+    "historical_skewness_premium": {
+      "lookback_days_variants": [14, 30, 60, 90],
+      "score": "negative unbiased sample skewness of the most recent N completed close-to-close daily returns ending at t",
+      "direction": "long highest two scores (lowest skewness) and short lowest two scores (highest skewness)",
+      "principal_control": "exact reversed direction"
+    },
+    "historical_kurtosis_premium": {
+      "lookback_days_variants": [14, 30, 60, 90],
+      "score": "unbiased Fisher sample excess kurtosis of the most recent N completed close-to-close daily returns ending at t",
+      "direction": "long highest two kurtosis scores and short lowest two",
+      "principal_control": "exact reversed direction"
+    }
+  },
+  "family_falsification_gate": {
+    "minimum_baseline_positive_variants": 3,
+    "minimum_adjacent_variants_positive_at_1_5x_cost": 2,
+    "bootstrap_95pct_lower_bound_must_be_positive_for_selected_variant": true,
+    "minimum_candidate_minus_reversed_control_mean_bps": 5.0,
+    "minimum_leave_one_symbol_out_mean_bps": 0.0,
+    "maximum_best_symbol_positive_pnl_share": 0.50,
+    "maximum_best_calendar_month_positive_pnl_share": 0.50,
+    "maximum_top5_positive_period_share": 0.50,
+    "selection_if_family_passes": "Among variants in an adjacent 1.5x-cost-positive neighborhood, select the upper median parameter; never select by maximum PnL."
+  },
+  "trial_accounting": {
+    "directional_candidate_variants_added_this_sprint": 12,
+    "all_12_variants_count": true,
+    "all_reversed_controls_count_as_controls": true,
+    "no_grid_expansion_after_results": true,
+    "sequential_discovery_debt_acknowledged": true,
+    "sprints_1_through_9_and_regime_diagnostics_are_part_of_researcher_degrees_of_freedom": true,
+    "published_direction_does_not_relax_internal_gates": true,
+    "failed_family_closes": true,
+    "positive_control_can_only_generate_new_candidate_id": true
+  },
+  "evidence_boundary": {
+    "this_sprint_is": "D0 literature-backed mechanism transfer falsification",
+    "positive_result_establishes_edge": false,
+    "positive_result_only_allows": "new frozen candidate followed by independent reproduction, D2, non-overlapping D3 and prospective D4",
+    "d3_failure_is_terminal_for_candidate_id": true
+  },
+  "claims": {
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "leverage_supported": false,
+    "paper_replication_claimed": false
+  }
+}
