@@ -1,0 +1,105 @@
+{
+  "protocol": "discovery_v2_sprint5_v1",
+  "status": "FROZEN_BEFORE_MARKET_RESULTS",
+  "frozen_at_utc": "2026-09-16T16:16:00Z",
+  "purpose": "Falsify three new daily cross-sectional mechanisms not previously tested in Discovery v2 Sprints 1-4.",
+  "prior_family_exclusions": [
+    "residual momentum",
+    "volume-confirmed momentum",
+    "funding carry or funding reversal",
+    "dispersion momentum",
+    "intraday skewness",
+    "same-weekday seasonality",
+    "low idiosyncratic volatility",
+    "volatility compression breakout",
+    "range-shock reversal or momentum",
+    "fixed-pair relative-value reversion or momentum"
+  ],
+  "data": {
+    "venue": "MEXC perpetuals",
+    "development_start_utc": "2026-01-01T00:00:00Z",
+    "development_end_utc_exclusive": "2026-09-12T00:00:00Z",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "actual_public_funding_required": true,
+    "survivorship_warning": "Fixed present liquid universe; historical results do not remove survivorship risk."
+  },
+  "execution": {
+    "gross_exposure": 1.0,
+    "intended_net_exposure": 0.0,
+    "selected_per_side": 2,
+    "weight_per_selected_leg": 0.25,
+    "transaction_cost_bps_per_side_on_turnover": 10.0,
+    "cost_multipliers": [1.0, 1.5, 2.0],
+    "signal_on_completed_data_only": true,
+    "execution": "next available UTC daily open after signal",
+    "hold_days": 1,
+    "leverage": 1.0,
+    "terminal_liquidation_for_D0_comparability": true
+  },
+  "families": {
+    "donchian_channel_position_continuation": {
+      "hypothesis": "A completed close positioned unusually high or low relative to its strictly prior price channel predicts next-day continuation in the same direction.",
+      "timeframe": "1d",
+      "channel_lookback_days_variants": [5, 10, 20, 40],
+      "common_comparison_warmup_days": 40,
+      "prior_channel": "highest high and lowest low over the strictly prior N completed bars t-N through t-1",
+      "score": "2 * (close_t - prior_low) / (prior_high - prior_low) - 1, with invalid zero-width channels excluded",
+      "direction": "long highest two scores and short lowest two scores",
+      "principal_control": "exact reversed direction"
+    },
+    "amihud_liquidity_premium": {
+      "hypothesis": "Cross-sectional differences in recent return-per-dollar-volume illiquidity predict next-day relative returns after costs and funding.",
+      "timeframe": "1d",
+      "lookback_days_variants": [7, 14, 28, 45],
+      "common_comparison_warmup_days": 45,
+      "daily_illiquidity": "abs(close_t / close_t-1 - 1) divided by max(close_t * base_asset_volume_t, positive epsilon)",
+      "score": "mean daily illiquidity across the most recent N completed bars ending at t",
+      "direction": "long the two lowest-illiquidity symbols and short the two highest-illiquidity symbols",
+      "principal_control": "exact reversed direction"
+    },
+    "close_location_pressure": {
+      "hypothesis": "Persistent closes near the high or low of the completed daily range proxy directional buying or selling pressure that continues into the next daily open-to-open period.",
+      "timeframe": "1d",
+      "lookback_days_variants": [3, 5, 10, 20],
+      "common_comparison_warmup_days": 20,
+      "daily_close_location": "(2*close_t - high_t - low_t) / (high_t - low_t), with zero-range bars excluded",
+      "score": "mean completed daily close-location value across the most recent N bars ending at t",
+      "direction": "long highest two scores and short lowest two scores",
+      "principal_control": "exact reversed direction"
+    }
+  },
+  "family_falsification_gate": {
+    "minimum_baseline_positive_variants": 3,
+    "minimum_adjacent_variants_positive_at_1_5x_cost": 2,
+    "bootstrap_95pct_lower_bound_must_be_positive_for_selected_variant": true,
+    "minimum_candidate_minus_reversed_control_mean_bps": 5.0,
+    "minimum_leave_one_symbol_out_mean_bps": 0.0,
+    "maximum_best_symbol_positive_pnl_share": 0.50,
+    "maximum_best_calendar_month_positive_pnl_share": 0.50,
+    "maximum_top5_positive_period_share": 0.50,
+    "selection_if_family_passes": "Among variants belonging to an adjacent 1.5x-cost-positive neighborhood, select the upper median parameter; never select by maximum PnL."
+  },
+  "trial_accounting": {
+    "directional_candidate_variants": 12,
+    "all_12_variants_count": true,
+    "all_reversed_controls_count_as_controls": true,
+    "no_grid_expansion_after_results": true,
+    "failed_family_closes": true,
+    "positive_control_can_only_generate_a_new_candidate_id": true,
+    "family_variants_share_common_max_lookback_warmup_for_selection_diagnostics": true,
+    "no_regime_router_selection_inside_this_sprint": true
+  },
+  "evidence_boundary": {
+    "this_sprint_is": "D0 hypothesis falsification",
+    "same_period_cross_symbol_is_independent_validation": false,
+    "positive_sprint_result_establishes_edge": false,
+    "positive_sprint_result_only_allows": "new frozen candidate followed by independent-engine reproduction and D2/D3/D4 evidence"
+  },
+  "claims": {
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "leverage_supported": false,
+    "existing_candidates_modified": false,
+    "failed_prior_family_rescued": false
+  }
+}
