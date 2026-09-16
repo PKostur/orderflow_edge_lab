@@ -1,0 +1,102 @@
+{
+  "protocol": "discovery_v2_sprint3_v1",
+  "status": "FROZEN_BEFORE_MARKET_RESULTS",
+  "frozen_at_utc": "2026-09-16T15:20:00Z",
+  "purpose": "Falsify one regime-generated hypothesis and two economically distinct mechanisms without modifying any failed Sprint 2 family or frozen beta45 candidate.",
+  "hypothesis_provenance": {
+    "btc_downtrend_intraday_skewness": "Generated from the frozen Sprint 2 regime attribution. This is a NEW hypothesis family, not a rescue of discovery_v2_sprint2 intraday_skewness.",
+    "funding_carry_spread": "Independent funding/carry mechanism.",
+    "volume_confirmed_momentum": "Independent price-volume attention/continuation mechanism."
+  },
+  "data": {
+    "venue": "MEXC perpetuals",
+    "development_start_utc": "2026-01-01T00:00:00Z",
+    "development_end_utc_exclusive": "2026-09-12T00:00:00Z",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "actual_public_funding_required": true,
+    "survivorship_warning": "Fixed present liquid universe; historical results do not remove survivorship risk."
+  },
+  "execution": {
+    "gross_exposure": 1.0,
+    "intended_net_exposure": 0.0,
+    "selected_per_side": 2,
+    "weight_per_selected_leg": 0.25,
+    "transaction_cost_bps_per_side_on_turnover": 10.0,
+    "cost_multipliers": [1.0, 1.5, 2.0],
+    "signal_on_completed_data_only": true,
+    "first_execution": "next available UTC daily open after signal",
+    "leverage": 1.0
+  },
+  "families": {
+    "btc_downtrend_intraday_skewness": {
+      "hypothesis": "When BTC's strictly prior completed 20-day trend is negative, lower realized 4h return skewness predicts higher next-day cross-sectional return than higher skewness.",
+      "signal_timeframe": "4h",
+      "execution_timeframe": "1d",
+      "btc_trend_lookback_days": 20,
+      "btc_gate": "log(BTC close_t / BTC close_t-20) < 0 using the last completed daily close before execution",
+      "lookback_days_variants": [3, 5, 7, 14],
+      "common_comparison_warmup_days": 20,
+      "score": "sample skewness of strictly prior completed 4h log returns inside the lookback; only active when the BTC gate is true",
+      "direction": "when active long lowest two skewness scores and short highest two; otherwise target flat",
+      "rebalance_every_days": 1,
+      "hold_days": 1,
+      "principal_control": "same gate with exact reversed cross-sectional direction"
+    },
+    "funding_carry_spread": {
+      "hypothesis": "Cross-sectional perpetual funding dispersion contains harvestable carry: assets with lower prior realized funding should outperform as long legs relative to short legs with higher prior realized funding after price PnL, actual funding and costs.",
+      "timeframe": "1d",
+      "lookback_days_variants": [3, 7, 14, 28],
+      "common_comparison_warmup_days": 28,
+      "minimum_settlements_per_day_in_lookback": 2,
+      "score": "mean actual funding rate over settlement timestamps strictly before the execution open and within the trailing N calendar days",
+      "direction": "long lowest two funding scores; short highest two",
+      "rebalance_every_days": 1,
+      "hold_days": 1,
+      "principal_control": "exact reversed direction"
+    },
+    "volume_confirmed_momentum": {
+      "hypothesis": "Recent cross-sectional return continuation is stronger when the completed signal day's contract volume is elevated relative to its own strictly prior baseline.",
+      "timeframe": "1d",
+      "volume_baseline_days_variants": [10, 20, 30, 45],
+      "common_comparison_warmup_days": 45,
+      "score": "completed one-day close-to-close return multiplied by current completed-day contract volume divided by the median contract volume of the strictly prior N completed days",
+      "direction": "long highest two scores; short lowest two",
+      "rebalance_every_days": 1,
+      "hold_days": 1,
+      "principal_control": "exact reversed direction"
+    }
+  },
+  "family_falsification_gate": {
+    "minimum_baseline_positive_variants": 3,
+    "minimum_adjacent_variants_positive_at_1_5x_cost": 2,
+    "bootstrap_95pct_lower_bound_must_be_positive_for_selected_variant": true,
+    "minimum_candidate_minus_reversed_control_mean_bps": 5.0,
+    "minimum_leave_one_symbol_out_mean_bps": 0.0,
+    "maximum_best_symbol_positive_pnl_share": 0.50,
+    "maximum_best_calendar_month_positive_pnl_share": 0.50,
+    "maximum_top5_positive_period_share": 0.50,
+    "selection_if_family_passes": "among variants belonging to an adjacent 1.5x-cost-positive neighborhood, select the upper median parameter; never select by maximum PnL"
+  },
+  "trial_accounting": {
+    "all_12_directional_candidate_variants_count": true,
+    "all_reversed_controls_count_as_controls": true,
+    "no_grid_expansion_after_results": true,
+    "failed_family_closes": true,
+    "regime_generated_family_is_contaminated_D0_hypothesis_generation": true,
+    "positive_control_can_only_generate_a_new_candidate_id": true,
+    "family_variants_share_common_max_lookback_warmup_for_selection_diagnostics": true
+  },
+  "evidence_boundary": {
+    "this_sprint_is": "D0 hypothesis falsification",
+    "same_period_cross_symbol_is_independent_validation": false,
+    "positive_sprint_result_establishes_edge": false,
+    "positive_sprint_result_only_allows": "new frozen candidate followed by independent-engine replication and D2/D3/D4 evidence"
+  },
+  "claims": {
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "leverage_supported": false,
+    "beta45_modified": false,
+    "sprint2_failed_family_modified": false
+  }
+}
