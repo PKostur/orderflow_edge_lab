@@ -41,7 +41,7 @@ def fetch_binance_usdm_klines(
     start: str,
     end: str,
     *,
-    rest_base: str = "https://fapi.binance.com",
+    rest_base: str = "https://data-api.binance.vision",
     limit: int = 1500,
     request_pause_seconds: float = 0.05,
 ) -> pd.DataFrame:
@@ -118,7 +118,7 @@ def fetch_binance_usdm_funding_history(
     start: str,
     end: str,
     *,
-    rest_base: str = "https://fapi.binance.com",
+    rest_base: str = "https://data-api.binance.vision",
     limit: int = 1000,
     request_pause_seconds: float = 0.05,
 ) -> pd.DataFrame:
