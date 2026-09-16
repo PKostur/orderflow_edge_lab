@@ -83,26 +83,48 @@ State before seeing the result.
 - survivorship/universe audit: pass/fail/not-applicable
 - funding/borrow chronology audit: pass/fail/not-applicable
 
-## Engine 2 — independent replication
+## Engine 2 — independent signal replication
 
 - engine:
+- version:
 - independently implemented: yes/no
 - shared signal code: must be no
 - implementation commit:
-- signal timestamp agreement:
-- position agreement:
-- trade-count difference:
-- turnover difference:
-- gross-return difference:
-- net-return difference:
+- timestamp disagreement count:
+- raw-target disagreement count:
+- execution-target disagreement count:
+- transition disagreement count:
+- signal-parity artifact/hash:
+- unexplained discrepancy: yes/no
+
+## Event-driven execution replication
+
+Required whenever execution timing or fills materially affect the claimed economics.
+
+- engine/version:
+- venue/instrument model:
+- OMS/account type:
+- order types:
+- latency model:
+- fill model:
+- expected fill count:
+- actual fill count:
+- fill-side disagreements:
+- fill-quantity disagreements:
+- fill-price disagreements:
+- fill-timestamp disagreements:
+- final-position disagreement:
+- gross-PnL accounting disagreement:
+- execution-parity artifact/hash:
 - unexplained discrepancy: yes/no
 
 ## Statistical robustness
 
 - sample count:
+- dependence/cluster unit:
 - block-bootstrap mean CI:
 - block-bootstrap median CI:
-- Deflated Sharpe Ratio:
+- Deflated-Sharpe-style probability:
 - PBO/CSCV:
 - family-level Reality Check / equivalent:
 - positive-period fraction:
@@ -111,10 +133,11 @@ State before seeing the result.
 
 ## Concentration
 
-- best-symbol PnL share:
-- best-period PnL share:
-- top-five-trade/period PnL share:
+- best-symbol positive-PnL share:
+- best-period positive-PnL share:
+- top-five-trade/period positive-PnL share:
 - contribution HHI:
+- minimum leave-one-symbol-out expectancy:
 - result excluding best symbol:
 - result excluding best period:
 
@@ -127,7 +150,11 @@ State before seeing the result.
 | 2.0x cost | | | |
 | +1 decision event delay | | | |
 | partial/missed fill stress | | | |
+| spread-widening stress | | | |
+| funding/borrow stress | | | |
 
+- break-even round-trip friction:
+- break-even/base-cost ratio:
 - estimated capacity:
 - liquidation/margin feasibility:
 
