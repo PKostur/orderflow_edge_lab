@@ -1,0 +1,121 @@
+{
+  "research_id": "cross_market_etf_v1",
+  "freeze_commit": "f3156a7460399d38f0dc3c7b6f5d7109858eb0d2",
+  "clarification_commit": "98b77ae7027efd9edc71aff78204abbda0855cd5",
+  "status": "FALSIFIED_D0_ALL_FAMILIES",
+  "evaluated_at_utc": "2026-09-17T17:18:00Z",
+  "source": {
+    "provider": "Massive",
+    "endpoint": "/v2/aggs/ticker/{ticker}/range/1/minute/{from}/{to}",
+    "adjusted": true,
+    "D0_window": ["2026-07-06", "2026-07-31"],
+    "D3_holdout": ["2026-08-03", "2026-08-28"],
+    "D3_opened": false,
+    "reason_D3_not_opened": "Every frozen family failed at least one D0 survival gate."
+  },
+  "data_integrity": {
+    "SPY": {"D0_and_D3_regular_session_minutes_per_session": "390/390 on all 40 loaded sessions"},
+    "QQQ": {"D0_and_D3_regular_session_minutes_per_session": "390/390 on all 40 loaded sessions"},
+    "GLD": {"D0_and_D3_regular_session_minutes_per_session": "390/390 on all 40 loaded sessions"},
+    "USO": {"D0_and_D3_sessions_loaded": 40, "minimum_regular_session_minutes": 372, "incomplete_sessions": 17, "handling": "exact-minute fail-closed eligibility; no interpolation"}
+  },
+  "families": {
+    "ETF_H1_ORB15_CONTINUATION": {
+      "status": "FALSIFIED_D0_REGIME_INSTABILITY",
+      "signals": 76,
+      "sessions": 20,
+      "tickers": 4,
+      "pooled_net_mean_bps_2": 1.2650321783,
+      "pooled_net_mean_bps_4": -0.7349678217,
+      "reversed_mean_bps_2": -5.2650321783,
+      "positive_tickers": 3,
+      "max_positive_ticker_pnl_share": 0.5662974216,
+      "half1_net_mean_bps_2": -5.1590651607,
+      "half2_net_mean_bps_2": 7.6891295172,
+      "ticker_results": {
+        "GLD": {"signals":18,"mean_net_bps_2":3.7210472979,"mean_net_bps_4":1.7210472979,"reversed_bps_2":-7.7210472979,"total_net_bps_2":66.9788513629},
+        "QQQ": {"signals":19,"mean_net_bps_2":4.8096149389,"mean_net_bps_4":2.8096149389,"reversed_bps_2":-8.8096149389,"total_net_bps_2":91.3826838393},
+        "SPY": {"signals":19,"mean_net_bps_2":0.1582723056,"mean_net_bps_4":-1.8417276944,"reversed_bps_2":-4.1582723056,"total_net_bps_2":3.0071738069},
+        "USO": {"signals":20,"mean_net_bps_2":-3.2613131731,"mean_net_bps_4":-5.2613131731,"reversed_bps_2":-0.7386868269,"total_net_bps_2":-65.2262634617}
+      },
+      "gate_results": {
+        "minimum_total_signals": true,
+        "minimum_sessions_with_signals": true,
+        "minimum_tickers_with_signals": true,
+        "pooled_net_mean_bps_2_positive": true,
+        "original_beats_reversed_at_2": true,
+        "minimum_positive_tickers": true,
+        "max_positive_pnl_share_single_ticker": true,
+        "both_calendar_halves_positive_at_2": false
+      }
+    },
+    "ETF_H2_VWAP_VOL_REVERSION": {
+      "status": "FALSIFIED_D0_CONCENTRATION_AND_BREADTH",
+      "signals": 75,
+      "sessions": 20,
+      "tickers": 4,
+      "pooled_net_mean_bps_2": 1.8367385395,
+      "pooled_net_mean_bps_4": -0.1632614605,
+      "reversed_mean_bps_2": -5.8367385395,
+      "positive_tickers": 2,
+      "max_positive_ticker_pnl_share": 0.9188783831,
+      "half1_net_mean_bps_2": 0.7296451306,
+      "half2_net_mean_bps_2": 2.8054452722,
+      "ticker_results": {
+        "GLD": {"signals":18,"mean_net_bps_2":-1.3764285883,"mean_net_bps_4":-3.3764285883,"reversed_bps_2":-2.6235714117,"total_net_bps_2":-24.7757145894},
+        "QQQ": {"signals":19,"mean_net_bps_2":0.8572769052,"mean_net_bps_4":-1.1427230948,"reversed_bps_2":-4.8572769052,"total_net_bps_2":16.2882611992},
+        "SPY": {"signals":19,"mean_net_bps_2":-2.0135298543,"mean_net_bps_4":-4.0135298543,"reversed_bps_2":-1.9864701457,"total_net_bps_2":-38.2570672318},
+        "USO": {"signals":19,"mean_net_bps_2":9.7105216359,"mean_net_bps_4":7.7105216359,"reversed_bps_2":-13.7105216359,"total_net_bps_2":184.4999110815}
+      },
+      "gate_results": {
+        "minimum_total_signals": true,
+        "minimum_sessions_with_signals": true,
+        "minimum_tickers_with_signals": true,
+        "pooled_net_mean_bps_2_positive": true,
+        "original_beats_reversed_at_2": true,
+        "minimum_positive_tickers": false,
+        "max_positive_pnl_share_single_ticker": false,
+        "both_calendar_halves_positive_at_2": true
+      }
+    },
+    "ETF_H3_GAP_REVERSION": {
+      "status": "FALSIFIED_D0_NEGATIVE_EXPECTANCY",
+      "signals": 42,
+      "sessions": 16,
+      "tickers": 4,
+      "pooled_net_mean_bps_2": -16.3917325573,
+      "pooled_net_mean_bps_4": -18.3917325573,
+      "reversed_mean_bps_2": 12.3917325573,
+      "positive_tickers": 2,
+      "max_positive_ticker_pnl_share": 0.8852837812,
+      "half1_net_mean_bps_2": -28.0118602993,
+      "half2_net_mean_bps_2": -8.4900456927,
+      "ticker_results": {
+        "GLD": {"signals":11,"mean_net_bps_2":-28.1084897581,"mean_net_bps_4":-30.1084897581,"reversed_bps_2":24.1084897581,"total_net_bps_2":-309.1933873388},
+        "QQQ": {"signals":12,"mean_net_bps_2":1.7313191149,"mean_net_bps_4":-0.2686808851,"reversed_bps_2":-5.7313191149,"total_net_bps_2":20.7758293784},
+        "SPY": {"signals":8,"mean_net_bps_2":20.0413082155,"mean_net_bps_4":18.0413082155,"reversed_bps_2":-24.0413082155,"total_net_bps_2":160.3304657240},
+        "USO": {"signals":11,"mean_net_bps_2":-50.9423341062,"mean_net_bps_4":-52.9423341062,"reversed_bps_2":46.9423341062,"total_net_bps_2":-560.3656751684}
+      },
+      "gate_results": {
+        "minimum_total_signals": true,
+        "minimum_sessions_with_signals": true,
+        "minimum_tickers_with_signals": true,
+        "pooled_net_mean_bps_2_positive": false,
+        "original_beats_reversed_at_2": false,
+        "minimum_positive_tickers": false,
+        "max_positive_pnl_share_single_ticker": false,
+        "both_calendar_halves_positive_at_2": false
+      }
+    }
+  },
+  "research_state": {
+    "D0": "FALSIFIED_ALL_FAMILIES",
+    "D3_holdout": "SEALED_NOT_INSPECTED",
+    "candidate_created": false,
+    "future_shadow_created": false,
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "leverage_supported": false,
+    "same_id_retuning_allowed": false
+  }
+}
