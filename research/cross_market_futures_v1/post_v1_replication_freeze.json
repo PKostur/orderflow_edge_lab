@@ -1,0 +1,87 @@
+{
+  "replication_id": "cross_market_futures_post_v1_replication_2026_08",
+  "status": "FROZEN_BEFORE_REPLICATION_RESULTS",
+  "frozen_at_utc": "2026-09-17T13:34:00Z",
+  "provenance": {
+    "generated_from": "cross_market_futures_price_transfer_v1",
+    "discovery_window": ["2026-09-10", "2026-09-16"],
+    "data_mined_hypotheses": true,
+    "multiple_testing_debt_acknowledged": true,
+    "same_ids_as_failed_v1": false,
+    "purpose": "Test only the two observed market-specific pockets on an untouched non-overlapping historical window without changing their signal rules."
+  },
+  "validation_window": {
+    "session_end_dates": ["2026-08-24", "2026-08-25", "2026-08-26", "2026-08-27", "2026-08-28"],
+    "intraday_window_utc": {"start": "13:30:00", "end": "14:30:00"},
+    "source": "Massive futures 1-minute aggregate bars",
+    "non_overlapping_with_discovery": true,
+    "genuine_future_oos": false,
+    "same_source_as_discovery": true
+  },
+  "contract_selection": {
+    "rule": "On 2026-08-24 choose, for each tested product root, the active single contract with the smallest days_to_maturity subject to days_to_maturity >= 14; hold that contract fixed for all five sessions.",
+    "selected": {
+      "NQ": {"ticker": "NQU6", "days_to_maturity": 24, "last_trade_date": "2026-09-18", "tick_size": 0.25},
+      "GC": {"ticker": "GCU6", "days_to_maturity": 34, "last_trade_date": "2026-09-28", "tick_size": 0.10},
+      "CL": {"ticker": "CLV6", "days_to_maturity": 28, "last_trade_date": "2026-09-22", "tick_size": 0.01}
+    },
+    "selection_used_strategy_pnl": false,
+    "no_post_result_substitution": true
+  },
+  "hypotheses": [
+    {
+      "id": "cmf_nq_range_breakout_replication_v1",
+      "root": "NQ",
+      "inherits_exact_rule_from": "CMFP-H2",
+      "rule": "At completed minute t, long if close[t] > max(high[t-20:t-1]); short if close[t] < min(low[t-20:t-1]); enter next exact minute open; exit open exactly five minutes after entry.",
+      "reason_generated": "NQ was the only clearly positive CMFP-H2 market in the discovery window.",
+      "parameters_changed": false,
+      "replication_gates": {
+        "minimum_signals": 25,
+        "minimum_sessions_with_signals": 5,
+        "net_mean_bps_2tick_positive": true,
+        "net_mean_bps_4tick_positive": true,
+        "original_beats_reversed_at_2tick": true,
+        "minimum_positive_sessions": 3,
+        "max_positive_session_pnl_share": 0.50
+      }
+    },
+    {
+      "id": "cmf_gc_cl_bollinger_reversion_replication_v1",
+      "roots": ["GC", "CL"],
+      "inherits_exact_rule_from": "CMFP-H3",
+      "rule": "At completed minute t, rolling 20-close population z-score including t; z>=+2 signals short and z<=-2 signals long; enter next exact minute open; exit open exactly five minutes after entry.",
+      "reason_generated": "GC and CL were the only positive CMFP-H3 markets in the discovery window.",
+      "parameters_changed": false,
+      "replication_gates": {
+        "minimum_signals_each_market": 15,
+        "minimum_sessions_with_signals_each_market": 4,
+        "both_markets_net_mean_bps_2tick_positive": true,
+        "equal_market_mean_bps_2tick_positive": true,
+        "equal_market_mean_bps_4tick_positive": true,
+        "pooled_original_beats_reversed_at_2tick": true,
+        "minimum_positive_market_session_cells": 6,
+        "max_positive_market_pnl_share": 0.70
+      }
+    }
+  ],
+  "economics": {
+    "round_trip_friction_ticks": [2.0, 4.0],
+    "same_cost_formula_as_price_transfer_v1": true,
+    "commissions_not_modeled": true,
+    "leverage": 1.0
+  },
+  "interpretation_rule": {
+    "pass_status": "HISTORICAL_REPLICATION_SURVIVOR_ONLY",
+    "pass_does_not_establish_edge": true,
+    "pass_does_not_authorize_live_or_leverage": true,
+    "pass_requires_new_prospective_future_shadow_after_2026-09-17": true,
+    "fail_is_terminal_for_exact_replication_id": true
+  },
+  "claims": {
+    "persistent_edge_established": false,
+    "candidate_promoted": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
+}
