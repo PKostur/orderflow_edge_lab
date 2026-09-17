@@ -1,0 +1,96 @@
+{
+  "research_id": "cross_sectional_equity_v1",
+  "status": "FROZEN_BEFORE_PNL",
+  "frozen_at_utc": "2026-09-17T19:31:00Z",
+  "purpose": "Test fresh market-neutral intraday cross-sectional effects in liquid US equities after futures, ETF and FX single-market lanes failed D0.",
+  "evidence_separation": {
+    "crypto_chain_unchanged": true,
+    "futures_chain_unchanged": true,
+    "etf_chain_unchanged": true,
+    "fx_chain_unchanged": true,
+    "equity_results_cannot_promote_other_market_candidates": true
+  },
+  "data": {
+    "provider": "Massive",
+    "endpoint": "/v2/aggs/ticker/{stocksTicker}/range/1/minute/{from}/{to}",
+    "adjusted": true,
+    "session": "US regular hours only, America/New_York",
+    "universe": ["AAPL","MSFT","NVDA","AMZN","META","GOOGL","JPM","XOM"],
+    "universe_selected_before_pnl": true,
+    "gap_policy": "No interpolation, forward fill, substitute signal, substitute entry or alternate exit. A daily cross-section is eligible only if all eight names have every exact timestamp required by that family."
+  },
+  "windows": {
+    "D0_discovery": ["2026-07-06","2026-07-31"],
+    "D3_locked_historical_holdout": ["2026-08-03","2026-08-28"],
+    "later_check_reserved_not_for_retuning": ["2026-09-01","2026-09-16"],
+    "future_shadow_earliest": "2026-09-18"
+  },
+  "portfolio": {
+    "construction": "Each valid signal day ranks all eight names by the frozen feature. Long the bottom two and short the top two for reversion families; long top two and short bottom two for momentum family. Equal weight across four legs; gross exposure normalized to 1.0, net exposure 0.",
+    "daily_return_bps": "mean of the four signed leg returns in bps minus frozen all-in round-trip friction per leg",
+    "primary_round_trip_friction_bps_per_leg": 3.0,
+    "stress_round_trip_friction_bps_per_leg": 6.0,
+    "reversed_same_ranking_control": "Swap long and short sides using the exact same ranked cross-section and timestamps; pay identical friction.",
+    "leverage": 1.0
+  },
+  "hypotheses": {
+    "EQ_H1_OPEN30_CROSSSEC_REVERSION": {
+      "feature": "log(10:00 ET open / 09:30 ET open)",
+      "ranking": "ascending feature across all eight names",
+      "position": "long bottom two, short top two",
+      "entry": "10:01 ET open",
+      "exit": "11:00 ET open",
+      "max_portfolios_per_day": 1
+    },
+    "EQ_H2_FIRSTHOUR_CROSSSEC_MOMENTUM": {
+      "feature": "log(10:30 ET open / 09:30 ET open)",
+      "ranking": "ascending feature across all eight names",
+      "position": "long top two, short bottom two",
+      "entry": "10:31 ET open",
+      "exit": "15:30 ET open",
+      "max_portfolios_per_day": 1
+    },
+    "EQ_H3_OVERNIGHT_GAP_CROSSSEC_REVERSION": {
+      "feature": "log(current 09:30 ET open / previous valid session 15:59 ET close)",
+      "ranking": "ascending feature across all eight names",
+      "position": "long bottom two, short top two",
+      "entry": "09:31 ET open",
+      "exit": "10:30 ET open",
+      "max_portfolios_per_day": 1,
+      "prior_close_rule": "exact previous valid US regular session 15:59 close for each name"
+    }
+  },
+  "D0_calendar_halves": {
+    "half1": ["2026-07-06","2026-07-17"],
+    "half2": ["2026-07-20","2026-07-31"]
+  },
+  "gates": {
+    "D0_survival": {
+      "minimum_valid_portfolio_days": 15,
+      "minimum_distinct_names_selected": 6,
+      "pooled_daily_net_mean_bps_primary_positive": true,
+      "original_beats_reversed_primary": true,
+      "minimum_names_with_positive_total_contribution": 5,
+      "max_positive_contribution_share_single_name": 0.35,
+      "both_calendar_halves_positive_primary": true
+    },
+    "D3_holdout_survival": {
+      "minimum_valid_portfolio_days": 15,
+      "pooled_daily_net_mean_bps_primary_positive": true,
+      "pooled_daily_net_mean_bps_stress_nonnegative": true,
+      "original_beats_reversed_primary": true,
+      "minimum_names_with_positive_total_contribution": 5,
+      "max_positive_contribution_share_single_name": 0.35
+    },
+    "promotion": "No direct promotion from D0 or D3. A survivor gets a new candidate ID and prospective future shadow only."
+  },
+  "research_rules": {
+    "families_frozen": 3,
+    "ticker_substitution_forbidden": true,
+    "ticker_specific_rescue_forbidden": true,
+    "threshold_or_time_retuning_after_D0_forbidden": true,
+    "failed_family_id_dead": true,
+    "reversed_control_cannot_be_adopted_post_hoc": true,
+    "D3_performance_must_not_be_computed_for_D0_failures": true
+  }
+}
