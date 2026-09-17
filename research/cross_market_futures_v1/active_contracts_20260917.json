@@ -1,0 +1,61 @@
+{
+  "research_id": "cross_market_futures_v1",
+  "selection_timestamp_utc": "2026-09-17T12:57:00Z",
+  "selection_rule": "For each frozen market root, select the currently active native outright contract by observed current-session aggregate volume, before inspecting any strategy PnL. No market substitution and no contract switching within a capture batch.",
+  "strategy_pnl_inspected_before_selection": false,
+  "source": {
+    "provider": "Massive futures aggregate bars",
+    "resolution": "1session",
+    "window_start": "2026-09-16",
+    "session_end_date": "2026-09-17",
+    "tick_trades_entitled": false,
+    "tick_quotes_entitled": false,
+    "aggregate_bars_entitled": true,
+    "entitlement_note": "Massive returned NOT_ENTITLED for /futures/v1/trades/{ticker} and /futures/v1/quotes/{ticker}; aggregate bars remained available. Bars are used here only for pre-PnL active-contract selection, not as order-flow evidence."
+  },
+  "selected_contracts": [
+    {
+      "root": "ES",
+      "selected": "ESZ6",
+      "selected_volume": 278392,
+      "comparison": "ESU6",
+      "comparison_volume": 28896,
+      "selected_to_comparison_volume_ratio": 9.634136905453412
+    },
+    {
+      "root": "NQ",
+      "selected": "NQZ6",
+      "selected_volume": 116034,
+      "comparison": "NQU6",
+      "comparison_volume": 8710,
+      "selected_to_comparison_volume_ratio": 13.321928817451205
+    },
+    {
+      "root": "GC",
+      "selected": "GCZ6",
+      "selected_volume": 100935,
+      "comparison": "GCV6",
+      "comparison_volume": 3744,
+      "selected_to_comparison_volume_ratio": 26.95806623931624,
+      "note": "GCU6 returned no session aggregate for the requested session and was not used as the comparison."
+    },
+    {
+      "root": "CL",
+      "selected": "CLV6",
+      "selected_volume": 87239,
+      "comparison": "CLX6",
+      "comparison_volume": 52684,
+      "selected_to_comparison_volume_ratio": 1.6558864171285407
+    }
+  ],
+  "frozen_panel": ["ESZ6", "NQZ6", "GCZ6", "CLV6"],
+  "evidence_use": {
+    "contract_selection_only": true,
+    "orderflow_h1_evidence": false,
+    "orderflow_h2_evidence": false,
+    "orderflow_h3_evidence": false,
+    "candidate_promotion_evidence": false,
+    "live_or_leverage_evidence": false
+  },
+  "next_required_data": "Native-contract tick trades plus BBO quotes for H1/H3; genuine top-10 Level-2 depth for H2."
+}
