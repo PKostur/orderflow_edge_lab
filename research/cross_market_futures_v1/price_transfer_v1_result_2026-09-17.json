@@ -1,0 +1,94 @@
+{
+  "research_id": "cross_market_futures_price_transfer_v1",
+  "source_freeze": "research/cross_market_futures_v1/price_transfer_v1_freeze.json",
+  "status": "FALSIFIED_D0",
+  "evaluated_at_utc": "2026-09-17T13:31:00Z",
+  "source": {
+    "provider": "Massive",
+    "endpoint": "/futures/v1/aggs/{ticker}",
+    "resolution": "1min",
+    "contracts": {"ES": "ESZ6", "NQ": "NQZ6", "GC": "GCV6", "CL": "CLX6"},
+    "session_end_dates": ["2026-09-10", "2026-09-11", "2026-09-14", "2026-09-15", "2026-09-16"],
+    "signal_window_utc": ["13:30:00", "14:30:00"],
+    "source_bytes_hashed": false,
+    "limitation": "Results were queried from a connected licensed API workspace; exact raw response bytes were not persisted into the repository. Queries, tickers, dates, rules, and aggregate counts are recorded."
+  },
+  "data_integrity": {
+    "expected_signal_minutes_per_market_session": 60,
+    "bars_in_signal_window": {
+      "ES": {"2026-09-10":60,"2026-09-11":60,"2026-09-14":60,"2026-09-15":60,"2026-09-16":60},
+      "NQ": {"2026-09-10":60,"2026-09-11":60,"2026-09-14":60,"2026-09-15":60,"2026-09-16":60},
+      "GC": {"2026-09-10":60,"2026-09-11":60,"2026-09-14":59,"2026-09-15":58,"2026-09-16":49},
+      "CL": {"2026-09-10":60,"2026-09-11":60,"2026-09-14":60,"2026-09-15":59,"2026-09-16":60}
+    },
+    "gap_policy": "No filling or interpolation. A signal observation is eligible only when required lookback bars plus exact next-minute entry and exact five-minute-later exit timestamps exist.",
+    "post_result_contract_substitution": false
+  },
+  "pooled_results": {
+    "CMFP-H1": {"signals":149,"markets":4,"sessions":5,"net2_mean_bps":-0.7023422324,"reversed2_mean_bps":-0.6597680470,"net4_mean_bps":-1.3833973722,"net2_total_bps":-104.6489926331},
+    "CMFP-H2": {"signals":136,"markets":4,"sessions":5,"net2_mean_bps":-0.6221925102,"reversed2_mean_bps":-0.9318669579,"net4_mean_bps":-1.3992222442,"net2_total_bps":-84.6181813825},
+    "CMFP-H3": {"signals":159,"markets":4,"sessions":5,"net2_mean_bps":-0.2076460043,"reversed2_mean_bps":-1.2914001384,"net4_mean_bps":-0.9571690756,"net2_total_bps":-33.0157146821}
+  },
+  "market_results_primary_2tick_cost": {
+    "CMFP-H1": {
+      "ES":{"signals":65,"mean_net_bps":0.0812107778,"total_net_bps":5.2787005599},
+      "NQ":{"signals":55,"mean_net_bps":-0.0535158424,"total_net_bps":-2.9433713302},
+      "GC":{"signals":6,"mean_net_bps":-6.2342022157,"total_net_bps":-37.4052132945},
+      "CL":{"signals":23,"mean_net_bps":-3.0251786334,"total_net_bps":-69.5791085683}
+    },
+    "CMFP-H2": {
+      "ES":{"signals":43,"mean_net_bps":0.0782777554,"total_net_bps":3.3659434821},
+      "NQ":{"signals":39,"mean_net_bps":1.3638659459,"total_net_bps":53.1907718894},
+      "GC":{"signals":25,"mean_net_bps":-5.1392752356,"total_net_bps":-128.4818808899},
+      "CL":{"signals":29,"mean_net_bps":-0.4376902022,"total_net_bps":-12.6930158641}
+    },
+    "CMFP-H3": {
+      "ES":{"signals":58,"mean_net_bps":-1.4420038979,"total_net_bps":-83.6362260778},
+      "NQ":{"signals":50,"mean_net_bps":-1.4404779936,"total_net_bps":-72.0238996814},
+      "GC":{"signals":20,"mean_net_bps":4.9464066357,"total_net_bps":98.9281327134},
+      "CL":{"signals":31,"mean_net_bps":0.7650412375,"total_net_bps":23.7162783637}
+    }
+  },
+  "session_results_primary_2tick_cost": {
+    "CMFP-H1": {
+      "2026-09-10":{"signals":29,"mean_net_bps":0.1446430712,"total_net_bps":4.1946490660},
+      "2026-09-11":{"signals":23,"mean_net_bps":-5.9363818514,"total_net_bps":-136.5367825812},
+      "2026-09-14":{"signals":35,"mean_net_bps":3.9237545771,"total_net_bps":137.3314101989},
+      "2026-09-15":{"signals":36,"mean_net_bps":-4.3245059890,"total_net_bps":-155.6822156040},
+      "2026-09-16":{"signals":26,"mean_net_bps":1.7709210110,"total_net_bps":46.0439462872}
+    },
+    "CMFP-H2": {
+      "2026-09-10":{"signals":32,"mean_net_bps":-1.6499357306,"total_net_bps":-52.7979433790},
+      "2026-09-11":{"signals":21,"mean_net_bps":-3.7401493170,"total_net_bps":-78.5431356580},
+      "2026-09-14":{"signals":33,"mean_net_bps":1.4829904253,"total_net_bps":48.9386840357},
+      "2026-09-15":{"signals":32,"mean_net_bps":0.1353854067,"total_net_bps":4.3323330144},
+      "2026-09-16":{"signals":18,"mean_net_bps":-0.3637844109,"total_net_bps":-6.5481193956}
+    },
+    "CMFP-H3": {
+      "2026-09-10":{"signals":38,"mean_net_bps":-0.1919412871,"total_net_bps":-7.2937689115},
+      "2026-09-11":{"signals":22,"mean_net_bps":3.8583778016,"total_net_bps":84.8843116356},
+      "2026-09-14":{"signals":39,"mean_net_bps":-2.0694331992,"total_net_bps":-80.7078947690},
+      "2026-09-15":{"signals":36,"mean_net_bps":0.6480724502,"total_net_bps":23.3306082074},
+      "2026-09-16":{"signals":24,"mean_net_bps":-2.2178737852,"total_net_bps":-53.2289708446}
+    }
+  },
+  "hard_gate_results": {
+    "CMFP-H1": {"signals":true,"markets":true,"sessions":true,"pooled_positive":false,"beats_reversed":false,"three_positive_markets":false,"market_concentration":false,"session_concentration":false,"max_positive_market_share":1.0,"max_positive_session_share":0.7321608260},
+    "CMFP-H2": {"signals":true,"markets":true,"sessions":true,"pooled_positive":false,"beats_reversed":true,"three_positive_markets":false,"market_concentration":false,"session_concentration":false,"max_positive_market_share":0.9404855204,"max_positive_session_share":0.9186737319},
+    "CMFP-H3": {"signals":true,"markets":true,"sessions":true,"pooled_positive":false,"beats_reversed":true,"three_positive_markets":false,"market_concentration":false,"session_concentration":false,"max_positive_market_share":0.8066256900,"max_positive_session_share":0.7844048839}
+  },
+  "interpretation": {
+    "CMFP-H1": "Falsified. The pooled result is negative, fails the reversed-direction comparison, and has no market breadth.",
+    "CMFP-H2": "Falsified. NQ is a positive isolated pocket and ES is approximately flat-positive, but pooled expectancy is negative and positive PnL is overwhelmingly concentrated in NQ.",
+    "CMFP-H3": "Falsified. GC and CL show a commodity-side reversion pocket, but pooled expectancy is negative and the result is concentrated in GC plus a small number of positive sessions.",
+    "no_retuning": true,
+    "same_id_retest_allowed": false,
+    "lessons_may_generate_new_id": true
+  },
+  "claims": {
+    "persistent_edge_established": false,
+    "candidate_promoted": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
+}
