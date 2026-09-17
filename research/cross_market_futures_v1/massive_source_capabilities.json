@@ -1,0 +1,24 @@
+{
+  "research_id": "cross_market_futures_v1",
+  "source": "Massive futures API",
+  "checked_before_strategy_pnl": true,
+  "available_research_interfaces": {
+    "contracts": true,
+    "session_aggregates": true,
+    "tick_trades": true,
+    "best_bid_offer_quotes_with_sizes": true,
+    "historical_level2_top10_depth": false
+  },
+  "hypothesis_eligibility": {
+    "CMF-H1_aggressive_flow_ratio": "ELIGIBLE_IF_TRADE_AND_QUOTE_QUALITY_GATES_PASS",
+    "CMF-H2_book_imbalance_top10": "DATA_BLOCKED_ON_MASSIVE_SOURCE",
+    "CMF-H3_microprice_normalized_edge": "ELIGIBLE_IF_BBO_SIZE_AND_QUOTE_QUALITY_GATES_PASS"
+  },
+  "anti_substitution_rule": "Do not replace CMF-H2 top-10 displayed-book imbalance with BBO-size imbalance. BBO-size imbalance may be reported as a diagnostic only and cannot satisfy H2.",
+  "claims": {
+    "persistent_edge_established": false,
+    "candidate_promoted": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
+}
