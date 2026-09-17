@@ -1,0 +1,77 @@
+{
+  "protocol_id": "cross_asset_etf_price_state_v1",
+  "status": "FROZEN_BEFORE_RESULTS",
+  "frozen_at_utc": "2026-09-17T14:40:00Z",
+  "purpose": "Fresh non-crypto discovery lane. No inheritance from crypto or failed futures candidates.",
+  "source": {
+    "provider": "Massive",
+    "endpoint": "/v2/aggs/ticker/{ticker}/range/1/minute/{from}/{to}",
+    "adjusted": true,
+    "resolution": "1 minute"
+  },
+  "universe": [
+    {"ticker":"SPY","role":"broad US equity"},
+    {"ticker":"QQQ","role":"Nasdaq/growth equity"},
+    {"ticker":"IWM","role":"US small-cap equity"},
+    {"ticker":"TLT","role":"long-duration US Treasuries"},
+    {"ticker":"GLD","role":"gold"},
+    {"ticker":"XLE","role":"US energy equity sector"}
+  ],
+  "discovery_window": ["2026-09-01", "2026-09-16"],
+  "locked_nonoverlap_replication_window": ["2026-08-17", "2026-08-28"],
+  "replication_rule": "Do not inspect the locked replication window for a family unless that family first survives the full discovery gate. This replication is historical and same-source, not genuine future OOS.",
+  "session": {
+    "timezone": "UTC",
+    "regular_hours_window": ["13:30:00", "20:00:00"],
+    "research_signal_window": ["13:30:00", "15:00:00"],
+    "missing_minutes": "No interpolation. Any signal/entry/exit requiring a missing exact minute is ineligible."
+  },
+  "families": {
+    "ETF_ORB15_CONT_V1": {
+      "opening_range": "high/low over bars 13:30 through 13:44 inclusive",
+      "signal": "first close from 13:45 through 14:44 strictly above opening-range high => long; strictly below opening-range low => short",
+      "entry": "next exact minute open",
+      "exit": "open exactly 15 minutes after entry",
+      "max_signals": "one per ticker per session"
+    },
+    "ETF_BB20_REVERT_V1": {
+      "lookback": 20,
+      "center": "simple mean of the 20 closes ending at the signal bar",
+      "dispersion": "population standard deviation of those same 20 closes",
+      "signal": "z >= +2.0 => short; z <= -2.0 => long",
+      "entry": "next exact minute open",
+      "exit": "open exactly 10 minutes after entry",
+      "overlap": "no overlapping positions; after a signal no new signal until its timed exit",
+      "eligible_signal_times": "13:49 through 14:49 UTC inclusive"
+    }
+  },
+  "controls": {
+    "primary": "fully reversed direction at identical signal, entry and exit timestamps",
+    "no_post_result_flip": true
+  },
+  "economics": {
+    "gross_return": "direction * (exit_open / entry_open - 1)",
+    "round_trip_all_in_friction_bps": [2,5,10],
+    "primary_friction_bps": 5,
+    "friction_interpretation": "stress allowance for spread, fees and slippage because minute bars do not contain executable BBO",
+    "leverage": 1.0
+  },
+  "discovery_survival_gate_per_family": {
+    "minimum_signals": 40,
+    "minimum_sessions_with_signals": 8,
+    "minimum_instruments_with_signals": 4,
+    "pooled_net_mean_bps_at_5bps_gt": 0,
+    "original_must_beat_reversed_at_5bps": true,
+    "minimum_positive_instruments_at_5bps": 4,
+    "maximum_single_instrument_share_of_positive_pnl": 0.50,
+    "maximum_single_session_share_of_positive_pnl": 0.25,
+    "10bps_stress": "diagnostic only"
+  },
+  "research_claims": {
+    "survival_is_candidate_promotion": false,
+    "historical_replication_is_future_oos": false,
+    "live_supported": false,
+    "leverage_supported": false,
+    "same_id_retuning_after_failure": false
+  }
+}
