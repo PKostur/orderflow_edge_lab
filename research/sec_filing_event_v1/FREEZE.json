@@ -1,0 +1,127 @@
+{
+  "protocol_id": "sec_filing_event_v1",
+  "status": "FROZEN_BEFORE_EVENT_PNL",
+  "frozen_at_utc": "2026-09-17T23:40:00Z",
+  "purpose": "Test whether price reactions after causally observed SEC 10-Q/10-K filings continue after the next regular-session open. Separate non-crypto event-driven evidence lane; no prior technical-pattern status is inherited.",
+  "source": {
+    "event_provider": "Massive SEC reference / SEC EDGAR",
+    "event_endpoint": "/v1/reference/sec/filings",
+    "price_provider": "Massive",
+    "price_endpoint": "/v2/aggs/ticker/{ticker}/range/1/minute/{from}/{to}",
+    "price_adjusted": true,
+    "universe": [
+      "AAPL",
+      "MSFT",
+      "NVDA",
+      "AMZN",
+      "META",
+      "GOOGL",
+      "JPM",
+      "XOM"
+    ],
+    "universe_selected_before_event_pnl": true,
+    "forms": [
+      "10-Q",
+      "10-K"
+    ],
+    "amendments_excluded": true,
+    "timezone": "America/New_York"
+  },
+  "windows": {
+    "prehistory_start": "2024-09-01",
+    "D0_event_acceptance": [
+      "2025-01-01",
+      "2025-12-31"
+    ],
+    "D3_locked_event_acceptance": [
+      "2026-01-01",
+      "2026-08-31"
+    ],
+    "future_shadow_earliest": "2026-09-18"
+  },
+  "causal_event_clock": {
+    "timestamp": "SEC acceptance_datetime",
+    "reaction_session": "first regular US equity session whose 09:30 ET bar begins strictly after the SEC acceptance timestamp; same calendar day is allowed only when acceptance is before that 09:30 open",
+    "prior_close": "15:59 ET close of the immediately preceding eligible regular session",
+    "gap_observation": "reaction-session 09:30 ET open / prior_close - 1",
+    "signal_available_at": "reaction-session 09:30 ET open",
+    "entry": "reaction-session 09:31 ET open",
+    "missing_data": "Fail closed. No interpolation, forward fill, proxy ticker, event-time substitution, or price substitution."
+  },
+  "normalization": {
+    "sigma": "sample standard deviation of the previous 20 eligible regular-session close-to-close log returns, using only observations ending before the reaction session",
+    "gap_threshold": "abs(log(09:30_open / prior_session_close)) >= 0.50 * sigma20",
+    "exactly_zero_gap": "no signal"
+  },
+  "economics": {
+    "gross_return_bps": "direction * (exit_price / entry_price - 1) * 10000",
+    "primary_round_trip_friction_bps": 5,
+    "stress_round_trip_friction_bps": 10,
+    "reversed_same_event_control": true,
+    "leverage": 1,
+    "one_event_one_equal_weight_observation": true,
+    "no_spread_reconstruction_claim": "Minute aggregates are a research proxy, not executable NBBO fills."
+  },
+  "families": {
+    "SEC_H1_FILING_GAP_CONT_INTRADAY": {
+      "signal": "direction = sign(reaction-session opening gap) after the frozen 0.50*sigma20 threshold",
+      "entry": "09:31 ET open",
+      "exit": "15:59 ET open on the reaction session",
+      "maximum_signals_per_company_event": 1
+    },
+    "SEC_H2_FILING_GAP_CONT_3SESSION": {
+      "signal": "same frozen opening-gap direction and threshold as H1",
+      "entry": "09:31 ET open on reaction session",
+      "exit": "15:59 ET open on the third eligible regular session after the reaction session, where reaction session counts as session 1",
+      "maximum_signals_per_company_event": 1,
+      "overlap_rule": "If a later filing for the same ticker occurs while an earlier event position would still be open, the later event is ineligible. No cross-ticker overlap restriction."
+    }
+  },
+  "D0_halves": {
+    "half1_event_acceptance": [
+      "2025-01-01",
+      "2025-06-30"
+    ],
+    "half2_event_acceptance": [
+      "2025-07-01",
+      "2025-12-31"
+    ]
+  },
+  "gates": {
+    "D0_survival_per_family": {
+      "minimum_valid_events": 24,
+      "minimum_distinct_tickers": 6,
+      "pooled_net_mean_bps_primary_positive": true,
+      "pooled_net_mean_bps_stress_nonnegative": true,
+      "original_beats_reversed_primary": true,
+      "minimum_tickers_with_positive_total_contribution": 5,
+      "both_D0_halves_positive_primary": true,
+      "max_single_ticker_share_of_positive_contribution": 0.35,
+      "minimum_positive_calendar_quarters": 3,
+      "max_single_calendar_quarter_share_of_positive_pnl": 0.5
+    },
+    "D3_survival_per_family": {
+      "minimum_valid_events": 16,
+      "minimum_distinct_tickers": 6,
+      "pooled_net_mean_bps_primary_positive": true,
+      "pooled_net_mean_bps_stress_nonnegative": true,
+      "original_beats_reversed_primary": true,
+      "minimum_tickers_with_positive_total_contribution": 5,
+      "max_single_ticker_share_of_positive_contribution": 0.4
+    }
+  },
+  "promotion": {
+    "D0": "Survival only unlocks sealed D3.",
+    "D3": "Survival does not establish persistent edge; it creates a new candidate ID eligible for independent-source replication or prospective future shadow.",
+    "no_live_or_leverage_from_historical_results": true
+  },
+  "research_rules": {
+    "no_threshold_retuning_after_results": true,
+    "no_ticker_removal_or_substitution_after_results": true,
+    "no_form_type_rescue_after_results": true,
+    "failed_family_id_dead": true,
+    "reversed_control_cannot_be_adopted_post_hoc": true,
+    "D3_remains_sealed_for_any_family_that_fails_D0": true,
+    "event_dates_may_be_audited_before_pnl_but_strategy_returns_must_not_be_inspected_before_freeze": true
+  }
+}
