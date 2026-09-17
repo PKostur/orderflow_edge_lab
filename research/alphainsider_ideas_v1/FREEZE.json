@@ -1,0 +1,80 @@
+{
+  "protocol_id": "alphainsider_inspired_scan_v1",
+  "status": "FROZEN_BEFORE_LOCAL_RESULTS",
+  "frozen_at_utc": "2026-09-17T14:50:00Z",
+  "source_context": {
+    "alpha_insider_article": "https://blog.alphainsider.com/how-i-used-ai-to-build-a-hedge-fund-of-trading-strategies/",
+    "idea_only": true,
+    "not_exact_reproduction": true,
+    "reason": "Public article describes concepts and reported outcomes but not complete executable rules for S10/S9/S6. We freeze simple auditable interpretations before looking at our own results."
+  },
+  "data": {
+    "provider": "Massive",
+    "market": "US stocks/ETFs",
+    "resolution": "5 minute adjusted OHLCV/VWAP",
+    "scan_window": ["2026-01-02", "2026-09-16"],
+    "rth_utc": ["13:30:00", "20:00:00"],
+    "missing_bars": "No interpolation; any trade needing a missing entry/exit bar is ineligible.",
+    "oos_claim": false,
+    "note": "The public AlphaInsider source may have inspected overlapping history. This is an external-idea plausibility scan, not independent OOS validation."
+  },
+  "economics": {
+    "round_trip_all_in_friction_bps": [2,5,10],
+    "primary_friction_bps": 5,
+    "leverage": 1.0,
+    "primary_control": "fully reversed execution at identical timestamps"
+  },
+  "families": {
+    "AI_S10_GAP_REGIME_V1": {
+      "source_idea": "small gaps tend to fill; large gaps tend to continue; focus on first hour",
+      "universe": ["IWM","SMH","SPY","QQQ"],
+      "gap_definition": "today 09:30 ET open versus previous regular-session final close",
+      "small_gap": "0.20% <= abs(gap) < 0.80%",
+      "large_gap": "abs(gap) >= 0.80%",
+      "entry": "09:35 ET open",
+      "small_gap_direction": "opposite gap direction",
+      "small_gap_exit": "first 5-minute bar after entry whose range touches prior close; execute next 5-minute open; otherwise 10:30 ET open",
+      "large_gap_direction": "same as gap direction",
+      "large_gap_exit": "10:30 ET open",
+      "one_trade_per_ticker_session": true
+    },
+    "AI_S9_VWAP_CONT_V1": {
+      "source_idea": "trend day continuation; VWAP acts as support in uptrend/resistance in downtrend",
+      "universe": ["XLE","SMH","SPY","QQQ","IWM"],
+      "vwap": "cumulative regular-session VWAP reconstructed as sum(minute_vwap*volume)/sum(volume)",
+      "signal_window": ["14:00:00", "17:00:00"],
+      "long_state": "close > cumulative VWAP AND close > close 30 minutes ago AND VWAP > VWAP 30 minutes ago",
+      "long_pullback": "bar low <= cumulative VWAP AND bar close > cumulative VWAP",
+      "short_state": "close < cumulative VWAP AND close < close 30 minutes ago AND VWAP < VWAP 30 minutes ago",
+      "short_pullback": "bar high >= cumulative VWAP AND bar close < cumulative VWAP",
+      "entry": "next exact 5-minute open",
+      "exit": "open exactly 30 minutes after entry",
+      "overlap": "no overlapping positions per ticker"
+    },
+    "AI_S6_INITIAL_BALANCE_V1": {
+      "source_idea": "initial-balance breakout; reported strongest on TSLA and some correlation on mega caps",
+      "universe": ["TSLA","GOOGL","AMD","AMZN","MSFT","AAPL","META"],
+      "initial_balance": "09:30-09:59 ET high/low using first six 5-minute bars",
+      "signal_window": ["14:00:00", "17:00:00"],
+      "long_signal": "first 5-minute close strictly above initial-balance high",
+      "short_signal": "first 5-minute close strictly below initial-balance low",
+      "entry": "next exact 5-minute open",
+      "exit": "open exactly 60 minutes after entry",
+      "one_trade_per_ticker_session": true
+    }
+  },
+  "plausibility_gate_per_family": {
+    "minimum_signals": 100,
+    "minimum_sessions_with_signals": 40,
+    "minimum_instruments_with_signals": 3,
+    "pooled_net_mean_bps_at_5bps_gt": 0,
+    "original_must_beat_reversed_at_5bps": true,
+    "minimum_positive_instruments_at_5bps": 3,
+    "maximum_single_instrument_share_of_positive_pnl": 0.50,
+    "10bps_stress": "must be reported, not mandatory for plausibility"
+  },
+  "next_step_if_survives": "Create a new frozen candidate ID, run non-overlap historical replication and then genuine post-freeze shadow. Do not promote directly from this scan.",
+  "same_id_retuning_after_failure": false,
+  "live_supported": false,
+  "leverage_supported": false
+}
