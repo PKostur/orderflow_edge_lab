@@ -1,0 +1,104 @@
+{
+  "research_id": "cross_sectional_equity_v1",
+  "stage": "D0_discovery",
+  "status": "FALSIFIED_D0_ALL_FAMILIES",
+  "evaluated_at_utc": "2026-09-17T19:43:00Z",
+  "freeze_commits": ["daaa94d5061ae1a1315535151d6e789828202d78","896da55d5dc33f2edb1440ea3d63ad324e46c21c"],
+  "source": {
+    "provider": "Massive",
+    "resolution": "1min adjusted stock aggregates",
+    "D0_window": ["2026-07-06","2026-07-31"],
+    "D3_holdout": ["2026-08-03","2026-08-28"],
+    "D3_strategy_pnl_computed": false
+  },
+  "data_integrity": {
+    "AAPL":{"sessions":20,"min_rth_bars":390,"sessions_all_required_times":20},
+    "MSFT":{"sessions":20,"min_rth_bars":390,"sessions_all_required_times":20},
+    "NVDA":{"sessions":20,"min_rth_bars":390,"sessions_all_required_times":20},
+    "AMZN":{"sessions":20,"min_rth_bars":390,"sessions_all_required_times":20},
+    "META":{"sessions":20,"min_rth_bars":390,"sessions_all_required_times":20},
+    "GOOGL":{"sessions":20,"min_rth_bars":390,"sessions_all_required_times":20},
+    "JPM":{"sessions":20,"min_rth_bars":390,"sessions_all_required_times":20},
+    "XOM":{"sessions":20,"min_rth_bars":388,"sessions_all_required_times":19},
+    "handling":"Cross-section fails closed unless all eight names have every family-required exact timestamp; no interpolation."
+  },
+  "families": {
+    "EQ_H1_OPEN30_CROSSSEC_REVERSION": {
+      "status":"FALSIFIED_D0_NEGATIVE_EXPECTANCY",
+      "valid_days":19,
+      "distinct_names_selected":8,
+      "net_mean_bps_primary":-1.268668,
+      "net_mean_bps_stress":-4.268668,
+      "reversed_mean_bps_primary":-4.731332,
+      "positive_names":3,
+      "max_positive_name_share":0.635146,
+      "half1_mean_bps":-3.471313,
+      "half2_mean_bps":0.713712,
+      "gate_results": {
+        "minimum_valid_portfolio_days":true,
+        "minimum_distinct_names_selected":true,
+        "pooled_daily_net_mean_bps_primary_positive":false,
+        "original_beats_reversed_primary":true,
+        "minimum_names_with_positive_total_contribution":false,
+        "max_positive_contribution_share_single_name":false,
+        "both_calendar_halves_positive_primary":false
+      },
+      "name_contribution_bps": {"GOOGL":85.867104,"META":41.565353,"AMZN":7.760250,"AAPL":-5.037494,"MSFT":-14.199752,"NVDA":-34.268157,"JPM":-44.312313,"XOM":-61.479683}
+    },
+    "EQ_H2_FIRSTHOUR_CROSSSEC_MOMENTUM": {
+      "status":"FALSIFIED_D0_NEGATIVE_EXPECTANCY_AND_REGIME_FLIP",
+      "valid_days":19,
+      "distinct_names_selected":8,
+      "net_mean_bps_primary":-3.017708,
+      "net_mean_bps_stress":-6.017708,
+      "reversed_mean_bps_primary":-2.982292,
+      "positive_names":4,
+      "max_positive_name_share":0.329654,
+      "half1_mean_bps":7.089532,
+      "half2_mean_bps":-12.114223,
+      "gate_results": {
+        "minimum_valid_portfolio_days":true,
+        "minimum_distinct_names_selected":true,
+        "pooled_daily_net_mean_bps_primary_positive":false,
+        "original_beats_reversed_primary":false,
+        "minimum_names_with_positive_total_contribution":false,
+        "max_positive_contribution_share_single_name":true,
+        "both_calendar_halves_positive_primary":false
+      },
+      "name_contribution_bps": {"META":28.841844,"JPM":27.174695,"GOOGL":21.198560,"NVDA":10.276151,"AMZN":-3.298675,"MSFT":-7.273439,"AAPL":-64.781989,"XOM":-69.473594}
+    },
+    "EQ_H3_OVERNIGHT_GAP_CROSSSEC_REVERSION": {
+      "status":"FALSIFIED_D0_STABILITY_AND_CONCENTRATION",
+      "valid_days":19,
+      "distinct_names_selected":8,
+      "net_mean_bps_primary":7.150864,
+      "net_mean_bps_stress":4.150864,
+      "reversed_mean_bps_primary":-13.150864,
+      "positive_names":5,
+      "max_positive_name_share":0.416676,
+      "half1_mean_bps":24.786963,
+      "half2_mean_bps":-8.721625,
+      "gate_results": {
+        "minimum_valid_portfolio_days":true,
+        "minimum_distinct_names_selected":true,
+        "pooled_daily_net_mean_bps_primary_positive":true,
+        "original_beats_reversed_primary":true,
+        "minimum_names_with_positive_total_contribution":true,
+        "max_positive_contribution_share_single_name":false,
+        "both_calendar_halves_positive_primary":false
+      },
+      "name_contribution_bps": {"JPM":122.509062,"META":52.105344,"MSFT":49.708023,"AAPL":37.116244,"NVDA":32.576335,"XOM":-2.352147,"AMZN":-46.909091,"GOOGL":-108.887351},
+      "interpretation":"The positive pooled D0 result is not promotable. It fails the predeclared half-stability gate and positive-contribution concentration cap. No JPM removal, name substitution, half selection, or threshold rescue is allowed under this family ID."
+    }
+  },
+  "research_state": {
+    "D0":"FALSIFIED_ALL_FAMILIES",
+    "D3_holdout":"SEALED_NOT_INSPECTED",
+    "candidate_created":false,
+    "future_shadow_created":false,
+    "persistent_edge_established":false,
+    "live_execution_supported":false,
+    "leverage_supported":false,
+    "same_id_retuning_allowed":false
+  }
+}
