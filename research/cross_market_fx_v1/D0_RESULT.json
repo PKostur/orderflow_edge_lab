@@ -1,0 +1,90 @@
+{
+  "research_id": "cross_market_fx_v1",
+  "freeze_commit": "abcb7e685e45ae293c8c5dd6af2bf5e1a3fad723",
+  "clarification_commit": "315be4d933ec502021a6d1cfe7499ecb3164064e",
+  "status": "FALSIFIED_D0_ALL_FAMILIES",
+  "evaluated_at_utc": "2026-09-17T17:39:00Z",
+  "source": {
+    "provider": "Massive",
+    "bars": "quote-derived one-minute FX aggregates",
+    "D0_window": ["2026-07-06", "2026-07-31"],
+    "D3_holdout": ["2026-08-03", "2026-08-28"],
+    "D3_opened": false,
+    "reason_D3_not_opened": "Neither frozen FX family passed all D0 gates."
+  },
+  "data_integrity": {
+    "EURUSD": {"complete_asian_range_weekdays":20,"H2_exact_timestamp_weekdays":20},
+    "GBPUSD": {"complete_asian_range_weekdays":20,"H2_exact_timestamp_weekdays":20},
+    "USDJPY": {"complete_asian_range_weekdays":20,"H2_exact_timestamp_weekdays":20},
+    "AUDUSD": {"complete_asian_range_weekdays":7,"H2_exact_timestamp_weekdays":16,"handling":"fail-closed exact-minute eligibility; no interpolation"}
+  },
+  "families": {
+    "FX_H1_ASIA_RANGE_LONDON_BREAKOUT": {
+      "status": "FALSIFIED_D0_NEGATIVE_EXPECTANCY",
+      "signals": 43,
+      "sessions": 17,
+      "pairs": 4,
+      "pooled_net_mean_bps_2": -5.1948428752,
+      "pooled_net_mean_bps_4": -7.1948428752,
+      "reversed_mean_bps_2": 1.1948428752,
+      "positive_pairs": 0,
+      "half1_net_mean_bps_2": -3.2927276879,
+      "half2_net_mean_bps_2": -6.4385335746,
+      "pair_results": {
+        "AUDUSD":{"signals":5,"mean_net_bps_2":-3.7021345588,"mean_net_bps_4":-5.7021345588,"reversed_bps_2":-0.2978654412,"total_net_bps_2":-18.5106727942},
+        "EURUSD":{"signals":12,"mean_net_bps_2":-4.5539559504,"mean_net_bps_4":-6.5539559504,"reversed_bps_2":0.5539559504,"total_net_bps_2":-54.6474714048},
+        "GBPUSD":{"signals":14,"mean_net_bps_2":-5.2350113885,"mean_net_bps_4":-7.2350113885,"reversed_bps_2":1.2350113885,"total_net_bps_2":-73.2901594384},
+        "USDJPY":{"signals":12,"mean_net_bps_2":-6.4108283330,"mean_net_bps_4":-8.4108283330,"reversed_bps_2":2.4108283330,"total_net_bps_2":-76.9299399959}
+      },
+      "gate_results": {
+        "minimum_total_signals": true,
+        "minimum_sessions_with_signals": true,
+        "minimum_pairs_with_signals": true,
+        "pooled_net_mean_bps_2_positive": false,
+        "original_beats_reversed_at_2": false,
+        "minimum_positive_pairs": false,
+        "max_positive_pnl_share_single_pair": false,
+        "both_calendar_halves_positive_at_2": false
+      }
+    },
+    "FX_H2_LONDON_TO_NY_CONTINUATION": {
+      "status": "FALSIFIED_D0_CONCENTRATION_AND_REGIME_INSTABILITY",
+      "signals": 74,
+      "sessions": 20,
+      "pairs": 4,
+      "pooled_net_mean_bps_2": 3.4884649205,
+      "pooled_net_mean_bps_4": 1.4884649205,
+      "reversed_mean_bps_2": -7.4884649205,
+      "positive_pairs": 2,
+      "max_positive_pair_pnl_share": 0.8924222270,
+      "half1_net_mean_bps_2": -2.5153671955,
+      "half2_net_mean_bps_2": 9.1763058725,
+      "pair_results": {
+        "AUDUSD":{"signals":15,"mean_net_bps_2":2.3601667051,"mean_net_bps_4":0.3601667051,"reversed_bps_2":-6.3601667051,"total_net_bps_2":35.4025005768},
+        "EURUSD":{"signals":19,"mean_net_bps_2":-0.4561762177,"mean_net_bps_4":-2.4561762177,"reversed_bps_2":-3.5438237823,"total_net_bps_2":-8.6673481359},
+        "GBPUSD":{"signals":20,"mean_net_bps_2":-3.1136874806,"mean_net_bps_4":-5.1136874806,"reversed_bps_2":-0.8863125194,"total_net_bps_2":-62.2737496117},
+        "USDJPY":{"signals":20,"mean_net_bps_2":14.6842500645,"mean_net_bps_4":12.6842500645,"reversed_bps_2":-18.6842500645,"total_net_bps_2":293.6850012899}
+      },
+      "gate_results": {
+        "minimum_total_signals": true,
+        "minimum_sessions_with_signals": true,
+        "minimum_pairs_with_signals": true,
+        "pooled_net_mean_bps_2_positive": true,
+        "original_beats_reversed_at_2": true,
+        "minimum_positive_pairs": false,
+        "max_positive_pnl_share_single_pair": false,
+        "both_calendar_halves_positive_at_2": false
+      }
+    }
+  },
+  "research_state": {
+    "D0": "FALSIFIED_ALL_FAMILIES",
+    "D3_holdout": "SEALED_NOT_INSPECTED",
+    "candidate_created": false,
+    "future_shadow_created": false,
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "leverage_supported": false,
+    "same_id_retuning_allowed": false
+  }
+}
