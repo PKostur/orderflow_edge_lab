@@ -1,0 +1,19 @@
+{
+  "research_id": "cross_market_futures_v1",
+  "freeze_kind": "initial_evidence_window",
+  "frozen_before_strategy_pnl": true,
+  "frozen_at_utc": "2026-09-17T12:02:00Z",
+  "session_end_date_gte": "2026-09-03",
+  "session_end_date_lte": "2026-09-16",
+  "session_rule": "Use every source-returned completed futures session in the inclusive range for each preselected native contract. Do not add, remove, or substitute sessions based on signal count, expectancy, market direction, volatility, or later results.",
+  "missing_session_rule": "A missing source session is recorded as missing and is not synthesized. A market may become DATA_BLOCKED if the frozen D0 minimum independent-session requirement cannot be met.",
+  "event_scope": "All entitled tick-level trades and BBO quotes for the selected native contract inside each completed source session.",
+  "dependence_unit": ["market_root", "native_contract", "session_end_date"],
+  "pnl_visibility_at_freeze": "none",
+  "claims": {
+    "persistent_edge_established": false,
+    "candidate_promoted": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
+}
