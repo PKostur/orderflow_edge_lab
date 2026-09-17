@@ -1,0 +1,19 @@
+{
+  "protocol_id": "cross_asset_daily_momentum_v1",
+  "status": "BLOCKED_BY_HISTORY_ENTITLEMENT_NOT_FALSIFIED",
+  "recorded_at_utc": "2026-09-17T20:14:00Z",
+  "freeze_commit": "191fecbef605fa4a6d437ae042834f301e190ac4",
+  "requested_source": "Massive adjusted daily bars",
+  "required_history_start": "2009-01-01",
+  "entitlement_probe": {
+    "ticker": "SPY",
+    "requested": ["2024-01-01","2026-09-16"],
+    "returned_first_date": "2024-09-17",
+    "returned_last_date": "2026-09-16",
+    "rows": 501,
+    "older_2009_2019_request": "NOT_ENTITLED"
+  },
+  "pnl_inspected": false,
+  "protocol_changes_after_freeze": false,
+  "interpretation": "The original eight-year D0/D3 protocol cannot be evaluated with the connected data entitlement. It remains blocked, not failed. The windows and lookbacks will not be shortened under the same protocol ID."
+}
