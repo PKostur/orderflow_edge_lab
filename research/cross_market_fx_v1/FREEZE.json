@@ -1,0 +1,76 @@
+{
+  "research_id": "cross_market_fx_v1",
+  "status": "FROZEN_BEFORE_FX_PNL",
+  "frozen_at_utc": "2026-09-17T17:28:00Z",
+  "purpose": "Test two session-structure hypotheses on quote-derived FX minute bars without reusing failed crypto/futures/ETF rules.",
+  "data": {
+    "provider": "Massive",
+    "endpoint": "/v2/aggs/ticker/{forexTicker}/range/1/minute/{from}/{to}",
+    "bars_are_quote_derived_not_executed_trades": true,
+    "tick_bbo_history_entitlement": "NOT_AVAILABLE_ON_CONNECTED_PLAN",
+    "universe": ["C:EURUSD", "C:GBPUSD", "C:USDJPY", "C:AUDUSD"],
+    "universe_selection_used_no_strategy_pnl": true,
+    "timezone": "UTC",
+    "gap_policy": "No interpolation or forward fill. Every minute required by a signal, entry or exit must exist exactly."
+  },
+  "windows": {
+    "D0_discovery": ["2026-07-06", "2026-07-31"],
+    "D3_locked_historical_holdout": ["2026-08-03", "2026-08-28"],
+    "future_shadow_earliest": "2026-09-18"
+  },
+  "execution": {
+    "return_bps": "direction * (exit_open / entry_open - 1) * 10000",
+    "primary_round_trip_friction_bps": 2.0,
+    "stress_round_trip_friction_bps": 4.0,
+    "reversed_same_decision_control": true,
+    "one_signal_equal_weight": true,
+    "leverage": 1.0,
+    "bar_execution_is_research_proxy_not_live_fill_model": true
+  },
+  "hypotheses": {
+    "FX_H1_ASIA_RANGE_LONDON_BREAKOUT": {
+      "range": "00:00-06:59 UTC inclusive",
+      "signal_search": "07:00-09:00 UTC inclusive",
+      "signal": "first close strictly above Asian high => long; first close strictly below Asian low => short",
+      "entry": "next minute open",
+      "exit": "open exactly 60 minutes after entry",
+      "max_signals_per_pair_day": 1
+    },
+    "FX_H2_LONDON_TO_NY_CONTINUATION": {
+      "direction_measure": "sign of log(11:59 close / 07:00 open)",
+      "signal": "positive London-morning move => long; negative => short; zero => no signal",
+      "entry": "12:01 UTC open",
+      "exit": "15:00 UTC open",
+      "required_minutes": ["07:00", "11:59", "12:01", "15:00"],
+      "max_signals_per_pair_day": 1
+    }
+  },
+  "D0_gate": {
+    "minimum_total_signals": 30,
+    "minimum_sessions_with_signals": 15,
+    "minimum_pairs_with_signals": 4,
+    "pooled_net_mean_bps_2_positive": true,
+    "original_beats_reversed_at_2": true,
+    "minimum_positive_pairs": 3,
+    "max_positive_pnl_share_single_pair": 0.60,
+    "both_calendar_halves_positive_at_2": true
+  },
+  "D3_gate": {
+    "minimum_total_signals": 30,
+    "minimum_sessions_with_signals": 15,
+    "pooled_net_mean_bps_2_positive": true,
+    "pooled_net_mean_bps_4_nonnegative": true,
+    "original_beats_reversed_at_2": true,
+    "minimum_positive_pairs": 3,
+    "max_positive_pnl_share_single_pair": 0.60
+  },
+  "calendar_halves_D0": [["2026-07-06","2026-07-17"],["2026-07-20","2026-07-31"]],
+  "research_rules": {
+    "failed_family_id_dead": true,
+    "no_post_result_pair_substitution": true,
+    "no_threshold_or_time_window_retuning": true,
+    "reversed_control_cannot_be_adopted_post_hoc": true,
+    "D3_remains_sealed_for_any_family_that_fails_D0": true,
+    "survivor_only_creates_new_candidate_id_for_future_shadow": true
+  }
+}
