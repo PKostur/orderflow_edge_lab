@@ -1,0 +1,52 @@
+{
+  "research_id": "cross_market_futures_v1",
+  "source_lane_id": "cmf_massive_primary_v1",
+  "status": "FROZEN_BEFORE_MASSIVE_TICK_RESULTS",
+  "frozen_at_utc": "2026-09-17T13:20:00Z",
+  "source": "Massive futures REST API",
+  "purpose": "Acquire native-contract tick trades and BBO quotes for the already-frozen cross-market futures v1 transfer test without using futures PnL, signal outcomes, or realized edge metrics to choose contracts, sessions, thresholds, or horizons.",
+  "contract_selection": {
+    "rule": "For each frozen product root, choose the active single contract with the smallest days_to_maturity subject to days_to_maturity >= 14 on 2026-09-17; ties break by ticker ascending.",
+    "selection_used_strategy_pnl": false,
+    "selection_used_volume_or_return_outcomes": false,
+    "selected": {
+      "ES": {"ticker": "ESZ6", "days_to_maturity": 92, "last_trade_date": "2026-12-18", "trade_tick_size": 0.25},
+      "NQ": {"ticker": "NQZ6", "days_to_maturity": 92, "last_trade_date": "2026-12-18", "trade_tick_size": 0.25},
+      "GC": {"ticker": "GCV6", "days_to_maturity": 41, "last_trade_date": "2026-10-28", "trade_tick_size": 0.1},
+      "CL": {"ticker": "CLX6", "days_to_maturity": 33, "last_trade_date": "2026-10-20", "trade_tick_size": 0.01}
+    },
+    "no_post_result_contract_substitution": true
+  },
+  "sessions": {
+    "rule": "Use the five most recent completed common weekday sessions before 2026-09-17, excluding the current incomplete session.",
+    "session_end_dates": ["2026-09-10", "2026-09-11", "2026-09-14", "2026-09-15", "2026-09-16"],
+    "common_intraday_window_utc": {"start": "13:30:00", "end": "14:30:00"},
+    "same_window_all_markets": true,
+    "no_post_result_session_substitution": true
+  },
+  "source_specific_normalization": {
+    "trades_endpoint_has_explicit_aggressor_side": false,
+    "h1_side_precedence": ["trade_price_at_or_beyond_causal_bbo", "causal_tick_rule", "UNKNOWN"],
+    "same_timestamp_quote_use_requires_sequence_order": true,
+    "maximum_prior_bbo_age_seconds": 1.0,
+    "unknown_sides_are_not_imputed": true,
+    "report_side_classification_coverage": true,
+    "h2_requires_true_level2_top10_depth": true,
+    "bbo_size_imbalance_cannot_substitute_for_h2": true,
+    "h3_requires_causal_bid_ask_prices_and_sizes": true
+  },
+  "economics_and_controls": {
+    "inherit_from": "config/cross_market_futures_v1.json",
+    "thresholds_changed": false,
+    "horizons_changed": false,
+    "cost_surface_changed": false,
+    "reversed_control_required": true,
+    "leverage": 1.0
+  },
+  "claims": {
+    "persistent_edge_established": false,
+    "candidate_promoted": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
+}
