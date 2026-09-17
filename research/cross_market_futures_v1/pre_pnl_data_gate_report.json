@@ -1,0 +1,39 @@
+{
+  "research_id": "cross_market_futures_v1",
+  "report_stage": "PRE_PNL_DATA_GATE",
+  "strategy_pnl_inspected": false,
+  "selected_contracts": {
+    "ES": "ESZ6",
+    "NQ": "NQZ6",
+    "GC": "GCZ6",
+    "CL": "CLV6"
+  },
+  "frozen_sessions": ["2026-09-10", "2026-09-11", "2026-09-14", "2026-09-15", "2026-09-16"],
+  "frozen_intraday_window_utc": "13:30:00 <= timestamp < 13:35:00",
+  "session_aggregate_coverage": {
+    "ESZ6": ["2026-09-10", "2026-09-11", "2026-09-14", "2026-09-15", "2026-09-16"],
+    "NQZ6": ["2026-09-10", "2026-09-11", "2026-09-14", "2026-09-15", "2026-09-16"],
+    "GCZ6": ["2026-09-10", "2026-09-11", "2026-09-14", "2026-09-15", "2026-09-16"],
+    "CLV6": ["2026-09-10", "2026-09-11", "2026-09-14", "2026-09-15", "2026-09-16"]
+  },
+  "structural_gate": "PASS",
+  "massive_current_plan": {
+    "reference_contracts": "AVAILABLE",
+    "session_aggregates": "AVAILABLE",
+    "historical_tick_trades": "NOT_ENTITLED",
+    "historical_bbo_quotes": "NOT_ENTITLED",
+    "historical_level2_top10": "UNAVAILABLE"
+  },
+  "hypothesis_status_before_pnl": {
+    "CMF-H1": "DATA_BLOCKED",
+    "CMF-H2": "DATA_BLOCKED",
+    "CMF-H3": "DATA_BLOCKED"
+  },
+  "required_unblock": "Provide a source entitled for historical tick trades and BBO quotes for the four frozen native contracts and five frozen windows. H2 additionally requires genuine historical Level-2/top-10 depth. Do not substitute bars or BBO-size imbalance for the frozen hypotheses.",
+  "claims": {
+    "persistent_edge_established": false,
+    "candidate_promoted": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
+}
