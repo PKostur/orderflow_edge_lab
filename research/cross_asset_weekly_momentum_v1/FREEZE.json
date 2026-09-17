@@ -1,0 +1,101 @@
+{
+  "protocol_id": "cross_asset_weekly_momentum_v1",
+  "status": "FROZEN_BEFORE_RESULTS",
+  "frozen_at_utc": "2026-09-17T20:18:00Z",
+  "purpose": "Use the full two-year daily history actually available from Massive to test weekly multi-month cross-asset momentum without modifying the blocked long-history protocol.",
+  "source": {
+    "provider": "Massive",
+    "endpoint": "/v2/aggs/ticker/{ticker}/range/1/day/{from}/{to}",
+    "adjusted": true,
+    "resolution": "1 day",
+    "known_entitled_start": "2024-09-17"
+  },
+  "universe": ["SPY","EFA","EEM","IEF","TLT","GLD","DBC","UUP"],
+  "universe_selected_before_pnl": true,
+  "windows": {
+    "prehistory": ["2024-09-17","2024-12-31"],
+    "D0_signal_dates": ["2025-01-03","2025-12-19"],
+    "D3_locked_signal_dates": ["2026-01-02","2026-06-19"],
+    "D3b_locked_signal_dates": ["2026-07-03","2026-08-21"],
+    "2026_late_historical_reserved": ["2026-08-24","2026-09-16"],
+    "future_shadow_earliest": "2026-09-18"
+  },
+  "common_calendar": {
+    "signal_date": "last common trading date within each ISO Monday-Sunday week on which all eight ETFs have a valid adjusted close",
+    "entry_date": "first common trading date after signal_date on which all eight ETFs have a valid adjusted open",
+    "exit_date": "entry_date associated with the next weekly signal",
+    "lookbacks": "Count only common trading dates on which all eight ETFs have valid closes.",
+    "missing_data": "No interpolation, forward fill, proxy substitution or ticker substitution."
+  },
+  "economics": {
+    "gross_leg_return_bps": "direction * (exit_open / entry_open - 1) * 10000",
+    "primary_round_trip_friction_bps_per_leg_per_week": 5.0,
+    "stress_round_trip_friction_bps_per_leg_per_week": 10.0,
+    "cost_treatment": "Every weekly leg pays the full round-trip haircut even when direction persists; no post-result turnover credit.",
+    "leverage": 1.0,
+    "reversed_same_signal_control": true
+  },
+  "families": {
+    "CA_TS63D_SIGN_WEEKLY_V1": {
+      "feature": "log(signal_close / close_63_common_sessions_earlier)",
+      "signal": "positive => long; negative => short; zero => flat",
+      "portfolio": "equal weight across all non-flat legs with gross exposure normalized to 1.0",
+      "entry": "next common trading day open",
+      "exit": "next weekly entry_date open"
+    },
+    "CA_XS63_5_MOM_WEEKLY_V1": {
+      "feature": "log(close_5_common_sessions_before_signal / close_63_common_sessions_before_signal)",
+      "ranking": "rank all eight ETFs by feature; ties broken ticker ascending",
+      "portfolio": "long top two and short bottom two, equal weight across four legs; gross exposure 1.0, net exposure 0",
+      "entry": "next common trading day open",
+      "exit": "next weekly entry_date open"
+    }
+  },
+  "controls": {
+    "reversed": "Multiply every original direction by -1 using identical signals, rankings, entry and exit dates and identical costs.",
+    "no_post_result_flip": true
+  },
+  "D0_halves": {
+    "half1": ["2025-01-03","2025-06-27"],
+    "half2": ["2025-07-03","2025-12-19"]
+  },
+  "gates": {
+    "D0_survival_per_family": {
+      "minimum_valid_weeks": 45,
+      "minimum_instruments_participating": 8,
+      "mean_weekly_net_return_primary_positive": true,
+      "mean_weekly_net_return_stress_nonnegative": true,
+      "annualized_sharpe_primary_gt": 0.50,
+      "original_beats_reversed_primary": true,
+      "minimum_positive_instrument_contributions": 5,
+      "both_D0_halves_positive_primary": true,
+      "minimum_positive_calendar_quarters": 3,
+      "max_single_instrument_share_of_positive_contribution": 0.35,
+      "max_single_calendar_quarter_share_of_positive_pnl": 0.45
+    },
+    "D3_survival_per_family": {
+      "minimum_valid_weeks": 20,
+      "mean_weekly_net_return_primary_positive": true,
+      "mean_weekly_net_return_stress_nonnegative": true,
+      "annualized_sharpe_primary_gt": 0.25,
+      "original_beats_reversed_primary": true,
+      "minimum_positive_calendar_quarters": 2,
+      "max_single_calendar_quarter_share_of_positive_pnl": 0.60
+    },
+    "D3b_survival_per_family": {
+      "minimum_valid_weeks": 6,
+      "mean_weekly_net_return_primary_positive": true,
+      "original_beats_reversed_primary": true
+    },
+    "promotion": "D0 only unlocks D3; D3 only unlocks D3b. Historical success never establishes persistent edge. Full historical survival creates a new candidate ID for prospective future shadow only."
+  },
+  "research_rules": {
+    "families_frozen": 2,
+    "lookback_retuning_forbidden": true,
+    "ticker_rescue_forbidden": true,
+    "cost_retuning_forbidden": true,
+    "failed_family_id_dead": true,
+    "locked_stage_performance_must_not_be_inspected_for_prior_stage_failures": true,
+    "same_source_temporal_holdout_is_not_independent_source_replication": true
+  }
+}
