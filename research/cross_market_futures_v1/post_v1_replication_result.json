@@ -1,0 +1,96 @@
+{
+  "replication_id": "cross_market_futures_post_v1_replication_2026_08",
+  "freeze": "research/cross_market_futures_v1/post_v1_replication_freeze.json",
+  "status": "FALSIFIED_HISTORICAL_REPLICATION",
+  "evaluated_at_utc": "2026-09-17T13:39:00Z",
+  "source": {
+    "provider": "Massive",
+    "endpoint": "/futures/v1/aggs/{ticker}",
+    "resolution": "1min",
+    "window": ["2026-08-24", "2026-08-28"],
+    "signal_window_utc": ["13:30:00", "14:30:00"],
+    "genuine_future_oos": false,
+    "same_source_as_discovery": true
+  },
+  "data_integrity": {
+    "NQ": {"contract":"NQU6","bars_per_signal_window":[60,60,60,60,60]},
+    "GC": {"contract":"GCU6","bars_per_signal_window":[29,21,33,20,16]},
+    "CL": {"contract":"CLV6","bars_per_signal_window":[60,60,60,60,60]},
+    "gap_policy": "No interpolation. Exact consecutive-minute lookback, next-minute entry, and exact five-minute-later exit required.",
+    "post_result_contract_substitution": false
+  },
+  "hypothesis_results": {
+    "cmf_nq_range_breakout_replication_v1": {
+      "status": "FALSIFIED",
+      "signals": 44,
+      "sessions_with_signals": 5,
+      "net_mean_bps_2tick": -5.0898898206,
+      "net_mean_bps_4tick": -5.2602795466,
+      "reversed_mean_bps_2tick": 4.7491103687,
+      "positive_sessions": 1,
+      "max_positive_session_pnl_share": 1.0,
+      "session_results_2tick": {
+        "2026-08-24":{"signals":8,"mean_net_bps":0.6046911918,"total_net_bps":4.8375295345},
+        "2026-08-25":{"signals":9,"mean_net_bps":-5.6365629560,"total_net_bps":-50.7290666042},
+        "2026-08-26":{"signals":11,"mean_net_bps":-2.6017132060,"total_net_bps":-28.6188452656},
+        "2026-08-27":{"signals":8,"mean_net_bps":-11.6294784319,"total_net_bps":-93.0358274553},
+        "2026-08-28":{"signals":8,"mean_net_bps":-7.0511177895,"total_net_bps":-56.4089423156}
+      },
+      "gate_results": {
+        "minimum_signals": true,
+        "minimum_sessions_with_signals": true,
+        "net_mean_bps_2tick_positive": false,
+        "net_mean_bps_4tick_positive": false,
+        "original_beats_reversed_at_2tick": false,
+        "minimum_positive_sessions": false,
+        "max_positive_session_pnl_share": false
+      },
+      "interpretation": "The September NQ breakout pocket does not replicate. The sign reverses strongly in the untouched August window; this exact continuation ID is dead. The positive reversed control is descriptive only and cannot be adopted by flipping the failed rule post hoc."
+    },
+    "cmf_gc_cl_bollinger_reversion_replication_v1": {
+      "status": "FALSIFIED",
+      "total_eligible_signals": 40,
+      "GC": {
+        "signals": 0,
+        "sessions_with_signals": 0,
+        "reason": "Sparse GCU6 minute bars fail the exact 20-consecutive-minute signal eligibility requirement. No interpolation or contract substitution permitted."
+      },
+      "CL": {
+        "signals": 40,
+        "sessions_with_signals": 5,
+        "net_mean_bps_2tick": -2.3922380603,
+        "net_mean_bps_4tick": -4.8030726488,
+        "reversed_mean_bps_2tick": -2.4294311166,
+        "total_net_bps_2tick": -95.6895224127,
+        "session_results_2tick": {
+          "2026-08-24":{"signals":9,"mean_net_bps":6.7739962334,"total_net_bps":60.9659661004},
+          "2026-08-25":{"signals":5,"mean_net_bps":-3.9068966354,"total_net_bps":-19.5344831769},
+          "2026-08-26":{"signals":8,"mean_net_bps":-9.1107023393,"total_net_bps":-72.8856187142},
+          "2026-08-27":{"signals":7,"mean_net_bps":1.0210721819,"total_net_bps":7.1475052730},
+          "2026-08-28":{"signals":11,"mean_net_bps":-6.4893538086,"total_net_bps":-71.3828918950}
+        }
+      },
+      "gate_results": {
+        "minimum_signals_each_market": false,
+        "minimum_sessions_with_signals_each_market": false,
+        "both_markets_net_mean_bps_2tick_positive": false,
+        "equal_market_mean_bps_2tick_positive": false,
+        "equal_market_mean_bps_4tick_positive": false,
+        "pooled_original_beats_reversed_at_2tick": true,
+        "minimum_positive_market_session_cells": false,
+        "max_positive_market_pnl_share": false
+      },
+      "interpretation": "The September commodity reversion pocket does not replicate. GC cannot form eligible signals under the frozen exact-minute rule and CL is materially negative after costs. This exact replication ID is dead."
+    }
+  },
+  "research_state": {
+    "price_transfer_v1": "FALSIFIED_D0",
+    "post_v1_market_specific_replication": "FALSIFIED",
+    "orderflow_transfer_v1": "BLOCKED_BY_TICK_DATA_ENTITLEMENT_NOT_FALSIFIED",
+    "persistent_edge_established": false,
+    "candidate_promoted": false,
+    "live_execution_supported": false,
+    "leverage_supported": false,
+    "same_id_retuning_allowed": false
+  }
+}
