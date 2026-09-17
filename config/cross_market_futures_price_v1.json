@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "research_id": "cross_market_futures_price_v1",
+  "status": "FROZEN_BEFORE_FUTURES_PRICE_PNL",
+  "frozen_at_utc": "2026-09-17T13:00:00Z",
+  "purpose": "Independent non-crypto price-only transfer screen using the existing price-strategy tournament families and parameter grids unchanged, because tick futures trades/quotes are not entitled in the currently connected Massive plan. This lane is separate from cross_market_futures_v1 order-flow evidence.",
+  "separation": {
+    "orderflow_lane_unchanged": true,
+    "crypto_evidence_chain_unchanged": true,
+    "price_lane_results_cannot_promote_orderflow_hypotheses": true,
+    "price_lane_results_cannot_promote_crypto_candidates": true,
+    "screening_is_not_candidate_validation": true
+  },
+  "data": {
+    "source": "Massive futures aggregate bars",
+    "frozen_native_contract_panel": ["ESZ6", "NQZ6", "GCZ6", "CLV6"],
+    "contract_selection_manifest": "research/cross_market_futures_v1/active_contracts_20260917.json",
+    "selection_used_strategy_pnl": false,
+    "development_start": "2026-06-01",
+    "development_end_exclusive": "2026-09-17",
+    "intervals": ["5m", "15m", "1h"],
+    "native_contract_only": true,
+    "no_continuous_back_adjusted_series": true,
+    "no_contract_switch_within_a_test_cell": true,
+    "missing_bars_are_not_forward_filled": true,
+    "bars_used_for_price_lane_only": true
+  },
+  "transfer_source": {
+    "config": "config/price_strategy_tournament_v1_1.json",
+    "rule": "Copy the seven strategy families and every parameter-grid value exactly. No futures-specific additions, deletions, or tuning before results."
+  },
+  "families": {
+    "donchian_breakout": {"grid": {"lookback": [20, 40, 80, 120]}},
+    "ema_tsmom": {"grid": {"fast": [10, 20], "slow": [50, 100], "min_atr_spread": [0.0, 0.25]}},
+    "bb_mean_reversion": {"grid": {"period": [20, 40], "std": [1.5, 2.0], "rsi_low": [25, 30], "rsi_high": [70, 75], "max_hold": [20]}},
+    "bb_squeeze_breakout": {"grid": {"period": [20, 40], "std": [2.0], "squeeze_q": [0.1, 0.2], "q_window": [200], "max_hold": [20, 40]}},
+    "intraday_reversal": {"grid": {"lookback": [3, 6], "vol_window": [48], "z": [1.5, 2.0], "max_hold": [6, 12]}},
+    "trend_pullback": {"grid": {"fast": [20], "slow": [50, 100], "long_rsi_max": [40, 45], "short_rsi_min": [55, 60], "max_hold": [12, 24]}},
+    "vol_scaled_momentum": {"grid": {"lookback": [12, 24, 48, 96], "vol_window": [96], "threshold": [0.5, 1.0]}}
+  },
+  "execution": {
+    "signal_on_completed_bar": true,
+    "entry": "next_bar_open",
+    "exit": "next_bar_open according to existing strategy_tournament state machine",
+    "leverage": 1.0,
+    "cost_model": "market-native round-trip tick friction converted to bps at each entry price",
+    "round_trip_tick_stress": [1.0, 2.0, 4.0],
+    "commission_exchange_broker_fees": "separate unresolved hard limitation; no candidate promotion may assume zero all-in fees",
+    "market_impact": "not modeled in v1 development screening"
+  },
+  "dependence_and_trials": {
+    "fold_days": 21,
+    "trial_unit": "family x interval x parameter variant x native contract x cost case",
+    "calendar_time_fold_is_dependence_cluster": true,
+    "all_trials_retained": true,
+    "multiple_testing_debt_explicit": true,
+    "minimum_fold_observations": 4,
+    "minimum_total_trades": 40,
+    "minimum_positive_fold_fraction": 0.60,
+    "minimum_markets_with_trades": 3,
+    "single_market_positive_pnl_share_max": 0.60
+  },
+  "controls": {
+    "fully_reversed_signal_control": true,
+    "same_data_same_cost_same_timing": true,
+    "time_shift_placebo_required_before_any_candidate_freeze": true
+  },
+  "development_survival": {
+    "median_expectancy_after_middle_cost_case_bps_gt": 0.0,
+    "median_profit_factor_after_middle_cost_case_gt": 1.0,
+    "minimum_positive_fold_fraction": 0.60,
+    "original_must_beat_reversed": true,
+    "minimum_markets_with_same_direction_positive_expectancy": 3,
+    "single_market_positive_pnl_share_must_not_exceed": 0.60,
+    "parameter_neighborhood_breadth_required": true,
+    "survival_creates_new_candidate_id_only": true,
+    "no_direct_promotion": true
+  },
+  "claims": {
+    "persistent_edge_established": false,
+    "candidate_promoted": false,
+    "independent_validation_completed": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
+}
