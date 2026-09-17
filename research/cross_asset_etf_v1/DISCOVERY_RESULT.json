@@ -1,0 +1,90 @@
+{
+  "protocol_id": "cross_asset_etf_price_state_v1",
+  "stage": "discovery",
+  "status": "FALSIFIED_DISCOVERY_ALL_FAMILIES",
+  "evaluated_at_utc": "2026-09-17T19:58:00Z",
+  "freeze": {
+    "protocol_file": "research/cross_asset_etf_v1/FREEZE.json",
+    "clarification_commit": "57514b5d02cd701a5dd0d9d2cc4e3a0d3893e9ac"
+  },
+  "source": {
+    "provider": "Massive",
+    "resolution": "1min adjusted ETF bars",
+    "discovery_window": ["2026-09-01","2026-09-16"],
+    "locked_replication_window": ["2026-08-17","2026-08-28"],
+    "replication_strategy_pnl_computed": false
+  },
+  "data_integrity": {
+    "research_window_utc": ["13:30:00","15:00:00"],
+    "sessions": 11,
+    "required_minutes_per_session": 91,
+    "SPY": {"complete_sessions":11,"min_bars":91,"max_bars":91},
+    "QQQ": {"complete_sessions":11,"min_bars":91,"max_bars":91},
+    "IWM": {"complete_sessions":11,"min_bars":91,"max_bars":91},
+    "TLT": {"complete_sessions":11,"min_bars":91,"max_bars":91},
+    "GLD": {"complete_sessions":11,"min_bars":91,"max_bars":91},
+    "XLE": {"complete_sessions":11,"min_bars":91,"max_bars":91}
+  },
+  "families": {
+    "ETF_ORB15_CONT_V1": {
+      "status": "FALSIFIED_DISCOVERY_NEGATIVE_EXPECTANCY",
+      "signals": 62,
+      "sessions": 11,
+      "instruments": 6,
+      "net_mean_bps_2": -2.423718,
+      "net_mean_bps_5": -5.423718,
+      "net_mean_bps_10": -10.423718,
+      "reversed_mean_bps_5": -4.576282,
+      "positive_instruments": 0,
+      "max_positive_instrument_share": null,
+      "max_positive_session_share": 0.459662,
+      "discovery_gate_passed": false,
+      "instrument_results_5bps": {
+        "GLD":{"signals":11,"mean_net_bps":-11.068096,"total_net_bps":-121.749051,"reversed_mean_bps":1.068096},
+        "IWM":{"signals":10,"mean_net_bps":-0.710000,"total_net_bps":-7.100000,"reversed_mean_bps":-9.290000},
+        "QQQ":{"signals":11,"mean_net_bps":-2.851289,"total_net_bps":-31.364179,"reversed_mean_bps":-7.148711},
+        "SPY":{"signals":11,"mean_net_bps":-4.361463,"total_net_bps":-47.976096,"reversed_mean_bps":-5.638537},
+        "TLT":{"signals":10,"mean_net_bps":-4.665190,"total_net_bps":-46.651897,"reversed_mean_bps":-5.334810},
+        "XLE":{"signals":9,"mean_net_bps":-9.047701,"total_net_bps":-81.429306,"reversed_mean_bps":-0.952299}
+      },
+      "interpretation": "The frozen opening-range continuation family is negative after the primary 5 bps friction and no instrument has positive total PnL. The family ID is dead."
+    },
+    "ETF_BB20_REVERT_V1": {
+      "status": "FALSIFIED_DISCOVERY_NEGATIVE_EXPECTANCY_AND_BREADTH",
+      "signals": 161,
+      "sessions": 11,
+      "instruments": 6,
+      "net_mean_bps_2": -2.127696,
+      "net_mean_bps_5": -5.127696,
+      "net_mean_bps_10": -10.127696,
+      "reversed_mean_bps_5": -4.872304,
+      "positive_instruments": 1,
+      "max_positive_instrument_share": 1.0,
+      "max_positive_session_share": null,
+      "discovery_gate_passed": false,
+      "non_overlap_implementation": "Exact chronological greedy schedule. Search window permits at most six accepted signals per ticker/session; acceptance sequence was unrolled deterministically with next signal timestamp >= prior signal + 11 minutes.",
+      "instrument_results_5bps": {
+        "GLD":{"signals":27,"mean_net_bps":0.656921,"total_net_bps":17.736871,"reversed_mean_bps":-10.656921},
+        "IWM":{"signals":23,"mean_net_bps":-4.229759,"total_net_bps":-97.284463,"reversed_mean_bps":-5.770241},
+        "QQQ":{"signals":28,"mean_net_bps":-6.248982,"total_net_bps":-174.971501,"reversed_mean_bps":-3.751018},
+        "SPY":{"signals":27,"mean_net_bps":-7.998095,"total_net_bps":-215.948572,"reversed_mean_bps":-2.001905},
+        "TLT":{"signals":31,"mean_net_bps":-4.251504,"total_net_bps":-131.796629,"reversed_mean_bps":-5.748496},
+        "XLE":{"signals":25,"mean_net_bps":-8.931790,"total_net_bps":-223.294740,"reversed_mean_bps":-1.068210}
+      },
+      "interpretation": "The frozen Bollinger reversion family is materially negative pooled. Only GLD is positive and it cannot be rescued as a post-result single-instrument rule under this ID. The family ID is dead."
+    }
+  },
+  "locked_replication": {
+    "window": ["2026-08-17","2026-08-28"],
+    "status": "SEALED_NOT_INSPECTED",
+    "reason": "Neither family survived the full frozen discovery gate."
+  },
+  "research_state": {
+    "candidate_created": false,
+    "persistent_edge_established": false,
+    "future_shadow_created": false,
+    "live_execution_supported": false,
+    "leverage_supported": false,
+    "same_id_retuning_allowed": false
+  }
+}
