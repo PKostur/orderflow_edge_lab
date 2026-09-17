@@ -2,19 +2,27 @@
   "research_id": "cross_market_futures_v1",
   "source": "Massive futures API",
   "checked_before_strategy_pnl": true,
-  "available_research_interfaces": {
+  "endpoint_capability": {
     "contracts": true,
     "session_aggregates": true,
-    "tick_trades": true,
-    "best_bid_offer_quotes_with_sizes": true,
-    "historical_level2_top10_depth": false
+    "tick_trades_endpoint_exists": true,
+    "best_bid_offer_quotes_endpoint_exists": true,
+    "historical_level2_top10_depth_endpoint_found": false
   },
-  "hypothesis_eligibility": {
-    "CMF-H1_aggressive_flow_ratio": "ELIGIBLE_IF_TRADE_AND_QUOTE_QUALITY_GATES_PASS",
-    "CMF-H2_book_imbalance_top10": "DATA_BLOCKED_ON_MASSIVE_SOURCE",
-    "CMF-H3_microprice_normalized_edge": "ELIGIBLE_IF_BBO_SIZE_AND_QUOTE_QUALITY_GATES_PASS"
+  "connected_plan_entitlement": {
+    "contracts": "AVAILABLE",
+    "session_aggregates": "AVAILABLE",
+    "tick_trades": "NOT_ENTITLED",
+    "best_bid_offer_quotes_with_sizes": "NOT_ENTITLED",
+    "historical_level2_top10_depth": "UNAVAILABLE"
   },
-  "anti_substitution_rule": "Do not replace CMF-H2 top-10 displayed-book imbalance with BBO-size imbalance. BBO-size imbalance may be reported as a diagnostic only and cannot satisfy H2.",
+  "hypothesis_eligibility_on_current_massive_plan": {
+    "CMF-H1_aggressive_flow_ratio": "DATA_BLOCKED_TICK_TRADES_NOT_ENTITLED",
+    "CMF-H2_book_imbalance_top10": "DATA_BLOCKED_NO_LEVEL2_SOURCE",
+    "CMF-H3_microprice_normalized_edge": "DATA_BLOCKED_BBO_QUOTES_NOT_ENTITLED"
+  },
+  "anti_substitution_rule": "Do not replace H1 with bar volume, H2 with BBO-size imbalance, or H3 with OHLC-derived proxies. Aggregate bars are structural/context data only and cannot satisfy the frozen order-flow hypotheses.",
+  "selected_contracts_and_window_remain_frozen": true,
   "claims": {
     "persistent_edge_established": false,
     "candidate_promoted": false,
