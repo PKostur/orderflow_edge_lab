@@ -1,0 +1,19 @@
+{
+  "research_id": "cross_market_futures_v1",
+  "freeze_kind": "native_contract_selection",
+  "frozen_before_strategy_pnl": true,
+  "frozen_at_utc": "2026-09-17T11:55:00Z",
+  "eligible_roots": ["ES", "NQ", "GC", "CL"],
+  "source": "Massive futures reference and aggregate market-structure data",
+  "selection_date": "2026-09-17",
+  "liquidity_reference_session_end_date": "2026-09-16",
+  "rule": "For each frozen product root, restrict to active single outright contracts on 2026-09-17. Among those contracts with a valid completed-session aggregate for session_end_date 2026-09-16, select the contract with the highest reported session volume. Ties are broken by higher transaction count, then earlier settlement date, then lexicographic ticker. No strategy PnL, signal count, signal quality, or post-selection result may influence contract choice.",
+  "fallback": "If no eligible contract has a completed-session aggregate, mark that root DATA_BLOCKED for v1 rather than substitute a contract using strategy results or discretionary judgment.",
+  "roll_policy": "The selected native contract is fixed for the initial v1 evidence batch. Event-level signals and fills may not be stitched across contract rolls.",
+  "claims": {
+    "strategy_pnl_seen_before_freeze": false,
+    "candidate_promoted": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
+}
