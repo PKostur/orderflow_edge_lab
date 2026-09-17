@@ -1,0 +1,105 @@
+{
+  "protocol_id": "cross_asset_weekly_momentum_v1",
+  "stage": "D0",
+  "status": "FALSIFIED_D0_ALL_FAMILIES",
+  "evaluated_at_utc": "2026-09-17T20:27:00Z",
+  "freeze_commit": "f076e294129face8e03803e4b307bae0b54669ad",
+  "source": {
+    "provider": "Massive",
+    "resolution": "1 day adjusted bars",
+    "D0_data_loaded_only_through": "2025-12-31",
+    "D3_strategy_pnl_computed": false,
+    "D3b_strategy_pnl_computed": false
+  },
+  "calendar_integrity": {
+    "all_eight_series_rows": 324,
+    "D0_signal_weeks": 51,
+    "first_signal_date": "2025-01-03",
+    "last_signal_date": "2025-12-19",
+    "first_signal_common_index": 76,
+    "minimum_lookback_index_after_63_session_lag": 13,
+    "last_next_signal_date_for_D0_exit": "2025-12-26",
+    "lookback_available_for_every_D0_signal": true
+  },
+  "families": {
+    "CA_TS63D_SIGN_WEEKLY_V1": {
+      "status": "FALSIFIED_D0_NEGATIVE_EXPECTANCY_AND_INSTABILITY",
+      "valid_weeks": 51,
+      "instruments": 8,
+      "mean_weekly_net_bps_5": -4.187177,
+      "mean_weekly_net_bps_10": -9.187177,
+      "reversed_mean_bps_5": -5.812823,
+      "annualized_sharpe_5bps": -0.3074,
+      "positive_instrument_contributions": 3,
+      "max_positive_instrument_share": 0.786542,
+      "half1_mean_bps": -24.764455,
+      "half2_mean_bps": 17.213192,
+      "positive_calendar_quarters": 2,
+      "max_positive_quarter_share": 0.897141,
+      "D0_gate_passed": false,
+      "instrument_contribution_bps": {
+        "DBC": -529.719008,
+        "EEM": -50.001580,
+        "EFA": -145.653114,
+        "GLD": 550.502974,
+        "IEF": -84.094994,
+        "SPY": 118.010664,
+        "TLT": -103.980505,
+        "UUP": 31.389532
+      },
+      "quarter_results_bps": {
+        "2025-Q1": -347.797481,
+        "2025-Q2": -296.078341,
+        "2025-Q3": 386.066381,
+        "2025-Q4": 44.263408
+      },
+      "interpretation": "The time-series rule is negative pooled at both cost levels, has negative Sharpe, flips sign between the two frozen half-years, and positive contribution is heavily concentrated in GLD. The family ID is dead."
+    },
+    "CA_XS63_5_MOM_WEEKLY_V1": {
+      "status": "FALSIFIED_D0_COST_FRAGILITY_AND_INSTABILITY",
+      "valid_weeks": 51,
+      "instruments": 8,
+      "mean_weekly_net_bps_5": 0.374214,
+      "mean_weekly_net_bps_10": -4.625786,
+      "reversed_mean_bps_5": -10.374214,
+      "annualized_sharpe_5bps": 0.0243,
+      "positive_instrument_contributions": 3,
+      "max_positive_instrument_share": 0.878339,
+      "half1_mean_bps": -10.816244,
+      "half2_mean_bps": 12.012291,
+      "positive_calendar_quarters": 2,
+      "max_positive_quarter_share": 0.635648,
+      "D0_gate_passed": false,
+      "instrument_contribution_bps": {
+        "DBC": -296.512979,
+        "EEM": -68.791239,
+        "EFA": -74.641503,
+        "GLD": 690.677986,
+        "IEF": -52.576208,
+        "SPY": 40.124388,
+        "TLT": -274.738974,
+        "UUP": 55.543438
+      },
+      "quarter_results_bps": {
+        "2025-Q1": -205.442235,
+        "2025-Q2": -75.780120,
+        "2025-Q3": 190.889725,
+        "2025-Q4": 109.417539
+      },
+      "interpretation": "The cross-sectional rule is barely positive at 5 bps but negative under the 10 bps stress, has near-zero Sharpe, fails both half-year and quarter stability, and positive contribution is dominated by GLD. The family ID is dead; GLD-only rescue is prohibited."
+    }
+  },
+  "locked_stages": {
+    "D3_2026_H1": "SEALED_NOT_INSPECTED",
+    "D3b_2026_JUL_AUG": "SEALED_NOT_INSPECTED",
+    "reason": "Neither family passed every frozen D0 gate."
+  },
+  "research_state": {
+    "candidate_created": false,
+    "persistent_edge_established": false,
+    "future_shadow_created": false,
+    "live_execution_supported": false,
+    "leverage_supported": false,
+    "same_id_retuning_allowed": false
+  }
+}
