@@ -6,7 +6,7 @@ import math
 from typing import Iterable, Mapping, Sequence
 
 from .adapters import normalize_dxfeed_rows
-from .data import MarketEvent, Side, parse_timestamp_ns
+from .data import Side, parse_timestamp_ns
 
 
 _TS_KEYS = ("timestamp", "time", "datetime", "ts", "event_time", "eventtime")
@@ -57,7 +57,6 @@ def _is_quote_row(row: Mapping[str, object]) -> bool:
     raw = _first(row, _KIND_KEYS)
     if raw not in (None, ""):
         return str(raw).strip().upper() == "QUOTE"
-    # Match the generic normalizer: rows without a trade price are quote rows.
     price = _first(row, ("price", "trade_price", "last", "last_price"))
     return price in (None, "")
 
@@ -104,6 +103,7 @@ class Level1BuildResult:
     trades_with_classified_side: int
     trades_with_eligible_prior_bbo_sizes: int
     ambiguous_same_timestamp_bbo_uses_blocked: int
+    stale_bbo_uses_blocked: int
 
     @property
     def h1_eligible(self) -> bool:
@@ -155,13 +155,20 @@ def _quote_from_row(row: Mapping[str, object]) -> QuoteState | None:
     return QuoteState(ts_ns, _sequence(_first(row, _SEQUENCE_KEYS)), bid, ask, bid_size, ask_size)
 
 
-def _state_eligible_for_trade(state: QuoteState | None, *, trade_ts_ns: int, trade_sequence: int | None) -> bool:
+def _state_eligible_for_trade(
+    state: QuoteState | None,
+    *,
+    trade_ts_ns: int,
+    trade_sequence: int | None,
+    max_quote_age_ns: int,
+) -> bool:
     if state is None:
         return False
-    if state.ts_ns < trade_ts_ns:
-        return True
-    if state.ts_ns > trade_ts_ns:
+    age = trade_ts_ns - state.ts_ns
+    if age < 0 or age > max_quote_age_ns:
         return False
+    if age > 0:
+        return True
     return state.sequence is not None and trade_sequence is not None and state.sequence < trade_sequence
 
 
@@ -169,19 +176,24 @@ def build_dxfeed_level1_feature_rows(
     source_rows: Iterable[Mapping[str, object]],
     *,
     default_symbol: str | None = None,
+    max_quote_age_seconds: float = 2.0,
 ) -> Level1BuildResult:
     """Build causal H1/H3-ready rows from dxFeed/DeepCharts CSV-like rows.
 
-    Quote state is reusable only from actual quote rows. Same-timestamp quote
-    state can influence a trade only when both events carry sequence values that
-    establish quote-before-trade order. Top-10 depth is deliberately not
-    synthesized here, so CMF-H2 remains ineligible without a separate Level-2
-    source/parser.
+    Quote state is reusable only from actual quote rows, no older than the
+    configured causal age bound. Same-timestamp quote state can influence a
+    trade only when both events carry sequence values establishing quote-before-
+    trade order. Top-10 depth is deliberately not synthesized here, so CMF-H2
+    remains ineligible without a separate Level-2 source/parser.
     """
+    if isinstance(max_quote_age_seconds, bool) or not math.isfinite(max_quote_age_seconds) or max_quote_age_seconds <= 0:
+        raise ValueError("max_quote_age_seconds must be finite and positive")
+    max_quote_age_ns = int(max_quote_age_seconds * 1_000_000_000)
     raw = [dict(row) for row in source_rows]
     events = normalize_dxfeed_rows(
         raw,
         default_symbol=default_symbol,
+        max_quote_age_seconds=max_quote_age_seconds,
         reject_timestamp_regressions=True,
     ).events
     if len(events) != len(raw):
@@ -190,7 +202,7 @@ def build_dxfeed_level1_feature_rows(
     quote_state: dict[str, QuoteState] = {}
     flows: dict[str, _RollingFlow] = {}
     output: list[dict[str, object]] = []
-    trade_rows = quote_rows = trades_with_size = classified = trades_with_bbo = blocked = 0
+    trade_rows = quote_rows = trades_with_size = classified = trades_with_bbo = blocked = stale_blocked = 0
 
     for source, event in zip(raw, events, strict=True):
         parsed_ts = parse_timestamp_ns(_first(source, _TS_KEYS))
@@ -236,9 +248,16 @@ def build_dxfeed_level1_feature_rows(
         if size is not None and event.side != Side.UNKNOWN:
             flow.add(event.ts_ns, event.side, float(size))
         state = quote_state.get(event.symbol)
-        state_ok = _state_eligible_for_trade(state, trade_ts_ns=event.ts_ns, trade_sequence=seq)
+        state_ok = _state_eligible_for_trade(
+            state,
+            trade_ts_ns=event.ts_ns,
+            trade_sequence=seq,
+            max_quote_age_ns=max_quote_age_ns,
+        )
         if state is not None and state.ts_ns == event.ts_ns and not state_ok:
             blocked += 1
+        if state is not None and event.ts_ns - state.ts_ns > max_quote_age_ns:
+            stale_blocked += 1
         if state_ok:
             trades_with_bbo += 1
         features = flow.snapshot(event.ts_ns)
@@ -271,4 +290,5 @@ def build_dxfeed_level1_feature_rows(
         trades_with_classified_side=classified,
         trades_with_eligible_prior_bbo_sizes=trades_with_bbo,
         ambiguous_same_timestamp_bbo_uses_blocked=blocked,
+        stale_bbo_uses_blocked=stale_blocked,
     )
