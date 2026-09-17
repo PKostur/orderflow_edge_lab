@@ -1,0 +1,141 @@
+{
+  "research_id": "cross_market_futures_v1",
+  "status": "FROZEN_BEFORE_NON_CRYPTO_RESULTS",
+  "frozen_at_utc": "2026-09-17T10:10:00Z",
+  "purpose": "Test whether the existing normalized short-horizon order-flow logic transfers from crypto perpetuals to centralized non-crypto futures without using non-crypto PnL to choose markets, thresholds, or hypotheses.",
+  "separation": {
+    "crypto_evidence_chain_unchanged": true,
+    "non_crypto_results_cannot_promote_crypto_candidates": true,
+    "crypto_candidate_status_not_inherited": true,
+    "market_selection_used_strategy_pnl": false,
+    "v1_is_transfer_discovery_not_candidate_validation": true
+  },
+  "universe": [
+    {
+      "root": "ES",
+      "venue": "CME",
+      "asset_class": "US_equity_index",
+      "description": "E-mini S&P 500",
+      "tick_size": 0.25,
+      "point_value_usd": 50.0,
+      "micro_execution_analogue": "MES"
+    },
+    {
+      "root": "NQ",
+      "venue": "CME",
+      "asset_class": "US_equity_index_growth",
+      "description": "E-mini Nasdaq-100",
+      "tick_size": 0.25,
+      "point_value_usd": 20.0,
+      "micro_execution_analogue": "MNQ"
+    },
+    {
+      "root": "GC",
+      "venue": "COMEX",
+      "asset_class": "precious_metals",
+      "description": "Gold futures",
+      "tick_size": 0.1,
+      "point_value_usd": 100.0,
+      "micro_execution_analogue": "MGC"
+    },
+    {
+      "root": "CL",
+      "venue": "NYMEX",
+      "asset_class": "energy",
+      "description": "WTI Crude Oil futures",
+      "tick_size": 0.01,
+      "point_value_usd": 1000.0,
+      "micro_execution_analogue": "MCL"
+    }
+  ],
+  "market_selection_rationale": {
+    "rule": "Preselect highly liquid centralized benchmark futures spanning materially different economic drivers before inspecting strategy PnL.",
+    "diversification": "Two equity-index contracts plus one precious-metal and one energy benchmark.",
+    "no_post_result_market_substitution": true
+  },
+  "data": {
+    "preferred_source": "dxFeed/DeepCharts export or dxFeed historical/replay",
+    "required_event_types": ["TRADE", "QUOTE"],
+    "bbo_required_for_executable_pnl": true,
+    "full_depth_optional_for_later_separately_frozen_version": true,
+    "timestamps": "UTC with explicit timezone",
+    "normalization": "reuse normalize_dxfeed_rows and DataQualityPolicy",
+    "native_contract_only_for_event_level_research": true,
+    "no_stitched_order_book_across_rolls": true,
+    "historical_roll_policy": "Keep each native contract as a separate dependence cluster; synthetic continuous/rolling prices may be used only for context and may not create event-level signals or fills.",
+    "fresh_capture_contract_policy": "Choose and record the native active contract before capture; do not switch contract during a capture batch.",
+    "minimum_capture_events": 100,
+    "reject_non_monotonic_timestamps": true
+  },
+  "signal_transfer": {
+    "source_protocol": "discovery-v1 normalized crypto order-flow protocol",
+    "families": ["aggressive_flow_ratio", "book_imbalance", "microprice_normalized_edge"],
+    "absolute_aggressive_flow_ratio_threshold": 0.25,
+    "absolute_book_imbalance_threshold": 0.25,
+    "absolute_microprice_normalized_edge_threshold": 0.20,
+    "minimum_trade_prints": 5,
+    "same_family_same_direction_cooldown_seconds": 2,
+    "forward_horizons_seconds": [1, 5, 15, 30],
+    "market_specific_threshold_tuning": false,
+    "market_specific_horizon_tuning": false
+  },
+  "hypotheses": [
+    {
+      "id": "CMF-H1",
+      "family": "aggressive_flow_ratio",
+      "claim": "Extreme normalized aggressive-flow imbalance has same-direction short-horizon continuation after executable spread and market-native friction."
+    },
+    {
+      "id": "CMF-H2",
+      "family": "book_imbalance",
+      "claim": "Extreme normalized displayed-book imbalance has same-direction short-horizon continuation after executable spread and market-native friction."
+    },
+    {
+      "id": "CMF-H3",
+      "family": "microprice_normalized_edge",
+      "claim": "Normalized microprice displacement has same-direction short-horizon continuation after executable spread and market-native friction."
+    }
+  ],
+  "analysis_order": [
+    "data_integrity",
+    "future_market_state_and_direction",
+    "original_vs_reversed_transfer",
+    "execution_economics",
+    "strategy_pnl"
+  ],
+  "economics": {
+    "long_entry": "cross ask",
+    "long_exit": "hit bid",
+    "short_entry": "cross bid",
+    "short_exit": "lift ask",
+    "additional_round_trip_friction_ticks": [0.0, 1.0, 2.0],
+    "commission_and_exchange_fees": "Report separately when exact entitlement/broker schedule is known; a v1 result cannot be promoted by assuming these are zero.",
+    "market_impact": "Not modeled in v1 discovery and therefore remains a limitation.",
+    "leverage": 1.0
+  },
+  "dependence_and_controls": {
+    "primary_cluster": ["market_root", "native_contract", "capture_session"],
+    "fully_reversed_signal_control": true,
+    "time_shift_placebo_required_before_candidate_freeze": true,
+    "session_block_bootstrap_diagnostic": true,
+    "single_market_positive_pnl_share_max_for_family_survival": 0.60
+  },
+  "d0_transfer_survival": {
+    "minimum_total_signals": 100,
+    "minimum_independent_capture_sessions": 5,
+    "minimum_markets_with_signals": 3,
+    "pooled_net_expectancy_positive_after_one_extra_round_trip_tick": true,
+    "original_must_beat_reversed_after_one_extra_round_trip_tick": true,
+    "at_least_three_markets_same_direction_net_expectancy": true,
+    "single_market_positive_pnl_share_must_not_exceed": 0.60,
+    "bootstrap_is_diagnostic_not_mandatory": true,
+    "survival_creates_new_candidate_id_only": true,
+    "no_v1_direct_promotion": true
+  },
+  "claims": {
+    "persistent_edge_established": false,
+    "candidate_promoted": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
+}
