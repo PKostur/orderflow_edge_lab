@@ -1,0 +1,20 @@
+{
+  "research_id": "cross_market_futures_v1",
+  "selection_rule_commit": "6254aba63a48f7391551013c3ecbb511130f6a8f",
+  "reference_session_end_date": "2026-09-16",
+  "strategy_pnl_seen_before_selection": false,
+  "selected": {
+    "ES": {"ticker": "ESZ6", "volume": 1424863, "transactions": 443312, "runner_up": {"ticker": "ESU6", "volume": 158661}},
+    "NQ": {"ticker": "NQZ6", "volume": 525876, "transactions": 385104, "runner_up": {"ticker": "NQU6", "volume": 85960}},
+    "GC": {"ticker": "GCZ6", "volume": 227854, "transactions": 158276, "runner_up": {"ticker": "GCV6", "volume": 7889}},
+    "CL": {"ticker": "CLV6", "volume": 197800, "transactions": 116340, "runner_up": {"ticker": "CLX6", "volume": 100619}}
+  },
+  "selection_basis": "Highest completed-session volume among the pre-frozen six nearest active outright contracts per root; ties would use transactions then settlement date then ticker.",
+  "roll_policy": "Selected tickers remain fixed for the initial v1 evidence batch; no stitching or substitution after results.",
+  "claims": {
+    "persistent_edge_established": false,
+    "candidate_promoted": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
+}
