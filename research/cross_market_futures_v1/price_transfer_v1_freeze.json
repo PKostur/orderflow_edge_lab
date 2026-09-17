@@ -1,0 +1,72 @@
+{
+  "research_id": "cross_market_futures_price_transfer_v1",
+  "status": "FROZEN_BEFORE_PRICE_STRATEGY_RESULTS",
+  "frozen_at_utc": "2026-09-17T13:24:00Z",
+  "relationship_to_orderflow_lane": "Separate development lane. It cannot repair, replace, or promote the blocked cross_market_futures_v1 order-flow hypotheses.",
+  "data": {
+    "source": "Massive futures 1-minute aggregate bars",
+    "contracts": {"ES": "ESZ6", "NQ": "NQZ6", "GC": "GCV6", "CL": "CLX6"},
+    "contract_selection_rule": "Inherited unchanged from cmf_massive_primary_v1: nearest active single contract with at least 14 days to maturity on 2026-09-17.",
+    "session_end_dates": ["2026-09-10", "2026-09-11", "2026-09-14", "2026-09-15", "2026-09-16"],
+    "intraday_window_utc": {"start": "13:30:00", "end": "14:30:00"},
+    "signal_clock": "completed 1-minute bar",
+    "entry": "next available 1-minute bar open strictly after signal bar",
+    "exit": "open of the bar 5 minutes after entry; missing bars invalidate that observation",
+    "market_specific_parameter_tuning": false,
+    "no_post_result_contract_or_session_substitution": true
+  },
+  "hypotheses": [
+    {
+      "id": "CMFP-H1",
+      "name": "standardized_5m_impulse_continuation",
+      "rule": "At completed minute t, compute log return from close[t-5] to close[t]. Compute trailing 30 one-minute log-return RMS using data ending at t. Signal in the 5m return direction when abs(return_5m) >= 1.5 * rms_1m * sqrt(5).",
+      "direction": "continuation"
+    },
+    {
+      "id": "CMFP-H2",
+      "name": "prior_20m_range_breakout_continuation",
+      "rule": "At completed minute t, go long when close[t] > max(high[t-20:t-1]); go short when close[t] < min(low[t-20:t-1]). Current bar is excluded from the breakout range.",
+      "direction": "continuation"
+    },
+    {
+      "id": "CMFP-H3",
+      "name": "bollinger_20_2_extreme_reversion",
+      "rule": "At completed minute t, compute rolling 20-close mean and population standard deviation including t. When z >= +2 signal short; when z <= -2 signal long.",
+      "direction": "reversion"
+    }
+  ],
+  "controls": {
+    "fully_reversed_direction_for_every_signal": true,
+    "same_entry_exit_timestamps_for_original_and_reversed": true,
+    "no_parameter_grid": true,
+    "no_best_hypothesis_selection_inside_v1": true
+  },
+  "economics": {
+    "leverage": 1.0,
+    "normalized_return_unit": "underlying-price basis points",
+    "round_trip_friction_ticks": [2.0, 4.0],
+    "primary_cost_case_round_trip_ticks": 2.0,
+    "tick_sizes": {"ES": 0.25, "NQ": 0.25, "GC": 0.1, "CL": 0.01},
+    "cost_formula_bps": "round_trip_ticks * tick_size / entry_price * 10000",
+    "commissions": "Not included in v1 bars; therefore no result can be promoted directly from this lane.",
+    "market_impact": "Not modeled; development limitation."
+  },
+  "d0_family_survival": {
+    "minimum_pooled_signals": 30,
+    "minimum_markets_with_signals": 3,
+    "minimum_independent_session_dates": 5,
+    "pooled_net_expectancy_positive_at_primary_cost": true,
+    "original_must_beat_reversed_at_primary_cost": true,
+    "minimum_markets_with_positive_net_expectancy": 3,
+    "single_market_positive_pnl_share_max": 0.60,
+    "single_session_positive_pnl_share_max": 0.50,
+    "survival_creates_new_candidate_id_only": true,
+    "no_direct_promotion": true
+  },
+  "claims": {
+    "persistent_edge_established": false,
+    "candidate_promoted": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
+}
