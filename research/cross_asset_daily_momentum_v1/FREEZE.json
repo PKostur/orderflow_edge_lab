@@ -1,0 +1,103 @@
+{
+  "protocol_id": "cross_asset_daily_momentum_v1",
+  "status": "FROZEN_BEFORE_RESULTS",
+  "frozen_at_utc": "2026-09-17T20:07:00Z",
+  "purpose": "Test long-horizon cross-asset momentum after repeated short-horizon bar-pattern failures. This is a separate evidence lane and does not inherit any prior candidate status.",
+  "source": {
+    "provider": "Massive",
+    "endpoint": "/v2/aggs/ticker/{ticker}/range/1/day/{from}/{to}",
+    "adjusted": true,
+    "resolution": "1 day"
+  },
+  "universe": [
+    {"ticker":"SPY","role":"US equities"},
+    {"ticker":"EFA","role":"developed ex-US equities"},
+    {"ticker":"EEM","role":"emerging-market equities"},
+    {"ticker":"IEF","role":"intermediate US Treasuries"},
+    {"ticker":"TLT","role":"long-duration US Treasuries"},
+    {"ticker":"GLD","role":"gold"},
+    {"ticker":"DBC","role":"broad commodities"},
+    {"ticker":"UUP","role":"US dollar"}
+  ],
+  "universe_selected_before_pnl": true,
+  "windows": {
+    "prehistory": ["2009-01-01","2011-12-31"],
+    "D0_signal_months": ["2012-01","2019-11"],
+    "D3_locked_signal_months": ["2020-01","2023-11"],
+    "D3b_locked_signal_months": ["2024-01","2025-11"],
+    "2026_historical_reserved": ["2026-01","2026-08"],
+    "future_shadow_earliest": "2026-09-18"
+  },
+  "common_calendar": {
+    "signal_date": "last date in each signal month on which all eight ETFs have a valid adjusted close",
+    "entry_date": "first later date on which all eight ETFs have a valid adjusted open",
+    "exit_date": "the entry_date associated with the next signal month",
+    "window_boundary_rule": "The final signal month in each stage is chosen so its exit remains inside that stage's calendar block; therefore December 2019, December 2023 and December 2025 are not signal months.",
+    "missing_data": "No interpolation, forward fill, proxy substitution or ticker substitution. A month is ineligible if any required common date or lookback observation is missing."
+  },
+  "economics": {
+    "gross_leg_return_bps": "direction * (exit_open / entry_open - 1) * 10000",
+    "primary_round_trip_friction_bps_per_leg_per_month": 10.0,
+    "stress_round_trip_friction_bps_per_leg_per_month": 20.0,
+    "cost_treatment": "Every monthly leg pays the full frozen round-trip haircut even when its direction persists across rebalances; this deliberately overstates turnover rather than using post-result persistence to reduce costs.",
+    "leverage": 1.0,
+    "reversed_same_signal_control": true
+  },
+  "families": {
+    "CA_TS12M_SIGN_V1": {
+      "feature": "log(signal_close / close_252_common_sessions_earlier)",
+      "signal": "positive feature => long; negative feature => short; exactly zero => flat for that leg",
+      "portfolio": "equal weight across all non-flat ETF legs, gross exposure normalized to 1.0; no volatility scaling",
+      "entry": "common entry_date open",
+      "exit": "next month's common entry_date open"
+    },
+    "CA_XS12_1_MOM_V1": {
+      "feature": "log(close_21_common_sessions_before_signal / close_252_common_sessions_before_signal)",
+      "ranking": "rank all eight ETFs by feature; ties broken ticker ascending",
+      "portfolio": "long top two, short bottom two, equal weight across four legs, gross exposure 1.0 and net exposure 0",
+      "entry": "common entry_date open",
+      "exit": "next month's common entry_date open"
+    }
+  },
+  "controls": {
+    "reversed": "Multiply every original leg direction by -1 using identical signal, ranking, entry and exit dates and identical costs.",
+    "no_post_result_flip": true
+  },
+  "D0_halves": {
+    "half1_signal_months": ["2012-01","2015-12"],
+    "half2_signal_months": ["2016-01","2019-11"]
+  },
+  "gates": {
+    "D0_survival_per_family": {
+      "minimum_valid_months": 84,
+      "minimum_instruments_participating": 8,
+      "mean_monthly_net_return_primary_positive": true,
+      "mean_monthly_net_return_stress_nonnegative": true,
+      "annualized_sharpe_primary_gt": 0.50,
+      "original_beats_reversed_primary": true,
+      "minimum_positive_calendar_years": 6,
+      "both_D0_halves_positive_primary": true,
+      "max_single_instrument_share_of_positive_contribution": 0.35,
+      "max_single_calendar_year_share_of_positive_pnl": 0.35
+    },
+    "D3_survival_per_family": {
+      "minimum_valid_months": 42,
+      "mean_monthly_net_return_primary_positive": true,
+      "mean_monthly_net_return_stress_nonnegative": true,
+      "annualized_sharpe_primary_gt": 0.25,
+      "original_beats_reversed_primary": true,
+      "minimum_positive_calendar_years": 3,
+      "max_single_calendar_year_share_of_positive_pnl": 0.50
+    },
+    "promotion": "D0 survival only unlocks D3. D3 survival only unlocks D3b. Historical survival never establishes persistent edge or live eligibility; a survivor gets a new candidate ID and prospective future shadow after the full historical chain."
+  },
+  "research_rules": {
+    "families_frozen": 2,
+    "ticker_specific_rescue_forbidden": true,
+    "lookback_retuning_after_results_forbidden": true,
+    "cost_retuning_after_results_forbidden": true,
+    "failed_family_id_dead": true,
+    "locked_stage_performance_must_not_be_inspected_for_prior_stage_failures": true,
+    "same_source_temporal_holdouts_are_not_independent_source_replication": true
+  }
+}
