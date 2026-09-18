@@ -1,0 +1,22 @@
+{
+  "research_id": "sector_etf_cross_sectional_v1",
+  "status": "BLOCKED_BY_HISTORICAL_DATA_ENTITLEMENT",
+  "evaluated_at_utc": "2026-09-18T15:46:00Z",
+  "freeze_commit": "ae0cfcdd12cc819ea51faf269c5865051f1cda99",
+  "source_attempt": {
+    "provider": "Massive",
+    "requested_window": ["2019-09-01","2023-12-29"],
+    "custom_daily_bars": "NOT_ENTITLED",
+    "grouped_daily_history_check_2023_01_03": "NOT_ENTITLED",
+    "strategy_pnl_inspected": false
+  },
+  "research_state": {
+    "D0": "NOT_RUN",
+    "D3_holdout": "SEALED_NOT_FETCHED",
+    "candidate_created": false,
+    "persistent_edge_established": false,
+    "same_id_window_shortening_allowed": false,
+    "same_id_parameter_changes_allowed": false
+  },
+  "next_legal_step": "Acquire the frozen historical window from an independent entitled source, then run the exact frozen protocol without changing universe, dates, lookbacks, holding periods, costs or gates."
+}
