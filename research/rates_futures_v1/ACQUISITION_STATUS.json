@@ -1,7 +1,7 @@
 {
   "research_id": "rates_futures_v1",
-  "status": "D0_ACQUISITION_INCOMPLETE_NO_PNL",
-  "updated_at_utc": "2026-09-18T15:55:00Z",
+  "status": "D0_ACQUISITION_COMPLETE",
+  "updated_at_utc": "2026-09-18T16:10:00Z",
   "frozen_protocol_commit": "d88aecbdf71ce02acfc425a71c85f0f9356aeba3",
   "provider": "Massive",
   "acquired_contracts": [
@@ -18,9 +18,7 @@
     "ZNU5",
     "ZBU5",
     "ZTZ5",
-    "ZFZ5"
-  ],
-  "pending_contracts": [
+    "ZFZ5",
     "ZNZ5",
     "ZBZ5",
     "ZTH6",
@@ -28,9 +26,10 @@
     "ZNH6",
     "ZBH6"
   ],
-  "blocker": "provider request rate limit during acquisition",
-  "strategy_pnl_inspected": false,
-  "D0_result": null,
+  "pending_contracts": [],
+  "blocker": null,
+  "strategy_pnl_inspected": true,
+  "D0_result": "research/rates_futures_v1/D0_RESULT.json",
   "D3_holdout": "SEALED_NOT_FETCHED",
   "protocol_changes_allowed": false
 }
