@@ -1,0 +1,85 @@
+{
+  "protocol_id": "alphainsider_inspired_scan_v1",
+  "stage": "external_idea_plausibility_scan",
+  "status": "ONE_FAMILY_SURVIVES_SCAN",
+  "evaluated_at_utc": "2026-09-18T15:10:00Z",
+  "protocol_files": [
+    "research/alphainsider_ideas_v1/FREEZE.json",
+    "research/alphainsider_ideas_v1/FREEZE_CLARIFICATION.md",
+    "research/alphainsider_ideas_v1/ACQUISITION_INTEGRITY.md",
+    "research/alphainsider_ideas_v1/DATA_INTEGRITY.json"
+  ],
+  "source": {
+    "provider": "Massive",
+    "resolution": "5 minute adjusted aggregates",
+    "scan_window": ["2026-01-02","2026-09-16"],
+    "oos_claim": false,
+    "bar_execution_is_research_proxy": true
+  },
+  "families": {
+    "AI_S10_GAP_REGIME_V1": {
+      "status": "FALSIFIED_SCAN",
+      "signals": 556,
+      "sessions": 176,
+      "instruments": 4,
+      "net_mean_bps_2": -6.712179,
+      "net_mean_bps_5": -9.712179,
+      "net_mean_bps_10": -14.712179,
+      "reversed_mean_bps_5": -0.287821,
+      "positive_instruments": 0,
+      "failed_gates": ["pooled_net_mean_bps_at_5bps_gt","original_must_beat_reversed_at_5bps","minimum_positive_instruments_at_5bps","maximum_single_instrument_share_of_positive_pnl"]
+    },
+    "AI_S9_VWAP_CONT_V1": {
+      "status": "FALSIFIED_SCAN",
+      "raw_candidates": 1372,
+      "accepted_non_overlapping_signals": 930,
+      "sessions": 172,
+      "instruments": 5,
+      "net_mean_bps_2": -1.377695,
+      "net_mean_bps_5": -4.377695,
+      "net_mean_bps_10": -9.377695,
+      "reversed_mean_bps_5": -5.622305,
+      "positive_instruments": 0,
+      "instrument_total_net5_bps": {
+        "IWM": -684.268730,
+        "QQQ": -1215.505980,
+        "SMH": -711.297364,
+        "SPY": -1051.579013,
+        "XLE": -408.604802
+      },
+      "failed_gates": ["pooled_net_mean_bps_at_5bps_gt","minimum_positive_instruments_at_5bps","maximum_single_instrument_share_of_positive_pnl"]
+    },
+    "AI_S6_INITIAL_BALANCE_V1": {
+      "status": "SURVIVES_PLAUSIBILITY_SCAN_ONLY",
+      "signals": 1002,
+      "sessions": 177,
+      "instruments": 7,
+      "net_mean_bps_2": 5.817796,
+      "net_mean_bps_5": 2.817796,
+      "net_mean_bps_10": -2.182204,
+      "reversed_mean_bps_5": -12.817796,
+      "positive_instruments": 6,
+      "max_positive_instrument_share": 0.319664,
+      "gate_passed": true,
+      "instrument_results": {
+        "AAPL":{"signals":144,"mean_net_bps_5":1.265086,"mean_net_bps_10":-3.734914,"total_net_bps_5":182.172427},
+        "AMD":{"signals":138,"mean_net_bps_5":9.300025,"mean_net_bps_10":4.300025,"total_net_bps_5":1283.403472},
+        "AMZN":{"signals":141,"mean_net_bps_5":5.196969,"mean_net_bps_10":0.196969,"total_net_bps_5":732.772591},
+        "GOOGL":{"signals":141,"mean_net_bps_5":5.752563,"mean_net_bps_10":0.752563,"total_net_bps_5":811.111408},
+        "META":{"signals":150,"mean_net_bps_5":-12.825272,"mean_net_bps_10":-17.825272,"total_net_bps_5":-1923.790771},
+        "MSFT":{"signals":144,"mean_net_bps_5":1.529494,"mean_net_bps_10":-3.470506,"total_net_bps_5":220.247202},
+        "TSLA":{"signals":144,"mean_net_bps_5":10.538303,"mean_net_bps_10":5.538303,"total_net_bps_5":1517.515598}
+      },
+      "interpretation": "This passes only the predeclared external-idea plausibility gate. The 10 bps stress is negative, the source idea is not an exact reproduction, and the scan is not independent OOS validation. The seven-name universe is unchanged for replication; META cannot be removed post-result."
+    }
+  },
+  "research_state": {
+    "persistent_edge_established": false,
+    "candidate_validated": false,
+    "historical_replication_completed": false,
+    "future_shadow_started": false,
+    "live_execution_supported": false,
+    "leverage_supported": false,
+    "retuning_scan_id_allowed": false
+  }
+}
