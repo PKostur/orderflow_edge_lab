@@ -120,8 +120,10 @@ def _composite_signals(record: Mapping[str, object]) -> list[dict[str, object]]:
             continue
         original = [cells[("original", h)] for h in PRIMARY_HORIZONS_MS]
         reversed_ = [cells[("reversed_same_decision", h)] for h in PRIMARY_HORIZONS_MS]
+        capture_key = f"{root}|{native_contract}|{session_id}"
         output.append(
             {
+                "capture_key": capture_key,
                 "session_id": session_id,
                 "root": root,
                 "native_contract": native_contract,
@@ -141,7 +143,7 @@ def _bootstrap_by_session(signals: Sequence[Mapping[str, object]]) -> dict[str, 
     for row in signals:
         value = _finite(row.get("original_composite_net_bps"))
         if value is not None:
-            by_session[str(row["session_id"])].append(value)
+            by_session[str(row["capture_key"])].append(value)
     sessions = sorted(by_session)
     if len(sessions) < 5:
         return {
@@ -296,7 +298,7 @@ def _path_net_bps(
 
 def _placebo_for_family(
     family_signals: Sequence[Mapping[str, object]],
-    feature_rows_by_session: Mapping[str, Sequence[Mapping[str, object]]],
+    feature_rows_by_capture: Mapping[str, Sequence[Mapping[str, object]]],
 ) -> dict[str, object]:
     original_count = len(family_signals)
     original_mean = _mean([
@@ -304,13 +306,13 @@ def _placebo_for_family(
     ])
     by_session: dict[str, list[Mapping[str, object]]] = defaultdict(list)
     for row in family_signals:
-        by_session[str(row["session_id"])].append(row)
+        by_session[str(row["capture_key"])].append(row)
 
     shift_results: list[dict[str, object]] = []
     for shift_seconds in PLACEBO_SHIFTS_SECONDS:
         values: list[float] = []
         for session_id, signals in by_session.items():
-            feature_rows = feature_rows_by_session.get(session_id)
+            feature_rows = feature_rows_by_capture.get(session_id)
             if feature_rows is None:
                 continue
             quotes = _quotes(feature_rows)
@@ -387,7 +389,7 @@ def _placebo_for_family(
 def aggregate_d0(
     records: Sequence[Mapping[str, object]],
     *,
-    feature_rows_by_session: Mapping[str, Sequence[Mapping[str, object]]] | None = None,
+    feature_rows_by_capture: Mapping[str, Sequence[Mapping[str, object]]] | None = None,
 ) -> dict[str, object]:
     """Aggregate frozen cross-market futures v1 replay reports into family D0 gates."""
     seen_sha: set[str] = set()
@@ -404,8 +406,10 @@ def aggregate_d0(
         if key in seen_session_root:
             raise ValueError("duplicate session/root record")
         seen_session_root.add(key)
+        capture_key = f"{root}|{native_contract}|{session_id}"
         identities.append(
             {
+                "capture_key": capture_key,
                 "session_id": session_id,
                 "root": root,
                 "native_contract": native_contract,
@@ -419,9 +423,9 @@ def aggregate_d0(
     for family in families:
         rows = [row for row in all_signals if row["family"] == family]
         result = _family_d0(rows)
-        if feature_rows_by_session is not None:
+        if feature_rows_by_capture is not None:
             result["time_shift_placebo"] = _placebo_for_family(
-                rows, feature_rows_by_session
+                rows, feature_rows_by_capture
             )
         else:
             result["time_shift_placebo"] = {
