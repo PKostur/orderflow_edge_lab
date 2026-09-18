@@ -50,4 +50,23 @@ v1 itself cannot promote directly.
 
 ## Current evidence
 
-No non-crypto strategy PnL has been inspected under this protocol yet. Persistent edge: **not established**. Candidate promotion: **no**. Live execution: **no**. Leverage: **no**.
+No real futures **tick/order-flow PnL** has been inspected under this frozen H1/H2/H3 protocol.
+
+A separate one-minute **bar-price transfer** lane was run because Massive bar data were available; that lane was falsified at D0 and its post-v1 market-specific replication also failed. Those bar results do not count as evidence for or against this order-flow protocol.
+
+The order-flow engineering path is now frozen and implemented through:
+
+- 1.0-second causal Level-1 quote age;
+- native-contract single-session replay;
+- bounded dxFeed current-Quote, historical-TimeAndSale, and current-AGGREGATE-depth entitlement probes;
+- non-selectable 1s/5s/15s/30s signal composites for family-level D0;
+- duplicate-source and root/contract/session binding checks;
+- deterministic -300s/-60s/+60s/+300s time-shift placebo;
+- deterministic session-cluster bootstrap diagnostic;
+- multi-session D0 manifest aggregation.
+
+Historical TimeAndSale alone is insufficient for the full frozen replay: actual Quote event history is required for executable BBO state, and H2 additionally requires true top-10 depth history. Current Quote/Order snapshots can establish live-capture capability but do not certify historical replay.
+
+The remaining blocker is eligible event data or a legitimate external dxFeed stream/export that supplies the required event types.
+
+Persistent edge: **not established**. Candidate promotion: **no**. Live execution: **no**. Leverage: **no**.
