@@ -1,0 +1,38 @@
+name: Sector ETF Cross-Sectional D0
+
+on:
+  push:
+    branches: [research/cross-market-etf-v1, research/sector-etf-cross-sectional-v1]
+    paths:
+      - "scripts/sector_etf_cross_sectional_v1.py"
+      - "research/sector_etf_cross_sectional_v1/FREEZE.json"
+      - "research/sector_etf_cross_sectional_v1/FREEZE_CLARIFICATION.md"
+      - ".github/workflows/sector_etf_cross_sectional_d0.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  d0:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/sector-etf-cross-sectional-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run frozen D0
+        run: python scripts/sector_etf_cross_sectional_v1.py
+      - name: Commit result
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/sector_etf_cross_sectional_v1/D0_RESULT_YAHOO.json
+          if git diff --cached --quiet; then
+            echo "No result change"
+          else
+            git commit -m "Record sector ETF cross-sectional v1 D0 result"
+            git push origin HEAD:research/sector-etf-cross-sectional-v1
+          fi
