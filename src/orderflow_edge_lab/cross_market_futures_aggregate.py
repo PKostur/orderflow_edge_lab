@@ -10,6 +10,11 @@ from .cross_market_futures import extra_round_trip_friction_bps
 
 
 PRIMARY_HORIZONS_MS = (1_000, 5_000, 15_000, 30_000)
+FROZEN_FAMILIES = (
+    "aggressive_flow_ratio",
+    "book_imbalance_10",
+    "microprice_normalized_edge",
+)
 PRIMARY_EXTRA_ROUND_TRIP_TICKS = 1.0
 PLACEBO_SHIFTS_SECONDS = (-300, -60, 60, 300)
 PLACEBO_MIN_COVERAGE = 0.80
@@ -418,7 +423,11 @@ def aggregate_d0(
         )
         all_signals.extend(_composite_signals(record))
 
-    families = sorted({str(row["family"]) for row in all_signals})
+    observed_families = {str(row["family"]) for row in all_signals}
+    unexpected = observed_families.difference(FROZEN_FAMILIES)
+    if unexpected:
+        raise ValueError(f"unexpected signal families in frozen v1 reports: {sorted(unexpected)}")
+    families = list(FROZEN_FAMILIES)
     results: dict[str, object] = {}
     for family in families:
         rows = [row for row in all_signals if row["family"] == family]
