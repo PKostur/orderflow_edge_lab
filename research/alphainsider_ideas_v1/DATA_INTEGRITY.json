@@ -1,0 +1,38 @@
+{
+  "protocol_id": "alphainsider_inspired_scan_v1",
+  "stage": "pre_pnl_data_integrity",
+  "status": "DATA_READY_WITH_FAIL_CLOSED_EXCLUSIONS",
+  "provider": "Massive",
+  "resolution": "5 minute adjusted aggregates",
+  "requested_window": ["2026-01-02","2026-09-16"],
+  "acquisition": "Each frozen date segment fetched sort=asc and sort=desc; exact timestamps deduplicated before strategy evaluation.",
+  "coverage": {
+    "AAPL":{"min_date":"2026-01-02","max_date":"2026-09-16","unique_bars":33172,"conflicting_duplicates":1},
+    "AMD":{"min_date":"2026-01-02","max_date":"2026-09-16","unique_bars":33372,"conflicting_duplicates":1},
+    "AMZN":{"min_date":"2026-01-02","max_date":"2026-09-16","unique_bars":33277,"conflicting_duplicates":1},
+    "GOOGL":{"min_date":"2026-01-02","max_date":"2026-09-16","unique_bars":33285,"conflicting_duplicates":1},
+    "IWM":{"min_date":"2026-01-02","max_date":"2026-09-16","unique_bars":33258,"conflicting_duplicates":1},
+    "META":{"min_date":"2026-01-02","max_date":"2026-09-16","unique_bars":33166,"conflicting_duplicates":1},
+    "MSFT":{"min_date":"2026-01-02","max_date":"2026-09-16","unique_bars":33786,"conflicting_duplicates":1},
+    "QQQ":{"min_date":"2026-01-02","max_date":"2026-09-16","unique_bars":33977,"conflicting_duplicates":0},
+    "SMH":{"min_date":"2026-01-02","max_date":"2026-09-16","unique_bars":31386,"conflicting_duplicates":0},
+    "SPY":{"min_date":"2026-01-02","max_date":"2026-09-16","unique_bars":33956,"conflicting_duplicates":1},
+    "TSLA":{"min_date":"2026-01-02","max_date":"2026-09-16","unique_bars":33983,"conflicting_duplicates":1},
+    "XLE":{"min_date":"2026-01-02","max_date":"2026-09-16","unique_bars":30339,"conflicting_duplicates":1}
+  },
+  "excluded_ticker_dates": {
+    "AAPL":["2026-06-23"],
+    "AMD":["2026-06-12"],
+    "AMZN":["2026-06-15"],
+    "GOOGL":["2026-06-24"],
+    "IWM":["2026-06-10"],
+    "META":["2026-06-17"],
+    "MSFT":["2026-06-23"],
+    "SPY":["2026-06-25"],
+    "TSLA":["2026-06-29"],
+    "XLE":["2026-05-15"]
+  },
+  "clean_conflict_free_tickers":["QQQ","SMH"],
+  "policy":"Any ticker-date containing a conflicting duplicate is ineligible for every family. No conflicting version is selected.",
+  "strategy_pnl_inspected": false
+}
