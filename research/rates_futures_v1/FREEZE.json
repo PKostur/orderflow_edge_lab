@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "research_id": "rates_futures_v1",
+  "status": "FROZEN_BEFORE_PNL",
+  "frozen_at_utc": "2026-09-18T15:58:00Z",
+  "purpose": "Test fresh Treasury-futures momentum/reversion hypotheses on native CBOT contracts without synthetic continuous-series stitching.",
+  "evidence_separation": {
+    "crypto_chain_unchanged": true,
+    "gold_chain_unchanged": true,
+    "cross_market_futures_v1_unchanged": true,
+    "etf_chain_unchanged": true,
+    "fx_chain_unchanged": true,
+    "equity_chain_unchanged": true
+  },
+  "data": {
+    "provider": "Massive",
+    "venue": "CBOT",
+    "products": ["ZT","ZF","ZN","ZB"],
+    "resolution": "1session",
+    "D0": ["2025-02-03","2025-12-31"],
+    "D3_locked_historical_holdout": ["2026-01-02","2026-08-31"],
+    "D3b_reserved_historical_check_not_future_oos": ["2026-09-01","2026-09-16"],
+    "contract_selection": "For each product and signal session, choose the nearest standard single outright Future with at least 21 calendar days to last_trade_date. Exclude tickers containing ':' or '-'.",
+    "native_contract_rule": "The full feature lookback, entry and exit for a portfolio observation must remain on the same selected native contract for each product. If any leg crosses a contract roll, that observation is ineligible. No back-adjustment or stitched price series.",
+    "tick_sizes": {"ZT":0.00390625,"ZF":0.0078125,"ZN":0.015625,"ZB":0.03125},
+    "missing_rule": "Every required session bar must exist exactly. No interpolation, alternate contract rescue or skipped-session substitution."
+  },
+  "execution": {
+    "signal_time": "completed session close only",
+    "entry": "next valid session open",
+    "primary_round_trip_friction_ticks_per_leg": 2.0,
+    "stress_round_trip_friction_ticks_per_leg": 4.0,
+    "tick_cost_bps": "friction_ticks * native_tick_size / entry_price * 10000",
+    "return_bps": "direction * (exit_open / entry_open - 1) * 10000 minus weighted native-tick friction",
+    "reversed_same_decision_control": true,
+    "leverage": 1.0
+  },
+  "families": {
+    "RATES_H1_XS_MOM5_VOLNORM_HOLD5": {
+      "feature": "sum of prior 5 same-contract close-to-close log returns divided by (sample std of prior 20 same-contract daily log returns * sqrt(5))",
+      "ranking": "rank four products by feature; product code ascending breaks exact ties",
+      "position": "long highest feature product at +0.5 gross weight, short lowest at -0.5",
+      "holding_sessions": 5,
+      "sampling": "sequential non-overlapping observations; next signal at exit session close"
+    },
+    "RATES_H2_XS_SHOCK1_REVERSION_HOLD2": {
+      "feature": "most recent same-contract daily log return divided by sample std of prior 20 same-contract daily log returns",
+      "ranking": "rank four products by feature; product code ascending breaks exact ties",
+      "position": "long lowest feature product at +0.5 gross weight, short highest at -0.5",
+      "holding_sessions": 2,
+      "sampling": "sequential non-overlapping observations; next signal at exit session close"
+    },
+    "RATES_H3_TS_TREND20_IVOL_HOLD5": {
+      "signal": "for each product, direction = sign(log(signal_close / close_20_valid_sessions_ago)); zero means no leg",
+      "volatility": "sample std of prior 20 same-contract daily log returns",
+      "weights": "inverse-volatility absolute weights across nonzero legs, normalized so sum(abs(weight))=1",
+      "holding_sessions": 5,
+      "sampling": "sequential non-overlapping observations; next signal at exit session close"
+    }
+  },
+  "D0_halves": {
+    "half1": ["2025-02-03","2025-06-30"],
+    "half2": ["2025-07-01","2025-12-31"]
+  },
+  "D0_gate": {
+    "minimum_portfolio_observations": 35,
+    "minimum_distinct_products_selected": 4,
+    "net_mean_bps_primary_positive": true,
+    "net_mean_bps_stress_nonnegative": true,
+    "original_beats_reversed_primary": true,
+    "both_calendar_halves_positive_primary": true,
+    "minimum_products_with_positive_total_contribution": 3,
+    "max_positive_contribution_share_single_product": 0.50
+  },
+  "D3_gate": {
+    "minimum_portfolio_observations": 20,
+    "net_mean_bps_primary_positive": true,
+    "net_mean_bps_stress_nonnegative": true,
+    "original_beats_reversed_primary": true,
+    "both_holdout_halves_positive_primary": true,
+    "minimum_products_with_positive_total_contribution": 3,
+    "max_positive_contribution_share_single_product": 0.50
+  },
+  "research_rules": {
+    "all_three_families_retained": true,
+    "failed_family_id_dead": true,
+    "no_post_result_contract_selection_change": true,
+    "no_lookback_or_holding_retuning": true,
+    "no_synthetic_roll_rescue": true,
+    "reversed_control_cannot_be_adopted_post_hoc": true,
+    "D3_not_opened_for_D0_failure": true,
+    "D3b_not_opened_until_D3_pass": true,
+    "historical_holdout_is_not_genuine_future_oos": true,
+    "survivor_only_creates_new_candidate_id_for_prospective_shadow": true
+  }
+}
