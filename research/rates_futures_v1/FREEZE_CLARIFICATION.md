@@ -15,3 +15,12 @@ Frozen before strategy PnL.
 - Product contribution is each leg's weighted net bps summed across eligible D0 observations.
 - Positive-contribution concentration is largest positive product contribution / sum positive product contributions; if none are positive, the gate fails.
 - Reversed control keeps identical signal dates, products, weights, entry/exit timestamps and costs while multiplying every direction by -1.
+
+
+## Window-boundary rule
+
+Frozen before strategy PnL.
+
+- D0 signal, entry and exit must all fall within 2025-02-03 through 2025-12-31 inclusive. January 2025 bars may be used only as indicator warmup.
+- D3 signal, entry and exit must all fall within 2026-01-02 through 2026-08-31 inclusive.
+- No D0 position may consume a 2026 holdout exit price, and no D3 position may consume the reserved September-2026 check.
