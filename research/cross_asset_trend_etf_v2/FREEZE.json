@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "research_id": "cross_asset_trend_etf_v2",
+  "status": "FROZEN_BEFORE_V2_PNL",
+  "frozen_at_intent_date": "2026-09-18",
+  "provenance": {
+    "derived_from": "cross_asset_trend_etf_v1 development only",
+    "reason": "v1 6-month trend was positive across both halves and all eight assets but failed its predeclared contribution-concentration gate; v2 tests broader diversification rather than relaxing the gate.",
+    "data_mining_debt": true,
+    "v1_failed_id_remains_dead": true,
+    "no_v1_holdout_inspected": true
+  },
+  "prior": {
+    "literature": [
+      "Moskowitz, Ooi, Pedersen (2012) Time Series Momentum",
+      "Hurst, Ooi, Pedersen (2017) A Century of Evidence on Trend-Following Investing"
+    ],
+    "exact_replication": false,
+    "implementation": "US-listed ETF proxy implementation"
+  },
+  "data": {
+    "source": "Yahoo Finance chart API daily OHLC + adjusted close",
+    "universe": [
+      "SPY",
+      "IWM",
+      "EFA",
+      "EEM",
+      "IEF",
+      "TLT",
+      "TIP",
+      "LQD",
+      "VNQ",
+      "GLD",
+      "SLV",
+      "DBC",
+      "USO",
+      "UUP",
+      "FXE",
+      "FXY"
+    ],
+    "universe_groups": {
+      "equity": [
+        "SPY",
+        "IWM",
+        "EFA",
+        "EEM"
+      ],
+      "fixed_income_credit": [
+        "IEF",
+        "TLT",
+        "TIP",
+        "LQD"
+      ],
+      "real_estate": [
+        "VNQ"
+      ],
+      "commodities": [
+        "GLD",
+        "SLV",
+        "DBC",
+        "USO"
+      ],
+      "currencies": [
+        "UUP",
+        "FXE",
+        "FXY"
+      ]
+    },
+    "universe_selected_before_v2_pnl": true,
+    "adjustment": "factor=adjusted_close/raw_close; adjusted_open=raw_open*factor; signal close=adjusted_close",
+    "calendar": "intersection of valid dates across all 16 ETFs",
+    "no_symbol_substitution": true
+  },
+  "windows": {
+    "warmup_start": "2007-01-01",
+    "v2_development_reused_period": [
+      "2009-01-02",
+      "2017-12-29"
+    ],
+    "note": "This development period overlaps dates already inspected under v1 and is not independent evidence.",
+    "D3_locked_temporal_validation": [
+      "2018-01-02",
+      "2023-12-29"
+    ],
+    "D3b_reserved_historical_check_not_future_oos": [
+      "2024-01-02",
+      "2026-09-16"
+    ],
+    "prospective_shadow_earliest": "2026-09-21"
+  },
+  "strategy": {
+    "family": "CROSS_ASSET_TS_RET126_BROAD16_V2",
+    "lookback_common_sessions": 126,
+    "signal": "sign(log(adjusted_close[t]/adjusted_close[t-126])) independently per asset",
+    "volatility": "sample std of latest 63 adjusted-close daily log returns ending at signal close",
+    "weighting": "inverse-volatility absolute weights across nonzero signals, normalized to gross exposure 1.0",
+    "signal_time": "completed close",
+    "entry": "next common-session adjusted open",
+    "hold_common_sessions": 21,
+    "exit": "adjusted open exactly 21 common sessions after entry",
+    "next_signal": "exit session close; sequential non-overlapping",
+    "leverage": 1,
+    "primary_costs": {
+      "round_trip_transaction_bps": 10,
+      "short_carry_bps_per_21_sessions": 5
+    },
+    "stress_costs": {
+      "round_trip_transaction_bps": 20,
+      "short_carry_bps_per_21_sessions": 10
+    },
+    "reversed_control": "same dates/features/absolute weights, all directions reversed, direction-dependent short carry recomputed"
+  },
+  "development_gate": {
+    "minimum_portfolio_observations": 95,
+    "minimum_calendar_years_with_observations": 9,
+    "net_mean_bps_primary_positive": true,
+    "net_mean_bps_stress_positive": true,
+    "original_beats_reversed_primary": true,
+    "minimum_positive_calendar_year_fraction": 0.6666666667,
+    "both_halves_positive_primary": true,
+    "minimum_assets_with_positive_total_contribution": 12,
+    "max_positive_contribution_share_single_asset": 0.2
+  },
+  "development_halves": {
+    "half1": [
+      "2009-01-02",
+      "2013-12-31"
+    ],
+    "half2": [
+      "2014-01-01",
+      "2017-12-29"
+    ]
+  },
+  "D3_gate": {
+    "minimum_portfolio_observations": 60,
+    "minimum_calendar_years_with_observations": 6,
+    "net_mean_bps_primary_positive": true,
+    "net_mean_bps_stress_nonnegative": true,
+    "original_beats_reversed_primary": true,
+    "minimum_positive_calendar_year_fraction": 0.6666666667,
+    "both_holdout_halves_positive_primary": true,
+    "minimum_assets_with_positive_total_contribution": 10,
+    "max_positive_contribution_share_single_asset": 0.25
+  },
+  "protocol": {
+    "development_first": true,
+    "if_development_passes_freeze_candidate_before_fetching_D3": true,
+    "if_development_fails_D3_remains_sealed": true,
+    "one_family_only": true,
+    "no_parameter_or_universe_changes_after_result": true,
+    "failed_v2_id_dead": true,
+    "independent_source_replication_required_after_D3_before_future_shadow": true,
+    "no_live_or_leverage_claim_from_historical_results": true
+  }
+}
