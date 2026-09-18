@@ -1,0 +1,108 @@
+{
+  "research_id": "cross_sectional_equities_v1",
+  "status": "FALSIFIED_D0_ALL_FAMILIES",
+  "freeze_commit": "326419f1ce9b8c0e9613821dcf68d2bba190d1ea",
+  "clarification_commit": "27abd56cddb6e0eed05f77f7d47aa953e1f71cc3",
+  "evaluated_at_utc": "2026-09-18T19:45:00Z",
+  "source": {
+    "provider": "Massive",
+    "bars": "adjusted one-minute US stock aggregates",
+    "D0_window": [
+      "2026-07-06",
+      "2026-07-31"
+    ],
+    "D3_holdout": [
+      "2026-08-03",
+      "2026-08-28"
+    ],
+    "D3_opened": false,
+    "reason_D3_not_opened": "Every frozen family failed at least one D0 gate."
+  },
+  "data_integrity": {
+    "complete_rth_390_of_390": [
+      "AAPL",
+      "MSFT",
+      "NVDA",
+      "AMZN",
+      "META",
+      "GOOGL",
+      "JPM"
+    ],
+    "XOM": {
+      "incomplete_sessions": 1,
+      "date": "2026-07-15",
+      "rth_bars": 388,
+      "missing_key_minutes": [
+        "09:30",
+        "09:31"
+      ],
+      "handling": "family session ineligible where required exact minute is absent; universe never shrunk"
+    },
+    "interpolation": false
+  },
+  "families": {
+    "EQ_H1_OPEN30_RELATIVE_MOMENTUM": {
+      "status": "FALSIFIED_D0_INSTABILITY",
+      "sessions": 19,
+      "mean_net_bps_primary4": 0.715887,
+      "mean_net_bps_stress8": -3.284113,
+      "reversed_mean_bps_primary4": -8.715887,
+      "positive_sessions": 9,
+      "half1_mean_net_bps_primary4": -17.299641,
+      "half2_mean_net_bps_primary4": 16.929863,
+      "positive_cumulative_names": 4,
+      "max_positive_name_share": 0.347062,
+      "failed_gates": [
+        "pooled_net_mean_bps_8cost_nonnegative",
+        "both_calendar_halves_positive_at_4cost",
+        "minimum_positive_sessions"
+      ]
+    },
+    "EQ_H2_OVERNIGHT_GAP_REVERSAL": {
+      "status": "FALSIFIED_D0_INSTABILITY_AND_CONCENTRATION",
+      "sessions": 19,
+      "mean_net_bps_primary4": 6.150864,
+      "mean_net_bps_stress8": 2.150864,
+      "reversed_mean_bps_primary4": -14.150864,
+      "positive_sessions": 11,
+      "half1_mean_net_bps_primary4": 23.786963,
+      "half2_mean_net_bps_primary4": -9.721625,
+      "positive_cumulative_names": 5,
+      "max_positive_name_share": 0.431243,
+      "failed_gates": [
+        "both_calendar_halves_positive_at_4cost",
+        "max_positive_pnl_share_single_name"
+      ]
+    },
+    "EQ_H3_LATE_DAY_RELATIVE_MOMENTUM": {
+      "status": "FALSIFIED_D0_NEGATIVE_EXPECTANCY",
+      "sessions": 20,
+      "mean_net_bps_primary4": -25.692552,
+      "mean_net_bps_stress8": -29.692552,
+      "reversed_mean_bps_primary4": 17.692552,
+      "positive_sessions": 4,
+      "half1_mean_net_bps_primary4": -19.797873,
+      "half2_mean_net_bps_primary4": -31.587231,
+      "positive_cumulative_names": 1,
+      "max_positive_name_share": 1,
+      "failed_gates": [
+        "pooled_net_mean_bps_4cost_positive",
+        "pooled_net_mean_bps_8cost_nonnegative",
+        "original_beats_reversed_at_4cost",
+        "both_calendar_halves_positive_at_4cost",
+        "minimum_positive_sessions",
+        "max_positive_pnl_share_single_name"
+      ]
+    }
+  },
+  "research_state": {
+    "D0": "FALSIFIED_ALL_FAMILIES",
+    "D3_holdout": "SEALED_NOT_INSPECTED",
+    "candidate_created": false,
+    "future_shadow_created": false,
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "leverage_supported": false,
+    "same_id_retuning_allowed": false
+  }
+}
