@@ -1,0 +1,127 @@
+{
+  "research_id": "sector_etf_cross_sectional_v1",
+  "status": "FALSIFIED_D0_ALL_FAMILIES",
+  "source": {
+    "D0_window": [
+      "2020-01-02",
+      "2023-12-29"
+    ],
+    "D3_fetched": false,
+    "fetch_window": [
+      "2019-09-01",
+      "2024-01-02"
+    ],
+    "provider": "Yahoo Finance chart API",
+    "single_source_all_symbols": true
+  },
+  "data_integrity": {
+    "common_sessions": 1090,
+    "first_common_session": "2019-09-03",
+    "last_common_session": "2023-12-29",
+    "per_symbol_rows": {
+      "XLB": 1090,
+      "XLC": 1090,
+      "XLE": 1090,
+      "XLF": 1090,
+      "XLI": 1090,
+      "XLK": 1090,
+      "XLP": 1090,
+      "XLRE": 1090,
+      "XLU": 1090,
+      "XLV": 1090,
+      "XLY": 1090
+    }
+  },
+  "families": {
+    "SECTOR_XS_H1_MOM63_HOLD21": {
+      "status": "FALSIFIED_D0",
+      "observations": 45,
+      "net_mean_bps_primary": -10.958105748648743,
+      "net_mean_bps_stress": -18.95810574864874,
+      "reversed_mean_bps_primary": -5.041894251351257,
+      "year_means_primary_bps": {
+        "2020": 12.793594259869886,
+        "2021": -42.58767545933107,
+        "2022": -35.63599354809409,
+        "2023": 24.945846282213875
+      },
+      "positive_year_fraction": 0.5,
+      "positive_sector_count": 4,
+      "max_positive_sector_share": 0.5549316494931085,
+      "gate_results": {
+        "max_positive_contribution_share_single_sector": false,
+        "minimum_calendar_years_with_observations": true,
+        "minimum_distinct_sectors_selected": true,
+        "minimum_portfolio_observations": true,
+        "minimum_positive_calendar_year_fraction": false,
+        "minimum_sectors_with_positive_total_contribution": false,
+        "net_mean_bps_primary_positive": false,
+        "net_mean_bps_stress_nonnegative": false,
+        "original_beats_reversed_primary": false
+      }
+    },
+    "SECTOR_XS_H2_MOM21_HOLD5": {
+      "status": "FALSIFIED_D0",
+      "observations": 167,
+      "net_mean_bps_primary": -9.90988068829121,
+      "net_mean_bps_stress": -17.909880688291214,
+      "reversed_mean_bps_primary": -6.090119311708789,
+      "year_means_primary_bps": {
+        "2020": 8.822742603995222,
+        "2021": -7.943401770655588,
+        "2022": -24.825228559145042,
+        "2023": -16.65538442985233
+      },
+      "positive_year_fraction": 0.25,
+      "positive_sector_count": 4,
+      "max_positive_sector_share": 0.3218946188453997,
+      "gate_results": {
+        "max_positive_contribution_share_single_sector": false,
+        "minimum_calendar_years_with_observations": true,
+        "minimum_distinct_sectors_selected": true,
+        "minimum_portfolio_observations": true,
+        "minimum_positive_calendar_year_fraction": false,
+        "minimum_sectors_with_positive_total_contribution": false,
+        "net_mean_bps_primary_positive": false,
+        "net_mean_bps_stress_nonnegative": false,
+        "original_beats_reversed_primary": false
+      }
+    },
+    "SECTOR_XS_H3_REV5_HOLD5": {
+      "status": "FALSIFIED_D0",
+      "observations": 167,
+      "net_mean_bps_primary": -6.461502634573177,
+      "net_mean_bps_stress": -14.461502634573177,
+      "reversed_mean_bps_primary": -9.53849736542682,
+      "year_means_primary_bps": {
+        "2020": -2.963067186928308,
+        "2021": -19.473065559347486,
+        "2022": -5.320868069864332,
+        "2023": 2.057690083444597
+      },
+      "positive_year_fraction": 0.25,
+      "positive_sector_count": 4,
+      "max_positive_sector_share": 0.27201036131481054,
+      "gate_results": {
+        "max_positive_contribution_share_single_sector": true,
+        "minimum_calendar_years_with_observations": true,
+        "minimum_distinct_sectors_selected": true,
+        "minimum_portfolio_observations": true,
+        "minimum_positive_calendar_year_fraction": false,
+        "minimum_sectors_with_positive_total_contribution": false,
+        "net_mean_bps_primary_positive": false,
+        "net_mean_bps_stress_nonnegative": false,
+        "original_beats_reversed_primary": true
+      }
+    }
+  },
+  "survivors": [],
+  "research_state": {
+    "D0": "FALSIFIED_ALL_FAMILIES",
+    "D3_holdout": "SEALED_NOT_FETCHED",
+    "candidate_created": false,
+    "leverage_supported": false,
+    "live_execution_supported": false,
+    "persistent_edge_established": false
+  }
+}
