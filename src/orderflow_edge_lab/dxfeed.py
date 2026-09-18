@@ -139,6 +139,14 @@ def probe_connection(endpoint, token, symbol, *, username=None, password=None):
         request, endpoint, max_bytes=QUOTE_RESPONSE_LIMIT_BYTES
     )
     if failure is not None:
+        if failure.get("error_type") == "InvalidJSON" and status is not None and 200 <= status < 300:
+            result.update(
+                http_status=status,
+                status="ok",
+                response_bytes_limit=QUOTE_RESPONSE_LIMIT_BYTES,
+                note="HTTP access alone does not verify account rights, real-time data, or historical access.",
+            )
+            return 0, result
         return 3 if failure.get("error_type") in {"HTTPError", "URLError", "TimeoutError"} else 4, {
             **result,
             **failure,
