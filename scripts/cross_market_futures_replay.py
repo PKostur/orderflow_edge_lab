@@ -32,9 +32,11 @@ def main() -> int:
     if not rows:
         raise SystemExit("input CSV has no rows")
 
+    max_quote_age_seconds = 1.0
     adapted = normalize_dxfeed_rows(
         rows,
         default_symbol=args.default_symbol,
+        max_quote_age_seconds=max_quote_age_seconds,
         reject_timestamp_regressions=True,
     )
     quality = quality_report(
@@ -67,7 +69,11 @@ def main() -> int:
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 2
 
-    built = build_dxfeed_level1_feature_rows(rows, default_symbol=args.default_symbol)
+    built = build_dxfeed_level1_feature_rows(
+        rows,
+        default_symbol=args.default_symbol,
+        max_quote_age_seconds=max_quote_age_seconds,
+    )
     replay = evaluate_feature_rows(built.rows, root=args.root)
     report = {
         **replay,
@@ -82,6 +88,7 @@ def main() -> int:
             "quote_events": quality.quote_events,
         },
         "level1_build": {
+            "max_quote_age_seconds": max_quote_age_seconds,
             "trade_rows": built.trade_rows,
             "quote_rows": built.quote_rows,
             "trades_with_size": built.trades_with_size,
