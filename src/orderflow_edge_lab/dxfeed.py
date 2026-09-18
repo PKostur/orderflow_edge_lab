@@ -13,6 +13,8 @@ DEFAULT_SYMBOL = "/NQ:XCME"
 MAX_HISTORY_WINDOW_SECONDS = 600
 QUOTE_RESPONSE_LIMIT_BYTES = 64_000
 HISTORY_RESPONSE_LIMIT_BYTES = 2_000_000
+DEPTH_RESPONSE_LIMIT_BYTES = 2_000_000
+FUTURES_DEPTH_SOURCE = "AGGREGATE"
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -118,6 +120,13 @@ def probe_connection(endpoint, token, symbol, *, username=None, password=None):
         "account_entitlement_verified": False,
         "historical_access_verified": False,
         "quote_received": False,
+        "quote_sizes_received": False,
+        "research_eligibility": {
+            "current_level1_bbo_prices": False,
+            "current_level1_bbo_sizes": False,
+            "CMF_H3_live_capture_component": False,
+            "historical_quote_stream_verified": False,
+        },
     }
     try:
         endpoint, symbol = _validated_endpoint_symbol(endpoint, symbol)
@@ -170,6 +179,8 @@ def probe_connection(endpoint, token, symbol, *, username=None, password=None):
         quote = quotes.get(symbol) if isinstance(quotes, dict) else None
         if isinstance(quote, dict) and quote.get("eventSymbol") == symbol:
             bid, ask = quote.get("bidPrice"), quote.get("askPrice")
+            bid_size = quote.get("bidSizeAsDouble", quote.get("bidSize"))
+            ask_size = quote.get("askSizeAsDouble", quote.get("askSize"))
             try:
                 result["quote_received"] = (
                     type(bid) in (int, float)
@@ -178,8 +189,22 @@ def probe_connection(endpoint, token, symbol, *, username=None, password=None):
                     and math.isfinite(ask)
                     and 0 < bid < ask
                 )
-            except OverflowError:
+                result["quote_sizes_received"] = (
+                    _finite_number(bid_size, nonnegative=True)
+                    and _finite_number(ask_size, nonnegative=True)
+                    and float(bid_size) + float(ask_size) > 0
+                )
+            except (OverflowError, TypeError, ValueError):
                 result["quote_received"] = False
+                result["quote_sizes_received"] = False
+    result["research_eligibility"] = {
+        "current_level1_bbo_prices": bool(result["quote_received"]),
+        "current_level1_bbo_sizes": bool(result["quote_sizes_received"]),
+        "CMF_H3_live_capture_component": bool(
+            result["quote_received"] and result["quote_sizes_received"]
+        ),
+        "historical_quote_stream_verified": False,
+    }
     return (0 if result["status"] == "ok" else 4), result
 
 
@@ -226,6 +251,135 @@ def _finite_number(value, *, positive: bool = False, nonnegative: bool = False) 
     if nonnegative and value < 0:
         return False
     return True
+
+
+def _order_events(payload, symbol: str) -> list[dict]:
+    if not isinstance(payload, dict):
+        return []
+    collection = payload.get("Order")
+    candidates: list[object] = []
+    nested_by_symbol = False
+    if isinstance(collection, dict) and symbol in collection:
+        nested_by_symbol = True
+        value = collection.get(symbol)
+        if isinstance(value, list):
+            candidates.extend(value)
+        elif isinstance(value, dict):
+            candidates.append(value)
+    elif isinstance(collection, list):
+        candidates.extend(collection)
+
+    events = []
+    for value in candidates:
+        if not isinstance(value, dict):
+            continue
+        event_symbol = value.get("eventSymbol")
+        if nested_by_symbol:
+            if event_symbol not in (None, symbol):
+                continue
+        elif event_symbol != symbol:
+            continue
+        events.append(value)
+    return events
+
+
+def probe_depth_snapshot(
+    endpoint,
+    token,
+    symbol,
+    *,
+    username=None,
+    password=None,
+):
+    """Probe current AGGREGATE futures Order depth without returning raw orders."""
+    result = {
+        "mode": "rest_depth_snapshot",
+        "status": "failed",
+        "account_entitlement_verified": False,
+        "historical_depth_verified": False,
+        "depth_source": FUTURES_DEPTH_SOURCE,
+        "current_depth_snapshot_verified": False,
+        "valid_order_events": 0,
+        "bid_price_levels": 0,
+        "ask_price_levels": 0,
+        "top10_each_side_verified": False,
+        "research_eligibility": {
+            "CMF_H2_current_depth_component": False,
+            "CMF_H2_historical_replay": False,
+        },
+    }
+    try:
+        endpoint, symbol = _validated_endpoint_symbol(endpoint, symbol)
+        authorization = _authorization(token, username=username, password=password)
+        request = urllib.request.Request(
+            endpoint
+            + "?"
+            + urllib.parse.urlencode(
+                [
+                    ("event", "Order"),
+                    ("symbol", symbol),
+                    ("source", FUTURES_DEPTH_SOURCE),
+                    ("timeout", "3"),
+                ]
+            ),
+            headers={
+                "Authorization": authorization,
+                "Accept": "application/json",
+                "User-Agent": "orderflow-edge-lab/1.0",
+            },
+        )
+    except (ValueError, TypeError, AttributeError):
+        return 3, {**result, "error_type": "InvalidConfiguration"}
+
+    status, payload, failure = _open_bounded_json(
+        request, endpoint, max_bytes=DEPTH_RESPONSE_LIMIT_BYTES
+    )
+    if failure is not None:
+        return 3 if failure.get("transport_error") else 4, {
+            **result,
+            **failure,
+            **({"http_status": status} if status is not None else {}),
+        }
+    result.update(
+        http_status=status,
+        response_bytes_limit=DEPTH_RESPONSE_LIMIT_BYTES,
+        status="ok" if status is not None and 200 <= status < 300 else "failed",
+    )
+    if _service_rejected(payload):
+        return 4, {**result, "status": "failed", "error_type": "ServiceRejected"}
+
+    bid_levels: set[float] = set()
+    ask_levels: set[float] = set()
+    valid_orders = 0
+    for event in _order_events(payload, symbol):
+        price = event.get("price")
+        size = event.get("sizeAsDouble", event.get("size"))
+        side = str(event.get("orderSide", "")).strip().upper()
+        if not _finite_number(price, positive=True) or not _finite_number(size, positive=True):
+            continue
+        valid_orders += 1
+        if side in {"BUY", "BID"}:
+            bid_levels.add(float(price))
+        elif side in {"SELL", "ASK"}:
+            ask_levels.add(float(price))
+
+    result["valid_order_events"] = valid_orders
+    result["bid_price_levels"] = len(bid_levels)
+    result["ask_price_levels"] = len(ask_levels)
+    result["current_depth_snapshot_verified"] = bool(bid_levels and ask_levels)
+    result["top10_each_side_verified"] = len(bid_levels) >= 10 and len(ask_levels) >= 10
+    result["research_eligibility"] = {
+        "CMF_H2_current_depth_component": bool(result["top10_each_side_verified"]),
+        "CMF_H2_historical_replay": False,
+    }
+    result["note"] = (
+        "Order/AGGREGATE verifies only a current depth snapshot. REST toTime is not a "
+        "historical-depth guarantee for indexed Order events; historical CMF-H2 replay "
+        "still requires a captured/exported Order stream."
+    )
+    if result["current_depth_snapshot_verified"]:
+        return 0, result
+    return 4, {**result, "error_type": "NoDepthSnapshot"}
 
 
 def probe_history(
@@ -320,9 +474,20 @@ def probe_history(
 
     result["time_and_sale_received"] = result["valid_price_events"] > 0
     result["historical_access_verified"] = result["time_and_sale_received"]
+    result["research_eligibility"] = {
+        "historical_time_and_sale_component": bool(result["historical_access_verified"]),
+        "CMF_H1_aggressor_component": bool(
+            result["events_with_size"] > 0 and result["events_with_aggressor_side"] > 0
+        ),
+        "historical_quote_stream_verified": False,
+        "CMF_H1_full_frozen_replay": False,
+        "CMF_H2_full_frozen_replay": False,
+        "CMF_H3_full_frozen_replay": False,
+    }
     result["note"] = (
-        "Historical access is verified only for this endpoint, symbol, and bounded TimeAndSale window. "
-        "This does not verify Level-2 depth, every contract, live execution, or DeepCharts external API rights."
+        "Historical TimeAndSale access is verified only for this endpoint, symbol, and bounded window. "
+        "The frozen futures replay still requires actual quote events for executable BBO state; "
+        "TimeAndSale alone does not verify historical Quote or Order streams."
     )
     if result["historical_access_verified"]:
         return 0, result
