@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "research_id": "cross_asset_trend_etf_v1",
+  "status": "FROZEN_BEFORE_PNL",
+  "frozen_at_intent_date": "2026-09-18",
+  "purpose": "Test ETF-proxy time-series momentum across major asset classes using a long development window, without altering any prior crypto or non-crypto protocol.",
+  "prior": {
+    "literature": [
+      "Moskowitz, Ooi, Pedersen (2012), Time Series Momentum, Journal of Financial Economics 104(2):228-250",
+      "Hurst, Ooi, Pedersen (2017), A Century of Evidence on Trend-Following Investing"
+    ],
+    "interpretation": "Published literature is a prior, not proof for this ETF implementation.",
+    "exact_replication": false,
+    "differences": "Uses liquid US-listed ETF proxies rather than futures/forwards and models ETF transaction/short carry explicitly."
+  },
+  "evidence_separation": {
+    "crypto_chain_unchanged": true,
+    "gold_chain_unchanged": true,
+    "prior_futures_etf_fx_equity_rates_chains_unchanged": true,
+    "results_cannot_rescue_failed_ids": true
+  },
+  "data": {
+    "D0_source": "Yahoo Finance chart API daily OHLC + adjusted close",
+    "universe": [
+      "SPY",
+      "EFA",
+      "EEM",
+      "IEF",
+      "TLT",
+      "GLD",
+      "DBC",
+      "VNQ"
+    ],
+    "universe_selected_before_pnl": true,
+    "rationale": {
+      "SPY": "US equities",
+      "EFA": "developed ex-US equities",
+      "EEM": "emerging equities",
+      "IEF": "intermediate US Treasuries",
+      "TLT": "long US Treasuries",
+      "GLD": "gold",
+      "DBC": "broad commodities",
+      "VNQ": "US real estate"
+    },
+    "adjustment": "For each date factor=adjusted_close/raw_close; adjusted_open=raw_open*factor; signal close=adjusted_close. Rows missing raw open/close or adjusted close are invalid.",
+    "calendar": "intersection of valid daily dates across all eight ETFs",
+    "no_symbol_substitution": true
+  },
+  "windows": {
+    "warmup_start": "2006-01-01",
+    "D0_development": [
+      "2008-01-02",
+      "2017-12-29"
+    ],
+    "D3_locked_temporal_holdout": [
+      "2018-01-02",
+      "2023-12-29"
+    ],
+    "D3b_reserved_historical_check_not_future_oos": [
+      "2024-01-02",
+      "2026-09-16"
+    ],
+    "prospective_shadow_earliest": "2026-09-21"
+  },
+  "execution": {
+    "signal_time": "completed common-session close",
+    "entry": "next common-session adjusted open",
+    "holding_common_sessions": 21,
+    "exit": "adjusted open exactly 21 common sessions after entry",
+    "next_signal": "exit session close; observations are sequential and non-overlapping",
+    "gross_exposure": 1,
+    "leverage": 1,
+    "volatility_window_returns": 63,
+    "volatility": "sample standard deviation of the latest 63 common-session adjusted-close log returns ending at signal close",
+    "weighting": "inverse-volatility absolute weights across nonzero-direction assets, normalized to sum(abs(weight))=1",
+    "primary_costs": {
+      "round_trip_transaction_bps_per_unit_weight": 10,
+      "short_carry_bps_per_21_session_hold_per_unit_short_weight": 5
+    },
+    "stress_costs": {
+      "round_trip_transaction_bps_per_unit_weight": 20,
+      "short_carry_bps_per_21_session_hold_per_unit_short_weight": 10
+    },
+    "collateral_interest": "not modeled",
+    "reversed_control": "same signal dates, features, absolute weights, entry/exit; multiply directions by -1 and recompute direction-dependent short carry"
+  },
+  "families": {
+    "CROSS_ASSET_TS_H1_RET252_HOLD21": {
+      "lookback_common_sessions": 252,
+      "feature": "log(adjusted_close[t] / adjusted_close[t-252])",
+      "signal": "sign(feature) for each asset"
+    },
+    "CROSS_ASSET_TS_H2_RET126_HOLD21": {
+      "lookback_common_sessions": 126,
+      "feature": "log(adjusted_close[t] / adjusted_close[t-126])",
+      "signal": "sign(feature) for each asset"
+    }
+  },
+  "D0_halves": {
+    "half1": [
+      "2008-01-02",
+      "2012-12-31"
+    ],
+    "half2": [
+      "2013-01-01",
+      "2017-12-29"
+    ]
+  },
+  "D0_gate": {
+    "minimum_portfolio_observations": 90,
+    "minimum_calendar_years_with_observations": 10,
+    "net_mean_bps_primary_positive": true,
+    "net_mean_bps_stress_positive": true,
+    "original_beats_reversed_primary": true,
+    "minimum_positive_calendar_year_fraction": 0.7,
+    "both_calendar_halves_positive_primary": true,
+    "minimum_assets_with_positive_total_contribution": 6,
+    "max_positive_contribution_share_single_asset": 0.3
+  },
+  "D3_gate": {
+    "minimum_portfolio_observations": 55,
+    "minimum_calendar_years_with_observations": 6,
+    "net_mean_bps_primary_positive": true,
+    "net_mean_bps_stress_nonnegative": true,
+    "original_beats_reversed_primary": true,
+    "minimum_positive_calendar_year_fraction": 0.6666666667,
+    "both_holdout_halves_positive_primary": true,
+    "minimum_assets_with_positive_total_contribution": 5,
+    "max_positive_contribution_share_single_asset": 0.35
+  },
+  "protocol": {
+    "D0_only_initially": true,
+    "D3_not_fetched_for_D0_failure": true,
+    "D0_survivor_gets_new_candidate_id_before_D3": true,
+    "independent_source_replication_required_after_D3_before_future_shadow": true,
+    "D3b_not_opened_before_prior_gates": true,
+    "no_parameter_retuning_after_D0": true,
+    "failed_family_id_dead": true,
+    "reversed_control_cannot_be_adopted_post_hoc": true,
+    "historical_holdouts_are_not_genuine_future_OOS": true,
+    "no_live_or_leverage_claim_from_historical_results": true
+  }
+}
