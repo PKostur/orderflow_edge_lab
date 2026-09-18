@@ -83,6 +83,7 @@ def _open_bounded_json(request, endpoint: str, *, max_bytes: int):
         return None, None, {
             "http_status": exc.code,
             "error_type": "HTTPError",
+            "transport_error": True,
             "redirect_to_public_demo": redirect_to_demo,
             "note": (
                 "Redirect refused; credentials were not forwarded. Obtain the provider endpoint for an account test."
@@ -93,6 +94,7 @@ def _open_bounded_json(request, endpoint: str, *, max_bytes: int):
     except Exception as exc:
         return None, None, {
             "error_type": type(exc).__name__,
+            "transport_error": True,
             "note": "Connection failed; credentials and server messages were not logged.",
         }
 
@@ -147,7 +149,7 @@ def probe_connection(endpoint, token, symbol, *, username=None, password=None):
                 note="HTTP access alone does not verify account rights, real-time data, or historical access.",
             )
             return 0, result
-        return 3 if failure.get("error_type") in {"HTTPError", "URLError", "TimeoutError"} else 4, {
+        return 3 if failure.get("transport_error") else 4, {
             **result,
             **failure,
             **({"http_status": status} if status is not None else {}),
@@ -279,7 +281,7 @@ def probe_history(
         request, endpoint, max_bytes=HISTORY_RESPONSE_LIMIT_BYTES
     )
     if failure is not None:
-        return 3 if failure.get("error_type") in {"HTTPError", "URLError", "TimeoutError"} else 4, {
+        return 3 if failure.get("transport_error") else 4, {
             **result,
             **failure,
             **({"http_status": status} if status is not None else {}),
