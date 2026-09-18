@@ -1,0 +1,112 @@
+{
+  "research_id": "fundamental_event_drift_v1",
+  "status": "FROZEN_BEFORE_EVENT_PNL",
+  "frozen_at_utc": "2026-09-18T19:55:00Z",
+  "purpose": "Test whether objectively reported quarterly fundamentals predict subsequent multi-session abnormal drift in a fixed liquid-stock universe.",
+  "universe": [
+    "AAPL",
+    "MSFT",
+    "NVDA",
+    "AMZN",
+    "META",
+    "GOOGL",
+    "JPM",
+    "XOM"
+  ],
+  "universe_note": "Inherited unchanged from the prior cross-sectional equity branch for liquidity/coverage only; no fundamental-event outcomes were inspected before this freeze.",
+  "data": {
+    "fundamentals_provider": "Massive XBRL / SEC",
+    "fundamentals_endpoint": "/vX/reference/financials",
+    "price_provider": "Massive stocks aggregates",
+    "price_endpoint": "/v2/aggs/ticker/{ticker}/range/1/day/{from}/{to}",
+    "benchmark": "SPY",
+    "adjusted_prices": true
+  },
+  "windows": {
+    "D0_discovery": [
+      "2023-01-01",
+      "2024-12-31"
+    ],
+    "D3_locked_historical_holdout": [
+      "2025-01-01",
+      "2025-12-31"
+    ],
+    "recent_context_reserved": [
+      "2026-01-01",
+      "2026-09-16"
+    ],
+    "future_shadow_earliest": "2026-09-21"
+  },
+  "event_timing": {
+    "information_timestamp": "acceptance_datetime from SEC/XBRL record",
+    "entry": "next US regular trading session open strictly after acceptance_datetime",
+    "exit": "close of the fifth regular trading session after entry, counting entry session as session 1",
+    "same_day_entry_forbidden": true
+  },
+  "hypotheses": {
+    "FUND_H1_YOY_REVENUE_EPS_CONFIRMATION": {
+      "current_fields": [
+        "revenues",
+        "diluted_earnings_per_share"
+      ],
+      "comparator": "same fiscal_period one fiscal year earlier",
+      "signal": "long if both current revenue and diluted EPS exceed prior-year values; short if both are lower; otherwise no signal"
+    },
+    "FUND_H2_YOY_OPERATING_MARGIN_CHANGE": {
+      "fields": [
+        "revenues",
+        "operating_income_loss"
+      ],
+      "comparator": "same fiscal_period one fiscal year earlier",
+      "margin": "operating_income_loss / revenues",
+      "signal": "long if current operating margin exceeds prior-year margin by at least 1.0 percentage point; short if lower by at least 1.0 percentage point; otherwise no signal"
+    }
+  },
+  "returns": {
+    "raw_bps": "direction * (stock_exit_close / stock_entry_open - 1) * 10000",
+    "abnormal_bps": "direction * ((stock_exit_close / stock_entry_open - 1) - (spy_exit_close / spy_entry_open - 1)) * 10000",
+    "primary_round_trip_friction_bps": 10,
+    "stress_round_trip_friction_bps": 20,
+    "gate_metric": "abnormal return after friction",
+    "raw_return_reported_separately": true,
+    "reversed_same_decision_control": true
+  },
+  "eligibility": {
+    "quarterly_timeframe_only": true,
+    "require_ticker_in_fixed_universe": true,
+    "require_current_and_prior_year_same_fiscal_period": true,
+    "require_nonzero_revenue_for_margin": true,
+    "require_entry_and_exit_bars_for_stock_and_SPY": true,
+    "duplicate_filings": "for same ticker/fiscal_year/fiscal_period keep earliest acceptance_datetime only",
+    "amendments": "later amended filings ignored for signal generation"
+  },
+  "D0_gate": {
+    "minimum_signals": 24,
+    "minimum_tickers_with_signals": 6,
+    "abnormal_net_mean_bps_10_positive": true,
+    "abnormal_net_mean_bps_20_nonnegative": true,
+    "original_beats_reversed_at_10": true,
+    "both_calendar_years_positive_at_10": true,
+    "minimum_positive_tickers": 5,
+    "max_positive_pnl_share_single_ticker": 0.35
+  },
+  "D3_gate": {
+    "minimum_signals": 12,
+    "minimum_tickers_with_signals": 6,
+    "abnormal_net_mean_bps_10_positive": true,
+    "abnormal_net_mean_bps_20_nonnegative": true,
+    "original_beats_reversed_at_10": true,
+    "minimum_positive_tickers": 5,
+    "max_positive_pnl_share_single_ticker": 0.35
+  },
+  "research_rules": {
+    "failed_family_id_dead": true,
+    "no_threshold_retuning_after_D0": true,
+    "no_ticker_substitution": true,
+    "reversed_control_cannot_be_adopted_post_hoc": true,
+    "D3_sealed_for_family_failing_D0": true,
+    "survivor_only_creates_new_candidate_for_future_shadow": true,
+    "no_live_or_leverage_claim_from_D0_or_D3": true,
+    "survivorship_bias_of_fixed_current_liquid_universe_is_explicit_limitation": true
+  }
+}
