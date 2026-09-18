@@ -1,0 +1,6242 @@
+{
+  "data_integrity": {
+    "common_sessions": 1090,
+    "first_common_session": "2019-09-03",
+    "last_common_session": "2023-12-29",
+    "per_symbol_rows": {
+      "XLB": 1090,
+      "XLC": 1090,
+      "XLE": 1090,
+      "XLF": 1090,
+      "XLI": 1090,
+      "XLK": 1090,
+      "XLP": 1090,
+      "XLRE": 1090,
+      "XLU": 1090,
+      "XLV": 1090,
+      "XLY": 1090
+    }
+  },
+  "families": {
+    "SECTOR_XS_H1_MOM63_HOLD21": {
+      "distinct_sectors_selected": 11,
+      "family": "SECTOR_XS_H1_MOM63_HOLD21",
+      "gate_results": {
+        "max_positive_contribution_share_single_sector": false,
+        "minimum_calendar_years_with_observations": true,
+        "minimum_distinct_sectors_selected": true,
+        "minimum_portfolio_observations": true,
+        "minimum_positive_calendar_year_fraction": false,
+        "minimum_sectors_with_positive_total_contribution": false,
+        "net_mean_bps_primary_positive": false,
+        "net_mean_bps_stress_nonnegative": false,
+        "original_beats_reversed_primary": false
+      },
+      "max_positive_sector_share": 0.5549316494931085,
+      "net_mean_bps_primary": -10.958105748648743,
+      "net_mean_bps_stress": -18.95810574864874,
+      "observations": 45,
+      "observations_detail": [
+        {
+          "entry": "2020-01-03",
+          "exit": "2020-02-04",
+          "net_primary_bps": -133.71943885989015,
+          "net_stress_bps": -141.71943885989015,
+          "positions": {
+            "XLF": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": 117.71943885989015,
+          "signal": "2020-01-02"
+        },
+        {
+          "entry": "2020-02-05",
+          "exit": "2020-03-06",
+          "net_primary_bps": 35.05845769673038,
+          "net_stress_bps": 27.058457696730375,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLRE": -1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": -51.05845769673038,
+          "signal": "2020-02-04"
+        },
+        {
+          "entry": "2020-03-09",
+          "exit": "2020-04-07",
+          "net_primary_bps": 22.21595894598383,
+          "net_stress_bps": 14.215958945983829,
+          "positions": {
+            "XLE": -1,
+            "XLF": -1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLRE": 1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": -38.21595894598383,
+          "signal": "2020-03-06"
+        },
+        {
+          "entry": "2020-04-08",
+          "exit": "2020-05-08",
+          "net_primary_bps": 5.832470226960248,
+          "net_stress_bps": -2.167529773039752,
+          "positions": {
+            "XLE": -1,
+            "XLF": -1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLP": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": -21.83247022696025,
+          "signal": "2020-04-07"
+        },
+        {
+          "entry": "2020-05-11",
+          "exit": "2020-06-10",
+          "net_primary_bps": -490.53034781013207,
+          "net_stress_bps": -498.53034781013207,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": 474.53034781013207,
+          "signal": "2020-05-08"
+        },
+        {
+          "entry": "2020-06-11",
+          "exit": "2020-07-13",
+          "net_primary_bps": 87.92013666941715,
+          "net_stress_bps": 79.92013666941715,
+          "positions": {
+            "XLE": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -103.92013666941715,
+          "signal": "2020-06-10"
+        },
+        {
+          "entry": "2020-07-14",
+          "exit": "2020-08-12",
+          "net_primary_bps": 113.01118190557183,
+          "net_stress_bps": 105.01118190557183,
+          "positions": {
+            "XLC": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -129.01118190557182,
+          "signal": "2020-07-13"
+        },
+        {
+          "entry": "2020-08-13",
+          "exit": "2020-09-14",
+          "net_primary_bps": 462.86252537378374,
+          "net_stress_bps": 454.86252537378374,
+          "positions": {
+            "XLB": 1,
+            "XLE": -1,
+            "XLI": 1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -478.86252537378374,
+          "signal": "2020-08-12"
+        },
+        {
+          "entry": "2020-09-15",
+          "exit": "2020-10-14",
+          "net_primary_bps": 188.70554118571474,
+          "net_stress_bps": 180.70554118571474,
+          "positions": {
+            "XLB": 1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -204.70554118571474,
+          "signal": "2020-09-14"
+        },
+        {
+          "entry": "2020-10-15",
+          "exit": "2020-11-13",
+          "net_primary_bps": -288.1988195616049,
+          "net_stress_bps": -296.1988195616049,
+          "positions": {
+            "XLE": -1,
+            "XLF": -1,
+            "XLI": 1,
+            "XLK": 1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 272.1988195616049,
+          "signal": "2020-10-14"
+        },
+        {
+          "entry": "2020-11-16",
+          "exit": "2020-12-16",
+          "net_primary_bps": -210.71872229799075,
+          "net_stress_bps": -218.71872229799075,
+          "positions": {
+            "XLB": 1,
+            "XLE": -1,
+            "XLI": 1,
+            "XLRE": -1,
+            "XLU": 1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": 194.71872229799075,
+          "signal": "2020-11-13"
+        },
+        {
+          "entry": "2020-12-17",
+          "exit": "2021-01-20",
+          "net_primary_bps": 361.0841876438946,
+          "net_stress_bps": 353.0841876438946,
+          "positions": {
+            "XLC": 1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": -377.0841876438946,
+          "signal": "2020-12-16"
+        },
+        {
+          "entry": "2021-01-21",
+          "exit": "2021-02-22",
+          "net_primary_bps": 165.37223167406526,
+          "net_stress_bps": 157.37223167406526,
+          "positions": {
+            "XLB": 1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": -181.37223167406526,
+          "signal": "2021-01-20"
+        },
+        {
+          "entry": "2021-02-23",
+          "exit": "2021-03-24",
+          "net_primary_bps": 6.300043873296531,
+          "net_stress_bps": -1.6999561267034693,
+          "positions": {
+            "XLC": 1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": -22.300043873296534,
+          "signal": "2021-02-22"
+        },
+        {
+          "entry": "2021-03-25",
+          "exit": "2021-04-26",
+          "net_primary_bps": -193.99744550804874,
+          "net_stress_bps": -201.99744550804874,
+          "positions": {
+            "XLC": 1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLP": -1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": 177.99744550804874,
+          "signal": "2021-03-24"
+        },
+        {
+          "entry": "2021-04-27",
+          "exit": "2021-05-26",
+          "net_primary_bps": 311.2195826495842,
+          "net_stress_bps": 303.2195826495842,
+          "positions": {
+            "XLE": 1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -327.2195826495842,
+          "signal": "2021-04-26"
+        },
+        {
+          "entry": "2021-05-27",
+          "exit": "2021-06-28",
+          "net_primary_bps": -408.0895432292676,
+          "net_stress_bps": -416.0895432292676,
+          "positions": {
+            "XLB": 1,
+            "XLE": -1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLK": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 392.0895432292676,
+          "signal": "2021-05-26"
+        },
+        {
+          "entry": "2021-06-29",
+          "exit": "2021-07-29",
+          "net_primary_bps": 43.285475154031474,
+          "net_stress_bps": 35.28547515403148,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": -59.285475154031474,
+          "signal": "2021-06-28"
+        },
+        {
+          "entry": "2021-07-30",
+          "exit": "2021-08-30",
+          "net_primary_bps": 24.356424542459937,
+          "net_stress_bps": 16.356424542459937,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLRE": 1,
+            "XLU": -1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": -40.35642454245994,
+          "signal": "2021-07-29"
+        },
+        {
+          "entry": "2021-08-31",
+          "exit": "2021-09-30",
+          "net_primary_bps": -236.09704756135326,
+          "net_stress_bps": -244.09704756135326,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": -1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": 220.09704756135326,
+          "signal": "2021-08-30"
+        },
+        {
+          "entry": "2021-10-01",
+          "exit": "2021-11-01",
+          "net_primary_bps": -68.26338946744534,
+          "net_stress_bps": -76.26338946744534,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLF": 1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": 52.263389467445336,
+          "signal": "2021-09-30"
+        },
+        {
+          "entry": "2021-11-02",
+          "exit": "2021-12-02",
+          "net_primary_bps": -7.792129041482073,
+          "net_stress_bps": -15.792129041482072,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLP": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -8.207870958517928,
+          "signal": "2021-11-01"
+        },
+        {
+          "entry": "2021-12-03",
+          "exit": "2022-01-04",
+          "net_primary_bps": -104.75863313848214,
+          "net_stress_bps": -112.75863313848214,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLK": 1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 88.75863313848214,
+          "signal": "2021-12-02"
+        },
+        {
+          "entry": "2022-01-05",
+          "exit": "2022-02-04",
+          "net_primary_bps": -171.9626925553539,
+          "net_stress_bps": -179.9626925553539,
+          "positions": {
+            "XLC": -1,
+            "XLF": -1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLRE": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 155.9626925553539,
+          "signal": "2022-01-04"
+        },
+        {
+          "entry": "2022-02-07",
+          "exit": "2022-03-09",
+          "net_primary_bps": 468.1222339642555,
+          "net_stress_bps": 460.1222339642555,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLI": -1,
+            "XLP": 1,
+            "XLU": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -484.1222339642555,
+          "signal": "2022-02-04"
+        },
+        {
+          "entry": "2022-03-10",
+          "exit": "2022-04-08",
+          "net_primary_bps": 69.11357130017251,
+          "net_stress_bps": 61.11357130017251,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLU": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -85.11357130017251,
+          "signal": "2022-03-09"
+        },
+        {
+          "entry": "2022-04-11",
+          "exit": "2022-05-11",
+          "net_primary_bps": 301.69302350294305,
+          "net_stress_bps": 293.69302350294305,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLK": -1,
+            "XLU": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -317.69302350294305,
+          "signal": "2022-04-08"
+        },
+        {
+          "entry": "2022-05-12",
+          "exit": "2022-06-13",
+          "net_primary_bps": 166.38750375901017,
+          "net_stress_bps": 158.38750375901017,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLU": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -182.38750375901017,
+          "signal": "2022-05-11"
+        },
+        {
+          "entry": "2022-06-14",
+          "exit": "2022-07-15",
+          "net_primary_bps": -279.217878980217,
+          "net_stress_bps": -287.217878980217,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": -1,
+            "XLP": 1,
+            "XLU": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 263.217878980217,
+          "signal": "2022-06-13"
+        },
+        {
+          "entry": "2022-07-18",
+          "exit": "2022-08-16",
+          "net_primary_bps": -268.0433270611909,
+          "net_stress_bps": -276.0433270611909,
+          "positions": {
+            "XLB": -1,
+            "XLC": -1,
+            "XLP": 1,
+            "XLU": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 252.0433270611909,
+          "signal": "2022-07-15"
+        },
+        {
+          "entry": "2022-08-17",
+          "exit": "2022-09-16",
+          "net_primary_bps": -238.13314376568397,
+          "net_stress_bps": -246.13314376568397,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLU": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 222.13314376568397,
+          "signal": "2022-08-16"
+        },
+        {
+          "entry": "2022-09-19",
+          "exit": "2022-10-18",
+          "net_primary_bps": -421.0259176953717,
+          "net_stress_bps": -429.0259176953717,
+          "positions": {
+            "XLB": -1,
+            "XLC": -1,
+            "XLE": -1,
+            "XLF": 1,
+            "XLU": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 405.0259176953717,
+          "signal": "2022-09-16"
+        },
+        {
+          "entry": "2022-10-19",
+          "exit": "2022-11-17",
+          "net_primary_bps": 177.13928756785313,
+          "net_stress_bps": 169.13928756785313,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLRE": -1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": -193.13928756785313,
+          "signal": "2022-10-18"
+        },
+        {
+          "entry": "2022-11-18",
+          "exit": "2022-12-20",
+          "net_primary_bps": 43.06066966924044,
+          "net_stress_bps": 35.06066966924044,
+          "positions": {
+            "XLB": 1,
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLRE": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -59.06066966924044,
+          "signal": "2022-11-17"
+        },
+        {
+          "entry": "2022-12-21",
+          "exit": "2023-01-24",
+          "net_primary_bps": -274.76525228278643,
+          "net_stress_bps": -282.76525228278643,
+          "positions": {
+            "XLB": 1,
+            "XLC": -1,
+            "XLE": 1,
+            "XLI": 1,
+            "XLRE": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 258.76525228278643,
+          "signal": "2022-12-20"
+        },
+        {
+          "entry": "2023-01-25",
+          "exit": "2023-02-24",
+          "net_primary_bps": 5.013950459438606,
+          "net_stress_bps": -2.9860495405613943,
+          "positions": {
+            "XLB": 1,
+            "XLE": -1,
+            "XLI": 1,
+            "XLRE": 1,
+            "XLV": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -21.013950459438608,
+          "signal": "2023-01-24"
+        },
+        {
+          "entry": "2023-02-27",
+          "exit": "2023-03-28",
+          "net_primary_bps": 282.18935533214125,
+          "net_stress_bps": 274.18935533214125,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -298.18935533214125,
+          "signal": "2023-02-24"
+        },
+        {
+          "entry": "2023-03-29",
+          "exit": "2023-04-28",
+          "net_primary_bps": 0.7405670342066722,
+          "net_stress_bps": -7.259432965793327,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -16.740567034206673,
+          "signal": "2023-03-28"
+        },
+        {
+          "entry": "2023-05-01",
+          "exit": "2023-05-31",
+          "net_primary_bps": 400.5414914595588,
+          "net_stress_bps": 392.5414914595588,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLP": 1,
+            "XLRE": -1
+          },
+          "reversed_primary_bps": -416.5414914595588,
+          "signal": "2023-04-28"
+        },
+        {
+          "entry": "2023-06-01",
+          "exit": "2023-07-03",
+          "net_primary_bps": 23.82444213179261,
+          "net_stress_bps": 15.824442131792608,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -39.82444213179261,
+          "signal": "2023-05-31"
+        },
+        {
+          "entry": "2023-07-05",
+          "exit": "2023-08-03",
+          "net_primary_bps": -117.15522561188367,
+          "net_stress_bps": -125.15522561188367,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 101.15522561188367,
+          "signal": "2023-07-03"
+        },
+        {
+          "entry": "2023-08-04",
+          "exit": "2023-09-05",
+          "net_primary_bps": 92.41241096305737,
+          "net_stress_bps": 84.41241096305737,
+          "positions": {
+            "XLC": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -108.41241096305737,
+          "signal": "2023-08-03"
+        },
+        {
+          "entry": "2023-09-06",
+          "exit": "2023-10-05",
+          "net_primary_bps": 47.47794603414571,
+          "net_stress_bps": 39.47794603414571,
+          "positions": {
+            "XLE": 1,
+            "XLI": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -63.47794603414571,
+          "signal": "2023-09-05"
+        },
+        {
+          "entry": "2023-10-06",
+          "exit": "2023-11-06",
+          "net_primary_bps": -242.37325819986015,
+          "net_stress_bps": -250.37325819986015,
+          "positions": {
+            "XLC": 1,
+            "XLE": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": 226.37325819986015,
+          "signal": "2023-10-05"
+        },
+        {
+          "entry": "2023-11-07",
+          "exit": "2023-12-07",
+          "net_primary_bps": -243.21321678045845,
+          "net_stress_bps": -251.21321678045845,
+          "positions": {
+            "XLC": 1,
+            "XLE": 1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": -1
+          },
+          "reversed_primary_bps": 227.21321678045845,
+          "signal": "2023-11-06"
+        }
+      ],
+      "positive_sector_count": 4,
+      "positive_year_fraction": 0.5,
+      "reversed_mean_bps_primary": -5.041894251351257,
+      "sector_contribution_bps": {
+        "XLB": -138.81414071015476,
+        "XLC": 977.2473807916842,
+        "XLE": -532.5319946187999,
+        "XLF": 8.37253101989559,
+        "XLI": -243.83734589197368,
+        "XLK": 757.7223992846733,
+        "XLP": -47.29813001711185,
+        "XLRE": -486.1505741652636,
+        "XLU": -760.0072997366889,
+        "XLV": 17.680657560034454,
+        "XLY": -45.498242205488616
+      },
+      "status": "FALSIFIED_D0",
+      "year_means_primary_bps": {
+        "2020": 12.793594259869886,
+        "2021": -42.58767545933107,
+        "2022": -35.63599354809409,
+        "2023": 24.945846282213875
+      }
+    },
+    "SECTOR_XS_H2_MOM21_HOLD5": {
+      "distinct_sectors_selected": 11,
+      "family": "SECTOR_XS_H2_MOM21_HOLD5",
+      "gate_results": {
+        "max_positive_contribution_share_single_sector": false,
+        "minimum_calendar_years_with_observations": true,
+        "minimum_distinct_sectors_selected": true,
+        "minimum_portfolio_observations": true,
+        "minimum_positive_calendar_year_fraction": false,
+        "minimum_sectors_with_positive_total_contribution": false,
+        "net_mean_bps_primary_positive": false,
+        "net_mean_bps_stress_nonnegative": false,
+        "original_beats_reversed_primary": false
+      },
+      "max_positive_sector_share": 0.3218946188453997,
+      "net_mean_bps_primary": -9.90988068829121,
+      "net_mean_bps_stress": -17.909880688291214,
+      "observations": 167,
+      "observations_detail": [
+        {
+          "entry": "2020-01-03",
+          "exit": "2020-01-10",
+          "net_primary_bps": 88.73457040295209,
+          "net_stress_bps": 80.73457040295209,
+          "positions": {
+            "XLC": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -104.73457040295209,
+          "signal": "2020-01-02"
+        },
+        {
+          "entry": "2020-01-13",
+          "exit": "2020-01-21",
+          "net_primary_bps": 40.06897389162124,
+          "net_stress_bps": 32.06897389162124,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -56.06897389162125,
+          "signal": "2020-01-10"
+        },
+        {
+          "entry": "2020-01-22",
+          "exit": "2020-01-29",
+          "net_primary_bps": 88.11596804366371,
+          "net_stress_bps": 80.1159680436637,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLRE": 1
+          },
+          "reversed_primary_bps": -104.11596804366371,
+          "signal": "2020-01-21"
+        },
+        {
+          "entry": "2020-01-30",
+          "exit": "2020-02-06",
+          "net_primary_bps": -120.71571227230585,
+          "net_stress_bps": -128.71571227230586,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLRE": 1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": 104.71571227230585,
+          "signal": "2020-01-29"
+        },
+        {
+          "entry": "2020-02-07",
+          "exit": "2020-02-14",
+          "net_primary_bps": 46.55399846150474,
+          "net_stress_bps": 38.55399846150474,
+          "positions": {
+            "XLE": -1,
+            "XLF": -1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLRE": 1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": -62.55399846150474,
+          "signal": "2020-02-06"
+        },
+        {
+          "entry": "2020-02-18",
+          "exit": "2020-02-25",
+          "net_primary_bps": 41.89009921734991,
+          "net_stress_bps": 33.89009921734991,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLRE": 1,
+            "XLU": 1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": -57.890099217349906,
+          "signal": "2020-02-14"
+        },
+        {
+          "entry": "2020-02-26",
+          "exit": "2020-03-04",
+          "net_primary_bps": 55.35467543294393,
+          "net_stress_bps": 47.35467543294393,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLI": -1,
+            "XLP": 1,
+            "XLRE": 1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": -71.35467543294392,
+          "signal": "2020-02-25"
+        },
+        {
+          "entry": "2020-03-05",
+          "exit": "2020-03-12",
+          "net_primary_bps": 541.5750573912959,
+          "net_stress_bps": 533.5750573912959,
+          "positions": {
+            "XLE": -1,
+            "XLF": -1,
+            "XLI": -1,
+            "XLP": 1,
+            "XLRE": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": -557.5750573912959,
+          "signal": "2020-03-04"
+        },
+        {
+          "entry": "2020-03-13",
+          "exit": "2020-03-20",
+          "net_primary_bps": 259.828177317751,
+          "net_stress_bps": 251.82817731775097,
+          "positions": {
+            "XLE": -1,
+            "XLF": -1,
+            "XLI": -1,
+            "XLP": 1,
+            "XLRE": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": -275.828177317751,
+          "signal": "2020-03-12"
+        },
+        {
+          "entry": "2020-03-23",
+          "exit": "2020-03-30",
+          "net_primary_bps": -252.77355494252856,
+          "net_stress_bps": -260.77355494252856,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLI": -1,
+            "XLP": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": 236.77355494252856,
+          "signal": "2020-03-20"
+        },
+        {
+          "entry": "2020-03-31",
+          "exit": "2020-04-07",
+          "net_primary_bps": -204.4198184263174,
+          "net_stress_bps": -212.4198184263174,
+          "positions": {
+            "XLE": -1,
+            "XLF": -1,
+            "XLI": -1,
+            "XLP": 1,
+            "XLU": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": 188.4198184263174,
+          "signal": "2020-03-30"
+        },
+        {
+          "entry": "2020-04-08",
+          "exit": "2020-04-16",
+          "net_primary_bps": 64.4270308234213,
+          "net_stress_bps": 56.4270308234213,
+          "positions": {
+            "XLC": 1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": -80.4270308234213,
+          "signal": "2020-04-07"
+        },
+        {
+          "entry": "2020-04-17",
+          "exit": "2020-04-24",
+          "net_primary_bps": 10.550254864788313,
+          "net_stress_bps": 2.5502548647883123,
+          "positions": {
+            "XLF": -1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLU": -1,
+            "XLV": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -26.550254864788315,
+          "signal": "2020-04-16"
+        },
+        {
+          "entry": "2020-04-27",
+          "exit": "2020-05-04",
+          "net_primary_bps": -2.611834246451457,
+          "net_stress_bps": -10.611834246451457,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": 1,
+            "XLF": -1,
+            "XLI": -1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": -13.388165753548543,
+          "signal": "2020-04-24"
+        },
+        {
+          "entry": "2020-05-05",
+          "exit": "2020-05-12",
+          "net_primary_bps": 36.11724771351581,
+          "net_stress_bps": 28.11724771351581,
+          "positions": {
+            "XLB": 1,
+            "XLE": 1,
+            "XLI": -1,
+            "XLP": -1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -52.11724771351581,
+          "signal": "2020-05-04"
+        },
+        {
+          "entry": "2020-05-13",
+          "exit": "2020-05-20",
+          "net_primary_bps": 35.40902770206824,
+          "net_stress_bps": 27.409027702068233,
+          "positions": {
+            "XLC": 1,
+            "XLE": 1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLRE": -1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": -51.40902770206824,
+          "signal": "2020-05-12"
+        },
+        {
+          "entry": "2020-05-21",
+          "exit": "2020-05-29",
+          "net_primary_bps": -310.74195276464576,
+          "net_stress_bps": -318.74195276464576,
+          "positions": {
+            "XLC": 1,
+            "XLE": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": 294.74195276464576,
+          "signal": "2020-05-20"
+        },
+        {
+          "entry": "2020-06-01",
+          "exit": "2020-06-08",
+          "net_primary_bps": -383.54984560891194,
+          "net_stress_bps": -391.54984560891194,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 367.54984560891194,
+          "signal": "2020-05-29"
+        },
+        {
+          "entry": "2020-06-09",
+          "exit": "2020-06-16",
+          "net_primary_bps": -196.21467708517503,
+          "net_stress_bps": -204.21467708517503,
+          "positions": {
+            "XLE": 1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLK": -1,
+            "XLP": -1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": 180.21467708517503,
+          "signal": "2020-06-08"
+        },
+        {
+          "entry": "2020-06-17",
+          "exit": "2020-06-24",
+          "net_primary_bps": -210.5074019383993,
+          "net_stress_bps": -218.5074019383993,
+          "positions": {
+            "XLC": -1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": 194.5074019383993,
+          "signal": "2020-06-16"
+        },
+        {
+          "entry": "2020-06-25",
+          "exit": "2020-07-02",
+          "net_primary_bps": -16.768347767935662,
+          "net_stress_bps": -24.768347767935662,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 0.7683477679356608,
+          "signal": "2020-06-24"
+        },
+        {
+          "entry": "2020-07-06",
+          "exit": "2020-07-13",
+          "net_primary_bps": 221.1367409155176,
+          "net_stress_bps": 213.1367409155176,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -237.1367409155176,
+          "signal": "2020-07-02"
+        },
+        {
+          "entry": "2020-07-14",
+          "exit": "2020-07-21",
+          "net_primary_bps": 93.98334137166087,
+          "net_stress_bps": 85.98334137166087,
+          "positions": {
+            "XLB": 1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -109.98334137166087,
+          "signal": "2020-07-13"
+        },
+        {
+          "entry": "2020-07-22",
+          "exit": "2020-07-29",
+          "net_primary_bps": -59.28485877007316,
+          "net_stress_bps": -67.28485877007316,
+          "positions": {
+            "XLB": 1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLRE": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 43.28485877007316,
+          "signal": "2020-07-21"
+        },
+        {
+          "entry": "2020-07-30",
+          "exit": "2020-08-06",
+          "net_primary_bps": -86.88132571202021,
+          "net_stress_bps": -94.88132571202021,
+          "positions": {
+            "XLB": 1,
+            "XLE": -1,
+            "XLI": -1,
+            "XLK": -1,
+            "XLV": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 70.88132571202023,
+          "signal": "2020-07-29"
+        },
+        {
+          "entry": "2020-08-07",
+          "exit": "2020-08-14",
+          "net_primary_bps": 34.48330557608278,
+          "net_stress_bps": 26.483305576082774,
+          "positions": {
+            "XLB": 1,
+            "XLE": -1,
+            "XLI": 1,
+            "XLK": 1,
+            "XLRE": -1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": -50.48330557608278,
+          "signal": "2020-08-06"
+        },
+        {
+          "entry": "2020-08-17",
+          "exit": "2020-08-24",
+          "net_primary_bps": 181.00040302344175,
+          "net_stress_bps": 173.00040302344175,
+          "positions": {
+            "XLE": -1,
+            "XLI": 1,
+            "XLK": 1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -197.00040302344175,
+          "signal": "2020-08-14"
+        },
+        {
+          "entry": "2020-08-25",
+          "exit": "2020-09-01",
+          "net_primary_bps": 160.84912557715126,
+          "net_stress_bps": 152.84912557715126,
+          "positions": {
+            "XLE": -1,
+            "XLI": 1,
+            "XLK": 1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -176.84912557715128,
+          "signal": "2020-08-24"
+        },
+        {
+          "entry": "2020-09-02",
+          "exit": "2020-09-10",
+          "net_primary_bps": -189.23628429744986,
+          "net_stress_bps": -197.23628429744986,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 173.23628429744986,
+          "signal": "2020-09-01"
+        },
+        {
+          "entry": "2020-09-11",
+          "exit": "2020-09-18",
+          "net_primary_bps": -62.998686353893895,
+          "net_stress_bps": -70.99868635389389,
+          "positions": {
+            "XLB": 1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 46.998686353893895,
+          "signal": "2020-09-10"
+        },
+        {
+          "entry": "2020-09-21",
+          "exit": "2020-09-28",
+          "net_primary_bps": -79.61801821314725,
+          "net_stress_bps": -87.61801821314725,
+          "positions": {
+            "XLB": 1,
+            "XLC": -1,
+            "XLE": -1,
+            "XLI": 1,
+            "XLK": -1,
+            "XLRE": 1
+          },
+          "reversed_primary_bps": 63.61801821314725,
+          "signal": "2020-09-18"
+        },
+        {
+          "entry": "2020-09-29",
+          "exit": "2020-10-06",
+          "net_primary_bps": 107.95549319533457,
+          "net_stress_bps": 99.95549319533457,
+          "positions": {
+            "XLB": 1,
+            "XLC": -1,
+            "XLE": -1,
+            "XLI": 1,
+            "XLK": -1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": -123.95549319533457,
+          "signal": "2020-09-28"
+        },
+        {
+          "entry": "2020-10-07",
+          "exit": "2020-10-14",
+          "net_primary_bps": -41.70260999861596,
+          "net_stress_bps": -49.70260999861595,
+          "positions": {
+            "XLC": -1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLRE": 1,
+            "XLU": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 25.70260999861596,
+          "signal": "2020-10-06"
+        },
+        {
+          "entry": "2020-10-15",
+          "exit": "2020-10-22",
+          "net_primary_bps": 39.882891725482175,
+          "net_stress_bps": 31.882891725482178,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLRE": -1,
+            "XLU": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -55.88289172548218,
+          "signal": "2020-10-14"
+        },
+        {
+          "entry": "2020-10-23",
+          "exit": "2020-10-30",
+          "net_primary_bps": -19.24074768135992,
+          "net_stress_bps": -27.24074768135992,
+          "positions": {
+            "XLE": -1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": 3.2407476813599203,
+          "signal": "2020-10-22"
+        },
+        {
+          "entry": "2020-11-02",
+          "exit": "2020-11-09",
+          "net_primary_bps": -36.83857612600386,
+          "net_stress_bps": -44.83857612600386,
+          "positions": {
+            "XLB": 1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLRE": -1,
+            "XLU": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 20.838576126003858,
+          "signal": "2020-10-30"
+        },
+        {
+          "entry": "2020-11-10",
+          "exit": "2020-11-17",
+          "net_primary_bps": 12.01005071339454,
+          "net_stress_bps": 4.010050713394544,
+          "positions": {
+            "XLC": 1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -28.010050713394538,
+          "signal": "2020-11-09"
+        },
+        {
+          "entry": "2020-11-18",
+          "exit": "2020-11-25",
+          "net_primary_bps": 211.93037060346353,
+          "net_stress_bps": 203.93037060346353,
+          "positions": {
+            "XLE": 1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLK": -1,
+            "XLU": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -227.9303706034635,
+          "signal": "2020-11-17"
+        },
+        {
+          "entry": "2020-11-27",
+          "exit": "2020-12-04",
+          "net_primary_bps": -10.644051560648322,
+          "net_stress_bps": -18.64405156064832,
+          "positions": {
+            "XLE": 1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLP": -1,
+            "XLU": -1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": -5.355948439351678,
+          "signal": "2020-11-25"
+        },
+        {
+          "entry": "2020-12-07",
+          "exit": "2020-12-14",
+          "net_primary_bps": 85.74071553013879,
+          "net_stress_bps": 77.74071553013879,
+          "positions": {
+            "XLE": 1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": -101.74071553013879,
+          "signal": "2020-12-04"
+        },
+        {
+          "entry": "2020-12-15",
+          "exit": "2020-12-22",
+          "net_primary_bps": -15.675166481998692,
+          "net_stress_bps": -23.67516648199869,
+          "positions": {
+            "XLC": 1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": -0.32483351800130816,
+          "signal": "2020-12-14"
+        },
+        {
+          "entry": "2020-12-23",
+          "exit": "2020-12-31",
+          "net_primary_bps": -1.4623067158034917,
+          "net_stress_bps": -9.462306715803491,
+          "positions": {
+            "XLE": 1,
+            "XLF": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": -14.537693284196507,
+          "signal": "2020-12-22"
+        },
+        {
+          "entry": "2021-01-04",
+          "exit": "2021-01-11",
+          "net_primary_bps": 223.6661894409361,
+          "net_stress_bps": 215.6661894409361,
+          "positions": {
+            "XLE": 1,
+            "XLF": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": -239.6661894409361,
+          "signal": "2020-12-31"
+        },
+        {
+          "entry": "2021-01-12",
+          "exit": "2021-01-20",
+          "net_primary_bps": -65.48210163494065,
+          "net_stress_bps": -73.48210163494065,
+          "positions": {
+            "XLB": 1,
+            "XLF": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 49.48210163494065,
+          "signal": "2021-01-11"
+        },
+        {
+          "entry": "2021-01-21",
+          "exit": "2021-01-28",
+          "net_primary_bps": -255.7698536271065,
+          "net_stress_bps": -263.7698536271065,
+          "positions": {
+            "XLE": 1,
+            "XLF": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 239.7698536271065,
+          "signal": "2021-01-20"
+        },
+        {
+          "entry": "2021-01-29",
+          "exit": "2021-02-05",
+          "net_primary_bps": 28.987157073287886,
+          "net_stress_bps": 20.987157073287882,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLI": -1,
+            "XLP": -1,
+            "XLV": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -44.98715707328788,
+          "signal": "2021-01-28"
+        },
+        {
+          "entry": "2021-02-08",
+          "exit": "2021-02-16",
+          "net_primary_bps": 53.850265381581295,
+          "net_stress_bps": 45.850265381581295,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": 1
+          },
+          "reversed_primary_bps": -69.85026538158131,
+          "signal": "2021-02-05"
+        },
+        {
+          "entry": "2021-02-17",
+          "exit": "2021-02-24",
+          "net_primary_bps": -57.985815761040925,
+          "net_stress_bps": -65.98581576104093,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": 41.985815761040925,
+          "signal": "2021-02-16"
+        },
+        {
+          "entry": "2021-02-25",
+          "exit": "2021-03-04",
+          "net_primary_bps": 75.58178657346708,
+          "net_stress_bps": 67.58178657346708,
+          "positions": {
+            "XLE": 1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -91.58178657346707,
+          "signal": "2021-02-24"
+        },
+        {
+          "entry": "2021-03-05",
+          "exit": "2021-03-12",
+          "net_primary_bps": -44.2779008003522,
+          "net_stress_bps": -52.2779008003522,
+          "positions": {
+            "XLE": 1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLK": -1,
+            "XLU": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 28.277900800352203,
+          "signal": "2021-03-04"
+        },
+        {
+          "entry": "2021-03-15",
+          "exit": "2021-03-22",
+          "net_primary_bps": -175.88592926497074,
+          "net_stress_bps": -183.88592926497074,
+          "positions": {
+            "XLE": 1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLK": -1,
+            "XLU": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 159.88592926497074,
+          "signal": "2021-03-12"
+        },
+        {
+          "entry": "2021-03-23",
+          "exit": "2021-03-30",
+          "net_primary_bps": 22.86452571928226,
+          "net_stress_bps": 14.86452571928226,
+          "positions": {
+            "XLC": 1,
+            "XLE": 1,
+            "XLI": 1,
+            "XLK": -1,
+            "XLU": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -38.86452571928226,
+          "signal": "2021-03-22"
+        },
+        {
+          "entry": "2021-03-31",
+          "exit": "2021-04-08",
+          "net_primary_bps": -130.13098777519767,
+          "net_stress_bps": -138.13098777519767,
+          "positions": {
+            "XLC": -1,
+            "XLE": -1,
+            "XLI": 1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": 114.13098777519765,
+          "signal": "2021-03-30"
+        },
+        {
+          "entry": "2021-04-09",
+          "exit": "2021-04-16",
+          "net_primary_bps": 24.34509812699461,
+          "net_stress_bps": 16.345098126994607,
+          "positions": {
+            "XLE": -1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLRE": 1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -40.34509812699461,
+          "signal": "2021-04-08"
+        },
+        {
+          "entry": "2021-04-19",
+          "exit": "2021-04-26",
+          "net_primary_bps": 7.080566581089914,
+          "net_stress_bps": -0.9194334189100856,
+          "positions": {
+            "XLC": -1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLU": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -23.080566581089915,
+          "signal": "2021-04-16"
+        },
+        {
+          "entry": "2021-04-27",
+          "exit": "2021-05-04",
+          "net_primary_bps": -230.91158070976314,
+          "net_stress_bps": -238.91158070976314,
+          "positions": {
+            "XLE": -1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 214.91158070976314,
+          "signal": "2021-04-26"
+        },
+        {
+          "entry": "2021-05-05",
+          "exit": "2021-05-12",
+          "net_primary_bps": 121.58125340508867,
+          "net_stress_bps": 113.58125340508867,
+          "positions": {
+            "XLB": 1,
+            "XLC": -1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLP": -1,
+            "XLRE": 1
+          },
+          "reversed_primary_bps": -137.5812534050887,
+          "signal": "2021-05-04"
+        },
+        {
+          "entry": "2021-05-13",
+          "exit": "2021-05-20",
+          "net_primary_bps": -2.3850347091030706,
+          "net_stress_bps": -10.38503470910307,
+          "positions": {
+            "XLB": 1,
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -13.614965290896928,
+          "signal": "2021-05-12"
+        },
+        {
+          "entry": "2021-05-21",
+          "exit": "2021-05-28",
+          "net_primary_bps": 7.642564431686548,
+          "net_stress_bps": -0.357435568313452,
+          "positions": {
+            "XLB": 1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLU": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -23.642564431686548,
+          "signal": "2021-05-20"
+        },
+        {
+          "entry": "2021-06-01",
+          "exit": "2021-06-08",
+          "net_primary_bps": 3.1889894826098555,
+          "net_stress_bps": -4.8110105173901445,
+          "positions": {
+            "XLB": 1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLU": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -19.188989482609855,
+          "signal": "2021-05-28"
+        },
+        {
+          "entry": "2021-06-09",
+          "exit": "2021-06-16",
+          "net_primary_bps": -70.05615924026038,
+          "net_stress_bps": -78.05615924026038,
+          "positions": {
+            "XLC": 1,
+            "XLE": 1,
+            "XLRE": 1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 54.05615924026039,
+          "signal": "2021-06-08"
+        },
+        {
+          "entry": "2021-06-17",
+          "exit": "2021-06-24",
+          "net_primary_bps": 145.38711096121318,
+          "net_stress_bps": 137.38711096121318,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLF": -1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLRE": 1
+          },
+          "reversed_primary_bps": -161.38711096121318,
+          "signal": "2021-06-16"
+        },
+        {
+          "entry": "2021-06-25",
+          "exit": "2021-07-02",
+          "net_primary_bps": -22.37817062348893,
+          "net_stress_bps": -30.37817062348893,
+          "positions": {
+            "XLB": -1,
+            "XLE": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 6.3781706234889315,
+          "signal": "2021-06-24"
+        },
+        {
+          "entry": "2021-07-06",
+          "exit": "2021-07-13",
+          "net_primary_bps": 3.7420151145764002,
+          "net_stress_bps": -4.2579848854236,
+          "positions": {
+            "XLB": -1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLU": -1,
+            "XLV": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -19.7420151145764,
+          "signal": "2021-07-02"
+        },
+        {
+          "entry": "2021-07-14",
+          "exit": "2021-07-21",
+          "net_primary_bps": 71.81004148669552,
+          "net_stress_bps": 63.810041486695525,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLU": -1,
+            "XLV": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -87.81004148669552,
+          "signal": "2021-07-13"
+        },
+        {
+          "entry": "2021-07-22",
+          "exit": "2021-07-29",
+          "net_primary_bps": -65.835037386856,
+          "net_stress_bps": -73.835037386856,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLU": -1,
+            "XLV": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 49.835037386855994,
+          "signal": "2021-07-21"
+        },
+        {
+          "entry": "2021-07-30",
+          "exit": "2021-08-06",
+          "net_primary_bps": 30.45153561516064,
+          "net_stress_bps": 22.45153561516064,
+          "positions": {
+            "XLE": -1,
+            "XLF": -1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLU": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": -46.45153561516065,
+          "signal": "2021-07-29"
+        },
+        {
+          "entry": "2021-08-09",
+          "exit": "2021-08-16",
+          "net_primary_bps": 33.51138383830503,
+          "net_stress_bps": 25.511383838305026,
+          "positions": {
+            "XLE": -1,
+            "XLF": 1,
+            "XLI": -1,
+            "XLU": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -49.51138383830503,
+          "signal": "2021-08-06"
+        },
+        {
+          "entry": "2021-08-17",
+          "exit": "2021-08-24",
+          "net_primary_bps": -41.88131571761729,
+          "net_stress_bps": -49.88131571761729,
+          "positions": {
+            "XLB": 1,
+            "XLE": -1,
+            "XLF": 1,
+            "XLRE": -1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 25.881315717617287,
+          "signal": "2021-08-16"
+        },
+        {
+          "entry": "2021-08-25",
+          "exit": "2021-09-01",
+          "net_primary_bps": -67.14606410409418,
+          "net_stress_bps": -75.14606410409418,
+          "positions": {
+            "XLC": -1,
+            "XLE": -1,
+            "XLF": 1,
+            "XLU": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 51.14606410409417,
+          "signal": "2021-08-24"
+        },
+        {
+          "entry": "2021-09-02",
+          "exit": "2021-09-10",
+          "net_primary_bps": -66.00292098997129,
+          "net_stress_bps": -74.00292098997129,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLI": -1,
+            "XLRE": 1,
+            "XLU": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 50.00292098997128,
+          "signal": "2021-09-01"
+        },
+        {
+          "entry": "2021-09-13",
+          "exit": "2021-09-20",
+          "net_primary_bps": -7.770676657501568,
+          "net_stress_bps": -15.770676657501568,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLRE": 1
+          },
+          "reversed_primary_bps": -8.229323342498432,
+          "signal": "2021-09-10"
+        },
+        {
+          "entry": "2021-09-21",
+          "exit": "2021-09-28",
+          "net_primary_bps": 199.13453029864323,
+          "net_stress_bps": 191.13453029864323,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": 1,
+            "XLI": -1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -215.13453029864323,
+          "signal": "2021-09-20"
+        },
+        {
+          "entry": "2021-09-29",
+          "exit": "2021-10-06",
+          "net_primary_bps": 10.346531112503804,
+          "net_stress_bps": 2.3465311125038038,
+          "positions": {
+            "XLB": -1,
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -26.3465311125038,
+          "signal": "2021-09-28"
+        },
+        {
+          "entry": "2021-10-07",
+          "exit": "2021-10-14",
+          "net_primary_bps": 93.9728690641201,
+          "net_stress_bps": 85.9728690641201,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLRE": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -109.9728690641201,
+          "signal": "2021-10-06"
+        },
+        {
+          "entry": "2021-10-15",
+          "exit": "2021-10-22",
+          "net_primary_bps": 13.534653357913603,
+          "net_stress_bps": 5.534653357913602,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -29.5346533579136,
+          "signal": "2021-10-14"
+        },
+        {
+          "entry": "2021-10-25",
+          "exit": "2021-11-01",
+          "net_primary_bps": -3.5472887224202285,
+          "net_stress_bps": -11.547288722420229,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLP": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -12.452711277579771,
+          "signal": "2021-10-22"
+        },
+        {
+          "entry": "2021-11-02",
+          "exit": "2021-11-09",
+          "net_primary_bps": 30.43591796241719,
+          "net_stress_bps": 22.43591796241719,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -46.435917962417186,
+          "signal": "2021-11-01"
+        },
+        {
+          "entry": "2021-11-10",
+          "exit": "2021-11-17",
+          "net_primary_bps": 53.48223551121915,
+          "net_stress_bps": 45.48223551121915,
+          "positions": {
+            "XLB": 1,
+            "XLC": -1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -69.48223551121914,
+          "signal": "2021-11-09"
+        },
+        {
+          "entry": "2021-11-18",
+          "exit": "2021-11-26",
+          "net_primary_bps": 44.61925323516696,
+          "net_stress_bps": 36.61925323516696,
+          "positions": {
+            "XLB": 1,
+            "XLC": -1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -60.61925323516696,
+          "signal": "2021-11-17"
+        },
+        {
+          "entry": "2021-11-29",
+          "exit": "2021-12-06",
+          "net_primary_bps": 7.096563062713305,
+          "net_stress_bps": -0.9034369372866943,
+          "positions": {
+            "XLB": 1,
+            "XLC": -1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -23.096563062713305,
+          "signal": "2021-11-26"
+        },
+        {
+          "entry": "2021-12-07",
+          "exit": "2021-12-14",
+          "net_primary_bps": 218.52319554090823,
+          "net_stress_bps": 210.52319554090823,
+          "positions": {
+            "XLC": -1,
+            "XLF": -1,
+            "XLP": 1,
+            "XLRE": 1,
+            "XLU": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -234.52319554090823,
+          "signal": "2021-12-06"
+        },
+        {
+          "entry": "2021-12-15",
+          "exit": "2021-12-22",
+          "net_primary_bps": -0.5440224236581734,
+          "net_stress_bps": -8.544022423658173,
+          "positions": {
+            "XLC": -1,
+            "XLE": -1,
+            "XLI": -1,
+            "XLP": 1,
+            "XLRE": 1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": -15.455977576341828,
+          "signal": "2021-12-14"
+        },
+        {
+          "entry": "2021-12-23",
+          "exit": "2021-12-31",
+          "net_primary_bps": 19.227671997405167,
+          "net_stress_bps": 11.227671997405167,
+          "positions": {
+            "XLF": -1,
+            "XLI": -1,
+            "XLP": 1,
+            "XLRE": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -35.22767199740517,
+          "signal": "2021-12-22"
+        },
+        {
+          "entry": "2022-01-03",
+          "exit": "2022-01-10",
+          "net_primary_bps": -346.02972915324136,
+          "net_stress_bps": -354.02972915324136,
+          "positions": {
+            "XLE": -1,
+            "XLF": -1,
+            "XLP": 1,
+            "XLRE": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 330.02972915324136,
+          "signal": "2021-12-31"
+        },
+        {
+          "entry": "2022-01-11",
+          "exit": "2022-01-19",
+          "net_primary_bps": 105.55323295362392,
+          "net_stress_bps": 97.55323295362392,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -121.55323295362392,
+          "signal": "2022-01-10"
+        },
+        {
+          "entry": "2022-01-20",
+          "exit": "2022-01-27",
+          "net_primary_bps": 153.02231608184414,
+          "net_stress_bps": 145.02231608184414,
+          "positions": {
+            "XLE": 1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLRE": -1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": -169.02231608184414,
+          "signal": "2022-01-19"
+        },
+        {
+          "entry": "2022-01-28",
+          "exit": "2022-02-04",
+          "net_primary_bps": -13.655533183949933,
+          "net_stress_bps": -21.65553318394993,
+          "positions": {
+            "XLE": 1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLRE": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -2.3444668160500632,
+          "signal": "2022-01-27"
+        },
+        {
+          "entry": "2022-02-07",
+          "exit": "2022-02-14",
+          "net_primary_bps": 80.47508623764377,
+          "net_stress_bps": 72.47508623764377,
+          "positions": {
+            "XLB": -1,
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLP": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -96.47508623764377,
+          "signal": "2022-02-04"
+        },
+        {
+          "entry": "2022-02-15",
+          "exit": "2022-02-23",
+          "net_primary_bps": 127.26544280429283,
+          "net_stress_bps": 119.26544280429283,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLP": 1,
+            "XLRE": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -143.26544280429283,
+          "signal": "2022-02-14"
+        },
+        {
+          "entry": "2022-02-24",
+          "exit": "2022-03-03",
+          "net_primary_bps": -250.20190288756694,
+          "net_stress_bps": -258.201902887567,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLP": 1,
+            "XLRE": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 234.20190288756694,
+          "signal": "2022-02-23"
+        },
+        {
+          "entry": "2022-03-04",
+          "exit": "2022-03-11",
+          "net_primary_bps": 181.9165280472655,
+          "net_stress_bps": 173.9165280472655,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLK": -1,
+            "XLU": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -197.9165280472655,
+          "signal": "2022-03-03"
+        },
+        {
+          "entry": "2022-03-14",
+          "exit": "2022-03-21",
+          "net_primary_bps": -372.9226450733095,
+          "net_stress_bps": -380.9226450733095,
+          "positions": {
+            "XLE": 1,
+            "XLF": -1,
+            "XLK": -1,
+            "XLRE": 1,
+            "XLU": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 356.9226450733095,
+          "signal": "2022-03-11"
+        },
+        {
+          "entry": "2022-03-22",
+          "exit": "2022-03-29",
+          "net_primary_bps": -71.16007802752894,
+          "net_stress_bps": -79.16007802752894,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": -1,
+            "XLP": -1,
+            "XLU": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": 55.16007802752895,
+          "signal": "2022-03-21"
+        },
+        {
+          "entry": "2022-03-30",
+          "exit": "2022-04-06",
+          "net_primary_bps": 103.75821496573627,
+          "net_stress_bps": 95.75821496573627,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": -1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": -119.75821496573627,
+          "signal": "2022-03-29"
+        },
+        {
+          "entry": "2022-04-07",
+          "exit": "2022-04-14",
+          "net_primary_bps": -34.67616540360518,
+          "net_stress_bps": -42.67616540360518,
+          "positions": {
+            "XLB": 1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLI": -1,
+            "XLRE": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 18.676165403605182,
+          "signal": "2022-04-06"
+        },
+        {
+          "entry": "2022-04-18",
+          "exit": "2022-04-25",
+          "net_primary_bps": -60.204574142408205,
+          "net_stress_bps": -68.2045741424082,
+          "positions": {
+            "XLE": 1,
+            "XLF": -1,
+            "XLI": -1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": 44.204574142408205,
+          "signal": "2022-04-14"
+        },
+        {
+          "entry": "2022-04-26",
+          "exit": "2022-05-03",
+          "net_primary_bps": -161.90563027304034,
+          "net_stress_bps": -169.90563027304034,
+          "positions": {
+            "XLC": -1,
+            "XLF": -1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLRE": 1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": 145.90563027304034,
+          "signal": "2022-04-25"
+        },
+        {
+          "entry": "2022-05-04",
+          "exit": "2022-05-11",
+          "net_primary_bps": 169.57603396562035,
+          "net_stress_bps": 161.57603396562035,
+          "positions": {
+            "XLB": 1,
+            "XLC": -1,
+            "XLE": 1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -185.57603396562035,
+          "signal": "2022-05-03"
+        },
+        {
+          "entry": "2022-05-12",
+          "exit": "2022-05-19",
+          "net_primary_bps": -78.1993045304966,
+          "net_stress_bps": -86.1993045304966,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLP": 1,
+            "XLRE": -1,
+            "XLU": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 62.19930453049661,
+          "signal": "2022-05-11"
+        },
+        {
+          "entry": "2022-05-20",
+          "exit": "2022-05-27",
+          "net_primary_bps": -58.312835035755505,
+          "net_stress_bps": -66.3128350357555,
+          "positions": {
+            "XLE": 1,
+            "XLF": -1,
+            "XLRE": -1,
+            "XLU": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 42.312835035755505,
+          "signal": "2022-05-19"
+        },
+        {
+          "entry": "2022-05-31",
+          "exit": "2022-06-07",
+          "net_primary_bps": 77.8234610135176,
+          "net_stress_bps": 69.8234610135176,
+          "positions": {
+            "XLB": 1,
+            "XLE": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLU": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -93.8234610135176,
+          "signal": "2022-05-27"
+        },
+        {
+          "entry": "2022-06-08",
+          "exit": "2022-06-15",
+          "net_primary_bps": -73.147049163759,
+          "net_stress_bps": -81.147049163759,
+          "positions": {
+            "XLB": 1,
+            "XLE": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLU": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 57.14704916375899,
+          "signal": "2022-06-07"
+        },
+        {
+          "entry": "2022-06-16",
+          "exit": "2022-06-24",
+          "net_primary_bps": -361.21185954862864,
+          "net_stress_bps": -369.21185954862864,
+          "positions": {
+            "XLE": 1,
+            "XLI": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": 345.21185954862864,
+          "signal": "2022-06-15"
+        },
+        {
+          "entry": "2022-06-27",
+          "exit": "2022-07-05",
+          "net_primary_bps": -250.60596159683973,
+          "net_stress_bps": -258.60596159683973,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 234.60596159683973,
+          "signal": "2022-06-24"
+        },
+        {
+          "entry": "2022-07-06",
+          "exit": "2022-07-13",
+          "net_primary_bps": -18.386177000787914,
+          "net_stress_bps": -26.38617700078792,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLP": 1,
+            "XLRE": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": 2.386177000787915,
+          "signal": "2022-07-05"
+        },
+        {
+          "entry": "2022-07-14",
+          "exit": "2022-07-21",
+          "net_primary_bps": -191.80981513483218,
+          "net_stress_bps": -199.80981513483218,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLI": -1,
+            "XLP": 1,
+            "XLRE": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": 175.80981513483218,
+          "signal": "2022-07-13"
+        },
+        {
+          "entry": "2022-07-22",
+          "exit": "2022-07-29",
+          "net_primary_bps": -123.1792982967546,
+          "net_stress_bps": -131.17929829675458,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 107.1792982967546,
+          "signal": "2022-07-21"
+        },
+        {
+          "entry": "2022-08-01",
+          "exit": "2022-08-08",
+          "net_primary_bps": 46.035086196499996,
+          "net_stress_bps": 38.035086196499996,
+          "positions": {
+            "XLC": -1,
+            "XLI": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -62.035086196499996,
+          "signal": "2022-07-29"
+        },
+        {
+          "entry": "2022-08-09",
+          "exit": "2022-08-16",
+          "net_primary_bps": 68.32306661401984,
+          "net_stress_bps": 60.32306661401983,
+          "positions": {
+            "XLC": -1,
+            "XLI": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -84.32306661401984,
+          "signal": "2022-08-08"
+        },
+        {
+          "entry": "2022-08-17",
+          "exit": "2022-08-24",
+          "net_primary_bps": -21.4600377343082,
+          "net_stress_bps": -29.4600377343082,
+          "positions": {
+            "XLC": -1,
+            "XLI": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 5.460037734308204,
+          "signal": "2022-08-16"
+        },
+        {
+          "entry": "2022-08-25",
+          "exit": "2022-09-01",
+          "net_primary_bps": -50.62609534769201,
+          "net_stress_bps": -58.62609534769201,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLRE": -1,
+            "XLU": 1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 34.62609534769201,
+          "signal": "2022-08-24"
+        },
+        {
+          "entry": "2022-09-02",
+          "exit": "2022-09-12",
+          "net_primary_bps": -1.147938313357012,
+          "net_stress_bps": -9.147938313357011,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLU": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -14.852061686642989,
+          "signal": "2022-09-01"
+        },
+        {
+          "entry": "2022-09-13",
+          "exit": "2022-09-20",
+          "net_primary_bps": 106.40124075945523,
+          "net_stress_bps": 98.40124075945523,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLK": -1,
+            "XLRE": -1,
+            "XLU": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -122.40124075945523,
+          "signal": "2022-09-12"
+        },
+        {
+          "entry": "2022-09-21",
+          "exit": "2022-09-28",
+          "net_primary_bps": 6.290650726748368,
+          "net_stress_bps": -1.7093492732516324,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLK": -1,
+            "XLRE": -1,
+            "XLU": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": -22.290650726748368,
+          "signal": "2022-09-20"
+        },
+        {
+          "entry": "2022-09-29",
+          "exit": "2022-10-06",
+          "net_primary_bps": -263.96690507776503,
+          "net_stress_bps": -271.96690507776503,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLP": 1,
+            "XLRE": -1,
+            "XLV": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 247.96690507776506,
+          "signal": "2022-09-28"
+        },
+        {
+          "entry": "2022-10-07",
+          "exit": "2022-10-14",
+          "net_primary_bps": 76.75319580158735,
+          "net_stress_bps": 68.75319580158735,
+          "positions": {
+            "XLE": 1,
+            "XLF": 1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -92.75319580158737,
+          "signal": "2022-10-06"
+        },
+        {
+          "entry": "2022-10-17",
+          "exit": "2022-10-24",
+          "net_primary_bps": 77.8174667608073,
+          "net_stress_bps": 69.8174667608073,
+          "positions": {
+            "XLE": 1,
+            "XLP": 1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -93.8174667608073,
+          "signal": "2022-10-14"
+        },
+        {
+          "entry": "2022-10-25",
+          "exit": "2022-11-01",
+          "net_primary_bps": -4.144841110192374,
+          "net_stress_bps": -12.144841110192374,
+          "positions": {
+            "XLE": 1,
+            "XLI": 1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -11.855158889807626,
+          "signal": "2022-10-24"
+        },
+        {
+          "entry": "2022-11-02",
+          "exit": "2022-11-09",
+          "net_primary_bps": 149.22410202071916,
+          "net_stress_bps": 141.22410202071916,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLRE": -1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": -165.22410202071916,
+          "signal": "2022-11-01"
+        },
+        {
+          "entry": "2022-11-10",
+          "exit": "2022-11-17",
+          "net_primary_bps": -84.5861774244055,
+          "net_stress_bps": -92.5861774244055,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLU": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 68.5861774244055,
+          "signal": "2022-11-09"
+        },
+        {
+          "entry": "2022-11-18",
+          "exit": "2022-11-28",
+          "net_primary_bps": 17.029974063155617,
+          "net_stress_bps": 9.029974063155617,
+          "positions": {
+            "XLB": 1,
+            "XLC": -1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLU": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -33.02997406315561,
+          "signal": "2022-11-17"
+        },
+        {
+          "entry": "2022-11-29",
+          "exit": "2022-12-06",
+          "net_primary_bps": 71.92923306283244,
+          "net_stress_bps": 63.92923306283243,
+          "positions": {
+            "XLB": 1,
+            "XLC": -1,
+            "XLE": -1,
+            "XLI": 1,
+            "XLU": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -87.92923306283244,
+          "signal": "2022-11-28"
+        },
+        {
+          "entry": "2022-12-07",
+          "exit": "2022-12-14",
+          "net_primary_bps": 39.16720183468285,
+          "net_stress_bps": 31.167201834682853,
+          "positions": {
+            "XLB": 1,
+            "XLC": 1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -55.16720183468285,
+          "signal": "2022-12-06"
+        },
+        {
+          "entry": "2022-12-15",
+          "exit": "2022-12-22",
+          "net_primary_bps": -53.650236422333045,
+          "net_stress_bps": -61.650236422333045,
+          "positions": {
+            "XLE": -1,
+            "XLF": -1,
+            "XLP": 1,
+            "XLU": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 37.650236422333045,
+          "signal": "2022-12-14"
+        },
+        {
+          "entry": "2022-12-23",
+          "exit": "2023-01-03",
+          "net_primary_bps": -77.03484410568281,
+          "net_stress_bps": -85.03484410568281,
+          "positions": {
+            "XLE": -1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLU": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 61.0348441056828,
+          "signal": "2022-12-22"
+        },
+        {
+          "entry": "2023-01-04",
+          "exit": "2023-01-11",
+          "net_primary_bps": -198.45815449682536,
+          "net_stress_bps": -206.45815449682536,
+          "positions": {
+            "XLE": -1,
+            "XLI": 1,
+            "XLK": -1,
+            "XLU": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 182.45815449682536,
+          "signal": "2023-01-03"
+        },
+        {
+          "entry": "2023-01-12",
+          "exit": "2023-01-20",
+          "net_primary_bps": 67.52463634270534,
+          "net_stress_bps": 59.52463634270534,
+          "positions": {
+            "XLC": 1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLP": -1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": -83.52463634270534,
+          "signal": "2023-01-11"
+        },
+        {
+          "entry": "2023-01-23",
+          "exit": "2023-01-30",
+          "net_primary_bps": 91.32254486645549,
+          "net_stress_bps": 83.32254486645549,
+          "positions": {
+            "XLC": 1,
+            "XLE": 1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLU": -1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": -107.32254486645549,
+          "signal": "2023-01-20"
+        },
+        {
+          "entry": "2023-01-31",
+          "exit": "2023-02-07",
+          "net_primary_bps": 238.97590737029597,
+          "net_stress_bps": 230.97590737029597,
+          "positions": {
+            "XLC": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -254.97590737029597,
+          "signal": "2023-01-30"
+        },
+        {
+          "entry": "2023-02-08",
+          "exit": "2023-02-15",
+          "net_primary_bps": -69.42207112133406,
+          "net_stress_bps": -77.42207112133406,
+          "positions": {
+            "XLC": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 53.422071121334056,
+          "signal": "2023-02-07"
+        },
+        {
+          "entry": "2023-02-16",
+          "exit": "2023-02-24",
+          "net_primary_bps": -168.43593214160674,
+          "net_stress_bps": -176.43593214160674,
+          "positions": {
+            "XLC": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 152.43593214160674,
+          "signal": "2023-02-15"
+        },
+        {
+          "entry": "2023-02-27",
+          "exit": "2023-03-06",
+          "net_primary_bps": 34.02878290744172,
+          "net_stress_bps": 26.028782907441723,
+          "positions": {
+            "XLE": -1,
+            "XLI": 1,
+            "XLK": 1,
+            "XLRE": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -50.02878290744172,
+          "signal": "2023-02-24"
+        },
+        {
+          "entry": "2023-03-07",
+          "exit": "2023-03-14",
+          "net_primary_bps": -38.00627526415759,
+          "net_stress_bps": -46.00627526415758,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLI": 1,
+            "XLP": 1,
+            "XLRE": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 22.006275264157583,
+          "signal": "2023-03-06"
+        },
+        {
+          "entry": "2023-03-15",
+          "exit": "2023-03-22",
+          "net_primary_bps": 43.436178382760296,
+          "net_stress_bps": 35.4361783827603,
+          "positions": {
+            "XLE": -1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLP": 1,
+            "XLRE": -1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": -59.436178382760296,
+          "signal": "2023-03-14"
+        },
+        {
+          "entry": "2023-03-23",
+          "exit": "2023-03-30",
+          "net_primary_bps": -95.60278743630796,
+          "net_stress_bps": -103.60278743630796,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLP": 1,
+            "XLRE": -1
+          },
+          "reversed_primary_bps": 79.60278743630796,
+          "signal": "2023-03-22"
+        },
+        {
+          "entry": "2023-03-31",
+          "exit": "2023-04-10",
+          "net_primary_bps": 22.12022394217421,
+          "net_stress_bps": 14.120223942174212,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": -38.12022394217421,
+          "signal": "2023-03-30"
+        },
+        {
+          "entry": "2023-04-11",
+          "exit": "2023-04-18",
+          "net_primary_bps": -74.95068004571759,
+          "net_stress_bps": -82.95068004571759,
+          "positions": {
+            "XLC": 1,
+            "XLF": -1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLRE": -1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": 58.95068004571758,
+          "signal": "2023-04-10"
+        },
+        {
+          "entry": "2023-04-19",
+          "exit": "2023-04-26",
+          "net_primary_bps": -89.01401456660699,
+          "net_stress_bps": -97.01401456660699,
+          "positions": {
+            "XLB": 1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLRE": -1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": 73.01401456660699,
+          "signal": "2023-04-18"
+        },
+        {
+          "entry": "2023-04-27",
+          "exit": "2023-05-04",
+          "net_primary_bps": -128.5269309232293,
+          "net_stress_bps": -136.5269309232293,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLI": -1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": 112.5269309232293,
+          "signal": "2023-04-26"
+        },
+        {
+          "entry": "2023-05-05",
+          "exit": "2023-05-12",
+          "net_primary_bps": 10.350601171607254,
+          "net_stress_bps": 2.3506011716072543,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLP": 1,
+            "XLU": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -26.350601171607252,
+          "signal": "2023-05-04"
+        },
+        {
+          "entry": "2023-05-15",
+          "exit": "2023-05-22",
+          "net_primary_bps": 65.93908626205018,
+          "net_stress_bps": 57.93908626205018,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLP": 1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": -81.93908626205018,
+          "signal": "2023-05-12"
+        },
+        {
+          "entry": "2023-05-23",
+          "exit": "2023-05-31",
+          "net_primary_bps": 262.9463188319502,
+          "net_stress_bps": 254.94631883195018,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -278.9463188319502,
+          "signal": "2023-05-22"
+        },
+        {
+          "entry": "2023-06-01",
+          "exit": "2023-06-08",
+          "net_primary_bps": -152.74236911113158,
+          "net_stress_bps": -160.74236911113158,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 136.74236911113158,
+          "signal": "2023-05-31"
+        },
+        {
+          "entry": "2023-06-09",
+          "exit": "2023-06-16",
+          "net_primary_bps": 137.12127278200543,
+          "net_stress_bps": 129.12127278200543,
+          "positions": {
+            "XLC": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -153.12127278200543,
+          "signal": "2023-06-08"
+        },
+        {
+          "entry": "2023-06-20",
+          "exit": "2023-06-27",
+          "net_primary_bps": -60.12894271189354,
+          "net_stress_bps": -68.12894271189354,
+          "positions": {
+            "XLC": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 44.12894271189354,
+          "signal": "2023-06-16"
+        },
+        {
+          "entry": "2023-06-28",
+          "exit": "2023-07-06",
+          "net_primary_bps": -42.94291443303673,
+          "net_stress_bps": -50.94291443303673,
+          "positions": {
+            "XLB": 1,
+            "XLE": -1,
+            "XLI": 1,
+            "XLP": -1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 26.94291443303673,
+          "signal": "2023-06-27"
+        },
+        {
+          "entry": "2023-07-07",
+          "exit": "2023-07-14",
+          "net_primary_bps": -6.661377948756893,
+          "net_stress_bps": -14.661377948756893,
+          "positions": {
+            "XLE": -1,
+            "XLI": 1,
+            "XLRE": 1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -9.338622051243107,
+          "signal": "2023-07-06"
+        },
+        {
+          "entry": "2023-07-17",
+          "exit": "2023-07-24",
+          "net_primary_bps": -247.90397411470892,
+          "net_stress_bps": -255.90397411470892,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLI": 1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 231.90397411470892,
+          "signal": "2023-07-14"
+        },
+        {
+          "entry": "2023-07-25",
+          "exit": "2023-08-01",
+          "net_primary_bps": -71.40059405004095,
+          "net_stress_bps": -79.40059405004095,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": 55.40059405004095,
+          "signal": "2023-07-24"
+        },
+        {
+          "entry": "2023-08-02",
+          "exit": "2023-08-09",
+          "net_primary_bps": 15.57691315522011,
+          "net_stress_bps": 7.576913155220109,
+          "positions": {
+            "XLC": 1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLRE": -1,
+            "XLV": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -31.57691315522011,
+          "signal": "2023-08-01"
+        },
+        {
+          "entry": "2023-08-10",
+          "exit": "2023-08-17",
+          "net_primary_bps": 40.30276990640591,
+          "net_stress_bps": 32.30276990640591,
+          "positions": {
+            "XLE": 1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": -56.30276990640592,
+          "signal": "2023-08-09"
+        },
+        {
+          "entry": "2023-08-18",
+          "exit": "2023-08-25",
+          "net_primary_bps": -121.64607848843245,
+          "net_stress_bps": -129.64607848843244,
+          "positions": {
+            "XLE": 1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLRE": -1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 105.64607848843245,
+          "signal": "2023-08-17"
+        },
+        {
+          "entry": "2023-08-28",
+          "exit": "2023-09-05",
+          "net_primary_bps": 36.25853727642684,
+          "net_stress_bps": 28.258537276426846,
+          "positions": {
+            "XLB": -1,
+            "XLE": 1,
+            "XLI": 1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": -52.25853727642684,
+          "signal": "2023-08-25"
+        },
+        {
+          "entry": "2023-09-06",
+          "exit": "2023-09-13",
+          "net_primary_bps": -104.11810624156429,
+          "net_stress_bps": -112.11810624156429,
+          "positions": {
+            "XLC": 1,
+            "XLE": 1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": 88.11810624156429,
+          "signal": "2023-09-05"
+        },
+        {
+          "entry": "2023-09-14",
+          "exit": "2023-09-21",
+          "net_primary_bps": -122.11566252076585,
+          "net_stress_bps": -130.11566252076585,
+          "positions": {
+            "XLE": 1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 106.11566252076585,
+          "signal": "2023-09-13"
+        },
+        {
+          "entry": "2023-09-22",
+          "exit": "2023-09-29",
+          "net_primary_bps": 16.78990369084629,
+          "net_stress_bps": 8.78990369084629,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLI": -1,
+            "XLRE": -1
+          },
+          "reversed_primary_bps": -32.789903690846295,
+          "signal": "2023-09-21"
+        },
+        {
+          "entry": "2023-10-02",
+          "exit": "2023-10-09",
+          "net_primary_bps": 22.92714875615613,
+          "net_stress_bps": 14.927148756156129,
+          "positions": {
+            "XLC": 1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLI": -1,
+            "XLRE": -1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": -38.927148756156136,
+          "signal": "2023-09-29"
+        },
+        {
+          "entry": "2023-10-10",
+          "exit": "2023-10-17",
+          "net_primary_bps": -82.20641618274604,
+          "net_stress_bps": -90.20641618274603,
+          "positions": {
+            "XLC": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": 66.20641618274604,
+          "signal": "2023-10-09"
+        },
+        {
+          "entry": "2023-10-18",
+          "exit": "2023-10-25",
+          "net_primary_bps": -11.494203467894394,
+          "net_stress_bps": -19.494203467894394,
+          "positions": {
+            "XLC": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": -4.505796532105606,
+          "signal": "2023-10-17"
+        },
+        {
+          "entry": "2023-10-26",
+          "exit": "2023-11-02",
+          "net_primary_bps": -68.66766765001212,
+          "net_stress_bps": -76.66766765001212,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLK": 1,
+            "XLP": 1,
+            "XLRE": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 52.66766765001211,
+          "signal": "2023-10-25"
+        },
+        {
+          "entry": "2023-11-03",
+          "exit": "2023-11-10",
+          "net_primary_bps": 19.73815844727634,
+          "net_stress_bps": 11.73815844727634,
+          "positions": {
+            "XLB": -1,
+            "XLK": 1,
+            "XLRE": 1,
+            "XLU": 1,
+            "XLV": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -35.73815844727634,
+          "signal": "2023-11-02"
+        },
+        {
+          "entry": "2023-11-13",
+          "exit": "2023-11-20",
+          "net_primary_bps": -28.846609143867482,
+          "net_stress_bps": -36.84660914386748,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLP": 1,
+            "XLU": 1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": 12.846609143867482,
+          "signal": "2023-11-10"
+        },
+        {
+          "entry": "2023-11-21",
+          "exit": "2023-11-29",
+          "net_primary_bps": 39.042123209280284,
+          "net_stress_bps": 31.042123209280287,
+          "positions": {
+            "XLE": -1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -55.042123209280284,
+          "signal": "2023-11-20"
+        },
+        {
+          "entry": "2023-11-30",
+          "exit": "2023-12-07",
+          "net_primary_bps": 57.338461438797516,
+          "net_stress_bps": 49.338461438797516,
+          "positions": {
+            "XLE": -1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -73.33846143879752,
+          "signal": "2023-11-29"
+        },
+        {
+          "entry": "2023-12-08",
+          "exit": "2023-12-15",
+          "net_primary_bps": 131.60891303910685,
+          "net_stress_bps": 123.60891303910687,
+          "positions": {
+            "XLE": -1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": -147.60891303910685,
+          "signal": "2023-12-07"
+        },
+        {
+          "entry": "2023-12-18",
+          "exit": "2023-12-26",
+          "net_primary_bps": -52.927481342271015,
+          "net_stress_bps": -60.92748134227102,
+          "positions": {
+            "XLC": -1,
+            "XLE": -1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLP": -1,
+            "XLRE": 1
+          },
+          "reversed_primary_bps": 36.927481342271015,
+          "signal": "2023-12-15"
+        }
+      ],
+      "positive_sector_count": 4,
+      "positive_year_fraction": 0.25,
+      "reversed_mean_bps_primary": -6.090119311708789,
+      "sector_contribution_bps": {
+        "XLB": -240.37638740663613,
+        "XLC": 359.7638417602299,
+        "XLE": -208.98008064078653,
+        "XLF": -239.51761495734092,
+        "XLI": 340.7740080161449,
+        "XLK": 308.1151211243503,
+        "XLP": -375.0747297133333,
+        "XLRE": -892.4038239066773,
+        "XLU": -727.2513368524908,
+        "XLV": -88.99088549843552,
+        "XLY": 108.99181313034359
+      },
+      "status": "FALSIFIED_D0",
+      "year_means_primary_bps": {
+        "2020": 8.822742603995222,
+        "2021": -7.943401770655588,
+        "2022": -24.825228559145042,
+        "2023": -16.65538442985233
+      }
+    },
+    "SECTOR_XS_H3_REV5_HOLD5": {
+      "distinct_sectors_selected": 11,
+      "family": "SECTOR_XS_H3_REV5_HOLD5",
+      "gate_results": {
+        "max_positive_contribution_share_single_sector": true,
+        "minimum_calendar_years_with_observations": true,
+        "minimum_distinct_sectors_selected": true,
+        "minimum_portfolio_observations": true,
+        "minimum_positive_calendar_year_fraction": false,
+        "minimum_sectors_with_positive_total_contribution": false,
+        "net_mean_bps_primary_positive": false,
+        "net_mean_bps_stress_nonnegative": false,
+        "original_beats_reversed_primary": true
+      },
+      "max_positive_sector_share": 0.27201036131481054,
+      "net_mean_bps_primary": -6.461502634573177,
+      "net_mean_bps_stress": -14.461502634573177,
+      "observations": 167,
+      "observations_detail": [
+        {
+          "entry": "2020-01-03",
+          "exit": "2020-01-10",
+          "net_primary_bps": -110.39358763482771,
+          "net_stress_bps": -118.39358763482771,
+          "positions": {
+            "XLB": 1,
+            "XLE": 1,
+            "XLI": -1,
+            "XLK": -1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 94.39358763482771,
+          "signal": "2020-01-02"
+        },
+        {
+          "entry": "2020-01-13",
+          "exit": "2020-01-21",
+          "net_primary_bps": -88.46269940779116,
+          "net_stress_bps": -96.46269940779116,
+          "positions": {
+            "XLB": 1,
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": 72.46269940779116,
+          "signal": "2020-01-10"
+        },
+        {
+          "entry": "2020-01-22",
+          "exit": "2020-01-29",
+          "net_primary_bps": -92.17841227826388,
+          "net_stress_bps": -100.17841227826388,
+          "positions": {
+            "XLE": 1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": 76.17841227826388,
+          "signal": "2020-01-21"
+        },
+        {
+          "entry": "2020-01-30",
+          "exit": "2020-02-06",
+          "net_primary_bps": 53.67244349543781,
+          "net_stress_bps": 45.67244349543781,
+          "positions": {
+            "XLC": 1,
+            "XLE": 1,
+            "XLI": -1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": -69.6724434954378,
+          "signal": "2020-01-29"
+        },
+        {
+          "entry": "2020-02-07",
+          "exit": "2020-02-14",
+          "net_primary_bps": 67.51615896946973,
+          "net_stress_bps": 59.51615896946973,
+          "positions": {
+            "XLB": -1,
+            "XLE": 1,
+            "XLRE": 1,
+            "XLU": 1,
+            "XLV": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -83.51615896946973,
+          "signal": "2020-02-06"
+        },
+        {
+          "entry": "2020-02-18",
+          "exit": "2020-02-25",
+          "net_primary_bps": -63.76779689815552,
+          "net_stress_bps": -71.76779689815551,
+          "positions": {
+            "XLB": 1,
+            "XLF": 1,
+            "XLP": 1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 47.76779689815552,
+          "signal": "2020-02-14"
+        },
+        {
+          "entry": "2020-02-26",
+          "exit": "2020-03-04",
+          "net_primary_bps": -29.23244329774509,
+          "net_stress_bps": -37.232443297745085,
+          "positions": {
+            "XLC": 1,
+            "XLE": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": 13.23244329774509,
+          "signal": "2020-02-25"
+        },
+        {
+          "entry": "2020-03-05",
+          "exit": "2020-03-12",
+          "net_primary_bps": -569.5708818018082,
+          "net_stress_bps": -577.5708818018082,
+          "positions": {
+            "XLE": 1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLP": -1,
+            "XLU": -1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": 553.5708818018082,
+          "signal": "2020-03-04"
+        },
+        {
+          "entry": "2020-03-13",
+          "exit": "2020-03-20",
+          "net_primary_bps": -387.8765850161606,
+          "net_stress_bps": -395.8765850161606,
+          "positions": {
+            "XLB": 1,
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLP": -1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": 371.8765850161606,
+          "signal": "2020-03-12"
+        },
+        {
+          "entry": "2020-03-23",
+          "exit": "2020-03-30",
+          "net_primary_bps": 219.0341215137927,
+          "net_stress_bps": 211.0341215137927,
+          "positions": {
+            "XLB": -1,
+            "XLE": 1,
+            "XLI": 1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": -235.0341215137927,
+          "signal": "2020-03-20"
+        },
+        {
+          "entry": "2020-03-31",
+          "exit": "2020-04-07",
+          "net_primary_bps": 108.76887125202539,
+          "net_stress_bps": 100.76887125202539,
+          "positions": {
+            "XLC": 1,
+            "XLI": -1,
+            "XLP": 1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -124.76887125202539,
+          "signal": "2020-03-30"
+        },
+        {
+          "entry": "2020-04-08",
+          "exit": "2020-04-16",
+          "net_primary_bps": 118.95237739819567,
+          "net_stress_bps": 110.95237739819567,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLI": 1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": -134.95237739819567,
+          "signal": "2020-04-07"
+        },
+        {
+          "entry": "2020-04-17",
+          "exit": "2020-04-24",
+          "net_primary_bps": 237.58967854013363,
+          "net_stress_bps": 229.58967854013363,
+          "positions": {
+            "XLE": 1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLP": -1,
+            "XLV": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -253.58967854013363,
+          "signal": "2020-04-16"
+        },
+        {
+          "entry": "2020-04-27",
+          "exit": "2020-05-04",
+          "net_primary_bps": -164.79010713349575,
+          "net_stress_bps": -172.79010713349575,
+          "positions": {
+            "XLC": -1,
+            "XLE": -1,
+            "XLP": 1,
+            "XLRE": 1,
+            "XLU": 1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": 148.79010713349575,
+          "signal": "2020-04-24"
+        },
+        {
+          "entry": "2020-05-05",
+          "exit": "2020-05-12",
+          "net_primary_bps": -110.97807805308092,
+          "net_stress_bps": -118.97807805308092,
+          "positions": {
+            "XLC": -1,
+            "XLE": -1,
+            "XLK": -1,
+            "XLRE": 1,
+            "XLU": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": 94.97807805308092,
+          "signal": "2020-05-04"
+        },
+        {
+          "entry": "2020-05-13",
+          "exit": "2020-05-20",
+          "net_primary_bps": -90.70591150139359,
+          "net_stress_bps": -98.70591150139359,
+          "positions": {
+            "XLC": -1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLRE": 1,
+            "XLU": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 74.7059115013936,
+          "signal": "2020-05-12"
+        },
+        {
+          "entry": "2020-05-21",
+          "exit": "2020-05-29",
+          "net_primary_bps": 54.645040659092835,
+          "net_stress_bps": 46.645040659092835,
+          "positions": {
+            "XLE": -1,
+            "XLI": -1,
+            "XLP": 1,
+            "XLU": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -70.64504065909283,
+          "signal": "2020-05-20"
+        },
+        {
+          "entry": "2020-06-01",
+          "exit": "2020-06-08",
+          "net_primary_bps": 34.50936270491966,
+          "net_stress_bps": 26.509362704919663,
+          "positions": {
+            "XLC": 1,
+            "XLE": 1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLRE": -1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": -50.50936270491966,
+          "signal": "2020-05-29"
+        },
+        {
+          "entry": "2020-06-09",
+          "exit": "2020-06-16",
+          "net_primary_bps": 153.12254665977377,
+          "net_stress_bps": 145.12254665977377,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLI": -1,
+            "XLP": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": -169.12254665977377,
+          "signal": "2020-06-08"
+        },
+        {
+          "entry": "2020-06-17",
+          "exit": "2020-06-24",
+          "net_primary_bps": -231.16006779794782,
+          "net_stress_bps": -239.16006779794782,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLK": -1,
+            "XLP": -1
+          },
+          "reversed_primary_bps": 215.16006779794782,
+          "signal": "2020-06-16"
+        },
+        {
+          "entry": "2020-06-25",
+          "exit": "2020-07-02",
+          "net_primary_bps": 84.18138140936601,
+          "net_stress_bps": 76.18138140936601,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLI": 1,
+            "XLK": -1,
+            "XLRE": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -100.18138140936601,
+          "signal": "2020-06-24"
+        },
+        {
+          "entry": "2020-07-06",
+          "exit": "2020-07-13",
+          "net_primary_bps": 50.8800699782858,
+          "net_stress_bps": 42.8800699782858,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLRE": -1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": -66.8800699782858,
+          "signal": "2020-07-02"
+        },
+        {
+          "entry": "2020-07-14",
+          "exit": "2020-07-21",
+          "net_primary_bps": 57.21950461263767,
+          "net_stress_bps": 49.21950461263767,
+          "positions": {
+            "XLE": 1,
+            "XLF": -1,
+            "XLI": 1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": -73.21950461263766,
+          "signal": "2020-07-13"
+        },
+        {
+          "entry": "2020-07-22",
+          "exit": "2020-07-29",
+          "net_primary_bps": 88.00497073129007,
+          "net_stress_bps": 80.00497073129007,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": -1,
+            "XLI": -1,
+            "XLP": 1,
+            "XLRE": 1
+          },
+          "reversed_primary_bps": -104.00497073129007,
+          "signal": "2020-07-21"
+        },
+        {
+          "entry": "2020-07-30",
+          "exit": "2020-08-06",
+          "net_primary_bps": 195.20250154045334,
+          "net_stress_bps": 187.20250154045334,
+          "positions": {
+            "XLC": 1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -211.20250154045334,
+          "signal": "2020-07-29"
+        },
+        {
+          "entry": "2020-08-07",
+          "exit": "2020-08-14",
+          "net_primary_bps": -9.994606632390221,
+          "net_stress_bps": -17.99460663239022,
+          "positions": {
+            "XLC": -1,
+            "XLK": -1,
+            "XLRE": 1,
+            "XLU": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -6.005393367609777,
+          "signal": "2020-08-06"
+        },
+        {
+          "entry": "2020-08-17",
+          "exit": "2020-08-24",
+          "net_primary_bps": 77.62081524036167,
+          "net_stress_bps": 69.62081524036167,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLI": -1,
+            "XLRE": 1,
+            "XLU": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -93.62081524036165,
+          "signal": "2020-08-14"
+        },
+        {
+          "entry": "2020-08-25",
+          "exit": "2020-09-01",
+          "net_primary_bps": -213.3595253321901,
+          "net_stress_bps": -221.35952533219015,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLK": -1,
+            "XLRE": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 197.3595253321901,
+          "signal": "2020-08-24"
+        },
+        {
+          "entry": "2020-09-02",
+          "exit": "2020-09-10",
+          "net_primary_bps": 125.73613661432934,
+          "net_stress_bps": 117.73613661432934,
+          "positions": {
+            "XLB": -1,
+            "XLC": -1,
+            "XLE": 1,
+            "XLK": -1,
+            "XLU": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": -141.73613661432935,
+          "signal": "2020-09-01"
+        },
+        {
+          "entry": "2020-09-11",
+          "exit": "2020-09-18",
+          "net_primary_bps": -78.93838096020026,
+          "net_stress_bps": -86.93838096020026,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": 1,
+            "XLK": 1,
+            "XLRE": -1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": 62.938380960200256,
+          "signal": "2020-09-10"
+        },
+        {
+          "entry": "2020-09-21",
+          "exit": "2020-09-28",
+          "net_primary_bps": 202.89551334047883,
+          "net_stress_bps": 194.89551334047883,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": -1,
+            "XLI": -1,
+            "XLP": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -218.89551334047883,
+          "signal": "2020-09-18"
+        },
+        {
+          "entry": "2020-09-29",
+          "exit": "2020-10-06",
+          "net_primary_bps": -6.449869072029703,
+          "net_stress_bps": -14.449869072029704,
+          "positions": {
+            "XLB": 1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLI": -1,
+            "XLK": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -9.550130927970297,
+          "signal": "2020-09-28"
+        },
+        {
+          "entry": "2020-10-07",
+          "exit": "2020-10-14",
+          "net_primary_bps": 136.84982436716587,
+          "net_stress_bps": 128.84982436716587,
+          "positions": {
+            "XLC": 1,
+            "XLE": 1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLRE": -1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": -152.84982436716587,
+          "signal": "2020-10-06"
+        },
+        {
+          "entry": "2020-10-15",
+          "exit": "2020-10-22",
+          "net_primary_bps": -18.017081634835687,
+          "net_stress_bps": -26.017081634835687,
+          "positions": {
+            "XLC": -1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": 2.017081634835686,
+          "signal": "2020-10-14"
+        },
+        {
+          "entry": "2020-10-23",
+          "exit": "2020-10-30",
+          "net_primary_bps": -43.92992254686586,
+          "net_stress_bps": -51.92992254686586,
+          "positions": {
+            "XLC": -1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLRE": 1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 27.929922546865857,
+          "signal": "2020-10-22"
+        },
+        {
+          "entry": "2020-11-02",
+          "exit": "2020-11-09",
+          "net_primary_bps": 149.1124443904611,
+          "net_stress_bps": 141.1124443904611,
+          "positions": {
+            "XLB": -1,
+            "XLI": 1,
+            "XLK": 1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -165.1124443904611,
+          "signal": "2020-10-30"
+        },
+        {
+          "entry": "2020-11-10",
+          "exit": "2020-11-17",
+          "net_primary_bps": -24.366964592928383,
+          "net_stress_bps": -32.36696459292838,
+          "positions": {
+            "XLE": -1,
+            "XLF": -1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLRE": 1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": 8.366964592928385,
+          "signal": "2020-11-09"
+        },
+        {
+          "entry": "2020-11-18",
+          "exit": "2020-11-25",
+          "net_primary_bps": -164.24811884545343,
+          "net_stress_bps": -172.24811884545343,
+          "positions": {
+            "XLB": 1,
+            "XLE": -1,
+            "XLK": -1,
+            "XLRE": -1,
+            "XLU": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": 148.24811884545343,
+          "signal": "2020-11-17"
+        },
+        {
+          "entry": "2020-11-27",
+          "exit": "2020-12-04",
+          "net_primary_bps": 17.33558465420582,
+          "net_stress_bps": 9.335584654205821,
+          "positions": {
+            "XLE": -1,
+            "XLF": -1,
+            "XLP": 1,
+            "XLRE": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -33.335584654205825,
+          "signal": "2020-11-25"
+        },
+        {
+          "entry": "2020-12-07",
+          "exit": "2020-12-14",
+          "net_primary_bps": -48.74443749967497,
+          "net_stress_bps": -56.74443749967497,
+          "positions": {
+            "XLB": 1,
+            "XLE": -1,
+            "XLK": -1,
+            "XLU": 1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 32.74443749967498,
+          "signal": "2020-12-04"
+        },
+        {
+          "entry": "2020-12-15",
+          "exit": "2020-12-22",
+          "net_primary_bps": 108.16190411886255,
+          "net_stress_bps": 100.16190411886255,
+          "positions": {
+            "XLB": 1,
+            "XLE": -1,
+            "XLF": 1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -124.16190411886255,
+          "signal": "2020-12-14"
+        },
+        {
+          "entry": "2020-12-23",
+          "exit": "2020-12-31",
+          "net_primary_bps": -13.286293768139345,
+          "net_stress_bps": -21.286293768139345,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": 1,
+            "XLF": -1,
+            "XLK": -1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": -2.713706231860654,
+          "signal": "2020-12-22"
+        },
+        {
+          "entry": "2021-01-04",
+          "exit": "2021-01-11",
+          "net_primary_bps": 92.02863047672173,
+          "net_stress_bps": 84.02863047672173,
+          "positions": {
+            "XLE": 1,
+            "XLI": 1,
+            "XLK": 1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": -108.02863047672173,
+          "signal": "2020-12-31"
+        },
+        {
+          "entry": "2021-01-12",
+          "exit": "2021-01-20",
+          "net_primary_bps": 24.043198487324844,
+          "net_stress_bps": 16.04319848732484,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLP": 1,
+            "XLRE": 1
+          },
+          "reversed_primary_bps": -40.043198487324844,
+          "signal": "2021-01-11"
+        },
+        {
+          "entry": "2021-01-21",
+          "exit": "2021-01-28",
+          "net_primary_bps": -167.41457971889025,
+          "net_stress_bps": -175.41457971889028,
+          "positions": {
+            "XLB": 1,
+            "XLC": -1,
+            "XLF": 1,
+            "XLP": 1,
+            "XLRE": -1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": 151.41457971889025,
+          "signal": "2021-01-20"
+        },
+        {
+          "entry": "2021-01-29",
+          "exit": "2021-02-05",
+          "net_primary_bps": 135.4075122646761,
+          "net_stress_bps": 127.40751226467607,
+          "positions": {
+            "XLB": 1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": -151.4075122646761,
+          "signal": "2021-01-28"
+        },
+        {
+          "entry": "2021-02-08",
+          "exit": "2021-02-16",
+          "net_primary_bps": -195.535501757398,
+          "net_stress_bps": -203.535501757398,
+          "positions": {
+            "XLC": -1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLP": 1,
+            "XLU": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": 179.535501757398,
+          "signal": "2021-02-05"
+        },
+        {
+          "entry": "2021-02-17",
+          "exit": "2021-02-24",
+          "net_primary_bps": -220.43141855351476,
+          "net_stress_bps": -228.43141855351476,
+          "positions": {
+            "XLC": -1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLP": 1,
+            "XLU": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 204.43141855351476,
+          "signal": "2021-02-16"
+        },
+        {
+          "entry": "2021-02-25",
+          "exit": "2021-03-04",
+          "net_primary_bps": -110.97672638937847,
+          "net_stress_bps": -118.97672638937847,
+          "positions": {
+            "XLE": -1,
+            "XLF": -1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLU": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 94.97672638937847,
+          "signal": "2021-02-24"
+        },
+        {
+          "entry": "2021-03-05",
+          "exit": "2021-03-12",
+          "net_primary_bps": 41.539045310108555,
+          "net_stress_bps": 33.539045310108555,
+          "positions": {
+            "XLC": -1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLRE": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -57.539045310108555,
+          "signal": "2021-03-04"
+        },
+        {
+          "entry": "2021-03-15",
+          "exit": "2021-03-22",
+          "net_primary_bps": -79.55067015635638,
+          "net_stress_bps": -87.55067015635638,
+          "positions": {
+            "XLC": 1,
+            "XLE": 1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 63.550670156356375,
+          "signal": "2021-03-12"
+        },
+        {
+          "entry": "2021-03-23",
+          "exit": "2021-03-30",
+          "net_primary_bps": 133.31533260563305,
+          "net_stress_bps": 125.31533260563305,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLP": -1,
+            "XLU": 1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": -149.31533260563305,
+          "signal": "2021-03-22"
+        },
+        {
+          "entry": "2021-03-31",
+          "exit": "2021-04-08",
+          "net_primary_bps": 225.89245452403247,
+          "net_stress_bps": 217.89245452403247,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLF": -1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -241.89245452403247,
+          "signal": "2021-03-30"
+        },
+        {
+          "entry": "2021-04-09",
+          "exit": "2021-04-16",
+          "net_primary_bps": 41.58227246671238,
+          "net_stress_bps": 33.58227246671238,
+          "positions": {
+            "XLB": 1,
+            "XLC": -1,
+            "XLE": 1,
+            "XLK": -1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -57.58227246671239,
+          "signal": "2021-04-08"
+        },
+        {
+          "entry": "2021-04-19",
+          "exit": "2021-04-26",
+          "net_primary_bps": -60.75107809854203,
+          "net_stress_bps": -68.75107809854204,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": 1,
+            "XLI": 1,
+            "XLU": -1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": 44.75107809854203,
+          "signal": "2021-04-16"
+        },
+        {
+          "entry": "2021-04-27",
+          "exit": "2021-05-04",
+          "net_primary_bps": 125.83389918926366,
+          "net_stress_bps": 117.83389918926366,
+          "positions": {
+            "XLB": -1,
+            "XLE": 1,
+            "XLP": 1,
+            "XLRE": -1,
+            "XLU": 1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": -141.83389918926366,
+          "signal": "2021-04-26"
+        },
+        {
+          "entry": "2021-05-05",
+          "exit": "2021-05-12",
+          "net_primary_bps": -241.86789228859894,
+          "net_stress_bps": -249.86789228859894,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLRE": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 225.86789228859894,
+          "signal": "2021-05-04"
+        },
+        {
+          "entry": "2021-05-13",
+          "exit": "2021-05-20",
+          "net_primary_bps": -0.3565570926560954,
+          "net_stress_bps": -8.356557092656095,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -15.643442907343905,
+          "signal": "2021-05-12"
+        },
+        {
+          "entry": "2021-05-21",
+          "exit": "2021-05-28",
+          "net_primary_bps": -3.869711333659204,
+          "net_stress_bps": -11.869711333659204,
+          "positions": {
+            "XLB": 1,
+            "XLC": -1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLK": -1,
+            "XLRE": -1
+          },
+          "reversed_primary_bps": -12.130288666340796,
+          "signal": "2021-05-20"
+        },
+        {
+          "entry": "2021-06-01",
+          "exit": "2021-06-08",
+          "net_primary_bps": -63.989599275413546,
+          "net_stress_bps": -71.98959927541354,
+          "positions": {
+            "XLC": -1,
+            "XLP": 1,
+            "XLRE": -1,
+            "XLU": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 47.989599275413546,
+          "signal": "2021-05-28"
+        },
+        {
+          "entry": "2021-06-09",
+          "exit": "2021-06-16",
+          "net_primary_bps": -129.1113857190251,
+          "net_stress_bps": -137.1113857190251,
+          "positions": {
+            "XLB": 1,
+            "XLE": -1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLK": -1,
+            "XLRE": -1
+          },
+          "reversed_primary_bps": 113.11138571902511,
+          "signal": "2021-06-08"
+        },
+        {
+          "entry": "2021-06-17",
+          "exit": "2021-06-24",
+          "net_primary_bps": -209.28384704897178,
+          "net_stress_bps": -217.28384704897178,
+          "positions": {
+            "XLB": 1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLK": -1,
+            "XLV": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 193.28384704897178,
+          "signal": "2021-06-16"
+        },
+        {
+          "entry": "2021-06-25",
+          "exit": "2021-07-02",
+          "net_primary_bps": 7.820045587053669,
+          "net_stress_bps": -0.17995441294633116,
+          "positions": {
+            "XLE": -1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLRE": 1,
+            "XLU": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -23.82004558705367,
+          "signal": "2021-06-24"
+        },
+        {
+          "entry": "2021-07-06",
+          "exit": "2021-07-13",
+          "net_primary_bps": -65.18907758286336,
+          "net_stress_bps": -73.18907758286336,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLU": 1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": 49.18907758286337,
+          "signal": "2021-07-02"
+        },
+        {
+          "entry": "2021-07-14",
+          "exit": "2021-07-21",
+          "net_primary_bps": -99.5785551468897,
+          "net_stress_bps": -107.5785551468897,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": 1,
+            "XLK": -1,
+            "XLRE": -1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": 83.57855514688968,
+          "signal": "2021-07-13"
+        },
+        {
+          "entry": "2021-07-22",
+          "exit": "2021-07-29",
+          "net_primary_bps": 66.64724364362353,
+          "net_stress_bps": 58.64724364362352,
+          "positions": {
+            "XLB": 1,
+            "XLC": 1,
+            "XLE": 1,
+            "XLF": -1,
+            "XLI": -1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": -82.64724364362353,
+          "signal": "2021-07-21"
+        },
+        {
+          "entry": "2021-07-30",
+          "exit": "2021-08-06",
+          "net_primary_bps": 37.69426527610832,
+          "net_stress_bps": 29.694265276108315,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLI": 1,
+            "XLK": 1,
+            "XLRE": 1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": -53.69426527610832,
+          "signal": "2021-07-29"
+        },
+        {
+          "entry": "2021-08-09",
+          "exit": "2021-08-16",
+          "net_primary_bps": 40.1676340903862,
+          "net_stress_bps": 32.1676340903862,
+          "positions": {
+            "XLB": 1,
+            "XLF": -1,
+            "XLI": 1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": -56.1676340903862,
+          "signal": "2021-08-06"
+        },
+        {
+          "entry": "2021-08-17",
+          "exit": "2021-08-24",
+          "net_primary_bps": 40.45149430150353,
+          "net_stress_bps": 32.45149430150353,
+          "positions": {
+            "XLB": -1,
+            "XLE": 1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -56.45149430150354,
+          "signal": "2021-08-16"
+        },
+        {
+          "entry": "2021-08-25",
+          "exit": "2021-09-01",
+          "net_primary_bps": -34.22593337202124,
+          "net_stress_bps": -42.22593337202124,
+          "positions": {
+            "XLC": -1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLRE": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 18.225933372021238,
+          "signal": "2021-08-24"
+        },
+        {
+          "entry": "2021-09-02",
+          "exit": "2021-09-10",
+          "net_primary_bps": 38.591310706246375,
+          "net_stress_bps": 30.591310706246375,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLP": -1,
+            "XLRE": -1
+          },
+          "reversed_primary_bps": -54.59131070624638,
+          "signal": "2021-09-01"
+        },
+        {
+          "entry": "2021-09-13",
+          "exit": "2021-09-20",
+          "net_primary_bps": -16.90732218434442,
+          "net_stress_bps": -24.90732218434442,
+          "positions": {
+            "XLC": -1,
+            "XLI": 1,
+            "XLK": -1,
+            "XLRE": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 0.9073221843444182,
+          "signal": "2021-09-10"
+        },
+        {
+          "entry": "2021-09-21",
+          "exit": "2021-09-28",
+          "net_primary_bps": 353.03454216751726,
+          "net_stress_bps": 345.03454216751726,
+          "positions": {
+            "XLB": 1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLRE": -1,
+            "XLV": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -369.03454216751726,
+          "signal": "2021-09-20"
+        },
+        {
+          "entry": "2021-09-29",
+          "exit": "2021-10-06",
+          "net_primary_bps": -76.1091264334995,
+          "net_stress_bps": -84.1091264334995,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLRE": 1,
+            "XLU": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": 60.109126433499505,
+          "signal": "2021-09-28"
+        },
+        {
+          "entry": "2021-10-07",
+          "exit": "2021-10-14",
+          "net_primary_bps": -22.77919142795437,
+          "net_stress_bps": -30.77919142795437,
+          "positions": {
+            "XLE": -1,
+            "XLF": -1,
+            "XLP": 1,
+            "XLU": -1,
+            "XLV": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 6.779191427954371,
+          "signal": "2021-10-06"
+        },
+        {
+          "entry": "2021-10-15",
+          "exit": "2021-10-22",
+          "net_primary_bps": 23.03942959966651,
+          "net_stress_bps": 15.039429599666507,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": -1,
+            "XLF": 1,
+            "XLRE": -1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": -39.039429599666505,
+          "signal": "2021-10-14"
+        },
+        {
+          "entry": "2021-10-25",
+          "exit": "2021-11-01",
+          "net_primary_bps": -25.180324305664147,
+          "net_stress_bps": -33.18032430566415,
+          "positions": {
+            "XLB": 1,
+            "XLC": 1,
+            "XLF": -1,
+            "XLP": 1,
+            "XLRE": -1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": 9.180324305664147,
+          "signal": "2021-10-22"
+        },
+        {
+          "entry": "2021-11-02",
+          "exit": "2021-11-09",
+          "net_primary_bps": -42.280553043166314,
+          "net_stress_bps": -50.280553043166314,
+          "positions": {
+            "XLB": 1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLV": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 26.28055304316631,
+          "signal": "2021-11-01"
+        },
+        {
+          "entry": "2021-11-10",
+          "exit": "2021-11-17",
+          "net_primary_bps": 21.015881014156456,
+          "net_stress_bps": 13.015881014156456,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLU": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": -37.015881014156456,
+          "signal": "2021-11-09"
+        },
+        {
+          "entry": "2021-11-18",
+          "exit": "2021-11-26",
+          "net_primary_bps": -63.09710040554691,
+          "net_stress_bps": -71.09710040554691,
+          "positions": {
+            "XLE": 1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLRE": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 47.09710040554691,
+          "signal": "2021-11-17"
+        },
+        {
+          "entry": "2021-11-29",
+          "exit": "2021-12-06",
+          "net_primary_bps": -127.90565429028766,
+          "net_stress_bps": -135.90565429028766,
+          "positions": {
+            "XLC": 1,
+            "XLI": 1,
+            "XLP": -1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 111.90565429028766,
+          "signal": "2021-11-26"
+        },
+        {
+          "entry": "2021-12-07",
+          "exit": "2021-12-14",
+          "net_primary_bps": -166.29332584628636,
+          "net_stress_bps": -174.29332584628636,
+          "positions": {
+            "XLC": 1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 150.29332584628636,
+          "signal": "2021-12-06"
+        },
+        {
+          "entry": "2021-12-15",
+          "exit": "2021-12-22",
+          "net_primary_bps": -34.33573189779359,
+          "net_stress_bps": -42.33573189779359,
+          "positions": {
+            "XLE": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 18.33573189779359,
+          "signal": "2021-12-14"
+        },
+        {
+          "entry": "2021-12-23",
+          "exit": "2021-12-31",
+          "net_primary_bps": -12.805502060378041,
+          "net_stress_bps": -20.805502060378043,
+          "positions": {
+            "XLC": -1,
+            "XLI": 1,
+            "XLP": 1,
+            "XLRE": -1,
+            "XLU": 1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": -3.1944979396219586,
+          "signal": "2021-12-22"
+        },
+        {
+          "entry": "2022-01-03",
+          "exit": "2022-01-10",
+          "net_primary_bps": 95.88205070249292,
+          "net_stress_bps": 87.88205070249292,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLF": 1,
+            "XLK": 1,
+            "XLRE": -1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": -111.88205070249292,
+          "signal": "2021-12-31"
+        },
+        {
+          "entry": "2022-01-11",
+          "exit": "2022-01-19",
+          "net_primary_bps": -150.32497206594826,
+          "net_stress_bps": -158.32497206594826,
+          "positions": {
+            "XLE": -1,
+            "XLF": -1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLRE": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 134.32497206594826,
+          "signal": "2022-01-10"
+        },
+        {
+          "entry": "2022-01-20",
+          "exit": "2022-01-27",
+          "net_primary_bps": -164.42078635232443,
+          "net_stress_bps": -172.42078635232443,
+          "positions": {
+            "XLE": -1,
+            "XLF": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 148.42078635232443,
+          "signal": "2022-01-19"
+        },
+        {
+          "entry": "2022-01-28",
+          "exit": "2022-02-04",
+          "net_primary_bps": -89.58255016168737,
+          "net_stress_bps": -97.58255016168737,
+          "positions": {
+            "XLB": 1,
+            "XLC": 1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLP": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 73.58255016168737,
+          "signal": "2022-01-27"
+        },
+        {
+          "entry": "2022-02-07",
+          "exit": "2022-02-14",
+          "net_primary_bps": -74.65683886807606,
+          "net_stress_bps": -82.65683886807606,
+          "positions": {
+            "XLB": 1,
+            "XLC": 1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLRE": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 58.65683886807606,
+          "signal": "2022-02-04"
+        },
+        {
+          "entry": "2022-02-15",
+          "exit": "2022-02-23",
+          "net_primary_bps": 52.85633394526576,
+          "net_stress_bps": 44.85633394526576,
+          "positions": {
+            "XLB": -1,
+            "XLC": -1,
+            "XLI": -1,
+            "XLRE": 1,
+            "XLU": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": -68.85633394526576,
+          "signal": "2022-02-14"
+        },
+        {
+          "entry": "2022-02-24",
+          "exit": "2022-03-03",
+          "net_primary_bps": 233.31653548018642,
+          "net_stress_bps": 225.31653548018642,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -249.31653548018642,
+          "signal": "2022-02-23"
+        },
+        {
+          "entry": "2022-03-04",
+          "exit": "2022-03-11",
+          "net_primary_bps": -189.86922937264816,
+          "net_stress_bps": -197.86922937264816,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLF": 1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": 173.86922937264816,
+          "signal": "2022-03-03"
+        },
+        {
+          "entry": "2022-03-14",
+          "exit": "2022-03-21",
+          "net_primary_bps": 199.6924771975558,
+          "net_stress_bps": 191.6924771975558,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLP": 1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": -215.6924771975558,
+          "signal": "2022-03-11"
+        },
+        {
+          "entry": "2022-03-22",
+          "exit": "2022-03-29",
+          "net_primary_bps": -158.56048815916768,
+          "net_stress_bps": -166.56048815916768,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLK": -1,
+            "XLRE": 1,
+            "XLU": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 142.56048815916768,
+          "signal": "2022-03-21"
+        },
+        {
+          "entry": "2022-03-30",
+          "exit": "2022-04-06",
+          "net_primary_bps": -82.29384719511249,
+          "net_stress_bps": -90.29384719511249,
+          "positions": {
+            "XLE": 1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": 66.29384719511249,
+          "signal": "2022-03-29"
+        },
+        {
+          "entry": "2022-04-07",
+          "exit": "2022-04-14",
+          "net_primary_bps": -16.376965450047624,
+          "net_stress_bps": -24.376965450047624,
+          "positions": {
+            "XLI": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 0.3769654500476231,
+          "signal": "2022-04-06"
+        },
+        {
+          "entry": "2022-04-18",
+          "exit": "2022-04-25",
+          "net_primary_bps": -42.48660129807361,
+          "net_stress_bps": -50.486601298073616,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": 26.48660129807361,
+          "signal": "2022-04-14"
+        },
+        {
+          "entry": "2022-04-26",
+          "exit": "2022-05-03",
+          "net_primary_bps": 269.25161843169104,
+          "net_stress_bps": 261.25161843169104,
+          "positions": {
+            "XLB": 1,
+            "XLC": 1,
+            "XLE": 1,
+            "XLP": -1,
+            "XLRE": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -285.25161843169104,
+          "signal": "2022-04-25"
+        },
+        {
+          "entry": "2022-05-04",
+          "exit": "2022-05-11",
+          "net_primary_bps": 59.88116045651677,
+          "net_stress_bps": 51.88116045651677,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLRE": 1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": -75.88116045651677,
+          "signal": "2022-05-03"
+        },
+        {
+          "entry": "2022-05-12",
+          "exit": "2022-05-19",
+          "net_primary_bps": 32.647220877078986,
+          "net_stress_bps": 24.647220877078983,
+          "positions": {
+            "XLE": -1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -48.647220877078986,
+          "signal": "2022-05-11"
+        },
+        {
+          "entry": "2022-05-20",
+          "exit": "2022-05-27",
+          "net_primary_bps": 9.395310353319767,
+          "net_stress_bps": 1.3953103533197673,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLI": 1,
+            "XLP": 1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -25.39531035331977,
+          "signal": "2022-05-19"
+        },
+        {
+          "entry": "2022-05-31",
+          "exit": "2022-06-07",
+          "net_primary_bps": -5.116489819704392,
+          "net_stress_bps": -13.116489819704393,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLU": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -10.883510180295607,
+          "signal": "2022-05-27"
+        },
+        {
+          "entry": "2022-06-08",
+          "exit": "2022-06-15",
+          "net_primary_bps": 69.15533518348822,
+          "net_stress_bps": 61.155335183488226,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLF": 1,
+            "XLI": -1,
+            "XLP": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": -85.15533518348822,
+          "signal": "2022-06-07"
+        },
+        {
+          "entry": "2022-06-16",
+          "exit": "2022-06-24",
+          "net_primary_bps": -355.7064847781783,
+          "net_stress_bps": -363.7064847781783,
+          "positions": {
+            "XLB": 1,
+            "XLE": 1,
+            "XLI": -1,
+            "XLP": -1,
+            "XLU": 1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": 339.7064847781783,
+          "signal": "2022-06-15"
+        },
+        {
+          "entry": "2022-06-27",
+          "exit": "2022-07-05",
+          "net_primary_bps": 40.622419697565604,
+          "net_stress_bps": 32.622419697565604,
+          "positions": {
+            "XLB": 1,
+            "XLE": 1,
+            "XLI": 1,
+            "XLK": -1,
+            "XLV": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -56.62241969756561,
+          "signal": "2022-06-24"
+        },
+        {
+          "entry": "2022-07-06",
+          "exit": "2022-07-13",
+          "net_primary_bps": -0.4020456916216422,
+          "net_stress_bps": -8.402045691621643,
+          "positions": {
+            "XLB": 1,
+            "XLC": -1,
+            "XLE": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": -15.597954308378357,
+          "signal": "2022-07-05"
+        },
+        {
+          "entry": "2022-07-14",
+          "exit": "2022-07-21",
+          "net_primary_bps": -69.48514000556457,
+          "net_stress_bps": -77.48514000556457,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 53.485140005564574,
+          "signal": "2022-07-13"
+        },
+        {
+          "entry": "2022-07-22",
+          "exit": "2022-07-29",
+          "net_primary_bps": 111.11554096388129,
+          "net_stress_bps": 103.11554096388129,
+          "positions": {
+            "XLC": -1,
+            "XLF": -1,
+            "XLP": 1,
+            "XLU": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -127.11554096388129,
+          "signal": "2022-07-21"
+        },
+        {
+          "entry": "2022-08-01",
+          "exit": "2022-08-08",
+          "net_primary_bps": 78.82063425087206,
+          "net_stress_bps": 70.82063425087206,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLI": -1,
+            "XLP": 1,
+            "XLU": -1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": -94.82063425087206,
+          "signal": "2022-07-29"
+        },
+        {
+          "entry": "2022-08-09",
+          "exit": "2022-08-16",
+          "net_primary_bps": -52.97379106366569,
+          "net_stress_bps": -60.97379106366569,
+          "positions": {
+            "XLB": 1,
+            "XLC": -1,
+            "XLE": 1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 36.97379106366569,
+          "signal": "2022-08-08"
+        },
+        {
+          "entry": "2022-08-17",
+          "exit": "2022-08-24",
+          "net_primary_bps": 186.0624461212907,
+          "net_stress_bps": 178.0624461212907,
+          "positions": {
+            "XLB": -1,
+            "XLE": 1,
+            "XLF": -1,
+            "XLRE": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -202.0624461212907,
+          "signal": "2022-08-16"
+        },
+        {
+          "entry": "2022-08-25",
+          "exit": "2022-09-01",
+          "net_primary_bps": -49.423261238848376,
+          "net_stress_bps": -57.423261238848376,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": 33.423261238848376,
+          "signal": "2022-08-24"
+        },
+        {
+          "entry": "2022-09-02",
+          "exit": "2022-09-12",
+          "net_primary_bps": 14.55537937446372,
+          "net_stress_bps": 6.555379374463722,
+          "positions": {
+            "XLB": 1,
+            "XLC": -1,
+            "XLE": 1,
+            "XLK": 1,
+            "XLU": -1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": -30.555379374463723,
+          "signal": "2022-09-01"
+        },
+        {
+          "entry": "2022-09-13",
+          "exit": "2022-09-20",
+          "net_primary_bps": -56.24568675752482,
+          "net_stress_bps": -64.24568675752482,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": 1,
+            "XLF": -1,
+            "XLP": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 40.24568675752483,
+          "signal": "2022-09-12"
+        },
+        {
+          "entry": "2022-09-21",
+          "exit": "2022-09-28",
+          "net_primary_bps": -52.35944940120985,
+          "net_stress_bps": -60.35944940120985,
+          "positions": {
+            "XLB": 1,
+            "XLF": -1,
+            "XLI": 1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 36.35944940120985,
+          "signal": "2022-09-20"
+        },
+        {
+          "entry": "2022-09-29",
+          "exit": "2022-10-06",
+          "net_primary_bps": 6.5526620275193865,
+          "net_stress_bps": -1.4473379724806132,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLK": -1,
+            "XLRE": 1,
+            "XLU": 1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": -22.552662027519386,
+          "signal": "2022-09-28"
+        },
+        {
+          "entry": "2022-10-07",
+          "exit": "2022-10-14",
+          "net_primary_bps": 30.77140119136368,
+          "net_stress_bps": 22.77140119136368,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLRE": 1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": -46.77140119136368,
+          "signal": "2022-10-06"
+        },
+        {
+          "entry": "2022-10-17",
+          "exit": "2022-10-24",
+          "net_primary_bps": 20.477321394756817,
+          "net_stress_bps": 12.477321394756816,
+          "positions": {
+            "XLF": -1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLU": 1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -36.477321394756814,
+          "signal": "2022-10-14"
+        },
+        {
+          "entry": "2022-10-25",
+          "exit": "2022-11-01",
+          "net_primary_bps": 3.3834551192633833,
+          "net_stress_bps": -4.616544880736616,
+          "positions": {
+            "XLE": -1,
+            "XLI": -1,
+            "XLK": -1,
+            "XLRE": 1,
+            "XLU": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -19.383455119263385,
+          "signal": "2022-10-24"
+        },
+        {
+          "entry": "2022-11-02",
+          "exit": "2022-11-09",
+          "net_primary_bps": -266.51017288151144,
+          "net_stress_bps": -274.51017288151144,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLF": -1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 250.51017288151147,
+          "signal": "2022-11-01"
+        },
+        {
+          "entry": "2022-11-10",
+          "exit": "2022-11-17",
+          "net_primary_bps": 114.08210944324763,
+          "net_stress_bps": 106.08210944324763,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -130.08210944324762,
+          "signal": "2022-11-09"
+        },
+        {
+          "entry": "2022-11-18",
+          "exit": "2022-11-28",
+          "net_primary_bps": 131.21165620642995,
+          "net_stress_bps": 123.21165620642995,
+          "positions": {
+            "XLC": -1,
+            "XLE": -1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLRE": 1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": -147.21165620642995,
+          "signal": "2022-11-17"
+        },
+        {
+          "entry": "2022-11-29",
+          "exit": "2022-12-06",
+          "net_primary_bps": -69.58457531284559,
+          "net_stress_bps": -77.58457531284559,
+          "positions": {
+            "XLE": 1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLU": -1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": 53.584575312845594,
+          "signal": "2022-11-28"
+        },
+        {
+          "entry": "2022-12-07",
+          "exit": "2022-12-14",
+          "net_primary_bps": -40.36426448152918,
+          "net_stress_bps": -48.36426448152918,
+          "positions": {
+            "XLB": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 24.364264481529187,
+          "signal": "2022-12-06"
+        },
+        {
+          "entry": "2022-12-15",
+          "exit": "2022-12-22",
+          "net_primary_bps": 79.96983262474522,
+          "net_stress_bps": 71.96983262474522,
+          "positions": {
+            "XLF": 1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -95.96983262474522,
+          "signal": "2022-12-14"
+        },
+        {
+          "entry": "2022-12-23",
+          "exit": "2023-01-03",
+          "net_primary_bps": 24.767199150349754,
+          "net_stress_bps": 16.767199150349754,
+          "positions": {
+            "XLF": -1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -40.767199150349754,
+          "signal": "2022-12-22"
+        },
+        {
+          "entry": "2023-01-04",
+          "exit": "2023-01-11",
+          "net_primary_bps": 55.27237871560828,
+          "net_stress_bps": 47.27237871560828,
+          "positions": {
+            "XLB": 1,
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": -1,
+            "XLI": -1,
+            "XLP": 1
+          },
+          "reversed_primary_bps": -71.27237871560828,
+          "signal": "2023-01-03"
+        },
+        {
+          "entry": "2023-01-12",
+          "exit": "2023-01-20",
+          "net_primary_bps": -88.05747467239404,
+          "net_stress_bps": -96.05747467239404,
+          "positions": {
+            "XLB": -1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLU": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 72.05747467239404,
+          "signal": "2023-01-11"
+        },
+        {
+          "entry": "2023-01-23",
+          "exit": "2023-01-30",
+          "net_primary_bps": -77.92956400655652,
+          "net_stress_bps": -85.92956400655652,
+          "positions": {
+            "XLC": -1,
+            "XLE": -1,
+            "XLI": 1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": 61.92956400655652,
+          "signal": "2023-01-20"
+        },
+        {
+          "entry": "2023-01-31",
+          "exit": "2023-02-07",
+          "net_primary_bps": -168.33642771928461,
+          "net_stress_bps": -176.33642771928461,
+          "positions": {
+            "XLE": 1,
+            "XLF": -1,
+            "XLRE": -1,
+            "XLU": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 152.33642771928461,
+          "signal": "2023-01-30"
+        },
+        {
+          "entry": "2023-02-08",
+          "exit": "2023-02-15",
+          "net_primary_bps": 41.694735200575366,
+          "net_stress_bps": 33.694735200575366,
+          "positions": {
+            "XLB": 1,
+            "XLC": -1,
+            "XLE": 1,
+            "XLK": -1,
+            "XLU": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -57.69473520057536,
+          "signal": "2023-02-07"
+        },
+        {
+          "entry": "2023-02-16",
+          "exit": "2023-02-24",
+          "net_primary_bps": 53.17808569668648,
+          "net_stress_bps": 45.17808569668648,
+          "positions": {
+            "XLC": 1,
+            "XLK": -1,
+            "XLRE": 1,
+            "XLU": -1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -69.17808569668648,
+          "signal": "2023-02-15"
+        },
+        {
+          "entry": "2023-02-27",
+          "exit": "2023-03-06",
+          "net_primary_bps": 43.89492199222952,
+          "net_stress_bps": 35.89492199222952,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -59.89492199222952,
+          "signal": "2023-02-24"
+        },
+        {
+          "entry": "2023-03-07",
+          "exit": "2023-03-14",
+          "net_primary_bps": 92.70465328906262,
+          "net_stress_bps": 84.70465328906262,
+          "positions": {
+            "XLC": -1,
+            "XLE": -1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLU": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -108.70465328906262,
+          "signal": "2023-03-06"
+        },
+        {
+          "entry": "2023-03-15",
+          "exit": "2023-03-22",
+          "net_primary_bps": -8.071688184184646,
+          "net_stress_bps": -16.071688184184648,
+          "positions": {
+            "XLB": 1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLP": -1,
+            "XLU": -1
+          },
+          "reversed_primary_bps": -7.928311815815353,
+          "signal": "2023-03-14"
+        },
+        {
+          "entry": "2023-03-23",
+          "exit": "2023-03-30",
+          "net_primary_bps": 45.65033917842376,
+          "net_stress_bps": 37.65033917842376,
+          "positions": {
+            "XLC": -1,
+            "XLE": -1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLRE": 1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": -61.65033917842376,
+          "signal": "2023-03-22"
+        },
+        {
+          "entry": "2023-03-31",
+          "exit": "2023-04-10",
+          "net_primary_bps": -29.439356978559996,
+          "net_stress_bps": -37.43935697855999,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": 13.439356978559994,
+          "signal": "2023-03-30"
+        },
+        {
+          "entry": "2023-04-11",
+          "exit": "2023-04-18",
+          "net_primary_bps": 77.82360415135253,
+          "net_stress_bps": 69.82360415135253,
+          "positions": {
+            "XLE": -1,
+            "XLI": 1,
+            "XLK": 1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -93.82360415135253,
+          "signal": "2023-04-10"
+        },
+        {
+          "entry": "2023-04-19",
+          "exit": "2023-04-26",
+          "net_primary_bps": 62.550267491247446,
+          "net_stress_bps": 54.550267491247446,
+          "positions": {
+            "XLF": -1,
+            "XLI": -1,
+            "XLRE": 1,
+            "XLU": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -78.55026749124745,
+          "signal": "2023-04-18"
+        },
+        {
+          "entry": "2023-04-27",
+          "exit": "2023-05-04",
+          "net_primary_bps": -30.667323103300514,
+          "net_stress_bps": -38.66732310330051,
+          "positions": {
+            "XLB": 1,
+            "XLF": 1,
+            "XLI": 1,
+            "XLP": -1,
+            "XLU": -1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": 14.667323103300516,
+          "signal": "2023-04-26"
+        },
+        {
+          "entry": "2023-05-05",
+          "exit": "2023-05-12",
+          "net_primary_bps": 14.075767989901403,
+          "net_stress_bps": 6.075767989901404,
+          "positions": {
+            "XLC": 1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLP": -1,
+            "XLU": -1,
+            "XLV": -1
+          },
+          "reversed_primary_bps": -30.075767989901404,
+          "signal": "2023-05-04"
+        },
+        {
+          "entry": "2023-05-15",
+          "exit": "2023-05-22",
+          "net_primary_bps": 30.14850803454524,
+          "net_stress_bps": 22.14850803454524,
+          "positions": {
+            "XLB": 1,
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLU": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -46.14850803454524,
+          "signal": "2023-05-12"
+        },
+        {
+          "entry": "2023-05-23",
+          "exit": "2023-05-31",
+          "net_primary_bps": -228.77744029046406,
+          "net_stress_bps": -236.77744029046406,
+          "positions": {
+            "XLC": -1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLRE": 1,
+            "XLU": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 212.77744029046406,
+          "signal": "2023-05-22"
+        },
+        {
+          "entry": "2023-06-01",
+          "exit": "2023-06-08",
+          "net_primary_bps": 136.74236911113158,
+          "net_stress_bps": 128.74236911113158,
+          "positions": {
+            "XLB": 1,
+            "XLC": -1,
+            "XLE": 1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -152.74236911113158,
+          "signal": "2023-05-31"
+        },
+        {
+          "entry": "2023-06-09",
+          "exit": "2023-06-16",
+          "net_primary_bps": 108.32704386682347,
+          "net_stress_bps": 100.32704386682347,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": -1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLP": 1
+          },
+          "reversed_primary_bps": -124.32704386682347,
+          "signal": "2023-06-08"
+        },
+        {
+          "entry": "2023-06-20",
+          "exit": "2023-06-27",
+          "net_primary_bps": -26.514828474074932,
+          "net_stress_bps": -34.51482847407493,
+          "positions": {
+            "XLB": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLU": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 10.514828474074932,
+          "signal": "2023-06-16"
+        },
+        {
+          "entry": "2023-06-28",
+          "exit": "2023-07-06",
+          "net_primary_bps": 41.537076673088855,
+          "net_stress_bps": 33.537076673088855,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLF": 1,
+            "XLI": -1,
+            "XLK": 1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": -57.537076673088855,
+          "signal": "2023-06-27"
+        },
+        {
+          "entry": "2023-07-07",
+          "exit": "2023-07-14",
+          "net_primary_bps": 18.005825789070883,
+          "net_stress_bps": 10.005825789070883,
+          "positions": {
+            "XLB": 1,
+            "XLE": 1,
+            "XLF": -1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": -34.00582578907088,
+          "signal": "2023-07-06"
+        },
+        {
+          "entry": "2023-07-17",
+          "exit": "2023-07-24",
+          "net_primary_bps": 221.14866918625157,
+          "net_stress_bps": 213.14866918625157,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLF": 1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -237.14866918625157,
+          "signal": "2023-07-14"
+        },
+        {
+          "entry": "2023-07-25",
+          "exit": "2023-08-01",
+          "net_primary_bps": 87.30286135987738,
+          "net_stress_bps": 79.30286135987738,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -103.30286135987738,
+          "signal": "2023-07-24"
+        },
+        {
+          "entry": "2023-08-02",
+          "exit": "2023-08-09",
+          "net_primary_bps": -81.57094651836223,
+          "net_stress_bps": -89.57094651836223,
+          "positions": {
+            "XLC": -1,
+            "XLE": -1,
+            "XLI": -1,
+            "XLRE": 1,
+            "XLU": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": 65.57094651836223,
+          "signal": "2023-08-01"
+        },
+        {
+          "entry": "2023-08-10",
+          "exit": "2023-08-17",
+          "net_primary_bps": -27.500587030388264,
+          "net_stress_bps": -35.50058703038827,
+          "positions": {
+            "XLB": 1,
+            "XLE": -1,
+            "XLK": 1,
+            "XLU": 1,
+            "XLV": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 11.500587030388266,
+          "signal": "2023-08-09"
+        },
+        {
+          "entry": "2023-08-18",
+          "exit": "2023-08-25",
+          "net_primary_bps": 65.9761311802158,
+          "net_stress_bps": 57.97613118021581,
+          "positions": {
+            "XLC": 1,
+            "XLE": -1,
+            "XLRE": 1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -81.9761311802158,
+          "signal": "2023-08-17"
+        },
+        {
+          "entry": "2023-08-28",
+          "exit": "2023-09-05",
+          "net_primary_bps": -70.94507848216521,
+          "net_stress_bps": -78.94507848216521,
+          "positions": {
+            "XLE": 1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLRE": -1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 54.94507848216521,
+          "signal": "2023-08-25"
+        },
+        {
+          "entry": "2023-09-06",
+          "exit": "2023-09-13",
+          "net_primary_bps": 37.9049070864311,
+          "net_stress_bps": 29.9049070864311,
+          "positions": {
+            "XLE": -1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLU": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -53.9049070864311,
+          "signal": "2023-09-05"
+        },
+        {
+          "entry": "2023-09-14",
+          "exit": "2023-09-21",
+          "net_primary_bps": 1.0287857601051325,
+          "net_stress_bps": -6.971214239894867,
+          "positions": {
+            "XLE": -1,
+            "XLI": 1,
+            "XLK": 1,
+            "XLRE": 1,
+            "XLU": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": -17.028785760105134,
+          "signal": "2023-09-13"
+        },
+        {
+          "entry": "2023-09-22",
+          "exit": "2023-09-29",
+          "net_primary_bps": 115.91514086747101,
+          "net_stress_bps": 107.91514086747101,
+          "positions": {
+            "XLB": 1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -131.91514086747102,
+          "signal": "2023-09-21"
+        },
+        {
+          "entry": "2023-10-02",
+          "exit": "2023-10-09",
+          "net_primary_bps": -48.90478949604181,
+          "net_stress_bps": -56.904789496041815,
+          "positions": {
+            "XLB": -1,
+            "XLE": -1,
+            "XLF": 1,
+            "XLP": 1,
+            "XLU": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 32.90478949604181,
+          "signal": "2023-09-29"
+        },
+        {
+          "entry": "2023-10-10",
+          "exit": "2023-10-17",
+          "net_primary_bps": -30.550537635251576,
+          "net_stress_bps": -38.55053763525158,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLU": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": 14.550537635251578,
+          "signal": "2023-10-09"
+        },
+        {
+          "entry": "2023-10-18",
+          "exit": "2023-10-25",
+          "net_primary_bps": -4.820170206543087,
+          "net_stress_bps": -12.820170206543088,
+          "positions": {
+            "XLE": -1,
+            "XLF": -1,
+            "XLK": 1,
+            "XLU": -1,
+            "XLV": 1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -11.179829793456912,
+          "signal": "2023-10-17"
+        },
+        {
+          "entry": "2023-10-26",
+          "exit": "2023-11-02",
+          "net_primary_bps": 86.20344390833002,
+          "net_stress_bps": 78.20344390833002,
+          "positions": {
+            "XLE": 1,
+            "XLP": -1,
+            "XLRE": 1,
+            "XLU": -1,
+            "XLV": -1,
+            "XLY": 1
+          },
+          "reversed_primary_bps": -102.20344390833002,
+          "signal": "2023-10-25"
+        },
+        {
+          "entry": "2023-11-03",
+          "exit": "2023-11-10",
+          "net_primary_bps": -183.29858862906292,
+          "net_stress_bps": -191.29858862906292,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLK": -1,
+            "XLP": 1,
+            "XLV": 1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 167.29858862906292,
+          "signal": "2023-11-02"
+        },
+        {
+          "entry": "2023-11-13",
+          "exit": "2023-11-20",
+          "net_primary_bps": 25.497046249363333,
+          "net_stress_bps": 17.497046249363333,
+          "positions": {
+            "XLC": -1,
+            "XLE": 1,
+            "XLI": -1,
+            "XLK": -1,
+            "XLRE": 1,
+            "XLU": 1
+          },
+          "reversed_primary_bps": -41.497046249363336,
+          "signal": "2023-11-10"
+        },
+        {
+          "entry": "2023-11-21",
+          "exit": "2023-11-29",
+          "net_primary_bps": -44.854692463920514,
+          "net_stress_bps": -52.854692463920514,
+          "positions": {
+            "XLB": -1,
+            "XLE": 1,
+            "XLP": 1,
+            "XLRE": -1,
+            "XLU": -1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": 28.854692463920514,
+          "signal": "2023-11-20"
+        },
+        {
+          "entry": "2023-11-30",
+          "exit": "2023-12-07",
+          "net_primary_bps": -102.19027664085478,
+          "net_stress_bps": -110.19027664085478,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLE": 1,
+            "XLF": -1,
+            "XLRE": -1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": 86.19027664085478,
+          "signal": "2023-11-29"
+        },
+        {
+          "entry": "2023-12-08",
+          "exit": "2023-12-15",
+          "net_primary_bps": -122.05008750657753,
+          "net_stress_bps": -130.0500875065775,
+          "positions": {
+            "XLB": 1,
+            "XLE": 1,
+            "XLI": -1,
+            "XLP": 1,
+            "XLRE": -1,
+            "XLY": -1
+          },
+          "reversed_primary_bps": 106.05008750657753,
+          "signal": "2023-12-07"
+        },
+        {
+          "entry": "2023-12-18",
+          "exit": "2023-12-26",
+          "net_primary_bps": -3.7374113185770725,
+          "net_stress_bps": -11.737411318577074,
+          "positions": {
+            "XLB": -1,
+            "XLC": 1,
+            "XLI": -1,
+            "XLRE": -1,
+            "XLU": 1,
+            "XLV": 1
+          },
+          "reversed_primary_bps": -12.262588681422928,
+          "signal": "2023-12-15"
+        }
+      ],
+      "positive_sector_count": 4,
+      "positive_year_fraction": 0.25,
+      "reversed_mean_bps_primary": -9.53849736542682,
+      "sector_contribution_bps": {
+        "XLB": -34.46826262250795,
+        "XLC": 263.4709964922774,
+        "XLE": -246.94182507924293,
+        "XLF": -895.5572201276331,
+        "XLI": -289.3179453648743,
+        "XLK": -249.81054067560177,
+        "XLP": 275.56143269770087,
+        "XLRE": 289.3363224790078,
+        "XLU": 309.51660775053773,
+        "XLV": -417.02615996886607,
+        "XLY": -83.83434555451859
+      },
+      "status": "FALSIFIED_D0",
+      "year_means_primary_bps": {
+        "2020": -2.963067186928308,
+        "2021": -19.473065559347486,
+        "2022": -5.320868069864332,
+        "2023": 2.057690083444597
+      }
+    }
+  },
+  "research_id": "sector_etf_cross_sectional_v1",
+  "research_state": {
+    "D0": "FALSIFIED_ALL_FAMILIES",
+    "D3_holdout": "SEALED_NOT_FETCHED",
+    "candidate_created": false,
+    "leverage_supported": false,
+    "live_execution_supported": false,
+    "persistent_edge_established": false
+  },
+  "source": {
+    "D0_window": [
+      "2020-01-02",
+      "2023-12-29"
+    ],
+    "D3_fetched": false,
+    "fetch_window": [
+      "2019-09-01",
+      "2024-01-02"
+    ],
+    "provider": "Yahoo Finance chart API",
+    "single_source_all_symbols": true
+  },
+  "stage": "D0_development",
+  "survivors": []
+}
