@@ -1,0 +1,130 @@
+{
+  "research_id": "cross_sectional_equities_v1",
+  "status": "FROZEN_BEFORE_EQUITY_PNL",
+  "frozen_at_utc": "2026-09-18T19:30:00Z",
+  "purpose": "Test fresh market-neutral cross-sectional intraday effects in highly liquid US large-cap equities without reusing failed crypto/futures/ETF/FX family definitions.",
+  "evidence_separation": {
+    "crypto_chain_unchanged": true,
+    "futures_chain_unchanged": true,
+    "etf_chain_unchanged": true,
+    "fx_chain_unchanged": true,
+    "no_prior_equity_pnl_used_for_universe_or_thresholds": true
+  },
+  "data": {
+    "provider": "Massive",
+    "endpoint": "/v2/aggs/ticker/{stocksTicker}/range/1/minute/{from}/{to}",
+    "adjusted": true,
+    "session": "US regular hours, America/New_York",
+    "universe": [
+      "AAPL",
+      "MSFT",
+      "NVDA",
+      "AMZN",
+      "META",
+      "GOOGL",
+      "JPM",
+      "XOM"
+    ],
+    "universe_rationale": "Fixed before strategy PnL; liquid large-cap names spanning mega-cap technology/communications, consumer, financials and energy.",
+    "tick_bbo_entitlement": "NOT_AVAILABLE_ON_CONNECTED_PLAN",
+    "gap_policy": "No interpolation, forward fill, substitute bars or alternate exits. Required exact minutes must exist."
+  },
+  "windows": {
+    "D0_discovery": [
+      "2026-07-06",
+      "2026-07-31"
+    ],
+    "D3_locked_historical_holdout": [
+      "2026-08-03",
+      "2026-08-28"
+    ],
+    "later_check_reserved_not_for_retuning": [
+      "2026-09-01",
+      "2026-09-16"
+    ],
+    "future_shadow_earliest": "2026-09-21"
+  },
+  "portfolio": {
+    "long_count": 2,
+    "short_count": 2,
+    "gross_exposure": 1,
+    "net_exposure": 0,
+    "weight_per_selected_name": 0.25,
+    "one_portfolio_observation_per_session": true,
+    "primary_round_trip_friction_bps_on_portfolio": 4,
+    "stress_round_trip_friction_bps_on_portfolio": 8,
+    "short_borrow_cost": "not separately modeled; limitation; universe chosen to minimize hard-to-borrow risk",
+    "market_impact": "not modeled",
+    "leverage": 1,
+    "reversed_same_decision_control": true
+  },
+  "hypotheses": {
+    "EQ_H1_OPEN30_RELATIVE_MOMENTUM": {
+      "measure": "return from exact 09:30 ET open to exact 09:59 ET close",
+      "rank": "descending across eligible universe",
+      "portfolio": "long top 2, short bottom 2",
+      "entry": "10:00 ET open",
+      "exit": "12:00 ET open"
+    },
+    "EQ_H2_OVERNIGHT_GAP_REVERSAL": {
+      "measure": "log(09:30 ET open / immediately prior regular-session 15:59 ET close)",
+      "rank": "descending gap",
+      "portfolio": "short top 2 gaps, long bottom 2 gaps",
+      "entry": "09:31 ET open",
+      "exit": "10:30 ET open"
+    },
+    "EQ_H3_LATE_DAY_RELATIVE_MOMENTUM": {
+      "measure": "return from exact 10:00 ET open to exact 13:29 ET close",
+      "rank": "descending across eligible universe",
+      "portfolio": "long top 2, short bottom 2",
+      "entry": "13:30 ET open",
+      "exit": "15:55 ET open"
+    }
+  },
+  "ranking_rules": {
+    "minimum_eligible_names_per_session": 8,
+    "ties": "stable alphabetical ticker order only as deterministic tie breaker",
+    "missing_required_name": "session ineligible; do not shrink or substitute universe",
+    "return_bps_per_name": "direction * (exit_open / entry_open - 1) * 10000",
+    "gross_portfolio_bps": "sum(weight * name_return_bps) across four selected names",
+    "net_portfolio_bps_primary": "gross_portfolio_bps - 4",
+    "net_portfolio_bps_stress": "gross_portfolio_bps - 8",
+    "reversed_control": "flip every selected direction at same ranking/entry/exit; subtract identical friction"
+  },
+  "D0_gate": {
+    "minimum_portfolio_sessions": 15,
+    "pooled_net_mean_bps_4cost_positive": true,
+    "pooled_net_mean_bps_8cost_nonnegative": true,
+    "original_beats_reversed_at_4cost": true,
+    "both_calendar_halves_positive_at_4cost": true,
+    "minimum_positive_sessions": 10,
+    "max_positive_pnl_share_single_name": 0.35
+  },
+  "D3_gate": {
+    "minimum_portfolio_sessions": 15,
+    "pooled_net_mean_bps_4cost_positive": true,
+    "pooled_net_mean_bps_8cost_nonnegative": true,
+    "original_beats_reversed_at_4cost": true,
+    "minimum_positive_sessions": 9,
+    "max_positive_pnl_share_single_name": 0.35
+  },
+  "calendar_halves_D0": [
+    [
+      "2026-07-06",
+      "2026-07-17"
+    ],
+    [
+      "2026-07-20",
+      "2026-07-31"
+    ]
+  ],
+  "research_rules": {
+    "failed_family_id_dead": true,
+    "no_post_result_universe_change": true,
+    "no_threshold_or_time_window_retuning": true,
+    "reversed_control_cannot_be_adopted_post_hoc": true,
+    "D3_remains_sealed_for_any_family_that_fails_D0": true,
+    "survivor_only_creates_new_candidate_id_for_future_shadow": true,
+    "no_live_or_leverage_claim_from_D0_or_D3": true
+  }
+}
