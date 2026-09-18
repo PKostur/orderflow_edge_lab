@@ -1,0 +1,153 @@
+{
+  "research_id": "rates_futures_v1",
+  "stage": "D0",
+  "status": "FALSIFIED_D0_ALL_FAMILIES",
+  "evaluated_at_utc": "2026-09-18T16:10:00Z",
+  "source": {
+    "provider": "Massive",
+    "resolution": "1session",
+    "D0_window": [
+      "2025-02-03",
+      "2025-12-31"
+    ],
+    "D3_holdout": [
+      "2026-01-02",
+      "2026-08-31"
+    ],
+    "D3_fetched": false
+  },
+  "data_integrity": {
+    "common_selected_sessions": 251,
+    "first_common_session": "2025-01-02",
+    "last_common_session": "2025-12-31",
+    "contract_selection": "nearest standard outright with >=21 calendar days to last_trade_date",
+    "native_contract_only": true,
+    "no_stitching": true,
+    "expiries": {
+      "ZT": {
+        "ZTH5": "2025-03-31",
+        "ZTM5": "2025-06-30",
+        "ZTU5": "2025-09-30",
+        "ZTZ5": "2025-12-31",
+        "ZTH6": "2026-03-31"
+      },
+      "ZF": {
+        "ZFH5": "2025-03-31",
+        "ZFM5": "2025-06-30",
+        "ZFU5": "2025-09-30",
+        "ZFZ5": "2025-12-31",
+        "ZFH6": "2026-03-31"
+      },
+      "ZN": {
+        "ZNH5": "2025-03-20",
+        "ZNM5": "2025-06-18",
+        "ZNU5": "2025-09-19",
+        "ZNZ5": "2025-12-19",
+        "ZNH6": "2026-03-20"
+      },
+      "ZB": {
+        "ZBH5": "2025-03-20",
+        "ZBM5": "2025-06-18",
+        "ZBU5": "2025-09-19",
+        "ZBZ5": "2025-12-19",
+        "ZBH6": "2026-03-20"
+      }
+    }
+  },
+  "families": {
+    "RATES_H1_XS_MOM5_VOLNORM_HOLD5": {
+      "status": "FALSIFIED_D0",
+      "observations": 19,
+      "distinct_products_selected": 4,
+      "net_mean_bps_primary": -6.143256875985195,
+      "net_mean_bps_stress": -9.214280907314595,
+      "reversed_mean_bps_primary": 0.001208813326391877,
+      "half1_mean_bps_primary": -7.744388643009314,
+      "half2_mean_bps_primary": -5.209263345221125,
+      "positive_product_count": 1,
+      "max_positive_product_share": 1,
+      "product_contribution_bps": {
+        "ZT": -11.325274644410285,
+        "ZF": -60.694500744236734,
+        "ZN": 23.90289620269756,
+        "ZB": -68.60500145776925
+      },
+      "gate_results": {
+        "minimum_portfolio_observations": false,
+        "minimum_distinct_products_selected": true,
+        "net_mean_bps_primary_positive": false,
+        "net_mean_bps_stress_nonnegative": false,
+        "original_beats_reversed_primary": false,
+        "both_calendar_halves_positive_primary": false,
+        "minimum_products_with_positive_total_contribution": false,
+        "max_positive_contribution_share_single_product": false
+      }
+    },
+    "RATES_H2_XS_SHOCK1_REVERSION_HOLD2": {
+      "status": "FALSIFIED_D0",
+      "observations": 40,
+      "distinct_products_selected": 4,
+      "net_mean_bps_primary": -2.5733064184342567,
+      "net_mean_bps_stress": -5.578005198403957,
+      "reversed_mean_bps_primary": -3.4360911415051456,
+      "half1_mean_bps_primary": 14.938699205351138,
+      "half2_mean_bps_primary": -14.247976834291185,
+      "positive_product_count": 1,
+      "max_positive_product_share": 1,
+      "product_contribution_bps": {
+        "ZT": -33.858531716468654,
+        "ZF": -69.15831238710749,
+        "ZN": -12.883446295391943,
+        "ZB": 12.968033661597783
+      },
+      "gate_results": {
+        "minimum_portfolio_observations": true,
+        "minimum_distinct_products_selected": true,
+        "net_mean_bps_primary_positive": false,
+        "net_mean_bps_stress_nonnegative": false,
+        "original_beats_reversed_primary": true,
+        "both_calendar_halves_positive_primary": false,
+        "minimum_products_with_positive_total_contribution": false,
+        "max_positive_contribution_share_single_product": false
+      }
+    },
+    "RATES_H3_TS_TREND20_IVOL_HOLD5": {
+      "status": "FALSIFIED_D0",
+      "observations": 19,
+      "distinct_products_selected": 4,
+      "net_mean_bps_primary": -13.837569364962834,
+      "net_mean_bps_stress": -15.478562133789952,
+      "reversed_mean_bps_primary": 10.555583827308595,
+      "half1_mean_bps_primary": 0.009475947830526632,
+      "half2_mean_bps_primary": -21.91501246409229,
+      "positive_product_count": 0,
+      "max_positive_product_share": null,
+      "product_contribution_bps": {
+        "ZT": -84.14447490523074,
+        "ZF": -57.194118593713604,
+        "ZN": -60.49821910587191,
+        "ZB": -61.07700532947758
+      },
+      "gate_results": {
+        "minimum_portfolio_observations": false,
+        "minimum_distinct_products_selected": true,
+        "net_mean_bps_primary_positive": false,
+        "net_mean_bps_stress_nonnegative": false,
+        "original_beats_reversed_primary": false,
+        "both_calendar_halves_positive_primary": false,
+        "minimum_products_with_positive_total_contribution": false,
+        "max_positive_contribution_share_single_product": false
+      }
+    }
+  },
+  "research_state": {
+    "D0": "FALSIFIED_ALL_FAMILIES",
+    "D3_holdout": "SEALED_NOT_FETCHED",
+    "candidate_created": false,
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "leverage_supported": false,
+    "same_id_retuning_allowed": false
+  },
+  "design_note": "H1/H3 also failed the predeclared minimum-observation gate because same-native-contract 20-session warmup after each quarterly roll reduces eligible non-overlapping observations. This structural limitation cannot be repaired under v1."
+}
