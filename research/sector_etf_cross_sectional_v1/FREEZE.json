@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "research_id": "sector_etf_cross_sectional_v1",
+  "status": "FROZEN_BEFORE_PNL",
+  "frozen_at_utc": "2026-09-18T15:42:00Z",
+  "purpose": "Test fresh multi-year cross-sectional momentum and short-term reversal in US sector ETFs, separate from prior intraday ETF/equity experiments.",
+  "evidence_separation": {
+    "crypto_chain_unchanged": true,
+    "gold_chain_unchanged": true,
+    "futures_intraday_chain_unchanged": true,
+    "intraday_etf_chain_unchanged": true,
+    "fx_chain_unchanged": true,
+    "prior_cross_sectional_equity_v1_unchanged": true
+  },
+  "data": {
+    "provider": "Massive",
+    "endpoint": "/v2/aggs/ticker/{stocksTicker}/range/1/day/{from}/{to}",
+    "adjusted": true,
+    "universe": ["XLB","XLC","XLE","XLF","XLI","XLK","XLP","XLRE","XLU","XLV","XLY"],
+    "universe_selected_before_pnl": true,
+    "universe_rationale": "Fixed eleven SPDR US sector ETFs to test broad sector-relative effects without post-result name substitution.",
+    "missing_rule": "A portfolio signal is eligible only when all eleven ETFs have the required lookback close and all selected legs have exact entry/exit opens."
+  },
+  "windows": {
+    "D0_development": ["2020-01-02","2023-12-29"],
+    "D3_locked_historical_holdout": ["2024-01-02","2025-12-31"],
+    "D3b_reserved_historical_check_not_future_oos": ["2026-01-02","2026-09-16"],
+    "prospective_future_shadow_earliest": "2026-09-21"
+  },
+  "portfolio": {
+    "legs": 6,
+    "construction": "Equal gross weights: long three and short three; 50% long / 50% short; gross exposure 1.0, net exposure 0.",
+    "signal_timing": "completed daily close only",
+    "execution_timing": "next valid session open",
+    "primary_round_trip_cost_bps_per_leg": 8.0,
+    "stress_round_trip_cost_bps_per_leg": 16.0,
+    "return": "arithmetic signed open-to-open return in bps, then subtract round-trip cost once per leg",
+    "reversed_same_ranking_control": true,
+    "leverage": 1.0
+  },
+  "families": {
+    "SECTOR_XS_H1_MOM63_HOLD21": {
+      "feature": "trailing 63-valid-session close-to-close return ending at signal close",
+      "ranking": "ascending feature across eleven ETFs; ticker ascending breaks exact ties",
+      "position": "long top three, short bottom three",
+      "holding_valid_sessions": 21,
+      "sampling": "sequential non-overlapping portfolio observations; after an exit, next signal is that exit session close",
+      "lookback_sessions": 63
+    },
+    "SECTOR_XS_H2_MOM21_HOLD5": {
+      "feature": "trailing 21-valid-session close-to-close return ending at signal close",
+      "ranking": "ascending feature across eleven ETFs; ticker ascending breaks exact ties",
+      "position": "long top three, short bottom three",
+      "holding_valid_sessions": 5,
+      "sampling": "sequential non-overlapping portfolio observations; after an exit, next signal is that exit session close",
+      "lookback_sessions": 21
+    },
+    "SECTOR_XS_H3_REV5_HOLD5": {
+      "feature": "trailing 5-valid-session close-to-close return ending at signal close",
+      "ranking": "ascending feature across eleven ETFs; ticker ascending breaks exact ties",
+      "position": "long bottom three, short top three",
+      "holding_valid_sessions": 5,
+      "sampling": "sequential non-overlapping portfolio observations; after an exit, next signal is that exit session close",
+      "lookback_sessions": 5
+    }
+  },
+  "D0_gate": {
+    "minimum_portfolio_observations": 40,
+    "minimum_calendar_years_with_observations": 4,
+    "minimum_distinct_sectors_selected": 9,
+    "net_mean_bps_primary_positive": true,
+    "net_mean_bps_stress_nonnegative": true,
+    "original_beats_reversed_primary": true,
+    "minimum_positive_calendar_year_fraction": 0.75,
+    "minimum_sectors_with_positive_total_contribution": 6,
+    "max_positive_contribution_share_single_sector": 0.30
+  },
+  "D3_gate": {
+    "minimum_portfolio_observations": 20,
+    "net_mean_bps_primary_positive": true,
+    "net_mean_bps_stress_nonnegative": true,
+    "original_beats_reversed_primary": true,
+    "both_2024_and_2025_positive_primary": true,
+    "minimum_sectors_with_positive_total_contribution": 6,
+    "max_positive_contribution_share_single_sector": 0.30
+  },
+  "research_rules": {
+    "all_three_families_retained": true,
+    "failed_family_id_dead": true,
+    "no_post_result_sector_substitution": true,
+    "no_lookback_or_holding_retuning_after_D0": true,
+    "reversed_control_cannot_be_adopted_post_hoc": true,
+    "D3_not_opened_for_D0_failure": true,
+    "D3b_not_opened_until_D3_pass": true,
+    "no_historical_window_is_called_genuine_future_oos": true,
+    "survivor_only_creates_new_candidate_id_for_prospective_shadow": true
+  }
+}
