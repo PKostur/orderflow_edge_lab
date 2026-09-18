@@ -176,7 +176,7 @@ def build_dxfeed_level1_feature_rows(
     source_rows: Iterable[Mapping[str, object]],
     *,
     default_symbol: str | None = None,
-    max_quote_age_seconds: float = 2.0,
+    max_quote_age_seconds: float = 1.0,
 ) -> Level1BuildResult:
     """Build causal H1/H3-ready rows from dxFeed/DeepCharts CSV-like rows.
 
