@@ -1,22 +1,24 @@
 {
   "research_id": "sector_etf_cross_sectional_v1",
-  "status": "BLOCKED_BY_HISTORICAL_DATA_ENTITLEMENT",
-  "evaluated_at_utc": "2026-09-18T15:46:00Z",
-  "freeze_commit": "ae0cfcdd12cc819ea51faf269c5865051f1cda99",
-  "source_attempt": {
+  "status": "BLOCKER_RESOLVED_D0_FALSIFIED",
+  "updated_at_utc": "2026-09-18T15:50:00Z",
+  "original_blocker": {
     "provider": "Massive",
-    "requested_window": ["2019-09-01","2023-12-29"],
-    "custom_daily_bars": "NOT_ENTITLED",
-    "grouped_daily_history_check_2023_01_03": "NOT_ENTITLED",
-    "strategy_pnl_inspected": false
+    "issue": "2019-2023 stock history not entitled on connected plan",
+    "strategy_pnl_inspected_at_blocker": false
   },
-  "research_state": {
-    "D0": "NOT_RUN",
-    "D3_holdout": "SEALED_NOT_FETCHED",
+  "resolution": {
+    "source": "Yahoo Finance chart API",
+    "source_frozen_before_pnl": true,
+    "single_source_all_symbols": true,
+    "d0_result_file": "research/sector_etf_cross_sectional_v1/D0_RESULT_YAHOO.json",
+    "D0": "FALSIFIED_ALL_FAMILIES",
+    "D3_holdout": "SEALED_NOT_FETCHED"
+  },
+  "claims": {
     "candidate_created": false,
     "persistent_edge_established": false,
-    "same_id_window_shortening_allowed": false,
-    "same_id_parameter_changes_allowed": false
-  },
-  "next_legal_step": "Acquire the frozen historical window from an independent entitled source, then run the exact frozen protocol without changing universe, dates, lookbacks, holding periods, costs or gates."
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
 }
