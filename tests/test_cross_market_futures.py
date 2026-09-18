@@ -37,6 +37,8 @@ class CrossMarketFuturesTests(unittest.TestCase):
         clarification = Path("research/cross_market_futures_v1/FREEZE_CLARIFICATION.md").read_text()
         self.assertIn("top-10 displayed depth imbalance", clarification)
         self.assertIn("ineligible for CMF-H2", clarification)
+        quote_age = Path("research/cross_market_futures_v1/FREEZE_CLARIFICATION_QUOTE_AGE.md").read_text()
+        self.assertIn("1.0 second", quote_age)
 
     def test_contract_specs_and_tick_values(self) -> None:
         self.assertEqual(set(FUTURES_SPECS), {"ES", "NQ", "GC", "CL"})
@@ -137,6 +139,17 @@ class CrossMarketFuturesTests(unittest.TestCase):
         self.assertTrue(one_tick)
         self.assertTrue(all(r["extra_friction_bps"] > 0 for r in one_tick))
         self.assertTrue(all(r["commission_exchange_fees_resolved"] is False for r in rows))
+
+    def test_default_futures_quote_age_is_one_second(self) -> None:
+        base = 1_700_000_000_000_000_000
+        rows = [
+            {"timestamp": base, "symbol": "ESZ26", "kind": "QUOTE", "bid": 5000.0, "ask": 5000.25, "bid_size": 9, "ask_size": 1},
+            {"timestamp": base + 1_500_000_000, "symbol": "ESZ26", "kind": "TRADE", "price": 5000.25, "size": 1, "side": "BUY"},
+        ]
+        built = build_dxfeed_level1_feature_rows(rows)
+        trade = [r for r in built.rows if r["event_type"] == "trade"][0]
+        self.assertIsNone(trade["best_bid"])
+        self.assertEqual(built.stale_bbo_uses_blocked, 1)
 
     def test_stale_and_ambiguous_bbo_state_is_not_used(self) -> None:
         base = 1_700_000_000_000_000_000
