@@ -24,7 +24,12 @@ import os
 from pathlib import Path
 import urllib.request
 
-from orderflow_edge_lab.dxfeed import NoRedirect, probe_connection, probe_history
+from orderflow_edge_lab.dxfeed import (
+    NoRedirect,
+    probe_connection,
+    probe_depth_snapshot,
+    probe_history,
+)
 from orderflow_edge_lab.adapters import normalize_dxfeed_rows
 from orderflow_edge_lab.data import DataQualityPolicy, quality_report
 
@@ -80,7 +85,20 @@ def probe_rest(
     password: str | None = None,
     from_time: str | None = None,
     to_time: str | None = None,
+    depth: bool = False,
 ) -> int:
+    if depth and (from_time is not None or to_time is not None):
+        print(
+            json.dumps(
+                {
+                    "status": "blocked",
+                    "error_type": "InvalidConfiguration",
+                    "note": "--depth cannot be combined with --from-time/--to-time.",
+                },
+                indent=2,
+            )
+        )
+        return 2
     if (from_time is None) != (to_time is None):
         print(
             json.dumps(
@@ -93,7 +111,15 @@ def probe_rest(
             )
         )
         return 2
-    if from_time is not None and to_time is not None:
+    if depth:
+        code, result = probe_depth_snapshot(
+            endpoint,
+            token,
+            symbol,
+            username=username,
+            password=password,
+        )
+    elif from_time is not None and to_time is not None:
         code, result = probe_history(
             endpoint,
             token,
@@ -132,10 +158,15 @@ def main() -> int:
         "--to-time",
         help="Historical TimeAndSale window end, timezone-aware ISO 8601; max window 10 minutes",
     )
+    parser.add_argument(
+        "--depth",
+        action="store_true",
+        help="Probe current futures AGGREGATE Order depth; this does not verify historical depth",
+    )
     args = parser.parse_args()
 
     if args.export:
-        if args.from_time is not None or args.to_time is not None:
+        if args.from_time is not None or args.to_time is not None or args.depth:
             print(
                 json.dumps(
                     {
@@ -193,6 +224,7 @@ def main() -> int:
         password=password,
         from_time=args.from_time,
         to_time=args.to_time,
+        depth=args.depth,
     )
 
 
