@@ -33,7 +33,8 @@ class TournamentConfig:
 
 
 def _to_ms(value: str | pd.Timestamp) -> int:
-    ts = pd.Timestamp(value, tz="UTC") if not isinstance(value, pd.Timestamp) else value.tz_convert("UTC")
+    ts = pd.Timestamp(value)
+    ts = ts.tz_localize("UTC") if ts.tzinfo is None else ts.tz_convert("UTC")
     return int(ts.timestamp() * 1000)
 
 
