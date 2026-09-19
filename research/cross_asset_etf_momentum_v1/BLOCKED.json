@@ -1,0 +1,20 @@
+{
+  "research_id": "cross_asset_etf_momentum_v1",
+  "status": "BLOCKED_BY_DATA_ENTITLEMENT_NOT_FALSIFIED",
+  "freeze_commit": "fa2c40dbc3f6aeba0767524dd2227b16dac5180a",
+  "evaluated_at_utc": "2026-09-19T23:05:00Z",
+  "pnl_inspected": false,
+  "required_history": "2008-01-01 through 2018-12-31 for prehistory + D0",
+  "source": "Massive",
+  "entitlement_probe": {
+    "2023": "NOT_ENTITLED",
+    "2024": "AVAILABLE",
+    "2025": "AVAILABLE",
+    "2026": "AVAILABLE"
+  },
+  "rule": "Frozen windows are not moved after freeze under the same research ID.",
+  "candidate_created": false,
+  "persistent_edge_established": false,
+  "live_execution_supported": false,
+  "leverage_supported": false
+}
