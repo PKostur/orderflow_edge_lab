@@ -1,0 +1,109 @@
+{
+  "research_id": "cross_asset_etf_momentum_v1",
+  "status": "FROZEN_BEFORE_PNL",
+  "frozen_at_utc": "2026-09-19T22:45:00Z",
+  "purpose": "Test one canonical low-frequency cross-asset ETF relative-momentum hypothesis after the intraday ETF lane failed, without reusing or retuning intraday rules.",
+  "separation": {
+    "crypto_chain_unchanged": true,
+    "futures_chain_unchanged": true,
+    "intraday_etf_chain_unchanged": true,
+    "no_result_can_promote_prior_candidates": true
+  },
+  "universe": [
+    "SPY",
+    "IWM",
+    "EFA",
+    "EEM",
+    "TLT",
+    "IEF",
+    "HYG",
+    "GLD",
+    "DBC",
+    "VNQ"
+  ],
+  "universe_rule": "Fixed before any PnL; no substitutions after results.",
+  "data": {
+    "provider": "Massive",
+    "bars_endpoint": "/v2/aggs/ticker/{ticker}/range/1/day/{from}/{to}",
+    "dividends_endpoint": "/stocks/v1/dividends",
+    "bars_adjusted_for_splits": true,
+    "dividend_field": "split_adjusted_cash_amount",
+    "prehistory_start": "2008-01-01",
+    "missing_rule": "A monthly observation is ineligible if any required common-session decision, lookback, entry or exit bar is missing for any universe member. No fallback date or ticker substitution."
+  },
+  "windows": {
+    "D0_discovery": [
+      "2010-01-01",
+      "2018-12-31"
+    ],
+    "D3_locked_historical_holdout": [
+      "2019-01-01",
+      "2023-12-31"
+    ],
+    "later_historical_replication_reserved": [
+      "2024-01-01",
+      "2026-09-18"
+    ],
+    "future_shadow_earliest": "2026-09-21"
+  },
+  "signal": {
+    "decision": "Last common US trading session of each calendar month after the close.",
+    "lookback_sessions": 252,
+    "skip_recent_sessions": 21,
+    "score": "(close_at_t_minus_21 - close_at_t_minus_252 + sum(split_adjusted_cash_dividends with ex_date > t_minus_252 and <= t_minus_21)) / close_at_t_minus_252",
+    "ranking": "Descending score; ties broken alphabetically by ticker.",
+    "portfolio": "Long top 3, equal target weight 1/3 each.",
+    "reversed_control": "Long bottom 3, equal target weight 1/3 each, same dates and economics.",
+    "benchmark": "Long all 10, equal target weight 0.1 each.",
+    "no_shorting": true,
+    "no_leverage": true
+  },
+  "execution": {
+    "entry": "Next common US trading session open after decision date.",
+    "exit": "Next rebalance entry open.",
+    "holding_return": "(exit_open - entry_open + sum(split_adjusted_cash_dividends with ex_date > entry_date and <= exit_date)) / entry_open",
+    "cost_primary_one_way_bps": 5,
+    "cost_stress_one_way_bps": 10,
+    "turnover_proxy": "0.5 * sum(abs(target_weight_t - target_weight_previous)) across all 10 ETFs. Initial prior weights are zero.",
+    "cost_formula_bps": "2 * one_way_bps * turnover_proxy",
+    "note": "Membership/target-weight turnover proxy ignores small drift-restoration trades when target membership is unchanged; this is a stated limitation, not adjusted after results."
+  },
+  "D0_gate": {
+    "minimum_monthly_observations": 96,
+    "mean_monthly_net_return_primary_positive": true,
+    "mean_monthly_excess_vs_equal_weight_primary_positive": true,
+    "mean_monthly_excess_vs_equal_weight_stress_nonnegative": true,
+    "mean_monthly_return_beats_reversed_primary": true,
+    "both_calendar_halves_excess_vs_benchmark_primary_positive": true,
+    "minimum_distinct_selected_etfs": 6,
+    "max_positive_contribution_share_single_etf": 0.5
+  },
+  "D0_halves": {
+    "half1": [
+      "2010-01-01",
+      "2014-06-30"
+    ],
+    "half2": [
+      "2014-07-01",
+      "2018-12-31"
+    ]
+  },
+  "D3_gate": {
+    "minimum_monthly_observations": 54,
+    "mean_monthly_net_return_primary_positive": true,
+    "mean_monthly_excess_vs_equal_weight_primary_positive": true,
+    "mean_monthly_excess_vs_equal_weight_stress_nonnegative": true,
+    "mean_monthly_return_beats_reversed_primary": true,
+    "minimum_distinct_selected_etfs": 6,
+    "max_positive_contribution_share_single_etf": 0.5
+  },
+  "protocol": {
+    "only_one_family_in_v1": true,
+    "no_parameter_retuning_after_D0": true,
+    "failed_id_dead": true,
+    "reversed_control_cannot_be_adopted_post_hoc": true,
+    "D3_not_opened_if_D0_fails_any_gate": true,
+    "no_direct_promotion_from_historical_results": true,
+    "survivor_only_creates_new_candidate_id_for_future_shadow": true
+  }
+}
