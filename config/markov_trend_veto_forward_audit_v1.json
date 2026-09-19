@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "experiment_id": "markov_trend_veto_forward_audit_v1",
+  "frozen_at_utc": "2026-09-20T00:00:00Z",
+  "base_candidate_config": "config/htf_trend_candidate_v1.json",
+  "base_candidate_id": "mexc_8h_ema24_96_atr025_v1",
+  "base_candidate_spec_sha256": "aa98c8179f5c3160edda2e5e78d9a9c99adca76013da984f78aa2fcd943a0f0d",
+  "shadow_config": "config/markov_ev_shadow_v1.json",
+  "markov_config": "config/markov_price_diagnostics_v1.json",
+  "ev_config": "config/markov_ev_overlay_v1.json",
+  "shadow_candidate_id": "mexc_8h_ema24_96_atr025_markov_ev_v1",
+  "evaluation": {
+    "execution_start_utc": "2026-09-16T00:00:00Z",
+    "horizon_bars": 3,
+    "interval": "8h",
+    "round_trip_cost_bps": 20.0,
+    "funding": "actual public MEXC realized funding",
+    "only_fully_observed_horizons": true,
+    "minimum_completed_decisions_for_review": 20,
+    "primary_discrimination": "mean_realized_net_bps_PASS_minus_VETO",
+    "secondary_metrics": [
+      "profit_factor",
+      "win_rate",
+      "avoided_veto_losses",
+      "missed_veto_winners"
+    ]
+  },
+  "rules": {
+    "recompute_decisions_with_original_frozen_markov_configs": true,
+    "do_not_change_pass_veto_rule": true,
+    "do_not_use_realized_outcomes_to_retune": true,
+    "do_not_reverse_vetoed_entries": true,
+    "paper_diagnostic_only": true
+  },
+  "claims": {
+    "base_candidate_modified": false,
+    "markov_rule_modified": false,
+    "verified_out_of_sample_edge": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  }
+}
