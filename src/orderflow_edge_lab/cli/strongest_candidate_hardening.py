@@ -14,11 +14,12 @@ from orderflow_edge_lab.basis_convergence import fetch_mexc_funding_history
 from orderflow_edge_lab.htf_trend_forward_shadow import load_candidate as load_trend_candidate
 from orderflow_edge_lab.cross_sectional_forward_shadow import load_candidate as load_xs_candidate
 from orderflow_edge_lab.mexc_history import fetch_mexc_futures_klines
-from orderflow_edge_lab.strategy_tournament import fetch_binance_usdm_klines
 from orderflow_edge_lab.strongest_candidate_hardening import (
     evaluate_cross_sectional_panel,
     evaluate_trend_panel,
-    fetch_binance_usdm_funding_history,
+    fetch_bybit_linear_funding_history,
+    fetch_bybit_linear_klines,
+    resample_bybit_4h_to_8h,
 )
 
 
@@ -58,11 +59,12 @@ def _source_payload(
             trend = _retry(lambda: fetch_mexc_futures_klines(symbol, "8h", start, end))
             daily = _retry(lambda: fetch_mexc_futures_klines(symbol, "1d", start, end))
             fund = _retry(lambda: fetch_mexc_funding_history(symbol, start, end))
-        elif source == "binance_usdm":
+        elif source == "bybit_linear":
             normalized = symbol.replace("_", "")
-            trend = _retry(lambda: fetch_binance_usdm_klines(normalized, "8h", start, end))
-            daily = _retry(lambda: fetch_binance_usdm_klines(normalized, "1d", start, end))
-            fund = _retry(lambda: fetch_binance_usdm_funding_history(normalized, start, end))
+            four_hour = _retry(lambda: fetch_bybit_linear_klines(normalized, "240", start, end))
+            trend = resample_bybit_4h_to_8h(four_hour)
+            daily = _retry(lambda: fetch_bybit_linear_klines(normalized, "D", start, end))
+            fund = _retry(lambda: fetch_bybit_linear_funding_history(normalized, start, end))
         else:
             raise ValueError(f"unknown source {source}")
         return symbol, trend, daily, fund
@@ -86,7 +88,7 @@ def _source_payload(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Adversarially harden the two strongest frozen candidates.")
-    parser.add_argument("--config", default="config/strongest_candidate_hardening_v1.json")
+    parser.add_argument("--config", default="config/strongest_candidate_hardening_v1_1.json")
     parser.add_argument("--output", required=True)
     parser.add_argument("--source-dir", required=True)
     parser.add_argument("--max-workers", type=int, default=5)
@@ -115,7 +117,7 @@ def main() -> None:
     root = Path(args.source_dir)
     root.mkdir(parents=True, exist_ok=True)
     source_reports: dict[str, Any] = {}
-    for source in ("mexc", "binance_usdm"):
+    for source in ("mexc", "bybit_linear"):
         source_path = root / source
         source_path.mkdir(parents=True, exist_ok=True)
         trend_frames, daily_frames, funding, source_hashes = _source_payload(
