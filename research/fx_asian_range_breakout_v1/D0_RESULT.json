@@ -1,0 +1,107 @@
+{
+  "research_id": "fx_asian_range_breakout_v1",
+  "status": "FALSIFIED_D0",
+  "freeze_commit": "3e05b90d9049b0fb3359d33ba33d148b0c1dddff",
+  "clarification_commit": "b43427fcf4f704c4f44be5d0fe866aadcd134693",
+  "acquisition_clarification_commit": "b0f53ce8ebf836eee65c16a1a5a95be82d98acd5",
+  "evaluator_commit": "2623594d67b235c348f42ba73d67660d0c71a3b1",
+  "data": {
+    "provider": "Massive",
+    "D0_window": [
+      "2024-10-01",
+      "2025-09-30"
+    ],
+    "reconstructed_in_overlapping_fixed_chunks": true,
+    "overlap_conflicts": 0,
+    "pair_timestamp_coverage": {
+      "AUDUSD": {
+        "unique_timestamps": 6085,
+        "duplicated_timestamps": 131
+      },
+      "EURUSD": {
+        "unique_timestamps": 6163,
+        "duplicated_timestamps": 126
+      },
+      "GBPUSD": {
+        "unique_timestamps": 6180,
+        "duplicated_timestamps": 131
+      },
+      "USDJPY": {
+        "unique_timestamps": 6190,
+        "duplicated_timestamps": 131
+      }
+    }
+  },
+  "D0": {
+    "total_signals": 658,
+    "distinct_signal_days": 243,
+    "pairs_with_signals": 4,
+    "pooled_mean_net2_bps": 1.0085918636,
+    "pooled_mean_net4_bps": -0.9914081364,
+    "reversed_mean_net2_bps": -5.0085918636,
+    "half1_mean_net2_bps": 0.1080762325,
+    "half2_mean_net2_bps": 1.8768502183,
+    "positive_pairs": 3,
+    "max_positive_pair_share": 0.6064824997,
+    "pair_results": {
+      "USDJPY": {
+        "signals": 150,
+        "longs": 77,
+        "shorts": 73,
+        "mean_net2_bps": 6.2685444855,
+        "mean_net4_bps": 4.2685444855,
+        "reversed_mean_net2_bps": -10.2685444855,
+        "total_net2_bps": 940.281672827
+      },
+      "AUDUSD": {
+        "signals": 118,
+        "longs": 67,
+        "shorts": 51,
+        "mean_net2_bps": 2.805952099,
+        "mean_net4_bps": 0.805952099,
+        "reversed_mean_net2_bps": -6.805952099,
+        "total_net2_bps": 331.1023476799
+      },
+      "EURUSD": {
+        "signals": 181,
+        "longs": 101,
+        "shorts": 80,
+        "mean_net2_bps": 1.5414446315,
+        "mean_net4_bps": -0.4585553685,
+        "reversed_mean_net2_bps": -5.5414446315,
+        "total_net2_bps": 279.0014782934
+      },
+      "GBPUSD": {
+        "signals": 209,
+        "longs": 114,
+        "shorts": 95,
+        "mean_net2_bps": -4.2427370936,
+        "mean_net4_bps": -6.2427370936,
+        "reversed_mean_net2_bps": 0.2427370936,
+        "total_net2_bps": -886.7320525682
+      }
+    },
+    "gate_results": {
+      "minimum_total_signals": true,
+      "minimum_distinct_signal_days": true,
+      "all_four_pairs_have_signals": true,
+      "pooled_net_mean_bps_primary_positive": true,
+      "pooled_net_mean_bps_stress_nonnegative": false,
+      "original_beats_reversed_primary": true,
+      "minimum_positive_pairs": true,
+      "max_positive_contribution_share_single_pair": false,
+      "both_fixed_halves_positive_primary": true
+    }
+  },
+  "interpretation": "Primary-friction pooled expectancy is slightly positive, but the frozen stress-cost gate fails and positive PnL is too concentrated in USDJPY. The exact family ID is terminally falsified at D0. Pair-specific rescue, excluding GBPUSD, lowering stress friction, or loosening the concentration cap would be post-result tuning and is forbidden.",
+  "research_state": {
+    "D0": "FALSIFIED",
+    "D3_holdout": "SEALED_NOT_INSPECTED",
+    "candidate_created": false,
+    "future_shadow_created": false,
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "leverage_supported": false,
+    "same_id_retuning_allowed": false
+  }
+}
