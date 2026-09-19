@@ -193,6 +193,7 @@ def _trend_mode_returns(
     *,
     cost_bps: float,
     mode: str,
+    funding_matrix: pd.DataFrame | None = None,
 ) -> tuple[pd.Series, pd.DataFrame, dict[str, float]]:
     symbols = [str(x) for x in candidate["specification"]["symbols"] if str(x) in clean]
     opens = pd.DataFrame({s: clean[s].loc[common, "open"] for s in symbols}, index=common)
@@ -213,7 +214,8 @@ def _trend_mode_returns(
     weights = sides.div(active, axis=0).fillna(0.0)
     future_open = opens.shift(-1)
     price = weights.iloc[:-1] * (future_open.iloc[:-1] / opens.iloc[:-1] - 1.0)
-    fund_rates = _funding_matrix(common, symbols, funding)
+    fund_rates = funding_matrix if funding_matrix is not None else _funding_matrix(common, symbols, funding)
+    fund_rates = fund_rates.loc[:, symbols]
     funding_contrib = -weights.iloc[:-1] * fund_rates
     turnover = (weights - weights.shift(1).fillna(0.0)).abs().sum(axis=1).iloc[:-1]
     side_cost = float(cost_bps) / 2.0 / 10_000.0
@@ -238,8 +240,17 @@ def evaluate_trend_panel(
     clean, common = _common_frames(frames, symbols, {"open", "high", "low", "close"}, minimum_rows=400)
     modes: dict[str, Any] = {}
     mode_returns: dict[str, pd.Series] = {}
+    full_funding_matrix = _funding_matrix(common, symbols, funding)
     for mode in ("frozen_original", "exact_signal_reversal", "equal_weight_long_only"):
-        returns, weights, contributions = _trend_mode_returns(clean, common, funding, candidate, cost_bps=cost_bps, mode=mode)
+        returns, weights, contributions = _trend_mode_returns(
+            clean,
+            common,
+            funding,
+            candidate,
+            cost_bps=cost_bps,
+            mode=mode,
+            funding_matrix=full_funding_matrix,
+        )
         folds = _calendar_folds(returns, fold_days, 365.25 * 3.0)
         positive_folds = [row for row in folds if float(row["net_return"]) > 0]
         positives = {k: max(0.0, v) for k, v in contributions.items()}
@@ -280,7 +291,15 @@ def evaluate_trend_panel(
         subset = [s for s in symbols if s != omitted]
         subclean = {s: clean[s] for s in subset}
         subfunding = {s: funding.get(s, pd.DataFrame()) for s in subset}
-        returns, _, _ = _trend_mode_returns(subclean, common, subfunding, candidate, cost_bps=cost_bps, mode="frozen_original")
+        returns, _, _ = _trend_mode_returns(
+            subclean,
+            common,
+            subfunding,
+            candidate,
+            cost_bps=cost_bps,
+            mode="frozen_original",
+            funding_matrix=full_funding_matrix.loc[:, subset],
+        )
         loo[omitted] = float(_return_stats(returns, bars_per_year=365.25 * 3.0)["net_return"])
 
     return {
@@ -428,7 +447,7 @@ def evaluate_cross_sectional_panel(
 
     loo: dict[str, float] = {}
     for omitted in symbols:
-        subset = {s: clean[s] for s in symbols if s != omitted}
+        subset = {s: clean[s].loc[common].copy() for s in symbols if s != omitted}
         subfund = {s: funding.get(s, pd.DataFrame()) for s in subset}
         result = backtest_cross_sectional_momentum(
             subset,
