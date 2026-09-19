@@ -1,0 +1,84 @@
+name: Markov Trend Veto Forward Audit v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/markov-trend-veto-audit-v1]
+    paths:
+      - "config/markov_trend_veto_forward_audit_v1.json"
+      - "src/orderflow_edge_lab/markov_trend_veto_audit.py"
+      - "src/orderflow_edge_lab/cli/markov_trend_veto_audit.py"
+      - "tests/test_markov_trend_veto_audit.py"
+      - ".github/workflows/markov-trend-veto-audit-v1.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: markov-trend-veto-audit-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run paired-outcome guardrail tests
+        run: python -m unittest tests.test_markov_trend_veto_audit -v
+      - name: Recompute frozen Markov decisions and audit completed horizons
+        run: |
+          mkdir -p artifacts/markov_trend_veto_audit/source
+          python -m orderflow_edge_lab.cli.markov_trend_veto_audit \
+            --config config/markov_trend_veto_forward_audit_v1.json \
+            --output artifacts/markov_trend_veto_audit/report.json \
+            --source-dir artifacts/markov_trend_veto_audit/source \
+            --max-workers 5
+      - name: Enforce no-retuning boundary and summarize
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.load(open('artifacts/markov_trend_veto_audit/report.json', encoding='utf-8'))
+          c=r['claims']
+          if c.get('base_candidate_modified') or c.get('markov_rule_modified'):
+              raise SystemExit('frozen base or Markov rule was modified')
+          if c.get('verified_out_of_sample_edge') or c.get('profitable_edge_established') or c.get('live_order_transmission_supported'):
+              raise SystemExit('audit emitted forbidden promotion claim')
+          a=r['audit']
+          lines=[
+              '# Markov Trend Veto Forward Audit v1','',
+              f"As of: **{r['as_of_utc']}**",'',
+              f"Completed fixed-horizon decisions: **{a['completed_decisions']}**; censored: **{a['censored_decisions']}**.",
+              f"Review minimum reached: **{a['reviewable_count_reached']}**.",'',
+              '| Group | N | Mean net bps | Median net bps | Win rate | PF |',
+              '|---|---:|---:|---:|---:|---:|',
+          ]
+          for key,label in [('pass','PASS'),('veto','VETO')]:
+              x=a[key]
+              mean='N/A' if x['mean_realized_net_bps'] is None else f"{x['mean_realized_net_bps']:+.2f}"
+              med='N/A' if x['median_realized_net_bps'] is None else f"{x['median_realized_net_bps']:+.2f}"
+              win='N/A' if x['win_rate'] is None else f"{x['win_rate']:.1%}"
+              lines.append(f"| {label} | {x['decisions']} | {mean} | {med} | {win} | {x['profit_factor']} |")
+          disc=a['pass_minus_veto_mean_realized_net_bps']
+          lines += ['',f"PASS minus VETO realized mean: **{'N/A' if disc is None else f'{disc:+.2f} bps'}**.",
+                    f"Avoided veto losses: **{a['avoided_veto_losses']}**; missed veto winners: **{a['missed_veto_winners']}**.",'',
+                    'Diagnostic only. Realized outcomes cannot alter the frozen PASS/VETO rule.','']
+          text='\n'.join(lines)
+          Path('artifacts/markov_trend_veto_audit/SUMMARY.md').write_text(text, encoding='utf-8')
+          print(text)
+          PY
+          cat artifacts/markov_trend_veto_audit/SUMMARY.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Preserve audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: markov-trend-veto-forward-audit-v1
+          path: artifacts/markov_trend_veto_audit/
+          retention-days: 30
+          if-no-files-found: warn
