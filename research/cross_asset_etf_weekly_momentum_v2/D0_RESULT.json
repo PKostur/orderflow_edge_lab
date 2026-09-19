@@ -1,0 +1,72 @@
+{
+  "research_id": "cross_asset_etf_weekly_momentum_v2",
+  "status": "SURVIVED_D0_ONLY",
+  "freeze_commit": "f37bc008f5c5417a1d10a4703645a1cfcd3695af",
+  "clarification_commit": "794e674898e9c086fd2d9680db34888e3f6bdaf2",
+  "evaluated_at_utc": "2026-09-19T23:40:00Z",
+  "source": {
+    "provider": "Massive",
+    "window": "2024-09-19 through 2025-12-19",
+    "D0_decisions": [
+      "2025-01-03",
+      "2025-12-05"
+    ],
+    "D3_opened": false
+  },
+  "integrity": {
+    "common_sessions": 315,
+    "eligible_D0_decisions": 49,
+    "dividend_rows": 72,
+    "null_split_adjusted_dividends": 0
+  },
+  "D0": {
+    "weekly_observations": 49,
+    "mean_net_bps_primary": 47.1402231248,
+    "mean_net_bps_stress": 45.4055292472,
+    "benchmark_mean_bps_primary": 35.0460726898,
+    "mean_excess_bps_primary": 12.094150435,
+    "mean_excess_bps_stress": 10.4614973738,
+    "reversed_mean_bps_primary": 22.9346684253,
+    "half1_excess_bps_primary": 10.0186309008,
+    "half2_excess_bps_primary": 14.4403899084,
+    "mean_original_turnover": 0.1734693878,
+    "distinct_selected_etfs": 9,
+    "max_positive_contribution_share": 0.3591362588,
+    "contribution_bps_pre_cost": {
+      "GLD": 990.3536940496,
+      "EEM": 696.8780052281,
+      "SPY": 499.4338776285,
+      "IWM": 284.0587308647,
+      "EFA": 262.8621171779,
+      "IEF": 24.0123130775,
+      "VNQ": 0,
+      "HYG": -18.9947218617,
+      "TLT": -60.3756993209,
+      "DBC": -283.3573837289
+    },
+    "selected_weeks": {
+      "GLD": 34,
+      "EEM": 26,
+      "SPY": 23,
+      "IWM": 23,
+      "EFA": 21,
+      "IEF": 5,
+      "VNQ": 0,
+      "HYG": 2,
+      "TLT": 3,
+      "DBC": 10
+    },
+    "gate_results": {
+      "minimum_weekly_observations": true,
+      "mean_net_return_primary_positive": true,
+      "mean_excess_vs_equal_weight_primary_positive": true,
+      "mean_excess_vs_equal_weight_stress_nonnegative": true,
+      "mean_return_beats_reversed_primary": true,
+      "both_fixed_halves_excess_vs_benchmark_primary_positive": true,
+      "minimum_distinct_selected_etfs": true,
+      "max_positive_contribution_share_single_etf": true
+    }
+  },
+  "interpretation": "Passes every frozen D0 gate. This is discovery evidence only. No candidate promotion, live eligibility, leverage eligibility or persistent-edge claim is created by D0.",
+  "next_step": "Open the frozen D3 historical holdout exactly as specified. No retuning."
+}
