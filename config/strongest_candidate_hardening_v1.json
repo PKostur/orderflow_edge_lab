@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "experiment_id": "strongest_candidate_hardening_v1",
+  "frozen_at_utc": "2026-09-20T00:00:00Z",
+  "purpose": "Adversarial strengthening of the two strongest frozen candidates without changing their specifications or prospective forward records.",
+  "development_window": {
+    "start_utc": "2024-01-01T00:00:00Z",
+    "end_exclusive_utc": "2026-09-12T00:00:00Z",
+    "forward_data_used": false
+  },
+  "candidates": {
+    "htf_trend": {
+      "config": "config/htf_trend_candidate_v1.json",
+      "candidate_id": "mexc_8h_ema24_96_atr025_v1",
+      "spec_sha256": "aa98c8179f5c3160edda2e5e78d9a9c99adca76013da984f78aa2fcd943a0f0d"
+    },
+    "cross_sectional": {
+      "config": "config/cross_sectional_candidate_v1.json",
+      "candidate_id": "mexc_xs_mom30_7_dn_v1",
+      "spec_sha256": "60ed9b9ee661df4952d994b9b76226cc7a017447007b1ad02f0e1f5c564107e5"
+    }
+  },
+  "sources": [
+    "MEXC public USDT perpetual candles plus realized funding",
+    "Binance USD-M public perpetual candles plus realized funding"
+  ],
+  "stress_protocol": {
+    "round_trip_cost_bps": [20.0, 40.0, 60.0],
+    "fold_days": 120,
+    "trend_controls": [
+      "frozen_original",
+      "exact_signal_reversal",
+      "equal_weight_long_only"
+    ],
+    "trend_regime_diagnostics": {
+      "btc_trailing_return_days": 90,
+      "btc_realized_vol_days": 30,
+      "volatility_split": "full-development-sample median; diagnostic only"
+    },
+    "cross_sectional_random_rank_placebos": 500,
+    "placebo_seed": 20260920,
+    "leave_one_symbol_out": true,
+    "same_fixed_symbol_panel": true
+  },
+  "interpretation": {
+    "independent_source_replication_required_for_strengthening": true,
+    "development_diagnostics_cannot_promote_candidate": true,
+    "no_parameter_retuning_from_results": true,
+    "prospective_forward_candidate_unchanged": true,
+    "failed_controls_and_negative_results_retained": true
+  },
+  "claims": {
+    "development_hardening_only": true,
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  }
+}
