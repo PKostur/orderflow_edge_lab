@@ -1,0 +1,97 @@
+name: Strongest Candidate Hardening v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/strongest-candidate-hardening-v1]
+    paths:
+      - "config/strongest_candidate_hardening_v1.json"
+      - "src/orderflow_edge_lab/strongest_candidate_hardening.py"
+      - "src/orderflow_edge_lab/cli/strongest_candidate_hardening.py"
+      - "src/orderflow_edge_lab/strategy_tournament.py"
+      - "tests/test_strongest_candidate_hardening.py"
+      - ".github/workflows/strongest-candidate-hardening-v1.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: strongest-candidate-hardening-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  harden:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run hardening guardrail tests
+        run: python -m unittest tests.test_strongest_candidate_hardening -v
+      - name: Run frozen independent-source and placebo hardening
+        run: |
+          mkdir -p artifacts/strongest_candidate_hardening/source
+          python -m orderflow_edge_lab.cli.strongest_candidate_hardening \
+            --config config/strongest_candidate_hardening_v1.json \
+            --output artifacts/strongest_candidate_hardening/report.json \
+            --source-dir artifacts/strongest_candidate_hardening/source \
+            --max-workers 5
+      - name: Enforce immutable candidate boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.load(open('artifacts/strongest_candidate_hardening/report.json', encoding='utf-8'))
+          c=r['claims']
+          if c.get('candidate_parameters_changed') or c.get('prospective_forward_records_modified'):
+              raise SystemExit('hardening workflow modified a frozen candidate or its forward record')
+          if c.get('verified_out_of_sample_evidence') or c.get('profitable_edge_established') or c.get('live_order_transmission_supported'):
+              raise SystemExit('hardening workflow emitted a forbidden promotion claim')
+          if set(r['sources']) != {'mexc','binance_usdm'}:
+              raise SystemExit('independent source replication is incomplete')
+          lines=[
+              '# Strongest Candidate Hardening v1','',
+              'Frozen candidates are unchanged. Results below are development robustness diagnostics only.','',
+              '| Source | Cost | EMA original | EMA reversed | Long-only | EMA +folds | XS return | XS +folds | XS placebo p |',
+              '|---|---:|---:|---:|---:|---:|---:|---:|---:|',
+          ]
+          for source, item in r['sources'].items():
+              for trend, xs in zip(item['trend'], item['cross_sectional']):
+                  o=trend['modes']['frozen_original']
+                  rev=trend['modes']['exact_signal_reversal']
+                  bh=trend['modes']['equal_weight_long_only']
+                  a=xs['actual']
+                  p=xs['random_rank_placebo']
+                  lines.append(
+                      f"| {source} | {trend['round_trip_cost_bps']:.0f} bps | "
+                      f"{o['net_return']:+.2%} | {rev['net_return']:+.2%} | {bh['net_return']:+.2%} | "
+                      f"{o['positive_fold_fraction']:.1%} | {a['net_return']:+.2%} | "
+                      f"{a['positive_fold_fraction']:.1%} | {p['one_sided_empirical_p']:.4f} |"
+                  )
+          lines += ['', 'No result in this workflow can promote a strategy; prospective forward gates remain separate.','']
+          text='\n'.join(lines)
+          Path('artifacts/strongest_candidate_hardening/SUMMARY.md').write_text(text, encoding='utf-8')
+          print(text)
+          PY
+          cat artifacts/strongest_candidate_hardening/SUMMARY.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Deterministic multi-agent release gate
+        run: |
+          orderflow-multi-agent --output artifacts/strongest_candidate_hardening/multi_agent_report.json
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/strongest_candidate_hardening/multi_agent_report.json', encoding='utf-8'))
+          if r['release_manager']['status'] != 'reviewable':
+              raise SystemExit('release manager blocked strongest-candidate hardening artifact')
+          PY
+      - name: Preserve all hardening evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: strongest-candidate-hardening-v1
+          path: artifacts/strongest_candidate_hardening/
+          retention-days: 30
+          if-no-files-found: warn
