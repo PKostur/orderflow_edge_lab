@@ -9,6 +9,7 @@ from orderflow_edge_lab.strategy_tournament import _to_ms
 from orderflow_edge_lab.strongest_candidate_hardening import (
     evaluate_cross_sectional_panel,
     evaluate_trend_panel,
+    resample_bybit_4h_to_8h,
 )
 
 
@@ -96,6 +97,27 @@ def _empty_funding(frames: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
 class StrongestCandidateHardeningTests(unittest.TestCase):
     def test_binance_timestamp_normalizer_accepts_aware_iso(self) -> None:
         self.assertEqual(_to_ms("2026-09-12T00:00:00Z"), 1789171200000)
+
+    def test_bybit_4h_resample_uses_only_complete_utc_aligned_pairs(self) -> None:
+        idx = pd.date_range("2026-01-01", periods=402, freq="4h", tz="UTC")
+        close = 100.0 + np.arange(len(idx), dtype=float) * 0.1
+        frame = pd.DataFrame(
+            {
+                "open": close - 0.05,
+                "high": close + 0.2,
+                "low": close - 0.2,
+                "close": close,
+                "volume": np.ones(len(idx)),
+            },
+            index=idx,
+        )
+        out = resample_bybit_4h_to_8h(frame)
+        self.assertGreaterEqual(len(out), 200)
+        self.assertTrue(all(ts.hour in (0, 8, 16) for ts in out.index))
+        first = out.iloc[0]
+        self.assertAlmostEqual(float(first["open"]), float(frame.iloc[0]["open"]))
+        self.assertAlmostEqual(float(first["close"]), float(frame.iloc[1]["close"]))
+        self.assertAlmostEqual(float(first["volume"]), 2.0)
 
     def test_trend_hardening_discriminates_original_from_reversal(self) -> None:
         frames = _trend_frames()
