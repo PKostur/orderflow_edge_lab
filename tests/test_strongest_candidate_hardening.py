@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import unittest
+
 import numpy as np
 import pandas as pd
 
@@ -91,42 +93,45 @@ def _empty_funding(frames: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
     }
 
 
-def test_binance_timestamp_normalizer_accepts_aware_iso() -> None:
-    assert _to_ms("2026-09-12T00:00:00Z") == 1789171200000
+class StrongestCandidateHardeningTests(unittest.TestCase):
+    def test_binance_timestamp_normalizer_accepts_aware_iso(self) -> None:
+        self.assertEqual(_to_ms("2026-09-12T00:00:00Z"), 1789171200000)
+
+    def test_trend_hardening_discriminates_original_from_reversal(self) -> None:
+        frames = _trend_frames()
+        report = evaluate_trend_panel(
+            frames,
+            _empty_funding(frames),
+            _trend_candidate(),
+            cost_bps=20.0,
+            fold_days=60,
+            regime_return_days=30,
+            regime_vol_days=10,
+        )
+        original = report["modes"]["frozen_original"]
+        reversed_ = report["modes"]["exact_signal_reversal"]
+        self.assertGreater(original["net_return"], 0)
+        self.assertLess(reversed_["net_return"], original["net_return"])
+        self.assertTrue(report["leave_one_out_all_positive"])
+        self.assertGreaterEqual(original["independent_folds"], 3)
+
+    def test_cross_sectional_signal_beats_random_rank_placebo_on_structured_panel(self) -> None:
+        frames = _daily_frames()
+        report = evaluate_cross_sectional_panel(
+            frames,
+            _empty_funding(frames),
+            _xs_candidate(),
+            cost_bps=20.0,
+            fold_days=120,
+            placebo_permutations=60,
+            placebo_seed=20260920,
+        )
+        actual = report["actual"]["net_return"]
+        placebo = report["random_rank_placebo"]
+        self.assertGreater(actual, 0)
+        self.assertGreater(actual, placebo["median_net_return"])
+        self.assertLessEqual(placebo["one_sided_empirical_p"], 0.10)
 
 
-def test_trend_hardening_discriminates_original_from_reversal() -> None:
-    frames = _trend_frames()
-    report = evaluate_trend_panel(
-        frames,
-        _empty_funding(frames),
-        _trend_candidate(),
-        cost_bps=20.0,
-        fold_days=60,
-        regime_return_days=30,
-        regime_vol_days=10,
-    )
-    original = report["modes"]["frozen_original"]
-    reversed_ = report["modes"]["exact_signal_reversal"]
-    assert original["net_return"] > 0
-    assert reversed_["net_return"] < original["net_return"]
-    assert report["leave_one_out_all_positive"] is True
-    assert original["independent_folds"] >= 3
-
-
-def test_cross_sectional_signal_beats_random_rank_placebo_on_structured_panel() -> None:
-    frames = _daily_frames()
-    report = evaluate_cross_sectional_panel(
-        frames,
-        _empty_funding(frames),
-        _xs_candidate(),
-        cost_bps=20.0,
-        fold_days=120,
-        placebo_permutations=60,
-        placebo_seed=20260920,
-    )
-    actual = report["actual"]["net_return"]
-    placebo = report["random_rank_placebo"]
-    assert actual > 0
-    assert actual > placebo["median_net_return"]
-    assert placebo["one_sided_empirical_p"] <= 0.10
+if __name__ == "__main__":
+    unittest.main()
