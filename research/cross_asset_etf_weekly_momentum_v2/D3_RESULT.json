@@ -1,0 +1,71 @@
+{
+  "research_id": "cross_asset_etf_weekly_momentum_v2",
+  "status": "FALSIFIED_D3_LOCKED_HOLDOUT",
+  "freeze_commit": "f37bc008f5c5417a1d10a4703645a1cfcd3695af",
+  "clarification_commit": "794e674898e9c086fd2d9680db34888e3f6bdaf2",
+  "d3_precalc_commit": "2daef7c564df79c71079bd0208730f8cc5a1abb2",
+  "d0_result_commit": "b59c68eb564a555f09880a565ece4c688896ea66",
+  "evaluated_at_utc": "2026-09-19T23:58:00Z",
+  "integrity": {
+    "common_sessions": 501,
+    "eligible_D3_decisions": 39,
+    "dividend_rows_total": 106,
+    "null_split_adjusted_dividends": 0
+  },
+  "D3": {
+    "weekly_observations": 39,
+    "mean_net_bps_primary": 20.5087999666,
+    "mean_net_bps_stress": 18.0729025307,
+    "benchmark_mean_bps_primary": 27.6470803803,
+    "mean_excess_bps_primary": -7.1382804137,
+    "mean_excess_bps_stress": -9.4459727214,
+    "reversed_mean_bps_primary": 31.0595301892,
+    "mean_original_turnover": 0.2435897436,
+    "distinct_selected_etfs": 7,
+    "max_positive_contribution_share": 0.4779622572,
+    "contribution_bps_pre_cost": {
+      "DBC": 541.3279146097,
+      "EEM": 308.5796864813,
+      "SPY": 168.6446313269,
+      "GLD": 114.0223725341,
+      "TLT": 0,
+      "IEF": 0,
+      "HYG": 0,
+      "IWM": -49.3594019032,
+      "VNQ": -63.7038495752,
+      "EFA": -124.6681547752
+    },
+    "selected_weeks": {
+      "DBC": 18,
+      "EEM": 22,
+      "SPY": 14,
+      "GLD": 18,
+      "TLT": 0,
+      "IEF": 0,
+      "HYG": 0,
+      "IWM": 23,
+      "VNQ": 8,
+      "EFA": 14
+    },
+    "gate_results": {
+      "minimum_weekly_observations": true,
+      "mean_net_return_primary_positive": true,
+      "mean_excess_vs_equal_weight_primary_positive": false,
+      "mean_excess_vs_equal_weight_stress_nonnegative": false,
+      "mean_return_beats_reversed_primary": false,
+      "minimum_distinct_selected_etfs": true,
+      "max_positive_contribution_share_single_etf": true
+    }
+  },
+  "interpretation": "The D0 survivor does not replicate in the locked historical holdout. Raw portfolio return remains positive, but it underperforms both equal-weight benchmark and reversed bottom-3 control. The exact v2 ID is terminally failed and cannot be rescued by flipping or retuning.",
+  "research_state": {
+    "D0": "SURVIVED",
+    "D3": "FALSIFIED",
+    "candidate_created": false,
+    "future_shadow_created": false,
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "leverage_supported": false,
+    "same_id_retuning_allowed": false
+  }
+}
