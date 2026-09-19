@@ -310,25 +310,37 @@ def _aligned_open_close(
     return opens, closes, clean, common
 
 
+def _daily_funding_matrix(
+    index: pd.DatetimeIndex,
+    symbols: list[str],
+    funding: Mapping[str, pd.DataFrame],
+) -> pd.DataFrame:
+    out = pd.DataFrame(0.0, index=index[:-1], columns=symbols)
+    for i, start in enumerate(index[:-1]):
+        end = index[i + 1]
+        for symbol in symbols:
+            frame = funding.get(symbol)
+            if frame is None or frame.empty or "funding_rate" not in frame.columns:
+                continue
+            series = pd.to_numeric(frame["funding_rate"], errors="coerce").fillna(0.0)
+            out.loc[start, symbol] = float(series[(series.index > start) & (series.index < end)].sum())
+    return out
+
+
 def _portfolio_from_signal_weights(
     opens: pd.DataFrame,
     signal_weights: pd.DataFrame,
     funding: Mapping[str, pd.DataFrame],
     *,
     cost_bps: float,
+    funding_matrix: pd.DataFrame | None = None,
 ) -> dict[str, Any]:
     weights = signal_weights.shift(1).fillna(0.0)
     next_open = opens.shift(-1)
     price = (weights * (next_open / opens - 1.0)).sum(axis=1).fillna(0.0)
+    rates = funding_matrix if funding_matrix is not None else _daily_funding_matrix(opens.index, list(opens.columns), funding)
     funding_return = pd.Series(0.0, index=opens.index, dtype=float)
-    for i in range(len(opens.index) - 1):
-        start, end = opens.index[i], opens.index[i + 1]
-        value = 0.0
-        for symbol in opens.columns:
-            w = float(weights.iloc[i][symbol])
-            if abs(w) > 1e-15:
-                value += -w * _funding_between(funding.get(symbol), start, end)
-        funding_return.iloc[i] = value
+    funding_return.iloc[:-1] = (-(weights.iloc[:-1] * rates)).sum(axis=1).to_numpy(dtype=float)
     turnover = (weights - weights.shift(1).fillna(0.0)).abs().sum(axis=1)
     side_cost = float(cost_bps) / 2.0 / 10_000.0
     net = price + funding_return - turnover * side_cost
@@ -392,6 +404,7 @@ def evaluate_cross_sectional_panel(
         funding_frames=funding,
     )
     placebo_returns: list[float] = []
+    daily_funding = _daily_funding_matrix(common, symbols, funding)
     for i in range(int(placebo_permutations)):
         rng = np.random.default_rng(int(placebo_seed) + i)
         signal = _random_rank_signal(
@@ -401,7 +414,13 @@ def evaluate_cross_sectional_panel(
             quantile_fraction=float(spec["quantile_fraction"]),
             rng=rng,
         )
-        trial = _portfolio_from_signal_weights(opens, signal, funding, cost_bps=cost_bps)
+        trial = _portfolio_from_signal_weights(
+            opens,
+            signal,
+            funding,
+            cost_bps=cost_bps,
+            funding_matrix=daily_funding,
+        )
         placebo_returns.append(float(trial["net_return"]))
     actual_return = float(actual["net_return"])
     exceed = sum(value >= actual_return for value in placebo_returns)
