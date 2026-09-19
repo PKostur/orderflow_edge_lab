@@ -46,7 +46,7 @@ def fetch_binance_usdm_klines(
     base_url: str = BINANCE_USDM_KLINES,
     request_pause_seconds: float = 0.06,
 ) -> pd.DataFrame:
-    if interval not in {"5m", "15m", "1h"}:
+    if interval not in {"5m", "15m", "1h", "4h", "8h", "1d"}:
         raise StrategyTournamentError(f"unsupported interval: {interval}")
     start_ms = _to_ms(start)
     end_ms = _to_ms(end)
