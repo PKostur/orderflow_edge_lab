@@ -98,7 +98,11 @@ def fetch_binance_usdm_klines(
             "volume": [float(row[5]) for row in rows],
         }
     ).drop_duplicates("timestamp").sort_values("timestamp")
-    frame = frame[(frame["timestamp"] >= pd.Timestamp(start, tz="UTC")) & (frame["timestamp"] < pd.Timestamp(end, tz="UTC"))]
+    start_ts = pd.Timestamp(start)
+    end_ts = pd.Timestamp(end)
+    start_ts = start_ts.tz_localize("UTC") if start_ts.tzinfo is None else start_ts.tz_convert("UTC")
+    end_ts = end_ts.tz_localize("UTC") if end_ts.tzinfo is None else end_ts.tz_convert("UTC")
+    frame = frame[(frame["timestamp"] >= start_ts) & (frame["timestamp"] < end_ts)]
     frame = frame.set_index("timestamp")
     if len(frame) < 200:
         raise StrategyTournamentError(f"insufficient historical candles for {symbol} {interval}: {len(frame)}")
