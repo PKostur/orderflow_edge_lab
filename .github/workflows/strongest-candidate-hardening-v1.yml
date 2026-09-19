@@ -6,6 +6,7 @@ on:
     branches: [research/strongest-candidate-hardening-v1]
     paths:
       - "config/strongest_candidate_hardening_v1.json"
+      - "config/strongest_candidate_hardening_v1_1.json"
       - "src/orderflow_edge_lab/strongest_candidate_hardening.py"
       - "src/orderflow_edge_lab/cli/strongest_candidate_hardening.py"
       - "src/orderflow_edge_lab/strategy_tournament.py"
@@ -51,7 +52,7 @@ jobs:
               raise SystemExit('hardening workflow modified a frozen candidate or its forward record')
           if c.get('verified_out_of_sample_evidence') or c.get('profitable_edge_established') or c.get('live_order_transmission_supported'):
               raise SystemExit('hardening workflow emitted a forbidden promotion claim')
-          if set(r['sources']) != {'mexc','binance_usdm'}:
+          if set(r['sources']) != {'mexc','bybit_linear'}:
               raise SystemExit('independent source replication is incomplete')
           lines=[
               '# Strongest Candidate Hardening v1','',
