@@ -1,0 +1,116 @@
+{
+  "research_id": "cross_asset_etf_weekly_momentum_v1",
+  "status": "FROZEN_BEFORE_PNL",
+  "frozen_at_utc": "2026-09-19T23:10:00Z",
+  "reason_for_new_id": "Long-horizon v1 was blocked by source history entitlement before PnL. This shorter-horizon rule is a new protocol designed only from data availability, not performance.",
+  "evidence_separation": {
+    "prior_intraday_etf_results_do_not_tune_this_rule": true,
+    "blocked_long_horizon_id_not_reused": true,
+    "crypto_and_futures_chains_unchanged": true
+  },
+  "universe": [
+    "SPY",
+    "IWM",
+    "EFA",
+    "EEM",
+    "TLT",
+    "IEF",
+    "HYG",
+    "GLD",
+    "DBC",
+    "VNQ"
+  ],
+  "data": {
+    "provider": "Massive",
+    "bars_endpoint": "/v2/aggs/ticker/{ticker}/range/1/day/{from}/{to}",
+    "dividends_endpoint": "/stocks/v1/dividends",
+    "bars_adjusted_for_splits": true,
+    "dividend_field": "split_adjusted_cash_amount",
+    "accessible_history_verified_without_pnl": [
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "required_start": "2024-01-01",
+    "gap_rule": "Any weekly observation requiring a missing common-session lookback, decision, entry or exit bar for any universe member is ineligible. No fallback date or ticker substitution."
+  },
+  "windows": {
+    "prehistory": [
+      "2024-01-01",
+      "2024-05-02"
+    ],
+    "D0_discovery": [
+      "2024-05-03",
+      "2025-04-25"
+    ],
+    "D3_locked_historical_holdout": [
+      "2025-05-02",
+      "2026-04-24"
+    ],
+    "later_historical_replication_reserved": [
+      "2026-05-01",
+      "2026-09-18"
+    ],
+    "future_shadow_earliest": "2026-09-21"
+  },
+  "signal": {
+    "decision": "Last common US trading session of each ISO week after the close.",
+    "lookback_common_sessions": 63,
+    "skip_recent_common_sessions": 5,
+    "score": "(close_at_t_minus_5 - close_at_t_minus_63 + sum(split_adjusted_cash_dividends with ex_date > t_minus_63 and <= t_minus_5)) / close_at_t_minus_63",
+    "ranking": "Descending score; ties alphabetically by ticker.",
+    "original_portfolio": "Long top 3, equal target weight 1/3 each.",
+    "reversed_control": "Long bottom 3, equal target weight 1/3 each.",
+    "benchmark": "Long all 10, equal target weight 0.1 each.",
+    "no_shorting": true,
+    "no_leverage": true
+  },
+  "execution": {
+    "entry": "Next common US trading session open after decision.",
+    "exit": "Next rebalance entry open.",
+    "holding_return": "(exit_open - entry_open + sum(split_adjusted_cash_dividends with ex_date > entry_date and <= exit_date)) / entry_open",
+    "primary_one_way_bps": 5,
+    "stress_one_way_bps": 10,
+    "turnover_proxy": "0.5 * sum(abs(target_weight_t - target_weight_previous)) across all 10 ETFs; initial prior weights zero.",
+    "cost_bps": "2 * one_way_bps * turnover_proxy",
+    "limitation": "Target-membership turnover proxy ignores small drift-restoration trades when membership is unchanged. Frozen before results."
+  },
+  "D0_gate": {
+    "minimum_weekly_observations": 48,
+    "mean_net_return_primary_positive": true,
+    "mean_excess_vs_equal_weight_primary_positive": true,
+    "mean_excess_vs_equal_weight_stress_nonnegative": true,
+    "mean_return_beats_reversed_primary": true,
+    "both_fixed_halves_excess_vs_benchmark_primary_positive": true,
+    "minimum_distinct_selected_etfs": 6,
+    "max_positive_contribution_share_single_etf": 0.5
+  },
+  "D0_halves": {
+    "half1": [
+      "2024-05-03",
+      "2024-10-25"
+    ],
+    "half2": [
+      "2024-11-01",
+      "2025-04-25"
+    ]
+  },
+  "D3_gate": {
+    "minimum_weekly_observations": 48,
+    "mean_net_return_primary_positive": true,
+    "mean_excess_vs_equal_weight_primary_positive": true,
+    "mean_excess_vs_equal_weight_stress_nonnegative": true,
+    "mean_return_beats_reversed_primary": true,
+    "minimum_distinct_selected_etfs": 6,
+    "max_positive_contribution_share_single_etf": 0.5
+  },
+  "protocol": {
+    "one_family_only": true,
+    "no_retuning_after_D0": true,
+    "D3_unopened_if_any_D0_gate_fails": true,
+    "failed_id_dead": true,
+    "reversed_control_cannot_be_adopted_post_hoc": true,
+    "no_historical_result_directly_promotes_to_live": true,
+    "survivor_requires_new_candidate_id_and_future_shadow": true
+  }
+}
