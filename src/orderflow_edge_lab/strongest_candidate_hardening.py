@@ -14,6 +14,8 @@ from orderflow_edge_lab.cross_sectional_momentum import backtest_cross_sectional
 from orderflow_edge_lab.strategy_tournament import generate_target_position
 
 BINANCE_USDM_FUNDING = "https://fapi.binance.com/fapi/v1/fundingRate"
+BYBIT_V5_KLINE = "https://api.bybit.com/v5/market/kline"
+BYBIT_V5_FUNDING = "https://api.bybit.com/v5/market/funding/history"
 
 
 class StrongestCandidateHardeningError(ValueError):
@@ -73,6 +75,185 @@ def fetch_binance_usdm_funding_history(
     keys = sorted(rows)
     index = pd.to_datetime(keys, unit="ms", utc=True)
     return pd.DataFrame({"funding_rate": [rows[key] for key in keys]}, index=index)
+
+
+
+def _bybit_json(endpoint: str, params: Mapping[str, Any], timeout: float = 20.0) -> Mapping[str, Any]:
+    query = urlencode({key: value for key, value in params.items() if value is not None})
+    req = Request(
+        f"{endpoint}?{query}",
+        headers={"Accept": "application/json", "User-Agent": "orderflow-edge-lab/1.0"},
+    )
+    with urlopen(req, timeout=timeout) as response:
+        if response.status != 200:
+            raise StrongestCandidateHardeningError(f"Bybit public REST HTTP {response.status}")
+        payload = json.loads(response.read(16_000_000).decode("utf-8"))
+    if not isinstance(payload, Mapping) or int(payload.get("retCode", -1)) != 0:
+        raise StrongestCandidateHardeningError(f"Bybit public REST failed: {payload}")
+    return payload
+
+
+def fetch_bybit_linear_klines(
+    symbol: str,
+    interval: str,
+    start: str,
+    end: str,
+    *,
+    endpoint: str = BYBIT_V5_KLINE,
+    request_pause_seconds: float = 0.05,
+) -> pd.DataFrame:
+    if interval not in {"240", "D"}:
+        raise StrongestCandidateHardeningError(f"unsupported Bybit hardening interval: {interval}")
+    start_ms = int(_utc(start).timestamp() * 1000)
+    end_ms = int(_utc(end).timestamp() * 1000)
+    if end_ms <= start_ms:
+        raise StrongestCandidateHardeningError("Bybit kline end must be after start")
+    normalized = symbol.replace("_", "").upper()
+    cursor_end = end_ms - 1
+    rows: dict[int, list[Any]] = {}
+    while cursor_end >= start_ms:
+        payload = _bybit_json(
+            endpoint,
+            {
+                "category": "linear",
+                "symbol": normalized,
+                "interval": interval,
+                "end": cursor_end,
+                "limit": 1000,
+            },
+        )
+        result = payload.get("result")
+        items = result.get("list") if isinstance(result, Mapping) else None
+        if not isinstance(items, list) or not items:
+            break
+        earliest: int | None = None
+        for row in items:
+            if not isinstance(row, list) or len(row) < 6:
+                continue
+            try:
+                ts = int(row[0])
+                values = [float(row[i]) for i in range(1, 6)]
+            except (TypeError, ValueError, IndexError):
+                continue
+            earliest = ts if earliest is None else min(earliest, ts)
+            if start_ms <= ts < end_ms and min(values[:4]) > 0 and all(math.isfinite(v) for v in values):
+                rows[ts] = row
+        if earliest is None or earliest <= start_ms:
+            break
+        next_end = earliest - 1
+        if next_end >= cursor_end:
+            raise StrongestCandidateHardeningError("Bybit kline pagination did not move backward")
+        cursor_end = next_end
+        if request_pause_seconds > 0:
+            time.sleep(request_pause_seconds)
+    if not rows:
+        raise StrongestCandidateHardeningError(f"no Bybit linear candles for {normalized} interval={interval}")
+    ordered = [rows[key] for key in sorted(rows)]
+    frame = pd.DataFrame(
+        {
+            "timestamp": pd.to_datetime([int(row[0]) for row in ordered], unit="ms", utc=True),
+            "open": [float(row[1]) for row in ordered],
+            "high": [float(row[2]) for row in ordered],
+            "low": [float(row[3]) for row in ordered],
+            "close": [float(row[4]) for row in ordered],
+            "volume": [float(row[5]) for row in ordered],
+        }
+    ).set_index("timestamp").sort_index()
+    if frame.index.has_duplicates:
+        raise StrongestCandidateHardeningError(f"duplicate Bybit candles for {normalized}")
+    return frame
+
+
+def resample_bybit_4h_to_8h(frame: pd.DataFrame) -> pd.DataFrame:
+    clean = _clean_frame(frame, {"open", "high", "low", "close"}, "bybit_4h")
+    if "volume" not in clean.columns:
+        clean["volume"] = 0.0
+    else:
+        clean["volume"] = pd.to_numeric(clean["volume"], errors="coerce").fillna(0.0)
+    rows: list[dict[str, Any]] = []
+    buckets = clean.index.floor("8h")
+    for bucket in pd.DatetimeIndex(sorted(set(buckets))):
+        group = clean.loc[buckets == bucket]
+        expected = pd.DatetimeIndex([bucket, bucket + pd.Timedelta(hours=4)])
+        if len(group) != 2 or not group.index.equals(expected):
+            continue
+        rows.append(
+            {
+                "timestamp": bucket,
+                "open": float(group["open"].iloc[0]),
+                "high": float(group["high"].max()),
+                "low": float(group["low"].min()),
+                "close": float(group["close"].iloc[-1]),
+                "volume": float(group["volume"].sum()),
+            }
+        )
+    if not rows:
+        raise StrongestCandidateHardeningError("no complete UTC-aligned Bybit 8h bars after resampling")
+    out = pd.DataFrame(rows).set_index("timestamp").sort_index()
+    if len(out) < 200:
+        raise StrongestCandidateHardeningError(f"insufficient complete Bybit 8h bars: {len(out)}")
+    return out
+
+
+def fetch_bybit_linear_funding_history(
+    symbol: str,
+    start: str,
+    end: str,
+    *,
+    endpoint: str = BYBIT_V5_FUNDING,
+    request_pause_seconds: float = 0.05,
+) -> pd.DataFrame:
+    start_ms = int(_utc(start).timestamp() * 1000)
+    end_ms = int(_utc(end).timestamp() * 1000)
+    if end_ms <= start_ms:
+        raise StrongestCandidateHardeningError("Bybit funding end must be after start")
+    normalized = symbol.replace("_", "").upper()
+    cursor_end = end_ms - 1
+    rows: dict[int, float] = {}
+    while cursor_end >= start_ms:
+        payload = _bybit_json(
+            endpoint,
+            {
+                "category": "linear",
+                "symbol": normalized,
+                "endTime": cursor_end,
+                "limit": 200,
+            },
+        )
+        result = payload.get("result")
+        items = result.get("list") if isinstance(result, Mapping) else None
+        if not isinstance(items, list) or not items:
+            break
+        earliest: int | None = None
+        for item in items:
+            if not isinstance(item, Mapping):
+                continue
+            try:
+                ts = int(item["fundingRateTimestamp"])
+                rate = float(item["fundingRate"])
+            except (KeyError, TypeError, ValueError):
+                continue
+            earliest = ts if earliest is None else min(earliest, ts)
+            if start_ms <= ts < end_ms and math.isfinite(rate):
+                rows[ts] = rate
+        if earliest is None or earliest <= start_ms:
+            break
+        next_end = earliest - 1
+        if next_end >= cursor_end:
+            raise StrongestCandidateHardeningError("Bybit funding pagination did not move backward")
+        cursor_end = next_end
+        if request_pause_seconds > 0:
+            time.sleep(request_pause_seconds)
+    if not rows:
+        return pd.DataFrame(
+            columns=["funding_rate"],
+            index=pd.DatetimeIndex([], tz="UTC", name="timestamp"),
+        )
+    keys = sorted(rows)
+    return pd.DataFrame(
+        {"funding_rate": [rows[key] for key in keys]},
+        index=pd.DatetimeIndex(pd.to_datetime(keys, unit="ms", utc=True), name="timestamp"),
+    )
 
 
 def _funding_between(frame: pd.DataFrame | None, start: pd.Timestamp, end: pd.Timestamp) -> float:
