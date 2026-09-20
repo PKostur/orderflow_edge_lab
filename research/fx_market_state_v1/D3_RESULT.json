@@ -1,0 +1,107 @@
+{
+  "research_id": "fx_market_state_v1",
+  "status": "D3_HISTORICAL_STATE_HOLDOUT_COMPLETE_TWO_FAMILIES_REPLICATE",
+  "evaluated_at_utc": "2026-09-20T14:57:00Z",
+  "taxonomy": {
+    "stage": "D3 historical holdout",
+    "same_source_as_D0": true,
+    "independent_source_replication": false,
+    "genuine_future_oos": false
+  },
+  "source": {
+    "provider": "Massive",
+    "window": [
+      "2026-08-03",
+      "2026-08-28"
+    ],
+    "data": "1-minute quote-derived forex aggregates",
+    "historical_bbo_entitled": false,
+    "executable_pnl_claim": false
+  },
+  "data_integrity": {
+    "EURUSD": {
+      "sessions": 20,
+      "min_bars_1045_1615": 331,
+      "incomplete_sessions": 0
+    },
+    "GBPUSD": {
+      "sessions": 20,
+      "min_bars_1045_1615": 331,
+      "incomplete_sessions": 0
+    },
+    "USDJPY": {
+      "sessions": 20,
+      "min_bars_1045_1615": 331,
+      "incomplete_sessions": 0
+    },
+    "AUDUSD": {
+      "sessions": 20,
+      "min_bars_1045_1615": 110,
+      "incomplete_sessions": 2
+    },
+    "handling": "exact-minute fail-closed; no interpolation"
+  },
+  "families": {
+    "FXS_H1_TREND_EFFICIENCY_CONTINUATION": {
+      "status": "DEAD_AFTER_D0",
+      "D3_inspected": false
+    },
+    "FXS_H2_VOLATILITY_EXPANSION_PERSISTENCE": {
+      "status": "SURVIVED_D3_HISTORICAL_STATE_HOLDOUT",
+      "signals": 135,
+      "sessions": 19,
+      "pairs": 4,
+      "pooled_triggered_future_vol_ratio": 1.8072859282,
+      "pooled_control_future_vol_ratio": 1.1111820968,
+      "pooled_effect": 0.6961038313,
+      "pair_effects": {
+        "AUDUSD": 0.3851235005,
+        "EURUSD": 0.654139834,
+        "GBPUSD": 0.5563379121,
+        "USDJPY": 1.2006514893
+      },
+      "positive_pairs": 4,
+      "gate_results": {
+        "minimum_triggered_observations": true,
+        "minimum_sessions_with_triggers": true,
+        "minimum_positive_pairs": true,
+        "same_direction_as_D0": true,
+        "triggered_minus_control_positive": true
+      }
+    },
+    "FXS_H3_BOLLINGER_DISPLACEMENT_REVERSION": {
+      "status": "SURVIVED_D3_HISTORICAL_STATE_HOLDOUT",
+      "signals": 140,
+      "sessions": 20,
+      "pairs": 4,
+      "pooled_mean_target_bps": 1.2312395395,
+      "pooled_accuracy": 0.6071428571,
+      "pair_mean_target_bps": {
+        "AUDUSD": 1.2635216629,
+        "EURUSD": 1.7986723064,
+        "GBPUSD": 0.7530636142,
+        "USDJPY": 1.0881745974
+      },
+      "positive_pairs": 4,
+      "gate_results": {
+        "minimum_triggered_observations": true,
+        "minimum_sessions_with_triggers": true,
+        "minimum_positive_pairs": true,
+        "same_direction_as_D0": true,
+        "pooled_target_mean_positive": true
+      }
+    }
+  },
+  "research_state": {
+    "H1": "FALSIFIED_D0",
+    "H2": "HISTORICAL_STATE_SURVIVOR",
+    "H3": "HISTORICAL_STATE_SURVIVOR",
+    "independent_source_replication": "NOT_DONE",
+    "genuine_future_D4": "NOT_STARTED",
+    "strategy_pnl_conditioning": "NOT_STARTED",
+    "persistent_edge_established": false,
+    "candidate_created": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
+}
