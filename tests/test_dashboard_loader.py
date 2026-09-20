@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from dashboard.research_dashboard.loader import discover_artifacts
+from dashboard.research_dashboard.loader import discover_artifacts, discover_git_ref_artifacts
 
 
 class DashboardLoaderTests(unittest.TestCase):
@@ -34,6 +34,7 @@ class DashboardLoaderTests(unittest.TestCase):
             row = rows[0]
             self.assertEqual(row.project_id, "trial_v1")
             self.assertEqual(row.stage, "D0/DISCOVERY")
+            self.assertEqual(row.source_ref, "WORKTREE")
             self.assertFalse(row.persistent_edge)
             self.assertFalse(row.candidate)
             self.assertFalse(row.live_supported)
@@ -91,6 +92,13 @@ class DashboardLoaderTests(unittest.TestCase):
     def test_empty_repository_has_no_synthetic_fallback(self):
         with tempfile.TemporaryDirectory() as tmp:
             self.assertEqual(discover_artifacts(tmp), [])
+
+    def test_git_ref_discovery_fails_closed_outside_git_repo(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.assertEqual(
+                discover_git_ref_artifacts(tmp, ["research/cross-market-etf-v1"]),
+                [],
+            )
 
 
 if __name__ == "__main__":
