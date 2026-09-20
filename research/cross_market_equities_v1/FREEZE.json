@@ -1,0 +1,94 @@
+{
+  "research_id": "cross_market_equities_v1",
+  "status": "FROZEN_BEFORE_EQUITY_PNL",
+  "frozen_at_utc": "2026-09-20T23:58:00Z",
+  "purpose": "Test fresh cross-sectional, market-relative intraday hypotheses on liquid US single stocks without reusing failed ETF/futures/FX rule families.",
+  "evidence_separation": {
+    "crypto_chain_unchanged": true,
+    "futures_chain_unchanged": true,
+    "etf_chain_unchanged": true,
+    "fx_chain_unchanged": true,
+    "equity_results_cannot_promote_other_market_candidates": true
+  },
+  "data": {
+    "provider": "Massive",
+    "endpoint": "/v2/aggs/ticker/{stocksTicker}/range/1/minute/{from}/{to}",
+    "adjusted": true,
+    "session": "US regular hours only, America/New_York",
+    "universe": ["AAPL","NVDA","JPM","XOM"],
+    "benchmark": "SPY",
+    "universe_rationale": "Preselected highly liquid single stocks spanning technology, semiconductors, financials and energy; no post-result substitution.",
+    "tick_or_nbbo_entitlement": "NOT_AVAILABLE_ON_CONNECTED_PLAN",
+    "gap_policy": "No interpolation or forward fill. All signal, entry, exit, benchmark and prior-close timestamps must exist exactly."
+  },
+  "windows": {
+    "D0_discovery": ["2026-07-06","2026-07-31"],
+    "D0_half_1": ["2026-07-06","2026-07-17"],
+    "D0_half_2": ["2026-07-20","2026-07-31"],
+    "D3_locked_historical_holdout": ["2026-08-03","2026-08-28"],
+    "later_reserved_not_for_retuning": ["2026-09-01","2026-09-18"]
+  },
+  "execution": {
+    "portfolio": "one equal-gross market-neutral long/short pair per session; +0.5 long and -0.5 short, gross exposure 1.0, net exposure 0",
+    "portfolio_return_bps": "0.5 * long_leg_return_bps - 0.5 * short_leg_return_bps",
+    "primary_round_trip_friction_bps": 2.0,
+    "stress_round_trip_friction_bps": 4.0,
+    "cost_interpretation": "Weighted aggregate cost across the two legs; D0/D3 proxy, not a live fill model.",
+    "reversed_same_decision_control": "swap long and short using identical entry/exit timestamps and identical friction",
+    "leverage": 1.0
+  },
+  "hypotheses": {
+    "EQ_H1_OPENING_RELATIVE_MOMENTUM": {
+      "ranking_metric": "log(stock 10:00 close / stock 09:30 open) - log(SPY 10:00 close / SPY 09:30 open)",
+      "portfolio": "long highest metric, short lowest metric across the four-stock universe",
+      "entry": "10:01 exact minute open",
+      "exit": "11:30 exact minute open",
+      "signals_per_session": 1
+    },
+    "EQ_H2_OVERNIGHT_RELATIVE_GAP_REVERSION": {
+      "stock_gap": "log(stock 09:30 open / prior valid regular-session 15:59 close)",
+      "benchmark_gap": "log(SPY 09:30 open / prior valid regular-session 15:59 close)",
+      "ranking_metric": "stock_gap - benchmark_gap",
+      "portfolio": "long most negative residual gap, short most positive residual gap",
+      "entry": "09:31 exact minute open",
+      "exit": "10:30 exact minute open",
+      "signals_per_session": 1
+    },
+    "EQ_H3_AFTERNOON_RELATIVE_REVERSAL": {
+      "ranking_metric": "log(stock 14:00 close / stock 10:00 open) - log(SPY 14:00 close / SPY 10:00 open)",
+      "portfolio": "long lowest metric, short highest metric across the four-stock universe",
+      "entry": "14:01 exact minute open",
+      "exit": "15:55 exact minute open",
+      "signals_per_session": 1
+    }
+  },
+  "D0_gate": {
+    "minimum_total_sessions": 15,
+    "pooled_net_mean_bps_2_positive": true,
+    "pooled_net_mean_bps_4_nonnegative": true,
+    "original_beats_reversed_at_2": true,
+    "both_calendar_halves_positive_at_2": true,
+    "maximum_positive_pnl_share_single_session": 0.35,
+    "leave_one_name_out_nonnegative_variants_minimum": 3
+  },
+  "D3_gate": {
+    "minimum_total_sessions": 15,
+    "pooled_net_mean_bps_2_positive": true,
+    "pooled_net_mean_bps_4_nonnegative": true,
+    "original_beats_reversed_at_2": true,
+    "maximum_positive_pnl_share_single_session": 0.35,
+    "leave_one_name_out_nonnegative_variants_minimum": 3
+  },
+  "leave_one_name_out": {
+    "method": "For each of AAPL,NVDA,JPM,XOM, remove that name, rerank the remaining three using the exact same family rule and timestamps, and recompute net mean at 2 bps.",
+    "purpose": "Detect a family whose apparent edge is carried by one stock."
+  },
+  "research_rules": {
+    "failed_family_id_dead": true,
+    "no_post_result_name_substitution": true,
+    "no_threshold_or_time_window_retuning": true,
+    "reversed_control_cannot_be_adopted_post_hoc": true,
+    "D3_remains_sealed_for_any_family_that_fails_D0": true,
+    "survivor_only_creates_new_candidate_id_for_future_shadow": true
+  }
+}
