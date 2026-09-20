@@ -28,6 +28,7 @@ st.set_page_config(
 DEFAULT_EXTRA_REFS = (
     "research/cross-market-futures-v1",
     "research/cross-market-etf-v1",
+    "research/fx-market-state-v1",
 )
 
 
