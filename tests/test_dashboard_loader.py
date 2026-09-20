@@ -89,6 +89,24 @@ class DashboardLoaderTests(unittest.TestCase):
             self.assertIsNotNone(row.parse_error)
             self.assertIsNone(row.live_supported)
 
+    def test_conflicting_explicit_flags_resolve_to_unknown(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            target = root / "research" / "conflict.json"
+            target.parent.mkdir(parents=True)
+            target.write_text(
+                json.dumps(
+                    {
+                        "status": "REVIEW",
+                        "a": {"live_execution_supported": True},
+                        "b": {"live_execution_supported": False},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            row = discover_artifacts(root)[0]
+            self.assertIsNone(row.live_supported)
+
     def test_empty_repository_has_no_synthetic_fallback(self):
         with tempfile.TemporaryDirectory() as tmp:
             self.assertEqual(discover_artifacts(tmp), [])
