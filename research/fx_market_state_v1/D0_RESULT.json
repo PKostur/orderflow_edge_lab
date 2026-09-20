@@ -1,0 +1,156 @@
+{
+  "research_id": "fx_market_state_v1",
+  "status": "D0_COMPLETE_TWO_FAMILIES_SURVIVE_STATE_SCREEN",
+  "evaluated_at_utc": "2026-09-20T14:51:00Z",
+  "source": {
+    "provider": "Massive",
+    "data": "1-minute quote-derived forex aggregates",
+    "window": [
+      "2026-07-06",
+      "2026-07-31"
+    ],
+    "tick_bbo_available": false,
+    "executable_pnl_claim": false
+  },
+  "data_integrity": {
+    "EURUSD": {
+      "sessions": 20,
+      "min_bars_1045_1615": 331,
+      "incomplete_sessions": 0
+    },
+    "GBPUSD": {
+      "sessions": 20,
+      "min_bars_1045_1615": 331,
+      "incomplete_sessions": 0
+    },
+    "USDJPY": {
+      "sessions": 20,
+      "min_bars_1045_1615": 331,
+      "incomplete_sessions": 0
+    },
+    "AUDUSD": {
+      "sessions": 20,
+      "min_bars_1045_1615": 132,
+      "incomplete_sessions": 2
+    },
+    "handling": "exact-minute fail-closed; no interpolation"
+  },
+  "families": {
+    "FXS_H1_TREND_EFFICIENCY_CONTINUATION": {
+      "status": "FALSIFIED_D0_INSUFFICIENT_TRIGGER_COUNT",
+      "signals": 56,
+      "sessions": 18,
+      "pairs": 4,
+      "pooled_mean_target_bps": 3.3805319175,
+      "pooled_accuracy": 0.6071428571,
+      "pair_mean_target_bps": {
+        "AUDUSD": 3.4839546269,
+        "EURUSD": 2.8939708221,
+        "GBPUSD": 2.0622117653,
+        "USDJPY": 5.9465549791
+      },
+      "positive_pairs": 4,
+      "halves": {
+        "2026-07-06..2026-07-17": {
+          "signals": 20,
+          "mean_target_bps": 2.2009628984,
+          "accuracy": 0.6
+        },
+        "2026-07-20..2026-07-31": {
+          "signals": 36,
+          "mean_target_bps": 4.0358480392,
+          "accuracy": 0.6111111111
+        }
+      },
+      "gate_results": {
+        "minimum_triggered_observations": false,
+        "minimum_sessions_with_triggers": true,
+        "minimum_pairs_with_triggers": true,
+        "minimum_positive_pairs": true,
+        "both_calendar_halves_positive": true,
+        "pooled_target_mean_positive": true,
+        "directional_accuracy_gt_0_50": true
+      },
+      "holdout_opened": false
+    },
+    "FXS_H2_VOLATILITY_EXPANSION_PERSISTENCE": {
+      "status": "SURVIVED_D0_STATE_SCREEN",
+      "signals": 107,
+      "sessions": 19,
+      "pairs": 4,
+      "pooled_triggered_future_vol_ratio": 1.3739421086,
+      "pooled_control_future_vol_ratio": 1.0478392648,
+      "pooled_effect": 0.3261028438,
+      "pair_effects": {
+        "AUDUSD": 0.1484016357,
+        "EURUSD": 0.3111103806,
+        "GBPUSD": 0.3069543909,
+        "USDJPY": 0.6145531489
+      },
+      "positive_pairs": 4,
+      "halves": {
+        "2026-07-06..2026-07-17": {
+          "signals": 48,
+          "effect": 0.2017894748
+        },
+        "2026-07-20..2026-07-31": {
+          "signals": 59,
+          "effect": 0.4251473078
+        }
+      },
+      "gate_results": {
+        "minimum_triggered_observations": true,
+        "minimum_sessions_with_triggers": true,
+        "minimum_pairs_with_triggers": true,
+        "minimum_positive_pairs": true,
+        "both_calendar_halves_positive": true,
+        "triggered_minus_control_gt_0_10": true
+      },
+      "historical_holdout_eligible": true
+    },
+    "FXS_H3_BOLLINGER_DISPLACEMENT_REVERSION": {
+      "status": "SURVIVED_D0_STATE_SCREEN",
+      "signals": 139,
+      "sessions": 20,
+      "pairs": 4,
+      "pooled_mean_target_bps": 0.9647145645,
+      "pooled_accuracy": 0.5539568345,
+      "pair_mean_target_bps": {
+        "AUDUSD": 0.3368542204,
+        "EURUSD": 0.108435527,
+        "GBPUSD": 1.1747269491,
+        "USDJPY": 2.440360744
+      },
+      "positive_pairs": 4,
+      "halves": {
+        "2026-07-06..2026-07-17": {
+          "signals": 60,
+          "mean_target_bps": 0.8251644927,
+          "accuracy": 0.6333333333
+        },
+        "2026-07-20..2026-07-31": {
+          "signals": 79,
+          "mean_target_bps": 1.0707019608,
+          "accuracy": 0.4936708861
+        }
+      },
+      "gate_results": {
+        "minimum_triggered_observations": true,
+        "minimum_sessions_with_triggers": true,
+        "minimum_pairs_with_triggers": true,
+        "minimum_positive_pairs": true,
+        "both_calendar_halves_positive": true,
+        "pooled_target_mean_positive": true,
+        "reversion_accuracy_gt_0_50": true
+      },
+      "historical_holdout_eligible": true
+    }
+  },
+  "claims": {
+    "profitable_edge_established": false,
+    "executable_expectancy_established": false,
+    "candidate_created": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
+}
