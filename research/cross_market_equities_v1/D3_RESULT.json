@@ -1,0 +1,49 @@
+{
+  "research_id":"cross_market_equities_v1",
+  "family_id":"EQ_H3_AFTERNOON_RELATIVE_REVERSAL",
+  "freeze_commit":"a3a27707968d4a84579ba429935d472905ad9605",
+  "d0_commit":"93a5ff8a997a4e665367d8442d32262be146f41b",
+  "stage":"D3_locked_historical_holdout",
+  "window":["2026-08-03","2026-08-28"],
+  "status":"FALSIFIED_D3",
+  "data_integrity":{
+    "sessions":20,
+    "AAPL_exact_clock_days":20,
+    "NVDA_exact_clock_days":20,
+    "JPM_exact_clock_days":20,
+    "XOM_exact_clock_days":20,
+    "SPY_exact_clock_days":20,
+    "gap_policy":"No interpolation or alternate timestamps used."
+  },
+  "results":{
+    "sessions":20,
+    "net_mean_bps_2":0.6624858157,
+    "net_mean_bps_4":-1.3375141843,
+    "reversed_mean_bps_2":-4.6624858157,
+    "max_positive_session_share":0.1868673699,
+    "leave_one_out_net_bps_2":{
+      "AAPL":4.8961746237,
+      "JPM":-0.7276362131,
+      "NVDA":-0.1903308033,
+      "XOM":-0.4657853850
+    }
+  },
+  "gate_results":{
+    "minimum_total_sessions":true,
+    "pooled_net_mean_bps_2_positive":true,
+    "pooled_net_mean_bps_4_nonnegative":false,
+    "original_beats_reversed_at_2":true,
+    "maximum_positive_pnl_share_single_session":true,
+    "leave_one_name_out_nonnegative_variants_minimum":false
+  },
+  "research_state":{
+    "family":"DEAD_AFTER_D3_FAILURE",
+    "same_id_retuning_allowed":false,
+    "candidate_created":false,
+    "future_shadow_created":false,
+    "persistent_edge_established":false,
+    "live_execution_supported":false,
+    "leverage_supported":false
+  },
+  "interpretation":"The July D0 effect did not demonstrate robust transfer into the locked August holdout. The main portfolio remained marginally positive only under the lighter 2 bps haircut, failed the 4 bps stress case, and lost leave-one-name-out robustness. The exact family ID is terminally falsified and cannot be rescued by conditioning, name exclusion, cost relaxation, time-window changes, or direction reversal."
+}
