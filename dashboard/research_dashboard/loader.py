@@ -103,7 +103,11 @@ def _explicit_bool(flat: dict[str, Any], suffixes: Iterable[str]) -> bool | None
         matches.append(value)
     if not matches:
         return None
-    return any(matches)
+    if all(matches):
+        return True
+    if not any(matches):
+        return False
+    return None
 
 
 def _extract_metrics(flat: dict[str, Any]) -> dict[str, float | int]:
@@ -298,13 +302,16 @@ def discover_artifacts(
 
 def _resolve_git_ref(root: Path, requested: str) -> str | None:
     for candidate in (requested, f"origin/{requested}"):
-        proc = subprocess.run(
-            ["git", "-C", str(root), "rev-parse", "--verify", f"{candidate}^{{commit}}"],
-            text=True,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-            check=False,
-        )
+        try:
+            proc = subprocess.run(
+                ["git", "-C", str(root), "rev-parse", "--verify", f"{candidate}^{{commit}}"],
+                text=True,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=False,
+            )
+        except OSError:
+            return None
         if proc.returncode == 0:
             return candidate
     return None
@@ -334,12 +341,15 @@ def discover_git_ref_artifacts(
         if resolved is None:
             continue
 
-        proc = subprocess.run(
-            ["git", "-C", str(root), "ls-tree", "-r", "--name-only", resolved, "--", *scan_args],
-            text=True,
-            capture_output=True,
-            check=False,
-        )
+        try:
+            proc = subprocess.run(
+                ["git", "-C", str(root), "ls-tree", "-r", "--name-only", resolved, "--", *scan_args],
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+        except OSError:
+            continue
         if proc.returncode != 0:
             continue
 
@@ -351,13 +361,24 @@ def discover_git_ref_artifacts(
             }
         )
         for rel_text in paths:
-            show = subprocess.run(
-                ["git", "-C", str(root), "show", f"{resolved}:{rel_text}"],
-                text=True,
-                capture_output=True,
-                errors="replace",
-                check=False,
-            )
+            try:
+                show = subprocess.run(
+                    ["git", "-C", str(root), "show", f"{resolved}:{rel_text}"],
+                    text=True,
+                    capture_output=True,
+                    errors="replace",
+                    check=False,
+                )
+            except OSError:
+                results.append(
+                    _artifact_from_data(
+                        {},
+                        "git executable unavailable",
+                        Path(rel_text),
+                        requested,
+                    )
+                )
+                continue
             rel = Path(rel_text)
             if show.returncode != 0:
                 results.append(
