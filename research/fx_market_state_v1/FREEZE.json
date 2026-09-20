@@ -1,0 +1,108 @@
+{
+  "research_id": "fx_market_state_v1",
+  "status": "FROZEN_BEFORE_FX_STATE_RESULTS",
+  "frozen_at_utc": "2026-09-20T14:43:00Z",
+  "purpose": "Test whether simple causal 1-minute price-state features identify future FX directionality, volatility expansion, or mean reversion before any strategy-PnL conditioning.",
+  "claims": {
+    "strategy_edge_established": false,
+    "executable_pnl_supported": false,
+    "candidate_promotion_supported": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  },
+  "evidence_separation": {
+    "crypto_chain_unchanged": true,
+    "futures_chain_unchanged": true,
+    "etf_chain_unchanged": true,
+    "state_prediction_precedes_strategy_pnl": true
+  },
+  "data": {
+    "provider": "Massive",
+    "endpoint": "/v2/aggs/ticker/{forexTicker}/range/1/minute/{from}/{to}",
+    "bar_semantics": "quote-derived forex aggregates, not executed-trade bars",
+    "tick_bbo_entitlement": "NOT_AVAILABLE_ON_CONNECTED_PLAN",
+    "universe": [
+      "C:EURUSD",
+      "C:GBPUSD",
+      "C:USDJPY",
+      "C:AUDUSD"
+    ],
+    "universe_selection": "preselected major liquid currency pairs without inspecting strategy or state-result PnL",
+    "analysis_window_utc": "12:00-16:00 UTC Monday-Friday",
+    "grid": "15-minute decision timestamps: 12:00,12:15,...,15:45 UTC",
+    "gap_policy": "all required one-minute timestamps must exist; no interpolation, forward fill, alternate timestamp, or synthetic spread"
+  },
+  "windows": {
+    "D0_discovery": [
+      "2026-07-06",
+      "2026-07-31"
+    ],
+    "D2_nonoverlap_replication": [
+      "2026-08-03",
+      "2026-08-28"
+    ],
+    "later_reserved": [
+      "2026-09-01",
+      "2026-09-18"
+    ]
+  },
+  "return_definition": "r_t = ln(close_t / close_{t-1}) on exact consecutive one-minute bars",
+  "hypotheses": {
+    "FXS_H1_TREND_EFFICIENCY_CONTINUATION": {
+      "feature_window_minutes": 15,
+      "directional_efficiency": "abs(sum(last 15 one-minute returns)) / sum(abs(last 15 one-minute returns))",
+      "trigger": "directional_efficiency >= 0.60 and nonzero trailing 15-minute return",
+      "state_direction": "sign(sum(last 15 one-minute returns))",
+      "target": "state_direction * ln(close_{t+15}/close_t) * 10000 bps",
+      "secondary_metric": "fraction target > 0"
+    },
+    "FXS_H2_VOLATILITY_EXPANSION_PERSISTENCE": {
+      "baseline_window_minutes": 60,
+      "current_window_minutes": 15,
+      "baseline": "sqrt(mean(r^2)) over the 60 exact returns ending immediately before the current 15-return window",
+      "current_vol": "sqrt(mean(r^2)) over the most recent 15 exact returns",
+      "trigger": "current_vol / baseline >= 1.50 with baseline > 0",
+      "target": "future 15-return sqrt(mean(r^2)) / same baseline",
+      "control": "same target at all eligible 15-minute grid timestamps regardless of trigger",
+      "effect": "triggered target mean minus control target mean"
+    },
+    "FXS_H3_BOLLINGER_DISPLACEMENT_REVERSION": {
+      "lookback_closes": 20,
+      "center": "mean(log close) over 20 exact closes ending at t",
+      "scale": "sample standard deviation of log close over the same 20 closes, denominator n-1",
+      "z": "(log(close_t)-center)/scale",
+      "trigger": "abs(z) >= 2.0 with scale > 0",
+      "target": "-sign(z) * ln(close_{t+15}/close_t) * 10000 bps",
+      "secondary_metric": "fraction target > 0"
+    }
+  },
+  "D0_survival_gate": {
+    "minimum_triggered_observations": 80,
+    "minimum_sessions_with_triggers": 10,
+    "minimum_pairs_with_triggers": 4,
+    "minimum_positive_pairs": 3,
+    "both_calendar_halves_positive": true,
+    "H1_pooled_target_mean_bps_positive": true,
+    "H1_directional_accuracy_gt": 0.5,
+    "H2_triggered_minus_control_mean_ratio_gt": 0.1,
+    "H3_pooled_target_mean_bps_positive": true,
+    "H3_reversion_accuracy_gt": 0.5,
+    "note": "Each family must pass every applicable gate to unlock its unchanged D2 replication."
+  },
+  "D2_survival_gate": {
+    "minimum_triggered_observations": 60,
+    "minimum_sessions_with_triggers": 10,
+    "minimum_positive_pairs": 3,
+    "same_direction_as_D0": true,
+    "H1_pooled_target_mean_bps_positive": true,
+    "H2_triggered_minus_control_mean_ratio_positive": true,
+    "H3_pooled_target_mean_bps_positive": true
+  },
+  "multiple_testing": {
+    "families_frozen": 3,
+    "thresholds_frozen_before_results": true,
+    "pair_specific_retuning_forbidden": true,
+    "failed_family_id_dead": true,
+    "D2_opened_only_for_D0_survivors": true
+  }
+}
