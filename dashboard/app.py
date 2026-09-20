@@ -13,12 +13,21 @@ DASHBOARD_DIR = Path(__file__).resolve().parent
 if str(DASHBOARD_DIR) not in sys.path:
     sys.path.insert(0, str(DASHBOARD_DIR))
 
-from research_dashboard.loader import ResearchArtifact, discover_artifacts
+from research_dashboard.loader import (
+    ResearchArtifact,
+    discover_artifacts,
+    discover_git_ref_artifacts,
+)
 
 st.set_page_config(
     page_title="Orderflow Edge Lab — Research Dashboard",
     page_icon="📊",
     layout="wide",
+)
+
+DEFAULT_EXTRA_REFS = (
+    "research/cross-market-futures-v1",
+    "research/cross-market-etf-v1",
 )
 
 
@@ -27,6 +36,13 @@ def repo_root() -> Path:
     if configured:
         return Path(configured).expanduser().resolve()
     return DASHBOARD_DIR.parent
+
+
+def configured_refs() -> list[str]:
+    value = os.environ.get("ORDERFLOW_DASHBOARD_REFS")
+    if value is None:
+        return list(DEFAULT_EXTRA_REFS)
+    return [item.strip() for item in value.split(",") if item.strip()]
 
 
 def git_identity(root: Path) -> tuple[str, str]:
@@ -44,8 +60,12 @@ def git_identity(root: Path) -> tuple[str, str]:
 
 
 @st.cache_data(show_spinner=False)
-def load_artifacts(root_text: str) -> list[ResearchArtifact]:
-    return discover_artifacts(Path(root_text))
+def load_artifacts(root_text: str, refs_text: str) -> list[ResearchArtifact]:
+    root = Path(root_text)
+    worktree = discover_artifacts(root)
+    refs = [item for item in refs_text.split(",") if item]
+    branch_evidence = discover_git_ref_artifacts(root, refs)
+    return worktree + branch_evidence
 
 
 def bool_label(value: bool | None) -> str:
@@ -56,9 +76,14 @@ def bool_label(value: bool | None) -> str:
     return "—"
 
 
+def artifact_key(item: ResearchArtifact) -> str:
+    return f"{item.source_ref} :: {item.path}"
+
+
 def registry_rows(artifacts: list[ResearchArtifact]) -> list[dict[str, object]]:
     return [
         {
+            "source": item.source_ref,
             "project": item.project_id,
             "stage": item.stage,
             "status": item.status,
@@ -74,12 +99,18 @@ def registry_rows(artifacts: list[ResearchArtifact]) -> list[dict[str, object]]:
 
 
 root = repo_root()
+refs = configured_refs()
 branch, commit = git_identity(root)
 
 with st.sidebar:
     st.header("Research source")
     st.code(str(root))
     st.caption(f"git: {branch} @ {commit}")
+    st.markdown("**Additional read-only refs**")
+    if refs:
+        st.code("\n".join(refs))
+    else:
+        st.caption("None configured.")
     if st.button("Refresh files", use_container_width=True):
         st.cache_data.clear()
         st.rerun()
@@ -90,10 +121,12 @@ with st.sidebar:
         "change frozen protocols, transmit orders, or promote candidates."
     )
 
-artifacts = load_artifacts(str(root))
+artifacts = load_artifacts(str(root), ",".join(refs))
 
 st.title("Orderflow Edge Lab — Research Dashboard")
-st.caption("Evidence observability for crypto, cross-market, candidate, and shadow research.")
+st.caption(
+    "Evidence observability across the current worktree and already-fetched research refs."
+)
 
 if not artifacts:
     st.warning(
@@ -107,13 +140,15 @@ falsified = [a for a in artifacts if any(x in a.status.upper() for x in ("FALSIF
 blocked = [a for a in artifacts if "BLOCKED" in a.status.upper()]
 shadows = [a for a in artifacts if a.is_shadow]
 explicit_live = [a for a in artifacts if a.live_supported is True]
+source_count = len({a.source_ref for a in artifacts})
 
-c1, c2, c3, c4, c5 = st.columns(5)
-c1.metric("Artifacts", len(artifacts))
-c2.metric("Falsified / rejected", len(falsified))
-c3.metric("Blocked", len(blocked))
-c4.metric("Shadow artifacts", len(shadows))
-c5.metric("Explicit live-supported", len(explicit_live))
+c1, c2, c3, c4, c5, c6 = st.columns(6)
+c1.metric("Evidence records", len(artifacts))
+c2.metric("Sources", source_count)
+c3.metric("Falsified / rejected", len(falsified))
+c4.metric("Blocked", len(blocked))
+c5.metric("Shadow records", len(shadows))
+c6.metric("Explicit live-supported", len(explicit_live))
 
 if explicit_live:
     st.error(
@@ -154,6 +189,7 @@ with overview_tab:
         ):
             flag_rows.append(
                 {
+                    "source": item.source_ref,
                     "project": item.project_id,
                     "status": item.status,
                     "edge": bool_label(item.persistent_edge),
@@ -172,14 +208,19 @@ with registry_tab:
     rows = registry_rows(artifacts)
     frame = pd.DataFrame(rows)
 
-    left, right = st.columns(2)
-    with left:
+    c_left, c_mid, c_right = st.columns(3)
+    with c_left:
+        sources = ["All"] + sorted(frame["source"].dropna().unique().tolist())
+        source_filter = st.selectbox("Source", sources)
+    with c_mid:
         stages = ["All"] + sorted(frame["stage"].dropna().unique().tolist())
         stage_filter = st.selectbox("Stage", stages)
-    with right:
+    with c_right:
         status_query = st.text_input("Status/path contains", "")
 
     filtered = frame.copy()
+    if source_filter != "All":
+        filtered = filtered[filtered["source"] == source_filter]
     if stage_filter != "All":
         filtered = filtered[filtered["stage"] == stage_filter]
     if status_query.strip():
@@ -197,12 +238,9 @@ with metrics_tab:
     if not metric_artifacts:
         st.caption("No numeric research metrics detected.")
     else:
-        selected_path = st.selectbox(
-            "Artifact",
-            [a.path for a in metric_artifacts],
-            key="metric_artifact",
-        )
-        item = next(a for a in metric_artifacts if a.path == selected_path)
+        options = {artifact_key(a): a for a in metric_artifacts}
+        selected_key = st.selectbox("Artifact", list(options), key="metric_artifact")
+        item = options[selected_key]
         metric_frame = pd.DataFrame(
             [{"metric": key, "value": value} for key, value in sorted(item.metrics.items())]
         )
@@ -215,22 +253,24 @@ with metrics_tab:
 
 with shadow_tab:
     if not shadows:
-        st.caption("No shadow/forward artifacts found in the current checkout.")
+        st.caption("No shadow/forward artifacts found in the loaded sources.")
     else:
         st.dataframe(
             pd.DataFrame(registry_rows(shadows)),
             use_container_width=True,
             hide_index=True,
         )
-        shadow_path = st.selectbox("Inspect shadow artifact", [a.path for a in shadows])
-        shadow_item = next(a for a in shadows if a.path == shadow_path)
-        st.json(shadow_item.raw, expanded=False)
+        options = {artifact_key(a): a for a in shadows}
+        shadow_key = st.selectbox("Inspect shadow artifact", list(options))
+        st.json(options[shadow_key].raw, expanded=False)
 
 with raw_tab:
-    selected = st.selectbox("Artifact", [a.path for a in artifacts], key="raw_artifact")
-    item = next(a for a in artifacts if a.path == selected)
+    options = {artifact_key(a): a for a in artifacts}
+    selected_key = st.selectbox("Artifact", list(options), key="raw_artifact")
+    item = options[selected_key]
     st.write(
         {
+            "source": item.source_ref,
             "project": item.project_id,
             "stage": item.stage,
             "status": item.status,
