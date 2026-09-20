@@ -41,7 +41,9 @@ py -m pip install -r dashboard/requirements.txt
 py -m streamlit run dashboard/app.py
 ```
 
-The app discovers the repository root automatically. To point at another checkout:
+The app discovers the repository root automatically. It also reads the already-fetched `research/cross-market-futures-v1` and `research/cross-market-etf-v1` refs without checking them out. Run `git fetch --all --prune` if those refs are not available locally.
+
+To override the extra refs, set a comma-separated `ORDERFLOW_DASHBOARD_REFS` value. To point at another checkout:
 
 ```bash
 ORDERFLOW_REPO_ROOT=/path/to/orderflow_edge_lab streamlit run dashboard/app.py
