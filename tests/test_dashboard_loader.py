@@ -1,4 +1,5 @@
 import json
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -110,6 +111,44 @@ class DashboardLoaderTests(unittest.TestCase):
     def test_empty_repository_has_no_synthetic_fallback(self):
         with tempfile.TemporaryDirectory() as tmp:
             self.assertEqual(discover_artifacts(tmp), [])
+
+    def test_git_ref_discovery_reads_named_research_branch_without_checkout(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            subprocess.run(["git", "init", "-b", "main"], cwd=root, check=True, capture_output=True)
+            subprocess.run(["git", "config", "user.email", "ci@example.invalid"], cwd=root, check=True)
+            subprocess.run(["git", "config", "user.name", "CI"], cwd=root, check=True)
+
+            target = root / "research" / "demo" / "result.json"
+            target.parent.mkdir(parents=True)
+            target.write_text(json.dumps({"research_id": "demo", "status": "BASE"}), encoding="utf-8")
+            subprocess.run(["git", "add", "."], cwd=root, check=True)
+            subprocess.run(["git", "commit", "-m", "base"], cwd=root, check=True, capture_output=True)
+
+            subprocess.run(["git", "switch", "-c", "research/fx-market-state-v1"], cwd=root, check=True, capture_output=True)
+            target.write_text(
+                json.dumps(
+                    {
+                        "research_id": "fx_demo",
+                        "status": "SURVIVED_D3_HISTORICAL_STATE_HOLDOUT",
+                        "research_state": {"live_execution_supported": False},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            subprocess.run(["git", "add", "."], cwd=root, check=True)
+            subprocess.run(["git", "commit", "-m", "fx evidence"], cwd=root, check=True, capture_output=True)
+            subprocess.run(["git", "switch", "main"], cwd=root, check=True, capture_output=True)
+
+            rows = discover_git_ref_artifacts(root, ["research/fx-market-state-v1"])
+            self.assertEqual(len(rows), 1)
+            self.assertEqual(rows[0].project_id, "fx_demo")
+            self.assertEqual(rows[0].source_ref, "research/fx-market-state-v1")
+            self.assertFalse(rows[0].live_supported)
+            self.assertEqual(
+                subprocess.check_output(["git", "branch", "--show-current"], cwd=root, text=True).strip(),
+                "main",
+            )
 
     def test_git_ref_discovery_fails_closed_outside_git_repo(self):
         with tempfile.TemporaryDirectory() as tmp:
