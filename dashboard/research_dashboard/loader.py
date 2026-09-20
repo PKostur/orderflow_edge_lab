@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
@@ -63,6 +64,7 @@ class ResearchArtifact:
     metrics: dict[str, float | int]
     raw: Any
     parse_error: str | None = None
+    source_ref: str = "WORKTREE"
 
 
 def _flatten(value: Any, prefix: str = "") -> dict[str, Any]:
@@ -173,9 +175,8 @@ def _infer_stage(status: str, path: Path) -> str:
     return "RESEARCH"
 
 
-def _parse_markdown(path: Path) -> dict[str, Any]:
-    text = path.read_text(encoding="utf-8", errors="replace")
-    title = path.stem
+def _parse_markdown_text(text: str, stem: str) -> dict[str, Any]:
+    title = stem
     for line in text.splitlines():
         if line.startswith("# "):
             title = line[2:].strip()
@@ -193,8 +194,8 @@ def _parse_markdown(path: Path) -> dict[str, Any]:
     }
 
 
-def _parse_jsonl(path: Path) -> dict[str, Any]:
-    lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
+def _parse_jsonl_text(text: str, stem: str) -> dict[str, Any]:
+    lines = text.splitlines()
     parsed: list[Any] = []
     for line in lines[-MAX_JSONL_LINES:]:
         if not line.strip():
@@ -204,34 +205,44 @@ def _parse_jsonl(path: Path) -> dict[str, Any]:
         except json.JSONDecodeError:
             continue
     return {
-        "research_id": path.stem,
+        "research_id": stem,
         "status": "JSONL_RECORD",
         "record_count_loaded": len(parsed),
         "records": parsed,
     }
 
 
-def _load_path(path: Path) -> tuple[dict[str, Any], str | None]:
+def _load_text(path: Path, text: str) -> tuple[dict[str, Any], str | None]:
     try:
-        if path.stat().st_size > MAX_JSON_BYTES and path.suffix.lower() != ".jsonl":
+        if len(text.encode("utf-8")) > MAX_JSON_BYTES and path.suffix.lower() != ".jsonl":
             return {}, f"file exceeds {MAX_JSON_BYTES} byte dashboard parse limit"
         if path.suffix.lower() == ".json":
-            raw = json.loads(path.read_text(encoding="utf-8"))
+            raw = json.loads(text)
             if isinstance(raw, dict):
                 return raw, None
             return {"research_id": path.stem, "status": "JSON_RECORD", "value": raw}, None
         if path.suffix.lower() == ".jsonl":
-            return _parse_jsonl(path), None
+            return _parse_jsonl_text(text, path.stem), None
         if path.suffix.lower() == ".md":
-            return _parse_markdown(path), None
+            return _parse_markdown_text(text, path.stem), None
         return {}, "unsupported file type"
-    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+    except (UnicodeError, json.JSONDecodeError) as exc:
         return {}, f"{type(exc).__name__}: {exc}"
 
 
-def artifact_from_path(path: Path, repo_root: Path) -> ResearchArtifact:
-    data, error = _load_path(path)
-    rel = path.relative_to(repo_root)
+def _load_path(path: Path) -> tuple[dict[str, Any], str | None]:
+    try:
+        return _load_text(path, path.read_text(encoding="utf-8", errors="replace"))
+    except OSError as exc:
+        return {}, f"{type(exc).__name__}: {exc}"
+
+
+def _artifact_from_data(
+    data: dict[str, Any],
+    error: str | None,
+    rel: Path,
+    source_ref: str,
+) -> ResearchArtifact:
     flat = _flatten(data)
     status = "PARSE_ERROR" if error else _infer_status(data, rel)
     lower_path = rel.as_posix().lower()
@@ -240,7 +251,7 @@ def artifact_from_path(path: Path, repo_root: Path) -> ResearchArtifact:
 
     return ResearchArtifact(
         path=rel.as_posix(),
-        kind=path.suffix.lower().lstrip("."),
+        kind=rel.suffix.lower().lstrip("."),
         project_id=_infer_project_id(data, rel) if not error else rel.stem,
         status=status,
         stage=_infer_stage(status, rel),
@@ -253,18 +264,21 @@ def artifact_from_path(path: Path, repo_root: Path) -> ResearchArtifact:
         metrics=_extract_metrics(flat),
         raw=data,
         parse_error=error,
+        source_ref=source_ref,
     )
+
+
+def artifact_from_path(path: Path, repo_root: Path) -> ResearchArtifact:
+    data, error = _load_path(path)
+    rel = path.relative_to(repo_root)
+    return _artifact_from_data(data, error, rel, "WORKTREE")
 
 
 def discover_artifacts(
     repo_root: str | Path,
     scan_dirs: Iterable[str] = DEFAULT_SCAN_DIRS,
 ) -> list[ResearchArtifact]:
-    """Discover read-only evidence/config artifacts.
-
-    No synthetic rows are generated. An empty repository returns an empty list.
-    Parse failures are surfaced as explicit PARSE_ERROR artifacts.
-    """
+    """Discover read-only evidence/config artifacts from the current worktree."""
 
     root = Path(repo_root).resolve()
     files: set[Path] = set()
@@ -280,3 +294,82 @@ def discover_artifacts(
         for path in sorted(files, key=lambda p: p.as_posix().lower())
         if path.is_file()
     ]
+
+
+def _resolve_git_ref(root: Path, requested: str) -> str | None:
+    for candidate in (requested, f"origin/{requested}"):
+        proc = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "--verify", f"{candidate}^{{commit}}"],
+            text=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        )
+        if proc.returncode == 0:
+            return candidate
+    return None
+
+
+def discover_git_ref_artifacts(
+    repo_root: str | Path,
+    refs: Iterable[str],
+    scan_dirs: Iterable[str] = DEFAULT_SCAN_DIRS,
+) -> list[ResearchArtifact]:
+    """Read evidence from already-fetched git refs without changing checkout.
+
+    Missing refs are ignored. No network fetch is attempted by the dashboard.
+    """
+
+    root = Path(repo_root).resolve()
+    results: list[ResearchArtifact] = []
+    if not (root / ".git").exists():
+        return results
+
+    scan_args = list(scan_dirs)
+    for requested in refs:
+        requested = requested.strip()
+        if not requested:
+            continue
+        resolved = _resolve_git_ref(root, requested)
+        if resolved is None:
+            continue
+
+        proc = subprocess.run(
+            ["git", "-C", str(root), "ls-tree", "-r", "--name-only", resolved, "--", *scan_args],
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        if proc.returncode != 0:
+            continue
+
+        paths = sorted(
+            {
+                line.strip()
+                for line in proc.stdout.splitlines()
+                if line.strip() and Path(line.strip()).suffix.lower() in {".json", ".jsonl", ".md"}
+            }
+        )
+        for rel_text in paths:
+            show = subprocess.run(
+                ["git", "-C", str(root), "show", f"{resolved}:{rel_text}"],
+                text=True,
+                capture_output=True,
+                errors="replace",
+                check=False,
+            )
+            rel = Path(rel_text)
+            if show.returncode != 0:
+                results.append(
+                    _artifact_from_data(
+                        {},
+                        f"git show failed for {resolved}:{rel_text}",
+                        rel,
+                        requested,
+                    )
+                )
+                continue
+            data, error = _load_text(rel, show.stdout)
+            results.append(_artifact_from_data(data, error, rel, requested))
+
+    return results
