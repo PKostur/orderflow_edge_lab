@@ -214,5 +214,89 @@
     "d0_recomputed": true,
     "august_holdout_inspected": false,
     "result_changed": false
+  },
+  "revalidation_2026_09_21": {
+    "status": "MATCHES_CANONICAL_D0_RESULT",
+    "purpose": "Repeatability and eligibility audit only; not independent replication and not new edge evidence.",
+    "source_reacquired_from_massive": true,
+    "source_window_loaded": [
+      "2026-06-01",
+      "2026-07-31"
+    ],
+    "august_holdout_loaded_in_this_revalidation": false,
+    "d0_recomputed": true,
+    "result_changed": false,
+    "d0_regular_session_integrity": {
+      "SPY": {
+        "sessions": 20,
+        "min_minutes": 390,
+        "max_minutes": 390,
+        "average_minutes": 390,
+        "incomplete_sessions": 0
+      },
+      "QQQ": {
+        "sessions": 20,
+        "min_minutes": 390,
+        "max_minutes": 390,
+        "average_minutes": 390,
+        "incomplete_sessions": 0
+      },
+      "GLD": {
+        "sessions": 20,
+        "min_minutes": 390,
+        "max_minutes": 390,
+        "average_minutes": 390,
+        "incomplete_sessions": 0
+      },
+      "USO": {
+        "sessions": 20,
+        "min_minutes": 372,
+        "max_minutes": 390,
+        "average_minutes": 388.75,
+        "incomplete_sessions": 5
+      }
+    },
+    "eligibility_audit": {
+      "ETF_H1_ORB15_CONTINUATION": {
+        "ticker_sessions_seen": 80,
+        "full_opening_range_ticker_sessions": 80,
+        "first_breakout_candidates": 76,
+        "execution_ineligible": 0,
+        "eligible_signals": 76,
+        "calendar_sessions_with_signals": 20,
+        "tickers_with_signals": 4
+      },
+      "ETF_H2_VWAP_VOL_REVERSION": {
+        "valid_z_observations": 5680,
+        "first_threshold_candidates": 75,
+        "execution_ineligible": 0,
+        "eligible_signals": 75,
+        "calendar_sessions_with_signals": 20,
+        "tickers_with_signals": 4
+      },
+      "ETF_H3_GAP_REVERSION": {
+        "ticker_sessions_with_0930": 80,
+        "valid_gap_sigma_observations": 80,
+        "threshold_candidates": 42,
+        "execution_ineligible": 0,
+        "eligible_signals": 42,
+        "calendar_sessions_with_signals": 16,
+        "tickers_with_signals": 4
+      }
+    },
+    "gate_recheck": {
+      "ETF_H1_ORB15_CONTINUATION": "FAIL_both_calendar_halves_positive_at_2bps",
+      "ETF_H2_VWAP_VOL_REVERSION": "FAIL_minimum_positive_tickers_and_concentration",
+      "ETF_H3_GAP_REVERSION": "FAIL_expectancy_control_breadth_concentration_and_halves"
+    },
+    "research_state_unchanged": {
+      "D0": "FALSIFIED_ALL_FAMILIES",
+      "D3_holdout": "SEALED_NOT_INSPECTED",
+      "candidate_created": false,
+      "future_shadow_created": false,
+      "live_execution_supported": false,
+      "leverage_supported": false,
+      "same_id_retuning_allowed": false
+    }
   }
 }
