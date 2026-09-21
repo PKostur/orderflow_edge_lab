@@ -1,0 +1,111 @@
+{
+  "research_id": "equities_premarket_news_v1",
+  "status": "FROZEN_BEFORE_NEWS_PNL",
+  "frozen_at_utc_date": "2026-09-21",
+  "purpose": "Test one event-driven, premarket ticker-specific news-sentiment continuation hypothesis on liquid US equities, separate from failed pure-price families.",
+  "data": {
+    "provider": "Massive",
+    "news_endpoint": "/v2/reference/news",
+    "bar_endpoint": "/v2/aggs/ticker/{stocksTicker}/range/1/minute/{from}/{to}",
+    "universe": [
+      "AAPL",
+      "MSFT",
+      "NVDA",
+      "AMZN",
+      "META",
+      "JPM",
+      "XOM",
+      "LLY"
+    ],
+    "universe_rationale": "Preselected liquid large-cap names spanning technology, internet/consumer, financials, energy and healthcare; no result-based substitution.",
+    "bar_session": "US regular hours, America/New_York",
+    "sentiment_source": "Massive ticker-level article insights; no assistant-generated NLP labels",
+    "schema_probe_date": "2026-05-01",
+    "schema_probe_excluded_from_research_windows": true,
+    "gap_policy": "No interpolation, forward fill or substitute entry/exit bars."
+  },
+  "windows": {
+    "D0_discovery": [
+      "2026-03-09",
+      "2026-04-30"
+    ],
+    "D0_half_1": [
+      "2026-03-09",
+      "2026-04-03"
+    ],
+    "D0_half_2": [
+      "2026-04-06",
+      "2026-04-30"
+    ],
+    "D3_locked_historical_holdout": [
+      "2026-05-04",
+      "2026-06-30"
+    ],
+    "future_shadow_earliest": "after D0 and D3 both survive; never before branch freeze"
+  },
+  "hypothesis": {
+    "id": "NEWS_H1_PREMARKET_SENTIMENT_CONTINUATION",
+    "article_window_et": [
+      "08:00:00",
+      "09:20:00"
+    ],
+    "article_window_utc_during_frozen_dates": [
+      "12:00:00Z",
+      "13:20:00Z"
+    ],
+    "article_filter": {
+      "target_ticker_has_insight": true,
+      "insight_sentiment_allowed": [
+        "positive",
+        "negative"
+      ],
+      "maximum_total_tagged_tickers_per_article": 3,
+      "neutral_insights_ignored": true
+    },
+    "daily_score": "sum(+1 positive, -1 negative) across all eligible articles for that ticker/day",
+    "signal": "score > 0 => long; score < 0 => short; score = 0 => no signal",
+    "entry": "09:30 ET exact minute open",
+    "exit": "10:30 ET exact minute open",
+    "one_signal_per_ticker_day": true,
+    "equal_weight_each_signal_observation": true
+  },
+  "execution": {
+    "return_bps": "direction * (exit_open / entry_open - 1) * 10000",
+    "primary_round_trip_friction_bps": 5,
+    "stress_round_trip_friction_bps": 10,
+    "reversed_same_decision_control": true,
+    "leverage": 1,
+    "live_fill_model": false
+  },
+  "D0_gate": {
+    "minimum_total_signals": 40,
+    "minimum_sessions_with_signals": 20,
+    "minimum_tickers_with_signals": 6,
+    "pooled_net_mean_bps_5_positive": true,
+    "pooled_net_mean_bps_10_nonnegative": true,
+    "original_beats_reversed_at_5": true,
+    "minimum_positive_tickers": 5,
+    "max_positive_pnl_share_single_ticker": 0.35,
+    "both_calendar_halves_positive_at_5": true
+  },
+  "D3_gate": {
+    "minimum_total_signals": 30,
+    "minimum_sessions_with_signals": 20,
+    "minimum_tickers_with_signals": 6,
+    "pooled_net_mean_bps_5_positive": true,
+    "pooled_net_mean_bps_10_nonnegative": true,
+    "original_beats_reversed_at_5": true,
+    "minimum_positive_tickers": 5,
+    "max_positive_pnl_share_single_ticker": 0.35
+  },
+  "research_rules": {
+    "one_frozen_family_only": true,
+    "no_publisher_filtering_after_results": true,
+    "no_sentiment_threshold_retuning": true,
+    "no_ticker_substitution": true,
+    "D3_sealed_unless_D0_passes_all_gates": true,
+    "reversed_control_cannot_be_adopted_post_hoc": true,
+    "failed_family_id_dead": true,
+    "no_live_or_leverage_claim_from_D0_or_D3": true
+  }
+}
