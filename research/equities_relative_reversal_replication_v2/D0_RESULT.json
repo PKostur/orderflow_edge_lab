@@ -1,0 +1,57 @@
+{
+  "research_id": "equities_relative_reversal_replication_v2",
+  "stage": "D0_replication_discovery",
+  "window": [
+    "2026-05-04",
+    "2026-05-29"
+  ],
+  "freeze_commit": "36cec4e33fd0ea9a62f935b63489fccad9384b72",
+  "clarification_commit": "0522f8584794d029a81f2254c4b5bcc75b98de80",
+  "status": "SURVIVED_D0_UNLOCK_D3",
+  "data_integrity": {
+    "required_symbols": [
+      "MSFT",
+      "AMD",
+      "BAC",
+      "CVX",
+      "SPY"
+    ],
+    "exact_required_clocks_complete_on_all_present_sessions": true,
+    "interpolation": false
+  },
+  "results": {
+    "sessions": 19,
+    "net_mean_bps_2": 21.855442159478965,
+    "net_mean_bps_4": 19.855442159478965,
+    "reversed_mean_bps_2": -25.855442159478965,
+    "positive_sessions": 11,
+    "half1_net_mean_bps_2": 22.818462402213306,
+    "half2_net_mean_bps_2": 20.785419667551924,
+    "max_positive_session_share": 0.1737763293080967,
+    "total_net_bps_2": 415.25340103010035,
+    "leave_one_out_net_bps_2": {
+      "AMD": 0.05445510462663317,
+      "BAC": 23.3313966502079,
+      "CVX": 17.187271753450545,
+      "MSFT": 17.26145871468487
+    }
+  },
+  "gate_results": {
+    "minimum_total_sessions": true,
+    "pooled_net_mean_bps_2_positive": true,
+    "pooled_net_mean_bps_4_nonnegative": true,
+    "original_beats_reversed_at_2": true,
+    "both_calendar_halves_positive_at_2": true,
+    "maximum_positive_pnl_share_single_session": true,
+    "leave_one_name_out_nonnegative_variants_minimum": true
+  },
+  "research_state": {
+    "D0": "SURVIVED",
+    "D3_locked_historical_holdout": "UNLOCKED",
+    "original_EQ_H3_id_remains_dead": true,
+    "candidate_created": false,
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
+}
