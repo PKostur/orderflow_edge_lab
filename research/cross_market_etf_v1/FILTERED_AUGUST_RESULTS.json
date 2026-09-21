@@ -1,0 +1,76 @@
+{
+  "research_id": "cross_market_etf_v1",
+  "stage": "FILTERED_AUGUST_LOCKED_HOLDOUT",
+  "candidate_freeze_commit": "d7a43d440f97dbd8840e105498dfb40d7416d0ac",
+  "august_window": ["2026-08-03", "2026-08-28"],
+  "retuning_after_opening_august": false,
+  "results": {
+    "ETF_H1_ORB15_CONTEXT_V1": {
+      "status": "HISTORICAL_SURVIVOR_FRAGILE",
+      "trades": 16,
+      "net_win_rate_pct_2bps": 43.75,
+      "average_net_win_bps_2bps": 24.709,
+      "average_net_loss_bps_2bps": -17.070,
+      "net_expectancy_bps_2bps": 1.208,
+      "profit_factor_2bps": 1.126,
+      "break_even_win_rate_pct_from_observed_payoff": 40.86,
+      "net_expectancy_bps_4bps": -0.792,
+      "average_mfe_bps": 23.359,
+      "average_mae_bps": 20.131,
+      "average_mfe_when_fixed_exit_direction_right_bps": 43.249,
+      "primary_survival_rule": {
+        "minimum_trades_8": true,
+        "positive_net_expectancy_2bps": true,
+        "profit_factor_above_1": true,
+        "win_rate_above_observed_break_even_rate": true,
+        "survives": true
+      },
+      "secondary_diagnostics": {
+        "ticker": {
+          "GLD": {"trades": 5, "win_rate_pct": 60.0, "ev_bps": 1.44},
+          "QQQ": {"trades": 2, "win_rate_pct": 50.0, "ev_bps": -0.90},
+          "SPY": {"trades": 4, "win_rate_pct": 0.0, "ev_bps": -13.37},
+          "USO": {"trades": 5, "win_rate_pct": 60.0, "ev_bps": 13.48}
+        },
+        "first_half_pooled_ev_bps_approx": 8.66,
+        "second_half_pooled_ev_bps_approx": -4.59,
+        "interpretation": "Primary August rule passes, but 4 bps stress is negative and performance is concentrated. No robust edge claim."
+      }
+    },
+    "ETF_H2_VWAP_REVERSION_CONTEXT_V1": {
+      "status": "INCONCLUSIVE_LOW_SAMPLE",
+      "trades": 4,
+      "net_win_rate_pct_2bps": 75.0,
+      "average_net_win_bps_2bps": 8.911,
+      "average_net_loss_bps_2bps": -2.140,
+      "net_expectancy_bps_2bps": 6.148,
+      "profit_factor_2bps": 12.493,
+      "break_even_win_rate_pct_from_observed_payoff": 19.36,
+      "net_expectancy_bps_4bps": 4.148,
+      "average_mfe_bps": 32.032,
+      "average_mae_bps": 9.314,
+      "average_mfe_when_fixed_exit_direction_right_bps": 36.787,
+      "primary_survival_rule": {
+        "minimum_trades_8": false,
+        "classification": "INCONCLUSIVE_LOW_SAMPLE",
+        "not_falsified": true
+      },
+      "secondary_diagnostics": {
+        "ticker": {
+          "GLD": {"trades": 1, "win_rate_pct": 100.0, "ev_bps": 6.21},
+          "QQQ": {"trades": 1, "win_rate_pct": 0.0, "ev_bps": -2.14},
+          "SPY": {"trades": 1, "win_rate_pct": 100.0, "ev_bps": 7.59},
+          "USO": {"trades": 1, "win_rate_pct": 100.0, "ev_bps": 12.93}
+        },
+        "first_half_pooled_ev_bps": 12.93,
+        "second_half_pooled_ev_bps_approx": 3.89,
+        "interpretation": "All observed economics are positive except one small QQQ loss, but four trades are insufficient under the frozen rule."
+      }
+    }
+  },
+  "decision": {
+    "H1": "Do not retune. Preserve as a weak historical survivor. Requires genuinely new evidence before promotion.",
+    "H2": "Do not retune. Preserve unchanged and obtain additional pre-declared locked observations because August sample was below the frozen minimum.",
+    "live_or_leverage_authorized": false
+  }
+}
