@@ -1,0 +1,168 @@
+{
+  "research_id": "fx_market_state_v1",
+  "stage": "orthogonality_redundancy_analysis",
+  "status": "ORTHOGONALITY_COMPLETE_LOW_REDUNDANCY",
+  "evaluated_at_utc": "2026-09-21T07:30:00Z",
+  "freeze": "research/fx_market_state_v1/ORTHOGONALITY_FREEZE.md",
+  "source": {
+    "provider": "Massive",
+    "data": "1-minute quote-derived forex aggregates",
+    "windows": {
+      "D0": [
+        "2026-07-06",
+        "2026-07-31"
+      ],
+      "D3": [
+        "2026-08-03",
+        "2026-08-28"
+      ]
+    },
+    "common_eligibility": "Only frozen 15-minute grid timestamps with exact H2 and H3 inputs and exact 15-minute targets."
+  },
+  "common_eligibility_by_pair": {
+    "D0": {
+      "AUDUSD": {
+        "eligible": 304,
+        "h2": 33,
+        "h3": 30,
+        "joint": 6
+      },
+      "EURUSD": {
+        "eligible": 320,
+        "h2": 25,
+        "h3": 41,
+        "joint": 3
+      },
+      "GBPUSD": {
+        "eligible": 320,
+        "h2": 24,
+        "h3": 35,
+        "joint": 4
+      },
+      "USDJPY": {
+        "eligible": 320,
+        "h2": 25,
+        "h3": 32,
+        "joint": 6
+      }
+    },
+    "D3": {
+      "AUDUSD": {
+        "eligible": 295,
+        "h2": 40,
+        "h3": 25,
+        "joint": 5
+      },
+      "EURUSD": {
+        "eligible": 320,
+        "h2": 27,
+        "h3": 39,
+        "joint": 6
+      },
+      "GBPUSD": {
+        "eligible": 320,
+        "h2": 32,
+        "h3": 36,
+        "joint": 4
+      },
+      "USDJPY": {
+        "eligible": 320,
+        "h2": 36,
+        "h3": 40,
+        "joint": 4
+      }
+    }
+  },
+  "redundancy": {
+    "D0": {
+      "common_eligible": 1264,
+      "h2_triggers": 107,
+      "h3_triggers": 138,
+      "joint": 19,
+      "p_h3_given_h2": 0.1775700935,
+      "p_h2_given_h3": 0.1376811594,
+      "jaccard": 0.0840707965,
+      "phi": 0.0666921051,
+      "high_redundancy_flag": false
+    },
+    "D3": {
+      "common_eligible": 1255,
+      "h2_triggers": 135,
+      "h3_triggers": 140,
+      "joint": 19,
+      "p_h3_given_h2": 0.1407407407,
+      "p_h2_given_h3": 0.1357142857,
+      "jaccard": 0.07421875,
+      "phi": 0.0321876262,
+      "high_redundancy_flag": false
+    }
+  },
+  "conditional_state_checks": {
+    "H2_volatility_persistence": {
+      "D0": {
+        "H3_0": {
+          "triggered_n": 88,
+          "effect_triggered_minus_control": 0.2787867027
+        },
+        "H3_1": {
+          "triggered_n": 19,
+          "effect_triggered_minus_control": 0.4882835457
+        }
+      },
+      "D3": {
+        "H3_0": {
+          "triggered_n": 116,
+          "effect_triggered_minus_control": 0.4283655725
+        },
+        "H3_1": {
+          "triggered_n": 19,
+          "effect_triggered_minus_control": 2.2342672325
+        }
+      },
+      "interpretation": "H2 effect is positive in both H3 strata in both historical windows."
+    },
+    "H3_reversion": {
+      "D0": {
+        "H2_0": {
+          "n": 119,
+          "mean_signed_reversion_target_bps": 1.0228031219
+        },
+        "H2_1": {
+          "n": 19,
+          "mean_signed_reversion_target_bps": 1.7680426767
+        }
+      },
+      "D3": {
+        "H2_0": {
+          "n": 121,
+          "mean_signed_reversion_target_bps": 0.8054098971
+        },
+        "H2_1": {
+          "n": 19,
+          "mean_signed_reversion_target_bps": 3.9431019989
+        }
+      },
+      "interpretation": "H3 signed reversion target is positive both outside and inside H2 expansion episodes in both historical windows."
+    }
+  },
+  "decision_rule": {
+    "high_redundancy_in_either_window": false,
+    "keep_as_separate_state_descriptors": true,
+    "combine_into_trading_rule": false,
+    "limitation": "Joint H2&H3 cells contain only 19 observations in each historical window; no post-result minimum cell count was added."
+  },
+  "research_state": {
+    "historical_state_survivors": [
+      "FXS_H2_VOLATILITY_EXPANSION_PERSISTENCE",
+      "FXS_H3_BOLLINGER_DISPLACEMENT_REVERSION"
+    ],
+    "redundancy_status": "LOW_HISTORICAL_REDUNDANCY",
+    "independent_source_replication": "NOT_DONE",
+    "genuine_future_D4": "NOT_STARTED",
+    "strategy_pnl_conditioning": "NOT_STARTED",
+    "persistent_edge_established": false,
+    "candidate_created": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
+}
