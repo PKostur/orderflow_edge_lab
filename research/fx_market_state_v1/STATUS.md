@@ -1,6 +1,6 @@
 # FX Market-State v1 Status
 
-**Current state:** two historical market-state survivors; no trading edge or candidate.
+**Current state:** two historical market-state survivors; low historical redundancy; prospective D4 frozen; no trading edge or candidate.
 
 ## Frozen universe and source
 
@@ -24,16 +24,40 @@ The original freeze called this D2 non-overlap replication. The taxonomy clarifi
 - **FXS-H3:** replicated. 140 triggers; pooled signed reversion target +1.2312 bps; pooled hit rate 60.71%; all four pairs positive.
 - **FXS-H1:** not inspected after its D0 failure.
 
+## Orthogonality / redundancy — September 21, 2026
+
+The predeclared H2/H3 common-eligibility analysis is complete.
+
+- **D0:** 1,264 common-eligible timestamps; 107 H2 triggers; 138 H3 triggers; 19 joint. Jaccard 0.0841; phi 0.0667.
+- **D3:** 1,255 common-eligible timestamps; 135 H2 triggers; 140 H3 triggers; 19 joint. Jaccard 0.0742; phi 0.0322.
+- The frozen high-redundancy flag is **false** in both windows.
+- H2 future-volatility persistence remains positive in both H3=0 and H3=1 strata in both windows.
+- H3 signed reversion target remains positive in both H2=0 and H2=1 strata in both windows.
+- Joint H2&H3 cells contain only 19 observations in each window, so those small conditional cells are descriptive only.
+
+Decision: keep H2 and H3 as separate state descriptors. Do not combine them into a trading rule.
+
+## Prospective D4
+
+A genuine future same-source D4 is frozen before the first post-freeze analysis session:
+
+- window: **2026-09-21 through 2026-10-02**;
+- same four pairs, feature definitions, thresholds, targets, exact-minute policy and decision grid;
+- H2 requires >=40 triggers, >=8 sessions, positive pooled triggered-minus-control effect and >=3 positive pairs;
+- H3 requires >=40 triggers, >=8 sessions, positive pooled signed target, >50% positive-target fraction and >=3 positive pairs.
+
+No D4 result has been inspected yet.
+
 ## Evidence boundary
 
-These findings support only the statement that the two frozen features identified similar future **market states** in two non-overlapping historical windows from the same data source.
+Current evidence supports only that H2 and H3 identified repeatable and historically non-redundant **market states** in two non-overlapping historical windows from the same source.
 
-They do **not** establish:
+It does **not** establish:
 
 - independent-source replication;
-- genuine post-freeze D4 evidence;
+- completed genuine D4 evidence;
 - executable profitability after spread/fees/slippage;
 - a promoted trading candidate;
 - live or leveraged trading eligibility.
 
-Next evidence should remain state-first: independent-source or genuinely future replication and redundancy/incremental-value analysis before any strategy-PnL conditioning.
+Strategy-PnL conditioning remains prohibited until prospective D4 is complete.
