@@ -1,0 +1,63 @@
+{
+  "research_id": "cross_market_etf_v1",
+  "candidate_id": "ETF_H2_VWAP_REVERSION_CONTEXT_V1",
+  "stage": "PROSPECTIVE_SHADOW",
+  "status": "FROZEN_BEFORE_PROSPECTIVE_OBSERVATIONS",
+  "source_candidate_freeze_commit": "d7a43d440f97dbd8840e105498dfb40d7416d0ac",
+  "source_confirmation_results_commit": "8ef7ea7fbf53d56573df575eecc357de5bea53de",
+  "shadow_start_date": "2026-09-22",
+  "backfill_before_start_forbidden": true,
+  "candidate_definition_unchanged": true,
+  "execution": {
+    "paper_only": true,
+    "leverage": 1.0,
+    "entry": "next exact one-minute bar open after the frozen H2 raw signal if all three frozen rolling context factors pass",
+    "exit": "open exactly 10 minutes after entry",
+    "primary_round_trip_friction_bps": 2.0,
+    "stress_round_trip_friction_bps": 4.0,
+    "missing_minute_policy": "fail closed"
+  },
+  "observation_target": {
+    "minimum_filtered_trades": 20,
+    "minimum_distinct_sessions": 10,
+    "minimum_calendar_days_before_evaluation": 20,
+    "early_failure_allowed": false
+  },
+  "shadow_metrics": [
+    "filtered trade count",
+    "distinct sessions",
+    "net win rate at 2 bps",
+    "average net win and average net loss",
+    "net expectancy at 2 bps",
+    "net expectancy at 4 bps",
+    "profit factor",
+    "average MFE",
+    "average MAE",
+    "ticker breakdown",
+    "rolling factor values at each signal"
+  ],
+  "shadow_review_rule": {
+    "do_not_judge_before_observation_target": true,
+    "minimum_requirements_after_target": [
+      "net expectancy at 2 bps positive",
+      "profit factor above 1",
+      "realized win rate above break-even win rate implied by observed average win and loss"
+    ],
+    "secondary_diagnostics": [
+      "4 bps friction",
+      "ticker concentration",
+      "MFE/MAE structure"
+    ]
+  },
+  "forbidden": [
+    "parameter changes",
+    "ticker exclusions",
+    "factor additions",
+    "lookback changes",
+    "entry or exit changes",
+    "stop or target changes",
+    "retroactive signal deletion",
+    "backfilling observations dated before 2026-09-22"
+  ],
+  "live_or_leverage_authorized": false
+}
