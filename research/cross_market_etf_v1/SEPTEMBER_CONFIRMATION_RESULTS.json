@@ -1,0 +1,70 @@
+{
+  "research_id": "cross_market_etf_v1",
+  "stage": "SEPTEMBER_LOCKED_CONFIRMATION",
+  "confirmation_freeze_commit": "3ff9e00bee5d4d4bdc8bc25569a2663f420c98f8",
+  "results": {
+    "ETF_H1_ORB15_CONTEXT_V1": {
+      "september": {
+        "trades": 8,
+        "net_win_rate_pct_2bps": 25.0,
+        "average_net_win_bps_2bps": 11.920,
+        "average_net_loss_bps_2bps": -26.830,
+        "net_expectancy_bps_2bps": -17.143,
+        "profit_factor_2bps": 0.148,
+        "average_mfe_bps": 10.816,
+        "average_mae_bps": 31.627,
+        "net_expectancy_bps_4bps": -19.143,
+        "break_even_win_rate_pct": 69.24
+      },
+      "classification": "AUGUST_PASS_SEPTEMBER_FAIL_NO_PROMOTION",
+      "reason": "September had the pre-declared minimum sample and failed the unchanged primary economics decisively."
+    },
+    "ETF_H2_VWAP_REVERSION_CONTEXT_V1": {
+      "august": {
+        "trades": 4,
+        "net_win_rate_pct_2bps": 75.0,
+        "net_expectancy_bps_2bps": 6.148,
+        "profit_factor_2bps": 12.493,
+        "net_expectancy_bps_4bps": 4.148
+      },
+      "september": {
+        "trades": 8,
+        "net_win_rate_pct_2bps": 75.0,
+        "average_net_win_bps_2bps": 10.185,
+        "average_net_loss_bps_2bps": -12.762,
+        "net_expectancy_bps_2bps": 4.449,
+        "profit_factor_2bps": 2.394,
+        "average_mfe_bps": 18.437,
+        "average_mae_bps": 9.018,
+        "net_expectancy_bps_4bps": 2.449,
+        "break_even_win_rate_pct": 55.61
+      },
+      "combined_august_september": {
+        "trades": 12,
+        "net_win_rate_pct_2bps": 75.0,
+        "average_net_win_bps_2bps": 9.761,
+        "average_net_loss_bps_2bps": -9.221,
+        "net_expectancy_bps_2bps": 5.015,
+        "profit_factor_2bps": 3.175,
+        "average_mfe_bps": 22.969,
+        "average_mae_bps": 9.117,
+        "net_expectancy_bps_4bps": 3.015,
+        "break_even_win_rate_pct": 48.58
+      },
+      "ticker_diagnostic_combined": {
+        "GLD": {"trades": 2, "win_rate_pct": 50.0, "ev_bps": -4.24},
+        "QQQ": {"trades": 2, "win_rate_pct": 50.0, "ev_bps": -0.31},
+        "SPY": {"trades": 4, "win_rate_pct": 75.0, "ev_bps": 1.12},
+        "USO": {"trades": 4, "win_rate_pct": 100.0, "ev_bps": 16.20}
+      },
+      "classification": "HISTORICAL_SURVIVOR_CONCENTRATED",
+      "primary_rule_pass": true,
+      "caveat": "Pooled economics pass the frozen rule, but positive contribution is strongly concentrated in USO. This is a diagnostic warning, not a post-hoc ticker exclusion."
+    }
+  },
+  "decision": {
+    "H1": "No promotion and no rescue under the same candidate ID.",
+    "H2": "Keep candidate unchanged. Eligible for prospective shadow, but not live or leverage authorization and not an edge claim.",
+    "live_or_leverage_authorized": false
+  }
+}
