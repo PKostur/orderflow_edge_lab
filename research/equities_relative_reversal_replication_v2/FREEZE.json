@@ -1,0 +1,90 @@
+{
+  "research_id": "equities_relative_reversal_replication_v2",
+  "status": "FROZEN_BEFORE_REPLICATION_PNL",
+  "frozen_at_utc_date": "2026-09-21",
+  "purpose": "Independent concept replication of the dead EQ_H3_AFTERNOON_RELATIVE_REVERSAL idea using a disjoint stock universe and non-overlapping earlier time windows. This cannot rescue or revive the original family ID.",
+  "lineage": {
+    "source_family": "cross_market_equities_v1/EQ_H3_AFTERNOON_RELATIVE_REVERSAL",
+    "source_family_terminal_state": "FALSIFIED_D3",
+    "original_id_remains_dead": true,
+    "no_result_from_new_windows_used_to_choose_universe_or_parameters": true
+  },
+  "data": {
+    "provider": "Massive",
+    "endpoint": "/v2/aggs/ticker/{stocksTicker}/range/1/minute/{from}/{to}",
+    "adjusted": true,
+    "session": "US regular hours only, America/New_York",
+    "universe": [
+      "MSFT",
+      "AMD",
+      "BAC",
+      "CVX"
+    ],
+    "benchmark": "SPY",
+    "universe_rationale": "Disjoint matched-sector replication set: large-cap technology, semiconductor, financials and energy. No overlap with AAPL/NVDA/JPM/XOM.",
+    "tick_or_nbbo_entitlement": "NOT_AVAILABLE_ON_CONNECTED_PLAN",
+    "gap_policy": "No interpolation, forward fill, substitute bar or alternate timestamp. Every required minute for all four names and SPY must exist exactly."
+  },
+  "windows": {
+    "D0_replication_discovery": [
+      "2026-05-04",
+      "2026-05-29"
+    ],
+    "D0_half_1": [
+      "2026-05-04",
+      "2026-05-15"
+    ],
+    "D0_half_2": [
+      "2026-05-18",
+      "2026-05-29"
+    ],
+    "D3_locked_historical_holdout": [
+      "2026-06-01",
+      "2026-06-30"
+    ],
+    "future_shadow_earliest": "after D0 and D3 both survive; never before branch freeze"
+  },
+  "execution": {
+    "portfolio": "one equal-gross market-neutral long/short pair per eligible session; +0.5 long and -0.5 short, gross exposure 1.0, net exposure 0",
+    "ranking_metric": "log(stock 14:00 close / stock 10:00 open) - log(SPY 14:00 close / SPY 10:00 open)",
+    "selection": "long lowest metric, short highest metric across the four-stock universe",
+    "entry": "14:01 ET exact minute open",
+    "exit": "15:55 ET exact minute open",
+    "gross_portfolio_return_bps": "0.5 * long_leg_return_bps - 0.5 * short_leg_return_bps",
+    "primary_round_trip_friction_bps": 2,
+    "stress_round_trip_friction_bps": 4,
+    "reversed_same_decision_control": "swap long and short at identical ranking/entry/exit timestamps and identical friction",
+    "leverage": 1
+  },
+  "leave_one_name_out": {
+    "method": "For each of MSFT,AMD,BAC,CVX, remove that name, rerank remaining three using the identical metric and timestamps, and recompute primary net mean.",
+    "minimum_nonnegative_variants": 3
+  },
+  "D0_gate": {
+    "minimum_total_sessions": 15,
+    "pooled_net_mean_bps_2_positive": true,
+    "pooled_net_mean_bps_4_nonnegative": true,
+    "original_beats_reversed_at_2": true,
+    "both_calendar_halves_positive_at_2": true,
+    "maximum_positive_pnl_share_single_session": 0.35,
+    "leave_one_name_out_nonnegative_variants_minimum": 3
+  },
+  "D3_gate": {
+    "minimum_total_sessions": 15,
+    "pooled_net_mean_bps_2_positive": true,
+    "pooled_net_mean_bps_4_nonnegative": true,
+    "original_beats_reversed_at_2": true,
+    "maximum_positive_pnl_share_single_session": 0.35,
+    "leave_one_name_out_nonnegative_variants_minimum": 3
+  },
+  "research_rules": {
+    "no_parameter_retuning_after_D0": true,
+    "failed_replication_id_dead": true,
+    "original_EQ_H3_id_remains_dead_regardless_of_result": true,
+    "D3_sealed_unless_D0_passes_all_gates": true,
+    "reversed_control_cannot_be_adopted_post_hoc": true,
+    "no_name_substitution_after_results": true,
+    "no_live_or_leverage_claim_from_D0_or_D3": true,
+    "D3_survivor_only_creates_new_candidate_id_for_future_shadow": true
+  }
+}
