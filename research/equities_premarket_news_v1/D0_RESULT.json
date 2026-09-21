@@ -1,0 +1,84 @@
+{
+  "research_id": "equities_premarket_news_v1",
+  "family_id": "NEWS_H1_PREMARKET_SENTIMENT_CONTINUATION",
+  "freeze_commit": "fb28ea231feb089c83a2d7abe410a657ba404652",
+  "stage": "D0_discovery",
+  "window": [
+    "2026-03-09",
+    "2026-04-30"
+  ],
+  "status": "FALSIFIED_D0",
+  "source": {
+    "provider": "Massive",
+    "news": "ticker-level news insights sentiment",
+    "bars": "adjusted one-minute stock aggregates",
+    "D3_holdout": [
+      "2026-05-04",
+      "2026-06-30"
+    ],
+    "D3_opened": false
+  },
+  "data_integrity": {
+    "raw_nonzero_news_signal_days": 48,
+    "executable_trading_session_signal_days": 36,
+    "nontrading_signal_days_excluded": 12,
+    "exact_0930_1030_price_bars_complete_for_all_8_tickers_on_all_38_trading_sessions": true,
+    "interpolation": false,
+    "ticker_substitution": false,
+    "JPM_qualifying_executable_signals": 0
+  },
+  "results": {
+    "signals": 36,
+    "sessions_with_signals": 24,
+    "tickers_with_signals": 7,
+    "pooled_net_mean_bps_5": -16.116190599591352,
+    "pooled_net_mean_bps_10": -21.116190599591352,
+    "reversed_mean_bps_5": 6.116190599591353,
+    "total_net_bps_5": -580.1828615852887,
+    "positive_tickers": 2,
+    "max_positive_pnl_share_single_ticker": 0.5352976289810888,
+    "half1_net_mean_bps_5": -29.665022003618866,
+    "half2_net_mean_bps_5": 0.8198486554430374,
+    "ticker_results_net5": {
+      "AAPL": 159.74142405429714,
+      "AMZN": -60.61635812844689,
+      "LLY": -112.19269773874163,
+      "META": -54.321508881306485,
+      "MSFT": -2.672567525150805,
+      "NVDA": 27.73493267633798,
+      "XOM": -0.9519212804381905
+    },
+    "ticker_signal_counts": {
+      "AAPL": 2,
+      "AMZN": 10,
+      "LLY": 3,
+      "META": 4,
+      "MSFT": 6,
+      "NVDA": 10,
+      "XOM": 1
+    }
+  },
+  "gate_results": {
+    "minimum_total_signals": false,
+    "minimum_sessions_with_signals": true,
+    "minimum_tickers_with_signals": true,
+    "pooled_net_mean_bps_5_positive": false,
+    "pooled_net_mean_bps_10_nonnegative": false,
+    "original_beats_reversed_at_5": false,
+    "minimum_positive_tickers": false,
+    "max_positive_pnl_share_single_ticker": false,
+    "both_calendar_halves_positive_at_5": false
+  },
+  "research_state": {
+    "D0": "FALSIFIED",
+    "D3_holdout": "SEALED_NOT_INSPECTED",
+    "family": "DEAD",
+    "candidate_created": false,
+    "future_shadow_created": false,
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "leverage_supported": false,
+    "same_id_retuning_allowed": false
+  },
+  "interpretation": "The frozen premarket-news continuation rule fails on both sample sufficiency and, more importantly, direction/expectancy: pooled primary-cost expectancy is materially negative and the reversed control is positive. The exact ID is dead; the May-June D3 holdout remains sealed and cannot be opened to rescue it."
+}
