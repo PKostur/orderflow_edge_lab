@@ -1,0 +1,51 @@
+{
+  "research_id": "equities_relative_reversal_replication_v2",
+  "stage": "D3_locked_historical_holdout",
+  "window": [
+    "2026-06-01",
+    "2026-06-30"
+  ],
+  "freeze_commit": "36cec4e33fd0ea9a62f935b63489fccad9384b72",
+  "clarification_commit": "0522f8584794d029a81f2254c4b5bcc75b98de80",
+  "d0_commit": "efe3439ad9409af57818cdae2c0abc409a5a5e80",
+  "status": "FALSIFIED_D3",
+  "data_integrity": {
+    "sessions": 21,
+    "all_required_exact_clocks_present_for_MSFT_AMD_BAC_CVX_SPY": true,
+    "interpolation": false
+  },
+  "results": {
+    "sessions": 21,
+    "net_mean_bps_2": -2.3614223485129795,
+    "net_mean_bps_4": -4.3614223485129795,
+    "reversed_mean_bps_2": -1.6385776514870205,
+    "positive_sessions": 8,
+    "max_positive_session_share": 0.2791627574669758,
+    "total_net_bps_2": -49.58986931877257,
+    "leave_one_out_net_bps_2": {
+      "AMD": -13.485719054283358,
+      "BAC": -8.965797817664068,
+      "CVX": 1.2654157550485052,
+      "MSFT": -2.967154787645027
+    }
+  },
+  "gate_results": {
+    "minimum_total_sessions": true,
+    "pooled_net_mean_bps_2_positive": false,
+    "pooled_net_mean_bps_4_nonnegative": false,
+    "original_beats_reversed_at_2": false,
+    "maximum_positive_pnl_share_single_session": true,
+    "leave_one_name_out_nonnegative_variants_minimum": false
+  },
+  "research_state": {
+    "replication_family": "DEAD_AFTER_D3_FAILURE",
+    "source_EQ_H3_family": "REMAINS_DEAD_AFTER_PRIOR_D3_FAILURE",
+    "candidate_created": false,
+    "future_shadow_created": false,
+    "persistent_edge_established": false,
+    "live_execution_supported": false,
+    "leverage_supported": false,
+    "same_id_retuning_allowed": false
+  },
+  "interpretation": "A second disjoint-universe, non-overlapping-time replication produced a strong D0 effect but failed its locked D3 holdout. The result is consistent with a regime-dependent or unstable effect rather than a persistent transferable edge. No timing, universe, cost or direction rescue is allowed under this ID."
+}
