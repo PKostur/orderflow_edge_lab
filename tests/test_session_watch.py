@@ -125,6 +125,12 @@ class SessionWatchTests(unittest.TestCase):
         watch=result["watches"][0]
         self.assertTrue(watch["ready_for_review"])
         self.assertEqual(watch["prospective_independent_batches"],2)
+        cell=next(c for c in watch["cells"] if c["horizon_ms"]==30000)
+        self.assertEqual(len(cell["batch_curve"]),2)
+        self.assertEqual(len(cell["daily_curve"]),2)
+        self.assertAlmostEqual(cell["batch_curve"][-1]["cumulative_net_bps"],2.0)
+        self.assertAlmostEqual(cell["peak_cumulative_net_bps"],2.0)
+        self.assertAlmostEqual(cell["giveback_from_peak_bps"],0.0)
         self.assertEqual(watch["prospective_calendar_days"],2)
         travel=watch["travel_by_fee"][0]
         self.assertTrue(travel["gross_travel_monotonic_non_decreasing"])
