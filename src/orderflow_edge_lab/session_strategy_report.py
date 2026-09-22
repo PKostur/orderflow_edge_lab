@@ -6,6 +6,9 @@ import statistics
 from collections import defaultdict
 from pathlib import Path
 from typing import Any, Iterable, Mapping
+from datetime import datetime, timezone
+
+from orderflow_edge_lab.session_metrics import session_phase_memberships
 
 
 class SessionStrategyReportError(ValueError):
@@ -76,6 +79,7 @@ def build_session_strategy_report(condition_aggregate:Mapping[str,Any])->dict[st
     baselines:dict[tuple[str,int,float],list[dict[str,Any]]]=defaultdict(list)
     groups:dict[tuple[str,int,float,str],list[dict[str,Any]]]=defaultdict(list)
     direction_groups:dict[tuple[str,int,float,str,int],list[dict[str,Any]]]=defaultdict(list)
+    phase_groups:dict[tuple[str,int,float,str,int],list[dict[str,Any]]]=defaultdict(list)
     for r in obs:
         family=str(r["family"]); horizon=int(r["horizon_ms"]); fee=float(r["fee_bps_round_trip"])
         baselines[(family,horizon,fee)].append(r)
@@ -89,6 +93,14 @@ def build_session_strategy_report(condition_aggregate:Mapping[str,Any])->dict[st
                 side=0
             if side in (-1,1):
                 direction_groups[(family,horizon,fee,regime,side)].append(r)
+                observed=r.get("signal_observed_at_ns")
+                if observed is not None:
+                    try:
+                        dt=datetime.fromtimestamp(int(observed)/1_000_000_000,tz=timezone.utc)
+                        for phase in session_phase_memberships(dt):
+                            phase_groups[(family,horizon,fee,phase,side)].append(r)
+                    except (TypeError,ValueError,OverflowError):
+                        pass
 
     rows=[]
     for (family,horizon,fee,regime),xs in sorted(groups.items()):
@@ -123,6 +135,20 @@ def build_session_strategy_report(condition_aggregate:Mapping[str,Any])->dict[st
             **summary,
             "baseline_net_mean_bps":base["net_mean_bps"],
             "net_mean_delta_vs_family_baseline":summary["net_mean_bps"]-base["net_mean_bps"],
+            "sample_warning":summary["observations"]<20 or summary["independent_batches"]<3,
+        })
+
+    phase_rows=[]
+    for (family,horizon,fee,phase,side),xs in sorted(phase_groups.items()):
+        summary=_summ(xs)
+        phase_rows.append({
+            "family":family,
+            "horizon_ms":horizon,
+            "fee_bps_round_trip":fee,
+            "session_phase":phase,
+            "side":side,
+            "direction":"LONG" if side>0 else "SHORT",
+            **summary,
             "sample_warning":summary["observations"]<20 or summary["independent_batches"]<3,
         })
 
@@ -166,10 +192,11 @@ def build_session_strategy_report(condition_aggregate:Mapping[str,Any])->dict[st
         "context_symbol":condition_aggregate.get("context_symbol"),
         "rows":rows,
         "direction_rows":direction_rows,
+        "phase_rows":phase_rows,
         "travel_profiles":travel_profiles,
         "interpretation_rule":{
             "do_not_rank_on_endpoint_only":True,
-            "inspect":["cumulative_net_bps","gross_mean_bps","net_mean_bps","win_rate","average_win_bps","average_loss_bps","profit_factor","max_drawdown_bps","positive_batch_fraction","pnl_concentration","direction_rows","travel_profiles"],
+            "inspect":["cumulative_net_bps","gross_mean_bps","net_mean_bps","win_rate","average_win_bps","average_loss_bps","profit_factor","max_drawdown_bps","positive_batch_fraction","pnl_concentration","direction_rows","phase_rows","travel_profiles"],
             "session_filter_requires_future_freeze":True,
         },
         "claims":{
