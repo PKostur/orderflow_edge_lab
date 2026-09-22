@@ -67,6 +67,41 @@
       "stress_note": "At 8 bps friction the 30-second mean remains approximately +0.87 bps, but batch/day consistency is weak.",
       "concentration_note": "September 21 dominates the cumulative result.",
       "interpretation": "Secondary diagnostic only; weaker consistency than SESSION_W1 despite higher mean return."
+    },
+    {
+      "watch_id": "SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST",
+      "family": "cvd",
+      "side": null,
+      "direction": "BOTH",
+      "session_phase": null,
+      "prospective_watch_start_utc": "2026-09-22T18:10:00Z",
+      "conditions": {
+        "trading_session_regime": "LONDON+NEW_YORK",
+        "spread_bps": "wide>3",
+        "range_to_spread_15s": "high>6",
+        "btc_flow_alignment": "against"
+      },
+      "horizons_ms": [
+        5000,
+        15000,
+        30000
+      ],
+      "fees_bps_round_trip": [
+        4,
+        8
+      ],
+      "development_snapshot_30s_4bps": {
+        "observations": 14,
+        "independent_batches": 4,
+        "gross_mean_bps": 33.06,
+        "net_mean_bps": 29.06,
+        "cumulative_net_bps": 406.8,
+        "win_rate_pct": 71.4,
+        "note": "Discovery subset only. Excluded from prospective scoring."
+      },
+      "stress_note": "Discovery 30-second mean remained approximately +25.06 bps at 8 bps friction, but only four independent batches.",
+      "concentration_note": "Small discovery sample. Broader parent state had only 3/9 positive batches; no promotion.",
+      "interpretation": "Prospective watch of the exact CVD/London-New-York/wide-spread/high-range/BTC-against state. No parameter changes."
     }
   ],
   "prospective_review_requirement": {
