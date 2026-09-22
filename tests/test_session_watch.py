@@ -56,6 +56,51 @@ class SessionWatchTests(unittest.TestCase):
         self.assertEqual(cell["observations"],1)
         self.assertAlmostEqual(cell["net_mean_bps"],6.0)
 
+    def test_condition_filtered_watch_uses_its_own_boundary(self):
+        cfg=self._config()
+        cfg["watches"].append({
+            "watch_id":"W3",
+            "family":"cvd",
+            "side":None,
+            "direction":"BOTH",
+            "session_phase":None,
+            "prospective_watch_start_utc":"2026-09-22T18:10:00Z",
+            "conditions":{
+                "trading_session_regime":"LONDON+NEW_YORK",
+                "spread_bps":"wide>3",
+                "range_to_spread_15s":"high>6",
+                "btc_flow_alignment":"against",
+            },
+            "horizons_ms":[30000],
+            "fees_bps_round_trip":[4.0],
+        })
+        def cvd(iso,batch,conditions):
+            row=self._row(iso,batch,30000,4.0,12.0,family="cvd",side=1)
+            row["conditions"]=conditions
+            return row
+        good={
+            "trading_session_regime":"LONDON+NEW_YORK",
+            "spread_bps":"wide>3",
+            "range_to_spread_15s":"high>6",
+            "btc_flow_alignment":"against",
+        }
+        wrong={**good,"btc_flow_alignment":"aligned"}
+        rows=[
+            cvd("2026-09-22T18:00:00Z","pre",good),
+            cvd("2026-09-23T13:30:00Z","good",good),
+            cvd("2026-09-23T13:31:00Z","wrong",wrong),
+        ]
+        result=build_session_watch_report({
+            "experiment":"multi_batch_market_condition_aggregate",
+            "symbol":"ENA_USDT",
+            "context_symbol":"BTC_USDT",
+            "enriched_observations":rows,
+        },cfg)
+        w3=next(w for w in result["watches"] if w["watch_id"]=="W3")
+        self.assertEqual(w3["prospective_unique_signals"],1)
+        self.assertEqual(w3["conditions"]["btc_flow_alignment"],"against")
+        self.assertEqual(w3["prospective_watch_start_utc"],"2026-09-22T18:10:00Z")
+
     def test_readiness_uses_new_batches_and_days(self):
         rows=[]
         for iso,batch in [
