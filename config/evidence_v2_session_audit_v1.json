@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "protocol_name": "evidence-v2-session-audit-v1",
+  "status": "FROZEN_DESCRIPTIVE_AUDIT_NO_STRATEGY_CHANGES",
+  "frozen_at_utc": "2026-09-22T19:55:00Z",
+  "source_protocol": "evidence-backed-strategies-v2",
+  "source_workflow_run_id": 35083698615,
+  "source_period": {
+    "start": "2024-01-01T00:00:00Z",
+    "end_exclusive": "2026-09-12T00:00:00Z"
+  },
+  "economics": {
+    "round_trip_cost_bps": 20.0,
+    "fold_days": 120
+  },
+  "selection_rule": "For each included family/timeframe, use the first robust-screening-eligible variant at 20 bps in the already-generated evidence-v2 leaderboard. Session metrics were not used for selection.",
+  "variants": [
+    {
+      "audit_id": "EMA8",
+      "family": "ema_tsmom",
+      "interval": "8h",
+      "parameters": {"fast": 24, "slow": 96, "min_atr_spread": 0.25}
+    },
+    {
+      "audit_id": "DON8",
+      "family": "donchian_breakout",
+      "interval": "8h",
+      "parameters": {"lookback": 55}
+    },
+    {
+      "audit_id": "VOL8",
+      "family": "vol_scaled_momentum",
+      "interval": "8h",
+      "parameters": {"lookback": 24, "vol_window": 96, "threshold": 0.5}
+    },
+    {
+      "audit_id": "EMA4",
+      "family": "ema_tsmom",
+      "interval": "4h",
+      "parameters": {"fast": 12, "slow": 96, "min_atr_spread": 0.0}
+    }
+  ],
+  "session_buckets": [
+    {"name": "ASIA_00_08", "start_utc_hour": 0, "end_utc_hour": 8},
+    {"name": "LONDON_PLUS_OVERLAP_08_16", "start_utc_hour": 8, "end_utc_hour": 16},
+    {"name": "NY_POST_PLUS_LATE_16_24", "start_utc_hour": 16, "end_utc_hour": 24}
+  ],
+  "metrics": [
+    "trades",
+    "cumulative_net_bps",
+    "net_expectancy_bps",
+    "median_net_bps",
+    "win_rate",
+    "profit_factor",
+    "max_drawdown_bps",
+    "median_mfe_bps",
+    "median_mae_bps",
+    "positive_symbol_fraction",
+    "median_120d_fold_expectancy_bps",
+    "positive_120d_fold_fraction",
+    "year_expectancy_bps"
+  ],
+  "interpretation": {
+    "descriptive_only": true,
+    "full_sample_endpoint_is_not_sufficient": true,
+    "fold_and_year_stability_required_for_any_new_hypothesis": true,
+    "same_family_variants_are_not_independent_replication": true,
+    "new_session_filter_requires_new_candidate_and_future_freeze": true
+  },
+  "claims": {
+    "candidate_modified": false,
+    "session_filter_promoted": false,
+    "live_trading_authorized": false,
+    "leverage_authorized": false
+  }
+}
