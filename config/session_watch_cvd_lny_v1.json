@@ -1,0 +1,74 @@
+{
+  "watch_id": "WATCH_CVD_LNY_WIDE_RANGE_BTC_AGAINST_V1",
+  "status": "FROZEN_PROSPECTIVE_WATCH_NOT_CANDIDATE",
+  "frozen_at_utc": "2026-09-22T18:10:00Z",
+  "prospective_start_utc": "2026-09-22T18:10:00Z",
+  "discovery_source": {
+    "workflow_run_id": 35724999358,
+    "workflow_completed_at_utc": "2026-09-22T12:30:22Z",
+    "discovery_batches": 84,
+    "discovery_interaction_30s": {
+      "observations": 14,
+      "independent_batches": 4,
+      "gross_mean_bps": 33.06,
+      "net_mean_bps_at_4": 29.06,
+      "net_mean_bps_at_8": 25.06,
+      "net_win_rate_at_4": 0.714
+    },
+    "note": "All discovery observations are excluded from prospective replication scoring."
+  },
+  "filter": {
+    "stream": "original",
+    "family": "cvd",
+    "trading_session_regime": "LONDON+NEW_YORK",
+    "spread_bps": "wide>3",
+    "range_to_spread_15s": "high>6",
+    "btc_flow_alignment": "against"
+  },
+  "execution_evaluation": {
+    "primary_horizon_ms": 30000,
+    "diagnostic_horizons_ms": [5000, 15000, 30000],
+    "primary_round_trip_friction_bps": 4.0,
+    "stress_round_trip_friction_bps": 8.0
+  },
+  "minimum_review_target": {
+    "prospective_observations_at_primary_horizon": 20,
+    "independent_batches": 8,
+    "calendar_days_elapsed": 7
+  },
+  "primary_review_metrics": [
+    "cumulative_net_bps",
+    "net_mean_bps",
+    "net_win_rate",
+    "average_net_win_bps",
+    "average_net_loss_bps",
+    "profit_factor",
+    "max_drawdown_bps",
+    "positive_batch_fraction",
+    "largest_positive_trade_share",
+    "top_three_positive_trade_share"
+  ],
+  "secondary_review_metrics": [
+    "8_bps_stress",
+    "5s_and_15s_horizon_consistency",
+    "mfe_mae_median_and_quantiles",
+    "btc_against_vs_aligned_separation"
+  ],
+  "review_rule": {
+    "no_early_promotion": true,
+    "primary_endpoint_requires_positive_cumulative_net_at_4bps": true,
+    "primary_ev_requires_positive": true,
+    "profit_factor_requires_above": 1.0,
+    "positive_batch_fraction_requires_above": 0.5,
+    "positive_endpoint_alone_is_insufficient": true
+  },
+  "forbidden": [
+    "changing_session_definition",
+    "changing_spread_or_range_buckets",
+    "changing_btc_flow_relation",
+    "excluding_losing_batches",
+    "changing_horizon_after_results",
+    "using_pre_freeze_observations_as_replication",
+    "authorizing_live_trading_or_leverage_from_this_watch"
+  ]
+}
