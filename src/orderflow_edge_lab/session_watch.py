@@ -154,6 +154,13 @@ def build_session_watch_report(
         watch_boundary = _parse_utc(
             str(watch.get("prospective_watch_start_utc") or watch_config["prospective_watch_start_utc"])
         )
+        watch_requirement = {
+            **requirement,
+            **dict(watch.get("prospective_review_requirement") or {}),
+        }
+        watch_min_signals = int(watch_requirement.get("minimum_new_signals", 0))
+        watch_min_batches = int(watch_requirement.get("minimum_new_independent_batches", min_batches))
+        watch_min_days = int(watch_requirement.get("minimum_new_calendar_days", min_days))
         base_rows = [
             row for row in observations if _matches_watch_base(row, watch, watch_boundary)
         ]
@@ -193,7 +200,11 @@ def build_session_watch_report(
                 for r in evidence_rows
             }
         )
-        ready = evidence_batches >= min_batches and evidence_days >= min_days
+        ready = (
+            len(evidence_rows) >= watch_min_signals
+            and evidence_batches >= watch_min_batches
+            and evidence_days >= watch_min_days
+        )
 
         travel_by_fee: list[dict[str, Any]] = []
         for fee in fees:
@@ -242,6 +253,11 @@ def build_session_watch_report(
                 "prospective_unique_signals": len(evidence_rows),
                 "prospective_independent_batches": evidence_batches,
                 "prospective_calendar_days": evidence_days,
+                "review_requirement": {
+                    "minimum_new_signals": watch_min_signals,
+                    "minimum_new_independent_batches": watch_min_batches,
+                    "minimum_new_calendar_days": watch_min_days,
+                },
                 "ready_for_review": ready,
                 "status": "READY_FOR_REVIEW" if ready else "ACCUMULATING",
                 "cells": cells,
