@@ -301,3 +301,21 @@ This strengthens the earlier conclusion that New York's higher movement does not
 * W3 CVD London-NY / wide-spread / high-range / BTC-against: no eligible observations because both new captures began after the London session closed.
 
 No watch has reached a prospective review target.
+
+
+## W3 discovery cumulative-path concentration
+
+A batch-by-batch reconstruction of the 14-observation BTC-against W3 discovery subset shows:
+
+| First signal date | Obs | Batch net @4bps | Running cumulative |
+|---|---:|---:|---:|
+| Sep 17 | 1 | +24.37 bps | +24.37 |
+| Sep 19 | 9 | **+374.64** | +399.01 |
+| Sep 21 | 3 | +16.04 | +415.06 |
+| Sep 22 | 1 | -8.28 | +406.77 |
+
+The September 19 capture contributed approximately **92.1%** of the final discovery PnL.
+
+Removing that strongest batch leaves approximately +32.13 bps across only five observations and three batches.
+
+This materially weakens the apparent robustness of the large +29.06 bps/trade discovery EV. W3 remains worth watching because the directional and excursion separation is coherent, but the prospective test must demonstrate repeated batch-level contribution rather than another isolated high-payoff episode.
