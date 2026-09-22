@@ -1,0 +1,71 @@
+{
+  "research_layer": "diagnostic_first_v2",
+  "source_window": ["2026-07-06", "2026-07-31"],
+  "friction_bps_round_trip": 2.0,
+  "note": "Descriptive re-analysis of the same July signals. Prior frozen D0 verdicts are unchanged. Any new exit/stop/target designed from these diagnostics requires a new candidate ID before holdout testing.",
+  "families": {
+    "ETF_H1_ORB15_CONTINUATION": {
+      "signals": 76,
+      "directional_win_rate_pct": 53.95,
+      "net_win_rate_pct": 47.37,
+      "avg_net_win_bps": 20.5412,
+      "avg_net_loss_bps": -16.0835,
+      "net_expectancy_bps": 1.2650,
+      "avg_mfe_all_bps": 21.8322,
+      "avg_mae_all_bps": 19.4934,
+      "avg_mfe_when_direction_right_bps": 31.6896,
+      "median_mfe_when_direction_right_bps": 28.527,
+      "avg_realized_gross_when_direction_right_bps": 19.9105,
+      "avg_capture_ratio_when_direction_right": 0.6063,
+      "mfe_hit_rates_when_direction_right_pct": {
+        "10_bps": 95.12,
+        "20_bps": 75.61,
+        "30_bps": 48.78,
+        "50_bps": 12.20
+      },
+      "avg_mae_when_direction_right_bps": 12.674
+    },
+    "ETF_H2_VWAP_VOL_REVERSION": {
+      "signals": 75,
+      "directional_win_rate_pct": 53.33,
+      "net_win_rate_pct": 44.00,
+      "avg_net_win_bps": 16.6883,
+      "avg_net_loss_bps": -9.8323,
+      "net_expectancy_bps": 1.8367,
+      "avg_mfe_all_bps": 19.6544,
+      "avg_mae_all_bps": 13.9734,
+      "avg_mfe_when_direction_right_bps": 24.8612,
+      "median_mfe_when_direction_right_bps": 25.719,
+      "avg_realized_gross_when_direction_right_bps": 15.5809,
+      "avg_capture_ratio_when_direction_right": 0.5270,
+      "mfe_hit_rates_when_direction_right_pct": {
+        "10_bps": 82.50,
+        "20_bps": 57.50,
+        "30_bps": 32.50,
+        "50_bps": 5.00
+      },
+      "avg_mae_when_direction_right_bps": 8.786
+    },
+    "ETF_H3_GAP_REVERSION": {
+      "signals": 42,
+      "directional_win_rate_pct": 38.10,
+      "net_win_rate_pct": 38.10,
+      "avg_net_win_bps": 49.5618,
+      "avg_net_loss_bps": -56.9785,
+      "net_expectancy_bps": -16.3917,
+      "avg_mfe_all_bps": 43.9516,
+      "avg_mae_all_bps": 60.9465,
+      "avg_mfe_when_direction_right_bps": 83.2191,
+      "median_mfe_when_direction_right_bps": 66.923,
+      "avg_realized_gross_when_direction_right_bps": 51.5618,
+      "avg_capture_ratio_when_direction_right": 0.5421,
+      "mfe_hit_rates_when_direction_right_pct": {
+        "10_bps": 100.00,
+        "20_bps": 100.00,
+        "30_bps": 100.00,
+        "50_bps": 81.25
+      },
+      "avg_mae_when_direction_right_bps": 25.443
+    }
+  }
+}

@@ -53,17 +53,6 @@ def _fixtures(days: int = 320):
     return daily, funding
 
 
-def _hourly_from_daily(daily):
-    start = min(frame.index.min() for frame in daily.values())
-    end = max(frame.index.max() for frame in daily.values())
-    hidx = pd.date_range(start, end, freq="1h", tz="UTC")
-    hourly = {}
-    for symbol, frame in daily.items():
-        series = pd.to_numeric(frame["open"], errors="coerce").reindex(hidx).interpolate(method="time")
-        hourly[symbol] = pd.DataFrame({"open": series}, index=hidx)
-    return hourly
-
-
 def test_shadow_contract_is_exact_failed_rule_and_research_only():
     cfg = json.loads(Path("config/dv2_payoff_meta_trend_accel_shadow_v1.json").read_text())
     assert cfg["prospective_start_utc"] == "2026-09-17T00:00:00Z"
@@ -131,66 +120,4 @@ def test_forward_snapshot_never_uses_leverage_or_prestart_pnl():
     if obs is not None and len(obs):
         assert (pd.to_numeric(obs["active_gross"], errors="coerce") <= 1.0 + 1e-12).all()
         assert (pd.to_datetime(obs.index, utc=True) >= pd.Timestamp("2026-09-17T00:00:00Z")).all()
-    assert report["claims"]["leverage_supported"] is False
-
-
-
-def test_session_metrics_are_observational_and_reconcile_without_changing_decisions():
-    d, f = _fixtures()
-    h = _hourly_from_daily(d)
-    base_report, _ = build_forward_snapshot(
-        d,
-        symbols=SYMBOLS,
-        funding_frames=f,
-        prospective_start_utc="2026-09-17T00:00:00Z",
-        as_of_utc="2026-10-25T12:00:00Z",
-        side_cost_bps=10.0,
-        ridge_alpha=10.0,
-        training_window=80,
-        minimum_training=60,
-        threshold_bps=0.0,
-    )
-    report, tables = build_forward_snapshot(
-        d,
-        symbols=SYMBOLS,
-        funding_frames=f,
-        hourly_frames=h,
-        prospective_start_utc="2026-09-17T00:00:00Z",
-        as_of_utc="2026-10-25T12:00:00Z",
-        side_cost_bps=10.0,
-        ridge_alpha=10.0,
-        training_window=80,
-        minimum_training=60,
-        threshold_bps=0.0,
-    )
-
-    assert report["completed_forward_setups"] == base_report["completed_forward_setups"]
-    assert report["accepted_completed_setups"] == base_report["accepted_completed_setups"]
-    assert report["latest_open_decision"] == base_report["latest_open_decision"]
-
-    sessions = report["session_metrics"]
-    assert sessions["decision_logic_unchanged"] is True
-    assert sessions["retuning_or_promotion_use_allowed"] is False
-    assert sessions["introduced_after_prospective_start"] is True
-    assert sessions["source_interval"] == "1h"
-    assert sessions["named_sessions_utc"] == {
-        "asia": "00:00-08:00",
-        "london": "08:00-16:00",
-        "new_york": "13:00-21:00",
-    }
-    assert sessions["named_sessions_overlap"] is True
-    assert sessions["attributed_completed_setups"] == report["completed_forward_setups"]
-    assert sessions["unattributed_completed_setups"] == 0
-    assert sessions["reconciliation_with_standalone_label_passed"] is True
-    assert sessions["max_abs_reconciliation_error_bps"] is not None
-    assert sessions["max_abs_reconciliation_error_bps"] <= 1e-6
-    assert set(sessions["named_session_metrics"]) == {"asia", "london", "new_york"}
-    assert "london_new_york_overlap" in sessions["exclusive_bucket_metrics"]
-
-    hourly = tables["session_hourly_attribution"]
-    if len(hourly):
-        assert (pd.to_datetime(hourly["start_timestamp"], utc=True) >= pd.Timestamp("2026-09-17T00:00:00Z")).all()
-    assert report["claims"]["candidate_promoted"] is False
-    assert report["claims"]["D4_validation"] is False
-    assert report["claims"]["live_execution_supported"] is False
     assert report["claims"]["leverage_supported"] is False

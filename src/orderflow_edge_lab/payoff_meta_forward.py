@@ -15,7 +15,6 @@ from orderflow_edge_lab.discovery_v2_sprint12 import (
     _zero,
 )
 from orderflow_edge_lab.discovery_v2_sprint13 import _model, run_payoff_meta
-from orderflow_edge_lab.session_metrics import build_session_attribution
 
 
 def _as_utc(value: str | pd.Timestamp) -> pd.Timestamp:
@@ -177,7 +176,6 @@ def build_forward_snapshot(
     *,
     symbols: Sequence[str],
     funding_frames: Mapping[str, pd.DataFrame],
-    hourly_frames: Mapping[str, pd.DataFrame] | None = None,
     prospective_start_utc: str,
     as_of_utc: str | pd.Timestamp,
     side_cost_bps: float = 10.0,
@@ -285,17 +283,4 @@ def build_forward_snapshot(
             "leverage_supported": False,
         },
     }
-    if hourly_frames is not None:
-        opens, _ = _validate_price_frames(daily_frames, symbols)
-        session_report, session_tables = build_session_attribution(
-            meta.predictions,
-            opens=opens,
-            hourly_frames=hourly_frames,
-            funding_frames=funding_frames,
-            symbols=symbols,
-            prospective_start=start,
-            side_cost_bps=side_cost_bps,
-        )
-        report["session_metrics"] = session_report
-        tables.update(session_tables)
     return report, tables

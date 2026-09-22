@@ -14,6 +14,8 @@ from orderflow_edge_lab.market_conditions import (
     _numeric_pf,
     _summarize_group,
 )
+from orderflow_edge_lab.session_metrics import session_regime
+from datetime import datetime, timezone
 
 
 class ConditionAggregateError(ValueError):
@@ -27,6 +29,34 @@ def _load(path: str | Path) -> dict[str, Any]:
     if payload.get("experiment") != "pre_registered_market_condition_stratification":
         raise ConditionAggregateError(f"{path}: incompatible condition report")
     return payload
+
+
+def _protocol_is_compatible(protocol: Any) -> bool:
+    if not isinstance(protocol, dict):
+        return False
+    # Historical reports created before named trading sessions are valid if
+    # every legacy condition dimension exactly matches the current protocol.
+    for key, value in protocol.items():
+        if key not in CONDITION_PROTOCOL or CONDITION_PROTOCOL[key] != value:
+            return False
+    missing = set(CONDITION_PROTOCOL) - set(protocol)
+    return missing <= {"trading_session_regime"}
+
+
+def _ensure_session_condition(row: dict[str, Any]) -> dict[str, Any]:
+    out = dict(row)
+    conditions = dict(out.get("conditions") or {})
+    if "trading_session_regime" not in conditions:
+        observed = out.get("signal_observed_at_ns")
+        if observed is not None:
+            try:
+                observed_ns = int(observed)
+                dt = datetime.fromtimestamp(observed_ns / 1_000_000_000, tz=timezone.utc)
+                conditions["trading_session_regime"] = session_regime(dt)
+            except (TypeError, ValueError, OverflowError):
+                pass
+    out["conditions"] = conditions
+    return out
 
 
 def aggregate_condition_reports(report_paths: Iterable[str | Path]) -> dict[str, Any]:
@@ -43,7 +73,7 @@ def aggregate_condition_reports(report_paths: Iterable[str | Path]) -> dict[str,
     for report in reports:
         if report.get("symbol") != symbol or report.get("context_symbol") != context_symbol:
             raise ConditionAggregateError("symbol or context mismatch across reports")
-        if report.get("condition_protocol") != CONDITION_PROTOCOL:
+        if not _protocol_is_compatible(report.get("condition_protocol")):
             raise ConditionAggregateError("condition protocol mismatch across reports")
         if report.get("horizons_ms") != horizons or report.get("fees_bps_round_trip") != fees:
             raise ConditionAggregateError("horizon or fee protocol mismatch across reports")
@@ -53,7 +83,7 @@ def aggregate_condition_reports(report_paths: Iterable[str | Path]) -> dict[str,
             sources[str(source["source_sha256"])] = source
         for row in report.get("enriched_observations", []):
             if isinstance(row, dict):
-                enriched.append(row)
+                enriched.append(_ensure_session_condition(row))
     # Deduplicate in case the same batch report was downloaded twice.
     unique: dict[tuple[str, str, int, float, int], dict[str, Any]] = {}
     for row in enriched:
@@ -124,6 +154,10 @@ def aggregate_condition_reports(report_paths: Iterable[str | Path]) -> dict[str,
         "symbol": symbol,
         "context_symbol": context_symbol,
         "condition_protocol": CONDITION_PROTOCOL,
+        "historical_protocol_migration": {
+            "named_session_condition_backfilled_from_signal_observed_at_ns": True,
+            "strategy_returns_or_signal_rules_changed": False,
+        },
         "screening_readiness_rule": {
             "minimum_observations": MIN_SCREEN_OBSERVATIONS,
             "minimum_independent_batches": MIN_SCREEN_BATCHES,

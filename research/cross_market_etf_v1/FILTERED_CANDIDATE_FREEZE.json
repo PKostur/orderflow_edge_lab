@@ -1,0 +1,103 @@
+{
+  "research_id": "cross_market_etf_v1",
+  "freeze_type": "FILTERED_DEVELOPMENT_SURVIVORS_BEFORE_AUGUST",
+  "status": "FROZEN_BEFORE_AUGUST_FILTERED_CANDIDATE_PNL",
+  "source_development": {
+    "base_freeze_commit": "f3156a7460399d38f0dc3c7b6f5d7109858eb0d2",
+    "base_clarification_commit": "98b77ae7027efd9edc71aff78204abbda0855cd5",
+    "development_diagnostics_commit": "8a0f903157a13da166817c8da77f7ef968a91fa0",
+    "factor_alignment_commit": "8c43b3881154cce11ba39e253e28fcfe5705aa8f"
+  },
+  "principle": "July is development. Candidate filters use only information available at or before each signal and rolling past-only same-ticker factor history. August is locked until this file is committed.",
+  "common_execution": {
+    "universe": ["SPY", "QQQ", "GLD", "USO"],
+    "data": "Massive adjusted one-minute bars",
+    "entry": "next exact one-minute bar open after the raw family signal",
+    "primary_round_trip_friction_bps": 2.0,
+    "stress_round_trip_friction_bps": 4.0,
+    "leverage": 1.0,
+    "missing_minute_policy": "fail closed; no interpolation or substitute bars",
+    "rolling_history": "previous 10 eligible raw signals from the same ticker and same base family, strictly before the current signal timestamp",
+    "rolling_benchmark": "simple arithmetic mean of each factor over those previous 10 raw signals",
+    "minimum_history_signals": 10
+  },
+  "candidates": {
+    "ETF_H1_ORB15_CONTEXT_V1": {
+      "base_family": "ETF_H1_ORB15_CONTINUATION",
+      "raw_signal": "unchanged from the original frozen H1 definition",
+      "factors": {
+        "breakout_depth_bps": "long: (signal_close / opening_range_high - 1)*10000; short: (opening_range_low / signal_close - 1)*10000",
+        "pre5_momentum_bps": "direction * (signal_close / exact_close_5_minutes_before_signal - 1)*10000",
+        "vwap_alignment_bps": "direction * (signal_close / cumulative_vwap_through_signal - 1)*10000",
+        "relative_signal_volume": "signal_minute_volume / average_volume_of_opening_range_minutes_09:30_through_09:44"
+      },
+      "factor_pass": "current factor strictly greater than its same-factor rolling mean over the previous 10 eligible raw H1 signals for that ticker",
+      "context_filter": "at least 3 of the 4 factors pass",
+      "exit": "open exactly 15 minutes after entry",
+      "july_development_snapshot": {
+        "trades": 18,
+        "net_win_rate_pct_2bps": 66.7,
+        "net_expectancy_bps_2bps": 8.22,
+        "average_mfe_bps": 22.55,
+        "average_mae_bps": 15.13
+      }
+    },
+    "ETF_H2_VWAP_REVERSION_CONTEXT_V1": {
+      "base_family": "ETF_H2_VWAP_VOL_REVERSION",
+      "raw_signal": "unchanged from the original frozen H2 definition",
+      "factors": {
+        "vwap_distance_bps": "abs(log(signal_close / cumulative_vwap_through_signal))*10000",
+        "signal_range_bps": "(signal_high / signal_low - 1)*10000",
+        "relative_signal_volume_20": "signal_minute_volume / arithmetic_mean_volume_of_signal_minute_and_preceding_19_exact_minutes"
+      },
+      "factor_pass": "current factor strictly greater than its same-factor rolling mean over the previous 10 eligible raw H2 signals for that ticker",
+      "context_filter": "all 3 factors pass",
+      "exit": "open exactly 10 minutes after entry",
+      "july_development_snapshot": {
+        "trades": 14,
+        "net_win_rate_pct_2bps": 64.3,
+        "net_expectancy_bps_2bps": 13.00,
+        "average_mfe_bps": 29.15,
+        "average_mae_bps": 13.46
+      }
+    }
+  },
+  "august_locked_evaluation": {
+    "window": ["2026-08-03", "2026-08-28"],
+    "primary_metrics": [
+      "eligible filtered trades",
+      "net win rate after 2 bps friction",
+      "average net winner",
+      "average net loser",
+      "net expectancy bps per trade after 2 bps",
+      "profit factor",
+      "average MFE",
+      "average MAE",
+      "MFE conditional on positive fixed-exit direction"
+    ],
+    "secondary_diagnostics_not_automatic_kill_gates": [
+      "ticker breakdown",
+      "calendar-half breakdown",
+      "4 bps friction stress",
+      "signal frequency",
+      "MFE and MAE timing"
+    ],
+    "survival_rule": {
+      "minimum_trades": 8,
+      "if_fewer_than_8": "INCONCLUSIVE_LOW_SAMPLE, not falsified",
+      "net_expectancy_after_2bps_must_be_positive": true,
+      "profit_factor_must_exceed_1": true,
+      "realized_net_win_rate_must_exceed_break_even_win_rate_from_observed_average_win_and_loss": true
+    },
+    "no_retuning_after_august": true
+  },
+  "forbidden_after_freeze": [
+    "change factor definitions",
+    "change rolling lookback length",
+    "change number of required aligned factors",
+    "exclude a ticker because of August results",
+    "change the entry or time exit",
+    "adopt a stop or target selected from August",
+    "inspect August and then create a rescue variant under the same candidate ID"
+  ]
+}

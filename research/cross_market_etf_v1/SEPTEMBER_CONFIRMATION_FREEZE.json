@@ -1,0 +1,47 @@
+{
+  "research_id": "cross_market_etf_v1",
+  "freeze_type": "LOCKED_FILTERED_CONFIRMATION_EXTENSION",
+  "status": "FROZEN_BEFORE_SEPTEMBER_CONFIRMATION_PNL",
+  "source_candidate_freeze_commit": "d7a43d440f97dbd8840e105498dfb40d7416d0ac",
+  "source_august_results_commit": "c2987a5f79923ab69d8a93f8df6f8f0917e2de5f",
+  "window": ["2026-09-01", "2026-09-16"],
+  "candidate_parameters_unchanged": true,
+  "candidates": {
+    "ETF_H1_ORB15_CONTEXT_V1": {
+      "purpose": "historical confirmation only; not independent replication",
+      "rule": "run exact frozen candidate unchanged",
+      "classification": {
+        "if_september_trades_below_8": "LOW_SAMPLE_CONFIRMATION_ONLY",
+        "if_september_trades_at_least_8_and_ev2_positive_and_pf_above_1_and_wr_above_break_even": "TWO_WINDOW_HISTORICAL_SURVIVOR",
+        "otherwise": "AUGUST_PASS_SEPTEMBER_FAIL_NO_PROMOTION"
+      }
+    },
+    "ETF_H2_VWAP_REVERSION_CONTEXT_V1": {
+      "purpose": "resolve August INCONCLUSIVE_LOW_SAMPLE without changing candidate",
+      "rule": "run exact frozen candidate unchanged",
+      "classification": {
+        "combine_august_and_september_for_sample_sufficiency": true,
+        "minimum_combined_trades": 8,
+        "if_combined_trades_below_8": "INCONCLUSIVE_LOW_SAMPLE",
+        "if_combined_trades_at_least_8_and_combined_ev2_positive_and_pf_above_1_and_wr_above_break_even": "HISTORICAL_SURVIVOR",
+        "otherwise": "FILTERED_CANDIDATE_FAILS_COMBINED_HISTORICAL_TEST"
+      }
+    }
+  },
+  "secondary_diagnostics_not_kill_gates": [
+    "ticker breakdown",
+    "subperiod breakdown",
+    "4 bps friction",
+    "MFE and MAE",
+    "signal frequency"
+  ],
+  "forbidden": [
+    "parameter changes",
+    "ticker exclusions",
+    "new factor additions",
+    "lookback changes",
+    "entry or exit changes",
+    "stop or target rescue",
+    "post-result candidate redefinition"
+  ]
+}

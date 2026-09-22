@@ -7,7 +7,6 @@ on:
     paths:
       - 'config/dv2_payoff_meta_trend_accel_shadow_v1.json'
       - 'src/orderflow_edge_lab/payoff_meta_forward.py'
-      - 'src/orderflow_edge_lab/session_metrics.py'
       - 'scripts/dv2_payoff_meta_forward_shadow.py'
       - 'tests/test_payoff_meta_forward.py'
       - '.github/workflows/dv2-payoff-meta-forward-shadow-v1.yml'
@@ -75,12 +74,6 @@ jobs:
           if r['status']=='PRE_START':
               assert r['completed_forward_setups']==0
               assert r['accepted_completed_setups']==0
-          session=r.get('session_metrics')
-          if session is not None:
-              assert session['decision_logic_unchanged'] is True
-              assert session['retuning_or_promotion_use_allowed'] is False
-              if session['attributed_completed_setups'] > 0:
-                  assert session['reconciliation_with_standalone_label_passed'] is True
           print({
               'shadow_id': r['shadow_id'],
               'status': r['status'],
@@ -88,7 +81,6 @@ jobs:
               'completed_forward_setups': r.get('completed_forward_setups',0),
               'accepted_completed_setups': r.get('accepted_completed_setups',0),
               'latest_open_decision': r.get('latest_open_decision'),
-              'session_metrics_status': r.get('session_metrics',{}).get('status'),
           })
           PY
       - name: Preserve immutable forward-shadow snapshot

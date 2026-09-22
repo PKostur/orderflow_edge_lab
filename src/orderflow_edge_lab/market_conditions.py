@@ -10,6 +10,7 @@ from typing import Any, Iterable
 
 from orderflow_edge_lab.direction_pair import evaluate_pair
 from orderflow_edge_lab.orderflow_backtest import BacktestConfig, _load
+from orderflow_edge_lab.session_metrics import session_regime
 
 
 class MarketConditionError(ValueError):
@@ -24,6 +25,7 @@ CONDITION_PROTOCOL = {
     "btc_flow_alignment": ["aligned", "neutral", "against"],
     "signal_strength_multiple": ["weak1-1.5", "medium1.5-2.5", "strong>=2.5"],
     "utc_session": ["00-08", "08-16", "16-24"],
+    "trading_session_regime": ["ASIA", "ASIA+LONDON", "LONDON", "LONDON+NEW_YORK", "NEW_YORK", "OFF_SESSION"],
 }
 
 
@@ -214,6 +216,7 @@ def _enrich_observation(
         "btc_flow_alignment": _btc_alignment(observation),
         "signal_strength_multiple": _bucket_strength(strength),
         "utc_session": _utc_session(observed_ns),
+        "trading_session_regime": session_regime(datetime.fromtimestamp(observed_ns / 1_000_000_000, tz=timezone.utc)),
     }
     return {
         **observation,

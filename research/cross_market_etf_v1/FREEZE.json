@@ -1,0 +1,96 @@
+{
+  "research_id": "cross_market_etf_v1",
+  "status": "FROZEN_BEFORE_ETF_PNL",
+  "frozen_at_utc": "2026-09-17T17:04:00Z",
+  "purpose": "Test fresh bar-based intraday hypotheses in liquid US ETFs without reusing or retuning the failed futures price-transfer rules.",
+  "evidence_separation": {
+    "crypto_chain_unchanged": true,
+    "futures_price_transfer_chain_unchanged": true,
+    "etf_results_cannot_promote_crypto_or_futures_candidates": true,
+    "persistent_edge_claim_requires_new_candidate_and_future_shadow": true
+  },
+  "data": {
+    "provider": "Massive",
+    "endpoint": "/v2/aggs/ticker/{ticker}/range/1/minute/{from}/{to}",
+    "adjusted": true,
+    "session": "US regular hours only, America/New_York 09:30-16:00",
+    "universe": ["SPY", "QQQ", "GLD", "USO"],
+    "universe_rationale": "Preselected liquid ETF proxies for broad US equity, Nasdaq growth, gold and crude-oil exposure; no post-result substitution.",
+    "tick_data_entitlement": "NOT_AVAILABLE_ON_CONNECTED_PLAN",
+    "gap_policy": "No interpolation. Any signal, entry or exit requiring a missing exact minute is ineligible."
+  },
+  "windows": {
+    "D0_discovery": ["2026-07-06", "2026-07-31"],
+    "D3_locked_historical_holdout": ["2026-08-03", "2026-08-28"],
+    "later_check_reserved_not_for_retuning": ["2026-09-01", "2026-09-16"],
+    "future_shadow_earliest": "2026-09-18"
+  },
+  "execution": {
+    "entry": "next exact one-minute bar open after signal",
+    "exit": "exact frozen exit minute open",
+    "primary_round_trip_friction_bps": 2.0,
+    "stress_round_trip_friction_bps": 4.0,
+    "commissions": "not separately modeled; friction haircut is all-in proxy for D0 only",
+    "market_impact": "not modeled",
+    "leverage": 1.0,
+    "reversed_same_decision_control": true
+  },
+  "hypotheses": {
+    "ETF_H1_ORB15_CONTINUATION": {
+      "opening_range": "09:30-09:44 ET inclusive",
+      "signal_search": "09:45-10:29 ET inclusive",
+      "signal": "first close strictly above opening-range high => long; first close strictly below opening-range low => short",
+      "entry": "next minute open",
+      "exit": "open exactly 15 minutes after entry",
+      "max_signals_per_ticker_session": 1
+    },
+    "ETF_H2_VWAP_VOL_REVERSION": {
+      "signal_search": "09:50-11:00 ET inclusive",
+      "cumulative_vwap": "sum(minute_vwap * minute_volume) / sum(minute_volume) from 09:30 through signal minute",
+      "volatility": "sample standard deviation of the preceding 20 exact one-minute log close-to-close returns",
+      "z": "log(close/cumulative_vwap) / (sigma_1m * sqrt(20))",
+      "signal": "first z >= +1.0 => short; first z <= -1.0 => long",
+      "entry": "next minute open",
+      "exit": "open exactly 10 minutes after entry",
+      "max_signals_per_ticker_session": 1
+    },
+    "ETF_H3_GAP_REVERSION": {
+      "daily_sigma": "sample standard deviation of prior 20 regular-session close-to-close log returns",
+      "gap": "log(09:30 open / prior regular-session close)",
+      "eligibility": "abs(gap) >= 0.5 * daily_sigma",
+      "signal": "positive gap => short; negative gap => long",
+      "entry": "09:31 ET open",
+      "exit": "10:30 ET open",
+      "max_signals_per_ticker_session": 1
+    }
+  },
+  "gates": {
+    "D0_survival": {
+      "minimum_total_signals": 30,
+      "minimum_sessions_with_signals": 10,
+      "minimum_tickers_with_signals": 3,
+      "pooled_net_mean_bps_2tick_positive": true,
+      "original_beats_reversed_at_2tick": true,
+      "minimum_positive_tickers": 3,
+      "max_positive_pnl_share_single_ticker": 0.60,
+      "both_calendar_halves_positive_at_2tick": true
+    },
+    "D3_holdout_survival": {
+      "minimum_total_signals": 20,
+      "minimum_sessions_with_signals": 10,
+      "pooled_net_mean_bps_2tick_positive": true,
+      "pooled_net_mean_bps_4tick_nonnegative": true,
+      "original_beats_reversed_at_2tick": true,
+      "minimum_positive_tickers": 3,
+      "max_positive_pnl_share_single_ticker": 0.60
+    },
+    "promotion": "No direct promotion from D0 or D3. A survivor gets a new candidate ID and prospective future shadow only."
+  },
+  "multiple_testing": {
+    "families_frozen": 3,
+    "ticker_specific_rescue_forbidden": true,
+    "threshold_retuning_after_D0_forbidden": true,
+    "failed_family_id_dead": true,
+    "reversed_control_cannot_be_adopted_post_hoc": true
+  }
+}

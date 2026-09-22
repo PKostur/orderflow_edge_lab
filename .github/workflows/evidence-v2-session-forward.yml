@@ -1,0 +1,70 @@
+name: Evidence v2 Cross-Strategy Session Forward
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/cross-market-etf-v1]
+    paths:
+      - "config/evidence_v2_session_forward_watch_v1.json"
+      - "src/orderflow_edge_lab/evidence_v2_session_forward.py"
+      - "src/orderflow_edge_lab/cli/evidence_v2_session_forward.py"
+      - "tests/test_evidence_v2_session_forward.py"
+      - ".github/workflows/evidence-v2-session-forward.yml"
+      - "pyproject.toml"
+  schedule:
+    - cron: "20 0,8,16 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: evidence-v2-session-forward-\${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  forward:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run prospective watch unit tests
+        run: python -m unittest tests.test_evidence_v2_session_forward -v
+      - name: Run cross-strategy session watch
+        run: |
+          mkdir -p artifacts/evidence_v2_session_forward/source
+          orderflow-evidence-v2-session-forward \
+            --config config/evidence_v2_session_forward_watch_v1.json \
+            --output artifacts/evidence_v2_session_forward/report.json \
+            --source-dir artifacts/evidence_v2_session_forward/source \
+            --max-workers 5
+      - name: Enforce no-promotion boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/evidence_v2_session_forward/report.json',encoding='utf-8'))
+          c=r['claims']
+          if c.get('candidate_promoted') or c.get('live_trading_authorized') or c.get('leverage_authorized'):
+              raise SystemExit('forbidden promotion/live claim')
+          if r['prospective_start_utc'] != '2026-09-23T00:00:00+00:00':
+              raise SystemExit('prospective boundary changed')
+          print(json.dumps({
+              'watch_id':r['watch_id'],
+              'status':r['status'],
+              'as_of_utc':r['as_of_utc'],
+              'days_elapsed':r['days_elapsed'],
+              'primary_observation':r['primary_observation'],
+          },indent=2))
+          PY
+      - name: Preserve forward session evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-v2-cross-strategy-session-forward
+          path: artifacts/evidence_v2_session_forward/
+          retention-days: 30
+          if-no-files-found: error

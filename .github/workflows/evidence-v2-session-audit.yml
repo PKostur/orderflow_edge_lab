@@ -1,0 +1,58 @@
+name: Evidence v2 Session Audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/cross-market-etf-v1]
+    paths:
+      - "config/evidence_v2_session_audit_v1.json"
+      - "src/orderflow_edge_lab/evidence_v2_session_audit.py"
+      - "src/orderflow_edge_lab/cli/evidence_v2_session_audit.py"
+      - "tests/test_evidence_v2_session_audit.py"
+      - ".github/workflows/evidence-v2-session-audit.yml"
+      - "pyproject.toml"
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run audit unit tests
+        run: python -m unittest tests.test_evidence_v2_session_audit -v
+      - name: Fetch frozen 4h data
+        run: |
+          orderflow-strategy-tournament-data \
+            --config config/evidence_backed_strategies_v2.json \
+            --interval 4h \
+            --output-dir artifacts/evidence_v2_session/data/4h \
+            --max-workers 8
+      - name: Fetch frozen 8h data
+        run: |
+          orderflow-strategy-tournament-data \
+            --config config/evidence_backed_strategies_v2.json \
+            --interval 8h \
+            --output-dir artifacts/evidence_v2_session/data/8h \
+            --max-workers 8
+      - name: Run frozen cross-strategy session audit
+        run: |
+          orderflow-evidence-v2-session-audit \
+            --config config/evidence_v2_session_audit_v1.json \
+            --data-4h artifacts/evidence_v2_session/data/4h \
+            --data-8h artifacts/evidence_v2_session/data/8h \
+            --output artifacts/evidence_v2_session/session_audit.json
+      - name: Preserve session audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-v2-session-audit
+          path: artifacts/evidence_v2_session/
+          retention-days: 30
+          if-no-files-found: error

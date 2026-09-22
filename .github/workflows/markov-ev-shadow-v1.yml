@@ -44,6 +44,11 @@ jobs:
             --ev-config config/markov_ev_overlay_v1.json \
             --output artifacts/markov_ev_shadow/report.json \
             --source-dir artifacts/markov_ev_shadow/source
+      - name: Build observational cross-strategy session economics
+        run: |
+          orderflow-portfolio-session-report \
+            artifacts/markov_ev_shadow/report.json \
+            --output artifacts/markov_ev_shadow/session_report.json
       - name: Build comparison summary
         run: |
           python - <<'PY'

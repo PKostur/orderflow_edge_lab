@@ -1,0 +1,63 @@
+{
+  "research_id": "cross_market_etf_v1",
+  "evaluation_update": "EQUITY_CURVE_FIRST",
+  "effective_before_prospective_shadow": true,
+  "prospective_shadow_start": "2026-09-22",
+  "candidate_definitions_changed": false,
+  "principle": "Conclusions should be based primarily on the realized cumulative capital path after costs, with expectancy, win rate, payoff ratio and excursion statistics used to explain that path rather than replace it.",
+  "primary_reporting": {
+    "constant_notional_cumulative_return": {
+      "definition": "Running sum of each eligible trade's net return after costs in bps. Each trade receives the same fixed notional. This measures raw strategy PnL without compounding or capital-allocation assumptions.",
+      "required": true
+    },
+    "portfolio_equity_curve": {
+      "definition": "Four fixed 25% capital sleeves, one each for SPY, QQQ, GLD and USO. Maximum one position per ticker-session. Unused sleeves remain cash. Daily sleeve returns are aggregated and compounded through time.",
+      "reason": "Prevents simultaneous ETF signals from implicitly reusing the same 100% of capital multiple times.",
+      "required": true
+    },
+    "maximum_drawdown": {
+      "definition": "Peak-to-trough drawdown of the portfolio equity curve.",
+      "required": true
+    },
+    "return_concentration": {
+      "definition": "Share of total positive strategy PnL contributed by the largest trade, top three trades, and each ticker.",
+      "required": true
+    }
+  },
+  "secondary_explanatory_metrics": [
+    "trade count",
+    "win rate",
+    "average winner",
+    "average loser",
+    "expectancy per trade",
+    "profit factor",
+    "MFE",
+    "MAE",
+    "time to MFE",
+    "time to MAE",
+    "2 bps and 4 bps friction sensitivity"
+  ],
+  "conclusion_logic": {
+    "development": "Prefer strategies whose cumulative net-return curve rises over a meaningful number of trades and whose gains are not dominated by one isolated observation. Development statistics may be used to design and freeze a candidate.",
+    "locked_historical_validation": "Primary question is whether the frozen candidate produces positive cumulative net return and an acceptable equity path under the declared portfolio model. Drawdown and concentration determine whether a positive endpoint is credible. Win rate and expectancy are explanatory, not independent all-or-nothing gates unless predeclared otherwise.",
+    "prospective_shadow": "Judge the unchanged candidate from its prospective cumulative equity curve after the minimum observation target is met. Positive endpoint alone is insufficient if almost all gain comes from one trade or one narrow source.",
+    "live_or_leverage": "Not authorized by historical cumulative return alone."
+  },
+  "historical_summary_from_reported_rounded_metrics": {
+    "ETF_H1_ORB15_CONTEXT_V1": {
+      "july_constant_notional_cumulative_bps_approx": 147.96,
+      "august_constant_notional_cumulative_bps_approx": 19.328,
+      "september_constant_notional_cumulative_bps_approx": -137.144,
+      "july_through_september_cumulative_bps_approx": 30.144,
+      "interpretation": "Most July development gain was surrendered by the September confirmation failure; aggregate path is approximately flat."
+    },
+    "ETF_H2_VWAP_REVERSION_CONTEXT_V1": {
+      "july_constant_notional_cumulative_bps_approx": 182.0,
+      "august_constant_notional_cumulative_bps_approx": 24.592,
+      "september_constant_notional_cumulative_bps_approx": 35.592,
+      "july_through_september_cumulative_bps_approx": 242.184,
+      "interpretation": "Cumulative net-return path remained positive across development, August and September, although ticker concentration remains a material diagnostic concern."
+    }
+  },
+  "note": "Historical cumulative bps shown here are derived from previously recorded rounded trade counts and rounded mean net returns. Canonical equity-curve reporting should be generated from the exact trade ledger."
+}
