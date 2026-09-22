@@ -49,8 +49,8 @@
       "universe": "10-coin MEXC perpetual panel",
       "status": "active_forward_shadow",
       "session_mode": "daily_holding_attribution",
-      "automated": false,
-      "next_implementation": "fetch causal lower-timeframe bars and emit additive session attribution without changing daily rebalance decisions"
+      "automated": true,
+      "next_implementation": "implemented: fetch 8h bars and emit additive price+funding session attribution; transaction costs remain separate"
     },
     {
       "candidate_id": "mexc_xs_mom30_7_dn_markov_ev_v1",
@@ -90,7 +90,15 @@
   ],
   "interpretation": {
     "primary": "cumulative return path first",
-    "secondary": ["win_rate", "expectancy", "profit_factor", "drawdown", "positive_period_fraction", "return_concentration", "MFE_MAE_when_available"],
+    "secondary": [
+      "win_rate",
+      "expectancy",
+      "profit_factor",
+      "drawdown",
+      "positive_period_fraction",
+      "return_concentration",
+      "MFE_MAE_when_available"
+    ],
     "same_lineage_is_not_independent_replication": true,
     "session_result_does_not_modify_current_frozen_strategy": true,
     "new_session_filter_requires_new_candidate_id_and_future_freeze": true
