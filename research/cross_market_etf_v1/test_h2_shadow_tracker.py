@@ -61,7 +61,7 @@ class ShadowTrackerTests(unittest.TestCase):
         self.assertAlmostEqual(raw.exit_open, 101.0)
 
     def test_rolling_filter_uses_strictly_previous_ten_raw_signals(self):
-        history_days = [date(2026, 9, 8) + timedelta(days=i) for i in range(15)]
+        history_days = [date(2026, 9, 12) + timedelta(days=i) for i in range(11)]
         sessions = {
             "SPY": {d: {m.minute_dt(d, 9, 30): mkbar("SPY", m.minute_dt(d, 9, 30))} for d in history_days},
             "QQQ": {},
