@@ -106,16 +106,26 @@ def _matches_watch_base(row: Mapping[str, Any], watch: Mapping[str, Any], bounda
         return False
     if str(row.get("family")) != str(watch["family"]):
         return False
-    try:
-        if int(row.get("side")) != int(watch["side"]):
+    if watch.get("side") is not None:
+        try:
+            if int(row.get("side")) != int(watch["side"]):
+                return False
+        except (TypeError, ValueError):
             return False
-    except (TypeError, ValueError):
-        return False
+
     observed = datetime.fromtimestamp(
         int(row["signal_observed_at_ns"]) / 1_000_000_000,
         tz=timezone.utc,
     )
-    return str(watch["session_phase"]) in session_phase_memberships(observed)
+    phase = watch.get("session_phase")
+    if phase is not None and str(phase) not in session_phase_memberships(observed):
+        return False
+
+    conditions = row.get("conditions") or {}
+    for key, expected in (watch.get("conditions") or {}).items():
+        if conditions.get(key) != expected:
+            return False
+    return True
 
 
 def build_session_watch_report(
@@ -141,8 +151,11 @@ def build_session_watch_report(
     for watch in watch_config.get("watches", []):
         if not isinstance(watch, Mapping):
             continue
+        watch_boundary = _parse_utc(
+            str(watch.get("prospective_watch_start_utc") or watch_config["prospective_watch_start_utc"])
+        )
         base_rows = [
-            row for row in observations if _matches_watch_base(row, watch, boundary)
+            row for row in observations if _matches_watch_base(row, watch, watch_boundary)
         ]
         horizons = [int(x) for x in watch.get("horizons_ms", [])]
         fees = [float(x) for x in watch.get("fees_bps_round_trip", [])]
@@ -221,9 +234,11 @@ def build_session_watch_report(
             {
                 "watch_id": watch["watch_id"],
                 "family": watch["family"],
-                "side": watch["side"],
+                "side": watch.get("side"),
                 "direction": watch.get("direction"),
-                "session_phase": watch["session_phase"],
+                "session_phase": watch.get("session_phase"),
+                "conditions": watch.get("conditions"),
+                "prospective_watch_start_utc": watch_boundary.isoformat().replace("+00:00", "Z"),
                 "prospective_unique_signals": len(evidence_rows),
                 "prospective_independent_batches": evidence_batches,
                 "prospective_calendar_days": evidence_days,
