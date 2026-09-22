@@ -81,6 +81,45 @@ def session_regime(
     return "+".join(active) if active else "OFF_SESSION"
 
 
+def _minutes(value: time) -> float:
+    return value.hour * 60.0 + value.minute + value.second / 60.0 + value.microsecond / 60_000_000.0
+
+
+def session_phase_memberships(
+    value: datetime,
+    sessions: Sequence[SessionSpec] = DEFAULT_SESSIONS,
+) -> tuple[str, ...]:
+    """Return neutral within-session thirds for every active named session.
+
+    Phases are OPENING, MID and LATE, each occupying one third of the declared
+    local session window. This is descriptive metadata, not a trading filter.
+    """
+    if value.tzinfo is None:
+        raise SessionMetricsError("timestamps must be timezone-aware")
+    utc = value.astimezone(UTC)
+    out: list[str] = []
+    for spec in sessions:
+        local = utc.astimezone(spec.tz)
+        if not _in_local_window(local, spec.start_local, spec.end_local):
+            continue
+        start = _minutes(spec.start_local)
+        end = _minutes(spec.end_local)
+        now = _minutes(local.timetz().replace(tzinfo=None))
+        duration = (end - start) % (24.0 * 60.0)
+        if duration == 0:
+            duration = 24.0 * 60.0
+        elapsed = (now - start) % (24.0 * 60.0)
+        progress = min(max(elapsed / duration, 0.0), 0.999999999)
+        if progress < 1.0 / 3.0:
+            phase = "OPENING"
+        elif progress < 2.0 / 3.0:
+            phase = "MID"
+        else:
+            phase = "LATE"
+        out.append(f"{spec.name}_{phase}")
+    return tuple(out)
+
+
 def _parse_timestamp(value: Any, field: str | None = None) -> datetime:
     if isinstance(value, datetime):
         if value.tzinfo is None:
@@ -266,6 +305,7 @@ def _enrich_trade(
         "_return_field": used_return_field,
         "_net_bps": net_bps,
         "_memberships": memberships,
+        "_phases": session_phase_memberships(timestamp, sessions),
         "_regime": "+".join(memberships) if memberships else "OFF_SESSION",
     }
 
