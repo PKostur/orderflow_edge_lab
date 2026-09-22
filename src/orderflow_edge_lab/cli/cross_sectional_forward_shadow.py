@@ -41,8 +41,12 @@ def main() -> None:
 
     def load(symbol: str):
         frame = fetch_mexc_futures_klines(symbol, "1d", warmup_start, as_of.isoformat())
+        # Session attribution needs enough 8h source bars for the shared
+        # history loader. Fetch from the already-declared indicator warmup
+        # boundary; build_daily_portfolio_session_report still scores only
+        # the frozen forward holding periods from the forward report.
         frame_8h = (
-            fetch_mexc_futures_klines(symbol, "8h", forward_start, as_of.isoformat())
+            fetch_mexc_futures_klines(symbol, "8h", warmup_start, as_of.isoformat())
             if args.session_output
             else None
         )
