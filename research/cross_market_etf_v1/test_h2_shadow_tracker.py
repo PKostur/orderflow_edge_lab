@@ -1,14 +1,16 @@
 import importlib.util
 import math
+import sys
 import unittest
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 from pathlib import Path
 from unittest.mock import patch
 
 MODULE_PATH = Path(__file__).with_name("h2_shadow_tracker.py")
 SPEC = importlib.util.spec_from_file_location("h2_shadow_tracker", MODULE_PATH)
-m = importlib.util.module_from_spec(SPEC)
 assert SPEC and SPEC.loader
+m = importlib.util.module_from_spec(SPEC)
+sys.modules[SPEC.name] = m
 SPEC.loader.exec_module(m)
 
 
@@ -32,16 +34,13 @@ class ShadowTrackerTests(unittest.TestCase):
         start = m.minute_dt(day, 9, 30)
         by_time = {}
 
-        # Complete exact minute chain through the frozen exit.
         for i in range(42):
             dt = start + timedelta(minutes=i)
             by_time[dt] = mkbar("SPY", dt)
 
-        # Make 09:50 the first H2 threshold event.
         sig = m.minute_dt(day, 9, 50)
         by_time[sig] = mkbar("SPY", sig, o=101.5, h=102.2, l=101.4, c=102.0, v=500.0, vw=99.0)
 
-        # Entry at 09:51 open, position held through 10:00, exit at 10:01 open.
         entry = m.minute_dt(day, 9, 51)
         by_time[entry] = mkbar("SPY", entry, o=100.0, h=100.4, l=99.8, c=100.2, v=100.0, vw=100.1)
         for minute in range(52, 60):
@@ -57,7 +56,6 @@ class ShadowTrackerTests(unittest.TestCase):
         self.assertIsNotNone(raw)
         assert raw is not None
 
-        # If the exit bar's post-open extremes leaked in, both would be thousands of bps.
         self.assertLess(raw.mfe_bps, 200.0)
         self.assertLess(raw.mae_bps, 200.0)
         self.assertAlmostEqual(raw.exit_open, 101.0)
@@ -73,7 +71,6 @@ class ShadowTrackerTests(unittest.TestCase):
 
         values = {}
         for i, d in enumerate(history_days):
-            # First 10 raw signals have all factors = 1.0.
             factor = 1.0 if i < 10 else 2.0
             values[d] = m.RawSignal(
                 ticker="SPY",
@@ -98,9 +95,8 @@ class ShadowTrackerTests(unittest.TestCase):
         with patch.object(m, "find_raw_h2_signal", side_effect=fake_find):
             trades = m.build_shadow_trades(sessions, history_days[-1])
 
-        # Shadow starts 2026-09-22. The first prospective 2.0-factor signal
-        # compares only against ten prior 1.0 signals and must pass.
         self.assertTrue(all(date.fromisoformat(t.date) >= m.SHADOW_START for t in trades))
+        self.assertGreaterEqual(len(trades), 1)
         first = trades[0]
         self.assertAlmostEqual(first.rolling_vwap_distance_mean, 1.0)
         self.assertAlmostEqual(first.rolling_signal_range_mean, 1.0)
@@ -147,7 +143,6 @@ class ShadowTrackerTests(unittest.TestCase):
         ]
         rows = m.equity_rows(trades)
         self.assertEqual(len(rows), 1)
-        # +1% on one 25% sleeve and -1% on another cancel at account level.
         self.assertAlmostEqual(rows[0]["portfolio_equity"], 1.0, places=12)
         self.assertAlmostEqual(rows[0]["constant_notional_cumulative_bps"], 0.0, places=12)
 
