@@ -119,6 +119,31 @@ At 8 bps round-trip friction, the same 30-second gross mean becomes approximatel
 
 Therefore this is **not** a promotable Asia-short edge.
 
+## Single-factor follow-up: intense trade activity
+
+The most obvious pre-signal separator between the positive and negative Asia-short batches was rolling 10-second trade activity.
+
+For the 30-second `aligned_btc` Asia-short subset at 4 bps:
+
+| Activity state | Obs | Batches | Gross mean | Net mean | Median net | Win rate | PF | Positive batches |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| All Asia shorts | 52 | 11 | +5.19 | +1.19 | +0.03 | 50.0% | 1.14 | 27.3% |
+| Intense >=9 trades / 10s | 40 | 9 | +7.60 | +3.60 | +2.55 | 55.0% | 1.43 | 33.3% |
+| Non-intense | 12 | 7 | -2.82 | -6.82 | -6.13 | 33.3% | 0.29 | 14.3% |
+
+This is economically coherent: the farther-travelling Asia shorts occur more often when actual trade activity is elevated.
+
+However, the intense subset is still not stable:
+
+* only 3 of 9 batches are positive;
+* only 1 of 5 represented calendar days is positive overall;
+* at 8 bps friction its 30-second mean falls to approximately -0.40 bps;
+* the positive endpoint remains heavily influenced by the September 21 burst.
+
+Therefore `intense>=9` is explanatory evidence, not a frozen filter.
+
+The independent market-state screen also identifies rolling trade count / trade velocity as a real volatility-state feature, but the existing conditioned-strategy aggregate does not turn the aligned families positive across clusters. No generic state gate currently explains the September 21 payoff burst robustly.
+
 ## Interpretation
 
 Session is useful as a state variable, but it should not be used as a standalone strategy filter yet.
