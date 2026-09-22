@@ -262,6 +262,25 @@ def run_evidence_session_audit(
                 }
             )
 
+        by_side_bucket = []
+        for bucket in buckets:
+            name = str(bucket["name"])
+            for side in (-1, 1):
+                subset = [
+                    r for r in trades
+                    if r["session_bucket"] == name and int(r["side"]) == side
+                ]
+                if not subset:
+                    continue
+                by_side_bucket.append(
+                    {
+                        "session_bucket": name,
+                        "side": side,
+                        "direction": "LONG" if side > 0 else "SHORT",
+                        **_summarize(subset, fold_start=start, fold_days=fold_days),
+                    }
+                )
+
         by_entry_hour = []
         for hour in sorted({int(r["entry_hour_utc"]) for r in trades}):
             subset = [r for r in trades if int(r["entry_hour_utc"]) == hour]
@@ -281,6 +300,7 @@ def run_evidence_session_audit(
                 "round_trip_cost_bps": cost,
                 "all_sessions": baseline,
                 "by_session_bucket": by_bucket,
+                "by_side_session_bucket": by_side_bucket,
                 "by_entry_hour_utc": by_entry_hour,
             }
         )
