@@ -146,6 +146,16 @@ class ShadowTrackerTests(unittest.TestCase):
         self.assertAlmostEqual(rows[0]["portfolio_equity"], 1.0, places=12)
         self.assertAlmostEqual(rows[0]["constant_notional_cumulative_bps"], 0.0, places=12)
 
+    def test_historical_audit_window_boundaries(self):
+        self.assertEqual(m.historical_period(date(2026, 7, 6)), "JUL")
+        self.assertEqual(m.historical_period(date(2026, 7, 31)), "JUL")
+        self.assertEqual(m.historical_period(date(2026, 8, 3)), "AUG")
+        self.assertEqual(m.historical_period(date(2026, 8, 28)), "AUG")
+        self.assertIsNone(m.historical_period(date(2026, 8, 31)))
+        self.assertEqual(m.historical_period(date(2026, 9, 1)), "SEP")
+        self.assertEqual(m.historical_period(date(2026, 9, 16)), "SEP")
+        self.assertIsNone(m.historical_period(date(2026, 9, 17)))
+
     def test_profit_factor(self):
         self.assertAlmostEqual(m.profit_factor([10.0, 5.0, -3.0]), 5.0)
         self.assertTrue(math.isinf(m.profit_factor([1.0, 2.0])))
