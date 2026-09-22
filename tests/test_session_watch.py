@@ -73,6 +73,11 @@ class SessionWatchTests(unittest.TestCase):
             },
             "horizons_ms":[30000],
             "fees_bps_round_trip":[4.0],
+            "prospective_review_requirement":{
+                "minimum_new_signals":2,
+                "minimum_new_independent_batches":1,
+                "minimum_new_calendar_days":1,
+            },
         })
         def cvd(iso,batch,conditions):
             row=self._row(iso,batch,30000,4.0,12.0,family="cvd",side=1)
@@ -100,6 +105,8 @@ class SessionWatchTests(unittest.TestCase):
         self.assertEqual(w3["prospective_unique_signals"],1)
         self.assertEqual(w3["conditions"]["btc_flow_alignment"],"against")
         self.assertEqual(w3["prospective_watch_start_utc"],"2026-09-22T18:10:00Z")
+        self.assertFalse(w3["ready_for_review"])
+        self.assertEqual(w3["review_requirement"]["minimum_new_signals"],2)
 
     def test_readiness_uses_new_batches_and_days(self):
         rows=[]
