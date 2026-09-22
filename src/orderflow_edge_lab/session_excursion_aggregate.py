@@ -32,19 +32,6 @@ def _summary(rows:list[dict[str,Any]])->dict[str,Any]:
     gross=[float(r["fixed_horizon_gross_bps"]) for r in rows]
     net=[float(r["fixed_horizon_net_bps"]) for r in rows]
     batches={str(r["batch_id"]) for r in rows}
-    movement_context_rows=[]
-    for (family,regime,spread_bucket,range_bucket,btc),rows in sorted(by_movement_context.items()):
-        if len(rows)<10:
-            continue
-        movement_context_rows.append({
-            "family":family,
-            "session_regime":regime,
-            "spread_bucket":spread_bucket,
-            "range_to_spread_15s":range_bucket,
-            "btc_flow_alignment":btc,
-            **_summary(rows),
-        })
-
     return {
         "observations":len(rows),
         "independent_batches":len(batches),
@@ -174,6 +161,19 @@ def aggregate_session_excursions(
             "session_regime":regime,
             "btc_flow_alignment":btc,
             "signal_strength_multiple":strength,
+            **_summary(rows),
+        })
+
+    movement_context_rows=[]
+    for (family,regime,spread_bucket,range_bucket,btc),rows in sorted(by_movement_context.items()):
+        if len(rows)<10:
+            continue
+        movement_context_rows.append({
+            "family":family,
+            "session_regime":regime,
+            "spread_bucket":spread_bucket,
+            "range_to_spread_15s":range_bucket,
+            "btc_flow_alignment":btc,
             **_summary(rows),
         })
 
