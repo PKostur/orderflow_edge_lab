@@ -328,6 +328,11 @@ jobs:
           orderflow-session-strategy-report \
             artifacts/orderflow/condition_aggregate.json \
             --output artifacts/orderflow/session_strategy_report.json
+
+          orderflow-session-watch \
+            artifacts/orderflow/condition_aggregate.json \
+            --watch-config config/session_development_watch_v1.json \
+            --output artifacts/orderflow/session_watch_report.json
       - name: Write cumulative ledger manifest
         run: |
           python - <<'PY'
@@ -371,6 +376,7 @@ jobs:
             artifacts/orderflow/discovery_aggregate.json
             artifacts/orderflow/condition_aggregate.json
             artifacts/orderflow/session_strategy_report.json
+            artifacts/orderflow/session_watch_report.json
             config/regime_research_v1_2.json
             config/orderflow_discovery_v1.json
           if-no-files-found: warn
