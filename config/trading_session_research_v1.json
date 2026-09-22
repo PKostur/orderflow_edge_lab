@@ -1,0 +1,44 @@
+{
+  "protocol_name": "trading-session-research-v1",
+  "status": "descriptive_protocol_frozen",
+  "sessions": [
+    {"name":"ASIA","timezone":"Asia/Tokyo","start_local":"09:00","end_local":"18:00"},
+    {"name":"LONDON","timezone":"Europe/London","start_local":"08:00","end_local":"17:00"},
+    {"name":"NEW_YORK","timezone":"America/New_York","start_local":"08:00","end_local":"17:00"}
+  ],
+  "membership": {
+    "multilabel": true,
+    "exclusive_overlap_regimes_reported": true,
+    "dst_aware": true
+  },
+  "market_metrics": [
+    "session_open_to_close_return_bps",
+    "absolute_return_bps",
+    "high_low_range_bps",
+    "realized_volatility_bps",
+    "volume"
+  ],
+  "strategy_metrics": [
+    "cumulative_net_bps",
+    "net_mean_bps",
+    "net_median_bps",
+    "win_rate",
+    "average_win_bps",
+    "average_loss_bps",
+    "break_even_win_rate",
+    "profit_factor",
+    "max_drawdown_bps",
+    "positive_batch_fraction",
+    "largest_positive_trade_share",
+    "top_three_positive_trade_share",
+    "average_spread_bps",
+    "average_local_range_15s_bps",
+    "average_signal_strength_multiple"
+  ],
+  "research_rules": {
+    "session_results_are_descriptive_until_future_freeze": true,
+    "post_hoc_session_exclusion_forbidden": true,
+    "session_filter_requires_new_candidate_id": true,
+    "live_or_leverage_authorized": false
+  }
+}
