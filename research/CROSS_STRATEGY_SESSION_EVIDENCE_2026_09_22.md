@@ -75,9 +75,9 @@ Eight completed daily holding intervals were reconstructable:
 
 | UTC window | Days | Cumulative gross price contribution | Mean/day | Positive days | PF |
 |---|---:|---:|---:|---:|---:|
-| 00-08 | **+252.38 bps** | +31.55 bps | 87.5% | 2.96 |
-| 08-16 | -1.87 bps | -0.23 bps | 50.0% | 0.99 |
-| 16-24 | **-261.36 bps** | -32.67 bps | 37.5% | 0.27 |
+| 00-08 | 8 | **+252.38 bps** | +31.55 bps | 87.5% | 2.96 |
+| 08-16 | 8 | -1.87 bps | -0.23 bps | 50.0% | 0.99 |
+| 16-24 | 8 | **-261.36 bps** | -32.67 bps | 37.5% | 0.27 |
 
 This is the opposite session shape from the 8h trend family.
 
@@ -112,6 +112,6 @@ It is wired into:
 * HTF Fibonacci forward shadow.
 * Markov EV shadow.
 
-The cross-sectional daily strategy is registered for lower-timeframe additive attribution next. The existing DV2 session-attribution implementation provides the model for that extension.
+The cross-sectional daily strategy is now wired to fetch 8h bars and emit additive price+funding session attribution on each forward run. Rebalance transaction costs remain separate rather than being arbitrarily assigned to a session. The existing DV2 1h attribution remains the finer-grained model for future expansion.
 
 No current candidate is modified. Any future session-conditioned execution rule requires a new candidate ID and a freeze before later evidence is inspected.
