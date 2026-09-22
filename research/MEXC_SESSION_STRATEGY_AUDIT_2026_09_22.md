@@ -144,6 +144,49 @@ Therefore `intense>=9` is explanatory evidence, not a frozen filter.
 
 The independent market-state screen also identifies rolling trade count / trade velocity as a real volatility-state feature, but the existing conditioned-strategy aggregate does not turn the aligned families positive across clusters. No generic state gate currently explains the September 21 payoff burst robustly.
 
+## Neutral within-session phase follow-up
+
+To avoid fitting a clock cutoff to the September 21 winner, each named session was split into equal thirds:
+
+* OPENING: first third of the session.
+* MID: middle third.
+* LATE: final third.
+
+For Asia, this means 09:00-12:00, 12:00-15:00 and 15:00-18:00 Tokyo local time.
+
+### Aligned short, Asia opening
+
+| Horizon | Obs | Batches | Days | Gross mean | Net mean 4 bps | Win rate | PF | Positive batches | Positive days |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 5s | 69 | 9 | 7 | +0.20 | -3.80 | 29.0% | 0.43 | 11.1% | 0.0% |
+| 15s | 65 | 9 | 7 | -0.58 | -4.58 | 36.9% | 0.55 | 33.3% | 28.6% |
+| 30s | 63 | 9 | 7 | +6.20 | **+2.20** | 55.6% | 1.24 | 55.6% | 57.1% |
+
+At 8 bps friction, the 30-second mean becomes approximately -1.80 bps.
+
+The 30-second cumulative result is about +138.5 bps, but September 21 alone contributes about +176.4 bps. Removing that strongest day makes the remaining cumulative result negative.
+
+### Aligned BTC-confirmed short, Asia opening
+
+| Horizon | Obs | Batches | Days | Gross mean | Net mean 4 bps | Win rate | PF | Positive batches | Positive days |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 5s | 41 | 7 | 5 | +1.61 | -2.39 | 34.1% | 0.65 | 28.6% | 20.0% |
+| 15s | 39 | 7 | 5 | +3.05 | -0.95 | 38.5% | 0.89 | 42.9% | 20.0% |
+| 30s | 37 | 7 | 5 | +8.87 | **+4.87** | 59.5% | 1.58 | 42.9% | 20.0% |
+
+At 8 bps friction, the 30-second mean remains slightly positive at about +0.87 bps, but its median is negative and only 2 of 7 batches are positive under the stressed cost assumption.
+
+The BTC-confirmed version therefore has better average travel but worse temporal consistency than the broader aligned version.
+
+### Development decision
+
+These are now registered as development watches, not frozen tradable candidates:
+
+* `SESSION_W1_ALIGNED_SHORT_ASIA_OPENING`
+* `SESSION_W2_ALIGNED_BTC_SHORT_ASIA_OPENING`
+
+They require at least 10 new independent batches and 5 new calendar days before any promotion discussion.
+
 ## Interpretation
 
 Session is useful as a state variable, but it should not be used as a standalone strategy filter yet.
