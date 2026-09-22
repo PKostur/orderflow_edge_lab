@@ -46,8 +46,8 @@ jobs:
             --source-dir artifacts/markov_ev_shadow/source
       - name: Build observational cross-strategy session economics
         run: |
-          orderflow-portfolio-session-report \\
-            artifacts/markov_ev_shadow/report.json \\
+          orderflow-portfolio-session-report \
+            artifacts/markov_ev_shadow/report.json \
             --output artifacts/markov_ev_shadow/session_report.json
       - name: Build comparison summary
         run: |
