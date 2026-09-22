@@ -46,8 +46,15 @@ def _fetch(config: dict, *, as_of: pd.Timestamp, output_dir: Path):
     history_start = str(data_cfg["history_start_utc"])
     current_day = as_of.normalize()
     daily_end = current_day + pd.Timedelta(days=1)
+    hourly_start = max(
+        _utc(history_start),
+        _utc(config["prospective_start_utc"]) - pd.Timedelta(days=10),
+    )
+    hourly_end = current_day + pd.Timedelta(hours=1)
     daily = {}
+    hourly = {}
     funding = {}
+    hourly_fetch_errors = {}
     manifest_files = {}
     source_dir = output_dir / "source"
     source_dir.mkdir(parents=True, exist_ok=True)
@@ -71,6 +78,21 @@ def _fetch(config: dict, *, as_of: pd.Timestamp, output_dir: Path):
             raise RuntimeError(f"{symbol}: incomplete forward-shadow source history")
         daily[symbol] = d
         funding[symbol] = f
+        try:
+            h = fetch_mexc_futures_klines(
+                symbol,
+                "1h",
+                hourly_start.isoformat(),
+                hourly_end.isoformat(),
+                request_pause_seconds=0.10,
+            )
+            h = h.loc[(h.index >= hourly_start) & (h.index <= current_day)].copy()
+            if h.empty:
+                raise RuntimeError("empty post-boundary hourly source")
+            hourly[symbol] = h
+        except Exception as exc:
+            hourly_fetch_errors[symbol] = f"{type(exc).__name__}: {exc}"
+
         dp = source_dir / f"{symbol}_1d.csv"
         fp = source_dir / f"{symbol}_funding.csv"
         d.to_csv(dp, index_label="timestamp")
@@ -89,14 +111,33 @@ def _fetch(config: dict, *, as_of: pd.Timestamp, output_dir: Path):
             "start": f.index.min().isoformat(),
             "end": f.index.max().isoformat(),
         }
+        if symbol in hourly:
+            hp = source_dir / f"{symbol}_1h.csv"
+            hourly[symbol].to_csv(hp, index_label="timestamp")
+            manifest_files[f"{symbol}:1h"] = {
+                "path": str(hp),
+                "sha256": _sha(hp),
+                "rows": len(hourly[symbol]),
+                "start": hourly[symbol].index.min().isoformat(),
+                "end": hourly[symbol].index.max().isoformat(),
+                "status": "available",
+            }
+        else:
+            manifest_files[f"{symbol}:1h"] = {
+                "status": "unavailable",
+                "error": hourly_fetch_errors.get(symbol, "unknown hourly fetch failure"),
+            }
     manifest = {
         "source": "MEXC public REST",
         "as_of_utc": as_of.isoformat(),
         "history_start_utc": history_start,
         "files": manifest_files,
         "no_2025_data": bool(data_cfg["no_2025_data"]),
+        "session_hourly_fetch_start_utc": hourly_start.isoformat(),
+        "session_hourly_source_complete": len(hourly) == len(data_cfg["symbols"]),
+        "session_hourly_fetch_errors": hourly_fetch_errors,
     }
-    return daily, funding, manifest
+    return daily, hourly, funding, manifest
 
 
 def run(config: dict, *, as_of: pd.Timestamp, output_dir: Path) -> dict:
@@ -113,13 +154,14 @@ def run(config: dict, *, as_of: pd.Timestamp, output_dir: Path) -> dict:
             "claims": dict(config["claims"]),
         }
 
-    daily, funding, manifest = _fetch(config, as_of=as_of, output_dir=output_dir)
+    daily, hourly, funding, manifest = _fetch(config, as_of=as_of, output_dir=output_dir)
     model_cfg = config["payoff_model"]
     execution = config["execution"]
     report, tables = build_forward_snapshot(
         daily,
         symbols=list(config["data"]["symbols"]),
         funding_frames=funding,
+        hourly_frames=hourly,
         prospective_start_utc=str(config["prospective_start_utc"]),
         as_of_utc=as_of,
         side_cost_bps=float(execution["transaction_cost_bps_per_side_on_actual_turnover"]),
