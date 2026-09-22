@@ -310,9 +310,10 @@ def mean_factor(raw_history: Sequence[RawSignal], attr: str) -> float:
     return statistics.fmean(vals)
 
 
-def build_shadow_trades(
+def build_filtered_trades(
     sessions_by_ticker: dict[str, dict[date, dict[datetime, Bar]]],
     end_date: date,
+    output_start: date,
 ) -> list[ShadowTrade]:
     raw_history: dict[str, list[RawSignal]] = {t: [] for t in UNIVERSE}
     trades: list[ShadowTrade] = []
@@ -348,7 +349,7 @@ def build_shadow_trades(
                     and raw.rel_volume20 > rv_mean
                 )
 
-                if context_pass and day >= SHADOW_START:
+                if context_pass and day >= output_start:
                     trades.append(
                         ShadowTrade(
                             date=day.isoformat(),
@@ -375,6 +376,87 @@ def build_shadow_trades(
             history.append(raw)
 
     return trades
+
+
+def build_shadow_trades(
+    sessions_by_ticker: dict[str, dict[date, dict[datetime, Bar]]],
+    end_date: date,
+) -> list[ShadowTrade]:
+    return build_filtered_trades(sessions_by_ticker, end_date, SHADOW_START)
+
+
+HISTORICAL_AUDIT_WINDOWS = (
+    (date(2026, 7, 6), date(2026, 7, 31)),
+    (date(2026, 8, 3), date(2026, 8, 28)),
+    (date(2026, 9, 1), date(2026, 9, 16)),
+)
+
+HISTORICAL_AUDIT_EXPECTED = {
+    "trades": 25,
+    "period_counts": {"JUL": 14, "AUG": 4, "SEP": 7},
+    "ticker_counts": {"SPY": 6, "QQQ": 8, "GLD": 4, "USO": 7},
+    "cumulative_net_bps_2": 237.960,
+}
+
+
+def historical_period(day: date) -> str | None:
+    if date(2026, 7, 6) <= day <= date(2026, 7, 31):
+        return "JUL"
+    if date(2026, 8, 3) <= day <= date(2026, 8, 28):
+        return "AUG"
+    if date(2026, 9, 1) <= day <= date(2026, 9, 16):
+        return "SEP"
+    return None
+
+
+def validate_historical_replay(
+    sessions_by_ticker: dict[str, dict[date, dict[datetime, Bar]]],
+) -> dict[str, object]:
+    replay = build_filtered_trades(
+        sessions_by_ticker,
+        date(2026, 9, 16),
+        date(2026, 7, 6),
+    )
+    replay = [t for t in replay if historical_period(date.fromisoformat(t.date)) is not None]
+
+    period_counts = {"JUL": 0, "AUG": 0, "SEP": 0}
+    ticker_counts = {t: 0 for t in UNIVERSE}
+    for trade in replay:
+        p = historical_period(date.fromisoformat(trade.date))
+        assert p is not None
+        period_counts[p] += 1
+        ticker_counts[trade.ticker] += 1
+
+    cumulative = sum(t.net_bps_2 for t in replay)
+    problems: list[str] = []
+    if len(replay) != HISTORICAL_AUDIT_EXPECTED["trades"]:
+        problems.append(
+            f"trade count {len(replay)} != {HISTORICAL_AUDIT_EXPECTED['trades']}"
+        )
+    if period_counts != HISTORICAL_AUDIT_EXPECTED["period_counts"]:
+        problems.append(
+            f"period counts {period_counts} != {HISTORICAL_AUDIT_EXPECTED['period_counts']}"
+        )
+    if ticker_counts != HISTORICAL_AUDIT_EXPECTED["ticker_counts"]:
+        problems.append(
+            f"ticker counts {ticker_counts} != {HISTORICAL_AUDIT_EXPECTED['ticker_counts']}"
+        )
+    if abs(cumulative - float(HISTORICAL_AUDIT_EXPECTED["cumulative_net_bps_2"])) > 0.10:
+        problems.append(
+            f"cumulative net {cumulative:.6f} bps differs from "
+            f"{HISTORICAL_AUDIT_EXPECTED['cumulative_net_bps_2']:.3f} by >0.10 bps"
+        )
+
+    if problems:
+        raise RuntimeError("historical H2 replay guard failed: " + "; ".join(problems))
+
+    return {
+        "status": "PASS",
+        "trades": len(replay),
+        "period_counts": period_counts,
+        "ticker_counts": ticker_counts,
+        "cumulative_net_bps_2": cumulative,
+    }
 
 
 def profit_factor(values: Sequence[float]) -> float | None:
@@ -538,6 +620,7 @@ def main() -> int:
         bars = fetch_bars(ticker, HISTORY_START, through, api_key, args.base_url)
         sessions_by_ticker[ticker] = group_regular_session(bars)
 
+    historical_guard = validate_historical_replay(sessions_by_ticker)
     trades = build_shadow_trades(sessions_by_ticker, through)
 
     if any(date.fromisoformat(t.date) < SHADOW_START for t in trades):
@@ -546,6 +629,7 @@ def main() -> int:
     trade_rows = [asdict(t) for t in trades]
     equity = equity_rows(trades)
     summary = summarize(trades, through)
+    summary["historical_replay_guard"] = historical_guard
 
     write_csv(
         args.output_dir / "H2_SHADOW_LEDGER.csv",
