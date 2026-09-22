@@ -101,7 +101,12 @@
       },
       "stress_note": "Discovery 30-second mean remained approximately +25.06 bps at 8 bps friction, but only four independent batches.",
       "concentration_note": "Small discovery sample. Broader parent state had only 3/9 positive batches; no promotion.",
-      "interpretation": "Prospective watch of the exact CVD/London-New-York/wide-spread/high-range/BTC-against state. No parameter changes."
+      "interpretation": "Prospective watch of the exact CVD/London-New-York/wide-spread/high-range/BTC-against state. No parameter changes.",
+      "prospective_review_requirement": {
+        "minimum_new_signals": 20,
+        "minimum_new_independent_batches": 8,
+        "minimum_new_calendar_days": 7
+      }
     }
   ],
   "prospective_review_requirement": {
