@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "protocol_name": "residual-right-tail-historical-replication-v1",
+  "status": "backward-historical-replication",
+  "source_hypothesis": "v1.1 suggested within-symbol right-tail continuation may depend on cross-sectional breadth and BTC trend/volatility, while residual magnitude alone was unstable.",
+  "strategy_source": {
+    "family": "rolling_beta_spread_momentum",
+    "interval": "1h",
+    "regression_window": 192,
+    "threshold_z": 1.5,
+    "hold_bars": 8,
+    "parameters_reoptimized": false
+  },
+  "data": {
+    "source": "MEXC public futures klines",
+    "target_execution_venue": "MEXC Futures",
+    "start": "2025-09-01",
+    "end_exclusive": "2026-03-01",
+    "symbols": ["BTC_USDT","ETH_USDT","SOL_USDT","XRP_USDT","DOGE_USDT","BNB_USDT","ADA_USDT","LINK_USDT","SUI_USDT","ENA_USDT"],
+    "intervals": ["1h"],
+    "context_symbol": "BTC_USDT",
+    "universe_selection_uses_strategy_pnl": false
+  },
+  "dependence": {
+    "calendar_fold_days": 21,
+    "initial_training_folds": [0,1,2],
+    "primary_test_folds": [3,4,5,6,7],
+    "partial_fold_8": "descriptive only; excluded from primary because the date range leaves only 13 days",
+    "chronological_only": true,
+    "for_test_fold_k": "train only on folds < k",
+    "minimum_symbol_cells_per_fold": 6,
+    "minimum_observations_per_symbol_cell": 8
+  },
+  "targets": {
+    "continuous": "signed 8h beta-neutral residual continuation",
+    "binary": "per symbol and outer split, signed residual continuation exceeds that symbol's training-only 80th percentile",
+    "strategy_pnl_used": false
+  },
+  "replication_feature_sets": {
+    "BREADTH": ["cs_positive_return_share_4h"],
+    "BTC": ["btc_ret_4h","btc_rv_24h","btc_rv_48h"],
+    "RELATIVE": ["residual_abs_rank_cross_section","cs_residual_dispersion"],
+    "LOCAL": ["asset_range_z_24h","asset_ret_4h"],
+    "COMPACT": ["cs_positive_return_share_4h","btc_ret_4h","btc_rv_24h","residual_abs_rank_cross_section","asset_range_z_24h"],
+    "RESIDUAL_BASELINE": ["residual_z","residual_accel_4h","residual_vol_24h","beta"]
+  },
+  "model_grid": {
+    "continuous": {
+      "ridge": [{"alpha":1.0},{"alpha":100.0}],
+      "hist_gradient_boosting": [{"max_iter":80,"max_leaf_nodes":7,"learning_rate":0.05}]
+    },
+    "binary": {
+      "logistic": [{"C":0.5},{"C":1.0}],
+      "hist_gradient_boosting": [{"max_iter":80,"max_leaf_nodes":7,"learning_rate":0.05}]
+    }
+  },
+  "epoch_accounting": {
+    "core_epochs": 36,
+    "calculation": "6 feature sets * (3 continuous variants + 3 binary variants)",
+    "winner_permutation_epochs": 20000,
+    "all_epochs_retained": true
+  },
+  "primary_metrics": {
+    "continuous": "for each full test fold, median per-symbol Spearman; primary = median of folds 3-7",
+    "binary": "for each full test fold, median per-symbol ROC AUC; primary = median of folds 3-7"
+  },
+  "replication_gates": {
+    "continuous": {"median_fold_score_gt":0.05,"positive_fold_fraction_gte":0.80},
+    "binary": {"median_fold_auc_gt":0.55,"auc_above_half_fold_fraction_gte":0.80},
+    "adversarial": {"permutation_p_lt":0.01},
+    "winner_rule": "one winner per target by primary metric; if within 0.01 choose lower complexity then fewer features"
+  },
+  "translation": {
+    "strategy_pnl_translation_allowed": false,
+    "reason": "This period is a backward replication selected after later-period analysis. A successful state replication may be frozen for future prospective monitoring but cannot establish a trading edge."
+  },
+  "claims": {
+    "independent_calendar_period": true,
+    "backward_replication_not_prospective_oos": true,
+    "verified_oos": false,
+    "profitable_edge_established": false,
+    "live_enabled": false
+  }
+}

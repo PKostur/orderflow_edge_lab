@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "protocol_name": "rolling-beta-spread-historical-economic-replication-v1",
+  "status": "backward-historical-fixed-strategy-replication",
+  "data_period": ["2025-09-01","2026-03-01"],
+  "source_data_artifact": "residual-right-tail-historical-replication-v1-data",
+  "source_strategy": {
+    "family": "rolling_beta_spread_momentum",
+    "interval": "1h",
+    "regression_window": 192,
+    "threshold_z": 1.5,
+    "hold_bars": 8,
+    "parameters_reoptimized": false,
+    "observed_exact_trade_count_before_pnl_analysis": 1461
+  },
+  "economics": {
+    "round_trip_cost_bps": [12.0,16.0,20.0],
+    "primary_cost_bps": 16.0,
+    "leverage_grid": [1.0,2.0,5.0,10.0],
+    "gross_and_costs_scale_with_notional": true
+  },
+  "dependence": {
+    "calendar_fold_days": 21,
+    "whole_fold_bootstrap_epochs": 100000,
+    "same_sampled_calendar_fold_applied_to_all_symbol_sleeves": true
+  },
+  "diagnostics": [
+    "mean and median trade expectancy",
+    "profit factor",
+    "positive fold fraction",
+    "positive symbol fraction",
+    "1 percent each-tail trimmed mean",
+    "top 1 percent PnL concentration",
+    "leave-one-symbol-out",
+    "leave-one-fold-out",
+    "long versus short decomposition",
+    "exact equal-symbol-sleeve compounded path",
+    "MAE/MFE from intratrade bars",
+    "optimistic 1/leverage adverse-move capital-wipeout bound",
+    "100000 whole-fold bootstrap epochs per leverage"
+  ],
+  "promotion": {
+    "no_parameter_tuning": true,
+    "no_stop_or_exit_tuning": true,
+    "no_edge_claim_from_backward_replication": true,
+    "future_after_freeze_validation_still_required": true,
+    "live_enabled": false
+  }
+}
