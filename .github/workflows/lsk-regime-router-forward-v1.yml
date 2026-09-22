@@ -1,0 +1,51 @@
+name: LSK Regime Router Forward v1
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lsk-regime-router-forward-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  forward-capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e ".[research]"
+      - name: Record one fresh independent LSK plus BTC capture
+        run: |
+          mkdir -p artifacts/lsk_regime_router/capture
+          orderflow-mexc-record \
+            --symbol LSK_USDT \
+            --symbol BTC_USDT \
+            --duration-seconds 900 \
+            --output-dir artifacts/lsk_regime_router/capture
+      - name: Evaluate frozen three-way router
+        shell: bash
+        run: |
+          FEATURE=$(find artifacts/lsk_regime_router/capture -name '*_mexc_features.jsonl' -print -quit)
+          test -n "$FEATURE"
+          orderflow-lsk-regime-router "$FEATURE" \
+            --protocol config/lsk_regime_router_v1.json \
+            --output artifacts/lsk_regime_router/router_result.json
+      - name: Preserve forward evidence and replay
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lsk-regime-router-forward-${{ github.run_id }}
+          path: |
+            artifacts/lsk_regime_router/router_result.json
+            artifacts/lsk_regime_router/capture/
+          if-no-files-found: warn
+          retention-days: 14
