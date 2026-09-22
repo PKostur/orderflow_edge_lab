@@ -2,6 +2,12 @@
   "research_id": "cross_market_etf_v1",
   "stage": "SEPTEMBER_LOCKED_CONFIRMATION",
   "confirmation_freeze_commit": "3ff9e00bee5d4d4bdc8bc25569a2663f420c98f8",
+  "audit_correction": {
+    "applied": true,
+    "reason": "The prior summary incorrectly classified an August 31 H2 trade as September. The frozen September confirmation window begins 2026-09-01. This file now uses only 2026-08-03 through 2026-08-28 for August and 2026-09-01 through 2026-09-16 for September.",
+    "candidate_definition_changed": false,
+    "retuning": false
+  },
   "results": {
     "ETF_H1_ORB15_CONTEXT_V1": {
       "september": {
@@ -23,43 +29,48 @@
       "august": {
         "trades": 4,
         "net_win_rate_pct_2bps": 75.0,
+        "average_net_win_bps_2bps": 8.911,
+        "average_net_loss_bps_2bps": -2.140,
         "net_expectancy_bps_2bps": 6.148,
         "profit_factor_2bps": 12.493,
-        "net_expectancy_bps_4bps": 4.148
+        "average_mfe_bps": 32.032,
+        "average_mae_bps": 9.314,
+        "net_expectancy_bps_4bps": 4.148,
+        "break_even_win_rate_pct": 19.36
       },
       "september": {
-        "trades": 8,
-        "net_win_rate_pct_2bps": 75.0,
-        "average_net_win_bps_2bps": 10.185,
+        "trades": 7,
+        "net_win_rate_pct_2bps": 71.43,
+        "average_net_win_bps_2bps": 11.365,
         "average_net_loss_bps_2bps": -12.762,
-        "net_expectancy_bps_2bps": 4.449,
-        "profit_factor_2bps": 2.394,
-        "average_mfe_bps": 18.437,
-        "average_mae_bps": 9.018,
-        "net_expectancy_bps_4bps": 2.449,
-        "break_even_win_rate_pct": 55.61
+        "net_expectancy_bps_2bps": 4.472,
+        "profit_factor_2bps": 2.226,
+        "average_mfe_bps": 18.795,
+        "average_mae_bps": 8.615,
+        "net_expectancy_bps_4bps": 2.472,
+        "break_even_win_rate_pct": 52.89
       },
       "combined_august_september": {
-        "trades": 12,
-        "net_win_rate_pct_2bps": 75.0,
-        "average_net_win_bps_2bps": 9.761,
+        "trades": 11,
+        "net_win_rate_pct_2bps": 72.73,
+        "average_net_win_bps_2bps": 10.445,
         "average_net_loss_bps_2bps": -9.221,
-        "net_expectancy_bps_2bps": 5.015,
-        "profit_factor_2bps": 3.175,
-        "average_mfe_bps": 22.969,
-        "average_mae_bps": 9.117,
-        "net_expectancy_bps_4bps": 3.015,
-        "break_even_win_rate_pct": 48.58
+        "net_expectancy_bps_2bps": 5.081,
+        "profit_factor_2bps": 3.021,
+        "average_mfe_bps": 23.608,
+        "average_mae_bps": 8.869,
+        "net_expectancy_bps_4bps": 3.081,
+        "break_even_win_rate_pct": 46.89
       },
       "ticker_diagnostic_combined": {
-        "GLD": {"trades": 2, "win_rate_pct": 50.0, "ev_bps": -4.24},
-        "QQQ": {"trades": 2, "win_rate_pct": 50.0, "ev_bps": -0.31},
-        "SPY": {"trades": 4, "win_rate_pct": 75.0, "ev_bps": 1.12},
-        "USO": {"trades": 4, "win_rate_pct": 100.0, "ev_bps": 16.20}
+        "GLD": {"trades": 2, "win_rate_pct": 50.0, "ev_bps": -4.235, "cumulative_bps": -8.471},
+        "QQQ": {"trades": 2, "win_rate_pct": 50.0, "ev_bps": -0.312, "cumulative_bps": -0.624},
+        "SPY": {"trades": 4, "win_rate_pct": 75.0, "ev_bps": 1.120, "cumulative_bps": 4.479},
+        "USO": {"trades": 3, "win_rate_pct": 100.0, "ev_bps": 20.170, "cumulative_bps": 60.510}
       },
       "classification": "HISTORICAL_SURVIVOR_CONCENTRATED",
       "primary_rule_pass": true,
-      "caveat": "Pooled economics pass the frozen rule, but positive contribution is strongly concentrated in USO. This is a diagnostic warning, not a post-hoc ticker exclusion."
+      "caveat": "Pooled economics pass the frozen rule, but positive contribution is concentrated in USO. This remains a diagnostic warning, not a post-hoc ticker exclusion."
     }
   },
   "decision": {
