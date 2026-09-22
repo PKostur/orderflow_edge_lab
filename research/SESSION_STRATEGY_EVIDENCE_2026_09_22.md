@@ -264,3 +264,40 @@ It is:
 A plausible market interpretation is temporary ENA-specific flow/decoupling during a high-liquidity, high-volatility period. That interpretation is unproven.
 
 The next independent batches should test this exact state without changing its definition. The key evidence is cumulative after-cost return, positive-batch fraction, median MFE/MAE and whether the BTC-against versus BTC-aligned separation persists.
+
+
+## Incremental update: two later New-York-only captures
+
+After the original 84-batch discovery artifact, two additional successful main-branch Continuous Order-Flow Discovery runs completed at approximately 16:06 UTC and 16:55 UTC.
+
+These captures occurred after the London session had ended, so they add New-York-only evidence and contain no W3 London-New-York observations.
+
+At the 30-second horizon and 4 bps friction, the incremental observations were:
+
+| Family | New obs | New batches | Incremental EV | Incremental cumulative net | Incremental WR |
+|---|---:|---:|---:|---:|---:|
+| aligned | 10 | 2 | -5.90 bps | -58.99 bps | 30.0% |
+| aligned_btc | 5 | 2 | -7.41 | -37.05 | 20.0% |
+| book | 133 | 2 | -4.03 | -535.44 | 39.1% |
+| cvd | 107 | 2 | -5.56 | -594.91 | 32.7% |
+| microprice | 256 | 2 | -3.55 | -908.04 | 39.5% |
+
+The updated full New-York-only 30-second / 4-bps results remain negative for every family:
+
+| Family | Obs | Batches | EV | Cumulative net | Positive batches |
+|---|---:|---:|---:|---:|---:|
+| aligned | 324 | 21 | -5.06 bps | -1,639.39 bps | 14.3% |
+| aligned_btc | 159 | 20 | -6.99 | -1,110.89 | 15.0% |
+| book | 1,972 | 22 | -5.49 | -10,830.41 | 0.0% |
+| cvd | 1,744 | 22 | -4.64 | -8,094.87 | 13.6% |
+| microprice | 3,311 | 22 | -4.65 | -15,392.17 | 0.0% |
+
+This strengthens the earlier conclusion that New York's higher movement does not by itself create directional expectancy for the existing signal families.
+
+### Prospective-watch status at this update
+
+* W1 aligned-short Asia-opening: no new eligible Asia-opening evidence in these two NY captures.
+* W2 aligned-BTC-short Asia-opening: no new eligible Asia-opening evidence in these two NY captures.
+* W3 CVD London-NY / wide-spread / high-range / BTC-against: no eligible observations because both new captures began after the London session closed.
+
+No watch has reached a prospective review target.
