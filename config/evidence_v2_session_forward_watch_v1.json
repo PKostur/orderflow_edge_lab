@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "watch_id": "evidence_v2_cross_strategy_session_forward_v1",
+  "status": "FROZEN_BEFORE_PROSPECTIVE_START",
+  "frozen_at_utc": "2026-09-22T20:05:00Z",
+  "prospective_start_utc": "2026-09-23T00:00:00Z",
+  "source": {
+    "venue": "MEXC Futures",
+    "bars": "public futures klines",
+    "warmup_start_utc": "2026-06-01T00:00:00Z",
+    "symbols": ["BTC_USDT","ETH_USDT","SOL_USDT","XRP_USDT","DOGE_USDT","BNB_USDT","ADA_USDT","LINK_USDT","SUI_USDT","ENA_USDT"]
+  },
+  "economics": {
+    "round_trip_cost_bps": 20.0,
+    "diagnostic_portfolio": "equal 10% capital sleeve per symbol; inactive symbols remain cash",
+    "continuation_state": "strategy state is computed causally from pre-start warmup and carried across the prospective boundary; only returns whose interval start is on_or_after prospective_start are scored"
+  },
+  "variants": [
+    {
+      "audit_id": "DON8",
+      "family": "donchian_breakout",
+      "interval": "8h",
+      "parameters": {"lookback": 55},
+      "role": "PRIMARY_SESSION_HYPOTHESIS"
+    },
+    {
+      "audit_id": "EMA8",
+      "family": "ema_tsmom",
+      "interval": "8h",
+      "parameters": {"fast": 24, "slow": 96, "min_atr_spread": 0.25},
+      "role": "CONTROL"
+    },
+    {
+      "audit_id": "VOL8",
+      "family": "vol_scaled_momentum",
+      "interval": "8h",
+      "parameters": {"lookback": 24, "vol_window": 96, "threshold": 0.5},
+      "role": "CONTROL"
+    },
+    {
+      "audit_id": "EMA4",
+      "family": "ema_tsmom",
+      "interval": "4h",
+      "parameters": {"fast": 12, "slow": 96, "min_atr_spread": 0.0},
+      "role": "CONTROL"
+    }
+  ],
+  "session_buckets": [
+    {"name":"ASIA_00_08","start_utc_hour":0,"end_utc_hour":8},
+    {"name":"LONDON_PLUS_OVERLAP_08_16","start_utc_hour":8,"end_utc_hour":16},
+    {"name":"NY_POST_PLUS_LATE_16_24","start_utc_hour":16,"end_utc_hour":24}
+  ],
+  "primary_hypothesis": {
+    "strategy": "DON8",
+    "statement": "The unchanged Donchian-55 8h strategy will continue to produce positive after-cost equal-weight portfolio contribution during 08:00-16:00 UTC and will outperform its own 00:00-08:00 UTC contribution.",
+    "development_evidence_is_not_prospective": true
+  },
+  "reporting": {
+    "review_after_calendar_days": 30,
+    "no_early_pass_fail": true,
+    "metrics": [
+      "compounded_return",
+      "cumulative_simple_bps",
+      "mean_interval_bps",
+      "median_interval_bps",
+      "positive_interval_fraction",
+      "max_drawdown",
+      "turnover_cost_bps",
+      "long_contribution_bps",
+      "short_contribution_bps",
+      "per_symbol_contribution_bps",
+      "session_vs_all_strategy_contribution"
+    ]
+  },
+  "forbidden": [
+    "parameter_changes",
+    "symbol_exclusions",
+    "session_boundary_changes",
+    "side_exclusions",
+    "cost_changes",
+    "retroactive_start_changes",
+    "using_pre_start_returns_as_forward_evidence",
+    "live_or_leverage_authorization"
+  ],
+  "claims": {
+    "candidate_promoted": false,
+    "live_trading_authorized": false,
+    "leverage_authorized": false
+  }
+}
