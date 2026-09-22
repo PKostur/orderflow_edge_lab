@@ -205,3 +205,62 @@ The practical research question becomes:
 > When London and New York overlap and ENA enters a wide-spread/high-range state, what additional directional variable separates the large favorable excursions from the equally elevated adverse excursions?
 
 That is a better next conditioning problem than simply filtering for the session itself.
+
+
+## Directional separator inside the CVD high-movement state
+
+Within the 30 CVD / London-New-York / wide-spread / high-range observations, winners and losers were split 15/15 at 4 bps.
+
+The strongest categorical separator was BTC flow relation:
+
+* Winners: 10 BTC-against, 4 BTC-aligned, 1 neutral.
+* Losers: 4 BTC-against, 11 BTC-aligned.
+
+Other causal variables showed smaller differences:
+
+* median signal-strength multiple: winners 3.65, losers 2.81;
+* median quote-update rate: winners 286.6/s, losers 153.3/s;
+* median rolling 10-second trade count: winners 17, losers 15;
+* local 15-second return was aligned with the ENA signal in 13/15 winners **and** 13/15 losers, so local price-direction agreement did not separate outcomes in this sample.
+
+### BTC-against subset
+
+The same 14 BTC-against signals are observable at each fixed horizon:
+
+| Horizon | Obs | Batches | Gross EV | Net EV @4bps | Net EV @8bps | Cum net @4bps | 4bps WR |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 5 s | 14 | 4 | +8.57 | +4.57 | +0.57 | +63.9 | 64.3% |
+| 15 s | 14 | 4 | +18.11 | +14.11 | +10.11 | +197.5 | 57.1% |
+| 30 s | 14 | 4 | +33.06 | +29.06 | +25.06 | +406.8 | 71.4% |
+
+For comparison, the 15 BTC-aligned observations at 30 seconds had:
+
+* gross EV: -11.11 bps;
+* net EV at 4 bps: -15.11 bps;
+* win rate: 26.7%;
+* cumulative net: -226.6 bps.
+
+This is a large separation, but the BTC-against result spans only four independent capture batches. It is therefore a **watch hypothesis**, not evidence sufficient for a candidate freeze.
+
+### Excursion proxy split by BTC relation
+
+Among risk-eligible observations from the same high-movement state:
+
+| BTC relation | Obs | Mean MFE | Median MFE | Mean MAE | Median MAE | Fixed-horizon gross EV |
+|---|---:|---:|---:|---:|---:|---:|
+| Against | 5 | 48.54 | 26.73 | 12.49 | 8.54 | +35.47 |
+| Aligned | 6 | 27.97 | 14.84 | 14.97 | 15.18 | -3.45 |
+
+The sample is very small, but the direction of the excursion evidence is consistent with the fixed-horizon result: BTC-against observations show more favorable travel and somewhat less adverse travel.
+
+## Working hypothesis
+
+The current hypothesis is not simply "trade London-New-York."
+
+It is:
+
+> During the London-New-York overlap, when ENA is already in a wide-spread/high-range state, CVD signals may have more directional value when short-horizon BTC flow is opposite the ENA signal rather than aligned with it.
+
+A plausible market interpretation is temporary ENA-specific flow/decoupling during a high-liquidity, high-volatility period. That interpretation is unproven.
+
+The next independent batches should test this exact state without changing its definition. The key evidence is cumulative after-cost return, positive-batch fraction, median MFE/MAE and whether the BTC-against versus BTC-aligned separation persists.
