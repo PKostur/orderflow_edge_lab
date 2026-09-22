@@ -508,7 +508,7 @@ def write_csv(path: Path, rows: Sequence[dict[str, object]], fieldnames: Sequenc
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser()
-    p.add_argument("--through", type=date.fromisoformat, default=date.today())
+    p.add_argument("--through", type=date.fromisoformat, default=datetime.now(tz=NY).date())
     p.add_argument("--output-dir", type=Path, default=Path(__file__).parent / "shadow")
     p.add_argument("--base-url", default=os.environ.get("MASSIVE_BASE_URL", "https://api.massive.com"))
     p.add_argument("--allow-intraday", action="store_true")
