@@ -38,15 +38,54 @@ def _summ(rows:list[dict[str,Any]])->dict[str,Any]:
     rows=sorted(rows,key=lambda r:int(r["signal_observed_at_ns"]))
     vals=[float(r["net_bps"]) for r in rows]
     gross=[float(r["gross_bps"]) for r in rows if r.get("gross_bps") is not None]
-    gross=[float(r["gross_bps"]) for r in rows if r.get("gross_bps") is not None]
     if not vals:
         return {"observations":0}
     wins=[v for v in vals if v>0]
     losses=[v for v in vals if v<=0]
-    by_batch:dict[str,list[float]]=defaultdict(list)
+    by_batch:dict[str,list[tuple[int,float]]]=defaultdict(list)
+    by_day:dict[str,list[float]]=defaultdict(list)
     for r in rows:
-        by_batch[str(r.get("batch_id"))].append(float(r["net_bps"]))
-    batch_means={k:statistics.fmean(v) for k,v in by_batch.items()}
+        ts=int(r["signal_observed_at_ns"])
+        value=float(r["net_bps"])
+        by_batch[str(r.get("batch_id"))].append((ts,value))
+        day=datetime.fromtimestamp(ts/1_000_000_000,tz=timezone.utc).date().isoformat()
+        by_day[day].append(value)
+    batch_means={k:statistics.fmean(v for _,v in xs) for k,xs in by_batch.items()}
+    day_means={k:statistics.fmean(v) for k,v in by_day.items()}
+
+    batch_curve=[]
+    cumulative=0.0
+    ordered_batches=sorted(
+        by_batch.items(),
+        key=lambda item:min(ts for ts,_ in item[1]),
+    )
+    for batch_id,xs in ordered_batches:
+        batch_net=sum(v for _,v in xs)
+        cumulative+=batch_net
+        batch_curve.append({
+            "batch_id":batch_id,
+            "observations":len(xs),
+            "net_bps":batch_net,
+            "cumulative_net_bps":cumulative,
+        })
+
+    daily_curve=[]
+    cumulative_day=0.0
+    for day in sorted(by_day):
+        day_net=sum(by_day[day])
+        cumulative_day+=day_net
+        daily_curve.append({
+            "date_utc":day,
+            "observations":len(by_day[day]),
+            "net_bps":day_net,
+            "cumulative_net_bps":cumulative_day,
+        })
+
+    trade_cum=0.0
+    peak=0.0
+    for value in vals:
+        trade_cum+=value
+        peak=max(peak,trade_cum)
     pos_total=sum(wins)
     ranked=sorted(wins,reverse=True)
     return {
@@ -61,7 +100,12 @@ def _summ(rows:list[dict[str,Any]])->dict[str,Any]:
         "average_loss_bps":statistics.fmean(losses) if losses else None,
         "profit_factor":_pf(vals),
         "max_drawdown_bps":_max_dd(vals),
+        "peak_cumulative_net_bps":peak,
+        "giveback_from_peak_bps":sum(vals)-peak,
         "positive_batch_fraction":sum(x>0 for x in batch_means.values())/len(batch_means) if batch_means else None,
+        "positive_day_fraction":sum(x>0 for x in day_means.values())/len(day_means) if day_means else None,
+        "batch_curve":batch_curve,
+        "daily_curve":daily_curve,
         "largest_positive_trade_share":ranked[0]/pos_total if pos_total>0 and ranked else None,
         "top_three_positive_trade_share":sum(ranked[:3])/pos_total if pos_total>0 else None,
         "average_spread_bps":statistics.fmean(float(r["spread_bps"]) for r in rows if r.get("spread_bps") is not None) if any(r.get("spread_bps") is not None for r in rows) else None,
@@ -187,7 +231,7 @@ def build_session_strategy_report(condition_aggregate:Mapping[str,Any])->dict[st
         })
 
     return {
-        "schema_version":2,
+        "schema_version":3,
         "analysis":"session_conditioned_strategy_economics",
         "symbol":condition_aggregate.get("symbol"),
         "context_symbol":condition_aggregate.get("context_symbol"),
@@ -197,7 +241,7 @@ def build_session_strategy_report(condition_aggregate:Mapping[str,Any])->dict[st
         "travel_profiles":travel_profiles,
         "interpretation_rule":{
             "do_not_rank_on_endpoint_only":True,
-            "inspect":["cumulative_net_bps","gross_mean_bps","net_mean_bps","win_rate","average_win_bps","average_loss_bps","profit_factor","max_drawdown_bps","positive_batch_fraction","pnl_concentration","direction_rows","phase_rows","travel_profiles"],
+            "inspect":["cumulative_net_bps","gross_mean_bps","net_mean_bps","win_rate","average_win_bps","average_loss_bps","profit_factor","max_drawdown_bps","peak_cumulative_net_bps","giveback_from_peak_bps","positive_batch_fraction","positive_day_fraction","batch_curve","daily_curve","pnl_concentration","direction_rows","phase_rows","travel_profiles"],
             "session_filter_requires_future_freeze":True,
         },
         "claims":{
