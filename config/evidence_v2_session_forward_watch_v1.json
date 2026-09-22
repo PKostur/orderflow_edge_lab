@@ -2,16 +2,27 @@
   "schema_version": 1,
   "watch_id": "evidence_v2_cross_strategy_session_forward_v1",
   "status": "FROZEN_BEFORE_PROSPECTIVE_START",
-  "frozen_at_utc": "2026-09-22T20:05:00Z",
+  "frozen_at_utc": "2026-09-22T20:01:45Z",
   "prospective_start_utc": "2026-09-23T00:00:00Z",
   "source": {
     "venue": "MEXC Futures",
     "bars": "public futures klines",
     "warmup_start_utc": "2026-06-01T00:00:00Z",
-    "symbols": ["BTC_USDT","ETH_USDT","SOL_USDT","XRP_USDT","DOGE_USDT","BNB_USDT","ADA_USDT","LINK_USDT","SUI_USDT","ENA_USDT"]
+    "symbols": [
+      "BTC_USDT",
+      "ETH_USDT",
+      "SOL_USDT",
+      "XRP_USDT",
+      "DOGE_USDT",
+      "BNB_USDT",
+      "ADA_USDT",
+      "LINK_USDT",
+      "SUI_USDT",
+      "ENA_USDT"
+    ]
   },
   "economics": {
-    "round_trip_cost_bps": 20.0,
+    "round_trip_cost_bps": 20,
     "diagnostic_portfolio": "equal 10% capital sleeve per symbol; inactive symbols remain cash",
     "continuation_state": "strategy state is computed causally from pre-start warmup and carried across the prospective boundary; only returns whose interval start is on_or_after prospective_start are scored"
   },
@@ -20,35 +31,61 @@
       "audit_id": "DON8",
       "family": "donchian_breakout",
       "interval": "8h",
-      "parameters": {"lookback": 55},
+      "parameters": {
+        "lookback": 55
+      },
       "role": "PRIMARY_SESSION_HYPOTHESIS"
     },
     {
       "audit_id": "EMA8",
       "family": "ema_tsmom",
       "interval": "8h",
-      "parameters": {"fast": 24, "slow": 96, "min_atr_spread": 0.25},
+      "parameters": {
+        "fast": 24,
+        "slow": 96,
+        "min_atr_spread": 0.25
+      },
       "role": "CONTROL"
     },
     {
       "audit_id": "VOL8",
       "family": "vol_scaled_momentum",
       "interval": "8h",
-      "parameters": {"lookback": 24, "vol_window": 96, "threshold": 0.5},
+      "parameters": {
+        "lookback": 24,
+        "vol_window": 96,
+        "threshold": 0.5
+      },
       "role": "CONTROL"
     },
     {
       "audit_id": "EMA4",
       "family": "ema_tsmom",
       "interval": "4h",
-      "parameters": {"fast": 12, "slow": 96, "min_atr_spread": 0.0},
+      "parameters": {
+        "fast": 12,
+        "slow": 96,
+        "min_atr_spread": 0
+      },
       "role": "CONTROL"
     }
   ],
   "session_buckets": [
-    {"name":"ASIA_00_08","start_utc_hour":0,"end_utc_hour":8},
-    {"name":"LONDON_PLUS_OVERLAP_08_16","start_utc_hour":8,"end_utc_hour":16},
-    {"name":"NY_POST_PLUS_LATE_16_24","start_utc_hour":16,"end_utc_hour":24}
+    {
+      "name": "ASIA_00_08",
+      "start_utc_hour": 0,
+      "end_utc_hour": 8
+    },
+    {
+      "name": "LONDON_PLUS_OVERLAP_08_16",
+      "start_utc_hour": 8,
+      "end_utc_hour": 16
+    },
+    {
+      "name": "NY_POST_PLUS_LATE_16_24",
+      "start_utc_hour": 16,
+      "end_utc_hour": 24
+    }
   ],
   "primary_hypothesis": {
     "strategy": "DON8",
@@ -86,5 +123,6 @@
     "candidate_promoted": false,
     "live_trading_authorized": false,
     "leverage_authorized": false
-  }
+  },
+  "freeze_commit": "37ec950f1ff4420c877a3dc370e7d0d7419947ae"
 }
