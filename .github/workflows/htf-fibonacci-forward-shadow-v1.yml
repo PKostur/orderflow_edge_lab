@@ -79,8 +79,8 @@ jobs:
 
       - name: Build observational cross-strategy session economics
         run: |
-          orderflow-portfolio-session-report \\
-            artifacts/htf_fibonacci_forward/report.json \\
+          orderflow-portfolio-session-report \
+            artifacts/htf_fibonacci_forward/report.json \
             --output artifacts/htf_fibonacci_forward/session_report.json
 
       - name: Enforce forward-only and claim boundaries
