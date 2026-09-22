@@ -43,6 +43,11 @@ def _summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
             "positive_batch_fraction": None,
             "positive_day_fraction": None,
             "max_drawdown_bps": 0.0,
+            "peak_cumulative_net_bps": 0.0,
+            "giveback_from_peak_bps": 0.0,
+            "largest_positive_batch_share": None,
+            "batch_curve": [],
+            "daily_curve": [],
         }
 
     by_batch: dict[str, list[float]] = defaultdict(list)
@@ -77,6 +82,38 @@ def _summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
     batch_means = [statistics.fmean(v) for v in by_batch.values()]
     day_means = [statistics.fmean(v) for v in by_day.values()]
 
+    batch_first_ts: dict[str, int] = {}
+    for row in rows:
+        batch_id = str(row["batch_id"])
+        ts = int(row["signal_observed_at_ns"])
+        batch_first_ts[batch_id] = min(batch_first_ts.get(batch_id, ts), ts)
+
+    batch_curve = []
+    batch_cumulative = 0.0
+    positive_batch_total = sum(sum(v) for v in by_batch.values() if sum(v) > 0)
+    positive_batch_nets = []
+    for batch_id in sorted(by_batch, key=lambda b: batch_first_ts[b]):
+        batch_net = sum(by_batch[batch_id])
+        batch_cumulative += batch_net
+        if batch_net > 0:
+            positive_batch_nets.append(batch_net)
+        batch_curve.append({
+            "batch_id": batch_id,
+            "net_bps": batch_net,
+            "cumulative_net_bps": batch_cumulative,
+        })
+
+    daily_curve = []
+    day_cumulative = 0.0
+    for day in sorted(by_day):
+        day_net = sum(by_day[day])
+        day_cumulative += day_net
+        daily_curve.append({
+            "date_utc": day,
+            "net_bps": day_net,
+            "cumulative_net_bps": day_cumulative,
+        })
+
     return {
         "observations": len(vals),
         "independent_batches": len(by_batch),
@@ -90,6 +127,15 @@ def _summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "positive_batch_fraction": sum(v > 0 for v in batch_means) / len(batch_means),
         "positive_day_fraction": sum(v > 0 for v in day_means) / len(day_means),
         "max_drawdown_bps": max_dd,
+        "peak_cumulative_net_bps": peak,
+        "giveback_from_peak_bps": sum(vals) - peak,
+        "largest_positive_batch_share": (
+            max(positive_batch_nets) / positive_batch_total
+            if positive_batch_total > 0 and positive_batch_nets
+            else None
+        ),
+        "batch_curve": batch_curve,
+        "daily_curve": daily_curve,
     }
 
 
