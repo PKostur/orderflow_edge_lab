@@ -142,3 +142,66 @@ The automated cumulative reports now need to track whether the narrow state:
 5. remains interpretable under 8 bps stress even if it does not remain profitable there.
 
 No candidate freeze is justified yet.
+
+
+## Second interaction: CVD + wide spread + high range during London-New York
+
+A systematic scan of one- and two-factor session interactions found 26 cells with positive 4-bps EV under the exploratory minimum of 30 observations and 8 batches. This multiple-comparison count is itself a warning against selecting the highest endpoint result.
+
+The most notable movement-state cell was:
+
+* family: `cvd`
+* session: `LONDON+NEW_YORK`
+* spread bucket: `wide>3`
+* range-to-spread bucket: `high>6`
+* 30 unique fixed-horizon observations across 9 batches
+
+### Fixed-horizon economics
+
+| Horizon | Gross EV | Net EV @4bps | Cum net @4bps | Net EV @8bps | Cum net @8bps |
+|---|---:|---:|---:|---:|---:|
+| 5 s | +6.082 | +2.082 | +62.45 | -1.918 | -57.55 |
+| 15 s | +9.366 | +5.366 | +160.97 | +1.366 | +40.97 |
+| 30 s | +11.244 | +7.244 | +217.32 | +3.244 | +97.32 |
+
+At 30 seconds and 4 bps:
+
+* win rate: 50.0%
+* average winner: +38.59 bps
+* average loser: -24.11 bps
+* profit factor: 1.60
+* max constant-notional drawdown: -150.85 bps
+* positive-batch fraction: only 33.3% (3/9)
+* top-three positive-trade share: 58.5%
+* average observed spread: 4.37 bps
+* median observed spread: 4.05 bps
+* maximum observed spread: 8.54 bps
+
+At 8 bps the 30-second endpoint remains arithmetically positive, but positive-batch fraction falls to 22.2% (2/9).
+
+### Excursion behavior
+
+The frozen stop-risk path contains 11 risk-eligible observations from this state.
+
+| Metric | General CVD London+NY | Wide-spread/high-range state |
+|---|---:|---:|
+| Risk-eligible observations | 390 | 11 |
+| Mean MFE | 7.71 bps | 37.32 bps |
+| Median MFE | 3.31 bps | 16.44 bps |
+| MFE p75 | 10.95 bps | 48.09 bps |
+| MFE p90 | 21.31 bps | 85.81 bps |
+| MFE >=10 bps | 27.7% | 63.6% |
+| MFE >=20 bps | 11.0% | 45.5% |
+| MFE >=30 bps | 4.4% | 36.4% |
+| Mean MAE | 7.41 bps | 13.85 bps |
+| Median MAE | 5.62 bps | 11.90 bps |
+
+Unlike the earlier aligned/BTC-against clue, the MFE shift here is visible in the median and intermediate quantiles, not only in the mean. This is stronger evidence that the state identifies **greater post-entry movement**.
+
+However, adverse excursion also rises substantially. The state therefore looks primarily like a high-movement/high-risk regime. The current evidence does not yet establish that CVD direction reliably predicts that movement.
+
+The practical research question becomes:
+
+> When London and New York overlap and ENA enters a wide-spread/high-range state, what additional directional variable separates the large favorable excursions from the equally elevated adverse excursions?
+
+That is a better next conditioning problem than simply filtering for the session itself.
