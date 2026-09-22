@@ -4,10 +4,11 @@
   "stage": "PROSPECTIVE_SHADOW",
   "status": "FROZEN_BEFORE_PROSPECTIVE_OBSERVATIONS",
   "source_candidate_freeze_commit": "d7a43d440f97dbd8840e105498dfb40d7416d0ac",
-  "source_confirmation_results_commit": "8ef7ea7fbf53d56573df575eecc357de5bea53de",
+  "source_confirmation_results_commit": "3158c23a6d1ad467833673e2d117519d8359354d",
   "shadow_start_date": "2026-09-22",
   "backfill_before_start_forbidden": true,
   "candidate_definition_unchanged": true,
+  "audit_note": "Source confirmation metadata was updated only to correct the August 31 versus September window bookkeeping. No candidate rule, threshold, entry, exit or shadow start date changed.",
   "execution": {
     "paper_only": true,
     "leverage": 1.0,
@@ -15,7 +16,8 @@
     "exit": "open exactly 10 minutes after entry",
     "primary_round_trip_friction_bps": 2.0,
     "stress_round_trip_friction_bps": 4.0,
-    "missing_minute_policy": "fail closed"
+    "missing_minute_policy": "fail closed",
+    "portfolio_model": "four fixed 25% capital sleeves, one each for SPY, QQQ, GLD and USO; unused sleeve remains cash"
   },
   "observation_target": {
     "minimum_filtered_trades": 20,
@@ -24,6 +26,12 @@
     "early_failure_allowed": false
   },
   "shadow_metrics": [
+    "exact trade ledger",
+    "constant-notional cumulative net return",
+    "25%-sleeve compounded portfolio equity curve",
+    "maximum drawdown",
+    "largest-trade and top-three positive-PnL concentration",
+    "ticker contribution concentration",
     "filtered trade count",
     "distinct sessions",
     "net win rate at 2 bps",
@@ -33,12 +41,13 @@
     "profit factor",
     "average MFE",
     "average MAE",
-    "ticker breakdown",
     "rolling factor values at each signal"
   ],
   "shadow_review_rule": {
     "do_not_judge_before_observation_target": true,
+    "primary_economic_question": "Does the unchanged candidate produce a rising after-cost cumulative equity curve with tolerable drawdown and without relying on a single isolated trade?",
     "minimum_requirements_after_target": [
+      "cumulative net return positive",
       "net expectancy at 2 bps positive",
       "profit factor above 1",
       "realized win rate above break-even win rate implied by observed average win and loss"
@@ -46,7 +55,9 @@
     "secondary_diagnostics": [
       "4 bps friction",
       "ticker concentration",
-      "MFE/MAE structure"
+      "largest-trade and top-three concentration",
+      "MFE/MAE structure",
+      "equity-curve drawdown"
     ]
   },
   "forbidden": [
