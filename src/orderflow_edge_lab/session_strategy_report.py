@@ -38,6 +38,7 @@ def _summ(rows:list[dict[str,Any]])->dict[str,Any]:
     rows=sorted(rows,key=lambda r:int(r["signal_observed_at_ns"]))
     vals=[float(r["net_bps"]) for r in rows]
     gross=[float(r["gross_bps"]) for r in rows if r.get("gross_bps") is not None]
+    gross=[float(r["gross_bps"]) for r in rows if r.get("gross_bps") is not None]
     if not vals:
         return {"observations":0}
     wins=[v for v in vals if v>0]
