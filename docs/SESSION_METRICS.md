@@ -35,6 +35,8 @@ The analyzer reports:
 
 * observations and distinct dates;
 * cumulative net bps;
+* batch-by-batch and daily cumulative return paths;
+* peak cumulative return and giveback from peak;
 * mean and median EV;
 * win rate;
 * average winner and loser;
