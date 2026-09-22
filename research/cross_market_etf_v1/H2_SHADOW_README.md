@@ -74,6 +74,17 @@ Therefore MFE and MAE use bars from the entry bar through the minute immediately
 
 This convention affects excursion diagnostics only, not strategy PnL.
 
+## Historical replay guard
+
+Before any prospective outputs are accepted, the tracker replays the frozen historical H2 candidate through September 16 and verifies:
+
+* 25 canonical filtered trades;
+* period counts of 14 July, 4 August and 7 September;
+* ticker counts of SPY 6, QQQ 8, GLD 4 and USO 7;
+* cumulative after-cost return within 0.10 bps of +237.960 bps.
+
+The canonical audit windows explicitly exclude August 31. If the replay no longer matches, the tracker fails closed rather than silently mixing a changed implementation or revised data history into the prospective shadow.
+
 ## Observation target
 
 Do not evaluate the shadow as passed or failed before all three are reached:
