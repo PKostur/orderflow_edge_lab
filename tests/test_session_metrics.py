@@ -6,6 +6,7 @@ from orderflow_edge_lab.session_metrics import (
     analyze_bar_sessions,
     analyze_trade_sessions,
     session_memberships,
+    session_phase_memberships,
     session_regime,
 )
 
@@ -26,6 +27,15 @@ class SessionMetricTests(unittest.TestCase):
     def test_dst_aware_winter(self):
         ts = datetime(2026, 1, 15, 13, 30, tzinfo=UTC)
         self.assertEqual(session_memberships(ts), ("LONDON", "NEW_YORK"))
+
+    def test_neutral_session_phase_thirds(self):
+        self.assertEqual(
+            session_phase_memberships(datetime(2026, 7, 15, 0, 30, tzinfo=UTC)),
+            ("ASIA_OPENING",),
+        )
+        phases=session_phase_memberships(datetime(2026, 7, 15, 13, 30, tzinfo=UTC))
+        self.assertIn("LONDON_LATE", phases)
+        self.assertIn("NEW_YORK_OPENING", phases)
 
     def test_off_session(self):
         ts = datetime(2026, 7, 15, 22, 30, tzinfo=UTC)
