@@ -32,6 +32,19 @@ def _summary(rows:list[dict[str,Any]])->dict[str,Any]:
     gross=[float(r["fixed_horizon_gross_bps"]) for r in rows]
     net=[float(r["fixed_horizon_net_bps"]) for r in rows]
     batches={str(r["batch_id"]) for r in rows}
+    movement_context_rows=[]
+    for (family,regime,spread_bucket,range_bucket,btc),rows in sorted(by_movement_context.items()):
+        if len(rows)<10:
+            continue
+        movement_context_rows.append({
+            "family":family,
+            "session_regime":regime,
+            "spread_bucket":spread_bucket,
+            "range_to_spread_15s":range_bucket,
+            "btc_flow_alignment":btc,
+            **_summary(rows),
+        })
+
     return {
         "observations":len(rows),
         "independent_batches":len(batches),
@@ -131,6 +144,7 @@ def aggregate_session_excursions(
 
     by_session:dict[tuple[str,str],list[dict[str,Any]]]=defaultdict(list)
     by_context:dict[tuple[str,str,str,str],list[dict[str,Any]]]=defaultdict(list)
+    by_movement_context:dict[tuple[str,str,str,str,str],list[dict[str,Any]]]=defaultdict(list)
     for row in joined:
         by_session[(row["family"],row["session_regime"])].append(row)
         by_context[(
@@ -138,6 +152,13 @@ def aggregate_session_excursions(
             row["session_regime"],
             str(row["btc_flow_alignment"]),
             str(row["signal_strength_multiple"]),
+        )].append(row)
+        by_movement_context[(
+            row["family"],
+            row["session_regime"],
+            str(row["spread_bucket"]),
+            str(row["range_to_spread_15s"]),
+            str(row["btc_flow_alignment"]),
         )].append(row)
 
     session_rows=[]
@@ -170,6 +191,7 @@ def aggregate_session_excursions(
         "batch_directories":len(batch_dirs),
         "by_family_session":session_rows,
         "by_family_session_btc_strength":context_rows,
+        "by_family_session_spread_range_btc":movement_context_rows,
         "claims":{
             "exploratory_only":True,
             "mean_mfe_alone_is_not_sufficient":True,
