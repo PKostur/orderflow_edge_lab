@@ -4,26 +4,27 @@
   "confirmation_freeze_commit": "3ff9e00bee5d4d4bdc8bc25569a2663f420c98f8",
   "audit_correction": {
     "applied": true,
-    "reason": "The prior summary incorrectly classified an August 31 H2 trade as September. The frozen September confirmation window begins 2026-09-01. This file now uses only 2026-08-03 through 2026-08-28 for August and 2026-09-01 through 2026-09-16 for September.",
+    "reason": "Exact-ledger reconstruction corrected period bookkeeping and aggregate trade counts. The frozen windows are August 3-28 and September 1-16. Candidate definitions and rules are unchanged.",
     "candidate_definition_changed": false,
     "retuning": false
   },
   "results": {
     "ETF_H1_ORB15_CONTEXT_V1": {
       "september": {
-        "trades": 8,
-        "net_win_rate_pct_2bps": 25.0,
+        "trades": 7,
+        "net_win_rate_pct_2bps": 28.57,
         "average_net_win_bps_2bps": 11.920,
-        "average_net_loss_bps_2bps": -26.830,
-        "net_expectancy_bps_2bps": -17.143,
-        "profit_factor_2bps": 0.148,
-        "average_mfe_bps": 10.816,
-        "average_mae_bps": 31.627,
-        "net_expectancy_bps_4bps": -19.143,
-        "break_even_win_rate_pct": 69.24
+        "average_net_loss_bps_2bps": -31.992,
+        "net_expectancy_bps_2bps": -19.446,
+        "profit_factor_2bps": 0.149,
+        "average_mfe_bps": 10.985,
+        "average_mae_bps": 32.696,
+        "net_expectancy_bps_4bps": -21.446,
+        "break_even_win_rate_pct": 72.86,
+        "cumulative_net_bps": -136.120
       },
       "classification": "AUGUST_PASS_SEPTEMBER_FAIL_NO_PROMOTION",
-      "reason": "September had the pre-declared minimum sample and failed the unchanged primary economics decisively."
+      "reason": "September failed decisively under the unchanged candidate. Exact-ledger correction reduces the count from 8 to 7 but does not change the conclusion."
     },
     "ETF_H2_VWAP_REVERSION_CONTEXT_V1": {
       "august": {
@@ -36,7 +37,8 @@
         "average_mfe_bps": 32.032,
         "average_mae_bps": 9.314,
         "net_expectancy_bps_4bps": 4.148,
-        "break_even_win_rate_pct": 19.36
+        "break_even_win_rate_pct": 19.36,
+        "cumulative_net_bps": 24.593
       },
       "september": {
         "trades": 7,
@@ -48,7 +50,8 @@
         "average_mfe_bps": 18.795,
         "average_mae_bps": 8.615,
         "net_expectancy_bps_4bps": 2.472,
-        "break_even_win_rate_pct": 52.89
+        "break_even_win_rate_pct": 52.89,
+        "cumulative_net_bps": 31.302
       },
       "combined_august_september": {
         "trades": 11,
@@ -60,7 +63,8 @@
         "average_mfe_bps": 23.608,
         "average_mae_bps": 8.869,
         "net_expectancy_bps_4bps": 3.081,
-        "break_even_win_rate_pct": 46.89
+        "break_even_win_rate_pct": 46.89,
+        "cumulative_net_bps": 55.895
       },
       "ticker_diagnostic_combined": {
         "GLD": {"trades": 2, "win_rate_pct": 50.0, "ev_bps": -4.235, "cumulative_bps": -8.471},
@@ -70,12 +74,12 @@
       },
       "classification": "HISTORICAL_SURVIVOR_CONCENTRATED",
       "primary_rule_pass": true,
-      "caveat": "Pooled economics pass the frozen rule, but positive contribution is concentrated in USO. This remains a diagnostic warning, not a post-hoc ticker exclusion."
+      "caveat": "Pooled economics pass the frozen rule, but validation-window profit is concentrated in USO. This remains a diagnostic warning, not a post-hoc ticker exclusion."
     }
   },
   "decision": {
     "H1": "No promotion and no rescue under the same candidate ID.",
-    "H2": "Keep candidate unchanged. Eligible for prospective shadow, but not live or leverage authorization and not an edge claim.",
+    "H2": "Keep candidate unchanged in prospective shadow. No live or leverage authorization.",
     "live_or_leverage_authorized": false
   }
 }
