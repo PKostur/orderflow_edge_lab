@@ -34,6 +34,7 @@ def _max_dd(values: list[float]) -> float:
 def _summ(rows:list[dict[str,Any]])->dict[str,Any]:
     rows=sorted(rows,key=lambda r:int(r["signal_observed_at_ns"]))
     vals=[float(r["net_bps"]) for r in rows]
+    gross=[float(r["gross_bps"]) for r in rows if r.get("gross_bps") is not None]
     if not vals:
         return {"observations":0}
     wins=[v for v in vals if v>0]
@@ -48,6 +49,7 @@ def _summ(rows:list[dict[str,Any]])->dict[str,Any]:
         "observations":len(vals),
         "independent_batches":len(by_batch),
         "cumulative_net_bps":sum(vals),
+        "gross_mean_bps":statistics.fmean(gross) if gross else None,
         "net_mean_bps":statistics.fmean(vals),
         "net_median_bps":statistics.median(vals),
         "win_rate":len(wins)/len(vals),
@@ -73,12 +75,20 @@ def build_session_strategy_report(condition_aggregate:Mapping[str,Any])->dict[st
 
     baselines:dict[tuple[str,int,float],list[dict[str,Any]]]=defaultdict(list)
     groups:dict[tuple[str,int,float,str],list[dict[str,Any]]]=defaultdict(list)
+    direction_groups:dict[tuple[str,int,float,str,int],list[dict[str,Any]]]=defaultdict(list)
     for r in obs:
         family=str(r["family"]); horizon=int(r["horizon_ms"]); fee=float(r["fee_bps_round_trip"])
         baselines[(family,horizon,fee)].append(r)
         regime=(r.get("conditions") or {}).get("trading_session_regime")
         if regime is not None:
-            groups[(family,horizon,fee,str(regime))].append(r)
+            regime=str(regime)
+            groups[(family,horizon,fee,regime)].append(r)
+            try:
+                side=int(r.get("side"))
+            except (TypeError,ValueError):
+                side=0
+            if side in (-1,1):
+                direction_groups[(family,horizon,fee,regime,side)].append(r)
 
     rows=[]
     for (family,horizon,fee,regime),xs in sorted(groups.items()):
@@ -99,15 +109,67 @@ def build_session_strategy_report(condition_aggregate:Mapping[str,Any])->dict[st
             "sample_warning": s["observations"]<20 or s["independent_batches"]<3,
         })
 
+    direction_rows=[]
+    for (family,horizon,fee,regime,side),xs in sorted(direction_groups.items()):
+        base=_summ(baselines[(family,horizon,fee)])
+        summary=_summ(xs)
+        direction_rows.append({
+            "family":family,
+            "horizon_ms":horizon,
+            "fee_bps_round_trip":fee,
+            "session_regime":regime,
+            "side":side,
+            "direction":"LONG" if side>0 else "SHORT",
+            **summary,
+            "baseline_net_mean_bps":base["net_mean_bps"],
+            "net_mean_delta_vs_family_baseline":summary["net_mean_bps"]-base["net_mean_bps"],
+            "sample_warning":summary["observations"]<20 or summary["independent_batches"]<3,
+        })
+
+    travel:dict[tuple[str,float,str,int],list[dict[str,Any]]]=defaultdict(list)
+    for row in direction_rows:
+        travel[(row["family"],row["fee_bps_round_trip"],row["session_regime"],row["side"])].append(row)
+    travel_profiles=[]
+    for (family,fee,regime,side),parts in sorted(travel.items()):
+        parts=sorted(parts,key=lambda x:x["horizon_ms"])
+        horizons=[
+            {
+                "horizon_ms":part["horizon_ms"],
+                "observations":part["observations"],
+                "independent_batches":part["independent_batches"],
+                "gross_mean_bps":part["gross_mean_bps"],
+                "net_mean_bps":part["net_mean_bps"],
+                "positive_batch_fraction":part["positive_batch_fraction"],
+            }
+            for part in parts
+        ]
+        gross_values=[p["gross_mean_bps"] for p in parts if p["gross_mean_bps"] is not None]
+        monotonic_gross=(
+            len(gross_values)>=2
+            and all(right>=left for left,right in zip(gross_values,gross_values[1:]))
+        )
+        travel_profiles.append({
+            "family":family,
+            "fee_bps_round_trip":fee,
+            "session_regime":regime,
+            "side":side,
+            "direction":"LONG" if side>0 else "SHORT",
+            "horizons":horizons,
+            "gross_travel_monotonic_non_decreasing":monotonic_gross,
+            "sample_warning":any(p["sample_warning"] for p in parts),
+        })
+
     return {
-        "schema_version":1,
+        "schema_version":2,
         "analysis":"session_conditioned_strategy_economics",
         "symbol":condition_aggregate.get("symbol"),
         "context_symbol":condition_aggregate.get("context_symbol"),
         "rows":rows,
+        "direction_rows":direction_rows,
+        "travel_profiles":travel_profiles,
         "interpretation_rule":{
             "do_not_rank_on_endpoint_only":True,
-            "inspect":["cumulative_net_bps","net_mean_bps","win_rate","average_win_bps","average_loss_bps","profit_factor","max_drawdown_bps","positive_batch_fraction","pnl_concentration"],
+            "inspect":["cumulative_net_bps","gross_mean_bps","net_mean_bps","win_rate","average_win_bps","average_loss_bps","profit_factor","max_drawdown_bps","positive_batch_fraction","pnl_concentration","direction_rows","travel_profiles"],
             "session_filter_requires_future_freeze":True,
         },
         "claims":{
