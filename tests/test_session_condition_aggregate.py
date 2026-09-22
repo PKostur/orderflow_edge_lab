@@ -61,7 +61,9 @@ class SessionConditionAggregateTests(unittest.TestCase):
                 "horizon_ms":15000,
                 "fee_bps_round_trip":4.0,
                 "signal_observed_at_ns":1_000_000_000+i,
+                "gross_bps":net+4.0,
                 "net_bps":net,
+                "side":-1,
                 "conditions":{"trading_session_regime":regime},
                 "spread_bps":1.0,
                 "local_range_15s_bps":5.0,
@@ -80,6 +82,36 @@ class SessionConditionAggregateTests(unittest.TestCase):
         self.assertAlmostEqual(rows["ASIA"]["profit_factor"],5.0)
         self.assertAlmostEqual(rows["LONDON+NEW_YORK"]["max_drawdown_bps"],-8.0)
         self.assertTrue(rows["ASIA"]["sample_warning"])
+        direction={(r["session_regime"],r["side"]):r for r in result["direction_rows"]}
+        self.assertIn(("ASIA",-1),direction)
+        self.assertEqual(direction[("ASIA",-1)]["direction"],"SHORT")
+
+    def test_travel_profile_detects_non_decreasing_gross_path(self):
+        observations=[]
+        for horizon,gross in ((5000,1.0),(15000,2.0),(30000,5.0)):
+            observations.append({
+                "batch_id":"a",
+                "family":"aligned_btc",
+                "horizon_ms":horizon,
+                "fee_bps_round_trip":4.0,
+                "signal_observed_at_ns":1_000_000_000+horizon,
+                "gross_bps":gross,
+                "net_bps":gross-4.0,
+                "side":-1,
+                "conditions":{"trading_session_regime":"ASIA"},
+                "spread_bps":1.0,
+                "local_range_15s_bps":5.0,
+                "signal_strength_multiple":2.0,
+            })
+        result=build_session_strategy_report({
+            "experiment":"multi_batch_market_condition_aggregate",
+            "symbol":"ENA_USDT",
+            "context_symbol":"BTC_USDT",
+            "enriched_observations":observations,
+        })
+        profile=next(p for p in result["travel_profiles"] if p["family"]=="aligned_btc")
+        self.assertTrue(profile["gross_travel_monotonic_non_decreasing"])
+        self.assertEqual([h["horizon_ms"] for h in profile["horizons"]],[5000,15000,30000])
 
 
 if __name__=="__main__":
