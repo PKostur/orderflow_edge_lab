@@ -35,6 +35,11 @@ jobs:
             --output artifacts/htf_trend_forward/report.json \
             --source-dir artifacts/htf_trend_forward/source \
             --max-workers 5
+      - name: Build observational cross-strategy session economics
+        run: |
+          orderflow-portfolio-session-report \\
+            artifacts/htf_trend_forward/report.json \\
+            --output artifacts/htf_trend_forward/session_report.json
       - name: Enforce paper-only and claim boundaries
         run: |
           python - <<'PY'
