@@ -80,6 +80,13 @@ class SessionConditionAggregateTests(unittest.TestCase):
         self.assertAlmostEqual(rows["ASIA"]["cumulative_net_bps"],8.0)
         self.assertAlmostEqual(rows["ASIA"]["net_mean_bps"],4.0)
         self.assertAlmostEqual(rows["ASIA"]["profit_factor"],5.0)
+        self.assertAlmostEqual(rows["ASIA"]["peak_cumulative_net_bps"],10.0)
+        self.assertAlmostEqual(rows["ASIA"]["giveback_from_peak_bps"],-2.0)
+        self.assertEqual(len(rows["ASIA"]["batch_curve"]),2)
+        self.assertAlmostEqual(rows["ASIA"]["batch_curve"][-1]["cumulative_net_bps"],8.0)
+        self.assertEqual(len(rows["ASIA"]["daily_curve"]),1)
+        self.assertAlmostEqual(rows["ASIA"]["daily_curve"][0]["cumulative_net_bps"],8.0)
+        self.assertAlmostEqual(rows["ASIA"]["positive_day_fraction"],1.0)
         self.assertAlmostEqual(rows["LONDON+NEW_YORK"]["max_drawdown_bps"],-8.0)
         self.assertTrue(rows["ASIA"]["sample_warning"])
         direction={(r["session_regime"],r["side"]):r for r in result["direction_rows"]}
