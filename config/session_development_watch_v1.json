@@ -10,14 +10,21 @@
       "side": -1,
       "direction": "SHORT",
       "session_phase": "ASIA_OPENING",
-      "horizons_ms": [5000, 15000, 30000],
-      "fees_bps_round_trip": [4.0, 8.0],
+      "horizons_ms": [
+        5000,
+        15000,
+        30000
+      ],
+      "fees_bps_round_trip": [
+        4,
+        8
+      ],
       "development_snapshot_30s_4bps": {
         "observations": 63,
         "independent_batches": 9,
         "calendar_days": 7,
-        "gross_mean_bps": 6.20,
-        "net_mean_bps": 2.20,
+        "gross_mean_bps": 6.2,
+        "net_mean_bps": 2.2,
         "cumulative_net_bps": 138.5,
         "win_rate_pct": 55.6,
         "profit_factor": 1.24,
@@ -35,8 +42,15 @@
       "side": -1,
       "direction": "SHORT",
       "session_phase": "ASIA_OPENING",
-      "horizons_ms": [5000, 15000, 30000],
-      "fees_bps_round_trip": [4.0, 8.0],
+      "horizons_ms": [
+        5000,
+        15000,
+        30000
+      ],
+      "fees_bps_round_trip": [
+        4,
+        8
+      ],
       "development_snapshot_30s_4bps": {
         "observations": 37,
         "independent_batches": 7,
@@ -47,7 +61,7 @@
         "win_rate_pct": 59.5,
         "profit_factor": 1.58,
         "positive_batch_fraction_pct": 42.9,
-        "positive_day_fraction_pct": 20.0,
+        "positive_day_fraction_pct": 20,
         "max_drawdown_bps": -133.8
       },
       "stress_note": "At 8 bps friction the 30-second mean remains approximately +0.87 bps, but batch/day consistency is weak.",
@@ -68,7 +82,10 @@
       "positive_day_fraction",
       "top_day_concentration"
     ],
-    "promotion_forbidden_until_new_evidence": true
+    "promotion_forbidden_until_new_evidence": true,
+    "future_rows_must_have_signal_observed_after_watch_start": true
   },
-  "live_or_leverage_authorized": false
+  "live_or_leverage_authorized": false,
+  "prospective_watch_start_utc": "2026-09-22T15:39:58Z",
+  "prospective_watch_boundary_commit": "db5f173cfd7831839de685936cbeb1e474488c18"
 }
