@@ -85,6 +85,7 @@ class SessionConditionAggregateTests(unittest.TestCase):
         direction={(r["session_regime"],r["side"]):r for r in result["direction_rows"]}
         self.assertIn(("ASIA",-1),direction)
         self.assertEqual(direction[("ASIA",-1)]["direction"],"SHORT")
+        self.assertTrue(any(r["session_phase"].startswith("ASIA_") for r in result["phase_rows"]))
 
     def test_travel_profile_detects_non_decreasing_gross_path(self):
         observations=[]
