@@ -22,27 +22,37 @@
     ]
   },
   "economics": {
-    "round_trip_cost_bps": 20.0,
+    "round_trip_cost_bps": 20,
     "canonical_accounting_version": 2,
-    "max_abs_position": 1.0
+    "max_abs_position": 1
   },
   "variants": [
     {
       "audit_id": "DON8",
       "family": "donchian_breakout",
-      "parameters": {"lookback": 55},
+      "parameters": {
+        "lookback": 55
+      },
       "role": "FROZEN_EXISTING_STRATEGY"
     },
     {
       "audit_id": "EMA8",
       "family": "ema_tsmom",
-      "parameters": {"fast": 24, "slow": 96, "min_atr_spread": 0.25},
+      "parameters": {
+        "fast": 24,
+        "slow": 96,
+        "min_atr_spread": 0.25
+      },
       "role": "FROZEN_EXISTING_CONTROL"
     },
     {
       "audit_id": "VOL8",
       "family": "vol_scaled_momentum",
-      "parameters": {"lookback": 24, "vol_window": 96, "threshold": 0.5},
+      "parameters": {
+        "lookback": 24,
+        "vol_window": 96,
+        "threshold": 0.5
+      },
       "role": "FROZEN_EXISTING_CONTROL"
     }
   ],
@@ -54,7 +64,11 @@
   "frozen_hypotheses": [
     {
       "hypothesis_id": "SESSION_ASIA_LONDON_VS_LONDON_NEW_YORK",
-      "applies_to": ["DON8", "EMA8", "VOL8"],
+      "applies_to": [
+        "DON8",
+        "EMA8",
+        "VOL8"
+      ],
       "factor": "exclusive_session_regime",
       "aligned_state": "ASIA+LONDON",
       "comparison_state": "LONDON+NEW_YORK",
@@ -63,7 +77,9 @@
     },
     {
       "hypothesis_id": "DON8_BTC_PRIOR_BAR_ALIGNMENT",
-      "applies_to": ["DON8"],
+      "applies_to": [
+        "DON8"
+      ],
       "factor": "btc_prior_bar_direction",
       "aligned_state": "ALIGNED",
       "comparison_state": "AGAINST",
@@ -72,7 +88,9 @@
     },
     {
       "hypothesis_id": "EMA8_OWN_PRIOR_3BAR_ALIGNMENT",
-      "applies_to": ["EMA8"],
+      "applies_to": [
+        "EMA8"
+      ],
       "factor": "own_prior_3bar_direction",
       "aligned_state": "ALIGNED",
       "comparison_state": "AGAINST",
@@ -81,7 +99,9 @@
     },
     {
       "hypothesis_id": "EMA8_BTC_PRIOR_BAR_ALIGNMENT_SECONDARY",
-      "applies_to": ["EMA8"],
+      "applies_to": [
+        "EMA8"
+      ],
       "factor": "btc_prior_bar_direction",
       "aligned_state": "ALIGNED",
       "comparison_state": "AGAINST",
@@ -90,7 +110,9 @@
     },
     {
       "hypothesis_id": "VOL8_OWN_PRIOR_3BAR_ALIGNMENT",
-      "applies_to": ["VOL8"],
+      "applies_to": [
+        "VOL8"
+      ],
       "factor": "own_prior_3bar_direction",
       "aligned_state": "ALIGNED",
       "comparison_state": "AGAINST",
@@ -136,5 +158,7 @@
     "session_filter_authorized": false,
     "live_trading_authorized": false,
     "leverage_authorized": false
-  }
+  },
+  "hypothesis_definition_commit": "5415416440430bce912123694e8965e671326423",
+  "freeze_note": "Hypothesis definitions were committed before the 2026-09-24T00:00:00Z prospective boundary; later commits only implement or test the frozen watch."
 }
