@@ -235,3 +235,64 @@ def legacy_strategy(family: str) -> FunctionStrategy:
         target_fn=lambda frame, params: generate_target_position(frame, family, params),
         warmup_bars=100,
     )
+
+
+def walk_forward_report(
+    frame: pd.DataFrame,
+    strategy: StrategyPlugin,
+    params: Mapping[str, Any],
+    execution: ExecutionModel = ExecutionModel(),
+    *,
+    fold_days: int = 30,
+) -> dict[str, Any]:
+    frame = _validate_frame(frame)
+    if fold_days <= 0:
+        raise UniversalBacktestError("fold_days must be positive")
+    if len(frame) == 0:
+        return {"folds": [], "fold_count": 0}
+    start = frame.index.min().normalize()
+    end = frame.index.max()
+    delta = pd.Timedelta(days=int(fold_days))
+    folds = []
+    cursor = start
+    while cursor <= end:
+        nxt = cursor + delta
+        window = frame[(frame.index >= cursor) & (frame.index < nxt)]
+        if len(window) >= max(3, int(strategy.warmup_bars)):
+            r = run_backtest(window, strategy, params, execution)
+            folds.append({
+                "start": cursor.isoformat(),
+                "end": nxt.isoformat(),
+                **{k:v for k,v in r.items() if k not in {"trades_ledger","parameters","execution","claims"}},
+            })
+        cursor = nxt
+    usable=[x for x in folds if int(x.get("trades") or 0)>0 and x.get("expectancy_bps") is not None]
+    ev=[float(x["expectancy_bps"]) for x in usable]
+    return {
+        "fold_days": int(fold_days),
+        "fold_count": len(usable),
+        "positive_fold_fraction": sum(v>0 for v in ev)/len(ev) if ev else None,
+        "median_fold_expectancy_bps": float(np.median(ev)) if ev else None,
+        "folds": folds,
+    }
+
+
+def regime_report(
+    frame: pd.DataFrame,
+    strategy: StrategyPlugin,
+    params: Mapping[str, Any],
+    regime: pd.Series,
+    execution: ExecutionModel = ExecutionModel(),
+) -> dict[str, Any]:
+    frame = _validate_frame(frame)
+    labels=regime.reindex(frame.index)
+    rows=[]
+    for label in sorted(str(x) for x in labels.dropna().unique()):
+        mask=labels.astype("string")==label
+        # Preserve the full timeline and suppress exposure outside the regime.
+        target=strategy.generate_target(frame,params,None).reindex(frame.index).fillna(0.0)
+        gated=target.where(mask,0.0)
+        gated_strategy=FunctionStrategy(f"{strategy.strategy_id}@{label}",lambda _f,_p,g=gated:g,warmup_bars=strategy.warmup_bars)
+        r=run_backtest(frame,gated_strategy,params,execution)
+        rows.append({"regime":label,**{k:v for k,v in r.items() if k not in {"trades_ledger","parameters","execution","claims"}}})
+    return {"strategy_id":strategy.strategy_id,"regimes":rows,"claims":{"descriptive_conditioning":True,"candidate_promoted":False}}
