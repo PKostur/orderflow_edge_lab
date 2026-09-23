@@ -265,6 +265,80 @@ def _comparison(
     }
 
 
+def _hypothesis_sample_progress(
+    rows: Sequence[Mapping[str, Any]],
+    hypothesis: Mapping[str, Any],
+) -> dict[str, Any]:
+    factor = str(hypothesis["factor"])
+    aligned_state = str(hypothesis["aligned_state"])
+    comparison_state = str(hypothesis["comparison_state"])
+    aligned_rows = [row for row in rows if str(row.get(factor)) == aligned_state]
+    comparison_rows = [row for row in rows if str(row.get(factor)) == comparison_state]
+    aligned_symbols = sorted({str(row["symbol"]) for row in aligned_rows})
+    comparison_symbols = sorted({str(row["symbol"]) for row in comparison_rows})
+    paired_symbols = sorted(set(aligned_symbols).intersection(comparison_symbols))
+    return {
+        "hypothesis_id": hypothesis["hypothesis_id"],
+        "factor": factor,
+        "aligned_state": aligned_state,
+        "comparison_state": comparison_state,
+        "aligned_completed_trade_count": len(aligned_rows),
+        "comparison_completed_trade_count": len(comparison_rows),
+        "aligned_observed_symbols": aligned_symbols,
+        "comparison_observed_symbols": comparison_symbols,
+        "paired_observed_symbols": paired_symbols,
+        "paired_observed_symbol_count": len(paired_symbols),
+        "both_states_observed": bool(aligned_rows and comparison_rows),
+        "formal_verdict": "WITHHELD",
+    }
+
+
+def _evidence_progress(
+    completed: Sequence[Mapping[str, Any]],
+    open_snapshots: Sequence[Mapping[str, Any]],
+    *,
+    symbols: Sequence[str],
+    days_elapsed: int,
+    review_days: int,
+    minimum_trades: int,
+) -> dict[str, Any]:
+    completed_ordered = sorted(
+        completed, key=lambda row: (str(row["entry_utc"]), str(row["symbol"]))
+    )
+    completed_symbols = sorted({str(row["symbol"]) for row in completed_ordered})
+    open_symbols = sorted({str(row["symbol"]) for row in open_snapshots})
+    ready = days_elapsed >= review_days and len(completed_ordered) >= minimum_trades
+    return {
+        "calendar_days_elapsed": days_elapsed,
+        "calendar_day_requirement": review_days,
+        "calendar_day_progress_fraction": (
+            min(1.0, days_elapsed / review_days) if review_days > 0 else 1.0
+        ),
+        "completed_trade_count": len(completed_ordered),
+        "completed_trade_requirement": minimum_trades,
+        "completed_trade_progress_fraction": (
+            min(1.0, len(completed_ordered) / minimum_trades)
+            if minimum_trades > 0
+            else 1.0
+        ),
+        "open_post_start_snapshot_count": len(open_snapshots),
+        "completed_observed_symbols": completed_symbols,
+        "completed_observed_symbol_count": len(completed_symbols),
+        "completed_symbol_coverage_fraction": (
+            len(completed_symbols) / len(symbols) if symbols else 0.0
+        ),
+        "open_observed_symbols": open_symbols,
+        "first_completed_entry_utc": (
+            str(completed_ordered[0]["entry_utc"]) if completed_ordered else None
+        ),
+        "last_completed_entry_utc": (
+            str(completed_ordered[-1]["entry_utc"]) if completed_ordered else None
+        ),
+        "ready_for_review": ready,
+        "formal_verdict": "WITHHELD",
+    }
+
+
 def build_shadow_report(
     config: Mapping[str, Any],
     frames: Mapping[str, pd.DataFrame],
@@ -345,7 +419,15 @@ def build_shadow_report(
             for hypothesis in hypotheses
             if audit_id in [str(value) for value in hypothesis.get("applies_to", [])]
         ]
-        ready = days_elapsed >= review_days and len(completed) >= minimum_trades
+        progress = _evidence_progress(
+            completed,
+            open_snapshots,
+            symbols=symbols,
+            days_elapsed=days_elapsed,
+            review_days=review_days,
+            minimum_trades=minimum_trades,
+        )
+        ready = bool(progress["ready_for_review"])
         reports.append(
             {
                 "audit_id": audit_id,
@@ -363,6 +445,11 @@ def build_shadow_report(
                 "frozen_hypothesis_comparisons": [
                     _comparison(completed, hypothesis) for hypothesis in applicable
                 ],
+                "hypothesis_sample_progress": [
+                    _hypothesis_sample_progress(completed, hypothesis)
+                    for hypothesis in applicable
+                ],
+                "evidence_progress": progress,
                 "completed_trades": sorted(
                     completed, key=lambda row: (str(row["entry_utc"]), str(row["symbol"]))
                 ),
@@ -398,6 +485,18 @@ def build_shadow_report(
         "shadow_labels": config["shadow_labels"],
         "frozen_hypotheses": hypotheses,
         "reports": reports,
+        "evidence_progress": {
+            "strategy_count": len(reports),
+            "ready_strategy_count": sum(
+                bool(report["ready_for_review"]) for report in reports
+            ),
+            "all_strategies_ready": bool(reports)
+            and all(bool(report["ready_for_review"]) for report in reports),
+            "per_strategy": {
+                str(report["audit_id"]): report["evidence_progress"]
+                for report in reports
+            },
+        },
         "claims": {
             **dict(config["claims"]),
             "pre_start_entries_excluded_from_scoring": True,
