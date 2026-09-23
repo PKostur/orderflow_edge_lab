@@ -195,7 +195,7 @@ def _canonical_trade_ledger(
     trades: list[dict[str, Any]] = []
     i = 0
     while i < m:
-        if abs(pos[i]) <= 1e-12:
+        if pos[i] == 0.0:
             i += 1
             continue
         side = 1 if pos[i] > 0.0 else -1
@@ -214,7 +214,7 @@ def _canonical_trade_ledger(
             cost = entry_cost if t == i else float(changes[t]) * per_turnover_cost
             if t > i:
                 cost_units += float(changes[t])
-            trade_equity *= 1.0 + gross - cost
+            trade_equity *= (1.0 - cost) * (1.0 + gross)
 
         exit_amount = abs(pos[j - 1])
         cost_units += exit_amount
@@ -276,6 +276,7 @@ def run_canonical_backtest(
             "parameters": dict(params),
             "accounting": {
                 "mode": "canonical_turnover_path",
+                "version": 2,
                 "terminal_policy": "liquidate_last_observable_open",
             },
             "trades": 0,
@@ -311,9 +312,21 @@ def run_canonical_backtest(
     terminal_turnover = abs(terminal_position)
     if (terminal_turnover * per_turnover_cost) >= 1.0:
         raise UniversalBacktestError("terminal liquidation cost would make equity non-positive")
+    market = frame[["open", "high", "low", "close"]].to_numpy(dtype=float)
+    if not np.isfinite(market).all() or (market <= 0).any():
+        raise UniversalBacktestError("canonical market prices must be finite and positive")
     gross = effective_position * price_returns
-    net = gross - turnover * per_turnover_cost
-    equity = (1.0 + net).cumprod()
+    # Close the old episode before sizing the new one on remaining equity.
+    changed_side = np.sign(effective_position) != np.sign(previous)
+    exit_units = previous.abs().where(changed_side, 0.0)
+    entry_or_resize_units = turnover - exit_units
+    exit_factor = 1.0 - exit_units * per_turnover_cost
+    entry_factor = 1.0 - entry_or_resize_units * per_turnover_cost
+    market_factor = 1.0 + gross
+    if (exit_factor <= 0).any() or (entry_factor <= 0).any() or (market_factor <= 0).any():
+        raise UniversalBacktestError("canonical path reaches non-positive equity; bankruptcy model required")
+    factors = exit_factor * entry_factor * market_factor
+    equity = factors.cumprod()
     terminal_cost = terminal_turnover * per_turnover_cost
     terminal_equity = float(equity.iloc[-1]) * (1.0 - terminal_cost)
     equity_with_terminal = pd.concat(
@@ -327,6 +340,10 @@ def run_canonical_backtest(
         turnover,
         per_turnover_cost,
     )
+    ledger_equity = float(np.prod([1.0 + float(t["net_bps"]) / 10_000.0 for t in trades]))
+    reconciled = bool(np.isclose(ledger_equity, terminal_equity, rtol=1e-10, atol=1e-12))
+    if not reconciled:
+        raise UniversalBacktestError("canonical trade ledger does not reconcile with equity")
     values = [float(trade["net_bps"]) for trade in trades]
     winners = [value for value in values if value > 0.0]
     mfe = [float(trade["mfe_bps"]) for trade in trades]
@@ -341,7 +358,11 @@ def run_canonical_backtest(
         },
         "accounting": {
             "mode": "canonical_turnover_path",
+            "version": 2,
             "terminal_policy": "liquidate_last_observable_open",
+            "event_order": "exit_then_entry_or_resize_then_market_return",
+            "ledger_equity_reconciled": reconciled,
+            "ledger_compounded_return": ledger_equity - 1.0,
             "evaluated_intervals": len(effective_position),
             "terminal_liquidation_turnover_units": terminal_turnover,
             "terminal_liquidation_cost_bps": terminal_cost * 10_000.0,
