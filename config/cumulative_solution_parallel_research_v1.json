@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "program_id": "cumulative_solution_parallel_research_v1",
+  "created_utc": "2026-09-23T09:35:00Z",
+  "status": "ACTIVE_PARALLEL_RESEARCH",
+  "objective": "Develop a cumulative trading solution from independently evidenced mechanisms across markets and regimes, while preserving all existing prospective freezes.",
+  "lanes": [
+    {"id":"L1","name":"trend_breakout","examples":["DON8","EMA8","HTF trend","Fibonacci HTF"],"role":"capture persistent directional moves"},
+    {"id":"L2","name":"mean_reversion","examples":["ETF H2 VWAP reversion","ENA mean reversion"],"role":"capture dislocations and reversions"},
+    {"id":"L3","name":"microstructure_orderflow","examples":["CVD","book","microprice","aligned","aligned_btc","W1","W2","W3"],"role":"short-horizon timing and state evidence"},
+    {"id":"L4","name":"cross_sectional_relative_value","examples":["30d/7d cross-sectional momentum","gold relative value"],"role":"market-neutral or relative ranking exposure"},
+    {"id":"L5","name":"derivatives_positioning","examples":["funding","basis","gamma exposure","MEXC derivatives context"],"role":"positioning/crowding context and independent signals"},
+    {"id":"L6","name":"information_context","examples":["news behavior","sentiment context"],"role":"event/regime conditioning, not standalone promotion without economics"},
+    {"id":"L7","name":"cross_market","examples":["SPY","QQQ","GLD","USO","XAUUSD","ES","NQ","GC","CL"],"role":"diversify source market and test transferability"},
+    {"id":"L8","name":"controls_and_meta","examples":["Markov EV veto","reversed controls","OCC R5.1 outlier"],"role":"falsification, gating and robustness"}
+  ],
+  "cumulative_scoreboard": {
+    "primary_metrics":["prospective_after_cost_return","cumulative_return_path","max_drawdown","expectancy","profit_factor","positive_period_fraction","concentration"],
+    "secondary_metrics":["win_rate","MFE_MAE","turnover","cost_sensitivity","regime_breadth","symbol_breadth"],
+    "independence_metrics":["return_correlation","signal_overlap","shared_lineage","market_overlap","regime_overlap"],
+    "combination_rule":"Do not combine lanes merely because each endpoint is positive. Combination requires positive prospective evidence plus sufficiently distinct return/signal behavior and a declared portfolio construction rule."
+  },
+  "parallel_rules":[
+    "Existing frozen prospective watches continue unchanged.",
+    "New discovery lanes cannot alter an existing candidate.",
+    "Rejected families are not rescued by leverage or post-hoc filters.",
+    "Context tools such as news and sentiment require demonstrated incremental economics before becoming trading rules.",
+    "Cross-market data-source and entitlement differences remain explicit.",
+    "Portfolio/ensemble testing starts only from survivors and uses future or separately locked evidence."
+  ],
+  "claims":{"live_trading_authorized":false,"leverage_authorized":false,"ensemble_promoted":false}
+}
