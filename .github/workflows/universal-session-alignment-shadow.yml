@@ -62,6 +62,9 @@ jobs:
                       raise SystemExit("pre-start trade entered prospective scoring")
               if report["formal_verdict"] != "WITHHELD":
                   raise SystemExit("early formal verdict")
+              for progress in report["hypothesis_sample_progress"]:
+                  if progress["formal_verdict"] != "WITHHELD":
+                      raise SystemExit("early hypothesis verdict")
           print(json.dumps({
               "watch_id":r["watch_id"],
               "status":r["status"],
@@ -71,6 +74,15 @@ jobs:
                   row["audit_id"]:row["summary"]["completed_trade_count"]
                   for row in r["reports"]
               },
+              "open_post_start_snapshots":{
+                  row["audit_id"]:row["evidence_progress"]["open_post_start_snapshot_count"]
+                  for row in r["reports"]
+              },
+              "observed_symbol_coverage":{
+                  row["audit_id"]:row["evidence_progress"]["completed_observed_symbol_count"]
+                  for row in r["reports"]
+              },
+              "ready_strategy_count":r["evidence_progress"]["ready_strategy_count"],
           },indent=2))
           PY
       - name: Preserve prospective shadow evidence
