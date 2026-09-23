@@ -28,7 +28,13 @@ The prospective report records these comparisons without an early verdict:
 - EMA8 secondary diagnostic: BTC prior-bar `ALIGNED` versus `AGAINST`;
 - VOL8: own prior-three-bar `ALIGNED` versus `AGAINST`.
 
-The recorded metrics are completed-trade compounded return, expectancy, win rate, profit factor, correct-direction rate, correct-direction MFE, and completed-trade sequence drawdown.
+The recorded metrics are equal-weight symbol-sleeve completed-trade return, median observed-symbol compounded return, positive-symbol fraction, expectancy, win rate, profit factor, correct-direction rate, correct-direction MFE, and a pooled completed-trade sequence drawdown diagnostic. The pooled drawdown is not treated as a portfolio drawdown.
+
+## Pre-start accounting clarification
+
+Before the prospective boundary, the cumulative-return implementation was corrected so overlapping trades from different symbols are not compounded as if they occurred sequentially in one account. Each frozen symbol receives an equal 10% initial capital sleeve. Completed post-start trades compound only inside their own symbol sleeve, and inactive sleeves remain cash. Factor-state comparisons use per-symbol compounded returns, including their median across observed symbols, rather than constructing a filtered cross-symbol portfolio.
+
+This clarification changes only reporting semantics. It does not change any frozen hypothesis, strategy parameter, signal, entry, exit, session definition, alignment definition, cost assumption, or symbol.
 
 ## Review rule
 
