@@ -85,6 +85,10 @@ class UniversalExistingValidationTests(unittest.TestCase):
             self.assertTrue(report["claims"]["accounting_audit_included"])
             canonical = report["strategies"][0]["cost_cases"][0]["symbols"][0]["canonical"]
             self.assertEqual(canonical["accounting"]["mode"], "canonical_turnover_path")
+            session_diagnostics = report["strategies"][0]["cost_cases"][0]["symbols"][0]["session_diagnostics"]
+            self.assertEqual(session_diagnostics["analysis"], "universal_session_diagnostics")
+            self.assertTrue(session_diagnostics["baseline_reconciles_to_canonical_total_return"])
+            self.assertFalse(report["claims"]["session_diagnostics_affect_compatibility_pass"])
             self.assertTrue(report["strategies"][0]["cost_cases"][1]["canonical_cost_monotonic_vs_previous"])
             self.assertFalse(report["claims"]["canonical_economic_accounting_established"])
 
