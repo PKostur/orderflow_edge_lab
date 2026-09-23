@@ -24,7 +24,8 @@
   "economics": {
     "round_trip_cost_bps": 20,
     "canonical_accounting_version": 2,
-    "max_abs_position": 1
+    "max_abs_position": 1,
+    "diagnostic_portfolio": "equal 10% initial capital sleeve per frozen symbol; completed post-start trades compound within their own symbol sleeve; inactive sleeves remain cash"
   },
   "variants": [
     {
@@ -126,14 +127,16 @@
     "no_early_pass_fail": true,
     "metrics": [
       "completed_trade_count",
-      "compounded_completed_trade_return",
+      "equal_weight_symbol_sleeve_completed_trade_return",
+      "median_observed_symbol_compounded_return",
+      "positive_observed_symbol_fraction",
       "expectancy_bps",
       "win_rate",
       "profit_factor",
       "correct_direction_rate",
       "mean_correct_direction_mfe_bps",
       "median_correct_direction_mfe_bps",
-      "max_completed_trade_sequence_drawdown",
+      "pooled_completed_trade_sequence_drawdown",
       "factor_state_differences"
     ]
   },
@@ -160,5 +163,5 @@
     "leverage_authorized": false
   },
   "hypothesis_definition_commit": "5415416440430bce912123694e8965e671326423",
-  "freeze_note": "Hypothesis definitions were committed before the 2026-09-24T00:00:00Z prospective boundary; later commits only implement or test the frozen watch."
+  "freeze_note": "Hypothesis definitions were committed before the 2026-09-24T00:00:00Z prospective boundary; later commits only implement or test the frozen watch. Before the prospective boundary, reporting semantics were clarified so cumulative return uses equal-weight independent symbol sleeves rather than sequentially compounding overlapping cross-symbol trades; frozen hypotheses and strategy rules were not changed."
 }
