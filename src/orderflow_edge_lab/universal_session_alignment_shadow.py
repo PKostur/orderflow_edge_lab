@@ -139,12 +139,48 @@ def _max_drawdown(values_bps: Sequence[float]) -> float:
     return worst
 
 
-def _summary(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+def _compound_bps(values: Sequence[float]) -> float:
+    equity = 1.0
+    for value in values:
+        factor = 1.0 + float(value) / 10_000.0
+        if factor <= 0.0:
+            raise UniversalSessionAlignmentShadowError("completed trade factor is non-positive")
+        equity *= factor
+    return equity - 1.0
+
+
+def _symbol_compounded_returns(
+    rows: Sequence[Mapping[str, Any]],
+) -> dict[str, float]:
+    grouped: dict[str, list[float]] = defaultdict(list)
+    for row in sorted(rows, key=lambda item: (str(item["entry_utc"]), str(item["symbol"]))):
+        grouped[str(row["symbol"])].append(float(row["net_bps"]))
+    return {
+        symbol: _compound_bps(values)
+        for symbol, values in sorted(grouped.items())
+    }
+
+
+def _summary(
+    rows: Sequence[Mapping[str, Any]],
+    *,
+    symbol_universe: Sequence[str] | None = None,
+) -> dict[str, Any]:
     ordered = sorted(rows, key=lambda row: (str(row["entry_utc"]), str(row["symbol"])))
+    symbol_returns = _symbol_compounded_returns(ordered)
+    observed_returns = list(symbol_returns.values())
+    equal_weight_return = None
+    if symbol_universe is not None:
+        sleeves = [1.0 + symbol_returns.get(str(symbol), 0.0) for symbol in symbol_universe]
+        equal_weight_return = statistics.fmean(sleeves) - 1.0 if sleeves else 0.0
+
     if not ordered:
         return {
             "completed_trade_count": 0,
-            "compounded_completed_trade_return": 0.0,
+            "equal_weight_symbol_sleeve_completed_trade_return": equal_weight_return,
+            "median_observed_symbol_compounded_return": None,
+            "positive_observed_symbol_fraction": None,
+            "per_observed_symbol_compounded_return": {},
             "expectancy_bps": None,
             "median_trade_bps": None,
             "win_rate": None,
@@ -153,20 +189,20 @@ def _summary(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
             "correct_direction_rate": None,
             "mean_correct_direction_mfe_bps": None,
             "median_correct_direction_mfe_bps": None,
-            "max_completed_trade_sequence_drawdown": 0.0,
+            "pooled_completed_trade_sequence_drawdown": 0.0,
         }
+
     values = [float(row["net_bps"]) for row in ordered]
-    equity = 1.0
-    for value in values:
-        factor = 1.0 + value / 10_000.0
-        if factor <= 0.0:
-            raise UniversalSessionAlignmentShadowError("completed trade factor is non-positive")
-        equity *= factor
     correct = [row for row in ordered if float(row["gross_bps"]) > 0.0]
     mfe = [float(row["mfe_bps"]) for row in correct]
     return {
         "completed_trade_count": len(ordered),
-        "compounded_completed_trade_return": equity - 1.0,
+        "equal_weight_symbol_sleeve_completed_trade_return": equal_weight_return,
+        "median_observed_symbol_compounded_return": statistics.median(observed_returns),
+        "positive_observed_symbol_fraction": (
+            sum(value > 0.0 for value in observed_returns) / len(observed_returns)
+        ),
+        "per_observed_symbol_compounded_return": symbol_returns,
         "expectancy_bps": statistics.fmean(values),
         "median_trade_bps": statistics.median(values),
         "win_rate": sum(value > 0.0 for value in values) / len(values),
@@ -175,7 +211,7 @@ def _summary(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
         "correct_direction_rate": len(correct) / len(ordered),
         "mean_correct_direction_mfe_bps": statistics.fmean(mfe) if mfe else None,
         "median_correct_direction_mfe_bps": statistics.median(mfe) if mfe else None,
-        "max_completed_trade_sequence_drawdown": _max_drawdown(values),
+        "pooled_completed_trade_sequence_drawdown": _max_drawdown(values),
     }
 
 
@@ -221,6 +257,9 @@ def _comparison(
         "win_rate_difference": _difference(left, right, "win_rate"),
         "correct_direction_mfe_difference_bps": _difference(
             left, right, "mean_correct_direction_mfe_bps"
+        ),
+        "median_symbol_compounded_return_difference": _difference(
+            left, right, "median_observed_symbol_compounded_return"
         ),
         "formal_verdict": "WITHHELD",
     }
@@ -313,7 +352,7 @@ def build_shadow_report(
                 "family": variant["family"],
                 "parameters": params,
                 "role": variant["role"],
-                "summary": _summary(completed),
+                "summary": _summary(completed, symbol_universe=symbols),
                 "by_exclusive_session_regime": by_session,
                 "by_btc_prior_bar_direction": _factor_rows(
                     completed, "btc_prior_bar_direction", ("ALIGNED", "AGAINST", "NEUTRAL")
