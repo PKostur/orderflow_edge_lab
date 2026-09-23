@@ -58,6 +58,7 @@ class UniversalExistingValidationTests(unittest.TestCase):
                 "start": "2024-01-01T00:00:00Z",
                 "end_exclusive": "2024-05-13T08:00:00Z",
                 "symbols": ["BTC_USDT"],
+                "coverage": {"full_window_symbols": ["BTC_USDT"], "allow_leading_missing_symbols": [], "minimum_rows": 100},
             },
             "costs_bps": [12.0, 20.0],
             "fold_days": 120,
@@ -89,6 +90,61 @@ class UniversalExistingValidationTests(unittest.TestCase):
             (root / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
             with self.assertRaises(UniversalExistingValidationError):
                 build_report(self._protocol(root), root)
+
+    def test_declared_leading_availability_gap_is_reported(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            frame = _fixture()
+            frame = frame.iloc[40:]
+            path = root / "BTC_USDT_8h.csv"
+            frame.to_csv(path, index_label="timestamp")
+            digest = hashlib.sha256(path.read_bytes()).hexdigest()
+            (root / "manifest.json").write_text(
+                json.dumps({
+                    "interval": "8h",
+                    "start": "2024-01-01",
+                    "end_exclusive": "2024-05-13T08:00:00Z",
+                    "files": [{"symbol": "BTC_USDT", "path": path.name, "rows": len(frame), "sha256": digest}],
+                    "failures": [],
+                }),
+                encoding="utf-8",
+            )
+            protocol = json.loads(self._protocol(root).read_text(encoding="utf-8"))
+            protocol["data"]["coverage"] = {
+                "full_window_symbols": [],
+                "allow_leading_missing_symbols": ["BTC_USDT"],
+                "minimum_rows": 100,
+            }
+            protocol_path = root / "protocol.json"
+            protocol_path.write_text(json.dumps(protocol), encoding="utf-8")
+            report = build_report(protocol_path, root)
+            checked = report["data"]["snapshot"]["files"][0]
+            self.assertFalse(checked["full_requested_window"])
+            self.assertTrue(report["claims"]["leading_listing_gaps_are_not_silent"])
+
+    def test_coverage_classification_must_be_disjoint(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            frame = _fixture()
+            path = root / "BTC_USDT_8h.csv"
+            frame.to_csv(path, index_label="timestamp")
+            digest = hashlib.sha256(path.read_bytes()).hexdigest()
+            (root / "manifest.json").write_text(
+                json.dumps({
+                    "interval": "8h",
+                    "start": "2024-01-01T00:00:00Z",
+                    "end_exclusive": "2024-05-13T08:00:00Z",
+                    "files": [{"symbol": "BTC_USDT", "path": path.name, "rows": len(frame), "sha256": digest}],
+                    "failures": [],
+                }),
+                encoding="utf-8",
+            )
+            protocol = json.loads(self._protocol(root).read_text(encoding="utf-8"))
+            protocol["data"]["coverage"]["allow_leading_missing_symbols"] = ["BTC_USDT"]
+            protocol_path = root / "protocol.json"
+            protocol_path.write_text(json.dumps(protocol), encoding="utf-8")
+            with self.assertRaises(UniversalExistingValidationError):
+                build_report(protocol_path, root)
 
     def test_out_of_order_snapshot_fails_closed(self):
         with tempfile.TemporaryDirectory() as directory:

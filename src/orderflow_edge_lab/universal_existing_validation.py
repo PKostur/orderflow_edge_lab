@@ -126,11 +126,10 @@ def _load_frame(path: Path, *, symbol: str, interval: str, start: pd.Timestamp, 
     if (frame[["open", "high", "low", "close"]] <= 0.0).any().any():
         raise UniversalExistingValidationError(f"{path}: non-positive OHLC")
     interval_delta = _interval_delta(interval)
-    expected_count = int((end - start) / interval_delta)
-    if frame.index.min() != start or frame.index.max() != end - interval_delta or len(frame) != expected_count:
+    if frame.index.max() != end - interval_delta:
         raise UniversalExistingValidationError(
             f"{path}: incomplete requested window; got {frame.index.min()} to {frame.index.max()} ({len(frame)} rows), "
-            f"expected {start} to {end - interval_delta} ({expected_count} rows)"
+            f"expected a trailing endpoint at {end - interval_delta}"
         )
     if len(frame) > 1 and not np.all(np.diff(frame.index.view("int64")) == interval_delta.value):
         raise UniversalExistingValidationError(f"{path}: timestamp gap or unexpected interval")
@@ -169,9 +168,28 @@ def load_snapshot(protocol: Mapping[str, Any], data_dir: str | Path) -> tuple[di
     start = _as_utc(str(data["start"]))
     end = _as_utc(str(data["end_exclusive"]))
     interval = str(data["interval"])
-    for field, expected in (("interval", interval), ("start", str(data["start"])), ("end_exclusive", str(data["end_exclusive"]))):
-        if field in manifest and str(manifest[field]) != expected:
-            raise UniversalExistingValidationError(f"data manifest {field} does not match frozen protocol")
+    if "interval" in manifest and str(manifest["interval"]) != interval:
+        raise UniversalExistingValidationError("data manifest interval does not match frozen protocol")
+    if "start" in manifest and _as_utc(str(manifest["start"])) != start:
+        raise UniversalExistingValidationError("data manifest start does not match frozen protocol")
+    if "end_exclusive" in manifest and _as_utc(str(manifest["end_exclusive"])) != end:
+        raise UniversalExistingValidationError("data manifest end does not match frozen protocol")
+    coverage = data.get("coverage", {})
+    if not isinstance(coverage, dict):
+        raise UniversalExistingValidationError("data.coverage must be an object")
+    full_window_symbols = {str(symbol).upper() for symbol in coverage.get("full_window_symbols", expected_symbols)}
+    allow_leading_missing_symbols = {str(symbol).upper() for symbol in coverage.get("allow_leading_missing_symbols", [])}
+    expected_symbol_set = set(expected_symbols)
+    if full_window_symbols & allow_leading_missing_symbols:
+        raise UniversalExistingValidationError("coverage policy cannot classify a symbol in both groups")
+    if full_window_symbols | allow_leading_missing_symbols != expected_symbol_set:
+        raise UniversalExistingValidationError("coverage policy must classify every frozen symbol")
+    try:
+        minimum_rows = int(coverage.get("minimum_rows", 100))
+    except (TypeError, ValueError) as exc:
+        raise UniversalExistingValidationError("coverage.minimum_rows must be a positive integer") from exc
+    if minimum_rows <= 0:
+        raise UniversalExistingValidationError("coverage.minimum_rows must be a positive integer")
     frames: dict[str, pd.DataFrame] = {}
     checked_files: list[dict[str, Any]] = []
     for symbol in expected_symbols:
@@ -183,10 +201,27 @@ def load_snapshot(protocol: Mapping[str, Any], data_dir: str | Path) -> tuple[di
         if actual_hash != str(row["sha256"]):
             raise UniversalExistingValidationError(f"hash mismatch for {symbol}: {actual_hash} != {row['sha256']}")
         frame = _load_frame(path, symbol=symbol, interval=interval, start=start, end=end)
+        first_timestamp = frame.index.min()
+        if symbol in full_window_symbols and first_timestamp != start:
+            raise UniversalExistingValidationError(f"{symbol}: unexpected leading coverage gap")
+        if symbol in allow_leading_missing_symbols and first_timestamp < start:
+            raise UniversalExistingValidationError(f"{symbol}: data begins before frozen start")
+        if len(frame) < minimum_rows:
+            raise UniversalExistingValidationError(f"{symbol}: fewer than {minimum_rows} usable bars")
         if int(row.get("rows", len(frame))) != len(frame):
             raise UniversalExistingValidationError(f"manifest row count mismatch for {symbol}")
         frames[symbol] = frame
-        checked_files.append({"symbol": symbol, "path": path.name, "sha256": actual_hash, "rows": len(frame)})
+        checked_files.append(
+            {
+                "symbol": symbol,
+                "path": path.name,
+                "sha256": actual_hash,
+                "rows": len(frame),
+                "first_timestamp": first_timestamp.isoformat(),
+                "last_timestamp": frame.index.max().isoformat(),
+                "full_requested_window": first_timestamp == start,
+            }
+        )
     return frames, {"manifest_path": str(manifest_path), "files": checked_files}
 
 
@@ -348,6 +383,8 @@ def run_validation(protocol: Mapping[str, Any], frames: Mapping[str, pd.DataFram
         "claims": {
             "existing_strategy_definitions_unchanged": True,
             "legacy_universal_compatibility_checked": True,
+            "coverage_policy_checked": True,
+            "leading_listing_gaps_are_not_silent": True,
             "folds_are_descriptive_cold_start_diagnostics": True,
             "prefix_causality_is_sampled_only": True,
             "development_only": True,
