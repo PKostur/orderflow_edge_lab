@@ -161,6 +161,54 @@ def _symbol_compounded_returns(
     }
 
 
+def _equal_weight_sleeve_curve(
+    rows: Sequence[Mapping[str, Any]],
+    symbol_universe: Sequence[str],
+) -> list[dict[str, Any]]:
+    equities = {str(symbol): 1.0 for symbol in symbol_universe}
+    by_exit: dict[str, list[Mapping[str, Any]]] = defaultdict(list)
+    for row in rows:
+        symbol = str(row["symbol"])
+        if symbol not in equities:
+            raise UniversalSessionAlignmentShadowError(
+                f"trade symbol outside frozen universe: {symbol}"
+            )
+        by_exit[str(row["exit"])].append(row)
+
+    curve: list[dict[str, Any]] = []
+    completed_count = 0
+    for exit_utc in sorted(by_exit):
+        batch = sorted(by_exit[exit_utc], key=lambda row: str(row["symbol"]))
+        for row in batch:
+            symbol = str(row["symbol"])
+            factor = 1.0 + float(row["net_bps"]) / 10_000.0
+            if factor <= 0.0:
+                raise UniversalSessionAlignmentShadowError(
+                    "completed trade factor is non-positive"
+                )
+            equities[symbol] *= factor
+            completed_count += 1
+        portfolio_equity = statistics.fmean(equities.values()) if equities else 1.0
+        curve.append(
+            {
+                "exit_utc": exit_utc,
+                "completed_trade_count_cumulative": completed_count,
+                "equal_weight_symbol_sleeve_return": portfolio_equity - 1.0,
+            }
+        )
+    return curve
+
+
+def _curve_max_drawdown(curve: Sequence[Mapping[str, Any]]) -> float:
+    peak = 1.0
+    worst = 0.0
+    for point in curve:
+        equity = 1.0 + float(point["equal_weight_symbol_sleeve_return"])
+        peak = max(peak, equity)
+        worst = min(worst, equity / peak - 1.0)
+    return worst
+
+
 def _summary(
     rows: Sequence[Mapping[str, Any]],
     *,
@@ -170,14 +218,23 @@ def _summary(
     symbol_returns = _symbol_compounded_returns(ordered)
     observed_returns = list(symbol_returns.values())
     equal_weight_return = None
+    equal_weight_curve: list[dict[str, Any]] | None = None
+    equal_weight_drawdown = None
     if symbol_universe is not None:
-        sleeves = [1.0 + symbol_returns.get(str(symbol), 0.0) for symbol in symbol_universe]
-        equal_weight_return = statistics.fmean(sleeves) - 1.0 if sleeves else 0.0
+        equal_weight_curve = _equal_weight_sleeve_curve(ordered, symbol_universe)
+        equal_weight_return = (
+            float(equal_weight_curve[-1]["equal_weight_symbol_sleeve_return"])
+            if equal_weight_curve
+            else 0.0
+        )
+        equal_weight_drawdown = _curve_max_drawdown(equal_weight_curve)
 
     if not ordered:
         return {
             "completed_trade_count": 0,
             "equal_weight_symbol_sleeve_completed_trade_return": equal_weight_return,
+            "equal_weight_symbol_sleeve_max_drawdown": equal_weight_drawdown,
+            "equal_weight_symbol_sleeve_curve": equal_weight_curve,
             "median_observed_symbol_compounded_return": None,
             "positive_observed_symbol_fraction": None,
             "per_observed_symbol_compounded_return": {},
@@ -198,6 +255,8 @@ def _summary(
     return {
         "completed_trade_count": len(ordered),
         "equal_weight_symbol_sleeve_completed_trade_return": equal_weight_return,
+        "equal_weight_symbol_sleeve_max_drawdown": equal_weight_drawdown,
+        "equal_weight_symbol_sleeve_curve": equal_weight_curve,
         "median_observed_symbol_compounded_return": statistics.median(observed_returns),
         "positive_observed_symbol_fraction": (
             sum(value > 0.0 for value in observed_returns) / len(observed_returns)
