@@ -26,6 +26,7 @@ from orderflow_edge_lab.universal_backtest import (
     run_backtest,
     run_canonical_backtest,
 )
+from orderflow_edge_lab.universal_session_diagnostics import build_universal_session_diagnostics
 
 
 class UniversalExistingValidationError(ValueError):
@@ -329,6 +330,12 @@ def run_validation(protocol: Mapping[str, Any], frames: Mapping[str, pd.DataFram
                 prefix_causality = _prefix_causality(frame, family, params, strategy.warmup_bars)
                 accounting_audit = audit_accounting(frame, strategy, params, execution)
                 canonical = run_canonical_backtest(frame, strategy, params, execution)
+                session_diagnostics = build_universal_session_diagnostics(
+                    frame,
+                    canonical,
+                    symbol=symbol,
+                    btc_frame=frames.get("BTC_USDT"),
+                )
                 row_passed = bool(target_equal and parity["passed"] and prefix_causality["all_passed"])
                 all_passed = all_passed and row_passed
                 symbol_rows.append(
@@ -341,6 +348,7 @@ def run_validation(protocol: Mapping[str, Any], frames: Mapping[str, pd.DataFram
                         "metric_parity": parity,
                         "prefix_causality": prefix_causality,
                         "accounting_audit": accounting_audit,
+                        "session_diagnostics": session_diagnostics,
                         "canonical": {
                             key: canonical.get(key)
                             for key in (
@@ -425,6 +433,8 @@ def run_validation(protocol: Mapping[str, Any], frames: Mapping[str, pd.DataFram
             "legacy_universal_compatibility_checked": True,
             "accounting_audit_included": True,
             "canonical_accounting_path_included": True,
+            "session_diagnostics_included": True,
+            "session_diagnostics_affect_compatibility_pass": False,
             "canonical_economic_accounting_established": False,
             "coverage_policy_checked": True,
             "leading_listing_gaps_are_not_silent": True,
