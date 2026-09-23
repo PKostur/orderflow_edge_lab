@@ -24,6 +24,7 @@ from orderflow_edge_lab.universal_backtest import (
     FunctionStrategy,
     legacy_strategy,
     run_backtest,
+    run_canonical_backtest,
 )
 
 
@@ -327,6 +328,7 @@ def run_validation(protocol: Mapping[str, Any], frames: Mapping[str, pd.DataFram
                 parity = _metric_parity(old, new)
                 prefix_causality = _prefix_causality(frame, family, params, strategy.warmup_bars)
                 accounting_audit = audit_accounting(frame, strategy, params, execution)
+                canonical = run_canonical_backtest(frame, strategy, params, execution)
                 row_passed = bool(target_equal and parity["passed"] and prefix_causality["all_passed"])
                 all_passed = all_passed and row_passed
                 symbol_rows.append(
@@ -339,6 +341,21 @@ def run_validation(protocol: Mapping[str, Any], frames: Mapping[str, pd.DataFram
                         "metric_parity": parity,
                         "prefix_causality": prefix_causality,
                         "accounting_audit": accounting_audit,
+                        "canonical": {
+                            key: canonical.get(key)
+                            for key in (
+                                "trades",
+                                "expectancy_bps",
+                                "total_return",
+                                "max_drawdown",
+                                "win_rate",
+                                "profit_factor",
+                                "turnover_units",
+                                "median_mfe_bps",
+                                "median_mae_bps",
+                            )
+                        }
+                        | {"accounting": canonical.get("accounting")},
                     }
                 )
             ordered_returns = [row["universal"]["total_return"] for row in symbol_rows if row["universal"]["total_return"] is not None]
@@ -349,7 +366,25 @@ def run_validation(protocol: Mapping[str, Any], frames: Mapping[str, pd.DataFram
                 cost_monotonic = previous is None or current is None or current <= float(previous) + 1e-12
             else:
                 current = float(np.median(ordered_returns)) if ordered_returns else None
+            canonical_returns = [
+                row["canonical"]["total_return"]
+                for row in symbol_rows
+                if row["canonical"]["total_return"] is not None
+            ]
+            if strategy_rows:
+                previous_canonical = strategy_rows[-1].get("median_canonical_total_return")
+                current_canonical = float(np.median(canonical_returns)) if canonical_returns else None
+                canonical_cost_monotonic = (
+                    previous_canonical is None
+                    or current_canonical is None
+                    or current_canonical <= float(previous_canonical) + 1e-12
+                )
+            else:
+                current_canonical = float(np.median(canonical_returns)) if canonical_returns else None
+                canonical_cost_monotonic = True
             if not cost_monotonic:
+                all_passed = False
+            if not canonical_cost_monotonic:
                 all_passed = False
             strategy_rows.append(
                 {
@@ -357,6 +392,8 @@ def run_validation(protocol: Mapping[str, Any], frames: Mapping[str, pd.DataFram
                     "symbols": symbol_rows,
                     "median_total_return": current,
                     "cost_monotonic_vs_previous": cost_monotonic,
+                    "median_canonical_total_return": current_canonical,
+                    "canonical_cost_monotonic_vs_previous": canonical_cost_monotonic,
                     "reversed_control": {
                         symbol: _reversed_control(frames[symbol], family, params, execution)
                         for symbol in sorted(frames)
@@ -387,6 +424,7 @@ def run_validation(protocol: Mapping[str, Any], frames: Mapping[str, pd.DataFram
             "existing_strategy_definitions_unchanged": True,
             "legacy_universal_compatibility_checked": True,
             "accounting_audit_included": True,
+            "canonical_accounting_path_included": True,
             "canonical_economic_accounting_established": False,
             "coverage_policy_checked": True,
             "leading_listing_gaps_are_not_silent": True,

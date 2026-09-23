@@ -83,6 +83,9 @@ class UniversalExistingValidationTests(unittest.TestCase):
             accounting = report["strategies"][0]["cost_cases"][0]["symbols"][0]["accounting_audit"]
             self.assertEqual(accounting["status"], "accounting_mismatch")
             self.assertTrue(report["claims"]["accounting_audit_included"])
+            canonical = report["strategies"][0]["cost_cases"][0]["symbols"][0]["canonical"]
+            self.assertEqual(canonical["accounting"]["mode"], "canonical_turnover_path")
+            self.assertTrue(report["strategies"][0]["cost_cases"][1]["canonical_cost_monotonic_vs_previous"])
             self.assertFalse(report["claims"]["canonical_economic_accounting_established"])
 
     def test_hash_mismatch_fails_closed(self):
