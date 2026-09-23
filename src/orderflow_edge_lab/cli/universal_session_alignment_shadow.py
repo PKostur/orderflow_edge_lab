@@ -92,6 +92,15 @@ def main(argv: list[str] | None = None) -> int:
                         row["audit_id"]: row["summary"]["completed_trade_count"]
                         for row in report["reports"]
                     },
+                    "open_post_start_snapshots": {
+                        row["audit_id"]: row["evidence_progress"]["open_post_start_snapshot_count"]
+                        for row in report["reports"]
+                    },
+                    "observed_symbol_coverage": {
+                        row["audit_id"]: row["evidence_progress"]["completed_observed_symbol_count"]
+                        for row in report["reports"]
+                    },
+                    "ready_strategy_count": report["evidence_progress"]["ready_strategy_count"],
                 },
                 indent=2,
                 sort_keys=True,
