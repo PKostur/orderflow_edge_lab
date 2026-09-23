@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 
 from orderflow_edge_lab.strategy_tournament import backtest as legacy_backtest
+from orderflow_edge_lab.universal_accounting_audit import audit_accounting
 from orderflow_edge_lab.universal_backtest import ExecutionModel, FunctionStrategy, legacy_strategy, run_backtest, run_sweep
 
 
@@ -50,6 +51,26 @@ class UniversalBacktestTests(unittest.TestCase):
         self.assertEqual(r["trial_count"],4)
         self.assertEqual({x["round_trip_cost_bps"] for x in r["results"]},{12.0,20.0})
         self.assertFalse(r["claims"]["profitable_edge_established"])
+
+    def test_accounting_audit_reports_terminal_ledger_difference(self):
+        f = frame(150)
+        target = pd.Series(0.0, index=f.index)
+        target.iloc[100:] = 1.0
+        s = FunctionStrategy("fixture", lambda _f, _p: target, warmup_bars=1)
+        r = audit_accounting(f, s, {}, ExecutionModel(20.0))
+        self.assertEqual(r["status"], "accounting_mismatch")
+        self.assertAlmostEqual(r["ledger_cost_delta_bps"], 10.0, places=12)
+        self.assertAlmostEqual(r["terminal_position"], 1.0, places=12)
+        self.assertIn("terminal_open_position_has_no_vectorized_exit_cost", r["issues"])
+
+    def test_accounting_audit_detects_fractional_turnover(self):
+        f = frame(150)
+        target = pd.Series(0.0, index=f.index)
+        target.iloc[100:] = 0.5
+        s = FunctionStrategy("fractional", lambda _f, _p: target, warmup_bars=1)
+        r = audit_accounting(f, s, {}, ExecutionModel(20.0))
+        self.assertTrue(r["fractional_position_detected"])
+        self.assertIn("fractional_position_ledger_cost_is_fixed_per_trade", r["issues"])
 
 
 if __name__=="__main__":

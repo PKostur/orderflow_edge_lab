@@ -18,6 +18,7 @@ import pandas as pd
 
 from orderflow_edge_lab.strategy_tournament import backtest as legacy_backtest
 from orderflow_edge_lab.strategy_tournament import generate_target_position
+from orderflow_edge_lab.universal_accounting_audit import audit_accounting
 from orderflow_edge_lab.universal_backtest import (
     ExecutionModel,
     FunctionStrategy,
@@ -325,6 +326,7 @@ def run_validation(protocol: Mapping[str, Any], frames: Mapping[str, pd.DataFram
                 target_equal = bool(np.array_equal(old_target.to_numpy(), new_target.to_numpy()))
                 parity = _metric_parity(old, new)
                 prefix_causality = _prefix_causality(frame, family, params, strategy.warmup_bars)
+                accounting_audit = audit_accounting(frame, strategy, params, execution)
                 row_passed = bool(target_equal and parity["passed"] and prefix_causality["all_passed"])
                 all_passed = all_passed and row_passed
                 symbol_rows.append(
@@ -336,6 +338,7 @@ def run_validation(protocol: Mapping[str, Any], frames: Mapping[str, pd.DataFram
                         "universal": {key: new.get(key) for key in ("trades", "expectancy_bps", "total_return", "max_drawdown", "win_rate", "profit_factor")},
                         "metric_parity": parity,
                         "prefix_causality": prefix_causality,
+                        "accounting_audit": accounting_audit,
                     }
                 )
             ordered_returns = [row["universal"]["total_return"] for row in symbol_rows if row["universal"]["total_return"] is not None]
@@ -383,6 +386,8 @@ def run_validation(protocol: Mapping[str, Any], frames: Mapping[str, pd.DataFram
         "claims": {
             "existing_strategy_definitions_unchanged": True,
             "legacy_universal_compatibility_checked": True,
+            "accounting_audit_included": True,
+            "canonical_economic_accounting_established": False,
             "coverage_policy_checked": True,
             "leading_listing_gaps_are_not_silent": True,
             "folds_are_descriptive_cold_start_diagnostics": True,

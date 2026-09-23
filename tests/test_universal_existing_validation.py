@@ -80,6 +80,10 @@ class UniversalExistingValidationTests(unittest.TestCase):
             self.assertTrue(report["compatibility_pass"])
             self.assertEqual(report["status"], "compatibility_pass")
             self.assertTrue(report["claims"]["folds_are_descriptive_cold_start_diagnostics"])
+            accounting = report["strategies"][0]["cost_cases"][0]["symbols"][0]["accounting_audit"]
+            self.assertEqual(accounting["status"], "accounting_mismatch")
+            self.assertTrue(report["claims"]["accounting_audit_included"])
+            self.assertFalse(report["claims"]["canonical_economic_accounting_established"])
 
     def test_hash_mismatch_fails_closed(self):
         with tempfile.TemporaryDirectory() as directory:
