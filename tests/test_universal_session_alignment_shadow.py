@@ -137,6 +137,21 @@ class UniversalSessionAlignmentShadowTests(unittest.TestCase):
             expected_equal_weight,
             places=12,
         )
+        curve = report["summary"]["equal_weight_symbol_sleeve_curve"]
+        self.assertTrue(curve)
+        self.assertAlmostEqual(
+            curve[-1]["equal_weight_symbol_sleeve_return"],
+            report["summary"]["equal_weight_symbol_sleeve_completed_trade_return"],
+            places=12,
+        )
+        self.assertLessEqual(
+            report["summary"]["equal_weight_symbol_sleeve_max_drawdown"],
+            0.0,
+        )
+        self.assertEqual(
+            curve[-1]["completed_trade_count_cumulative"],
+            report["summary"]["completed_trade_count"],
+        )
         self.assertNotIn("compounded_completed_trade_return", report["summary"])
         self.assertEqual(
             report["frozen_hypothesis_comparisons"][0]["formal_verdict"],
