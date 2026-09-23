@@ -165,5 +165,7 @@
     "leverage_authorized": false
   },
   "hypothesis_definition_commit": "5415416440430bce912123694e8965e671326423",
-  "freeze_note": "Hypothesis definitions were committed before the 2026-09-24T00:00:00Z prospective boundary; later commits only implement or test the frozen watch. Before the prospective boundary, reporting semantics were clarified so cumulative return uses equal-weight independent symbol sleeves rather than sequentially compounding overlapping cross-symbol trades; frozen hypotheses and strategy rules were not changed."
+  "freeze_note": "Hypothesis definitions were committed before the 2026-09-24T00:00:00Z prospective boundary; later commits only implement or test the frozen watch. Before the prospective boundary, reporting semantics were clarified so cumulative return uses equal-weight independent symbol sleeves rather than sequentially compounding overlapping cross-symbol trades; frozen hypotheses and strategy rules were not changed.",
+  "implementation_freeze_commit": "d900f609229536cdf6d9d4245de02e02aa7ae740",
+  "implementation_freeze_note": "All prospective scoring, evidence-progress, equal-weight symbol-sleeve equity-curve, and reporting semantics were finalized in this commit before the 2026-09-24T00:00:00Z prospective boundary. Subsequent changes must not alter these semantics for this watch."
 }
