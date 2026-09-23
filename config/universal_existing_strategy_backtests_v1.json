@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "protocol_name": "universal-existing-strategy-backtests-v1",
+  "status": "frozen_compatibility_and_diagnostics",
+  "purpose": "Compare the Universal Backtest Framework with the unchanged existing strategy definitions on one complete immutable MEXC 8h snapshot.",
+  "source_protocol": "config/evidence_backed_strategies_v2.json",
+  "source_session_watch": "config/evidence_v2_session_forward_watch_v1.json",
+  "data": {
+    "source": "MEXC public futures klines",
+    "interval": "8h",
+    "intervals": ["8h"],
+    "start": "2024-01-01T00:00:00Z",
+    "end_exclusive": "2026-09-12T00:00:00Z",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"]
+  },
+  "costs_bps": [12.0, 16.0, 20.0],
+  "fold_days": 120,
+  "strategies": [
+    {"audit_id": "DON8", "family": "donchian_breakout", "parameters": {"lookback": 55}, "role": "primary_existing_strategy"},
+    {"audit_id": "EMA8", "family": "ema_tsmom", "parameters": {"fast": 24, "slow": 96, "min_atr_spread": 0.25}, "role": "existing_control"},
+    {"audit_id": "VOL8", "family": "vol_scaled_momentum", "parameters": {"lookback": 24, "vol_window": 96, "threshold": 0.5}, "role": "existing_control"}
+  ],
+  "claims": {
+    "parameter_selection": false,
+    "strategy_definition_changes": false,
+    "development_only": true,
+    "profitable_edge_established": false,
+    "live_trading_authorized": false
+  }
+}
