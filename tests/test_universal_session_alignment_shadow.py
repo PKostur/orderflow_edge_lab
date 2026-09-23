@@ -60,14 +60,14 @@ class UniversalSessionAlignmentShadowTests(unittest.TestCase):
 
     def _frame(self, scale: float = 1.0) -> pd.DataFrame:
         index = pd.date_range("2026-08-01T00:00:00Z", periods=210, freq="8h")
-        amplitude = np.linspace(0.0, 15.0, len(index))
+        amplitude = np.arange(len(index), dtype=float) * 0.15
         close = (100.0 + np.where(np.arange(len(index)) % 2 == 0, amplitude, -amplitude)) * scale
         open_ = np.r_[close[0], close[:-1]]
         return pd.DataFrame(
             {
                 "open": open_,
-                "high": np.maximum(open_, close) * 1.005,
-                "low": np.minimum(open_, close) * 0.995,
+                "high": np.maximum(open_, close) * 1.0005,
+                "low": np.minimum(open_, close) * 0.9995,
                 "close": close,
                 "volume": 1000.0,
             },
