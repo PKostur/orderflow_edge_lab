@@ -28,7 +28,7 @@ The prospective report records these comparisons without an early verdict:
 - EMA8 secondary diagnostic: BTC prior-bar `ALIGNED` versus `AGAINST`;
 - VOL8: own prior-three-bar `ALIGNED` versus `AGAINST`.
 
-The recorded metrics are equal-weight symbol-sleeve completed-trade return, median observed-symbol compounded return, positive-symbol fraction, expectancy, win rate, profit factor, correct-direction rate, correct-direction MFE, and a pooled completed-trade sequence drawdown diagnostic. The pooled drawdown is not treated as a portfolio drawdown.
+The recorded metrics are equal-weight symbol-sleeve completed-trade return, its exit-by-exit equity curve and portfolio-consistent maximum drawdown, median observed-symbol compounded return, positive-symbol fraction, expectancy, win rate, profit factor, correct-direction rate, correct-direction MFE, and a pooled completed-trade sequence drawdown diagnostic. The pooled trade-sequence drawdown remains descriptive and is not treated as the portfolio drawdown.
 
 ## Pre-start accounting clarification
 
