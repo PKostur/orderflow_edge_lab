@@ -45,6 +45,19 @@ No formal pass or fail is permitted until both conditions hold for every strateg
 
 If either requirement is missing, status remains `ACCUMULATING`.
 
+## Evidence progress
+
+The report also exposes non-gating accumulation diagnostics so early shadow growth can be inspected without changing the review rule:
+
+- completed post-start trade count and still-open post-start episode count per strategy;
+- completed-symbol coverage across the frozen ten-symbol universe;
+- first and latest completed post-start entry timestamps;
+- calendar-day and completed-trade progress fractions toward the existing review gate;
+- aligned and comparison-state trade counts for each frozen hypothesis;
+- symbols represented in each state and the count of symbols that have observed both states.
+
+These fields are descriptive only. They do not add a new minimum sample rule and do not permit an early verdict.
+
 ## Operational note
 
 The GitHub workflow runs at 00:25, 08:25, and 16:25 UTC once the workflow is present on the default branch. While PR #113 remains draft, prospective integrity is still preserved because the source is public historical 8h kline data and the hypothesis definition commit predates all scored entries. The future sample can therefore be reconstructed from MEXC without retroactively changing the frozen rules.
