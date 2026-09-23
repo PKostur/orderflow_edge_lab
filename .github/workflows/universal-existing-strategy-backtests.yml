@@ -2,6 +2,9 @@ name: Universal Existing Strategy Backtests
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - fix/universal-existing-validation
   schedule:
     - cron: "35 3 * * 2,5"
 
