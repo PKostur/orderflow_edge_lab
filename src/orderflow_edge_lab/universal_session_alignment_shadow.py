@@ -247,7 +247,7 @@ def build_shadow_report(
     cost = float(config["economics"]["round_trip_cost_bps"])
     review_days = int(config["reporting"]["review_after_calendar_days"])
     minimum_trades = int(config["reporting"]["minimum_completed_trades_per_strategy"])
-    days_elapsed = max(0, int((as_of - start) / pd.Timedelta(days=1))) if as_of >= start else 0
+    days_elapsed = max(0, int((as_of - start).total_seconds() // 86_400.0)) if as_of >= start else 0
     hypotheses = list(config.get("frozen_hypotheses", []))
 
     reports: list[dict[str, Any]] = []
