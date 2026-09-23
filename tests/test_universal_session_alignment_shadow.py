@@ -117,6 +117,18 @@ class UniversalSessionAlignmentShadowTests(unittest.TestCase):
             report["summary"]["completed_trade_count"],
             len(report["completed_trades"]),
         )
+        per_symbol = report["summary"]["per_observed_symbol_compounded_return"]
+        expected_equal_weight = (
+            sum(1.0 + per_symbol.get(symbol, 0.0) for symbol in self._config()["source"]["symbols"])
+            / len(self._config()["source"]["symbols"])
+            - 1.0
+        )
+        self.assertAlmostEqual(
+            report["summary"]["equal_weight_symbol_sleeve_completed_trade_return"],
+            expected_equal_weight,
+            places=12,
+        )
+        self.assertNotIn("compounded_completed_trade_return", report["summary"])
         self.assertEqual(
             report["frozen_hypothesis_comparisons"][0]["formal_verdict"],
             "WITHHELD",
