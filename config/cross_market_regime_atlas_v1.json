@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "protocol_name": "cross_market_regime_atlas_v1",
+  "created_utc": "2026-09-23T09:20:00Z",
+  "status": "DISCOVERY_ONLY_SEPARATE_FROM_FROZEN_VALIDATION",
+  "purpose": "Map raw market behavior and existing strategy behavior across comparable regimes in crypto, ETFs/equities, gold and futures without modifying any frozen prospective watch.",
+  "common_regime_core": [
+    "session_or_exchange_time_block",
+    "trend_vs_range_state",
+    "realized_volatility_state",
+    "local_displacement_or_return_state",
+    "relative_volume_or_activity_state_when_available",
+    "liquidity_or_spread_efficiency_when_available",
+    "direction",
+    "timeframe"
+  ],
+  "market_tracks": [
+    {
+      "market": "crypto_perpetuals",
+      "primary_venue": "MEXC",
+      "universe_initial": ["BTC_USDT","ETH_USDT","SOL_USDT","XRP_USDT","DOGE_USDT","BNB_USDT","ADA_USDT","LINK_USDT","SUI_USDT","ENA_USDT"],
+      "expansion_policy": "Add liquid symbols only when history and execution metadata pass completeness checks; classify symbols by rolling BTC correlation rather than hand-labeling them.",
+      "evidence_tiers": ["public_tick_orderflow_for_ENA_BTC","intraday_bars","higher_timeframe_bars"],
+      "market_specific_states": ["BTC_return_alignment","BTC_flow_alignment_when_tick_data_exists","funding_when_available","cross_sectional_rank"],
+      "existing_strategy_families": ["cvd","book","microprice","aligned","aligned_btc","ema_tsmom","donchian_breakout","vol_scaled_momentum","cross_sectional_momentum"]
+    },
+    {
+      "market": "us_etfs_equities",
+      "universe_initial": ["SPY","QQQ","GLD","USO"],
+      "evidence_tiers": ["one_minute_bars"],
+      "market_specific_states": ["overnight_gap","opening_range","VWAP_distance","relative_volume","cash_session_phase"],
+      "existing_strategy_families": ["H1_ORB15_CONTEXT","H2_VWAP_REVERSION_CONTEXT","H3_overnight_gap_behavior"],
+      "entitlement_note": "Do not claim tick/order-flow evidence unless trade/NBBO entitlement becomes available."
+    },
+    {
+      "market": "gold",
+      "universe_initial": ["XAUUSD","GLD"],
+      "evidence_tiers": ["intraday_or_higher_timeframe_bars_by_source"],
+      "market_specific_states": ["cross_session_return_transmission","gold_silver_relative_value_when_source_available","US_session_overlap"],
+      "existing_strategy_families": ["gold_cross_session_state","relative_value_persistence"],
+      "separation_note": "Keep XAUUSD cash-source and GLD ETF evidence source-labelled; do not treat them as identical replication."
+    },
+    {
+      "market": "index_and_commodity_futures",
+      "universe_initial": ["ES","NQ","GC","CL"],
+      "evidence_tiers": ["one_minute_bars","tick_orderflow_only_if_entitled"],
+      "market_specific_states": ["regular_vs_extended_session","opening_range","overnight_return","realized_volatility","relative_volume"],
+      "existing_strategy_families": ["price_transfer_controls","NQ_breakout","GC_CL_reversion"],
+      "entitlement_note": "Previous true tick-level transfer was blocked by data entitlement, not falsified. Do not substitute bars and call them order flow."
+    }
+  ],
+  "atlas_outputs": {
+    "raw_market_behavior_first": true,
+    "strategy_overlay_second": true,
+    "cell_dimensions": ["market","instrument","regime","strategy_family","direction","timeframe","cost_case"],
+    "metrics": [
+      "observations_or_trades",
+      "independent_days_or_batches",
+      "cumulative_after_cost_return",
+      "mean_expectancy",
+      "win_rate",
+      "profit_factor",
+      "max_drawdown",
+      "MFE_MAE_when_path_data_supports_it",
+      "positive_day_or_batch_fraction",
+      "top1_top3_return_concentration",
+      "reversed_or_control_performance_when_defined"
+    ]
+  },
+  "anti_overfit_rules": [
+    "Regime atlas cells are descriptive discovery, not candidates.",
+    "Do not remove losing instruments or periods after seeing results.",
+    "Do not fit session boundaries to PnL.",
+    "Do not fit BTC-correlation group cutoffs to strategy PnL.",
+    "Sparse cells remain sparse and are labelled insufficient.",
+    "A promising atlas cell requires a new candidate ID and future freeze before validation.",
+    "Existing DON8 W1 W2 W3 and ETF H2 prospective definitions remain unchanged."
+  ],
+  "claims": {
+    "candidate_promoted": false,
+    "live_trading_authorized": false,
+    "leverage_authorized": false
+  }
+}
