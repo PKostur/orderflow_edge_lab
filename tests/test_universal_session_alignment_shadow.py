@@ -83,6 +83,15 @@ class UniversalSessionAlignmentShadowTests(unittest.TestCase):
         )
         self.assertEqual(result["status"], "PRE_START")
         self.assertEqual(result["reports"][0]["summary"]["completed_trade_count"], 0)
+        self.assertEqual(
+            result["reports"][0]["evidence_progress"]["open_post_start_snapshot_count"],
+            0,
+        )
+        self.assertEqual(
+            result["reports"][0]["evidence_progress"]["completed_trade_progress_fraction"],
+            0.0,
+        )
+        self.assertFalse(result["evidence_progress"]["all_strategies_ready"])
         self.assertTrue(result["claims"]["pre_start_entries_excluded_from_scoring"])
 
     def test_post_start_trades_are_labeled_without_gating(self):
@@ -133,6 +142,19 @@ class UniversalSessionAlignmentShadowTests(unittest.TestCase):
             report["frozen_hypothesis_comparisons"][0]["formal_verdict"],
             "WITHHELD",
         )
+        progress = report["evidence_progress"]
+        self.assertEqual(progress["completed_trade_count"], len(report["completed_trades"]))
+        self.assertEqual(
+            progress["open_post_start_snapshot_count"],
+            len(report["open_terminal_snapshots_not_scored"]),
+        )
+        self.assertGreater(progress["completed_observed_symbol_count"], 0)
+        self.assertFalse(progress["ready_for_review"])
+        sample_progress = report["hypothesis_sample_progress"][0]
+        self.assertEqual(sample_progress["formal_verdict"], "WITHHELD")
+        self.assertEqual(sample_progress["factor"], "btc_prior_bar_direction")
+        self.assertIn("paired_observed_symbol_count", sample_progress)
+        self.assertFalse(result["evidence_progress"]["all_strategies_ready"])
         self.assertTrue(result["claims"]["labels_do_not_gate_trade_generation"])
 
 
