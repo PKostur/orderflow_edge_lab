@@ -1,7 +1,7 @@
 {
   "candidate_id": "ETF_H2_VWAP_REVERSION_CONTEXT_V1",
   "shadow_start_date": "2026-09-22",
-  "through_date": "2026-09-21",
+  "through_date": "2026-09-22",
   "status": "ACCUMULATING",
   "observation_target": {
     "minimum_filtered_trades": 20,
@@ -11,16 +11,35 @@
   },
   "trades": 0,
   "distinct_sessions": 0,
-  "calendar_days_elapsed": 0,
+  "calendar_days_elapsed": 1,
   "constant_notional_cumulative_bps_2": 0.0,
   "constant_notional_cumulative_bps_4": 0.0,
+  "mean_net_bps_2": null,
+  "mean_net_bps_4": null,
+  "win_rate_pct_2": null,
+  "average_net_win_bps_2": null,
+  "average_net_loss_bps_2": null,
+  "break_even_win_rate_pct": null,
+  "profit_factor_2": null,
+  "average_mfe_bps": null,
+  "average_mae_bps": null,
   "portfolio_model": "four fixed 25% sleeves; unused sleeves cash",
   "portfolio_compounded_return_pct": 0.0,
   "portfolio_max_drawdown_pct": 0.0,
+  "positive_pnl_concentration": {
+    "largest_trade_share": null,
+    "top_three_share": null,
+    "ticker": {
+      "SPY": {"trades": 0, "cumulative_net_bps_2": 0.0, "mean_net_bps_2": null, "win_rate_pct_2": null, "share_of_positive_pnl": null},
+      "QQQ": {"trades": 0, "cumulative_net_bps_2": 0.0, "mean_net_bps_2": null, "win_rate_pct_2": null, "share_of_positive_pnl": null},
+      "GLD": {"trades": 0, "cumulative_net_bps_2": 0.0, "mean_net_bps_2": null, "win_rate_pct_2": null, "share_of_positive_pnl": null},
+      "USO": {"trades": 0, "cumulative_net_bps_2": 0.0, "mean_net_bps_2": null, "win_rate_pct_2": null, "share_of_positive_pnl": null}
+    }
+  },
   "diagnostic_convention": {
     "mfe_mae_window": "entry bar through the minute immediately before the exit bar; exit is at exit-bar open",
     "backfill_before_shadow_start": false
   },
-  "note": "Initial state created before the first completed US session on the prospective start date.",
+  "source_session_note": "2026-09-22 completed session processed fail-closed. SPY, QQQ, GLD and USO each produced a raw H2 signal, but none passed all three unchanged rolling context factors, so the prospective ledger and equity files remain header-only. 2026-09-23 was not advanced because the required exact one-minute source data were not yet complete in the connected market-data source at this run.",
   "live_or_leverage_authorized": false
 }
