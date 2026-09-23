@@ -305,6 +305,8 @@ def run_canonical_backtest(
         float(execution.round_trip_cost_bps) / 2.0
         + float(execution.slippage_bps_per_turnover_unit)
     ) / 10_000.0
+    if limit * per_turnover_cost >= 1.0:
+        raise UniversalBacktestError("turnover cost would make equity non-positive")
     terminal_position = float(effective_position.iloc[-1])
     terminal_turnover = abs(terminal_position)
     if (terminal_turnover * per_turnover_cost) >= 1.0:
