@@ -11,8 +11,15 @@ from orderflow_edge_lab.jev_research_decision import (
 
 
 class JevResearchDecisionTests(unittest.TestCase):
-    def _shadow(self, *, ready: bool = False, breach: bool = False):
-        completed = 24 if ready else 4
+    def _shadow(
+        self,
+        *,
+        ready: bool = False,
+        breach: bool = False,
+        completed: int | None = None,
+        open_count: int = 1,
+    ):
+        completed = (24 if ready else 4) if completed is None else int(completed)
         return {
             "analysis": "universal_session_alignment_prospective_shadow",
             "watch_id": "shadow-v1",
@@ -43,7 +50,7 @@ class JevResearchDecisionTests(unittest.TestCase):
                     "ready_for_review": ready,
                     "evidence_progress": {
                         "completed_trade_count": completed,
-                        "open_post_start_snapshot_count": 1,
+                        "open_post_start_snapshot_count": open_count,
                         "completed_observed_symbol_count": 7,
                         "completed_symbol_coverage_fraction": 0.7,
                     },
@@ -68,11 +75,47 @@ class JevResearchDecisionTests(unittest.TestCase):
             ],
         }
 
+    def test_zero_observations_collect_more_evidence(self):
+        result = decide_sync(
+            self._shadow(completed=0, open_count=0),
+            provider="offline",
+        )
+        self.assertEqual(result["policy"]["selected_action"], "collect_more_evidence")
+        self.assertEqual(result["policy"]["selection_source"], "offline_bounded_choice")
+        self.assertEqual(
+            result["judgments"]["dominant_uncertainty"]["choice"],
+            "sample_size",
+        )
+        self.assertEqual(result["state"]["total_completed_trade_count"], 0)
+        self.assertEqual(result["state"]["total_open_post_start_snapshot_count"], 0)
+        self.assertFalse(result["state"]["has_any_post_start_observation"])
+        self.assertNotIn(
+            "inspect_state_coverage",
+            result["policy"]["allowed_actions"],
+        )
+
+    def test_open_only_observations_still_collect_more_evidence(self):
+        result = decide_sync(
+            self._shadow(completed=0, open_count=2),
+            provider="offline",
+        )
+        self.assertEqual(result["policy"]["selected_action"], "collect_more_evidence")
+        self.assertTrue(result["state"]["has_any_post_start_observation"])
+        self.assertEqual(result["state"]["total_completed_trade_count"], 0)
+        self.assertNotIn(
+            "inspect_state_coverage",
+            result["policy"]["allowed_actions"],
+        )
+
     def test_accumulating_shadow_cannot_be_promoted_or_sent_live(self):
         result = decide_sync(self._shadow(), provider="offline")
         self.assertIn(
             result["policy"]["selected_action"],
             {"collect_more_evidence", "inspect_state_coverage", "inspect_data_quality"},
+        )
+        self.assertEqual(
+            result["policy"]["selection_source"],
+            "offline_bounded_choice",
         )
         self.assertFalse(
             result["policy"]["hard_vetoes"]["strategy_promotion_authorized"]
