@@ -453,6 +453,11 @@ async def decide(
         "decision_id": sha256(_canonical_json(contract).encode("utf-8")).hexdigest(),
         "provider": judgments.get("provider"),
         "model": judgments.get("model"),
+        "decision_config": {
+            "requested_model": config.model,
+            "min_choice_confidence": config.min_choice_confidence,
+            "timeout_s": config.timeout_s,
+        },
         "state": state,
         "judgments": judgments,
         "policy": policy,
