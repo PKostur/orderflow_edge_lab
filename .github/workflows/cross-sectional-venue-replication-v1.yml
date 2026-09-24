@@ -6,7 +6,7 @@ on:
     branches:
       - fix/universal-existing-validation
     paths:
-      - "src/orderflow_edge_lab/binance_history.py"
+      - "src/orderflow_edge_lab/bybit_history.py"
       - "src/orderflow_edge_lab/cross_sectional_venue_replication.py"
       - "src/orderflow_edge_lab/cli/cross_sectional_venue_replication.py"
       - "tests/test_cross_sectional_venue_replication.py"
@@ -30,7 +30,7 @@ jobs:
         run: python -m pip install -e ".[research]"
       - name: Run venue-replication tests
         run: python -m unittest tests.test_cross_sectional_venue_replication -v
-      - name: Run MEXC versus Binance USD-M replication
+      - name: Run MEXC versus Bybit linear replication
         run: |
           mkdir -p artifacts/cross_sectional_venue_replication/source
           orderflow-cross-sectional-venue-replication \
@@ -60,9 +60,10 @@ jobs:
               "shared_start":r["shared_start"],
               "shared_end":r["shared_end"],
               "mexc_net_return":r["mexc"]["net_return"],
-              "binance_net_return":r["binance_usdm"]["net_return"],
+              "independent_venue":r["economics"]["independent_venue"],
+              "independent_net_return":r["independent_venue"]["net_return"],
               "mexc_median_fold_return":r["mexc"]["median_fold_return"],
-              "binance_median_fold_return":r["binance_usdm"]["median_fold_return"],
+              "independent_median_fold_return":r["independent_venue"]["median_fold_return"],
               "signal_agreement":r["signal_agreement"],
           },indent=2))
           PY
