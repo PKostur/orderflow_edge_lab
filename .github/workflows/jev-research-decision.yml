@@ -105,6 +105,19 @@ jobs:
               raise SystemExit("Jev action/decision id mismatch")
           if any(bool(v) for v in a["authority_boundary"].values()):
               raise SystemExit("Jev action exceeded research-only authority")
+          selected=d["policy"]["selected_action"]
+          action_status=a["result"]["status"]
+          if selected == "stop_protocol_breach":
+              raise SystemExit("research pipeline halted on frozen-protocol breach")
+          expected_status={
+              "collect_more_evidence":"ACCUMULATE_UNCHANGED",
+              "inspect_state_coverage":"DESCRIPTIVE_INSPECTION_ONLY",
+              "prepare_formal_review":"READY",
+          }.get(selected)
+          if expected_status is not None and action_status != expected_status:
+              raise SystemExit(
+                  f"Jev action status mismatch: {selected} expected {expected_status} got {action_status}"
+              )
           claims=d["claims"]
           for key in (
               "jev_cannot_promote_strategy",
