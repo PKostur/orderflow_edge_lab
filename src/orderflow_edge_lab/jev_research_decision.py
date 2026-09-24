@@ -139,6 +139,8 @@ def build_research_state(shadow_report: Mapping[str, Any]) -> dict[str, Any]:
         ),
     }
     progress = shadow_report.get("evidence_progress") or {}
+    total_completed = sum(row["completed_trade_count"] for row in strategy_rows)
+    total_open = sum(row["open_post_start_snapshot_count"] for row in strategy_rows)
     return {
         "watch_id": str(shadow_report.get("watch_id")),
         "status": str(shadow_report.get("status")),
@@ -148,6 +150,9 @@ def build_research_state(shadow_report: Mapping[str, Any]) -> dict[str, Any]:
         "ready_strategy_count": int(progress.get("ready_strategy_count") or 0),
         "strategy_count": int(progress.get("strategy_count") or len(strategy_rows)),
         "all_strategies_ready": bool(progress.get("all_strategies_ready")),
+        "total_completed_trade_count": total_completed,
+        "total_open_post_start_snapshot_count": total_open,
+        "has_any_post_start_observation": bool(total_completed or total_open),
         "strategies": strategy_rows,
         "protocol_integrity_flags": protocol_integrity_flags,
         "forbidden_claims": forbidden_claims,
@@ -168,6 +173,8 @@ def build_question_specs() -> dict[str, dict[str, Any]]:
             "type": "choice",
             "instructions": (
                 "Choose the most useful next research action from the allowed set. "
+                "When there are no post-start observations, prefer collecting more evidence "
+                "unless the supplied state shows a concrete data-quality problem. "
                 "Do not recommend live trading, leverage, strategy promotion, or changing "
                 "frozen definitions."
             ),
@@ -230,6 +237,14 @@ def offline_judgments(state: Mapping[str, Any]) -> dict[str, Any]:
         action = "collect_more_evidence"
         uncertainty = "sample_size"
         maturity = 0.0
+    elif not bool(state.get("has_any_post_start_observation")):
+        action = "collect_more_evidence"
+        uncertainty = "sample_size"
+        maturity = 1.0
+    elif int(state.get("total_completed_trade_count") or 0) == 0:
+        action = "collect_more_evidence"
+        uncertainty = "sample_size"
+        maturity = 1.0
     else:
         strategies = state.get("strategies") or []
         sparse_states = any(
@@ -339,6 +354,11 @@ def allowed_actions(state: Mapping[str, Any]) -> tuple[str, ...]:
             "inspect_data_quality",
             "inspect_state_coverage",
         )
+    if int(state.get("total_completed_trade_count") or 0) == 0:
+        return (
+            "collect_more_evidence",
+            "inspect_data_quality",
+        )
     return (
         "collect_more_evidence",
         "inspect_data_quality",
@@ -364,7 +384,13 @@ def apply_policy(
         source = "hard_protocol_veto"
     elif proposed in allowed and confidence >= min_choice_confidence:
         selected = proposed
-        source = "jev_bounded_choice"
+        provider = str(judgments.get("provider") or "")
+        if provider == "typesafe_jev":
+            source = "jev_bounded_choice"
+        elif provider == "offline_deterministic":
+            source = "offline_bounded_choice"
+        else:
+            source = "bounded_choice"
     elif bool(state.get("all_strategies_ready")):
         selected = "prepare_formal_review"
         source = "deterministic_fallback"
