@@ -58,12 +58,14 @@ class CrossSectionalVenueReplicationTests(unittest.TestCase):
             "symbols": ["A", "B", "C", "D"],
             "window": {"start": "2025-01-01", "end_exclusive": "2025-09-18"},
             "fold_days": 60,
+            "replication_venue": "fixture independent venue",
+            "replication_funding_description": "fixture funding",
         }
         result = build_venue_replication_report(
             candidate, frames, funding, frames, funding, config
         )
         self.assertEqual(result["signal_agreement"]["exact_weight_agreement_fraction"], 1.0)
-        self.assertAlmostEqual(result["mexc"]["net_return"], result["independent_usdm"]["net_return"])
+        self.assertAlmostEqual(result["mexc"]["net_return"], result["independent_venue"]["net_return"])
         self.assertEqual(result["formal_verdict"], "DESCRIPTIVE_TRANSFER_ONLY")
         self.assertFalse(result["claims"]["same_historical_period_is_future_oos"])
 
