@@ -76,6 +76,21 @@ def main(argv: list[str] | None = None) -> int:
                             "carried_pre_start_position_count": row[
                                 "carried_pre_start_position_count"
                             ],
+                            "current_long_symbol_count": row[
+                                "current_long_symbol_count"
+                            ],
+                            "current_short_symbol_count": row[
+                                "current_short_symbol_count"
+                            ],
+                            "current_flat_symbol_count": row[
+                                "current_flat_symbol_count"
+                            ],
+                            "long_symbol_fraction": row[
+                                "long_symbol_fraction"
+                            ],
+                            "median_position_age_hours": row[
+                                "median_position_age_hours"
+                            ],
                             "post_start_position_change_count": row[
                                 "post_start_position_change_count"
                             ],
