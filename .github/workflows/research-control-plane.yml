@@ -32,6 +32,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Pin control-plane snapshot time
+        run: echo "CONTROL_PLANE_AS_OF=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_ENV"
       - name: Install runtime
         run: python -m pip install -e ".[research,jev]"
       - name: Run control plane tests
@@ -43,6 +45,7 @@ jobs:
             --config config/universal_session_alignment_shadow_v1.json \
             --output artifacts/research_control_plane/shadow.json \
             --source-dir artifacts/research_control_plane/source \
+            --as-of "$CONTROL_PLANE_AS_OF" \
             --max-workers 5
       - name: Build Jev decision
         run: |
@@ -60,6 +63,7 @@ jobs:
           orderflow-universal-shadow-monitor \
             --config config/universal_session_alignment_shadow_v1.json \
             --output artifacts/research_control_plane/operational.json \
+            --as-of "$CONTROL_PLANE_AS_OF" \
             --max-workers 5
       - name: Build unified status
         run: |
