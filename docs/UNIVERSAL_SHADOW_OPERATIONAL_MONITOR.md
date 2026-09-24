@@ -13,3 +13,20 @@ For each frozen strategy and symbol it reports:
 The monitor uses the unchanged frozen strategy definitions. It does not filter trades, alter the shadow, change Jev v1, or authorize live trading.
 
 A post-start position change here is an operational explanation of what the frozen target generator did. The prospective shadow remains the source of completed-trade evidence and keeps its existing scoring rules.
+
+
+## First live checkpoint
+
+At `2026-09-24T18:19:57.726213+00:00`, three frozen 8h execution boundaries had occurred since the prospective start: 00:00, 08:00, and 16:00 UTC.
+
+Operational state at that checkpoint:
+
+| Strategy | Nonzero symbols | Long | Short | Pre-start carryover | Post-start target changes |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| DON8 | 10 | 9 | 1 | 10 | 0 |
+| EMA8 | 10 | 10 | 0 | 10 | 0 |
+| VOL8 | 10 | 10 | 0 | 10 | 0 |
+
+The single DON8 short is LINK_USDT. Every other frozen strategy/symbol pair is long.
+
+This explains the empty prospective trade ledger: all 30 strategy-symbol positions were already open before the frozen boundary, and none changed target at the first three post-start execution boundaries. These inherited positions are not prospective entries and remain excluded from prospective completed-trade evidence.
