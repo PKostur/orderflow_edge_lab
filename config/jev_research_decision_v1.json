@@ -5,7 +5,7 @@
   "model": "jev-latest",
   "min_choice_confidence": 0.65,
   "provider_policy": {
-    "auto": "use TypeSafe Jev when TYPESAFE_API_KEY is available; otherwise use offline deterministic fallback",
+    "auto": "use TypeSafe Jev when TYPESAFE_API_KEY is available; fail closed if that Jev path cannot run; otherwise use offline deterministic fallback only when no API key is configured",
     "jev": "require TypeSafe Jev",
     "offline": "deterministic fallback only"
   },
