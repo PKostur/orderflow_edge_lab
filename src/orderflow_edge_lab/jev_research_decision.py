@@ -427,16 +427,17 @@ async def decide(
 
     if provider == "offline":
         judgments = offline_judgments(state)
+        provider_resolution = "explicit_offline"
     elif provider == "jev":
         judgments = await call_typesafe_jev(state, config=config)
+        provider_resolution = "explicit_typesafe_jev"
     else:
         if os.getenv("TYPESAFE_API_KEY"):
-            try:
-                judgments = await call_typesafe_jev(state, config=config)
-            except JevResearchDecisionError:
-                judgments = offline_judgments(state)
+            judgments = await call_typesafe_jev(state, config=config)
+            provider_resolution = "auto_typesafe_jev"
         else:
             judgments = offline_judgments(state)
+            provider_resolution = "auto_offline_no_api_key"
 
     policy = apply_policy(
         state,
@@ -458,6 +459,7 @@ async def decide(
         "analysis": "jev_research_decision_layer_v1",
         "decision_id": sha256(_canonical_json(contract).encode("utf-8")).hexdigest(),
         "provider": judgments.get("provider"),
+        "provider_resolution": provider_resolution,
         "model": judgments.get("model"),
         "decision_config": decision_config,
         "state": state,
