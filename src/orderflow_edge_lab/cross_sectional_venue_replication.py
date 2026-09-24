@@ -22,7 +22,7 @@ class CrossSectionalVenueReplicationError(ValueError):
 
 def _common_calendar(
     mexc_frames: Mapping[str, pd.DataFrame],
-    binance_frames: Mapping[str, pd.DataFrame],
+    replication_frames: Mapping[str, pd.DataFrame],
     symbols: list[str],
     *,
     start: str,
@@ -33,7 +33,7 @@ def _common_calendar(
     start_ts = start_ts.tz_localize("UTC") if start_ts.tzinfo is None else start_ts.tz_convert("UTC")
     end_ts = end_ts.tz_localize("UTC") if end_ts.tzinfo is None else end_ts.tz_convert("UTC")
     common: pd.DatetimeIndex | None = None
-    for venue_frames in (mexc_frames, binance_frames):
+    for venue_frames in (mexc_frames, replication_frames):
         for symbol in symbols:
             if symbol not in venue_frames:
                 raise CrossSectionalVenueReplicationError(
@@ -138,8 +138,8 @@ def build_venue_replication_report(
     candidate: Mapping[str, Any],
     mexc_frames: Mapping[str, pd.DataFrame],
     mexc_funding: Mapping[str, pd.DataFrame],
-    binance_frames: Mapping[str, pd.DataFrame],
-    binance_funding: Mapping[str, pd.DataFrame],
+    replication_frames: Mapping[str, pd.DataFrame],
+    replication_funding: Mapping[str, pd.DataFrame],
     config: Mapping[str, Any],
     *,
     source_sha256: Mapping[str, str] | None = None,
@@ -152,13 +152,13 @@ def build_venue_replication_report(
         raise CrossSectionalVenueReplicationError("replication symbol universe mismatch")
     common = _common_calendar(
         mexc_frames,
-        binance_frames,
+        replication_frames,
         symbols,
         start=str(config["window"]["start"]),
         end=str(config["window"]["end_exclusive"]),
     )
     mexc = _restrict(mexc_frames, symbols, common)
-    binance = _restrict(binance_frames, symbols, common)
+    independent = _restrict(replication_frames, symbols, common)
 
     kwargs = {
         "lookback_days": int(spec["lookback_days"]),
@@ -173,20 +173,20 @@ def build_venue_replication_report(
         funding_frames=mexc_funding,
         **kwargs,
     )
-    binance_result = backtest_cross_sectional_momentum(
-        binance,
-        funding_frames=binance_funding,
+    independent_result = backtest_cross_sectional_momentum(
+        independent,
+        funding_frames=replication_funding,
         **kwargs,
     )
     mexc_weights = _executed_weights(mexc, symbols, **{
         key: kwargs[key]
         for key in ("lookback_days", "holding_days", "quantile_fraction", "variant")
     })
-    binance_weights = _executed_weights(binance, symbols, **{
+    independent_weights = _executed_weights(independent, symbols, **{
         key: kwargs[key]
         for key in ("lookback_days", "holding_days", "quantile_fraction", "variant")
     })
-    agreement = _signal_agreement(mexc_weights, binance_weights)
+    agreement = _signal_agreement(mexc_weights, independent_weights)
 
     return {
         "schema_version": 1,
@@ -202,21 +202,21 @@ def build_venue_replication_report(
         "economics": {
             "round_trip_cost_bps": float(spec["round_trip_cost_bps"]),
             "mexc_funding": "realized public MEXC funding",
-            "binance_funding": "realized public Binance USD-M funding",
+            "replication_funding": "realized public Binance USD-M funding",
         },
         "mexc": mexc_result,
-        "binance_usdm": binance_result,
+        "independent_venue": independent_result,
         "signal_agreement": agreement,
         "source_sha256": dict(source_sha256 or {}),
         "descriptive_differences": {
-            "binance_minus_mexc_net_return": float(
-                binance_result["net_return"] - mexc_result["net_return"]
+            "independent_minus_mexc_net_return": float(
+                independent_result["net_return"] - mexc_result["net_return"]
             ),
-            "binance_minus_mexc_max_drawdown": float(
-                binance_result["max_drawdown"] - mexc_result["max_drawdown"]
+            "independent_minus_mexc_max_drawdown": float(
+                independent_result["max_drawdown"] - mexc_result["max_drawdown"]
             ),
-            "binance_minus_mexc_funding_return_sum": float(
-                binance_result["funding_return_sum"] - mexc_result["funding_return_sum"]
+            "independent_minus_mexc_funding_return_sum": float(
+                independent_result["funding_return_sum"] - mexc_result["funding_return_sum"]
             ),
         },
         "formal_verdict": "DESCRIPTIVE_TRANSFER_ONLY",
