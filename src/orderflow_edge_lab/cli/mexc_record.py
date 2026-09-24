@@ -80,28 +80,61 @@ async def _snapshot_symbol(
     symbol: str,
     snapshot_limit: int,
     reason: str | None = None,
+    max_attempts: int = 3,
 ) -> None:
-    payload = await asyncio.to_thread(
-        _fetch_json,
-        _depth_url(rest_base, symbol, snapshot_limit),
-    )
-    received_at_ns = time.time_ns()
-    raw_record: dict[str, Any] = {
-        "record_type": "rest_snapshot",
-        "source": "mexc_futures_public_rest",
-        "symbol": symbol,
-        "received_at_ns": received_at_ns,
-        "payload": payload,
-    }
-    if reason is not None:
-        raw_record["reason"] = reason
-    raw_writer.write(raw_record)
-    feature_writer.write(
-        {
-            **engine.load_snapshot(symbol, payload),
+    if max_attempts < 1:
+        raise ValueError("max_attempts must be >= 1")
+    last_error: MexcOrderFlowError | None = None
+    for attempt in range(1, max_attempts + 1):
+        payload = await asyncio.to_thread(
+            _fetch_json,
+            _depth_url(rest_base, symbol, snapshot_limit),
+        )
+        received_at_ns = time.time_ns()
+        try:
+            feature = engine.load_snapshot(symbol, payload)
+        except MexcOrderFlowError as exc:
+            last_error = exc
+            raw_writer.write(
+                {
+                    "record_type": "rest_snapshot_rejected",
+                    "source": "mexc_futures_public_rest",
+                    "symbol": symbol,
+                    "received_at_ns": received_at_ns,
+                    "attempt": attempt,
+                    "reason": str(exc),
+                    "payload": payload,
+                }
+            )
+            if attempt >= max_attempts:
+                break
+            await asyncio.sleep(0.25 * attempt)
+            continue
+
+        raw_record: dict[str, Any] = {
+            "record_type": "rest_snapshot",
+            "source": "mexc_futures_public_rest",
+            "symbol": symbol,
             "received_at_ns": received_at_ns,
-            **({"snapshot_reason": reason} if reason else {}),
+            "attempt": attempt,
+            "payload": payload,
         }
+        if reason is not None:
+            raw_record["reason"] = reason
+        raw_writer.write(raw_record)
+        feature_writer.write(
+            {
+                **feature,
+                "received_at_ns": received_at_ns,
+                "snapshot_attempt": attempt,
+                **({"snapshot_reason": reason} if reason else {}),
+            }
+        )
+        return
+
+    raise MexcOrderFlowError(
+        f"{symbol}: unable to obtain a valid depth snapshot after {max_attempts} attempts: "
+        f"{last_error}"
     )
 
 
