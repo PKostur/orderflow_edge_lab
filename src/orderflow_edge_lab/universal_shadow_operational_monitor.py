@@ -67,11 +67,17 @@ def _symbol_state(
         }
         for ts, value in post_start_changes.items()
     ]
+    position_age_hours = (
+        (boundary - last_change).total_seconds() / 3600.0
+        if last_change is not None
+        else None
+    )
     return {
         "symbol": symbol,
         "current_executed_position": current,
         "current_side": "LONG" if current > 0 else "SHORT" if current < 0 else "FLAT",
         "last_position_change_utc": last_change.isoformat() if last_change is not None else None,
+        "position_age_hours": position_age_hours,
         "post_start_position_change_count": len(change_rows),
         "post_start_position_changes": change_rows,
         "carried_pre_start_position": bool(
@@ -133,14 +139,32 @@ def build_operational_monitor(
                 )
             )
 
+        position_ages = [
+            float(row["position_age_hours"])
+            for row in symbol_rows
+            if row["position_age_hours"] is not None
+        ]
+        current_positions = [float(row["current_executed_position"]) for row in symbol_rows]
         strategies.append(
             {
                 "audit_id": audit_id,
                 "family": variant["family"],
                 "parameters": params,
-                "current_nonzero_symbol_count": sum(
-                    row["current_executed_position"] != 0.0 for row in symbol_rows
+                "current_nonzero_symbol_count": sum(value != 0.0 for value in current_positions),
+                "current_long_symbol_count": sum(value > 0.0 for value in current_positions),
+                "current_short_symbol_count": sum(value < 0.0 for value in current_positions),
+                "current_flat_symbol_count": sum(value == 0.0 for value in current_positions),
+                "net_position_sum": float(sum(current_positions)),
+                "gross_position_sum": float(sum(abs(value) for value in current_positions)),
+                "long_symbol_fraction": (
+                    sum(value > 0.0 for value in current_positions) / len(current_positions)
+                    if current_positions else 0.0
                 ),
+                "median_position_age_hours": (
+                    float(np.median(position_ages)) if position_ages else None
+                ),
+                "max_position_age_hours": max(position_ages) if position_ages else None,
+                "min_position_age_hours": min(position_ages) if position_ages else None,
                 "carried_pre_start_position_count": sum(
                     row["carried_pre_start_position"] for row in symbol_rows
                 ),
