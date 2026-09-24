@@ -202,7 +202,8 @@ def build_venue_replication_report(
         "economics": {
             "round_trip_cost_bps": float(spec["round_trip_cost_bps"]),
             "mexc_funding": "realized public MEXC funding",
-            "replication_funding": "realized public Binance USD-M funding",
+            "independent_venue": str(config["replication_venue"]),
+            "independent_venue_funding": str(config["replication_funding_description"]),
         },
         "mexc": mexc_result,
         "independent_venue": independent_result,
