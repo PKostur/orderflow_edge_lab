@@ -6,6 +6,13 @@ on:
     paths:
       - "config/high_cadence_evidence_capture_v1.json"
       - ".github/workflows/high-cadence-evidence-capture-v1.yml"
+  push:
+    branches: [fix/universal-existing-validation]
+    paths:
+      - "config/high_cadence_evidence_capture_v1.json"
+      - "src/orderflow_edge_lab/cli/mexc_record.py"
+      - "tests/test_mexc_record.py"
+      - ".github/workflows/high-cadence-evidence-capture-v1.yml"
   workflow_dispatch:
   schedule:
     - cron: "2,32 * * * *"
