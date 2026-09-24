@@ -443,9 +443,15 @@ async def decide(
         judgments,
         min_choice_confidence=config.min_choice_confidence,
     )
+    decision_config = {
+        "requested_model": config.model,
+        "min_choice_confidence": config.min_choice_confidence,
+        "timeout_s": config.timeout_s,
+    }
     contract = {
         "state": state,
         "questions": build_question_specs(),
+        "decision_config": decision_config,
     }
     return {
         "schema_version": 1,
@@ -453,11 +459,7 @@ async def decide(
         "decision_id": sha256(_canonical_json(contract).encode("utf-8")).hexdigest(),
         "provider": judgments.get("provider"),
         "model": judgments.get("model"),
-        "decision_config": {
-            "requested_model": config.model,
-            "min_choice_confidence": config.min_choice_confidence,
-            "timeout_s": config.timeout_s,
-        },
+        "decision_config": decision_config,
         "state": state,
         "judgments": judgments,
         "policy": policy,
