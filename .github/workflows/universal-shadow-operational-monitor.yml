@@ -60,6 +60,11 @@ jobs:
                   x["audit_id"]:{
                       "current_nonzero_symbol_count":x["current_nonzero_symbol_count"],
                       "carried_pre_start_position_count":x["carried_pre_start_position_count"],
+                      "current_long_symbol_count":x["current_long_symbol_count"],
+                      "current_short_symbol_count":x["current_short_symbol_count"],
+                      "current_flat_symbol_count":x["current_flat_symbol_count"],
+                      "long_symbol_fraction":x["long_symbol_fraction"],
+                      "median_position_age_hours":x["median_position_age_hours"],
                       "post_start_position_change_count":x["post_start_position_change_count"],
                       "symbols_with_post_start_change":x["symbols_with_post_start_change"],
                   }
