@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "decision_contract_id": "jev-research-decision-v1",
+  "scope": "research_orchestration_only",
+  "model": "jev-latest",
+  "min_choice_confidence": 0.65,
+  "provider_policy": {
+    "auto": "use TypeSafe Jev when TYPESAFE_API_KEY is available; otherwise use offline deterministic fallback",
+    "jev": "require TypeSafe Jev",
+    "offline": "deterministic fallback only"
+  },
+  "allowed_actions": [
+    "collect_more_evidence",
+    "inspect_data_quality",
+    "inspect_state_coverage",
+    "prepare_formal_review",
+    "stop_protocol_breach"
+  ],
+  "zero_completed_trade_actions": [
+    "collect_more_evidence",
+    "inspect_data_quality"
+  ],
+  "hard_vetoes": [
+    "strategy_promotion",
+    "live_trading",
+    "leverage",
+    "frozen_definition_changes"
+  ],
+  "questions": [
+    "research_action",
+    "dominant_uncertainty",
+    "protocol_intact",
+    "evidence_maturity"
+  ],
+  "claims": {
+    "frozen_trading_shadow_unchanged": true,
+    "actual_jev_output_must_identify_provider_and_model": true,
+    "offline_fallback_must_not_be_labeled_as_jev": true
+  }
+}
