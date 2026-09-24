@@ -72,6 +72,51 @@ def test_report_is_paper_only_and_cost_aware() -> None:
     assert report["metrics"]["executed_rebalances"] == 1
     assert report["metrics"]["open_symbol_positions"] == 4
     assert report["economics"]["round_trip_cost_bps"] == 20.0
+    assert "symbol_diagnostics" in report
+    assert set(report["symbol_diagnostics"]) == set(frames)
+    total_symbol_net = sum(
+        row["arithmetic_net_contribution_sum"]
+        for row in report["symbol_diagnostics"].values()
+    )
+    total_interval_net = sum(row["net_return"] for row in report["portfolio_intervals"])
+    assert abs(total_symbol_net - total_interval_net) < 1e-12
+    assert sum(
+        row["allocated_trading_cost_return_sum"]
+        for row in report["symbol_diagnostics"].values()
+    ) < 0.0
     assert report["claims"]["paper_shadow_only"] is True
     assert report["claims"]["profitable_edge_established"] is False
     assert report["claims"]["live_order_transmission_supported"] is False
+
+
+def test_completed_holding_period_decomposition_reconciles() -> None:
+    candidate = _candidate()
+    frames = _frames()
+    funding = {
+        symbol: pd.DataFrame(
+            columns=["funding_rate"],
+            index=pd.DatetimeIndex([], tz="UTC"),
+        )
+        for symbol in frames
+    }
+    report = build_forward_report(
+        frames,
+        funding,
+        candidate,
+        as_of_utc="2026-09-22T12:00:00Z",
+    )
+    assert report["metrics"]["completed_holding_periods"] == 1
+    assert len(report["completed_holding_periods"]) == 1
+    period = report["completed_holding_periods"][0]
+    assert period["daily_interval_count"] == 7
+    matching = [
+        row["net_return"]
+        for row in report["portfolio_intervals"]
+        if pd.Timestamp(row["start"]) >= pd.Timestamp(period["start"])
+        and pd.Timestamp(row["end"]) <= pd.Timestamp(period["end"])
+    ]
+    expected = 1.0
+    for value in matching:
+        expected *= 1.0 + value
+    expected -= 1.0
+    assert abs(period["net_return"] - expected) < 1e-12
