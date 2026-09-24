@@ -7,9 +7,9 @@ import json
 from pathlib import Path
 
 from orderflow_edge_lab.basis_convergence import fetch_mexc_funding_history
-from orderflow_edge_lab.binance_history import (
-    fetch_binance_usdm_funding_history,
-    fetch_binance_usdm_klines,
+from orderflow_edge_lab.bybit_history import (
+    fetch_bybit_linear_funding_history,
+    fetch_bybit_linear_klines,
 )
 from orderflow_edge_lab.cross_sectional_forward_shadow import load_candidate
 from orderflow_edge_lab.cross_sectional_venue_replication import (
@@ -45,8 +45,8 @@ def main(argv: list[str] | None = None) -> int:
 
     mexc_frames = {}
     mexc_funding = {}
-    binance_frames = {}
-    binance_funding = {}
+    replication_frames = {}
+    replication_funding = {}
     hashes: dict[str, str] = {
         "candidate_file": candidate_file_sha,
         "replication_config": sha256(Path(args.config).read_bytes()).hexdigest(),
@@ -57,8 +57,8 @@ def main(argv: list[str] | None = None) -> int:
             symbol,
             fetch_mexc_futures_klines(symbol, "1d", start, end),
             fetch_mexc_funding_history(symbol, start, end),
-            fetch_binance_usdm_klines(symbol, "1d", start, end),
-            fetch_binance_usdm_funding_history(symbol, start, end),
+            fetch_bybit_linear_klines(symbol, "1d", start, end),
+            fetch_bybit_linear_funding_history(symbol, start, end),
         )
 
     with ThreadPoolExecutor(max_workers=max(1, min(args.max_workers, len(symbols)))) as pool:
@@ -70,13 +70,13 @@ def main(argv: list[str] | None = None) -> int:
                 raise SystemExit(f"symbol identity mismatch: {expected} != {symbol}")
             mexc_frames[symbol] = mf
             mexc_funding[symbol] = mfund
-            binance_frames[symbol] = bf
-            binance_funding[symbol] = bfund
+            replication_frames[symbol] = bf
+            replication_funding[symbol] = bfund
             for venue, kind, frame in (
                 ("mexc", "1d", mf),
                 ("mexc", "funding", mfund),
-                ("binance_usdm", "1d", bf),
-                ("binance_usdm", "funding", bfund),
+                ("bybit_linear", "1d", bf),
+                ("bybit_linear", "funding", bfund),
             ):
                 path = source / f"{venue}_{symbol}_{kind}.csv"
                 frame.to_csv(path, index_label="timestamp")
@@ -86,8 +86,8 @@ def main(argv: list[str] | None = None) -> int:
         candidate,
         mexc_frames,
         mexc_funding,
-        binance_frames,
-        binance_funding,
+        replication_frames,
+        replication_funding,
         config,
         source_sha256=hashes,
     )
@@ -104,7 +104,8 @@ def main(argv: list[str] | None = None) -> int:
                 "evidence_independence": report["evidence_independence"],
                 "shared_daily_observations": report["shared_daily_observations"],
                 "mexc_net_return": report["mexc"]["net_return"],
-                "binance_net_return": report["binance_usdm"]["net_return"],
+                "independent_venue": report["economics"]["independent_venue"],
+                "independent_net_return": report["independent_venue"]["net_return"],
                 "signal_agreement": report["signal_agreement"],
                 "formal_verdict": report["formal_verdict"],
             },
