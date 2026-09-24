@@ -9,6 +9,7 @@ on:
       - "src/orderflow_edge_lab/jev_research_decision.py"
       - "src/orderflow_edge_lab/cli/jev_research_decision.py"
       - "tests/test_jev_research_decision.py"
+      - "config/jev_research_decision_v1.json"
       - ".github/workflows/jev-research-decision.yml"
       - "pyproject.toml"
   schedule:
@@ -48,8 +49,7 @@ jobs:
         run: |
           orderflow-jev-research-decision \
             --shadow-report artifacts/jev_decision/shadow_report.json \
-            --output artifacts/jev_decision/decision.json \
-            --provider auto
+            --output artifacts/jev_decision/decision.json
       - name: Enforce Jev authority boundary
         run: |
           python - <<'PY'
@@ -63,6 +63,15 @@ jobs:
               "frozen_definition_changes_authorized",
           )):
               raise SystemExit("Jev authority boundary violated")
+          contract=d["decision_contract"]
+          if contract["decision_contract_id"] != "jev-research-decision-v1":
+              raise SystemExit("unexpected Jev decision contract")
+          provider=d["provider"]
+          source=d["policy"]["selection_source"]
+          if provider == "offline_deterministic" and source == "jev_bounded_choice":
+              raise SystemExit("offline fallback mislabeled as Jev")
+          if provider == "typesafe_jev" and source == "offline_bounded_choice":
+              raise SystemExit("real Jev mislabeled as offline")
           claims=d["claims"]
           for key in (
               "jev_cannot_promote_strategy",
