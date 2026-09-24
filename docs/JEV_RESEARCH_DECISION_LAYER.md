@@ -76,6 +76,18 @@ orderflow-jev-research-decision \
   --provider auto
 ```
 
+## Bounded action execution
+
+A selected research action is passed to `orderflow-jev-research-action`. The executor is deliberately incapable of trading actions.
+
+- `collect_more_evidence` records an `ACCUMULATE_UNCHANGED` action and leaves the frozen watch untouched;
+- `inspect_data_quality` checks frozen-symbol source hashes and research-integrity claims;
+- `inspect_state_coverage` produces a descriptive hypothesis-state coverage report;
+- `prepare_formal_review` checks deterministic readiness before preparing review;
+- `stop_protocol_breach` records a blocked state and the protocol-breach reasons.
+
+Every action artifact asserts that it does not change the frozen shadow, strategy rules, positions, or orders and cannot authorize promotion or leverage.
+
 ## Chat usage
 
 The same contract should be used when making research decisions in ChatGPT:
@@ -86,4 +98,4 @@ The same contract should be used when making research decisions in ChatGPT:
 4. choose the research action;
 5. never represent a local ChatGPT judgment as an actual Jev API result.
 
-Until a native TypeSafe/Jev ChatGPT integration is available, chat-side decisions are Jev-style rather than direct Jev inference. Actual Jev output must identify the provider and model in the decision artifact. In this chat, research decisions should follow the same sequence: deterministic state, bounded judgment, deterministic veto, selected research action.
+Until a native TypeSafe/Jev ChatGPT integration is available, chat-side decisions are Jev-style rather than direct Jev inference. Actual Jev output must identify the provider and model in the decision artifact. In this chat, research decisions follow the same sequence: deterministic state, bounded judgment, deterministic veto, selected research action. When I surface a chat-side decision, I will distinguish it from an actual TypeSafe Jev result.
