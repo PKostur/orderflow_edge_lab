@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 35
     env:
-      GH_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       CONFIG: config/volatility_state_transfer_forward_v1.json
     steps:
       - uses: actions/checkout@v4
@@ -100,7 +100,7 @@ jobs:
           FEATURE=$(find artifacts/volatility_state_forward/current -name '*_mexc_features.jsonl' -print -quit)
           test -n "$FEATURE"
           mkdir -p artifacts/volatility_state_forward/current/state_reports
-          CLUSTER_ID="gha-\${GITHUB_RUN_ID}-attempt-\${GITHUB_RUN_ATTEMPT}"
+          CLUSTER_ID="gha-${GITHUB_RUN_ID}-attempt-${GITHUB_RUN_ATTEMPT}"
           for SYMBOL in ARB_USDT ETH_USDT FIL_USDT NEAR_USDT SOL_USDT UNI_USDT; do
             orderflow-market-state-scan "$FEATURE" \
               --symbol "$SYMBOL" \
@@ -112,14 +112,14 @@ jobs:
               --liquidity-horizons 60 \
               --continuation-horizons 60 \
               --minimum-association-observations 20 \
-              --output "artifacts/volatility_state_forward/current/state_reports/\${SYMBOL}.json"
+              --output "artifacts/volatility_state_forward/current/state_reports/${SYMBOL}.json"
           done
       - name: Evaluate current D4 cluster
         if: steps.boundary.outputs.eligible == 'true'
         shell: bash
         run: |
           set -euo pipefail
-          CLUSTER_ID="gha-\${GITHUB_RUN_ID}-attempt-\${GITHUB_RUN_ATTEMPT}"
+          CLUSTER_ID="gha-${GITHUB_RUN_ID}-attempt-${GITHUB_RUN_ATTEMPT}"
           orderflow-volatility-state-forward cluster \
             artifacts/volatility_state_forward/current/state_reports/*.json \
             --config "$CONFIG" \
@@ -151,8 +151,8 @@ jobs:
           mkdir -p "$DEST"
           cp artifacts/volatility_state_forward/current/cluster.json "$DEST/cluster.json"
           mapfile -t CLUSTERS < <(find artifacts/volatility_state_forward/history -type f -name cluster.json | sort)
-          test "\${#CLUSTERS[@]}" -ge 1
-          orderflow-volatility-state-forward aggregate "\${CLUSTERS[@]}" \
+          test "${#CLUSTERS[@]}" -ge 1
+          orderflow-volatility-state-forward aggregate "${CLUSTERS[@]}" \
             --config "$CONFIG" \
             --output artifacts/volatility_state_forward/aggregate.json
       - name: Enforce evidence boundary
