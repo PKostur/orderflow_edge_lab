@@ -63,15 +63,15 @@ class CrossSectionalVenueReplicationTests(unittest.TestCase):
             candidate, frames, funding, frames, funding, config
         )
         self.assertEqual(result["signal_agreement"]["exact_weight_agreement_fraction"], 1.0)
-        self.assertAlmostEqual(result["mexc"]["net_return"], result["binance_usdm"]["net_return"])
+        self.assertAlmostEqual(result["mexc"]["net_return"], result["independent_usdm"]["net_return"])
         self.assertEqual(result["formal_verdict"], "DESCRIPTIVE_TRANSFER_ONLY")
         self.assertFalse(result["claims"]["same_historical_period_is_future_oos"])
 
     def test_same_calendar_is_forced_across_venues(self):
         candidate = self._candidate()
         mexc = self._frames()
-        binance = self._frames(perturb=0.003)
-        binance["A"] = binance["A"].iloc[5:].copy()
+        independent = self._frames(perturb=0.003)
+        independent["A"] = independent["A"].iloc[5:].copy()
         funding = self._funding()
         config = {
             "symbols": ["A", "B", "C", "D"],
@@ -79,7 +79,7 @@ class CrossSectionalVenueReplicationTests(unittest.TestCase):
             "fold_days": 60,
         }
         result = build_venue_replication_report(
-            candidate, mexc, funding, binance, funding, config
+            candidate, mexc, funding, independent, funding, config
         )
         self.assertEqual(result["shared_daily_observations"], 255)
         self.assertTrue(result["claims"]["same_calendar_enforced"])
