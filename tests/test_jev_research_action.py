@@ -85,6 +85,25 @@ class JevResearchActionTests(unittest.TestCase):
         )
         self.assertEqual(result["result"]["status"], "NO_OBVIOUS_ISSUE")
 
+    def test_protocol_breach_action_is_blocked(self):
+        decision = self._decision("stop_protocol_breach")
+        decision["policy"]["protocol_breach_reasons"] = ["fixture_breach"]
+        result = execute_research_action(self._shadow(), decision)
+        self.assertEqual(result["result"]["status"], "BLOCKED")
+        self.assertEqual(
+            result["result"]["protocol_breach_reasons"],
+            ["fixture_breach"],
+        )
+        self.assertFalse(result["authority_boundary"]["transmits_orders"])
+
+    def test_prepare_review_is_ready_only_when_shadow_is_ready(self):
+        result = execute_research_action(
+            self._shadow(ready=True),
+            self._decision("prepare_formal_review"),
+        )
+        self.assertEqual(result["result"]["status"], "READY")
+        self.assertTrue(result["result"]["all_strategies_ready"])
+
     def test_prepare_review_respects_deterministic_readiness(self):
         result = execute_research_action(
             self._shadow(ready=False),
