@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "watch_id": "volatility-state-transfer-forward-v1",
+  "status": "frozen_rank_relationship_forward_replication",
+  "purpose": "Prospectively replicate the frozen volatility-state rank relationship on genuinely later MEXC order-flow dependence clusters without strategy PnL, retraining, or threshold tuning.",
+  "prospective_start_utc": "2026-09-24T21:00:00Z",
+  "source": {
+    "venue": "MEXC Futures public REST/WebSocket",
+    "market_type": "perpetual futures",
+    "transfer_symbols": [
+      "ARB_USDT",
+      "ETH_USDT",
+      "FIL_USDT",
+      "NEAR_USDT",
+      "SOL_USDT",
+      "UNI_USDT"
+    ],
+    "context_symbol": "BTC_USDT",
+    "simultaneous_capture_counts_as_one_dependence_cluster": true,
+    "capture_seconds": 600,
+    "sample_seconds": 5
+  },
+  "frozen_relationship": {
+    "historical_model_description": "Ridge with median imputation and standard scaling trained only on 12 pre-transfer ENA dependence batches",
+    "feature": "local_range_to_spread_15s",
+    "primary_target": "volatility_expansion_ratio_60s",
+    "secondary_targets": [
+      "volatility_expansion_ratio_30s",
+      "volatility_expansion_ratio_300s"
+    ],
+    "rank_equivalence_note": "For a one-feature Ridge model with positive fitted coefficient, Spearman ranking is unchanged by positive affine scaling. This watch validates the frozen rank-information mechanism directly from the causal feature rather than reconstructing or retraining numeric model coefficients.",
+    "model_retraining_permitted": false,
+    "feature_redefinition_permitted": false,
+    "target_redefinition_permitted": false
+  },
+  "cluster_metrics": [
+    "per_symbol_primary_spearman",
+    "cluster_median_primary_spearman",
+    "cluster_positive_symbol_fraction",
+    "pooled_within_symbol_rank_correlation",
+    "feature_rank_quartile_target_calibration",
+    "secondary_horizon_spearman"
+  ],
+  "review_rule": {
+    "minimum_observations_per_symbol_per_cluster": 20,
+    "minimum_eligible_symbols_per_cluster": 4,
+    "minimum_independent_clusters": 5,
+    "minimum_distinct_utc_dates": 3,
+    "early_pass_fail_permitted": false
+  },
+  "claims": {
+    "state_prediction_only": true,
+    "strategy_pnl_used": false,
+    "simultaneous_symbols_are_not_independent_clusters": true,
+    "same_cluster_cross_symbol_transfer_is_descriptive_within_cluster": true,
+    "d4_requires_capture_after_prospective_start": true,
+    "profitable_edge_established": false,
+    "live_trading_authorized": false,
+    "leverage_authorized": false
+  },
+  "freeze_note": "The watch validates only whether the previously frozen local-range-to-spread signal continues to rank future 60-second volatility expansion in genuinely later dependence clusters. It does not validate a trading strategy or directional alpha."
+}
