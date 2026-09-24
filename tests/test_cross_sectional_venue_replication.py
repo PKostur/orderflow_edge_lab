@@ -79,6 +79,8 @@ class CrossSectionalVenueReplicationTests(unittest.TestCase):
             "symbols": ["A", "B", "C", "D"],
             "window": {"start": "2025-01-01", "end_exclusive": "2025-09-18"},
             "fold_days": 60,
+            "replication_venue": "fixture independent venue",
+            "replication_funding_description": "fixture funding",
         }
         result = build_venue_replication_report(
             candidate, mexc, funding, independent, funding, config
