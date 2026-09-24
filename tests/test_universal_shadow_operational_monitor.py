@@ -64,6 +64,15 @@ class UniversalShadowOperationalMonitorTests(unittest.TestCase):
         self.assertTrue(row["carried_pre_start_position"])
         self.assertEqual(row["post_start_position_change_count"], 0)
         self.assertEqual(row["current_side"], "LONG")
+        self.assertGreater(row["position_age_hours"], 0.0)
+        strategy = result["strategies"][0]
+        self.assertEqual(strategy["current_long_symbol_count"], 1)
+        self.assertEqual(strategy["current_short_symbol_count"], 0)
+        self.assertEqual(strategy["current_flat_symbol_count"], 0)
+        self.assertEqual(strategy["net_position_sum"], 1.0)
+        self.assertEqual(strategy["gross_position_sum"], 1.0)
+        self.assertEqual(strategy["long_symbol_fraction"], 1.0)
+        self.assertGreater(strategy["median_position_age_hours"], 0.0)
         self.assertEqual(
             result["execution_boundaries_since_start_including_start"],
             3,
