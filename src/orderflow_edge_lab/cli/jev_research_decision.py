@@ -72,6 +72,7 @@ def main(argv: list[str] | None = None) -> int:
                 {
                     "decision_id": result["decision_id"],
                     "provider": result["provider"],
+                    "provider_resolution": result["provider_resolution"],
                     "model": result["model"],
                     "decision_contract": result["decision_contract"],
                     "selected_action": result["policy"]["selected_action"],
