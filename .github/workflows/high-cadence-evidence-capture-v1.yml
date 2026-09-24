@@ -242,26 +242,6 @@ jobs:
             config/regime_research_v1_2.json
           retention-days: 90
           if-no-files-found: error
-      - name: Delete superseded same-branch cumulative state-ledger artifacts
-        if: always()
-        shell: bash
-        run: |
-          set -euo pipefail
-          CURRENT_BRANCH="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
-          KEPT=false
-          ARTIFACT_IDS="$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=high-cadence-state-ledger-v1&per_page=100" \
-            --jq '.artifacts | map(select(.expired == false)) | sort_by(.created_at) | reverse | .[].id' || true)
-          for ID in $ARTIFACT_IDS; do
-            RUN_ID="$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${ID}" --jq '.workflow_run.id // empty' 2>/dev/null || true)"
-            [[ -z "$RUN_ID" ]] && continue
-            HEAD_BRANCH="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}" --jq '.head_branch // ""' 2>/dev/null || true)"
-            [[ "$HEAD_BRANCH" != "$CURRENT_BRANCH" ]] && continue
-            if [[ "$KEPT" == "false" ]]; then
-              KEPT=true
-            else
-              gh api -X DELETE "repos/${GITHUB_REPOSITORY}/actions/artifacts/${ID}" || true
-            fi
-          done
       - name: Preserve deterministic raw replay sample
         if: always() && steps.retention.outputs.keep_raw == 'true'
         uses: actions/upload-artifact@v4
