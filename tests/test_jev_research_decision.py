@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+import os
 import unittest
+from unittest.mock import patch
 
 from orderflow_edge_lab.jev_research_decision import (
     apply_policy,
     build_research_state,
     decide_sync,
+    JevResearchDecisionError,
     offline_judgments,
 )
 
@@ -74,6 +77,26 @@ class JevResearchDecisionTests(unittest.TestCase):
                 for audit_id in ("DON8", "EMA8", "VOL8")
             ],
         }
+
+    def test_auto_without_api_key_resolves_explicitly_offline(self):
+        with patch.dict(os.environ, {}, clear=True):
+            result = decide_sync(
+                self._shadow(completed=0, open_count=0),
+                provider="auto",
+            )
+        self.assertEqual(result["provider"], "offline_deterministic")
+        self.assertEqual(
+            result["provider_resolution"],
+            "auto_offline_no_api_key",
+        )
+
+    def test_explicit_jev_requires_api_key(self):
+        with patch.dict(os.environ, {}, clear=True):
+            with self.assertRaises(JevResearchDecisionError):
+                decide_sync(
+                    self._shadow(completed=0, open_count=0),
+                    provider="jev",
+                )
 
     def test_zero_observations_collect_more_evidence(self):
         result = decide_sync(
