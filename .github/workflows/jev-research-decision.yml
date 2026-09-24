@@ -38,6 +38,18 @@ jobs:
           python-version: "3.12"
       - name: Install research and Jev runtime
         run: python -m pip install -e ".[research,jev]"
+      - name: Smoke test TypeSafe SDK contract
+        run: |
+          python - <<'PY'
+          from importlib.metadata import version
+          from typesafe_sdk import AsyncTypeSafeClient, Choice, Noul, RetryPolicy, Score
+          Choice(instructions="choice", criteria={"a": None, "b": None})
+          Noul(instructions="noul", criteria={"true": "yes", "false": "no"})
+          Score(instructions="score", criteria=["low", "high"])
+          RetryPolicy(max_retries=0, timeout=1.0)
+          print("typesafe-sdk", version("typesafe-sdk"))
+          print("sdk_contract_ok")
+          PY
       - name: Run Jev decision and action tests
         run: |
           python -m unittest tests.test_jev_research_decision -v
@@ -78,7 +90,12 @@ jobs:
           if contract["decision_contract_id"] != "jev-research-decision-v1":
               raise SystemExit("unexpected Jev decision contract")
           provider=d["provider"]
+          resolution=d["provider_resolution"]
           source=d["policy"]["selection_source"]
+          if provider == "offline_deterministic" and resolution not in ("auto_offline_no_api_key", "explicit_offline"):
+              raise SystemExit("unexpected offline provider resolution")
+          if provider == "typesafe_jev" and resolution not in ("auto_typesafe_jev", "explicit_typesafe_jev"):
+              raise SystemExit("unexpected Jev provider resolution")
           if provider == "offline_deterministic" and source == "jev_bounded_choice":
               raise SystemExit("offline fallback mislabeled as Jev")
           if provider == "typesafe_jev" and source == "offline_bounded_choice":
@@ -99,6 +116,7 @@ jobs:
                   raise SystemExit(f"required Jev boundary claim false: {key}")
           print(json.dumps({
               "provider":d["provider"],
+              "provider_resolution":d["provider_resolution"],
               "model":d["model"],
               "selected_action":d["policy"]["selected_action"],
               "selection_source":d["policy"]["selection_source"],
