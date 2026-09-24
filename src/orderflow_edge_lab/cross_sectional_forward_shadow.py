@@ -145,6 +145,19 @@ def build_forward_report(
     weights = pd.Series(0.0, index=symbols, dtype=float)
     intervals: list[dict[str, Any]] = []
     rebalance_events: list[dict[str, Any]] = []
+    symbol_diag = {
+        symbol: {
+            "gross_return_sum": 0.0,
+            "funding_return_sum": 0.0,
+            "allocated_trading_cost_return_sum": 0.0,
+            "arithmetic_net_contribution_sum": 0.0,
+            "active_intervals": 0,
+            "long_intervals": 0,
+            "short_intervals": 0,
+            "absolute_turnover": 0.0,
+        }
+        for symbol in symbols
+    }
 
     first_exec = min(rebalance_weights) if rebalance_weights else None
     if first_exec is not None:
@@ -153,7 +166,12 @@ def build_forward_report(
             previous = weights.copy()
             if ts in rebalance_weights:
                 weights = rebalance_weights[ts].copy()
-                turnover = float((weights - previous).abs().sum())
+                deltas = weights - previous
+                turnover = float(deltas.abs().sum())
+                for symbol in symbols:
+                    symbol_turnover = abs(float(deltas[symbol]))
+                    symbol_diag[symbol]["absolute_turnover"] += symbol_turnover
+                    symbol_diag[symbol]["allocated_trading_cost_return_sum"] -= symbol_turnover * side_cost
                 rebalance_events.append({
                     "execution_time": ts.isoformat(),
                     "turnover": turnover,
@@ -180,8 +198,17 @@ def build_forward_report(
                     if end not in frame.index:
                         raise CrossSectionalForwardError(f"{symbol}: missing next daily open {end}")
                     mark = float(frame.loc[end, "open"])
-                gross += weight * (mark / entry - 1.0)
-                funding_return += -weight * _funding_between(funding.get(symbol, pd.DataFrame()), ts, end)
+                symbol_gross = weight * (mark / entry - 1.0)
+                symbol_funding = -weight * _funding_between(
+                    funding.get(symbol, pd.DataFrame()), ts, end
+                )
+                gross += symbol_gross
+                funding_return += symbol_funding
+                symbol_diag[symbol]["gross_return_sum"] += float(symbol_gross)
+                symbol_diag[symbol]["funding_return_sum"] += float(symbol_funding)
+                symbol_diag[symbol]["active_intervals"] += 1
+                symbol_diag[symbol]["long_intervals"] += int(weight > 0)
+                symbol_diag[symbol]["short_intervals"] += int(weight < 0)
             trading_cost = turnover * side_cost
             intervals.append({
                 "start": ts.isoformat(),
@@ -193,6 +220,37 @@ def build_forward_report(
                 "trading_cost_return": float(-trading_cost),
                 "net_return": float(gross + funding_return - trading_cost),
             })
+
+    for symbol in symbols:
+        d = symbol_diag[symbol]
+        d["arithmetic_net_contribution_sum"] = float(
+            d["gross_return_sum"]
+            + d["funding_return_sum"]
+            + d["allocated_trading_cost_return_sum"]
+        )
+
+    completed_periods: list[dict[str, Any]] = []
+    for i in range(max(0, len(rebalance_events) - 1)):
+        start = _utc(rebalance_events[i]["execution_time"])
+        end = _utc(rebalance_events[i + 1]["execution_time"])
+        rows = [
+            row
+            for row in intervals
+            if _utc(row["start"]) >= start and _utc(row["end"]) <= end
+        ]
+        period_returns = np.asarray([float(row["net_return"]) for row in rows], dtype=float)
+        compounded = float(np.prod(1.0 + period_returns) - 1.0) if len(period_returns) else 0.0
+        completed_periods.append(
+            {
+                "period_index": i + 1,
+                "start": start.isoformat(),
+                "end": end.isoformat(),
+                "net_return": compounded,
+                "net_pnl_per_1000_usdt": compounded * 1000.0,
+                "daily_interval_count": len(rows),
+                "opening_weights": dict(rebalance_events[i]["weights"]),
+            }
+        )
 
     returns = np.asarray([float(row["net_return"]) for row in intervals], dtype=float)
     if len(returns):
@@ -240,6 +298,8 @@ def build_forward_report(
         },
         "current_weights": {symbol: float(weights[symbol]) for symbol in symbols},
         "rebalance_events": rebalance_events,
+        "completed_holding_periods": completed_periods,
+        "symbol_diagnostics": symbol_diag,
         "portfolio_intervals": intervals,
         "claims": {
             "candidate_specification_frozen": True,
