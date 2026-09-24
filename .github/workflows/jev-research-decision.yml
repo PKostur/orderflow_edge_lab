@@ -8,7 +8,10 @@ on:
     paths:
       - "src/orderflow_edge_lab/jev_research_decision.py"
       - "src/orderflow_edge_lab/cli/jev_research_decision.py"
+      - "src/orderflow_edge_lab/jev_research_action.py"
+      - "src/orderflow_edge_lab/cli/jev_research_action.py"
       - "tests/test_jev_research_decision.py"
+      - "tests/test_jev_research_action.py"
       - "config/jev_research_decision_v1.json"
       - ".github/workflows/jev-research-decision.yml"
       - "pyproject.toml"
@@ -35,8 +38,10 @@ jobs:
           python-version: "3.12"
       - name: Install research and Jev runtime
         run: python -m pip install -e ".[research,jev]"
-      - name: Run Jev decision tests
-        run: python -m unittest tests.test_jev_research_decision -v
+      - name: Run Jev decision and action tests
+        run: |
+          python -m unittest tests.test_jev_research_decision -v
+          python -m unittest tests.test_jev_research_action -v
       - name: Build fresh frozen shadow state
         run: |
           mkdir -p artifacts/jev_decision/source
@@ -50,6 +55,12 @@ jobs:
           orderflow-jev-research-decision \
             --shadow-report artifacts/jev_decision/shadow_report.json \
             --output artifacts/jev_decision/decision.json
+      - name: Execute bounded research action
+        run: |
+          orderflow-jev-research-action \
+            --shadow-report artifacts/jev_decision/shadow_report.json \
+            --decision artifacts/jev_decision/decision.json \
+            --output artifacts/jev_decision/action.json
       - name: Enforce Jev authority boundary
         run: |
           python - <<'PY'
@@ -72,6 +83,11 @@ jobs:
               raise SystemExit("offline fallback mislabeled as Jev")
           if provider == "typesafe_jev" and source == "offline_bounded_choice":
               raise SystemExit("real Jev mislabeled as offline")
+          a=json.load(open("artifacts/jev_decision/action.json",encoding="utf-8"))
+          if a["decision_id"] != d["decision_id"]:
+              raise SystemExit("Jev action/decision id mismatch")
+          if any(bool(v) for v in a["authority_boundary"].values()):
+              raise SystemExit("Jev action exceeded research-only authority")
           claims=d["claims"]
           for key in (
               "jev_cannot_promote_strategy",
