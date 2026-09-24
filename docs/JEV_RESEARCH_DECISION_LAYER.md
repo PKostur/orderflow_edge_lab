@@ -41,6 +41,8 @@ The v1 battery asks four atomic questions against the same compact research stat
 
 Code, not Jev, owns these rules:
 
+- with zero completed prospective trades, state-coverage inspection is not an allowed action; the system continues evidence collection unless there is a concrete data-quality issue;
+
 - any frozen-protocol breach forces `stop_protocol_breach`;
 - Jev may only choose from actions allowed by deterministic state;
 - a low-confidence Jev choice falls back to a deterministic action;
@@ -55,7 +57,7 @@ This keeps the decision model useful without making it the source of trading tru
 
 `provider=jev` uses TypeSafe System One through `typesafe-sdk` and requires `TYPESAFE_API_KEY`.
 
-`provider=offline` uses a deterministic local fallback for tests and environments without Jev credentials.
+`provider=offline` uses a deterministic local fallback for tests and environments without Jev credentials. Its accepted choices are labeled `offline_bounded_choice`, never `jev_bounded_choice`.
 
 `provider=auto` tries Jev when a TypeSafe key is available and otherwise uses the offline fallback.
 
@@ -84,4 +86,4 @@ The same contract should be used when making research decisions in ChatGPT:
 4. choose the research action;
 5. never represent a local ChatGPT judgment as an actual Jev API result.
 
-Until a native TypeSafe/Jev ChatGPT integration is available, chat-side decisions are Jev-style rather than direct Jev inference. Actual Jev output must identify the provider and model in the decision artifact.
+Until a native TypeSafe/Jev ChatGPT integration is available, chat-side decisions are Jev-style rather than direct Jev inference. Actual Jev output must identify the provider and model in the decision artifact. In this chat, research decisions should follow the same sequence: deterministic state, bounded judgment, deterministic veto, selected research action.
