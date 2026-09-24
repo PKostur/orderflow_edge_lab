@@ -38,5 +38,17 @@
     "offline_fallback_must_not_be_labeled_as_jev": true
   },
   "default_provider": "auto",
-  "timeout_s": 3
+  "timeout_s": 3,
+  "implementation_freeze_commit": "9f55453e0512f3cf789e0e6e2ff2c5cbed3f9c7f",
+  "validation": {
+    "workflow": "Jev Research Decision Layer",
+    "run_id": 36013217427,
+    "typesafe_sdk_version": "0.7.1",
+    "decision_tests": 8,
+    "action_tests": 6,
+    "provider_resolution": "auto_offline_no_api_key",
+    "selected_action": "collect_more_evidence",
+    "executed_action_status": "ACCUMULATE_UNCHANGED"
+  },
+  "implementation_freeze_note": "Jev research-decision v1 and bounded action semantics are frozen at the implementation commit above. Later changes must use a new decision-contract version if they alter questions, allowed actions, provider resolution, authority boundaries, or action semantics."
 }
