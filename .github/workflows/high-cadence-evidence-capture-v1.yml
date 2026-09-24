@@ -113,7 +113,9 @@ jobs:
           mkdir -p /tmp/high_cadence_previous artifacts/high_cadence/history
           PREV_ID=""
           CURRENT_BRANCH="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
-          while IFS=            --jq '.artifacts | map(select(.expired == false)) | sort_by(.created_at) | reverse | .[] | [.id, .workflow_run.id] | @tsv' || true)
+          while IFS=
+          done < <(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=high-cadence-state-ledger-v1&per_page=20" \
+            --jq '.artifacts | map(select(.expired == false)) | sort_by(.created_at) | reverse | .[] | [.id, .workflow_run.id] | @tsv' || true)
           if [[ -n "$PREV_ID" ]]; then
             gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${PREV_ID}/zip" > /tmp/high_cadence_previous.zip
             unzip -q /tmp/high_cadence_previous.zip -d /tmp/high_cadence_previous
