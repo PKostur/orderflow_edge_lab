@@ -3,7 +3,7 @@
   "watch_id": "volatility-state-transfer-forward-v1",
   "status": "frozen_rank_relationship_forward_replication",
   "purpose": "Prospectively replicate the frozen volatility-state rank relationship on genuinely later MEXC order-flow dependence clusters without strategy PnL, retraining, or threshold tuning.",
-  "prospective_start_utc": "2026-09-24T21:00:00Z",
+  "prospective_start_utc": "2026-09-24T21:30:00Z",
   "source": {
     "venue": "MEXC Futures public REST/WebSocket",
     "market_type": "perpetual futures",
@@ -58,5 +58,12 @@
     "live_trading_authorized": false,
     "leverage_authorized": false
   },
-  "freeze_note": "The watch validates only whether the previously frozen local-range-to-spread signal continues to rank future 60-second volatility expansion in genuinely later dependence clusters. It does not validate a trading strategy or directional alpha."
+  "freeze_note": "The initial 21:00 UTC draft boundary was superseded because its freeze commit landed at 21:03:10 UTC. No capture was collected or scored under that draft boundary. The clean prospective boundary is 2026-09-24T21:30:00Z. The watch validates only whether the previously frozen local-range-to-spread signal continues to rank future 60-second volatility expansion in genuinely later dependence clusters. It does not validate a trading strategy or directional alpha.",
+  "boundary_history": {
+    "provisional_boundary": "2026-09-24T21:00:00Z",
+    "provisional_freeze_commit": "a8384bbb43f7a16ef51c3b1d3d03f5de791e6a56",
+    "provisional_freeze_committed_at_utc": "2026-09-24T21:03:10Z",
+    "status": "superseded_before_any_eligible_capture",
+    "clean_boundary": "2026-09-24T21:30:00Z"
+  }
 }
