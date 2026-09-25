@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "watch_id": "universal-regime-marginal-pairwise-shadow-v1",
+  "status": "FROZEN_BEFORE_PROSPECTIVE_START",
+  "prospective_start_utc": "2026-09-26T00:00:00Z",
+  "definition_freeze_commit": null,
+  "implementation_freeze_commit": null,
+  "purpose": "Prospectively collect the same complete 14 marginal and 78 pairwise regime contrasts before the historical marginal/pairwise report is inspected, so later replication cannot cherry-pick historical states.",
+  "source": {
+    "venue": "MEXC Futures",
+    "bars": "public futures klines",
+    "interval": "8h",
+    "warmup_start_utc": "2026-01-01T00:00:00Z",
+    "symbols": [
+      "BTC_USDT",
+      "ETH_USDT",
+      "SOL_USDT",
+      "XRP_USDT",
+      "DOGE_USDT",
+      "BNB_USDT",
+      "ADA_USDT",
+      "LINK_USDT",
+      "SUI_USDT",
+      "ENA_USDT"
+    ],
+    "warmup_rationale": "The slowest causal regime chain requires a 90-bar coupling window plus 540 prior coupling observations; January 1 provides more than the required ~630 8h bars before the September 26 prospective start."
+  },
+  "economics": {
+    "round_trip_cost_bps": 20,
+    "canonical_accounting_version": 2,
+    "max_abs_position": 1
+  },
+  "variants": [
+    {
+      "audit_id": "DON8",
+      "family": "donchian_breakout",
+      "parameters": {
+        "lookback": 55
+      },
+      "role": "FROZEN_EXISTING_STRATEGY"
+    },
+    {
+      "audit_id": "EMA8",
+      "family": "ema_tsmom",
+      "parameters": {
+        "fast": 24,
+        "slow": 96,
+        "min_atr_spread": 0.25
+      },
+      "role": "FROZEN_EXISTING_CONTROL"
+    },
+    {
+      "audit_id": "VOL8",
+      "family": "vol_scaled_momentum",
+      "parameters": {
+        "lookback": 24,
+        "vol_window": 96,
+        "threshold": 0.5
+      },
+      "role": "FROZEN_EXISTING_CONTROL"
+    }
+  ],
+  "inherited_labels": {
+    "protocol": "universal-descriptive-regime-labels-v1",
+    "implementation_freeze_commit": "f481ae50fee98953a6542334d10c123870e6301d",
+    "definitions_changed": false
+  },
+  "inherited_contrasts": {
+    "protocol": "universal-descriptive-regime-marginal-pairwise-v1",
+    "implementation_freeze_commit": "2eb4450cae4627f1e10cc8e532842814380068e1",
+    "marginal_contrasts_per_strategy": 14,
+    "pairwise_contrasts_per_strategy": 78,
+    "total_contrasts_per_strategy": 92,
+    "all_contrasts_collected_prospectively": true,
+    "historical_result_may_not_remove_or_add_contrasts": true
+  },
+  "historical_anchor_rule": {
+    "source_analysis": "universal-descriptive-regime-marginal-pairwise-v1",
+    "selection_timing": "Historical anchors are identified only after this prospective watch definition is frozen.",
+    "selection_rule": "Within each strategy, an anchor is any inference-eligible historical contrast whose global Holm FWER adjusted p-value is <= 0.10.",
+    "anchor_direction": "sign of the historical state-minus-complement expectancy difference",
+    "no_anchor_if_historical_global_holm_discovery_absent": true,
+    "historical_bh_or_by_alone_cannot_create_anchor": true
+  },
+  "prospective_reporting": {
+    "review_after_calendar_days": 90,
+    "no_early_pass_fail": true,
+    "contrast_eligibility": {
+      "minimum_group_trades": 20,
+      "minimum_complement_trades": 20,
+      "minimum_group_symbols": 3,
+      "minimum_group_blocks": 3,
+      "minimum_complement_blocks": 3,
+      "minimum_valid_bootstrap_replicates": 1000
+    },
+    "bootstrap": {
+      "method": "same_null_centered_30day_shared_block_state_vs_complement_difference_as_frozen_historical_protocol",
+      "block_days": 30,
+      "replicates": 3000,
+      "seed": 20260926
+    },
+    "multiplicity": {
+      "global_family": "all eligible 92 preregistered contrasts within strategy",
+      "primary_reference": "global Holm FWER",
+      "dependency_robust_fdr_reference": "global Benjamini-Yekutieli FDR",
+      "alpha": 0.1
+    },
+    "prospective_anchor_replication_rule": {
+      "requirements": [
+        "at least 90 calendar days elapsed",
+        "exact historical anchor contrast identity unchanged",
+        "prospective contrast is inference-eligible",
+        "prospective expectancy-difference sign matches historical anchor direction",
+        "prospective global Holm FWER adjusted p-value <= 0.10"
+      ],
+      "outcomes": {
+        "replicated": "REPLICATED_DESCRIPTIVELY",
+        "eligible_but_rule_not_met": "NOT_REPLICATED",
+        "insufficient_time_or_sample": "WITHHELD"
+      }
+    }
+  },
+  "forbidden": [
+    "changing any of the 92 contrast identities after historical results",
+    "changing label definitions",
+    "changing strategy parameters or signals",
+    "changing symbols or 20bps cost assumption",
+    "retroactive prospective start changes",
+    "using pre-start entries as prospective evidence",
+    "counting terminal snapshot liquidation as a completed trade",
+    "filtering or skipping original strategy trades",
+    "using historical BH or BY alone to choose a prospective anchor",
+    "early replication verdict before 90 days and contrast eligibility",
+    "strategy promotion",
+    "live trading authorization",
+    "leverage authorization"
+  ],
+  "claims": {
+    "original_strategy_trades_unchanged": true,
+    "labels_are_observational_only": true,
+    "all_92_contrasts_frozen_before_historical_marginal_pairwise_results": true,
+    "candidate_promoted": false,
+    "regime_filter_authorized": false,
+    "profitable_edge_established": false,
+    "live_trading_authorized": false,
+    "leverage_authorized": false
+  }
+}
