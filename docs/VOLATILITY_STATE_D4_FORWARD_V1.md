@@ -69,6 +69,8 @@ Formal interpretation remains withheld until both are satisfied:
 
 An eligible cluster requires at least 20 valid observations for at least 4 of the 6 transfer symbols.
 
+If a transfer symbol exhausts strict public-MEXC depth-snapshot validation, the recorder may mark that symbol unavailable for that cluster and continue capturing the remaining simultaneous panel. The invalid snapshot is never accepted, the frozen symbol set is not changed, and the ordinary recorder remains fail-fast by default. Cluster eligibility is still determined only by the pre-existing 4-of-6 rule.
+
 There is no early pass/fail.
 
 ## Evidence boundary
