@@ -84,6 +84,13 @@ def test_report_is_paper_only_and_cost_aware() -> None:
         row["allocated_trading_cost_return_sum"]
         for row in report["symbol_diagnostics"].values()
     ) < 0.0
+    concentration = report["contribution_concentration"]
+    assert concentration["active_contributor_count"] == 4
+    assert concentration["absolute_contribution_hhi"] is not None
+    assert concentration["largest_absolute_contributor"] is not None
+    assert abs(
+        concentration["arithmetic_net_contribution_sum"] - total_symbol_net
+    ) < 1e-12
     assert report["claims"]["paper_shadow_only"] is True
     assert report["claims"]["profitable_edge_established"] is False
     assert report["claims"]["live_order_transmission_supported"] is False
@@ -120,3 +127,11 @@ def test_completed_holding_period_decomposition_reconciles() -> None:
         expected *= 1.0 + value
     expected -= 1.0
     assert abs(period["net_return"] - expected) < 1e-12
+    symbol_sum = sum(period["symbol_arithmetic_net_contributions"].values())
+    interval_sum = sum(matching)
+    assert abs(symbol_sum - interval_sum) < 1e-12
+    period_concentration = period["contribution_concentration"]
+    assert abs(
+        period_concentration["arithmetic_net_contribution_sum"] - interval_sum
+    ) < 1e-12
+    assert period_concentration["largest_absolute_contributor"] is not None
