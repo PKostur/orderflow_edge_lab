@@ -1,0 +1,251 @@
+name: Prospective 8h Evidence Scheduler Bridge v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/prospective-8h-evidence-scheduler-bridge-v1.yml"
+  schedule:
+    - cron: "25 0,8,16 * * *"
+    - cron: "40 0,8,16 * * *"
+
+permissions:
+  contents: read
+
+env:
+  COLLECTOR_REF: 096617250b9164caafa7e1859aa00d480ea7cce2
+
+jobs:
+  validate-bridge:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.COLLECTOR_REF }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Validate frozen collector contracts
+        run: |
+          python -m unittest tests.test_universal_session_alignment_shadow -v
+          python -m unittest tests.test_vol8_payoff_amplitude_forward -v
+          python -m unittest tests.test_regime_marginal_pairwise_shadow_v1 -v
+      - name: Verify pinned prospective boundaries
+        run: |
+          python - <<'PY'
+          import json
+          checks = [
+              ("config/universal_session_alignment_shadow_v1.json", "2026-09-24T00:00:00Z"),
+              ("config/vol8_payoff_amplitude_forward_v1.json", "2026-09-26T00:00:00Z"),
+              ("config/universal_regime_marginal_pairwise_shadow_v1.json", "2026-09-26T00:00:00Z"),
+          ]
+          for path, expected in checks:
+              p=json.load(open(path,encoding="utf-8"))
+              if p["prospective_start_utc"] != expected:
+                  raise SystemExit(f"{path}: prospective boundary changed")
+          print("pinned_collector_contracts_ok")
+          PY
+
+  session-alignment:
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '25 0,8,16 * * *'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    concurrency:
+      group: bridge-universal-session-alignment-shadow
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.COLLECTOR_REF }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run frozen shadow tests
+        run: python -m unittest tests.test_universal_session_alignment_shadow -v
+      - name: Build prospective shadow
+        run: |
+          mkdir -p artifacts/universal_session_alignment_shadow/source
+          orderflow-universal-session-shadow \
+            --config config/universal_session_alignment_shadow_v1.json \
+            --output artifacts/universal_session_alignment_shadow/report.json \
+            --source-dir artifacts/universal_session_alignment_shadow/source \
+            --max-workers 5
+      - name: Enforce frozen evidence boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open("artifacts/universal_session_alignment_shadow/report.json",encoding="utf-8"))
+          if r["prospective_start_utc"] != "2026-09-24T00:00:00+00:00":
+              raise SystemExit("prospective boundary changed")
+          claims=r["claims"]
+          for key in ("candidate_promoted","session_filter_authorized","live_trading_authorized","leverage_authorized"):
+              if bool(claims.get(key)):
+                  raise SystemExit(f"authority exceeded: {key}")
+          for report in r["reports"]:
+              for trade in report["completed_trades"]:
+                  if trade.get("terminal_liquidation"):
+                      raise SystemExit("terminal snapshot entered completed scoring")
+                  if trade["entry_utc"] < r["prospective_start_utc"]:
+                      raise SystemExit("pre-start trade entered prospective scoring")
+              if report["formal_verdict"] != "WITHHELD":
+                  raise SystemExit("early formal verdict")
+          print(json.dumps({
+              "watch_id":r["watch_id"],
+              "status":r["status"],
+              "as_of_utc":r["as_of_utc"],
+              "completed_trades":{x["audit_id"]:x["summary"]["completed_trade_count"] for x in r["reports"]},
+              "open_snapshots":{x["audit_id"]:x["evidence_progress"]["open_post_start_snapshot_count"] for x in r["reports"]},
+          },indent=2))
+          PY
+      - name: Preserve session shadow evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: universal-session-alignment-shadow
+          path: artifacts/universal_session_alignment_shadow/
+          retention-days: 90
+          if-no-files-found: error
+
+  vol8-payoff-amplitude:
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '25 0,8,16 * * *'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    concurrency:
+      group: bridge-vol8-payoff-amplitude-forward-v1
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.COLLECTOR_REF }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run frozen watch tests
+        run: python -m unittest tests.test_vol8_payoff_amplitude_forward -v
+      - name: Build prospective snapshot
+        run: |
+          mkdir -p artifacts/vol8_payoff_amplitude/source
+          orderflow-vol8-payoff-amplitude-forward \
+            --config config/vol8_payoff_amplitude_forward_v1.json \
+            --output artifacts/vol8_payoff_amplitude/report.json \
+            --source-dir artifacts/vol8_payoff_amplitude/source \
+            --max-workers 5
+      - name: Enforce observational evidence boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open("artifacts/vol8_payoff_amplitude/report.json",encoding="utf-8"))
+          if r["analysis"] != "vol8_payoff_amplitude_forward_v1":
+              raise SystemExit("wrong analysis")
+          c=r["claims"]
+          for key in ("strategy_filter_authorized","strategy_promotion_authorized","profitable_edge_established","live_trading_authorized","leverage_authorized"):
+              if bool(c.get(key)):
+                  raise SystemExit(f"authority exceeded: {key}")
+          if not bool(c.get("pre_start_entries_excluded")):
+              raise SystemExit("pre-start entry boundary lost")
+          if not bool(c.get("terminal_liquidations_excluded_from_completed_scoring")):
+              raise SystemExit("terminal liquidation boundary lost")
+          if r["review_progress"]["formal_output"] not in ("WITHHELD","READY_FOR_REVIEW"):
+              raise SystemExit("unexpected formal output")
+          print(json.dumps({
+              "watch_id":r["watch_id"],
+              "status":r["status"],
+              "as_of_utc":r["as_of_utc"],
+              "completed_trade_count":r["completed_trade_count"],
+              "observed_symbol_count":r["observed_symbol_count"],
+              "distinct_7d_entry_block_count":r["distinct_7d_entry_block_count"],
+              "formal_output":r["review_progress"]["formal_output"],
+          },indent=2))
+          PY
+      - name: Preserve VOL8 amplitude evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vol8-payoff-amplitude-forward-v1
+          path: artifacts/vol8_payoff_amplitude/
+          retention-days: 90
+          if-no-files-found: error
+
+  regime-marginal-pairwise:
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '40 0,8,16 * * *'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    concurrency:
+      group: bridge-universal-regime-marginal-pairwise-shadow-v1
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.COLLECTOR_REF }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run prospective regime shadow tests
+        run: python -m unittest tests.test_regime_marginal_pairwise_shadow_v1 -v
+      - name: Build prospective regime shadow
+        run: |
+          mkdir -p artifacts/universal_regime_marginal_pairwise_shadow/source
+          python -m orderflow_edge_lab.cli.regime_marginal_pairwise_shadow_v1 \
+            --config config/universal_regime_marginal_pairwise_shadow_v1.json \
+            --anchor-binding config/universal_regime_marginal_pairwise_shadow_v1_anchor_binding.json \
+            --label-config config/universal_descriptive_regime_labels_v1.json \
+            --output artifacts/universal_regime_marginal_pairwise_shadow/report.json \
+            --source-dir artifacts/universal_regime_marginal_pairwise_shadow/source \
+            --max-workers 5
+      - name: Enforce prospective regime boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open("artifacts/universal_regime_marginal_pairwise_shadow/report.json",encoding="utf-8"))
+          start="2026-09-26T00:00:00+00:00"
+          if r["prospective_start_utc"] != start:
+              raise SystemExit("prospective start changed")
+          if r["historical_anchor_count"] != 0:
+              raise SystemExit("unexpected historical anchor")
+          claims=r["claims"]
+          if not claims["incomplete_8h_bars_excluded"] or not claims["pre_start_entries_excluded"] or not claims["terminal_snapshot_liquidations_not_scored"]:
+              raise SystemExit("prospective evidence boundary lost")
+          for key in ("candidate_promoted","regime_filter_authorized","profitable_edge_established","live_trading_authorized","leverage_authorized"):
+              if bool(claims.get(key)):
+                  raise SystemExit(f"authority exceeded: {key}")
+          for strategy in r["reports"]:
+              if strategy["fixed_contrast_count"] != 92:
+                  raise SystemExit("frozen contrast family changed")
+              for trade in strategy["completed_trades"]:
+                  if trade["entry"] < start or trade["terminal_liquidation"]:
+                      raise SystemExit("invalid prospective completed trade")
+              if not r["inferential_window_open"]:
+                  for contrast in strategy["contrasts"]:
+                      if contrast["bootstrap"]["null_centered_two_sided_block_bootstrap_p"] is not None:
+                          raise SystemExit("early p-value exposed")
+                      if contrast["global_multiplicity"]["holm_fwer_p"] is not None:
+                          raise SystemExit("early multiplicity exposed")
+          print(json.dumps({
+              "watch_id":r["watch_id"],
+              "status":r["status"],
+              "as_of_utc":r["as_of_utc"],
+              "inferential_window_open":r["inferential_window_open"],
+              "historical_anchor_count":r["historical_anchor_count"],
+              "completed_trades":{x["audit_id"]:x["completed_post_start_trade_count"] for x in r["reports"]},
+              "open_snapshots":{x["audit_id"]:x["open_post_start_snapshot_count"] for x in r["reports"]},
+          },indent=2))
+          PY
+      - name: Preserve regime shadow evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: universal-regime-marginal-pairwise-shadow-v1
+          path: artifacts/universal_regime_marginal_pairwise_shadow/
+          retention-days: 90
+          if-no-files-found: error
