@@ -87,7 +87,9 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     try:
-        config = _load_config(args.config)
+        config_path = Path(args.config)
+        config_bytes = config_path.read_bytes()
+        config = _load_config(config_path)
         data = config["development_data"]
         if not isinstance(data, dict):
             raise CrossMarketRegimeAtlasError("development_data must be an object")
