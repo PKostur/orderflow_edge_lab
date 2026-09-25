@@ -4,7 +4,8 @@ import json
 import math
 import time
 from typing import Any
-from urllib.parse import urlencode
+from urllib.error import HTTPError
+from urllib.parse import urlencode, urlsplit, urlunsplit
 from urllib.request import Request, urlopen
 
 import pandas as pd
@@ -29,7 +30,15 @@ def _symbol(value: str) -> str:
     return value.upper().replace("_", "")
 
 
-def _get_json(url: str, *, timeout: float = 20.0) -> Any:
+def _mainnet_fallback_url(url: str) -> str | None:
+    parts = urlsplit(url)
+    if parts.hostname != "api.bybit.com":
+        return None
+    replacement = parts.netloc.replace("api.bybit.com", "api.bytick.com", 1)
+    return urlunsplit((parts.scheme, replacement, parts.path, parts.query, parts.fragment))
+
+
+def _read_json(url: str, *, timeout: float) -> Any:
     request = Request(
         url,
         headers={"Accept": "application/json", "User-Agent": "orderflow-edge-lab/1.0"},
@@ -37,7 +46,25 @@ def _get_json(url: str, *, timeout: float = 20.0) -> Any:
     with urlopen(request, timeout=timeout) as response:
         if response.status != 200:
             raise BybitHistoryError(f"Bybit public REST returned HTTP {response.status}")
-        raw = response.read(16_000_000)
+        return response.read(16_000_000)
+
+
+def _get_json(url: str, *, timeout: float = 20.0) -> Any:
+    attempted = [url]
+    try:
+        raw = _read_json(url, timeout=timeout)
+    except HTTPError as exc:
+        fallback = _mainnet_fallback_url(url)
+        if exc.code != 403 or fallback is None:
+            raise
+        attempted.append(fallback)
+        try:
+            raw = _read_json(fallback, timeout=timeout)
+        except HTTPError as fallback_exc:
+            raise BybitHistoryError(
+                "Bybit public REST mainnet endpoints returned HTTP 403: "
+                + ", ".join(attempted)
+            ) from fallback_exc
     try:
         payload = json.loads(raw.decode("utf-8"))
     except (UnicodeDecodeError, json.JSONDecodeError) as exc:
