@@ -7,6 +7,8 @@ import numpy as np
 import pandas as pd
 
 from orderflow_edge_lab.payoff_geometry import (
+    _bootstrap_ci,
+    _bootstrap_samples,
     _cell_definitions,
     _summary,
     enrich_trade_geometry,
@@ -117,6 +119,111 @@ def test_summary_reports_requested_distribution_quantiles_and_capture_median():
     assert summary["median_gross_to_mfe_ratio"] is not None
     for field in ("mfe_bps", "abs_mae_bps", "gross_to_mfe_ratio", "time_to_mfe_hours"):
         assert set(summary["distributions"][field]) == {"p10", "p25", "p50", "p75", "p90"}
+
+
+def test_zero_mfe_does_not_report_fake_zero_hour_time():
+    frame = _frame()
+    entry = frame.index[180]
+    exit_ = frame.index[183]
+    frame.loc[entry:frame.index[182], "high"] = frame.loc[entry, "open"]
+    entry_price = float(frame.loc[entry, "open"])
+    frame.loc[entry:frame.index[182], "low"] = entry_price * 0.99
+    trade = {
+        "entry": entry.isoformat(),
+        "exit": exit_.isoformat(),
+        "side": 1,
+        "bars_held": 3,
+        "gross_bps": -50.0,
+        "net_bps": -70.0,
+        "mfe_bps": 0.0,
+        "mae_bps": -100.0,
+        "terminal_liquidation": False,
+    }
+    row = enrich_trade_geometry(
+        trade,
+        frame,
+        strategy_id="DON8",
+        symbol="BTC_USDT",
+        cost_bps=20.0,
+        btc_frame=frame,
+        volatility_config=_config()["pre_entry_volatility_state"],
+    )
+    assert row["time_to_mfe_hours"] is None
+    assert row["gross_to_mfe_ratio"] is None
+
+
+def test_cell_contract_is_complete_unique_and_reports_per_symbol_counts():
+    cfg = _config()
+    cells = _cell_definitions(cfg)
+    names = [name for name, _ in cells]
+    assert len(names) == 71
+    assert len(names) == len(set(names))
+    summary = _summary(
+        [
+            {
+                "symbol": "BTC_USDT",
+                "entry": "2026-01-01T00:00:00+00:00",
+                "net_bps": 10.0,
+                "gross_bps": 20.0,
+                "mfe_bps": 40.0,
+                "abs_mae_bps": 15.0,
+                "gross_to_mfe_ratio": 0.5,
+                "winner_gross_to_mfe_ratio": 0.5,
+                "time_to_mfe_hours": 8.0,
+                "time_to_mae_hours": 0.0,
+                "duration_hours": 24.0,
+                "mfe_to_abs_mae_ratio": 40.0 / 15.0,
+                "correct_direction": True,
+            },
+            {
+                "symbol": "ETH_USDT",
+                "entry": "2026-01-02T00:00:00+00:00",
+                "net_bps": -5.0,
+                "gross_bps": 5.0,
+                "mfe_bps": 30.0,
+                "abs_mae_bps": 20.0,
+                "gross_to_mfe_ratio": 1.0 / 6.0,
+                "winner_gross_to_mfe_ratio": 1.0 / 6.0,
+                "time_to_mfe_hours": 16.0,
+                "time_to_mae_hours": 8.0,
+                "duration_hours": 24.0,
+                "mfe_to_abs_mae_ratio": 1.5,
+                "correct_direction": True,
+            },
+        ],
+        cfg["quantiles"],
+    )
+    assert summary["per_symbol_counts"] == {"BTC_USDT": 1, "ETH_USDT": 1}
+
+
+def test_shared_block_bootstrap_is_reproducible():
+    rows = [
+        {
+            "_block_id": block,
+            "net_bps": float((block + 1) * 10),
+            "mfe_bps": float((block + 1) * 20),
+            "abs_mae_bps": float((block + 1) * 5),
+            "gross_to_mfe_ratio": 0.5,
+            "winner_gross_to_mfe_ratio": 0.5,
+            "time_to_mfe_hours": float(block * 8),
+        }
+        for block in range(4)
+    ]
+    fields = (
+        "expectancy_bps",
+        "win_rate",
+        "median_mfe_bps",
+        "median_abs_mae_bps",
+        "median_gross_to_mfe_ratio",
+        "median_winner_gross_to_mfe_ratio",
+        "median_time_to_mfe_hours",
+    )
+    a = _bootstrap_samples([0, 1, 2, 3], replicates=25, seed=123)
+    b = _bootstrap_samples([0, 1, 2, 3], replicates=25, seed=123)
+    ci_a = _bootstrap_ci(rows, cfg := _config()["quantiles"], a, (0.025, 0.975), fields)
+    ci_b = _bootstrap_ci(rows, cfg, b, (0.025, 0.975), fields)
+    assert ci_a == ci_b
+    assert ci_a["expectancy_bps"]["valid_replicates"] == 25
 
 
 def test_multiple_testing_is_reserved_for_later_decision_affecting_claims():
