@@ -54,3 +54,19 @@ The watch cannot:
 - convert an adverse or favorable historical condition into a live filter;
 - issue an early verdict;
 - authorize live trading or leverage.
+
+
+## Implementation semantics frozen before the prospective start
+
+The implementation applies an additional causal data rule: an 8h kline is usable only when its full eight-hour interval has ended at or before the report's \`as_of\` timestamp. A currently forming 8h bar is excluded even if the venue API already returns a partial kline for it.
+
+For every strategy:
+
+- canonical accounting v2 is run on the fully completed source bars;
+- entries before the prospective start are excluded from prospective evidence;
+- a canonical terminal snapshot liquidation is treated as an open position snapshot rather than a completed trade;
+- entry labels use the latest completed bar strictly before entry;
+- the 30-day prospective block index is anchored to the fixed prospective start;
+- point summaries may accumulate before the review date, but inferential p-values and multiplicity results are withheld until at least 90 calendar days have elapsed.
+
+The historical anchor binding is immutable for this watch. The deterministic rule selected zero anchors because the frozen historical marginal/pairwise analysis produced zero global-Holm discoveries for DON8, EMA8, and VOL8. The watch nevertheless retains all 92 contrasts for prospective descriptive accumulation.
