@@ -6,9 +6,11 @@ import numpy as np
 import pandas as pd
 
 from orderflow_edge_lab.cross_market_regime_atlas import (
+    CrossMarketRegimeAtlasError,
     build_instrument_state_frame,
     build_regime_atlas_report,
 )
+from orderflow_edge_lab.cli.cross_market_regime_atlas import _source_coverage
 
 
 class CrossMarketRegimeAtlasTests(unittest.TestCase):
@@ -20,6 +22,8 @@ class CrossMarketRegimeAtlasTests(unittest.TestCase):
                 "market": "crypto_perpetuals",
                 "venue": "MEXC",
                 "interval": "8h",
+                "start_utc": "2025-01-01T00:00:00Z",
+                "end_exclusive_utc": "2025-05-01T00:00:00Z",
                 "symbols": ["BTC_USDT", "ETH_USDT"],
                 "context_symbol": "BTC_USDT",
             },
@@ -48,6 +52,11 @@ class CrossMarketRegimeAtlasTests(unittest.TestCase):
                     "minimum_observations": 20,
                 },
                 "direction": {"flat_tolerance_bps": 1.0},
+            },
+            "data_quality": {
+                "expected_interval_hours": 8,
+                "full_window_symbols": ["BTC_USDT", "ETH_USDT"],
+                "allow_leading_missing_symbols": [],
             },
             "raw_future_outcomes": {"horizons_bars": [1, 3, 6]},
             "cell_protocol": {
@@ -98,6 +107,16 @@ class CrossMarketRegimeAtlasTests(unittest.TestCase):
         if volume:
             frame["volume"] = 1000.0 + 100.0 * np.sin(t / 11.0) + t
         return frame
+
+    def test_source_coverage_rejects_internal_gap(self):
+        config = self._config()
+        frame = self._frame()
+        coverage = _source_coverage("BTC_USDT", frame, config)
+        self.assertEqual(coverage["internal_gap_count"], 0)
+        self.assertTrue(coverage["starts_at_frozen_window"])
+        broken = frame.drop(frame.index[100])
+        with self.assertRaises(CrossMarketRegimeAtlasError):
+            _source_coverage("BTC_USDT", broken, config)
 
     def test_state_labels_are_prefix_causal(self):
         config = self._config()
