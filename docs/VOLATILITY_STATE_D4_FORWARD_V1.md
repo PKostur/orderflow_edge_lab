@@ -154,4 +154,40 @@ The hardening does three things:
 - restores and deduplicates cluster reports by `cluster_id`, failing closed if the same ID has conflicting payloads;
 - prevents ordinary code-push workflow runs from collecting new D4 evidence. Push runs now rebuild the existing ledger only. New capture remains limited to scheduled or explicitly dispatched runs.
 
-No already collected prospective cluster is discarded or re-scored. The three preserved pre-hardening cluster artifacts remain part of the v1 evidence record. Formal interpretation remains withheld until the original 5-cluster and 3-UTC-date gate is satisfied.
+No already collected prospective cluster is discarded or re-scored. The four preserved pre-hardening cluster artifacts remain part of the v1 evidence record. Formal interpretation remains withheld until the original 5-cluster and 3-UTC-date gate is satisfied.
+
+
+## Recovered cumulative checkpoint
+
+Ledger-recovery workflow run:
+
+`36156646988`
+
+Recovered artifact:
+
+`volatility-state-forward-ledger-v1`
+
+Recovered artifact SHA-256:
+
+`6713e32ff57a21115ce4d42993bb9255ce17fd43931db6c6fc3827dab1d3dbc1`
+
+The restore-only push run collected no new market observations. It recovered four distinct immutable prospective clusters that had already been preserved in earlier workflow artifacts:
+
+| Cluster | First observation UTC | Eligible symbols | Median 60s Spearman | Positive-symbol fraction | Pooled within-symbol rank correlation |
+| --- | --- | ---: | ---: | ---: | ---: |
+| `gha-36144801023-attempt-1` | 2026-09-25 14:04:15 | 6 / 6 | -0.0302 | 33.3% | -0.0061 |
+| `gha-36146173561-attempt-1` | 2026-09-25 14:17:40 | 6 / 6 | -0.0851 | 0.0% | -0.1402 |
+| `gha-36147836217-attempt-1` | 2026-09-25 14:37:40 | 6 / 6 | -0.3853 | 0.0% | -0.3832 |
+| `gha-36153161274-attempt-1` | 2026-09-25 15:18:00 | 6 / 6 | -0.1567 | 16.7% | -0.1773 |
+
+Recovered aggregate:
+
+- eligible independent clusters: 4 / 5;
+- distinct UTC dates: 1 / 3;
+- median of cluster median primary Spearman: `-0.1209`;
+- fraction of clusters with positive median primary Spearman: `0 / 4`;
+- median pooled within-symbol rank correlation: `-0.1588`;
+- formal verdict: `WITHHELD`;
+- ready for review: `false`.
+
+All four observed cluster medians are negative and therefore directionally inconsistent with the frozen positive historical relationship. This remains an interim observation only. The preregistered gate requires both five eligible independent clusters and three distinct UTC dates, so no early pass/fail or model decision is permitted.
