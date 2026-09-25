@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "protocol_name": "universal-descriptive-regime-marginal-pairwise-v1",
+  "status": "preregistered_descriptive_only",
+  "implementation_freeze_commit": null,
+  "source_protocol": "universal-existing-strategy-backtests-v1",
+  "primary_cost_bps": 20,
+  "purpose": "Reduce the 162-cell sparsity of the frozen five-axis regime layer without choosing historically attractive combinations. Report every marginal state and every unordered two-axis joint state symmetrically as a state-versus-complement contrast on unchanged DON8, EMA8 and VOL8 trades.",
+  "inherits": {
+    "label_protocol": "universal-descriptive-regime-labels-v1",
+    "label_implementation_freeze_commit": "f481ae50fee98953a6542334d10c123870e6301d",
+    "label_cell_set_sha256": "2bb7f94fb7ce3dbc65748d98cb726ee9c8072fae31319fbd073f9d935c3b46cc",
+    "v1_1_inference_context_only": "The corrected v1.1 result motivated reducing dimensionality because of sparsity, but no axis, pair, state or direction is selected from v1.1 PnL."
+  },
+  "axes": {
+    "trend_state": [
+      "CHOP",
+      "MIXED",
+      "TREND"
+    ],
+    "volatility_state": [
+      "LOW",
+      "MID",
+      "HIGH"
+    ],
+    "coupling_state": [
+      "LOW",
+      "MID",
+      "HIGH"
+    ],
+    "shock_state": [
+      "NORMAL",
+      "SHOCK"
+    ],
+    "drawdown_state": [
+      "NEAR_HIGH",
+      "CORRECTION",
+      "DEEP_DRAWDOWN"
+    ]
+  },
+  "hierarchy": {
+    "marginal_states_are_primary": true,
+    "all_marginal_parent_states_are_always_emitted": true,
+    "all_unordered_axis_pairs_are_secondary": true,
+    "all_pairwise_state_combinations_are_always_emitted": true,
+    "pair_selection_from_historical_pnl_prohibited": true,
+    "state_selection_from_historical_pnl_prohibited": true,
+    "expected_marginal_contrasts_per_strategy": 14,
+    "expected_pairwise_contrasts_per_strategy": 78,
+    "expected_total_contrasts_per_strategy": 92,
+    "interpretation": "Pairwise joint states are secondary conditional descriptions and are never allowed to appear without the complete lower-order marginal family."
+  },
+  "contrast_definition": {
+    "statistic": "mean_net_bps_in_state_minus_mean_net_bps_in_complement",
+    "marginal_pool": "all trades with a known label for the selected axis",
+    "marginal_complement": "all other known states of the same axis",
+    "pairwise_pool": "all trades with known labels for both selected axes",
+    "pairwise_complement": "all other state combinations of those two axes",
+    "pooled_trade_expectancy_is_not_portfolio_return": true,
+    "per_symbol_difference_is_descriptive_breadth_check": true
+  },
+  "eligibility": {
+    "minimum_group_trades": 20,
+    "minimum_complement_trades": 20,
+    "minimum_group_symbols": 3,
+    "minimum_group_blocks": 3,
+    "minimum_complement_blocks": 3,
+    "minimum_valid_bootstrap_replicates": 1000,
+    "ineligible_cells_remain_reported_descriptively": true
+  },
+  "bootstrap": {
+    "method": "null_centered_nonoverlapping_calendar_block_bootstrap_of_state_vs_complement_difference",
+    "block_days": 30,
+    "replicates": 3000,
+    "seed": 20260925,
+    "confidence_interval": [
+      0.025,
+      0.975
+    ],
+    "null_hypothesis": "group and complement have equal mean net_bps",
+    "null_imposition": "center group and complement separately to their pooled mean before applying the shared block draws",
+    "shared_resamples_across_symbols_strategies_and_contrasts": true
+  },
+  "multiplicity": {
+    "alpha": 0.1,
+    "tier_families": [
+      "14 marginal contrasts",
+      "78 pairwise joint-state contrasts"
+    ],
+    "global_family": "all eligible predeclared marginal and pairwise contrasts within strategy",
+    "methods": [
+      "Benjamini-Hochberg FDR",
+      "Benjamini-Yekutieli dependency-robust FDR",
+      "Holm FWER"
+    ],
+    "primary_conservative_reference": "global Holm FWER",
+    "dependency_robust_fdr_reference": "global Benjamini-Yekutieli FDR",
+    "bh_is_reported_as_less_conservative_context": true,
+    "no_discovery_authorizes_a_filter_or_strategy_change": true
+  },
+  "claims": {
+    "development_only": true,
+    "descriptive_only": true,
+    "same_period_not_future_oos": true,
+    "frozen_label_definitions_changed": false,
+    "strategy_definitions_changed": false,
+    "historical_pnl_selected_axes": false,
+    "historical_pnl_selected_pairs": false,
+    "trade_filter_authorized": false,
+    "regime_filter_authorized": false,
+    "candidate_promoted": false,
+    "profitable_edge_established": false,
+    "live_trading_authorized": false,
+    "leverage_authorized": false
+  },
+  "literature_basis": [
+    {
+      "topic": "hierarchical interactions",
+      "source": "Bien, Taylor and Tibshirani (2013), A lasso for hierarchical interactions",
+      "note": "Interaction analysis should retain lower-order structure rather than allowing isolated high-order combinations to drive interpretation."
+    },
+    {
+      "topic": "dependent resampling",
+      "source": "Politis and Romano (1994), The Stationary Bootstrap",
+      "note": "Dependence-aware resampling motivates shared calendar-block draws; this protocol keeps the repository's fixed 30-day nonoverlapping block convention rather than claiming to implement the stationary bootstrap algorithm."
+    },
+    {
+      "topic": "false discovery rate",
+      "source": "Benjamini and Hochberg (1995)",
+      "note": "BH FDR is reported as a power-oriented reference."
+    },
+    {
+      "topic": "FDR under dependency",
+      "source": "Benjamini and Yekutieli (2001)",
+      "note": "BY FDR is also reported because the 92 overlapping state hypotheses are strongly dependent."
+    },
+    {
+      "topic": "family-wise error",
+      "source": "Holm (1979)",
+      "note": "Global Holm FWER is the conservative reference for same-period descriptive discoveries."
+    },
+    {
+      "topic": "crypto market coupling",
+      "source": "Bouri, Benbachir and El Alaoui (2025)",
+      "note": "Recent evidence documents condition-dependent cross-correlations among major cryptocurrencies, supporting market coupling as a descriptive state axis without validating any trading filter."
+    }
+  ]
+}
