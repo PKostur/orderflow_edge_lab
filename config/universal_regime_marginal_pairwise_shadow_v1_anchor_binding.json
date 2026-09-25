@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "binding_id": "universal-regime-marginal-pairwise-shadow-v1-historical-anchor-binding",
+  "watch_id": "universal-regime-marginal-pairwise-shadow-v1",
+  "watch_definition_freeze_commit": "a739d03f24e656a66537596af890f202973a7498",
+  "watch_definition_binding_commit": "b0f6ddfaa0623f8f4dda5de431758dbfed5e1d9f",
+  "watch_provenance_clarification_commit": "d37942e47f58d0cdce8ed946e20125f1f269a8ba",
+  "historical_analysis": "universal_descriptive_regime_marginal_pairwise_v1",
+  "historical_workflow_run_id": 36174220487,
+  "historical_artifact_digest": "sha256:d468ea400f25bfd2bd02285e2ff7f0891d7f044d2c2e17b5f969f8101171b62b",
+  "historical_contrast_contract_sha256": "16d2cda054189809189ced0c2dda4bbbb6dbbd8d2ae7d67f2f679f19186aee30",
+  "selection_rule": {
+    "required_inference_eligible": true,
+    "required_global_holm_fwer_adjusted_p_lte": 0.1,
+    "bh_or_by_alone_cannot_select_anchor": true
+  },
+  "per_strategy": {
+    "DON8": {
+      "eligible_historical_contrasts": 37,
+      "global_holm_discoveries": 0,
+      "anchors": []
+    },
+    "EMA8": {
+      "eligible_historical_contrasts": 51,
+      "global_holm_discoveries": 0,
+      "anchors": []
+    },
+    "VOL8": {
+      "eligible_historical_contrasts": 82,
+      "global_holm_discoveries": 0,
+      "anchors": []
+    }
+  },
+  "total_anchor_count": 0,
+  "claims": {
+    "binding_is_deterministic_application_of_prefrozen_rule": true,
+    "historical_result_changed_watch_contrast_universe": false,
+    "historical_result_changed_label_definitions": false,
+    "historical_result_changed_strategy_rules": false,
+    "historical_result_authorized_filter": false,
+    "historical_result_authorized_live_trading": false,
+    "historical_result_authorized_leverage": false
+  }
+}
