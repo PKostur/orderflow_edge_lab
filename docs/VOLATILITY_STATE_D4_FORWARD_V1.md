@@ -86,3 +86,57 @@ It cannot establish:
 - leverage authorization.
 
 If the rank relationship survives genuine future clusters, a later strategy family may be designed around a volatility-expansion payoff mechanism. That strategy would require its own new specification, economics, freeze, and future validation.
+
+
+## First prospective cluster
+
+Workflow run:
+
+`36146173561`
+
+Artifact:
+
+`volatility-state-forward-ledger-v1`
+
+Artifact digest:
+
+`sha256:ef09f54ddf2947acc7efa7a0f5b6d9e8d020373df31a4fb9ad1535e433a7a560`
+
+Capture window:
+
+- first scored observation: `2026-09-25T14:17:40+00:00`
+- last scored observation: `2026-09-25T14:27:35+00:00`
+
+All six frozen transfer symbols were eligible. The MEXC native transport alias `FIL_USDT -> FILECOIN_USDT` allowed FIL to remain in the frozen logical panel without changing the research symbol identity.
+
+Primary frozen relationship:
+
+`local_range_to_spread_15s -> volatility_expansion_ratio_60s`
+
+| Symbol | Observations | 60s Spearman |
+| --- | ---: | ---: |
+| ARB_USDT | 120 | -0.1011 |
+| ETH_USDT | 120 | -0.0089 |
+| FIL_USDT | 120 | -0.0654 |
+| NEAR_USDT | 120 | -0.3571 |
+| SOL_USDT | 119 | -0.0691 |
+| UNI_USDT | 120 | -0.2394 |
+
+Cluster diagnostics:
+
+- eligible symbols: 6 / 6
+- median primary Spearman: **-0.0851**
+- positive-symbol fraction: **0 / 6**
+- pooled within-symbol rank correlation: **-0.1402**
+
+This first genuinely later cluster is directionally inconsistent with the frozen positive historical rank relationship. It is not a formal failure because the preregistered review gate requires at least five eligible independent clusters across at least three UTC dates.
+
+Current review progress after this cluster:
+
+- eligible independent clusters: 1 / 5
+- distinct UTC dates: 1 / 3
+- cluster progress: 20%
+- date progress: 33.3%
+- formal verdict: `WITHHELD`
+
+No strategy PnL, directional-alpha claim, promotion, live-trading authorization, or leverage authorization is attached to this state-prediction result.
