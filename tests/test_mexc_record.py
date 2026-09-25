@@ -151,6 +151,89 @@ class MexcRecordSnapshotTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(features.rows[0]["book_version"], 99)
         self.assertEqual(features.rows[0]["snapshot_attempt"], 4)
 
+    async def test_partial_bootstrap_marks_exhausted_symbol_unavailable(self):
+        raw = _Writer()
+        features = _Writer()
+        engine = _Engine()
+        payloads = [
+            {"success": True, "code": 0, "data": {"version": 11}},
+            {"success": True, "code": 0, "data": {"version": 0}},
+            {"success": True, "code": 0, "data": {"version": 0}},
+            {"success": True, "code": 0, "data": {"version": 22}},
+        ]
+        with patch(
+            "orderflow_edge_lab.cli.mexc_record._fetch_json",
+            side_effect=payloads,
+        ), patch(
+            "orderflow_edge_lab.cli.mexc_record.asyncio.sleep",
+            return_value=None,
+        ):
+            unavailable = await _bootstrap_snapshots(
+                engine,
+                raw,
+                features,
+                rest_base="https://example.invalid",
+                symbols=("ETH_USDT", "FIL_USDT", "SOL_USDT"),
+                venue_symbols={
+                    "ETH_USDT": "ETH_USDT",
+                    "FIL_USDT": "FIL_USDT",
+                    "SOL_USDT": "SOL_USDT",
+                },
+                snapshot_limit=1000,
+                snapshot_max_attempts=2,
+                failure_policy="continue",
+            )
+
+        self.assertEqual(unavailable, {"FIL_USDT"})
+        self.assertTrue(
+            any(
+                row.get("record_type") == "snapshot_unavailable"
+                and row.get("symbol") == "FIL_USDT"
+                for row in raw.rows
+            )
+        )
+        self.assertTrue(
+            any(
+                row.get("record_type") == "symbol_unavailable"
+                and row.get("symbol") == "FIL_USDT"
+                for row in features.rows
+            )
+        )
+        snapshot_symbols = [
+            row["symbol"]
+            for row in features.rows
+            if row.get("event_type") == "snapshot"
+        ]
+        self.assertEqual(snapshot_symbols, ["ETH_USDT", "SOL_USDT"])
+
+    async def test_partial_bootstrap_fail_policy_preserves_fail_fast_default(self):
+        raw = _Writer()
+        features = _Writer()
+        engine = _Engine()
+        with patch(
+            "orderflow_edge_lab.cli.mexc_record._fetch_json",
+            return_value={"success": True, "code": 0, "data": {"version": 0}},
+        ), patch(
+            "orderflow_edge_lab.cli.mexc_record.asyncio.sleep",
+            return_value=None,
+        ):
+            with self.assertRaises(MexcOrderFlowError):
+                await _bootstrap_snapshots(
+                    engine,
+                    raw,
+                    features,
+                    rest_base="https://example.invalid",
+                    symbols=("FIL_USDT",),
+                    venue_symbols={"FIL_USDT": "FIL_USDT"},
+                    snapshot_limit=1000,
+                    snapshot_max_attempts=2,
+                    failure_policy="fail",
+                )
+
+        self.assertFalse(
+            any(row.get("record_type") == "symbol_unavailable" for row in features.rows)
+        )
+
     async def test_persistent_invalid_snapshot_fails_with_symbol_context(self):
         raw = _Writer()
         features = _Writer()
