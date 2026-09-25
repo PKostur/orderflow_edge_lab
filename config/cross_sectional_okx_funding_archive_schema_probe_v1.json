@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "probe_id": "cross-sectional-okx-funding-archive-schema-probe-v1",
+  "status": "engineering_schema_discovery_only",
+  "purpose": "Inspect two fixed official OKX funding archive files to determine ZIP and CSV schema before any parser or D2 economic replication v2 is frozen.",
+  "limits": {
+    "max_download_bytes": 50000000,
+    "max_uncompressed_bytes": 100000000,
+    "max_members": 20,
+    "max_sample_rows": 3
+  },
+  "samples": [
+    {
+      "sample_id": "btc_monthly_2025_09",
+      "archive_kind": "monthly_single_instrument",
+      "filename": "BTC-USDT-SWAP-fundingrates-2025-09.zip",
+      "url": "https://static.okx.com/cdn/okex/traderecords/swaprates/monthly/202509/BTC-USDT-SWAP-fundingrates-2025-09.zip?v=999"
+    },
+    {
+      "sample_id": "allswap_daily_2026_09_11",
+      "archive_kind": "daily_all_swaps",
+      "filename": "allswap-fundingrates-2026-09-11.zip",
+      "url": "https://static.okx.com/cdn/okex/traderecords/swaprates/daily/20260911/allswap-fundingrates-2026-09-11.zip?v=999"
+    }
+  ],
+  "boundary": {
+    "candidate_pnl_computed": false,
+    "candidate_retested": false,
+    "historical_result_repaired": false,
+    "parser_semantics_frozen": false,
+    "v2_replication_defined": false
+  },
+  "claims": {
+    "candidate_promoted": false,
+    "profitable_edge_established": false,
+    "live_trading_authorized": false,
+    "leverage_authorized": false
+  }
+}
