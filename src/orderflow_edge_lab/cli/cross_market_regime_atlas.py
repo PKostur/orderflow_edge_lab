@@ -22,6 +22,57 @@ def _load_config(path: str | Path) -> dict[str, object]:
     return payload
 
 
+def _source_coverage(
+    symbol: str,
+    frame: pd.DataFrame,
+    config: dict[str, object],
+) -> dict[str, object]:
+    data = config["development_data"]
+    quality = config["data_quality"]
+    if not isinstance(data, dict) or not isinstance(quality, dict):
+        raise CrossMarketRegimeAtlasError("development_data/data_quality must be objects")
+    step = pd.Timedelta(hours=int(quality["expected_interval_hours"]))
+    start = pd.Timestamp(str(data["start_utc"]))
+    end = pd.Timestamp(str(data["end_exclusive_utc"]))
+    start = start.tz_localize("UTC") if start.tzinfo is None else start.tz_convert("UTC")
+    end = end.tz_localize("UTC") if end.tzinfo is None else end.tz_convert("UTC")
+    expected_last = end - step
+    index = pd.to_datetime(frame.index, utc=True)
+    if index.empty:
+        raise CrossMarketRegimeAtlasError(f"{symbol}: empty source frame")
+    diffs = index.to_series().diff().dropna()
+    gaps = diffs[diffs != step]
+    if len(gaps):
+        raise CrossMarketRegimeAtlasError(
+            f"{symbol}: {len(gaps)} internal interval gaps/nonconforming steps"
+        )
+    full = {str(value) for value in quality.get("full_window_symbols", [])}
+    leading_allowed = {str(value) for value in quality.get("allow_leading_missing_symbols", [])}
+    first = pd.Timestamp(index[0])
+    last = pd.Timestamp(index[-1])
+    if symbol in full and first != start:
+        raise CrossMarketRegimeAtlasError(
+            f"{symbol}: full-window source starts {first.isoformat()} not {start.isoformat()}"
+        )
+    if symbol not in full and symbol not in leading_allowed:
+        raise CrossMarketRegimeAtlasError(f"{symbol}: no declared source coverage policy")
+    if first < start:
+        raise CrossMarketRegimeAtlasError(f"{symbol}: source starts before frozen window")
+    if last != expected_last:
+        raise CrossMarketRegimeAtlasError(
+            f"{symbol}: trailing coverage ends {last.isoformat()} not {expected_last.isoformat()}"
+        )
+    return {
+        "rows": len(frame),
+        "first_timestamp_utc": first.isoformat(),
+        "last_timestamp_utc": last.isoformat(),
+        "leading_missing_allowed": symbol in leading_allowed,
+        "starts_at_frozen_window": first == start,
+        "internal_gap_count": 0,
+        "expected_interval_hours": int(quality["expected_interval_hours"]),
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="Build the frozen cross-market regime-atlas Phase A development report."
@@ -49,6 +100,7 @@ def main(argv: list[str] | None = None) -> int:
 
         frames: dict[str, pd.DataFrame] = {}
         source_hashes: dict[str, str] = {}
+        source_coverage: dict[str, dict[str, object]] = {}
 
         def load(symbol: str) -> tuple[str, pd.DataFrame]:
             return symbol, fetch_mexc_futures_klines(symbol, interval, start, end)
@@ -60,13 +112,16 @@ def main(argv: list[str] | None = None) -> int:
                 symbol, frame = future.result()
                 if symbol != expected:
                     raise CrossMarketRegimeAtlasError("source identity mismatch")
+                source_coverage[symbol] = _source_coverage(symbol, frame, config)
                 frames[symbol] = frame
                 path = source_dir / f"{symbol}_{interval}.csv"
                 frame.to_csv(path, index_label="timestamp")
                 source_hashes[symbol] = sha256(path.read_bytes()).hexdigest()
 
         report = build_regime_atlas_report(frames, config)
+        report["protocol_config_sha256"] = sha256(config_bytes).hexdigest()
         report["source_sha256"] = dict(sorted(source_hashes.items()))
+        report["source_coverage"] = dict(sorted(source_coverage.items()))
         output = Path(args.output)
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(
@@ -85,7 +140,9 @@ def main(argv: list[str] | None = None) -> int:
                     "sufficient_cell_count": sufficient,
                     "instrument_count": len(symbols),
                     "horizons_bars": report["raw_future_outcomes"]["horizons_bars"],
+                    "protocol_config_sha256": report["protocol_config_sha256"],
                     "source_sha256": report["source_sha256"],
+                    "source_coverage": report["source_coverage"],
                 },
                 indent=2,
                 sort_keys=True,
