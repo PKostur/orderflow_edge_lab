@@ -3,7 +3,7 @@
   "protocol_name": "universal-descriptive-regime-labels-v1.1",
   "status": "preregistered_descriptive_inference_hardening",
   "supersedes_inference_only": "universal-descriptive-regime-labels-v1",
-  "implementation_freeze_commit": null,
+  "implementation_freeze_commit": "fc1003d92e512b17acedaac8cb839cbe05877f9a",
   "reason_for_new_version": "The first frozen v1 artifact exposed an inference implementation defect: sparse cells, including one-trade cells, could receive spuriously tiny bootstrap p-values because resampling did not impose the zero-expectancy null. v1.1 preserves every v1 label, trade attribution rule, strategy, cost, cell and descriptive metric while replacing only the hypothesis-test layer.",
   "inherits": {
     "label_protocol": "universal-descriptive-regime-labels-v1",
