@@ -71,6 +71,28 @@ def _commits_url(
     )
 
 
+def _parse_symbol_aliases(
+    values: list[str],
+    symbols: tuple[str, ...],
+) -> dict[str, str]:
+    aliases = {symbol: symbol for symbol in symbols}
+    for raw in values:
+        if "=" not in raw:
+            raise ValueError("--symbol-alias must use LOGICAL=NATIVE")
+        logical, native = (part.strip().upper() for part in raw.split("=", 1))
+        if not logical or not native:
+            raise ValueError("--symbol-alias must use non-empty LOGICAL=NATIVE")
+        if logical not in aliases:
+            raise ValueError(
+                f"--symbol-alias logical symbol is not in --symbol panel: {logical}"
+            )
+        aliases[logical] = native
+    native_values = list(aliases.values())
+    if len(set(native_values)) != len(native_values):
+        raise ValueError("venue-native symbol aliases must be one-to-one")
+    return aliases
+
+
 async def _snapshot_symbol(
     engine: FeatureEngine,
     raw_writer: AppendOnlyJsonl,
@@ -79,6 +101,7 @@ async def _snapshot_symbol(
     rest_base: str,
     symbol: str,
     snapshot_limit: int,
+    venue_symbol: str | None = None,
     reason: str | None = None,
     max_attempts: int = 3,
 ) -> None:
@@ -88,7 +111,7 @@ async def _snapshot_symbol(
     for attempt in range(1, max_attempts + 1):
         payload = await asyncio.to_thread(
             _fetch_json,
-            _depth_url(rest_base, symbol, snapshot_limit),
+            _depth_url(rest_base, venue_symbol or symbol, snapshot_limit),
         )
         received_at_ns = time.time_ns()
         try:
@@ -100,6 +123,7 @@ async def _snapshot_symbol(
                     "record_type": "rest_snapshot_rejected",
                     "source": "mexc_futures_public_rest",
                     "symbol": symbol,
+                    "venue_symbol": venue_symbol or symbol,
                     "received_at_ns": received_at_ns,
                     "attempt": attempt,
                     "reason": str(exc),
@@ -115,6 +139,7 @@ async def _snapshot_symbol(
             "record_type": "rest_snapshot",
             "source": "mexc_futures_public_rest",
             "symbol": symbol,
+            "venue_symbol": venue_symbol or symbol,
             "received_at_ns": received_at_ns,
             "attempt": attempt,
             "payload": payload,
@@ -145,6 +170,7 @@ async def _recover_depth(
     *,
     rest_base: str,
     symbol: str,
+    venue_symbol: str,
     pending: Mapping[str, Any],
     snapshot_limit: int,
     snapshot_max_attempts: int,
@@ -167,13 +193,14 @@ async def _recover_depth(
 
     commits = await asyncio.to_thread(
         _fetch_json,
-        _commits_url(rest_base, symbol),
+        _commits_url(rest_base, venue_symbol),
     )
     raw_writer.write(
         {
             "record_type": "rest_depth_commits",
             "source": "mexc_futures_public_rest",
             "symbol": symbol,
+            "venue_symbol": venue_symbol,
             "received_at_ns": time.time_ns(),
             "stop_version": end,
             "payload": commits,
@@ -201,6 +228,7 @@ async def _recover_depth(
         rest_base=rest_base,
         symbol=symbol,
         snapshot_limit=snapshot_limit,
+        venue_symbol=venue_symbol,
         reason="depth_gap_fallback",
         max_attempts=snapshot_max_attempts,
     )
@@ -234,6 +262,7 @@ async def _run_connection(
     ws_url: str,
     rest_base: str,
     symbols: tuple[str, ...],
+    venue_symbols: Mapping[str, str],
     snapshot_limit: int,
     snapshot_max_attempts: int,
     deadline: float | None,
@@ -245,6 +274,7 @@ async def _run_connection(
             "websockets package is required; reinstall the project"
         ) from exc
 
+    native_to_logical = {native: logical for logical, native in venue_symbols.items()}
     try:
         async with websockets.connect(
             ws_url,
@@ -265,11 +295,12 @@ async def _run_connection(
             # buffered while REST snapshots are obtained, eliminating the
             # snapshot-before-subscription blind window.
             for symbol in symbols:
+                venue_symbol = venue_symbols[symbol]
                 await ws.send(
                     json.dumps(
                         {
                             "method": "sub.deal",
-                            "param": {"symbol": symbol},
+                            "param": {"symbol": venue_symbol},
                             "gzip": False,
                             "compress": False,
                         },
@@ -281,7 +312,7 @@ async def _run_connection(
                         {
                             "method": "sub.depth",
                             "param": {
-                                "symbol": symbol,
+                                "symbol": venue_symbol,
                                 "compress": False,
                             },
                             "gzip": False,
@@ -298,6 +329,7 @@ async def _run_connection(
                     rest_base=rest_base,
                     symbol=symbol,
                     snapshot_limit=snapshot_limit,
+                    venue_symbol=venue_symbols[symbol],
                     reason="post_subscription_initial_snapshot",
                     max_attempts=snapshot_max_attempts,
                 )
@@ -328,7 +360,8 @@ async def _run_connection(
                     received_at_ns = time.time_ns()
                     payload = decode_ws_message(raw)
                     channel = str(payload.get("channel", ""))
-                    symbol = str(payload.get("symbol", ""))
+                    venue_symbol = str(payload.get("symbol", ""))
+                    symbol = native_to_logical.get(venue_symbol, venue_symbol)
 
                     raw_writer.write(
                         {
@@ -337,6 +370,7 @@ async def _run_connection(
                             "received_at_ns": received_at_ns,
                             "channel": channel,
                             "symbol": symbol or None,
+                            "venue_symbol": venue_symbol or None,
                             "payload": payload,
                         }
                     )
@@ -358,6 +392,7 @@ async def _run_connection(
                                 feature_writer,
                                 rest_base=rest_base,
                                 symbol=symbol,
+                                venue_symbol=venue_symbol,
                                 pending=data,
                                 snapshot_limit=snapshot_limit,
                                 snapshot_max_attempts=snapshot_max_attempts,
@@ -403,6 +438,7 @@ async def run(args: argparse.Namespace) -> tuple[Path, Path]:
     )
     if not symbols:
         raise ValueError("at least one --symbol is required")
+    venue_symbols = _parse_symbol_aliases(args.symbol_alias, symbols)
     if args.duration_seconds < 0:
         raise ValueError(
             "--duration-seconds cannot be negative"
@@ -458,6 +494,11 @@ async def run(args: argparse.Namespace) -> tuple[Path, Path]:
                 "source": "mexc_futures_public",
                 "started_at_ns": time.time_ns(),
                 "symbols": list(symbols),
+                "venue_symbol_aliases": {
+                    logical: native
+                    for logical, native in venue_symbols.items()
+                    if logical != native
+                },
                 "rest_base": args.rest_base,
                 "ws_url": args.ws_url,
                 "snapshot_limit": args.snapshot_limit,
@@ -487,6 +528,7 @@ async def run(args: argparse.Namespace) -> tuple[Path, Path]:
                     ws_url=args.ws_url,
                     rest_base=args.rest_base,
                     symbols=symbols,
+                    venue_symbols=venue_symbols,
                     snapshot_limit=args.snapshot_limit,
                     snapshot_max_attempts=args.snapshot_max_attempts,
                     deadline=deadline,
@@ -553,6 +595,12 @@ def build_parser() -> argparse.ArgumentParser:
         action="append",
         default=[],
         help="Futures symbol; repeat for multiple symbols",
+    )
+    parser.add_argument(
+        "--symbol-alias",
+        action="append",
+        default=[],
+        help="Venue transport alias in LOGICAL=NATIVE form; repeat as needed",
     )
     parser.add_argument(
         "--output-dir",
