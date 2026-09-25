@@ -195,5 +195,32 @@
     "profitable_edge_established": false,
     "live_trading_authorized": false,
     "leverage_authorized": false
+  },
+  "data_quality": {
+    "expected_interval_hours": 8,
+    "internal_gap_policy": "fail_if_any_gap_exists_after_first_available_bar",
+    "trailing_gap_policy": "fail_if_last_bar_is_not_end_exclusive_minus_one_interval",
+    "full_window_symbols": [
+      "BTC_USDT",
+      "ETH_USDT",
+      "SOL_USDT",
+      "XRP_USDT",
+      "DOGE_USDT",
+      "BNB_USDT",
+      "ADA_USDT",
+      "LINK_USDT",
+      "SUI_USDT"
+    ],
+    "allow_leading_missing_symbols": [
+      "ENA_USDT"
+    ]
+  },
+  "preregistration_amendment": {
+    "recorded_before_first_atlas_result": true,
+    "reason": "Add source continuity and coverage enforcement before any atlas output is inspected so regime features are never calculated across silent missing-bar gaps.",
+    "results_observed_before_amendment": false,
+    "state_definitions_changed": false,
+    "outcome_horizons_changed": false,
+    "cell_protocol_changed": false
   }
 }
