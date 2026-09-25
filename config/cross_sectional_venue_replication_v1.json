@@ -45,12 +45,24 @@
   "replication_funding_description": "realized public Bybit linear perpetual funding",
   "replication_api": {
     "klines": "GET https://api.bybit.com/v5/market/kline?category=linear",
-    "funding": "GET https://api.bybit.com/v5/market/funding/history?category=linear"
+    "funding": "GET https://api.bybit.com/v5/market/funding/history?category=linear",
+    "mainnet_hosts": [
+      "https://api.bybit.com",
+      "https://api.bytick.com"
+    ],
+    "host_fallback_policy": "Use api.bybit.com first; on HTTP 403 only, retry the identical public V5 request through the other official Bybit mainnet endpoint api.bytick.com. This is transport failover within the same replication venue, not venue selection."
   },
   "failed_source_attempt": {
     "venue": "Binance USD-M Futures",
     "status": "engineering_source_unavailable",
     "reason": "GitHub hosted runner received HTTP 451 from fapi.binance.com before any replication report was produced",
     "evidence_use": "none"
+  },
+  "source_access_amendment": {
+    "recorded_after_engineering_403_before_successful_replication_report": true,
+    "source_venue_changed": false,
+    "candidate_parameters_changed": false,
+    "historical_window_changed": false,
+    "evidence_level_changed": false
   }
 }
