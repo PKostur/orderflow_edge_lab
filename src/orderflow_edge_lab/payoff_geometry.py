@@ -335,6 +335,7 @@ def _bootstrap_metric(
     field_map = {
         "median_mfe_bps": ("mfe_bps", False),
         "median_abs_mae_bps": ("abs_mae_bps", False),
+        "median_gross_to_mfe_ratio": ("gross_to_mfe_ratio", False),
         "median_winner_gross_to_mfe_ratio": (
             "winner_gross_to_mfe_ratio",
             False,
