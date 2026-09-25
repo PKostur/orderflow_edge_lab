@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "protocol_name": "cross-market-regime-atlas-v1.1",
+  "status": "FROZEN_BEFORE_FIRST_ATLAS_RESULT",
+  "inherits": "config/cross_market_regime_atlas_v1.json",
+  "purpose": "Implement the common causal bar-state map before any atlas result is inspected. Phase A measures raw future market behavior only; strategy overlays are deferred.",
+  "created_utc": "2026-09-25T14:29:00Z",
+  "phase": "A_COMMON_STATE_MAP_CRYPTO_REFERENCE",
+  "development_data": {
+    "market": "crypto_perpetuals",
+    "venue": "MEXC",
+    "interval": "8h",
+    "start_utc": "2024-01-01T00:00:00Z",
+    "end_exclusive_utc": "2026-09-12T00:00:00Z",
+    "symbols": [
+      "BTC_USDT",
+      "ETH_USDT",
+      "SOL_USDT",
+      "XRP_USDT",
+      "DOGE_USDT",
+      "BNB_USDT",
+      "ADA_USDT",
+      "LINK_USDT",
+      "SUI_USDT",
+      "ENA_USDT"
+    ],
+    "context_symbol": "BTC_USDT",
+    "same_period_development_only": true
+  },
+  "causal_state_clock": "state uses information available by the close of the labeled bar; all future outcomes begin after that bar close",
+  "state_definitions": {
+    "trend_efficiency": {
+      "lookback_bars": 20,
+      "formula": "abs(close_t / close_t_minus_20 - 1) / sum(abs(simple_return)) across the same 20 completed returns",
+      "rank_history_bars": 120,
+      "minimum_rank_history": 40,
+      "buckets": [
+        "RANGE",
+        "MIXED",
+        "TREND",
+        "UNKNOWN"
+      ],
+      "rule": "causal terciles versus strictly prior trend-efficiency observations; bottom=RANGE, middle=MIXED, top=TREND"
+    },
+    "realized_volatility": {
+      "lookback_bars": 20,
+      "formula": "population standard deviation of log returns over the latest 20 completed returns",
+      "rank_history_bars": 120,
+      "minimum_rank_history": 40,
+      "buckets": [
+        "LOW",
+        "MID",
+        "HIGH",
+        "UNKNOWN"
+      ],
+      "rule": "causal terciles versus strictly prior realized-volatility observations"
+    },
+    "displacement": {
+      "lookback_bars": 3,
+      "formula": "close_t / close_t_minus_3 - 1",
+      "rank_history_bars": 120,
+      "minimum_rank_history": 40,
+      "buckets": [
+        "DOWN",
+        "NEUTRAL",
+        "UP",
+        "UNKNOWN"
+      ],
+      "rule": "causal terciles versus strictly prior signed 3-bar displacement observations"
+    },
+    "activity": {
+      "source": "bar volume when available",
+      "rank_history_bars": 120,
+      "minimum_rank_history": 40,
+      "buckets": [
+        "LOW",
+        "MID",
+        "HIGH",
+        "UNKNOWN"
+      ],
+      "rule": "causal terciles versus strictly prior volume observations; UNKNOWN when volume is absent or invalid"
+    },
+    "btc_correlation": {
+      "lookback_bars": 30,
+      "minimum_observations": 20,
+      "buckets": [
+        "HIGH_NEGATIVE",
+        "MODERATE_NEGATIVE",
+        "LOW_ABS",
+        "MODERATE_POSITIVE",
+        "HIGH_POSITIVE",
+        "UNKNOWN"
+      ],
+      "rule": {
+        "HIGH_NEGATIVE": "rho <= -0.65",
+        "MODERATE_NEGATIVE": "-0.65 < rho <= -0.25",
+        "LOW_ABS": "-0.25 < rho < 0.25",
+        "MODERATE_POSITIVE": "0.25 <= rho < 0.65",
+        "HIGH_POSITIVE": "rho >= 0.65",
+        "UNKNOWN": "insufficient aligned observations"
+      }
+    },
+    "utc_time_block": {
+      "buckets": [
+        "00-08",
+        "08-16",
+        "16-24"
+      ],
+      "rule": "UTC hour of the labeled bar timestamp"
+    },
+    "direction": {
+      "source": "3-bar displacement",
+      "buckets": [
+        "DOWN",
+        "FLAT",
+        "UP"
+      ],
+      "flat_tolerance_bps": 1
+    },
+    "liquidity_efficiency": {
+      "buckets": [
+        "UNKNOWN"
+      ],
+      "rule": "bar-only Phase A does not invent spread/depth information; later source-specific adapters may populate this dimension"
+    }
+  },
+  "raw_future_outcomes": {
+    "horizons_bars": [
+      1,
+      3,
+      6
+    ],
+    "fields": [
+      "future_return_bps",
+      "future_abs_return_bps",
+      "future_high_low_range_bps",
+      "direction_match"
+    ],
+    "direction_match_definition": "for UP/DOWN current direction only, whether future return has the same sign; null for FLAT"
+  },
+  "cell_protocol": {
+    "minimum_observations_for_descriptive_cell": 30,
+    "minimum_distinct_utc_dates": 10,
+    "dimensions": [
+      "utc_time_block",
+      "trend_state",
+      "volatility_state",
+      "displacement_state",
+      "activity_state",
+      "btc_correlation_state",
+      "direction_state",
+      "liquidity_efficiency_state"
+    ],
+    "interactions": [
+      [
+        "trend_state",
+        "volatility_state"
+      ],
+      [
+        "displacement_state",
+        "volatility_state"
+      ],
+      [
+        "btc_correlation_state",
+        "volatility_state"
+      ]
+    ],
+    "emit_sparse_cells": true,
+    "rank_or_select_cells_by_strategy_pnl": false
+  },
+  "summary_metrics": [
+    "observations",
+    "distinct_utc_dates",
+    "mean_future_return_bps",
+    "median_future_return_bps",
+    "positive_future_return_fraction",
+    "mean_future_abs_return_bps",
+    "median_future_abs_return_bps",
+    "mean_future_high_low_range_bps",
+    "median_future_high_low_range_bps",
+    "direction_match_rate"
+  ],
+  "phase_boundaries": {
+    "raw_market_behavior_first": true,
+    "strategy_overlay_permitted_in_this_version": false,
+    "candidate_creation_permitted": false,
+    "prospective_claim_permitted": false
+  },
+  "claims": {
+    "development_only": true,
+    "state_labels_are_causal": true,
+    "strategy_pnl_used_for_state_definition": false,
+    "same_period_not_future_oos": true,
+    "candidate_promoted": false,
+    "profitable_edge_established": false,
+    "live_trading_authorized": false,
+    "leverage_authorized": false
+  }
+}
