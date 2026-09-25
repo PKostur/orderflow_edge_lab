@@ -171,8 +171,16 @@ def enrich_trade_geometry(
             f"{strategy_id}/{symbol}: reconstructed MAE does not match canonical ledger"
         )
 
-    mfe_time = _first_extreme_time(favorable, maximize=True)
-    mae_time = _first_extreme_time(adverse, maximize=False)
+    mfe_time = (
+        _first_extreme_time(favorable, maximize=True)
+        if canonical_mfe > 0.0
+        else None
+    )
+    mae_time = (
+        _first_extreme_time(adverse, maximize=False)
+        if canonical_mae < 0.0
+        else None
+    )
     gross_bps = float(trade["gross_bps"])
     abs_mae = abs(mae_bps)
     gross_to_mfe = gross_bps / mfe_bps if mfe_bps > 0.0 else None
@@ -259,9 +267,11 @@ def _summary(
     mfe = _values(rows, "mfe_bps")
     abs_mae = _values(rows, "abs_mae_bps")
     winner_capture = _values(rows, "winner_gross_to_mfe_ratio")
+    per_symbol_counts = Counter(str(row["symbol"]) for row in rows)
     return {
         "observations": len(rows),
-        "symbol_count": len({str(row["symbol"]) for row in rows}),
+        "symbol_count": len(per_symbol_counts),
+        "per_symbol_counts": dict(sorted(per_symbol_counts.items())),
         "first_entry": min((str(row["entry"]) for row in rows), default=None),
         "last_entry": max((str(row["entry"]) for row in rows), default=None),
         "expectancy_bps": float(np.mean(net)) if net else None,
