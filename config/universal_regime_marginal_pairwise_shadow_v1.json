@@ -76,7 +76,7 @@
   },
   "historical_anchor_rule": {
     "source_analysis": "universal-descriptive-regime-marginal-pairwise-v1",
-    "selection_timing": "Historical anchors are identified only after this prospective watch definition is frozen.",
+    "selection_timing": "Historical anchors are identified only after this prospective watch definition is frozen. The historical workflow had completed, but its marginal/pairwise artifact had not been inspected when these watch definitions were fixed.",
     "selection_rule": "Within each strategy, an anchor is any inference-eligible historical contrast whose global Holm FWER adjusted p-value is <= 0.10.",
     "anchor_direction": "sign of the historical state-minus-complement expectancy difference",
     "no_anchor_if_historical_global_holm_discovery_absent": true,
@@ -138,11 +138,11 @@
   "claims": {
     "original_strategy_trades_unchanged": true,
     "labels_are_observational_only": true,
-    "all_92_contrasts_frozen_before_historical_marginal_pairwise_results": true,
     "candidate_promoted": false,
     "regime_filter_authorized": false,
     "profitable_edge_established": false,
     "live_trading_authorized": false,
-    "leverage_authorized": false
+    "leverage_authorized": false,
+    "all_92_contrasts_frozen_before_historical_marginal_pairwise_results_were_inspected": true
   }
 }
