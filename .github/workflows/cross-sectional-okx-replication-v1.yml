@@ -1,0 +1,78 @@
+name: Cross-Sectional OKX Venue Replication v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - fix/universal-existing-validation
+    paths:
+      - "src/orderflow_edge_lab/okx_history.py"
+      - "src/orderflow_edge_lab/cli/cross_sectional_okx_replication.py"
+      - "tests/test_okx_history.py"
+      - "config/cross_sectional_okx_replication_v1.json"
+      - "docs/CROSS_SECTIONAL_OKX_REPLICATION_V1.md"
+      - ".github/workflows/cross-sectional-okx-replication-v1.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cross-sectional-okx-replication-v1
+  cancel-in-progress: true
+
+jobs:
+  replicate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run OKX source tests
+        run: python -m unittest tests.test_okx_history -v
+      - name: Run MEXC versus OKX replication
+        run: |
+          mkdir -p artifacts/cross_sectional_okx_replication/source
+          python -m orderflow_edge_lab.cli.cross_sectional_okx_replication \
+            --candidate config/cross_sectional_candidate_v1.json \
+            --config config/cross_sectional_okx_replication_v1.json \
+            --output artifacts/cross_sectional_okx_replication/report.json \
+            --source-dir artifacts/cross_sectional_okx_replication/source \
+            --max-workers 1
+      - name: Enforce D2 evidence boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open("artifacts/cross_sectional_okx_replication/report.json",encoding="utf-8"))
+          if r["evidence_independence"] != "D2_independent_venue_same_historical_period":
+              raise SystemExit("wrong evidence level")
+          if r["formal_verdict"] != "DESCRIPTIVE_TRANSFER_ONLY":
+              raise SystemExit("OKX replication emitted evaluative verdict")
+          if r["economics"]["independent_venue"] != "OKX USDT-Margined Perpetual Swap":
+              raise SystemExit("unexpected independent venue")
+          c=r["claims"]
+          if c["strategy_definition_changed"] or c["same_historical_period_is_future_oos"] or c["independent_venue_is_independent_engine"]:
+              raise SystemExit("OKX D2 evidence boundary violated")
+          if c["candidate_promoted"] or c["profitable_edge_established"] or c["live_trading_authorized"] or c["leverage_authorized"]:
+              raise SystemExit("forbidden OKX replication claim")
+          print(json.dumps({
+              "shared_daily_observations":r["shared_daily_observations"],
+              "shared_start":r["shared_start"],
+              "shared_end":r["shared_end"],
+              "mexc_net_return":r["mexc"]["net_return"],
+              "okx_net_return":r["independent_venue"]["net_return"],
+              "signal_agreement":r["signal_agreement"],
+              "basket_agreement":r["rebalance_selection_agreement"],
+          },indent=2))
+          PY
+      - name: Preserve OKX replication artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cross-sectional-okx-replication-v1
+          path: artifacts/cross_sectional_okx_replication/
+          retention-days: 90
+          if-no-files-found: warn
