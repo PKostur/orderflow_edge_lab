@@ -1,0 +1,84 @@
+name: Payoff Geometry Diagnostics v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - fix/universal-existing-validation
+    paths:
+      - "src/orderflow_edge_lab/payoff_geometry.py"
+      - "src/orderflow_edge_lab/cli/payoff_geometry.py"
+      - "config/payoff_geometry_v1.json"
+      - "tests/test_payoff_geometry.py"
+      - ".github/workflows/payoff-geometry-v1.yml"
+      - "pyproject.toml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: payoff-geometry-v1
+  cancel-in-progress: true
+
+jobs:
+  geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e ".[research]"
+      - name: Run payoff geometry tests
+        run: python -m unittest tests.test_payoff_geometry -v
+      - name: Fetch frozen 8h historical snapshot
+        run: |
+          mkdir -p artifacts/data/8h
+          orderflow-strategy-tournament-data \
+            --config config/universal_existing_strategy_backtests_v1.json \
+            --interval 8h \
+            --output-dir artifacts/data/8h
+      - name: Run predeclared payoff geometry diagnostic
+        run: |
+          orderflow-payoff-geometry \
+            --protocol config/universal_existing_strategy_backtests_v1.json \
+            --geometry-config config/payoff_geometry_v1.json \
+            --data-dir artifacts/data/8h \
+            --output artifacts/payoff_geometry_v1.json
+      - name: Enforce non-gating diagnostic contract
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open("artifacts/payoff_geometry_v1.json",encoding="utf-8"))
+          if r["analysis"] != "payoff_geometry_v1":
+              raise SystemExit("wrong payoff geometry analysis")
+          if r["fixed_cell_count_per_strategy"] <= 0:
+              raise SystemExit("no predeclared payoff cells")
+          if not r.get("cell_set_sha256"):
+              raise SystemExit("missing payoff cell-set hash")
+          claims=r["claims"]
+          if not bool(claims.get("development_only")):
+              raise SystemExit("payoff geometry lost development-only boundary")
+          for key in ("session_filter_authorized","strategy_promotion_authorized","live_trading_authorized","leverage_authorized"):
+              if bool(claims.get(key)):
+                  raise SystemExit(f"payoff geometry exceeded authority: {key}")
+          expected=r["fixed_cell_count_per_strategy"]
+          for cost in r["cost_cases"]:
+              for strategy in cost["strategies"]:
+                  if len(strategy["cells"]) != expected:
+                      raise SystemExit("predeclared empty cells were not retained")
+          print(json.dumps({
+              "fixed_cell_count_per_strategy":r["fixed_cell_count_per_strategy"],
+              "cell_set_sha256":r["cell_set_sha256"],
+              "cost_cases":[row["cost_bps"] for row in r["cost_cases"]],
+          },indent=2))
+          PY
+      - name: Upload payoff geometry artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: payoff-geometry-v1
+          path: artifacts/
+          retention-days: 90
+          if-no-files-found: error
