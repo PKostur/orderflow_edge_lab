@@ -1,0 +1,77 @@
+name: Payoff Geometry Diagnostics v1.1
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - fix/universal-existing-validation
+      - research/payoff-geometry-v1-1
+    paths:
+      - "src/orderflow_edge_lab/payoff_geometry_v1_1.py"
+      - "src/orderflow_edge_lab/cli/payoff_geometry_v1_1.py"
+      - "config/payoff_geometry_v1_1.json"
+      - "tests/test_payoff_geometry_v1_1.py"
+      - ".github/workflows/payoff-geometry-v1-1.yml"
+      - "pyproject.toml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: payoff-geometry-v1-1
+  cancel-in-progress: true
+
+jobs:
+  geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e ".[research]"
+      - name: Run payoff geometry tests
+        run: python -m unittest tests.test_payoff_geometry_v1_1 -v
+      - name: Fetch frozen 8h historical snapshot
+        run: |
+          mkdir -p artifacts/data/8h
+          orderflow-strategy-tournament-data \
+            --config config/universal_existing_strategy_backtests_v1.json \
+            --interval 8h \
+            --output-dir artifacts/data/8h
+      - name: Run payoff geometry v1.1 diagnostic
+        run: |
+          orderflow-payoff-geometry-v1-1 \
+            --data-dir artifacts/data/8h \
+            --as-of 2026-09-24T00:00:00Z \
+            --output artifacts/payoff_geometry_v1_1.json
+      - name: Enforce non-gating diagnostic contract
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open("artifacts/payoff_geometry_v1_1.json",encoding="utf-8"))
+          if r["protocol_id"] != "universal-payoff-geometry-diagnostics-v1":
+              raise SystemExit("wrong protocol id")
+          for key, flag in r["claims"].items():
+              if key.endswith("_authorized") and flag:
+                  raise SystemExit(f"payoff geometry v1.1 exceeded authority: {key}")
+          expected=r["fixed_cell_count_per_strategy_direction"]
+          for cost in r["cost_cases"]:
+              for s in cost["strategies"]:
+                  if [d["direction"] for d in s["directions"]] != ["ALL","LONG","SHORT"]:
+                      raise SystemExit("direction split missing")
+                  for d in s["directions"]:
+                      if len(d["cells"]) != expected:
+                          raise SystemExit("predeclared empty cells were not retained")
+          print(json.dumps({"cell_set_sha256":r["cell_set_sha256"],"cells":expected},indent=2))
+          PY
+      - name: Upload payoff geometry v1.1 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: payoff-geometry-v1-1
+          path: |
+            artifacts/payoff_geometry_v1_1.json
+            artifacts/data/8h/manifest.json
+          if-no-files-found: error

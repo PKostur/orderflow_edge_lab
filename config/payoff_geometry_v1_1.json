@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "protocol_id": "universal-payoff-geometry-diagnostics-v1",
+  "analysis": "payoff_geometry_v1_1",
+  "status": "predeclared_historical_descriptive_non_gating",
+  "extends": {
+    "analysis": "payoff_geometry_v1",
+    "config": "config/payoff_geometry_v1.json",
+    "relationship": "Additive extension. Reuses the v1 episode reconstruction, canonical MFE/MAE reconciliation and the frozen 71-cell grid unchanged; adds only fields v1 did not compute. v1 outputs and conclusions are not modified."
+  },
+  "source_protocol": "universal-existing-strategy-backtests-v1",
+  "source_config": "config/universal_existing_strategy_backtests_v1.json",
+  "frozen_window": {
+    "start": "2024-01-01T00:00:00Z",
+    "end_exclusive": "2026-09-12T00:00:00Z",
+    "latest_permitted_as_of": "2026-09-24T23:59:59Z",
+    "rule": "The source protocol window must equal this window, no bar at or after end_exclusive may be present, and an explicit as_of later than latest_permitted_as_of is rejected."
+  },
+  "primary_cost_bps": 20,
+  "cost_cases_bps": [12, 16, 20],
+  "directions": ["ALL", "LONG", "SHORT"],
+  "quantiles": [0.1, 0.25, 0.5, 0.75, 0.9],
+  "episode_fields": {
+    "bars_to_mfe": "bar offset from entry bar (0-based) of the first bar attaining the episode MFE; null when MFE is 0",
+    "bars_to_mae": "bar offset from entry bar (0-based) of the first bar attaining the episode MAE; null when MAE is 0",
+    "excursion_order": "MFE_FIRST | MAE_FIRST | SAME_BAR | NO_MFE | NO_MAE | NONE. SAME_BAR means the extremes share an OHLC bar and their order is unobservable; it is never resolved by assumption.",
+    "static_gross_bps": "side * (exit_open / entry_open - 1) * 1e4; same fixed-entry-price convention as MFE/MAE",
+    "path_gross_bps": "product over held bars of (1 + side * open-to-open return) - 1, in bps; must reconcile with the canonical ledger gross_bps",
+    "short_rebalance_gap_bps": "ledger gross minus static gross; identically 0 for +/-1 longs, non-zero for shorts because the canonical ledger compounds a per-bar rebalanced short",
+    "capture_ratio": "static_gross_bps / mfe_bps when mfe_bps > 0, else null; not clipped",
+    "giveback_bps": "mfe_bps - static_gross_bps"
+  },
+  "ledger_reconciliation": {
+    "tolerance_bps": 1e-06,
+    "on_failure": "hard_error"
+  },
+  "censoring": {
+    "terminal_liquidation_policy": "right_censored_open_episode_excluded_from_all_cells_including_capture_statistics",
+    "report_censored_counts": true
+  },
+  "cell_statistics": {
+    "minimum_sufficient_trades": 20,
+    "insufficient_label": "INSUFFICIENT",
+    "effective_n_sufficiency": "Post-first-run conservative amendment (2026-09-26): each cell also reports effective_n_sufficiency, SUFFICIENT only when effective_n >= minimum_sufficient_trades. It can only downgrade a cell, never select one. Added because the first run showed effective N of about 16-31 even for cells with thousands of trades.",
+    "top_decile_profit_share": "sum of net_bps over the top ceil(10%) trades by net_bps, counting only positive values, divided by the sum of all positive net_bps; null when no positive trade",
+    "skewness": "adjusted Fisher-Pearson sample skewness of net_bps; null when n < 3 or zero variance",
+    "effective_n": "Kish cluster effective size n^2 / sum_b n_b^2 over 30-day calendar blocks of entry time",
+    "win_rate_vs_payoff_comparison": "each cell reports its delta versus the same strategy x direction ALL cell for win_rate, expectancy_bps, median and p90 mfe_bps, and p10/p50/p90 net_bps",
+    "ranking": "none; cells are emitted in fixed predeclared order and no ordering, selection or best-cell field is produced"
+  },
+  "bootstrap": {
+    "method": "stationary_bootstrap_politis_romano_over_calendar_days",
+    "unit": "UTC calendar day of trade entry, from the first entry day to the last entry day inclusive, including days with no entries",
+    "mean_block_days": 30,
+    "wrap": "circular",
+    "replicates": 500,
+    "confidence_interval": [0.025, 0.975],
+    "seed": 20260926,
+    "shared_resamples_across_all_symbols_strategies_directions_and_cells_within_cost_case": true,
+    "fields": ["expectancy_bps", "win_rate", "median_mfe_bps", "median_giveback_bps", "median_capture_ratio"],
+    "emitted_only_for_sufficient_cells": false,
+    "note": "Intervals are descriptive uncertainty only; no p-values or hypothesis tests are produced."
+  },
+  "claims": {
+    "development_only": true,
+    "same_period_historical_only": true,
+    "verified_out_of_sample_evidence": false,
+    "cell_ranking_emitted": false,
+    "strategy_promotion_authorized": false,
+    "regime_filter_authorized": false,
+    "session_filter_authorized": false,
+    "feeds_jev_or_threshold_freezes": false,
+    "live_trading_authorized": false,
+    "leverage_authorized": false
+  }
+}
