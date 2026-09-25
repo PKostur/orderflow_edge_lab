@@ -18,7 +18,10 @@
     "context_symbol": "BTC_USDT",
     "simultaneous_capture_counts_as_one_dependence_cluster": true,
     "capture_seconds": 600,
-    "sample_seconds": 5
+    "sample_seconds": 5,
+    "venue_symbol_aliases": {
+      "FIL_USDT": "FILECOIN_USDT"
+    }
   },
   "frozen_relationship": {
     "historical_model_description": "Ridge with median imputation and standard scaling trained only on 12 pre-transfer ENA dependence batches",
@@ -65,5 +68,18 @@
     "provisional_freeze_committed_at_utc": "2026-09-24T21:03:10Z",
     "status": "superseded_before_any_eligible_capture",
     "clean_boundary": "2026-09-24T21:30:00Z"
+  },
+  "acquisition_amendment": {
+    "recorded_after_start": true,
+    "reason": "MEXC exposes the frozen FIL asset under venue-native futures identifier FILECOIN_USDT; strict FIL_USDT depth bootstrap returned version 0 on repeated attempts.",
+    "research_symbol_unchanged": "FIL_USDT",
+    "venue_transport_symbol": "FILECOIN_USDT",
+    "relationship_changed": false,
+    "feature_changed": false,
+    "target_changed": false,
+    "review_thresholds_changed": false,
+    "eligible_clusters_scored_before_amendment": 0,
+    "substitution_permitted": false,
+    "note": "Transport alias correction only. The frozen six-asset panel and D4 review rule are unchanged."
   }
 }
