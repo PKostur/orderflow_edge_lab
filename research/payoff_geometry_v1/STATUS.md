@@ -125,6 +125,6 @@ with prospective start:
 
 `2026-09-25T16:00:00Z`
 
-for DON8, EMA8 and VOL8 independently.
+for DON8 and EMA8. VOL8 is covered separately by `config/vol8_payoff_amplitude_forward_v1.json`, which uses a continuous volatility-rank mechanism and stronger review requirements.
 
 The forward watch does not filter the original trades and cannot authorize live trading or leverage.
