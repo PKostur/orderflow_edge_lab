@@ -74,3 +74,29 @@ accounting convention for the slow strategies. v1.1 does not modify the frozen
 canonical accounting. Capture and giveback use the static convention so that
 they are commensurable with MFE, and the gap is reported per strategy. Deciding
 which convention is canonical needs its own versioned accounting change.
+
+## Follow-up: whole-strategy re-scoring under both conventions
+
+`orderflow_edge_lab.short_convention_comparison` re-scores the same frozen trades
+under the ledger convention and under a fixed-quantity short. It charges the
+same entry and exit side costs and changes no trade, signal, cost or canonical
+rule. At 20 bps, completed trades only:
+
+| Strategy | Dir | N | Ledger E / PF / win | Fixed-quantity E / PF / win |
+| --- | --- | ---: | --- | --- |
+| DON8 | LONG | 108 | 1,060 / 2.22 / 34.3% | identical |
+| DON8 | SHORT | 112 | −108 / 0.87 / 36.6% | 248 / 1.35 / 47.3% |
+| DON8 | ALL | 220 | 466 / 1.55 / 35.5% | 647 / 1.82 / 40.9% |
+| EMA8 | SHORT | 172 | −87 / 0.86 / 26.2% | 156 / 1.30 / 33.1% |
+| EMA8 | ALL | 332 | 254 / 1.43 / 25.3% | 380 / 1.70 / 28.9% |
+| VOL8 | SHORT | 1,117 | −33 / 0.82 / 33.2% | −8 / 0.95 / 35.7% |
+| VOL8 | ALL | 2,095 | 35 / 1.20 / 34.5% | 48 / 1.28 / 35.8% |
+
+Under fixed-quantity accounting, which is how a MEXC USDT-M short of a fixed
+contract count actually settles, the DON8 and EMA8 short sides move from losing
+to profitable in-sample. The "shorts lose" conclusion for the slow strategies is
+therefore an accounting artifact, not a market finding. This is same-period
+development evidence with the wide, zero-spanning intervals reported above. It
+changes the accounting question, not the strategies' evidentiary status.
+Adopting fixed-quantity as canonical needs a versioned accounting change
+(canonical v3) re-bound across dependent protocols.
