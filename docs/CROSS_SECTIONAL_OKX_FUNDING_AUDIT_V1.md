@@ -43,3 +43,39 @@ The audit cannot:
 If coverage is incomplete, a full economic replication requires a new versioned protocol using a source with demonstrably complete realized funding.
 
 OKX's historical-data service advertises perpetual funding-rate archives from March 2022 onward, and OKX added a public historical-market-data query endpoint with funding-rate support in September 2025. Those archives are the appropriate next source to investigate rather than zero-filling unavailable REST history.
+
+
+## First completed audit result
+
+Workflow run:
+
+`36153239047`
+
+Artifact:
+
+`cross-sectional-okx-funding-audit-v1` (artifact ID `10872651856`)
+
+Observed held-interval funding coverage:
+
+- required nonzero executed-weight symbol-day intervals: `1,312`;
+- intervals with at least one finite realized OKX funding observation: `324`;
+- missing held intervals: `988`;
+- coverage fraction: `24.6951%`;
+- complete-funding economics admissible: `false`;
+- audit status: `FUNDING_COVERAGE_INCOMPLETE`.
+
+This is a data-quality result, not a strategy result. It confirms that the current REST funding-history source cannot support complete economics for the inspected shared historical window.
+
+## Next version boundary
+
+Any attempt to recover the missing realized funding history must be a new versioned source-replication path. It must preserve:
+
+- the frozen candidate specification;
+- the shared calendar rule;
+- the existing cost model;
+- realized venue funding rather than estimated funding;
+- the v1 artifact unchanged.
+
+Before economic results are inspected, the new version must prove 100% held-interval funding coverage or fail closed.
+
+The preferred source is OKX's public historical market-data/archive service, which is separate from the recent-history funding endpoint.
