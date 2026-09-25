@@ -179,6 +179,15 @@ class CrossMarketRegimeAtlasTests(unittest.TestCase):
         self.assertTrue(
             any(row["instrument"] == "ETH_USDT" for row in report["cells"])
         )
+        all_breadth = next(
+            row
+            for row in report["cross_instrument_breadth"]
+            if row["cell_family"] == "ALL"
+            and row["cell"] == "ALL"
+            and row["horizon_bars"] == 1
+        )
+        self.assertEqual(all_breadth["universe_instrument_count"], 2)
+        self.assertEqual(all_breadth["instrument_coverage_fraction"], 1.0)
 
     def test_future_tail_is_not_fabricated(self):
         config = self._config()
