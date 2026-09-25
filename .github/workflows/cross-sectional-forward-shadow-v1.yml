@@ -47,6 +47,10 @@ jobs:
               raise SystemExit('cross-sectional candidate or paper-only boundary is invalid')
           if c.get('verified_out_of_sample_evidence') or c.get('profitable_edge_established') or c.get('live_order_transmission_supported'):
               raise SystemExit('cross-sectional forward shadow emitted a forbidden promotion claim')
+          if not c.get('contribution_concentration_diagnostics_are_non_gating'):
+              raise SystemExit('contribution concentration diagnostics lost non-gating boundary')
+          if not c.get('contributor_removal_stress_is_attribution_not_counterfactual_strategy'):
+              raise SystemExit('contribution removal stress lost attribution-only boundary')
           print(json.dumps({
               'candidate_id': r['candidate_id'],
               'status': r['status'],
