@@ -64,6 +64,41 @@ def _btc_prior_return(frame: pd.DataFrame | None, entry: pd.Timestamp) -> float 
     return close_price / open_price - 1.0
 
 
+def _prior_volatility_state(
+    frame: pd.DataFrame,
+    entry_index: int,
+    *,
+    realized_window_bars: int,
+    rank_history_bars: int,
+    minimum_rank_history: int,
+) -> str:
+    if entry_index <= realized_window_bars:
+        return "UNKNOWN"
+    close = frame["close"].astype(float)
+    returns = close.pct_change()
+    realized = returns.rolling(
+        int(realized_window_bars),
+        min_periods=int(realized_window_bars),
+    ).std(ddof=0)
+    current_i = int(entry_index) - 1
+    current = realized.iloc[current_i]
+    if current is None or not math.isfinite(float(current)):
+        return "UNKNOWN"
+    start = max(0, current_i - int(rank_history_bars))
+    history = pd.to_numeric(realized.iloc[start:current_i], errors="coerce").dropna()
+    if len(history) < int(minimum_rank_history):
+        return "UNKNOWN"
+    q33, q67 = np.quantile(
+        history.to_numpy(dtype=float),
+        [1.0 / 3.0, 2.0 / 3.0],
+    )
+    if float(current) <= float(q33):
+        return "LOW"
+    if float(current) >= float(q67):
+        return "HIGH"
+    return "MID"
+
+
 def _first_extreme_time(
     values: pd.Series,
     *,
@@ -87,6 +122,7 @@ def enrich_trade_geometry(
     symbol: str,
     cost_bps: float,
     btc_frame: pd.DataFrame | None,
+    volatility_config: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     entry = _utc(trade["entry"])
     exit_ts = _utc(trade["exit"])
@@ -143,6 +179,14 @@ def enrich_trade_geometry(
     mfe_to_abs_mae = mfe_bps / abs_mae if abs_mae > 0.0 else None
     prior_3 = _prior_return(frame, int(entry_loc), 3)
     btc_prior_1 = _btc_prior_return(btc_frame, entry)
+    vol_cfg = dict(volatility_config or {})
+    volatility_state = _prior_volatility_state(
+        frame,
+        int(entry_loc),
+        realized_window_bars=int(vol_cfg.get("realized_window_bars", 20)),
+        rank_history_bars=int(vol_cfg.get("rank_history_bars", 90)),
+        minimum_rank_history=int(vol_cfg.get("minimum_rank_history", 30)),
+    )
 
     return {
         "strategy_id": strategy_id,
@@ -151,6 +195,9 @@ def enrich_trade_geometry(
         "entry": entry.isoformat(),
         "exit": exit_ts.isoformat(),
         "side": side,
+        "side_label": "LONG" if side > 0 else "SHORT",
+        "outcome_label": "CORRECT" if gross_bps > 0.0 else "INCORRECT",
+        "pre_entry_volatility_state": volatility_state,
         "terminal_liquidation": bool(trade.get("terminal_liquidation")),
         "bars_held": int(trade.get("bars_held") or 0),
         "duration_hours": (exit_ts - entry).total_seconds() / 3600.0,
@@ -307,9 +354,33 @@ def _cell_definitions(config: Mapping[str, Any]) -> list[tuple[str, Callable[[Ma
     grid = config["cell_grid"]
     regimes = [str(v) for v in grid["session_regimes"]]
     states = [str(v) for v in grid["alignment_states"]]
+    volatility_states = [str(v) for v in grid.get("volatility_states", [])]
+    outcome_states = [str(v) for v in grid.get("outcome_states", [])]
+    side_states = [str(v) for v in grid.get("side_states", [])]
     cells: list[tuple[str, Callable[[Mapping[str, Any]], bool]]] = [
         ("ALL", lambda _row: True)
     ]
+    for state in outcome_states:
+        cells.append(
+            (
+                f"OUTCOME={state}",
+                lambda row, state=state: row["outcome_label"] == state,
+            )
+        )
+    for state in side_states:
+        cells.append(
+            (
+                f"SIDE={state}",
+                lambda row, state=state: row["side_label"] == state,
+            )
+        )
+    for state in volatility_states:
+        cells.append(
+            (
+                f"PRE_ENTRY_VOLATILITY={state}",
+                lambda row, state=state: row["pre_entry_volatility_state"] == state,
+            )
+        )
     for regime in regimes:
         cells.append(
             (
@@ -415,6 +486,7 @@ def build_payoff_geometry_report(
                         symbol=symbol,
                         cost_bps=cost,
                         btc_frame=btc,
+                        volatility_config=geometry.get("pre_entry_volatility_state"),
                     )
                     if row["terminal_liquidation"]:
                         count += 1
