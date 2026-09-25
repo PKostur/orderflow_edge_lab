@@ -361,6 +361,11 @@ def build_forward_report(
                 max_abs_position=float(strategy_cfg.get("max_abs_position", 1.0)),
             ),
         )
+        accounting = result.get("accounting") or {}
+        if result.get("trades", 0) and int(accounting.get("version") or 0) != 2:
+            raise Vol8PayoffAmplitudeForwardError(
+                f"{symbol}: canonical accounting v2 required"
+            )
         completed, open_snapshots = _partition_trades(
             result.get("trades_ledger") or [],
             start,
@@ -380,6 +385,13 @@ def build_forward_report(
                 _utc(trade["entry"]),
                 config["causal_pre_entry_volatility"],
             )
+            if (
+                str(geometry["pre_entry_volatility_state"])
+                != str(vol["pre_entry_volatility_state"])
+            ):
+                raise Vol8PayoffAmplitudeForwardError(
+                    f"{symbol}: volatility-state implementations disagree"
+                )
             row = {
                 **geometry,
                 **vol,
