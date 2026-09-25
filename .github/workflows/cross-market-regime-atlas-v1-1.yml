@@ -1,0 +1,79 @@
+name: Cross-Market Regime Atlas v1.1
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/cross-market-regime-atlas-v1-1
+    paths:
+      - "config/cross_market_regime_atlas_v1_1.json"
+      - "src/orderflow_edge_lab/cross_market_regime_atlas.py"
+      - "src/orderflow_edge_lab/cli/cross_market_regime_atlas.py"
+      - "tests/test_cross_market_regime_atlas.py"
+      - "docs/CROSS_MARKET_REGIME_ATLAS_V1_1.md"
+      - ".github/workflows/cross-market-regime-atlas-v1-1.yml"
+      - "pyproject.toml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cross-market-regime-atlas-v1-1
+  cancel-in-progress: true
+
+jobs:
+  atlas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run causal atlas tests
+        run: python -m unittest tests.test_cross_market_regime_atlas -v
+      - name: Build frozen development atlas
+        run: |
+          mkdir -p artifacts/cross_market_regime_atlas_v1_1/source
+          orderflow-cross-market-regime-atlas \
+            --config config/cross_market_regime_atlas_v1_1.json \
+            --output artifacts/cross_market_regime_atlas_v1_1/report.json \
+            --source-dir artifacts/cross_market_regime_atlas_v1_1/source \
+            --max-workers 5
+      - name: Enforce discovery-only boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open("artifacts/cross_market_regime_atlas_v1_1/report.json",encoding="utf-8"))
+          if r["analysis"] != "cross_market_regime_atlas_v1_1":
+              raise SystemExit("unexpected atlas analysis id")
+          if r["observation_count"] <= 0 or r["cell_count"] <= 0:
+              raise SystemExit("atlas produced no observations/cells")
+          if len(r.get("source_sha256",{})) != 10:
+              raise SystemExit("expected ten frozen MEXC source hashes")
+          claims=r["claims"]
+          required_true=("development_only","state_labels_are_causal","same_period_not_future_oos","raw_market_behavior_only")
+          if not all(bool(claims.get(k)) for k in required_true):
+              raise SystemExit("atlas research-boundary claim failed")
+          forbidden=("strategy_overlay_used","strategy_pnl_used_for_state_definition","candidate_promoted","profitable_edge_established","live_trading_authorized","leverage_authorized","atlas_result_can_promote_candidate")
+          if any(bool(claims.get(k)) for k in forbidden):
+              raise SystemExit("atlas exceeded discovery-only authority")
+          sufficient=sum(bool(x["descriptive_cell_sufficient"]) for x in r["cells"])
+          print(json.dumps({
+              "protocol_name":r["protocol_name"],
+              "observation_count":r["observation_count"],
+              "cell_count":r["cell_count"],
+              "sufficient_cell_count":sufficient,
+              "breadth_rows":len(r["cross_instrument_breadth"]),
+          },indent=2))
+          PY
+      - name: Preserve atlas artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cross-market-regime-atlas-v1-1
+          path: artifacts/cross_market_regime_atlas_v1_1/
+          retention-days: 90
+          if-no-files-found: error
