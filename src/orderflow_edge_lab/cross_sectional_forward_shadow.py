@@ -109,8 +109,28 @@ def _contribution_concentration(
         if absolute_total > 0.0
         else None
     )
+    arithmetic_net = sum(values.values())
+    removal_stress = [
+        {
+            "symbol": symbol,
+            "contribution": value,
+            "arithmetic_net_without_contributor": arithmetic_net - value,
+        }
+        for symbol, value in sorted(
+            active.items(),
+            key=lambda item: (-abs(item[1]), item[0]),
+        )
+    ]
+    net_without_top_abs = (
+        arithmetic_net - top_abs[1] if top_abs is not None else arithmetic_net
+    )
+    net_without_top_positive = (
+        arithmetic_net - top_positive[1]
+        if top_positive is not None
+        else arithmetic_net
+    )
     return {
-        "arithmetic_net_contribution_sum": sum(values.values()),
+        "arithmetic_net_contribution_sum": arithmetic_net,
         "positive_contribution_sum": positive_total,
         "negative_contribution_sum": negative_total,
         "absolute_contribution_sum": absolute_total,
@@ -118,6 +138,20 @@ def _contribution_concentration(
         "positive_contributor_count": len(positive),
         "negative_contributor_count": len(negative),
         "absolute_contribution_hhi": absolute_hhi,
+        "positive_contributor_fraction_of_active": (
+            len(positive) / len(active) if active else None
+        ),
+        "arithmetic_net_without_largest_absolute_contributor": net_without_top_abs,
+        "arithmetic_net_without_largest_positive_contributor": net_without_top_positive,
+        "positive_net_survives_removing_largest_absolute_contributor": (
+            net_without_top_abs > 0.0 if arithmetic_net > 0.0 and top_abs is not None else None
+        ),
+        "positive_net_survives_removing_largest_positive_contributor": (
+            net_without_top_positive > 0.0
+            if arithmetic_net > 0.0 and top_positive is not None
+            else None
+        ),
+        "contributor_removal_stress": removal_stress,
         "largest_absolute_contributor": (
             {
                 "symbol": top_abs[0],
@@ -407,6 +441,8 @@ def build_forward_report(
             "paper_shadow_only": True,
             "forward_sample_minimum_reached": completed_holding_periods >= minimum,
             "visible_forward_pnl_is_statistical_proof": False,
+            "contribution_concentration_diagnostics_are_non_gating": True,
+            "contributor_removal_stress_is_attribution_not_counterfactual_strategy": True,
             "verified_out_of_sample_evidence": False,
             "profitable_edge_established": False,
             "live_order_transmission_supported": False,
