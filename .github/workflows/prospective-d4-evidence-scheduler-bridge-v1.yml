@@ -1,0 +1,225 @@
+name: Prospective D4 Evidence Scheduler Bridge v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/prospective-d4-evidence-scheduler-bridge-v1.yml"
+  schedule:
+    - cron: "35 1,7,13,19 * * *"
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  COLLECTOR_REF: 096617250b9164caafa7e1859aa00d480ea7cce2
+  CONFIG: config/volatility_state_transfer_forward_v1.json
+
+jobs:
+  validate-bridge:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.COLLECTOR_REF }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Validate frozen D4 collector
+        run: |
+          python -m unittest tests.test_volatility_state_forward -v
+          python -m unittest tests.test_mexc_record -v
+      - name: Verify frozen D4 boundary
+        run: |
+          python - <<'PY'
+          import json, os
+          p=json.load(open(os.environ["CONFIG"],encoding="utf-8"))
+          if p["prospective_start_utc"] != "2026-09-24T21:30:00Z":
+              raise SystemExit("D4 prospective start changed")
+          print("pinned_d4_contract_ok")
+          PY
+
+  d4-forward:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    concurrency:
+      group: bridge-volatility-state-transfer-forward-v1
+      cancel-in-progress: false
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.COLLECTOR_REF }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run forward-watch tests
+        run: |
+          python -m unittest tests.test_volatility_state_forward -v
+          python -m unittest tests.test_mexc_record -v
+      - name: Check frozen prospective boundary
+        id: boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          START=$(python -c 'import json,os; print(json.load(open(os.environ["CONFIG"]))["prospective_start_utc"])')
+          NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          python - "$START" "$NOW" <<'PY'
+          import sys
+          from datetime import datetime
+          start=datetime.fromisoformat(sys.argv[1].replace("Z","+00:00"))
+          now=datetime.fromisoformat(sys.argv[2].replace("Z","+00:00"))
+          print(f"start={start.isoformat()} now={now.isoformat()} eligible={now >= start}")
+          PY
+          if [[ "$NOW" < "$START" ]]; then
+            echo "eligible=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "eligible=true" >> "$GITHUB_OUTPUT"
+          fi
+          echo "now=$NOW" >> "$GITHUB_OUTPUT"
+      - name: Restore prior forward ledger
+        if: steps.boundary.outputs.eligible == 'true'
+        id: restore
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/volatility_state_forward/history /tmp/vol-ledgers
+          mapfile -t IDS < <(
+            gh api --paginate \
+              "repos/$GITHUB_REPOSITORY/actions/artifacts?name=volatility-state-forward-ledger-v1&per_page=100" \
+              --jq '.artifacts[] | select(.expired == false) | .id'
+          )
+          for ID in "${IDS[@]}"; do
+            DEST="/tmp/vol-ledgers/$ID"
+            mkdir -p "$DEST"
+            gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$ID/zip" > "$DEST/artifact.zip"
+            unzip -q "$DEST/artifact.zip" -d "$DEST/unpacked"
+          done
+          mapfile -t PRIOR_CLUSTERS < <(find /tmp/vol-ledgers -type f -name cluster.json | sort)
+          if [[ "${#PRIOR_CLUSTERS[@]}" -gt 0 ]]; then
+            orderflow-volatility-state-forward restore "${PRIOR_CLUSTERS[@]}" \
+              --config "$CONFIG" \
+              --history-dir artifacts/volatility_state_forward/history
+          fi
+          COUNT=$(find artifacts/volatility_state_forward/history -type f -name cluster.json | wc -l | tr -d ' ')
+          echo "restored_count=$COUNT" >> "$GITHUB_OUTPUT"
+      - name: Capture genuinely later multi-symbol order flow
+        if: steps.boundary.outputs.eligible == 'true'
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/volatility_state_forward/current
+          orderflow-mexc-record \
+            --symbol ARB_USDT \
+            --symbol ETH_USDT \
+            --symbol FIL_USDT \
+            --symbol-alias FIL_USDT=FILECOIN_USDT \
+            --symbol NEAR_USDT \
+            --symbol SOL_USDT \
+            --symbol UNI_USDT \
+            --symbol BTC_USDT \
+            --duration-seconds 600 \
+            --snapshot-max-attempts 12 \
+            --snapshot-failure-policy continue \
+            --output-dir artifacts/volatility_state_forward/current
+      - name: Build causal state reports
+        if: steps.boundary.outputs.eligible == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          FEATURE=$(find artifacts/volatility_state_forward/current -name '*_mexc_features.jsonl' -print -quit)
+          test -n "$FEATURE"
+          mkdir -p artifacts/volatility_state_forward/current/state_reports
+          CLUSTER_ID="gha-${GITHUB_RUN_ID}-attempt-${GITHUB_RUN_ATTEMPT}"
+          for SYMBOL in ARB_USDT ETH_USDT FIL_USDT NEAR_USDT SOL_USDT UNI_USDT; do
+            orderflow-market-state-scan "$FEATURE" \
+              --symbol "$SYMBOL" \
+              --context-symbol BTC_USDT \
+              --batch-id "$CLUSTER_ID" \
+              --sample-seconds 5 \
+              --directionality-horizons 60 \
+              --volatility-horizons 30,60,300 \
+              --liquidity-horizons 60 \
+              --continuation-horizons 60 \
+              --minimum-association-observations 20 \
+              --output "artifacts/volatility_state_forward/current/state_reports/${SYMBOL}.json"
+          done
+      - name: Evaluate current D4 cluster
+        if: steps.boundary.outputs.eligible == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          CLUSTER_ID="gha-${GITHUB_RUN_ID}-attempt-${GITHUB_RUN_ATTEMPT}"
+          orderflow-volatility-state-forward cluster \
+            artifacts/volatility_state_forward/current/state_reports/*.json \
+            --config "$CONFIG" \
+            --cluster-id "$CLUSTER_ID" \
+            --output artifacts/volatility_state_forward/current/cluster.json
+      - name: Append current cluster and aggregate
+        if: steps.boundary.outputs.eligible == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          CLUSTER_ID=$(python -c 'import json; print(json.load(open("artifacts/volatility_state_forward/current/cluster.json"))["cluster_id"])')
+          DEST="artifacts/volatility_state_forward/history/$CLUSTER_ID"
+          mkdir -p "$DEST"
+          cp artifacts/volatility_state_forward/current/cluster.json "$DEST/cluster.json"
+          mapfile -t CLUSTERS < <(find artifacts/volatility_state_forward/history -type f -name cluster.json | sort)
+          test "${#CLUSTERS[@]}" -ge 1
+          orderflow-volatility-state-forward aggregate "${CLUSTERS[@]}" \
+            --config "$CONFIG" \
+            --output artifacts/volatility_state_forward/aggregate.json
+      - name: Enforce D4 evidence boundary
+        if: steps.boundary.outputs.eligible == 'true'
+        run: |
+          python - <<'PY'
+          import json, os
+          from datetime import datetime
+          cfg=json.load(open(os.environ["CONFIG"],encoding="utf-8"))
+          cluster=json.load(open("artifacts/volatility_state_forward/current/cluster.json",encoding="utf-8"))
+          agg=json.load(open("artifacts/volatility_state_forward/aggregate.json",encoding="utf-8"))
+          start=datetime.fromisoformat(cfg["prospective_start_utc"].replace("Z","+00:00"))
+          first=datetime.fromisoformat(cluster["capture_first_observation_utc"])
+          if first < start:
+              raise SystemExit("pre-start observation entered D4 cluster")
+          if cluster["formal_verdict"] != "WITHHELD" or agg["formal_verdict"] != "WITHHELD":
+              raise SystemExit("early formal verdict")
+          if not cluster["claims"]["simultaneous_symbols_count_as_one_dependence_cluster"]:
+              raise SystemExit("dependence correction lost")
+          for payload in (cluster,agg):
+              claims=payload["claims"]
+              if claims.get("strategy_pnl_used"):
+                  raise SystemExit("strategy PnL entered D4 state watch")
+              if claims.get("profitable_edge_established") or claims.get("live_trading_authorized") or claims.get("leverage_authorized"):
+                  raise SystemExit("authority/evidence boundary violated")
+          print(json.dumps({
+              "cluster_id":cluster["cluster_id"],
+              "eligible_symbol_count":cluster["eligible_symbol_count"],
+              "cluster_median_primary_spearman":cluster["cluster_median_primary_spearman"],
+              "cluster_positive_symbol_fraction":cluster["cluster_positive_symbol_fraction"],
+              "eligible_cluster_count":agg["eligible_cluster_count"],
+              "distinct_utc_dates":agg["distinct_utc_dates"],
+              "review_progress":agg["review_progress"],
+          },indent=2))
+          PY
+      - name: Preserve cumulative D4 ledger
+        if: steps.boundary.outputs.eligible == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: volatility-state-forward-ledger-v1
+          path: |
+            artifacts/volatility_state_forward/history/
+            artifacts/volatility_state_forward/aggregate.json
+            artifacts/volatility_state_forward/current/cluster.json
+            config/volatility_state_transfer_forward_v1.json
+          retention-days: 90
+          if-no-files-found: error
