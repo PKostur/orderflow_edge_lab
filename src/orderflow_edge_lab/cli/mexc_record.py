@@ -163,6 +163,66 @@ async def _snapshot_symbol(
     )
 
 
+async def _bootstrap_snapshots(
+    engine: FeatureEngine,
+    raw_writer: AppendOnlyJsonl,
+    feature_writer: AppendOnlyJsonl,
+    *,
+    rest_base: str,
+    symbols: tuple[str, ...],
+    venue_symbols: Mapping[str, str],
+    snapshot_limit: int,
+    snapshot_max_attempts: int,
+    failure_policy: str,
+) -> set[str]:
+    if failure_policy not in {"fail", "continue"}:
+        raise ValueError("failure_policy must be fail or continue")
+    unavailable: set[str] = set()
+    for symbol in symbols:
+        try:
+            await _snapshot_symbol(
+                engine,
+                raw_writer,
+                feature_writer,
+                rest_base=rest_base,
+                symbol=symbol,
+                snapshot_limit=snapshot_limit,
+                venue_symbol=venue_symbols[symbol],
+                reason="post_subscription_initial_snapshot",
+                max_attempts=snapshot_max_attempts,
+            )
+        except MexcOrderFlowError as exc:
+            if failure_policy == "fail":
+                raise
+            unavailable.add(symbol)
+            received_at_ns = time.time_ns()
+            raw_writer.write(
+                {
+                    "record_type": "snapshot_unavailable",
+                    "source": "mexc_futures_public_rest",
+                    "symbol": symbol,
+                    "venue_symbol": venue_symbols[symbol],
+                    "received_at_ns": received_at_ns,
+                    "snapshot_max_attempts": snapshot_max_attempts,
+                    "failure_policy": failure_policy,
+                    "reason": str(exc),
+                }
+            )
+            feature_writer.write(
+                {
+                    "record_type": "symbol_unavailable",
+                    "feature_schema_version": FEATURE_SCHEMA_VERSION,
+                    "source": "mexc_futures_public_rest",
+                    "symbol": symbol,
+                    "venue_symbol": venue_symbols[symbol],
+                    "received_at_ns": received_at_ns,
+                    "snapshot_max_attempts": snapshot_max_attempts,
+                    "reason": str(exc),
+                }
+            )
+    return unavailable
+
+
 async def _recover_depth(
     engine: FeatureEngine,
     raw_writer: AppendOnlyJsonl,
@@ -265,8 +325,9 @@ async def _run_connection(
     venue_symbols: Mapping[str, str],
     snapshot_limit: int,
     snapshot_max_attempts: int,
+    snapshot_failure_policy: str,
     deadline: float | None,
-) -> None:
+) -> set[str]:
     try:
         import websockets
     except ImportError as exc:
@@ -321,18 +382,17 @@ async def _run_connection(
                     )
                 )
 
-            for symbol in symbols:
-                await _snapshot_symbol(
-                    engine,
-                    raw_writer,
-                    feature_writer,
-                    rest_base=rest_base,
-                    symbol=symbol,
-                    snapshot_limit=snapshot_limit,
-                    venue_symbol=venue_symbols[symbol],
-                    reason="post_subscription_initial_snapshot",
-                    max_attempts=snapshot_max_attempts,
-                )
+            unavailable_symbols = await _bootstrap_snapshots(
+                engine,
+                raw_writer,
+                feature_writer,
+                rest_base=rest_base,
+                symbols=symbols,
+                venue_symbols=venue_symbols,
+                snapshot_limit=snapshot_limit,
+                snapshot_max_attempts=snapshot_max_attempts,
+                failure_policy=snapshot_failure_policy,
+            )
 
             pinger = asyncio.create_task(_ping_loop(ws))
             try:
@@ -376,7 +436,7 @@ async def _run_connection(
                     )
 
                     if channel == "push.depth":
-                        if symbol not in engine.books:
+                        if symbol not in engine.books or symbol in unavailable_symbols:
                             continue
                         data = payload.get("data")
                         if not isinstance(data, Mapping):
@@ -404,7 +464,7 @@ async def _run_connection(
                             }
                         )
                     elif channel == "push.deal":
-                        if symbol not in engine.books:
+                        if symbol not in engine.books or symbol in unavailable_symbols:
                             continue
                         for feature in engine.on_deals(
                             symbol,
@@ -422,6 +482,7 @@ async def _run_connection(
                     pinger,
                     return_exceptions=True,
                 )
+            return unavailable_symbols
     except websockets.exceptions.ConnectionClosed as exc:
         raise ConnectionError(
             "MEXC websocket connection closed"
@@ -450,6 +511,10 @@ async def run(args: argparse.Namespace) -> tuple[Path, Path]:
     if args.snapshot_max_attempts < 1:
         raise ValueError(
             "--snapshot-max-attempts must be >= 1"
+        )
+    if args.snapshot_failure_policy not in {"fail", "continue"}:
+        raise ValueError(
+            "--snapshot-failure-policy must be fail or continue"
         )
     if args.trade_window_seconds <= 0:
         raise ValueError(
@@ -503,6 +568,7 @@ async def run(args: argparse.Namespace) -> tuple[Path, Path]:
                 "ws_url": args.ws_url,
                 "snapshot_limit": args.snapshot_limit,
                 "snapshot_max_attempts": args.snapshot_max_attempts,
+                "snapshot_failure_policy": args.snapshot_failure_policy,
                 "depth_subscription_compress": False,
                 "depth_level_schema": (
                     "price_contract_volume_order_count"
@@ -516,12 +582,13 @@ async def run(args: argparse.Namespace) -> tuple[Path, Path]:
         )
 
         reconnects = 0
+        unavailable_symbols: set[str] = set()
         while (
             deadline is None
             or time.monotonic() < deadline
         ):
             try:
-                await _run_connection(
+                unavailable_symbols = await _run_connection(
                     engine,
                     raw_writer,
                     feature_writer,
@@ -531,6 +598,7 @@ async def run(args: argparse.Namespace) -> tuple[Path, Path]:
                     venue_symbols=venue_symbols,
                     snapshot_limit=args.snapshot_limit,
                     snapshot_max_attempts=args.snapshot_max_attempts,
+                    snapshot_failure_policy=args.snapshot_failure_policy,
                     deadline=deadline,
                 )
                 break
@@ -569,6 +637,7 @@ async def run(args: argparse.Namespace) -> tuple[Path, Path]:
                 "ended_at_ns": time.time_ns(),
                 "depth_stats": engine.depth_stats_snapshot(),
                 "reconnects": reconnects,
+                "snapshot_unavailable_symbols": sorted(unavailable_symbols),
             }
         )
         feature_writer.write(
@@ -630,6 +699,15 @@ def build_parser() -> argparse.ArgumentParser:
         type=int,
         default=3,
         help="Strict REST depth snapshot retry budget per bootstrap/recovery",
+    )
+    parser.add_argument(
+        "--snapshot-failure-policy",
+        choices=("fail", "continue"),
+        default="fail",
+        help=(
+            "fail aborts after exhausted strict snapshot validation; continue "
+            "marks that symbol unavailable while preserving strict validation"
+        ),
     )
     parser.add_argument(
         "--trade-window-seconds",
