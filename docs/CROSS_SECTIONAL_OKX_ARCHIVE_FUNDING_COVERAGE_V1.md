@@ -73,3 +73,16 @@ This audit cannot:
 - authorize leverage.
 
 If and only if this audit demonstrates complete held-interval funding coverage, a separate D2 economic replication v2 may be specified and frozen before any v2 PnL is inspected.
+
+
+## Transport hardening
+
+The first full-archive attempt, workflow run `36159121966`, passed the frozen parser tests but encountered HTTP 429 while fetching the 131-file archive set. It produced no coverage verdict and therefore no data-quality evidence.
+
+The transport layer was hardened without changing any research definition:
+
+- bounded retry for HTTP 429 and transient 5xx responses;
+- exponential backoff with a capped delay and optional Retry-After respect;
+- archive download concurrency reduced to one in the validation workflow.
+
+The 131-file source set, exact CSV parser contract, candidate specification, price window, held-interval coverage rule, and 100% admissibility threshold remain unchanged.

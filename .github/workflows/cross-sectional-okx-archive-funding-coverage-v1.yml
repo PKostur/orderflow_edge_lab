@@ -7,8 +7,10 @@ on:
       - fix/universal-existing-validation
     paths:
       - "src/orderflow_edge_lab/okx_funding_archive.py"
+      - "src/orderflow_edge_lab/okx_funding_archive_schema.py"
       - "src/orderflow_edge_lab/cli/cross_sectional_okx_archive_funding_coverage.py"
       - "tests/test_okx_funding_archive.py"
+      - "tests/test_okx_funding_archive_schema.py"
       - "config/cross_sectional_okx_archive_funding_coverage_v1.json"
       - "docs/CROSS_SECTIONAL_OKX_ARCHIVE_FUNDING_COVERAGE_V1.md"
       - ".github/workflows/cross-sectional-okx-archive-funding-coverage-v1.yml"
@@ -32,7 +34,7 @@ jobs:
       - name: Install research runtime
         run: python -m pip install -e ".[research]"
       - name: Run frozen archive parser tests
-        run: python -m unittest tests.test_okx_funding_archive -v
+        run: python -m unittest tests.test_okx_funding_archive tests.test_okx_funding_archive_schema -v
       - name: Audit complete archive funding coverage
         run: |
           mkdir -p artifacts/cross_sectional_okx_archive_funding_coverage
@@ -40,7 +42,7 @@ jobs:
             --candidate config/cross_sectional_candidate_v1.json \
             --config config/cross_sectional_okx_archive_funding_coverage_v1.json \
             --output artifacts/cross_sectional_okx_archive_funding_coverage/report.json \
-            --max-workers 6
+            --max-workers 1
       - name: Enforce data-quality-only boundary
         run: |
           python - <<'PY'

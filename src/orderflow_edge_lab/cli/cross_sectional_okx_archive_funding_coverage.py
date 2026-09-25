@@ -37,7 +37,7 @@ def main(argv: list[str] | None = None) -> int:
         default="config/cross_sectional_okx_archive_funding_coverage_v1.json",
     )
     parser.add_argument("--output", required=True)
-    parser.add_argument("--max-workers", type=int, default=6)
+    parser.add_argument("--max-workers", type=int, default=1)
     args = parser.parse_args(argv)
 
     try:
@@ -82,7 +82,7 @@ def main(argv: list[str] | None = None) -> int:
         )
 
         archive_reports = []
-        workers = max(1, min(int(args.max_workers), 8))
+        workers = max(1, min(int(args.max_workers), 2))
         with ThreadPoolExecutor(max_workers=workers) as pool:
             futures = {
                 pool.submit(

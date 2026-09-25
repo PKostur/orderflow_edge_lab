@@ -4,11 +4,13 @@ from io import BytesIO
 import zipfile
 import unittest
 from unittest.mock import patch
+from urllib.error import HTTPError
 
 from orderflow_edge_lab.okx_funding_archive_schema import (
     ArchiveLimits,
     OkxFundingArchiveSchemaError,
     build_okx_funding_archive_schema_probe,
+    _download,
     inspect_okx_funding_archive,
 )
 
@@ -23,6 +25,22 @@ def _zip_bytes(name: str = "funding.csv", rows: str | None = None) -> bytes:
     with zipfile.ZipFile(out, "w", compression=zipfile.ZIP_DEFLATED) as archive:
         archive.writestr(name, rows)
     return out.getvalue()
+
+
+class _FakeResponse:
+    def __init__(self, payload: bytes):
+        self.status = 200
+        self.headers = {}
+        self._payload = payload
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        return False
+
+    def read(self, size=-1):
+        return self._payload if size < 0 else self._payload[:size]
 
 
 class OkxFundingArchiveSchemaTests(unittest.TestCase):
@@ -52,6 +70,31 @@ class OkxFundingArchiveSchemaTests(unittest.TestCase):
                     "https://example.invalid/funding.zip",
                     expected_filename="funding.zip",
                 )
+
+
+    def test_download_retries_http_429(self):
+        payload = _zip_bytes()
+        error = HTTPError(
+            "https://example.invalid/funding.zip",
+            429,
+            "Too Many Requests",
+            {},
+            None,
+        )
+        with patch(
+            "orderflow_edge_lab.okx_funding_archive_schema.urlopen",
+            side_effect=[error, _FakeResponse(payload)],
+        ), patch(
+            "orderflow_edge_lab.okx_funding_archive_schema.time.sleep"
+        ) as sleeper:
+            result = _download(
+                "https://example.invalid/funding.zip",
+                max_bytes=1_000_000,
+                max_attempts=2,
+                backoff_seconds=0.01,
+            )
+        self.assertEqual(result, payload)
+        sleeper.assert_called_once()
 
     def test_probe_is_engineering_only(self):
         config = {

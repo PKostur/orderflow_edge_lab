@@ -5,7 +5,9 @@ from io import BytesIO, TextIOWrapper
 import csv
 import json
 from pathlib import PurePosixPath
+import time
 from typing import Any, Mapping
+from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 import zipfile
 
@@ -32,7 +34,16 @@ def _safe_member(name: str) -> bool:
     )
 
 
-def _download(url: str, *, max_bytes: int, timeout: float = 30.0) -> bytes:
+def _download(
+    url: str,
+    *,
+    max_bytes: int,
+    timeout: float = 30.0,
+    max_attempts: int = 5,
+    backoff_seconds: float = 1.0,
+) -> bytes:
+    if max_attempts < 1:
+        raise OkxFundingArchiveSchemaError("max_attempts must be positive")
     request = Request(
         url,
         headers={
@@ -40,31 +51,65 @@ def _download(url: str, *, max_bytes: int, timeout: float = 30.0) -> bytes:
             "User-Agent": "orderflow-edge-lab/1.0",
         },
     )
-    with urlopen(request, timeout=timeout) as response:
-        if response.status != 200:
-            raise OkxFundingArchiveSchemaError(
-                f"archive download returned HTTP {response.status}"
-            )
-        raw_length = response.headers.get("Content-Length")
-        if raw_length not in (None, ""):
-            try:
-                content_length = int(raw_length)
-            except ValueError as exc:
+    last_error: Exception | None = None
+    for attempt in range(max_attempts):
+        try:
+            with urlopen(request, timeout=timeout) as response:
+                if response.status != 200:
+                    raise OkxFundingArchiveSchemaError(
+                        f"archive download returned HTTP {response.status}"
+                    )
+                raw_length = response.headers.get("Content-Length")
+                if raw_length not in (None, ""):
+                    try:
+                        content_length = int(raw_length)
+                    except ValueError as exc:
+                        raise OkxFundingArchiveSchemaError(
+                            "invalid archive Content-Length"
+                        ) from exc
+                    if content_length > max_bytes:
+                        raise OkxFundingArchiveSchemaError(
+                            f"archive exceeds download limit: {content_length}"
+                        )
+                payload = response.read(max_bytes + 1)
+            if len(payload) > max_bytes:
                 raise OkxFundingArchiveSchemaError(
-                    "invalid archive Content-Length"
-                ) from exc
-            if content_length > max_bytes:
-                raise OkxFundingArchiveSchemaError(
-                    f"archive exceeds download limit: {content_length}"
+                    f"archive exceeds download limit: >{max_bytes}"
                 )
-        payload = response.read(max_bytes + 1)
-    if len(payload) > max_bytes:
-        raise OkxFundingArchiveSchemaError(
-            f"archive exceeds download limit: >{max_bytes}"
-        )
-    if not payload:
-        raise OkxFundingArchiveSchemaError("archive download was empty")
-    return payload
+            if not payload:
+                raise OkxFundingArchiveSchemaError(
+                    "archive download was empty"
+                )
+            return payload
+        except HTTPError as exc:
+            last_error = exc
+            retryable = exc.code == 429 or 500 <= exc.code < 600
+            if not retryable or attempt + 1 >= max_attempts:
+                raise OkxFundingArchiveSchemaError(
+                    f"archive download returned HTTP {exc.code}"
+                ) from exc
+            retry_after = exc.headers.get("Retry-After") if exc.headers else None
+            try:
+                retry_after_seconds = float(retry_after) if retry_after else 0.0
+            except ValueError:
+                retry_after_seconds = 0.0
+            delay = max(
+                retry_after_seconds,
+                float(backoff_seconds) * (2 ** attempt),
+            )
+            time.sleep(min(delay, 30.0))
+        except URLError as exc:
+            last_error = exc
+            if attempt + 1 >= max_attempts:
+                raise OkxFundingArchiveSchemaError(
+                    f"archive download transport error: {exc.reason}"
+                ) from exc
+            time.sleep(
+                min(float(backoff_seconds) * (2 ** attempt), 30.0)
+            )
+    raise OkxFundingArchiveSchemaError(
+        f"archive download failed after {max_attempts} attempts: {last_error}"
+    )
 
 
 def _inspect_csv_member(
