@@ -3,7 +3,7 @@ from __future__ import annotations
 import unittest
 from unittest.mock import patch
 
-from orderflow_edge_lab.cli.mexc_record import _parse_symbol_aliases, _snapshot_symbol
+from orderflow_edge_lab.cli.mexc_record import _bootstrap_snapshots, _parse_symbol_aliases, _snapshot_symbol
 from orderflow_edge_lab.mexc_orderflow import MexcOrderFlowError
 
 
