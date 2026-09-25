@@ -88,10 +88,26 @@ def test_report_is_paper_only_and_cost_aware() -> None:
     assert concentration["active_contributor_count"] == 4
     assert concentration["absolute_contribution_hhi"] is not None
     assert concentration["largest_absolute_contributor"] is not None
+    assert len(concentration["contributor_removal_stress"]) == 4
+    top = concentration["largest_absolute_contributor"]
+    assert abs(
+        concentration["arithmetic_net_without_largest_absolute_contributor"]
+        - (total_symbol_net - top["contribution"])
+    ) < 1e-12
+    if total_symbol_net > 0.0:
+        assert (
+            concentration["positive_net_survives_removing_largest_absolute_contributor"]
+            == (
+                concentration["arithmetic_net_without_largest_absolute_contributor"]
+                > 0.0
+            )
+        )
     assert abs(
         concentration["arithmetic_net_contribution_sum"] - total_symbol_net
     ) < 1e-12
     assert report["claims"]["paper_shadow_only"] is True
+    assert report["claims"]["contribution_concentration_diagnostics_are_non_gating"] is True
+    assert report["claims"]["contributor_removal_stress_is_attribution_not_counterfactual_strategy"] is True
     assert report["claims"]["profitable_edge_established"] is False
     assert report["claims"]["live_order_transmission_supported"] is False
 
@@ -135,3 +151,9 @@ def test_completed_holding_period_decomposition_reconciles() -> None:
         period_concentration["arithmetic_net_contribution_sum"] - interval_sum
     ) < 1e-12
     assert period_concentration["largest_absolute_contributor"] is not None
+    assert period_concentration["contributor_removal_stress"]
+    top = period_concentration["largest_absolute_contributor"]
+    assert abs(
+        period_concentration["arithmetic_net_without_largest_absolute_contributor"]
+        - (interval_sum - top["contribution"])
+    ) < 1e-12
