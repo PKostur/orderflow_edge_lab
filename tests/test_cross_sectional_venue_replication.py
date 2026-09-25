@@ -66,6 +66,14 @@ class CrossSectionalVenueReplicationTests(unittest.TestCase):
         )
         self.assertEqual(result["signal_agreement"]["exact_weight_agreement_fraction"], 1.0)
         self.assertAlmostEqual(result["mexc"]["net_return"], result["independent_venue"]["net_return"])
+        baskets = result["rebalance_selection_agreement"]
+        self.assertGreater(baskets["rebalance_union_event_count"], 0)
+        self.assertEqual(
+            baskets["exact_long_short_basket_agreement_fraction"],
+            1.0,
+        )
+        self.assertEqual(baskets["mean_long_basket_jaccard"], 1.0)
+        self.assertEqual(baskets["mean_short_basket_jaccard"], 1.0)
         self.assertEqual(result["formal_verdict"], "DESCRIPTIVE_TRANSFER_ONLY")
         self.assertFalse(result["claims"]["same_historical_period_is_future_oos"])
 
@@ -86,6 +94,12 @@ class CrossSectionalVenueReplicationTests(unittest.TestCase):
             candidate, mexc, funding, independent, funding, config
         )
         self.assertEqual(result["shared_daily_observations"], 255)
+        baskets = result["rebalance_selection_agreement"]
+        self.assertGreater(baskets["rebalance_union_event_count"], 0)
+        self.assertGreaterEqual(baskets["mean_long_basket_jaccard"], 0.0)
+        self.assertLessEqual(baskets["mean_long_basket_jaccard"], 1.0)
+        self.assertGreaterEqual(baskets["mean_short_basket_jaccard"], 0.0)
+        self.assertLessEqual(baskets["mean_short_basket_jaccard"], 1.0)
         self.assertTrue(result["claims"]["same_calendar_enforced"])
 
 
