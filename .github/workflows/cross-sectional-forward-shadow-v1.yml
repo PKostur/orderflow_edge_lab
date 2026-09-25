@@ -56,6 +56,11 @@ jobs:
               'completed_holding_periods': r['metrics']['completed_holding_periods'],
               'open_symbol_positions': r['metrics']['open_symbol_positions'],
               'current_weights': r['current_weights'],
+              'contribution_concentration': r['contribution_concentration'],
+              'latest_completed_period_contribution_concentration': (
+                  r['completed_holding_periods'][-1]['contribution_concentration']
+                  if r['completed_holding_periods'] else None
+              ),
           }, indent=2))
           PY
       - name: Deterministic multi-agent release gate
