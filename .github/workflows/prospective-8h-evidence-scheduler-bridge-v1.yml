@@ -17,6 +17,35 @@ env:
   COLLECTOR_REF: 096617250b9164caafa7e1859aa00d480ea7cce2
 
 jobs:
+  native-workflow-guard:
+    runs-on: ubuntu-latest
+    outputs:
+      session: ${{ steps.guard.outputs.session }}
+      vol8: ${{ steps.guard.outputs.vol8 }}
+      regime: ${{ steps.guard.outputs.regime }}
+    steps:
+      - name: Disable bridge once native workflows reach main
+        id: guard
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          check_absent() {
+            local key="$1"
+            local path="$2"
+            if gh api "repos/$GITHUB_REPOSITORY/contents/$path?ref=main" >/dev/null 2>&1; then
+              echo "$key=false" >> "$GITHUB_OUTPUT"
+              echo "$key native workflow present on main; bridge disabled"
+            else
+              echo "$key=true" >> "$GITHUB_OUTPUT"
+              echo "$key native workflow absent on main; bridge active"
+            fi
+          }
+          check_absent session ".github/workflows/universal-session-alignment-shadow.yml"
+          check_absent vol8 ".github/workflows/vol8-payoff-amplitude-forward-v1.yml"
+          check_absent regime ".github/workflows/universal-regime-marginal-pairwise-shadow-v1.yml"
+
   validate-bridge:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
@@ -52,7 +81,8 @@ jobs:
           PY
 
   session-alignment:
-    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '25 0,8,16 * * *'
+    needs: native-workflow-guard
+    if: (github.event_name == 'workflow_dispatch' || github.event.schedule == '25 0,8,16 * * *') && needs.native-workflow-guard.outputs.session == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 40
     concurrency:
@@ -114,7 +144,8 @@ jobs:
           if-no-files-found: error
 
   vol8-payoff-amplitude:
-    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '25 0,8,16 * * *'
+    needs: native-workflow-guard
+    if: (github.event_name == 'workflow_dispatch' || github.event.schedule == '25 0,8,16 * * *') && needs.native-workflow-guard.outputs.vol8 == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     concurrency:
@@ -176,7 +207,8 @@ jobs:
           if-no-files-found: error
 
   regime-marginal-pairwise:
-    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '40 0,8,16 * * *'
+    needs: native-workflow-guard
+    if: (github.event_name == 'workflow_dispatch' || github.event.schedule == '40 0,8,16 * * *') && needs.native-workflow-guard.outputs.regime == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     concurrency:
