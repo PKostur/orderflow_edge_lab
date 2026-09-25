@@ -147,6 +147,7 @@ async def _recover_depth(
     symbol: str,
     pending: Mapping[str, Any],
     snapshot_limit: int,
+    snapshot_max_attempts: int,
 ) -> dict[str, Any]:
     book = engine.books[symbol]
     begin, end, version = depth_version_range(pending)
@@ -201,6 +202,7 @@ async def _recover_depth(
         symbol=symbol,
         snapshot_limit=snapshot_limit,
         reason="depth_gap_fallback",
+        max_attempts=snapshot_max_attempts,
     )
 
     try:
@@ -233,6 +235,7 @@ async def _run_connection(
     rest_base: str,
     symbols: tuple[str, ...],
     snapshot_limit: int,
+    snapshot_max_attempts: int,
     deadline: float | None,
 ) -> None:
     try:
@@ -296,6 +299,7 @@ async def _run_connection(
                     symbol=symbol,
                     snapshot_limit=snapshot_limit,
                     reason="post_subscription_initial_snapshot",
+                    max_attempts=snapshot_max_attempts,
                 )
 
             pinger = asyncio.create_task(_ping_loop(ws))
@@ -356,6 +360,7 @@ async def _run_connection(
                                 symbol=symbol,
                                 pending=data,
                                 snapshot_limit=snapshot_limit,
+                                snapshot_max_attempts=snapshot_max_attempts,
                             )
                         feature_writer.write(
                             {
@@ -406,6 +411,10 @@ async def run(args: argparse.Namespace) -> tuple[Path, Path]:
         raise ValueError(
             "--snapshot-limit must be in [1, 1000]"
         )
+    if args.snapshot_max_attempts < 1:
+        raise ValueError(
+            "--snapshot-max-attempts must be >= 1"
+        )
     if args.trade_window_seconds <= 0:
         raise ValueError(
             "--trade-window-seconds must be positive"
@@ -452,6 +461,7 @@ async def run(args: argparse.Namespace) -> tuple[Path, Path]:
                 "rest_base": args.rest_base,
                 "ws_url": args.ws_url,
                 "snapshot_limit": args.snapshot_limit,
+                "snapshot_max_attempts": args.snapshot_max_attempts,
                 "depth_subscription_compress": False,
                 "depth_level_schema": (
                     "price_contract_volume_order_count"
@@ -478,6 +488,7 @@ async def run(args: argparse.Namespace) -> tuple[Path, Path]:
                     rest_base=args.rest_base,
                     symbols=symbols,
                     snapshot_limit=args.snapshot_limit,
+                    snapshot_max_attempts=args.snapshot_max_attempts,
                     deadline=deadline,
                 )
                 break
@@ -565,6 +576,12 @@ def build_parser() -> argparse.ArgumentParser:
         "--snapshot-limit",
         type=int,
         default=1000,
+    )
+    parser.add_argument(
+        "--snapshot-max-attempts",
+        type=int,
+        default=3,
+        help="Strict REST depth snapshot retry budget per bootstrap/recovery",
     )
     parser.add_argument(
         "--trade-window-seconds",
