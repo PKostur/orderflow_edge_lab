@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "analysis": "payoff_geometry_v1",
+  "status": "predeclared_historical_development_diagnostic",
+  "source_protocol": "universal-existing-strategy-backtests-v1",
+  "source_config": "config/universal_existing_strategy_backtests_v1.json",
+  "primary_cost_bps": 20,
+  "cost_cases_bps": [
+    12,
+    16,
+    20
+  ],
+  "terminal_liquidation_policy": "exclude_from_primary_geometry_cells_but_report_count",
+  "correct_direction_definition": "gross_bps > 0",
+  "capture_ratio_definition": "gross_bps / mfe_bps when mfe_bps > 0; not clipped",
+  "excursion_timing_definition": "first bar attaining the canonical episode MFE/MAE, measured in hours from canonical entry",
+  "quantiles": [
+    0.1,
+    0.25,
+    0.5,
+    0.75,
+    0.9
+  ],
+  "cell_grid": {
+    "session_regimes": [
+      "OFF_SESSION",
+      "ASIA",
+      "LONDON",
+      "NEW_YORK",
+      "ASIA+LONDON",
+      "ASIA+NEW_YORK",
+      "LONDON+NEW_YORK",
+      "ASIA+LONDON+NEW_YORK"
+    ],
+    "alignment_states": [
+      "ALIGNED",
+      "AGAINST",
+      "NEUTRAL"
+    ],
+    "cell_families": [
+      "ALL",
+      "SESSION",
+      "BTC_PRIOR_BAR",
+      "OWN_PRIOR_3BAR",
+      "SESSION_X_BTC_PRIOR_BAR",
+      "SESSION_X_OWN_PRIOR_3BAR"
+    ],
+    "emit_empty_cells": true
+  },
+  "bootstrap": {
+    "method": "nonoverlapping_calendar_blocks_by_trade_entry",
+    "block_days": 30,
+    "replicates": 500,
+    "confidence_interval": [
+      0.025,
+      0.975
+    ],
+    "seed": 20260925,
+    "shared_resamples_across_all_strategies_and_cells_within_cost_case": true,
+    "rationale": "resample time blocks rather than individual trades so simultaneous and nearby trades across symbols/strategies are not treated as independent observations"
+  },
+  "reported_distribution_fields": [
+    "net_bps",
+    "gross_bps",
+    "mfe_bps",
+    "abs_mae_bps",
+    "gross_to_mfe_ratio",
+    "winner_gross_to_mfe_ratio",
+    "time_to_mfe_hours",
+    "time_to_mae_hours",
+    "duration_hours",
+    "mfe_to_abs_mae_ratio"
+  ],
+  "uncertainty_fields": [
+    "expectancy_bps",
+    "win_rate",
+    "median_mfe_bps",
+    "median_abs_mae_bps",
+    "median_winner_gross_to_mfe_ratio",
+    "median_time_to_mfe_hours"
+  ],
+  "multiplicity_policy": {
+    "diagnostics_are_non_gating": true,
+    "cell_selection_after_results_prohibited": true,
+    "decision_affecting_claims_require_later_correction": [
+      "White Reality Check",
+      "Hansen SPA",
+      "Deflated Sharpe Ratio",
+      "Probability of Backtest Overfitting"
+    ],
+    "note": "These stronger tests are reserved for later claims that would alter candidate selection, filtering, promotion, or deployment; this diagnostic does not make such claims."
+  },
+  "claims": {
+    "development_only": true,
+    "same_period_not_future_oos": true,
+    "strategy_targets_unchanged": true,
+    "session_filter_authorized": false,
+    "strategy_promotion_authorized": false,
+    "live_trading_authorized": false,
+    "leverage_authorized": false
+  }
+}
