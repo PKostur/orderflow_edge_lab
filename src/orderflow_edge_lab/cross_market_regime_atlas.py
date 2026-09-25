@@ -383,6 +383,8 @@ def summarize_atlas(
 
 def cross_instrument_breadth(
     cells: Sequence[Mapping[str, Any]],
+    *,
+    universe_instrument_count: int,
 ) -> list[dict[str, Any]]:
     grouped: dict[tuple[int, str, str], list[Mapping[str, Any]]] = defaultdict(list)
     for row in cells:
@@ -406,7 +408,18 @@ def cross_instrument_breadth(
                 "cell_family": family,
                 "cell": cell,
                 "instrument_count": len(rows),
+                "universe_instrument_count": universe_instrument_count,
+                "instrument_coverage_fraction": (
+                    len(rows) / universe_instrument_count
+                    if universe_instrument_count > 0
+                    else None
+                ),
                 "sufficient_instrument_count": len(sufficient),
+                "sufficient_instrument_coverage_fraction": (
+                    len(sufficient) / universe_instrument_count
+                    if universe_instrument_count > 0
+                    else None
+                ),
                 "median_of_instrument_median_future_abs_return_bps": (
                     statistics.median(med_abs) if med_abs else None
                 ),
@@ -429,7 +442,10 @@ def build_regime_atlas_report(
 ) -> dict[str, Any]:
     observations = build_atlas_observations(frames, config)
     cells = summarize_atlas(observations, config)
-    breadth = cross_instrument_breadth(cells)
+    breadth = cross_instrument_breadth(
+        cells,
+        universe_instrument_count=len(config["development_data"]["symbols"]),
+    )
     return {
         "schema_version": 1,
         "analysis": "cross_market_regime_atlas_v1_1",
