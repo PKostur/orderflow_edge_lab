@@ -140,3 +140,18 @@ Current review progress after this cluster:
 - formal verdict: `WITHHELD`
 
 No strategy PnL, directional-alpha claim, promotion, live-trading authorization, or leverage authorization is attached to this state-prediction result.
+
+
+## Ledger accumulation hardening
+
+A post-start infrastructure audit found that the artifact restore step expected a top-level `history/` directory, while uploaded artifacts preserve the repository-relative path `artifacts/volatility_state_forward/history/`. As a result, each successful run preserved its own immutable cluster correctly, but later runs did not restore earlier clusters into the cumulative aggregate.
+
+This is an accumulation bug only. It does not change any captured observation, symbol, feature, target, prospective boundary, eligibility threshold, or review threshold.
+
+The hardening does three things:
+
+- scans every non-expired prior `volatility-state-forward-ledger-v1` artifact;
+- restores and deduplicates cluster reports by `cluster_id`, failing closed if the same ID has conflicting payloads;
+- prevents ordinary code-push workflow runs from collecting new D4 evidence. Push runs now rebuild the existing ledger only. New capture remains limited to scheduled or explicitly dispatched runs.
+
+No already collected prospective cluster is discarded or re-scored. The three preserved pre-hardening cluster artifacts remain part of the v1 evidence record. Formal interpretation remains withheld until the original 5-cluster and 3-UTC-date gate is satisfied.

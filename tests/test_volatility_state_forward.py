@@ -6,8 +6,10 @@ import tempfile
 import unittest
 
 from orderflow_edge_lab.volatility_state_forward import (
+    VolatilityStateForwardError,
     aggregate_forward_clusters,
     evaluate_forward_cluster,
+    restore_forward_cluster_history,
 )
 
 
@@ -89,6 +91,67 @@ class VolatilityStateForwardTests(unittest.TestCase):
         self.assertEqual(len(result["distinct_utc_dates"]),2)
         self.assertTrue(result["review_progress"]["ready_for_review"])
         self.assertEqual(result["formal_verdict"],"WITHHELD")
+
+
+    def test_restore_deduplicates_identical_artifact_copies(self):
+        cfg=self._config()
+        rows=[]
+        for i,date in enumerate(("2026-09-25","2026-09-26"),start=1):
+            rows.append({
+                "schema_version":1,
+                "analysis":"volatility_state_forward_cluster_v1",
+                "watch_id":cfg["watch_id"],
+                "cluster_id":f"c{i}",
+                "prospective_start_utc":cfg["prospective_start_utc"],
+                "capture_first_observation_utc":f"{date}T01:00:00+00:00",
+                "eligible_symbol_count":2,
+                "cluster_median_primary_spearman":0.1*i,
+                "pooled_within_symbol_rank_correlation":0.2*i,
+            })
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            paths=[]
+            for copy_index in range(2):
+                for row in rows:
+                    p=root/f"artifact{copy_index}"/row["cluster_id"]/"cluster.json"
+                    p.parent.mkdir(parents=True,exist_ok=True)
+                    p.write_text(json.dumps(row),encoding="utf-8")
+                    paths.append(p)
+            history=root/"history"
+            result=restore_forward_cluster_history(paths,cfg,history)
+            restored=sorted(history.glob("*/cluster.json"))
+        self.assertEqual(result["restored_cluster_count"],2)
+        self.assertEqual(result["cluster_ids"],["c1","c2"])
+        self.assertEqual(len(restored),2)
+        self.assertFalse(result["claims"]["new_evidence_collected"])
+        self.assertFalse(result["claims"]["historical_cluster_values_changed"])
+
+    def test_restore_rejects_conflicting_duplicate_cluster_id(self):
+        cfg=self._config()
+        base={
+            "schema_version":1,
+            "analysis":"volatility_state_forward_cluster_v1",
+            "watch_id":cfg["watch_id"],
+            "cluster_id":"c1",
+            "prospective_start_utc":cfg["prospective_start_utc"],
+            "capture_first_observation_utc":"2026-09-25T01:00:00+00:00",
+            "eligible_symbol_count":2,
+            "cluster_median_primary_spearman":0.2,
+            "pooled_within_symbol_rank_correlation":0.25,
+        }
+        changed=dict(base)
+        changed["cluster_median_primary_spearman"]=-0.2
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            paths=[]
+            for name,row in (("a",base),("b",changed)):
+                p=root/name/"cluster.json"
+                p.parent.mkdir(parents=True,exist_ok=True)
+                p.write_text(json.dumps(row),encoding="utf-8")
+                paths.append(p)
+            with self.assertRaises(VolatilityStateForwardError):
+                restore_forward_cluster_history(paths,cfg,root/"history")
+
 
 
 if __name__ == "__main__":

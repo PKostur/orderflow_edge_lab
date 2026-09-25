@@ -8,6 +8,7 @@ from orderflow_edge_lab.volatility_state_forward import (
     VolatilityStateForwardError,
     aggregate_forward_clusters,
     evaluate_forward_cluster,
+    restore_forward_cluster_history,
 )
 
 
@@ -33,16 +34,39 @@ def main(argv: list[str] | None = None) -> int:
     aggregate.add_argument("--config", required=True)
     aggregate.add_argument("--output", required=True)
 
+    restore = sub.add_parser("restore")
+    restore.add_argument("clusters", nargs="+")
+    restore.add_argument("--config", required=True)
+    restore.add_argument("--history-dir", required=True)
+
     args = parser.parse_args(argv)
     try:
         cfg = _config(args.config)
         if args.command == "cluster":
             result = evaluate_forward_cluster(args.reports, cfg, cluster_id=args.cluster_id)
-        else:
+            output = Path(args.output)
+            output.parent.mkdir(parents=True, exist_ok=True)
+            output.write_text(
+                json.dumps(result, indent=2, sort_keys=True, allow_nan=False) + "\n",
+                encoding="utf-8",
+            )
+        elif args.command == "aggregate":
             result = aggregate_forward_clusters(args.clusters, cfg)
-        output = Path(args.output)
-        output.parent.mkdir(parents=True, exist_ok=True)
-        output.write_text(json.dumps(result, indent=2, sort_keys=True, allow_nan=False) + "\n", encoding="utf-8")
+            output = Path(args.output)
+            output.parent.mkdir(parents=True, exist_ok=True)
+            output.write_text(
+                json.dumps(result, indent=2, sort_keys=True, allow_nan=False) + "\n",
+                encoding="utf-8",
+            )
+        else:
+            result = restore_forward_cluster_history(
+                args.clusters,
+                cfg,
+                args.history_dir,
+            )
+            print(json.dumps(result, indent=2, sort_keys=True))
+            return 0
+
         print(json.dumps({
             "analysis": result["analysis"],
             "watch_id": result["watch_id"],

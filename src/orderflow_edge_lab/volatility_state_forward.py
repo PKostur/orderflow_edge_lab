@@ -235,6 +235,68 @@ def evaluate_forward_cluster(
     }
 
 
+def restore_forward_cluster_history(
+    cluster_paths: Iterable[str | Path],
+    config: Mapping[str, Any],
+    history_dir: str | Path,
+) -> dict[str, Any]:
+    start = str(config["prospective_start_utc"])
+    watch_id = str(config["watch_id"])
+    restored: dict[str, tuple[str, dict[str, Any]]] = {}
+
+    for path in cluster_paths:
+        payload = json.loads(Path(path).read_text(encoding="utf-8"))
+        if payload.get("analysis") != "volatility_state_forward_cluster_v1":
+            continue
+        if str(payload.get("watch_id")) != watch_id:
+            raise VolatilityStateForwardError(f"watch_id mismatch in restored cluster: {path}")
+        if str(payload.get("prospective_start_utc")) != start:
+            raise VolatilityStateForwardError(
+                f"prospective boundary mismatch in restored cluster: {path}"
+            )
+        cluster_id = str(payload.get("cluster_id") or "")
+        if not cluster_id:
+            raise VolatilityStateForwardError(f"missing cluster_id in restored cluster: {path}")
+        canonical = json.dumps(
+            payload,
+            sort_keys=True,
+            separators=(",", ":"),
+            allow_nan=False,
+        )
+        previous = restored.get(cluster_id)
+        if previous is not None and previous[0] != canonical:
+            raise VolatilityStateForwardError(
+                f"conflicting payloads for restored cluster_id {cluster_id}"
+            )
+        restored[cluster_id] = (canonical, payload)
+
+    destination = Path(history_dir)
+    destination.mkdir(parents=True, exist_ok=True)
+    for cluster_id in sorted(restored):
+        payload = restored[cluster_id][1]
+        target = destination / cluster_id / "cluster.json"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(
+            json.dumps(payload, indent=2, sort_keys=True, allow_nan=False) + "\n",
+            encoding="utf-8",
+        )
+
+    return {
+        "schema_version": 1,
+        "analysis": "volatility_state_forward_restore_v1",
+        "watch_id": watch_id,
+        "prospective_start_utc": start,
+        "restored_cluster_count": len(restored),
+        "cluster_ids": sorted(restored),
+        "claims": {
+            "new_evidence_collected": False,
+            "historical_cluster_values_changed": False,
+            "review_thresholds_changed": False,
+            "strategy_pnl_used": False,
+        },
+    }
+
+
 def aggregate_forward_clusters(
     cluster_paths: Iterable[str | Path],
     config: Mapping[str, Any],
