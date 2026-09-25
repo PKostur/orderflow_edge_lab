@@ -35,7 +35,14 @@
         "ETH-USDT",
         "SOL-USDT",
         "XRP-USDT",
-        "DOGE-USDT",
+        "DOGE-USDT"
+      ]
+    },
+    {
+      "aggregation": "monthly",
+      "begin": "2025-09-01T00:00:00+08:00",
+      "end": "2026-06-01T00:00:00+08:00",
+      "instrument_families": [
         "BNB-USDT",
         "ADA-USDT",
         "LINK-USDT",
@@ -52,7 +59,14 @@
         "ETH-USDT",
         "SOL-USDT",
         "XRP-USDT",
-        "DOGE-USDT",
+        "DOGE-USDT"
+      ]
+    },
+    {
+      "aggregation": "monthly",
+      "begin": "2026-07-01T00:00:00+08:00",
+      "end": "2026-08-01T00:00:00+08:00",
+      "instrument_families": [
         "BNB-USDT",
         "ADA-USDT",
         "LINK-USDT",
@@ -85,5 +99,13 @@
     "profitable_edge_established": false,
     "live_trading_authorized": false,
     "leverage_authorized": false
-  }
+  },
+  "source_contract_corrections": [
+    {
+      "observed_in_workflow_run": 36157592839,
+      "okx_code": "50025",
+      "message": "Number of instFamilyList values exceeds the maximum limit of 5",
+      "action": "split the ten frozen families into two fixed five-family monthly queries"
+    }
+  ]
 }

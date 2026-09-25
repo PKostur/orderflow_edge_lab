@@ -104,9 +104,9 @@ def fetch_okx_historical_funding_manifest(
             raise OkxMarketDataHistoryError(
                 "at least one instrument family is required"
             )
-        if len(families) > 10:
+        if len(families) > 5:
             raise OkxMarketDataHistoryError(
-                "at most ten instrument families are supported per query"
+                "at most five instrument families are supported per query"
             )
         family_value = ",".join(families)
 

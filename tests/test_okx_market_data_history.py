@@ -69,6 +69,15 @@ class OkxMarketDataHistoryTests(unittest.TestCase):
         self.assertIn("dateAggrType=monthly", url)
         self.assertIn("instFamilyList=BTC-USDT", url)
 
+    def test_more_than_five_families_fails_closed(self):
+        with self.assertRaises(OkxMarketDataHistoryError):
+            fetch_okx_historical_funding_manifest(
+                aggregation="monthly",
+                begin="2025-09-01T00:00:00+08:00",
+                end="2025-09-01T00:00:00+08:00",
+                instrument_families=[f"ASSET{i}-USDT" for i in range(6)],
+            )
+
     def test_daily_funding_requires_any(self):
         with self.assertRaises(OkxMarketDataHistoryError):
             fetch_okx_historical_funding_manifest(
