@@ -65,6 +65,11 @@ jobs:
               "mexc_median_fold_return":r["mexc"]["median_fold_return"],
               "independent_median_fold_return":r["independent_venue"]["median_fold_return"],
               "signal_agreement":r["signal_agreement"],
+              "rebalance_selection_agreement":{
+                  key:value
+                  for key,value in r["rebalance_selection_agreement"].items()
+                  if key != "events"
+              },
           },indent=2))
           PY
       - name: Preserve venue-replication artifact
