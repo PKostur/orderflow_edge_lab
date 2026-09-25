@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import Counter
+from hashlib import sha256
 import json
 import math
 from pathlib import Path
@@ -284,6 +285,11 @@ def _summary(
         ),
         "median_mfe_bps": float(np.median(mfe)) if mfe else None,
         "median_abs_mae_bps": float(np.median(abs_mae)) if abs_mae else None,
+        "median_gross_to_mfe_ratio": (
+            float(np.median(_values(rows, "gross_to_mfe_ratio")))
+            if _values(rows, "gross_to_mfe_ratio")
+            else None
+        ),
         "median_winner_gross_to_mfe_ratio": (
             float(np.median(winner_capture)) if winner_capture else None
         ),
@@ -572,6 +578,19 @@ def build_payoff_geometry_report(
             }
         )
 
+    cell_contract = {
+        "cell_grid": geometry["cell_grid"],
+        "pre_entry_volatility_state": geometry.get("pre_entry_volatility_state"),
+        "quantiles": geometry["quantiles"],
+    }
+    cell_set_sha256 = sha256(
+        json.dumps(
+            cell_contract,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+    ).hexdigest()
+
     return {
         "schema_version": 1,
         "analysis": "payoff_geometry_v1",
@@ -584,6 +603,10 @@ def build_payoff_geometry_report(
             "symbols": [str(v) for v in protocol["data"]["symbols"]],
         },
         "fixed_cell_count_per_strategy": len(cells),
+        "cell_set_sha256": cell_set_sha256,
+        "preregistration_amendment": geometry.get("preregistration_amendment"),
+        "pre_entry_volatility_state": geometry.get("pre_entry_volatility_state"),
+        "literature_guidance": geometry.get("literature_guidance"),
         "cost_cases": cost_reports,
         "bootstrap": dict(bootstrap),
         "terminal_liquidation_policy": geometry["terminal_liquidation_policy"],
