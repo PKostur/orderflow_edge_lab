@@ -18,6 +18,26 @@ env:
   CONFIG: config/volatility_state_transfer_forward_v1.json
 
 jobs:
+  native-workflow-guard:
+    runs-on: ubuntu-latest
+    outputs:
+      d4: ${{ steps.guard.outputs.d4 }}
+    steps:
+      - name: Disable bridge once native D4 workflow reaches main
+        id: guard
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if gh api "repos/$GITHUB_REPOSITORY/contents/.github/workflows/volatility-state-transfer-forward.yml?ref=main" >/dev/null 2>&1; then
+            echo "d4=false" >> "$GITHUB_OUTPUT"
+            echo "native D4 workflow present on main; bridge disabled"
+          else
+            echo "d4=true" >> "$GITHUB_OUTPUT"
+            echo "native D4 workflow absent on main; bridge active"
+          fi
+
   validate-bridge:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
@@ -46,7 +66,8 @@ jobs:
           PY
 
   d4-forward:
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    needs: native-workflow-guard
+    if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && needs.native-workflow-guard.outputs.d4 == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 35
     concurrency:
