@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "audit_id": "cross-sectional-okx-funding-coverage-audit-v1",
+  "status": "data_quality_only",
+  "candidate_id": "mexc_xs_mom30_7_dn_v1",
+  "source": "OKX USDT-Margined Perpetual Swap current public REST",
+  "symbols": [
+    "BTC_USDT",
+    "ETH_USDT",
+    "SOL_USDT",
+    "XRP_USDT",
+    "DOGE_USDT",
+    "BNB_USDT",
+    "ADA_USDT",
+    "LINK_USDT",
+    "SUI_USDT",
+    "ENA_USDT"
+  ],
+  "window": {
+    "start": "2024-01-01T00:00:00Z",
+    "end_exclusive": "2026-09-12T00:00:00Z"
+  },
+  "okx_api": {
+    "rest_base": "https://www.okx.com",
+    "instrument_mapping": "BASE_USDT -> BASE-USDT-SWAP",
+    "daily_bar": "1Dutc",
+    "candles_endpoint": "GET /api/v5/market/history-candles",
+    "funding_endpoint": "GET /api/v5/public/funding-rate-history",
+    "funding_field": "realizedRate"
+  },
+  "coverage_policy": {
+    "scope": "nonzero executed-weight symbol-day intervals only",
+    "required_observation": "at least one finite realizedRate strictly inside each held daily interval",
+    "required_coverage_fraction_for_complete_economics": 1.0,
+    "missing_funding_may_be_zero_filled": false
+  },
+  "interpretation": {
+    "changes_candidate": false,
+    "recomputes_or_repairs_v1_pnl": false,
+    "evidence_use": "data quality only",
+    "new_economic_replication_requires_new_version": true
+  },
+  "claims": {
+    "candidate_promoted": false,
+    "profitable_edge_established": false,
+    "live_trading_authorized": false,
+    "leverage_authorized": false
+  }
+}
