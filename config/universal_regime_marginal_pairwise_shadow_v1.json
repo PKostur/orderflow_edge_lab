@@ -4,7 +4,7 @@
   "status": "FROZEN_BEFORE_PROSPECTIVE_START",
   "prospective_start_utc": "2026-09-26T00:00:00Z",
   "definition_freeze_commit": "a739d03f24e656a66537596af890f202973a7498",
-  "implementation_freeze_commit": null,
+  "implementation_freeze_commit": "08785dae9d016f8ad8c47cf0beb2f100d6abc0f3",
   "purpose": "Prospectively collect the same complete 14 marginal and 78 pairwise regime contrasts before the historical marginal/pairwise report is inspected, so later replication cannot cherry-pick historical states.",
   "source": {
     "venue": "MEXC Futures",
@@ -144,5 +144,6 @@
     "live_trading_authorized": false,
     "leverage_authorized": false,
     "all_92_contrasts_frozen_before_historical_marginal_pairwise_results_were_inspected": true
-  }
+  },
+  "implementation_freeze_note": "Prospective scoring, incomplete-bar exclusion, 30-day block origin, zero-anchor binding semantics, and 90-day inference withholding were finalized before the 2026-09-26T00:00:00Z prospective start."
 }
