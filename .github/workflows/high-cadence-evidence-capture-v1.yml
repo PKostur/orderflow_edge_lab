@@ -121,7 +121,7 @@ jobs:
           PREV_ID=""
           CURRENT_BRANCH="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
           ARTIFACT_IDS="$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=high-cadence-state-ledger-v1&per_page=20" \
-            --jq '.artifacts | map(select(.expired == false)) | sort_by(.created_at) | reverse | .[].id' || true)
+            --jq '.artifacts | map(select(.expired == false)) | sort_by(.created_at) | reverse | .[].id' || true)"
           for ARTIFACT_ID in $ARTIFACT_IDS; do
             RUN_ID="$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}" --jq '.workflow_run.id // empty' 2>/dev/null || true)"
             [[ -z "$RUN_ID" ]] && continue
