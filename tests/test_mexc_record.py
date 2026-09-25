@@ -3,7 +3,7 @@ from __future__ import annotations
 import unittest
 from unittest.mock import patch
 
-from orderflow_edge_lab.cli.mexc_record import _snapshot_symbol
+from orderflow_edge_lab.cli.mexc_record import _parse_symbol_aliases, _snapshot_symbol
 from orderflow_edge_lab.mexc_orderflow import MexcOrderFlowError
 
 
@@ -31,7 +31,53 @@ class _Engine:
         }
 
 
+class MexcRecordAliasTests(unittest.TestCase):
+    def test_logical_to_native_alias_preserves_unaliased_symbols(self):
+        aliases = _parse_symbol_aliases(
+            ["FIL_USDT=FILECOIN_USDT"],
+            ("FIL_USDT", "BTC_USDT"),
+        )
+        self.assertEqual(aliases["FIL_USDT"], "FILECOIN_USDT")
+        self.assertEqual(aliases["BTC_USDT"], "BTC_USDT")
+
+    def test_alias_requires_logical_symbol_in_panel(self):
+        with self.assertRaisesRegex(ValueError, "not in --symbol panel"):
+            _parse_symbol_aliases(
+                ["FIL_USDT=FILECOIN_USDT"],
+                ("BTC_USDT",),
+            )
+
+
 class MexcRecordSnapshotTests(unittest.IsolatedAsyncioTestCase):
+    async def test_snapshot_uses_native_alias_but_preserves_logical_symbol(self):
+        raw = _Writer()
+        features = _Writer()
+        engine = _Engine()
+        seen_urls = []
+
+        def fetch(url):
+            seen_urls.append(url)
+            return {"success": True, "code": 0, "data": {"version": 42}}
+
+        with patch(
+            "orderflow_edge_lab.cli.mexc_record._fetch_json",
+            side_effect=fetch,
+        ):
+            await _snapshot_symbol(
+                engine,
+                raw,
+                features,
+                rest_base="https://example.invalid",
+                symbol="FIL_USDT",
+                venue_symbol="FILECOIN_USDT",
+                snapshot_limit=1000,
+            )
+
+        self.assertIn("/depth/FILECOIN_USDT?limit=1000", seen_urls[0])
+        self.assertEqual(raw.rows[0]["symbol"], "FIL_USDT")
+        self.assertEqual(raw.rows[0]["venue_symbol"], "FILECOIN_USDT")
+        self.assertEqual(features.rows[0]["symbol"], "FIL_USDT")
+
     async def test_invalid_bootstrap_snapshot_is_retried_without_weakening_validation(self):
         raw = _Writer()
         features = _Writer()
