@@ -14,7 +14,7 @@ Historical results before that boundary do not count toward this watch.
 
 ## Primary question
 
-For each unchanged strategy—DON8, EMA8 and VOL8—does the median MFE of completed trades entered in a causal HIGH pre-entry volatility state exceed the median MFE of completed trades entered in a LOW state?
+For each unchanged strategy in this watch—DON8 and EMA8—does the median MFE of completed trades entered in a causal HIGH pre-entry volatility state exceed the median MFE of completed trades entered in a LOW state?
 
 The question concerns payoff travel, not strategy profitability.
 
@@ -32,7 +32,9 @@ No trade is filtered or skipped because of the label.
 
 ## Review gate
 
-Formal review remains withheld until, for every strategy:
+Before the prospective start, VOL8 was removed from this watch because `config/vol8_payoff_amplitude_forward_v1.json` independently froze a more rigorous continuous-rank amplitude replication for VOL8. No forward payoff result had been observed. This watch therefore covers DON8 and EMA8 only.
+
+Formal review remains withheld until, for every strategy in this watch:
 
 - at least 30 calendar days have elapsed;
 - at least 20 completed post-start trades exist;
