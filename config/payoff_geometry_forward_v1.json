@@ -11,7 +11,8 @@
     "historical_window": "2024-01-01T00:00:00Z through exclusive 2026-09-12T00:00:00Z",
     "generated_after_inspecting_historical_diagnostic": true,
     "historical_evidence_only": true,
-    "historical_result_does_not_count_toward_forward_review": true
+    "historical_result_does_not_count_toward_forward_review": true,
+    "complementary_VOL8_watch": "config/vol8_payoff_amplitude_forward_v1.json"
   },
   "prospective_start_utc": "2026-09-25T16:00:00Z",
   "source": {
@@ -52,15 +53,6 @@
         "slow": 96,
         "min_atr_spread": 0.25
       }
-    },
-    {
-      "audit_id": "VOL8",
-      "family": "vol_scaled_momentum",
-      "parameters": {
-        "lookback": 24,
-        "vol_window": 96,
-        "threshold": 0.5
-      }
     }
   ],
   "volatility_state": {
@@ -88,13 +80,6 @@
     {
       "hypothesis_id": "EMA8_HIGH_VS_LOW_MEDIAN_MFE",
       "strategy_id": "EMA8",
-      "comparison": "HIGH versus LOW pre-entry volatility",
-      "primary_metric": "median_mfe_bps",
-      "directional_hypothesis": "HIGH > LOW"
-    },
-    {
-      "hypothesis_id": "VOL8_HIGH_VS_LOW_MEDIAN_MFE",
-      "strategy_id": "VOL8",
       "comparison": "HIGH versus LOW pre-entry volatility",
       "primary_metric": "median_mfe_bps",
       "directional_hypothesis": "HIGH > LOW"
@@ -145,5 +130,15 @@
     "profitable_edge_established": false,
     "live_trading_authorized": false,
     "leverage_authorized": false
+  },
+  "pre_start_amendment": {
+    "recorded_before_prospective_start": true,
+    "reason": "Remove VOL8 because an independently frozen, more rigorous dedicated VOL8 payoff-amplitude watch (config/vol8_payoff_amplitude_forward_v1.json) now covers the same mechanism with continuous volatility rank and stronger review requirements.",
+    "forward_results_observed_before_amendment": false,
+    "DON8_hypothesis_changed": false,
+    "EMA8_hypothesis_changed": false,
+    "volatility_state_definition_changed": false,
+    "cost_or_symbol_universe_changed": false,
+    "prospective_start_changed": false
   }
 }
