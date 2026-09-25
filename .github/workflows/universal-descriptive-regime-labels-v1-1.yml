@@ -1,0 +1,93 @@
+name: Universal Descriptive Regime Labels v1.1
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - fix/universal-existing-validation
+    paths:
+      - "config/universal_descriptive_regime_labels_v1_1.json"
+      - "src/orderflow_edge_lab/descriptive_regime_labels_v1_1.py"
+      - "src/orderflow_edge_lab/cli/descriptive_regime_labels_v1_1.py"
+      - "tests/test_descriptive_regime_labels_v1_1.py"
+      - "docs/UNIVERSAL_DESCRIPTIVE_REGIME_LABELS_V1_1.md"
+      - ".github/workflows/universal-descriptive-regime-labels-v1-1.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: universal-descriptive-regime-labels-v1-1
+  cancel-in-progress: true
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run v1.1 inference tests
+        run: python -m unittest tests.test_descriptive_regime_labels_v1_1 -v
+      - name: Fetch frozen 8h historical snapshot
+        run: |
+          mkdir -p artifacts/data/8h
+          orderflow-strategy-tournament-data \
+            --config config/universal_existing_strategy_backtests_v1.json \
+            --interval 8h \
+            --output-dir artifacts/data/8h
+      - name: Run frozen descriptive regime diagnostic v1.1
+        run: |
+          mkdir -p artifacts/descriptive_regime_labels_v1_1
+          python -m orderflow_edge_lab.cli.descriptive_regime_labels_v1_1 \
+            --source-protocol config/universal_existing_strategy_backtests_v1.json \
+            --regime-config config/universal_descriptive_regime_labels_v1_1.json \
+            --data-dir artifacts/data/8h \
+            --output artifacts/descriptive_regime_labels_v1_1/report.json
+      - name: Enforce v1.1 inference and authority contract
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open("artifacts/descriptive_regime_labels_v1_1/report.json",encoding="utf-8"))
+          if r["analysis"] != "universal_descriptive_regime_labels_v1_1":
+              raise SystemExit("wrong v1.1 analysis")
+          if not r["v1_label_contract_unchanged"]:
+              raise SystemExit("v1.1 changed frozen v1 labels")
+          if r["fixed_joint_cell_count_per_strategy"] != 162:
+              raise SystemExit("joint regime cell contract changed")
+          if r["v1_inference_status"] != "invalidated_due_to_null_bootstrap_implementation_error":
+              raise SystemExit("v1 inference invalidation missing")
+          inf=r["v1_1_inference"]
+          if inf["minimum_trades_for_hypothesis_test"] != 20:
+              raise SystemExit("minimum tested cell size changed")
+          if not inf["shared_block_draws_across_symbols_strategies_and_cells"]:
+              raise SystemExit("joint block dependence contract lost")
+          claims=r["claims"]
+          for key in ("regime_filter_authorized","candidate_promoted","profitable_edge_established","live_trading_authorized","leverage_authorized"):
+              if claims.get(key):
+                  raise SystemExit(f"v1.1 exceeded authority: {key}")
+          for strategy in r["strategies"]:
+              if len(strategy["joint_cells"]) != 162:
+                  raise SystemExit("fixed cells dropped")
+              for cell in strategy["joint_cells"]:
+                  if cell["trade_count"] < 20 and cell["hypothesis_test_eligible"]:
+                      raise SystemExit("sparse cell entered hypothesis family")
+                  if cell["trade_count"] < 20 and cell["v1_1_null_test"]["null_centered_two_sided_block_bootstrap_p"] is not None:
+                      raise SystemExit("sparse cell received inferential p")
+          print(json.dumps({
+              "v1_inference_status":r["v1_inference_status"],
+              "joint_cell_set_sha256":r["joint_cell_set_sha256"],
+              "strategy_audit":inf["strategy_audit"],
+          },indent=2))
+          PY
+      - name: Upload v1.1 regime diagnostic artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: universal-descriptive-regime-labels-v1-1
+          path: artifacts/descriptive_regime_labels_v1_1/
+          retention-days: 90
+          if-no-files-found: error
