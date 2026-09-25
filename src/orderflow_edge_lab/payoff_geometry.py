@@ -316,9 +316,38 @@ def _summary(
     }
 
 
-def _metric(summary: Mapping[str, Any], key: str) -> float | None:
-    value = summary.get(key)
-    return None if value is None else float(value)
+def _bootstrap_metric(
+    rows: Sequence[Mapping[str, Any]],
+    key: str,
+) -> float | None:
+    if not rows:
+        return None
+    if key == "expectancy_bps":
+        values = _values(rows, "net_bps")
+        return float(np.mean(values)) if values else None
+    if key == "win_rate":
+        values = _values(rows, "net_bps")
+        return (
+            sum(value > 0.0 for value in values) / len(values)
+            if values
+            else None
+        )
+    field_map = {
+        "median_mfe_bps": ("mfe_bps", False),
+        "median_abs_mae_bps": ("abs_mae_bps", False),
+        "median_winner_gross_to_mfe_ratio": (
+            "winner_gross_to_mfe_ratio",
+            False,
+        ),
+        "median_time_to_mfe_hours": ("time_to_mfe_hours", False),
+    }
+    if key not in field_map:
+        raise PayoffGeometryError(f"unsupported bootstrap field: {key}")
+    source, absolute = field_map[key]
+    values = _values(rows, source)
+    if absolute:
+        values = [abs(value) for value in values]
+    return float(np.median(values)) if values else None
 
 
 def _bootstrap_samples(
@@ -344,21 +373,27 @@ def _bootstrap_ci(
     ci: Sequence[float],
     fields: Sequence[str],
 ) -> dict[str, Any]:
+    del quantiles
+    values_by_field: dict[str, list[float]] = {
+        str(field): [] for field in fields
+    }
+    for weights in samples:
+        sampled: list[Mapping[str, Any]] = []
+        for row in rows:
+            weight = int(weights.get(int(row["_block_id"]), 0))
+            if weight > 0:
+                sampled.extend([row] * weight)
+        if not sampled:
+            continue
+        for field in fields:
+            value = _bootstrap_metric(sampled, str(field))
+            if value is not None and math.isfinite(value):
+                values_by_field[str(field)].append(float(value))
+
     result: dict[str, Any] = {}
     for field in fields:
-        values: list[float] = []
-        for weights in samples:
-            sampled: list[Mapping[str, Any]] = []
-            for row in rows:
-                weight = int(weights.get(int(row["_block_id"]), 0))
-                if weight > 0:
-                    sampled.extend([row] * weight)
-            if not sampled:
-                continue
-            value = _metric(_summary(sampled, quantiles), field)
-            if value is not None and math.isfinite(value):
-                values.append(value)
-        result[field] = {
+        values = values_by_field[str(field)]
+        result[str(field)] = {
             "lower": float(np.quantile(values, ci[0])) if values else None,
             "upper": float(np.quantile(values, ci[1])) if values else None,
             "valid_replicates": len(values),
