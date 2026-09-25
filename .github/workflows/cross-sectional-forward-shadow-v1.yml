@@ -4,6 +4,13 @@ on:
   workflow_dispatch:
   pull_request:
     branches: [main]
+    paths:
+      - "config/cross_sectional_candidate_v1.json"
+      - "src/orderflow_edge_lab/cross_sectional_forward_shadow.py"
+      - "src/orderflow_edge_lab/cli/cross_sectional_forward_shadow.py"
+      - "tests/test_cross_sectional_forward_shadow.py"
+      - ".github/workflows/cross-sectional-forward-shadow-v1.yml"
+      - "pyproject.toml"
   push:
     branches: [release/cross-sectional-forward-v1]
   schedule:
