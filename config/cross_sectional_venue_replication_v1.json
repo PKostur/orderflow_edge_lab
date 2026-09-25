@@ -64,5 +64,23 @@
     "candidate_parameters_changed": false,
     "historical_window_changed": false,
     "evidence_level_changed": false
-  }
+  },
+  "engineering_source_failures": [
+    {
+      "venue": "Binance USD-M Futures",
+      "status": "engineering_source_unavailable",
+      "reason": "GitHub hosted runner received HTTP 451 from fapi.binance.com before any replication report was produced",
+      "evidence_use": "none"
+    },
+    {
+      "venue": "Bybit Linear USDT Perpetual",
+      "status": "engineering_source_unavailable_on_github_hosted_runner",
+      "run_id": 36147444359,
+      "reason": "Both official Bybit mainnet V5 hosts api.bybit.com and api.bytick.com returned HTTP 403 before any replication report was produced",
+      "evidence_use": "none",
+      "candidate_parameters_changed": false,
+      "historical_window_changed": false
+    }
+  ],
+  "replication_source_status": "unresolved_after_engineering_access_failures"
 }
