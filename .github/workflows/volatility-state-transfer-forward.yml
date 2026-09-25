@@ -95,6 +95,7 @@ jobs:
             --symbol UNI_USDT \
             --symbol BTC_USDT \
             --duration-seconds 600 \
+            --snapshot-max-attempts 12 \
             --output-dir artifacts/volatility_state_forward/current
       - name: Build causal state reports
         if: steps.boundary.outputs.eligible == 'true'
