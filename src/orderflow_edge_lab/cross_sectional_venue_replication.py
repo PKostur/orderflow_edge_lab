@@ -134,6 +134,76 @@ def _signal_agreement(
     }
 
 
+def _set_jaccard(left: set[str], right: set[str]) -> float:
+    union = left | right
+    return 1.0 if not union else len(left & right) / len(union)
+
+
+def _rebalance_selection_agreement(
+    left: pd.DataFrame,
+    right: pd.DataFrame,
+) -> dict[str, Any]:
+    idx = left.index.intersection(right.index)
+    columns = list(left.columns)
+    left = left.loc[idx, columns]
+    right = right.loc[idx, columns]
+    if left.empty:
+        return {
+            "rebalance_union_event_count": 0,
+            "exact_long_short_basket_agreement_fraction": None,
+            "mean_long_basket_jaccard": None,
+            "mean_short_basket_jaccard": None,
+            "events": [],
+        }
+
+    left_change = left.ne(left.shift(1).fillna(0.0)).any(axis=1)
+    right_change = right.ne(right.shift(1).fillna(0.0)).any(axis=1)
+    event_index = idx[left_change | right_change]
+    events: list[dict[str, Any]] = []
+    for timestamp in event_index:
+        left_row = left.loc[timestamp]
+        right_row = right.loc[timestamp]
+        left_long = {symbol for symbol in columns if float(left_row[symbol]) > 1e-12}
+        right_long = {symbol for symbol in columns if float(right_row[symbol]) > 1e-12}
+        left_short = {symbol for symbol in columns if float(left_row[symbol]) < -1e-12}
+        right_short = {symbol for symbol in columns if float(right_row[symbol]) < -1e-12}
+        events.append(
+            {
+                "execution_time": timestamp.isoformat(),
+                "mexc_longs": sorted(left_long),
+                "replication_longs": sorted(right_long),
+                "mexc_shorts": sorted(left_short),
+                "replication_shorts": sorted(right_short),
+                "long_jaccard": _set_jaccard(left_long, right_long),
+                "short_jaccard": _set_jaccard(left_short, right_short),
+                "exact_long_short_basket_agreement": (
+                    left_long == right_long and left_short == right_short
+                ),
+            }
+        )
+
+    return {
+        "rebalance_union_event_count": len(events),
+        "exact_long_short_basket_agreement_fraction": (
+            sum(bool(row["exact_long_short_basket_agreement"]) for row in events)
+            / len(events)
+            if events
+            else None
+        ),
+        "mean_long_basket_jaccard": (
+            float(np.mean([float(row["long_jaccard"]) for row in events]))
+            if events
+            else None
+        ),
+        "mean_short_basket_jaccard": (
+            float(np.mean([float(row["short_jaccard"]) for row in events]))
+            if events
+            else None
+        ),
+        "events": events,
+    }
+
+
 def build_venue_replication_report(
     candidate: Mapping[str, Any],
     mexc_frames: Mapping[str, pd.DataFrame],
@@ -187,6 +257,10 @@ def build_venue_replication_report(
         for key in ("lookback_days", "holding_days", "quantile_fraction", "variant")
     })
     agreement = _signal_agreement(mexc_weights, independent_weights)
+    basket_agreement = _rebalance_selection_agreement(
+        mexc_weights,
+        independent_weights,
+    )
 
     return {
         "schema_version": 1,
@@ -208,6 +282,7 @@ def build_venue_replication_report(
         "mexc": mexc_result,
         "independent_venue": independent_result,
         "signal_agreement": agreement,
+        "rebalance_selection_agreement": basket_agreement,
         "source_sha256": dict(source_sha256 or {}),
         "descriptive_differences": {
             "independent_minus_mexc_net_return": float(
