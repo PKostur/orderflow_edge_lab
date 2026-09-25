@@ -65,6 +65,46 @@ class MexcRecordSnapshotTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(features.rows[0]["book_version"], 42)
         self.assertEqual(features.rows[0]["snapshot_attempt"], 2)
 
+    async def test_retry_budget_can_recover_after_three_invalid_snapshots(self):
+        raw = _Writer()
+        features = _Writer()
+        engine = _Engine()
+        payloads = [
+            {"success": True, "code": 0, "data": {"version": 0}},
+            {"success": True, "code": 0, "data": {"version": 0}},
+            {"success": True, "code": 0, "data": {"version": 0}},
+            {"success": True, "code": 0, "data": {"version": 99}},
+        ]
+        with patch(
+            "orderflow_edge_lab.cli.mexc_record._fetch_json",
+            side_effect=payloads,
+        ), patch(
+            "orderflow_edge_lab.cli.mexc_record.asyncio.sleep",
+            return_value=None,
+        ):
+            await _snapshot_symbol(
+                engine,
+                raw,
+                features,
+                rest_base="https://example.invalid",
+                symbol="FIL_USDT",
+                snapshot_limit=1000,
+                max_attempts=5,
+            )
+
+        self.assertEqual(engine.calls, 4)
+        self.assertEqual(
+            [row["record_type"] for row in raw.rows],
+            [
+                "rest_snapshot_rejected",
+                "rest_snapshot_rejected",
+                "rest_snapshot_rejected",
+                "rest_snapshot",
+            ],
+        )
+        self.assertEqual(features.rows[0]["book_version"], 99)
+        self.assertEqual(features.rows[0]["snapshot_attempt"], 4)
+
     async def test_persistent_invalid_snapshot_fails_with_symbol_context(self):
         raw = _Writer()
         features = _Writer()
