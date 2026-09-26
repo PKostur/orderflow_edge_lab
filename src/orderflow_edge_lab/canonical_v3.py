@@ -49,6 +49,7 @@ def run_canonical_backtest_v3(
     execution: ExecutionModel = ExecutionModel(),
     *,
     context: Mapping[str, pd.DataFrame] | None = None,
+    return_equity: bool = False,
 ) -> dict[str, Any]:
     frame = _validate_frame(frame)
     if len(frame) < max(3, int(strategy.warmup_bars)):
@@ -187,6 +188,18 @@ def run_canonical_backtest_v3(
         "exposure_fraction": float((pos != 0.0).mean()),
         "turnover_units": turnover_units,
         "trades_ledger": trades,
+        **(
+            {
+                # Equity after each evaluated interval, stamped at the interval's
+                # closing open (bar t+1); the terminal liquidation is the last point.
+                "equity_path": pd.Series(
+                    np.concatenate([equity[:-1], [terminal_equity]]),
+                    index=frame.index[1 : m + 1],
+                )
+            }
+            if return_equity
+            else {}
+        ),
         "claims": {
             "causal_next_bar_execution": True,
             "canonical_turnover_cost_accounting": True,

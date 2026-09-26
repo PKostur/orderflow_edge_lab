@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "watch_id": "universal-trend-portfolio-forward-v1",
+  "status": "FROZEN_BEFORE_PROSPECTIVE_START",
+  "question": "Does the equal-capital combination of the frozen DON8/EMA8/VOL8 trend strategies on 10 MEXC USDT perpetuals earn positive returns net of costs, outright and after a causal beta hedge?",
+  "prospective_start_utc": "2026-09-28T00:00:00Z",
+  "registration_note": "Registered 2026-09-26, before any day at or after the prospective start existed. The historical anchor below was computed and viewed on the frozen 2024-01-01..2026-09-12 window before registration; no parameter was chosen from it.",
+  "source": {
+    "venue": "MEXC Futures",
+    "interval": "8h",
+    "warmup_start_utc": "2026-01-01T00:00:00Z",
+    "symbols": ["ADA_USDT", "BNB_USDT", "BTC_USDT", "DOGE_USDT", "ENA_USDT", "ETH_USDT", "LINK_USDT", "SOL_USDT", "SUI_USDT", "XRP_USDT"]
+  },
+  "strategies": [
+    {"audit_id": "DON8", "family": "donchian_breakout", "parameters": {"lookback": 55}},
+    {"audit_id": "EMA8", "family": "ema_tsmom", "parameters": {"fast": 24, "slow": 96, "min_atr_spread": 0.25}},
+    {"audit_id": "VOL8", "family": "vol_scaled_momentum", "parameters": {"lookback": 24, "vol_window": 96, "threshold": 0.5}}
+  ],
+  "economics": {
+    "accounting": "canonical_v3_fixed_quantity_between_target_changes",
+    "round_trip_cost_bps": 20,
+    "max_abs_position": 1,
+    "portfolio": "equal capital across all 30 strategy x symbol sleeves, rebalanced daily at 00:00 UTC; inter-sleeve rebalancing is not charged"
+  },
+  "hedge": {
+    "benchmark": "equal-weight open-to-open daily return of the 10 symbols",
+    "window_days": 90,
+    "minimum_days": 60,
+    "estimation": "beta for day t uses only days strictly before t",
+    "cost": "|change in beta| x half the round-trip cost"
+  },
+  "reporting": {
+    "primary_series": "plain",
+    "secondary_series": ["hedged", "basket"],
+    "statistic": "mean daily net return, Newey-West t with 5 lags, annualized Sharpe (sqrt 365)",
+    "newey_west_lags": 5,
+    "detectability": "minimum detectable annualized Sharpe at t=2 after T days = 2 * sqrt(365 / T)",
+    "review_after_days": 365,
+    "before_review": "descriptive only: no verdict, no promotion"
+  },
+  "historical_anchor": {
+    "window": "2024-01-01..2026-09-12 (already inspected; not out-of-sample)",
+    "series": {
+      "plain": {"days": 983, "mean_daily_bps": 11.11, "annualized_sharpe": 1.07, "newey_west_t": 1.71, "max_drawdown": -0.301},
+      "hedged": {"days": 983, "mean_daily_bps": 11.18, "annualized_sharpe": 1.07, "newey_west_t": 1.66, "max_drawdown": -0.263},
+      "basket": {"days": 983, "mean_daily_bps": 9.01, "annualized_sharpe": 0.48, "newey_west_t": 0.79, "max_drawdown": -0.718}
+    },
+    "beta_mean": -0.04,
+    "note": "Even in-sample the combined portfolio is not significant at t=2 (t=1.71 over 2.7 years)."
+  },
+  "claims": {
+    "descriptive_only": true,
+    "strategy_definitions_modified": false,
+    "verified_out_of_sample_evidence": false,
+    "strategy_promotion_authorized": false,
+    "regime_filter_authorized": false,
+    "live_trading_authorized": false,
+    "leverage_authorized": false
+  }
+}
