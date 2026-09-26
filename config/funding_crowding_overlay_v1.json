@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "protocol_id": "funding-crowding-overlay-v1",
+  "status": "DECLARED_BEFORE_EVALUATION",
+  "question": "Does standing aside when funding shows the trend side is crowded (trailing 3-day per-8h funding beyond +/-0.03%) improve the trend core, net of funding costs?",
+  "registration_note": "Declared 2026-09-27 before any result of this overlay was computed. Distinct from discovery-v2 sprint-1 funding_extreme_reversal, a standalone reversal strategy; this is a risk overlay on the frozen trend core. Descriptive on seen crypto history.",
+  "overlay": {"window_hours": 72, "normalization": "sum of settlements in window / 9 (per-8h equivalent)", "threshold_per_8h": 0.0003,
+              "provenance": "3x the 0.01%/8h standard baseline; not tuned", "action": "crowded side -> flat; resumes when funding normalizes"},
+  "base_book": "crypto-trend-core design (DON8 + EMA8, 17 perps, entry inverse-vol sleeves), v3.1 with funding, 20 bps",
+  "funding_data": "Binance USDT-M funding history as a cross-venue proxy (MEXC history starts 2025-04); both books are charged it",
+  "window": ["2020-06-01T00:00:00Z", "2026-09-12T00:00:00Z"],
+  "reported": ["Sharpe, t, max drawdown, annual return", "funding paid", "per-year", "down/flat/up month means", "time in market"],
+  "claims": {"strategy_promotion_authorized": false, "live_trading_authorized": false, "verified_out_of_sample_evidence": false}
+}
