@@ -106,6 +106,11 @@
   persisted on `bot-state/crypto-trend-core-paper`). Not scheduled. Open design point: gross exposure is only ~26%
   (per-sleeve vol sizing), so portfolio-level vol targeting is needed before any real use.
 
+## Regime switch (`research/regime_switch/RESULT.md`, declared `cb3a97f`)
+- Trend↔mean-reversion switch on the frozen ER labels: crypto trend-only 0.89 (t 2.12) > chop filter 0.73 > switch 0.67 >
+  meanrev −1.05 (t −2.66). ETFs: nothing works (meanrev 0.00). Regime labels lag: trend earns +2.2 bp/day even on CHOP days.
+  Decision: keep the trend-only core; no mean-reversion component.
+
 ## Decisions
 - Workstream D (`universal-market-state-labels-v1`) was not built (post-hoc re-cut of v1 thresholds).
 - Monitor runs pick one action; 2026-09-26 08:05Z run = `collect_evidence` only, no code change.
