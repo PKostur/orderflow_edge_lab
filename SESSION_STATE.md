@@ -84,6 +84,13 @@
 - Cost realism (`research/cost_realism/NOTE.md`, one snapshot): the 20 bps RT assumption is conservative for 14/15
   forward instruments at 10–50k USDT; NAS100 at 50k is 21 bps.
 
+## Focus: `crypto-trend-core-v1` (registered `7875591`, start 2026-09-29)
+- DON8 + EMA8, 17 crypto perps, entry inverse-vol 15%, v3.1 with funding, 20 bps; daily net P&L. VOL8 drop and the
+  universe are disclosed post-evidence choices, so it is judged forward only.
+- 180-day sanity gate (mean > 0, max drawdown > −25%, funding within 2x, no integrity failures) → eligible for the
+  existing paper/approval gates; authorizes nothing. Historical context: 180-day windows positive 75% of the time.
+- Scheduling is in PR #117 (awaiting user merge).
+
 ## Decisions
 - Workstream D (`universal-market-state-labels-v1`) was not built (post-hoc re-cut of v1 thresholds).
 - Monitor runs pick one action; 2026-09-26 08:05Z run = `collect_evidence` only, no code change.
