@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "protocol_id": "portfolio-vol-target-v1",
+  "status": "DECLARED_BEFORE_EVALUATION",
+  "question": "Does scaling the whole crypto-trend-core book to a portfolio-level volatility target use capital efficiently (hit the risk target) without harming risk-adjusted returns?",
+  "registration_note": "Declared 2026-09-27 before any result of this overlay was computed. Descriptive on seen crypto history 2020-2026.",
+  "base_book": "crypto-trend-core design: DON8 + EMA8 on 17 perps, entry inverse-vol sleeve sizing, canonical v3, 20 bps",
+  "overlay": {"target_annual_vol": 0.15, "window_days": 60, "max_leverage": 3.0, "rebalance": "weekly (Monday 00:00 UTC)",
+              "cost": "|change in L| x book gross exposure x half the round trip",
+              "provenance": "conventional managed-futures values; not tuned"},
+  "reported": ["realized vol vs target", "Sharpe, t, max drawdown, annual return", "L and gross-exposure distribution, share of days with gross > 1",
+               "per-year", "overlay cost"],
+  "claims": {"strategy_promotion_authorized": false, "live_trading_authorized": false, "leverage_authorized": false}
+}
