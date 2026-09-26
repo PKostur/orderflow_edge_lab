@@ -1,0 +1,1602 @@
+[
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 3,
+   "buffer": 0,
+   "strategies": [
+    "DON8",
+    "EMA8"
+   ],
+   "execution": "market",
+   "allocation": "invvol"
+  },
+  "train": {
+   "annualized_sharpe": 1.086786823392115,
+   "newey_west_t": 1.3131444767645681,
+   "mean_daily_bps": 4.158561596051228,
+   "max_drawdown": -0.13216809367380022,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.5100439279622148,
+   "newey_west_t": 0.7339135422713085,
+   "mean_daily_bps": 1.721245007142816,
+   "max_drawdown": -0.08337339865968862,
+   "days": 619
+  },
+  "trades_per_week": 6.4734661770080315,
+  "fees_and_slippage_pct_per_year": 0.02013168063607474,
+  "funding_pct_per_year": 0.0023353955389871063
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 3,
+   "buffer": 0,
+   "strategies": [
+    "DON8",
+    "EMA8"
+   ],
+   "execution": "market",
+   "allocation": "mvo_shrunk"
+  },
+  "train": {
+   "annualized_sharpe": 0.9249235822966609,
+   "newey_west_t": 1.1483079497732853,
+   "mean_daily_bps": 3.58769863356714,
+   "max_drawdown": -0.15653876605859907,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.533964185116983,
+   "newey_west_t": 0.7815520785995955,
+   "mean_daily_bps": 1.880960300505927,
+   "max_drawdown": -0.08569456239777895,
+   "days": 619
+  },
+  "trades_per_week": 6.147893695347946,
+  "fees_and_slippage_pct_per_year": 0.02072728175895677,
+  "funding_pct_per_year": 0.002111668476325798
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 3,
+   "buffer": 0,
+   "strategies": [
+    "DON8",
+    "EMA8"
+   ],
+   "execution": "limit",
+   "allocation": "invvol"
+  },
+  "train": {
+   "annualized_sharpe": 0.9967205238596233,
+   "newey_west_t": 1.1849412421856516,
+   "mean_daily_bps": 3.8144579882152083,
+   "max_drawdown": -0.14094663302164145,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.04200166508335302,
+   "newey_west_t": 0.0591396026946404,
+   "mean_daily_bps": 0.13942570887827457,
+   "max_drawdown": -0.0913814539492469,
+   "days": 619
+  },
+  "trades_per_week": 6.4734661770080315,
+  "fees_and_slippage_pct_per_year": 0.003154303399759254,
+  "funding_pct_per_year": 0.002111062077785357
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 3,
+   "buffer": 0,
+   "strategies": [
+    "DON8",
+    "EMA8"
+   ],
+   "execution": "limit",
+   "allocation": "mvo_shrunk"
+  },
+  "train": {
+   "annualized_sharpe": 0.7743985595909142,
+   "newey_west_t": 0.9543344648444607,
+   "mean_daily_bps": 2.9965398008373194,
+   "max_drawdown": -0.17160086652259676,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.12121873204626919,
+   "newey_west_t": 0.17462818064390237,
+   "mean_daily_bps": 0.42208691139979976,
+   "max_drawdown": -0.09241822937874844,
+   "days": 619
+  },
+  "trades_per_week": 6.147893695347946,
+  "fees_and_slippage_pct_per_year": 0.0034300867406504574,
+  "funding_pct_per_year": 0.0018647486277494714
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 3,
+   "buffer": 0,
+   "strategies": [
+    "DON8"
+   ],
+   "execution": "market",
+   "allocation": "invvol"
+  },
+  "train": {
+   "annualized_sharpe": 0.9885594271197389,
+   "newey_west_t": 1.191829288096184,
+   "mean_daily_bps": 3.789285175519482,
+   "max_drawdown": -0.13091397044702324,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.5348443918900461,
+   "newey_west_t": 0.7729837469654439,
+   "mean_daily_bps": 1.7911848348920156,
+   "max_drawdown": -0.08077770788777938,
+   "days": 619
+  },
+  "trades_per_week": 6.587416545589061,
+  "fees_and_slippage_pct_per_year": 0.020277254798967748,
+  "funding_pct_per_year": 0.0022884237427881642
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 3,
+   "buffer": 0,
+   "strategies": [
+    "DON8"
+   ],
+   "execution": "market",
+   "allocation": "mvo_shrunk"
+  },
+  "train": {
+   "annualized_sharpe": 0.8582950846685793,
+   "newey_west_t": 1.060182125193424,
+   "mean_daily_bps": 3.341113644352399,
+   "max_drawdown": -0.15892323266656483,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.596788529531344,
+   "newey_west_t": 0.8767162614935479,
+   "mean_daily_bps": 2.1075732082992054,
+   "max_drawdown": -0.08295041093572675,
+   "days": 619
+  },
+  "trades_per_week": 6.234713023790635,
+  "fees_and_slippage_pct_per_year": 0.02092794168909231,
+  "funding_pct_per_year": 0.0021128589451235922
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 3,
+   "buffer": 0,
+   "strategies": [
+    "DON8"
+   ],
+   "execution": "limit",
+   "allocation": "invvol"
+  },
+  "train": {
+   "annualized_sharpe": 0.9088955663780706,
+   "newey_west_t": 1.081436277070489,
+   "mean_daily_bps": 3.4866928689109864,
+   "max_drawdown": -0.13665242338737715,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.052123530542661285,
+   "newey_west_t": 0.07380149495152748,
+   "mean_daily_bps": 0.17150640984848012,
+   "max_drawdown": -0.08505514366583866,
+   "days": 619
+  },
+  "trades_per_week": 6.587416545589061,
+  "fees_and_slippage_pct_per_year": 0.0031462530751867885,
+  "funding_pct_per_year": 0.0020770349090576614
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 3,
+   "buffer": 0,
+   "strategies": [
+    "DON8"
+   ],
+   "execution": "limit",
+   "allocation": "mvo_shrunk"
+  },
+  "train": {
+   "annualized_sharpe": 0.7204516773718326,
+   "newey_west_t": 0.8842879673365729,
+   "mean_daily_bps": 2.7963164529878113,
+   "max_drawdown": -0.16827101496703245,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.1816509495954624,
+   "newey_west_t": 0.2633567455845313,
+   "mean_daily_bps": 0.6338267415345357,
+   "max_drawdown": -0.08785159552036659,
+   "days": 619
+  },
+  "trades_per_week": 6.234713023790635,
+  "fees_and_slippage_pct_per_year": 0.0034365144869538356,
+  "funding_pct_per_year": 0.0018826995733893523
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 3,
+   "buffer": 0,
+   "strategies": [
+    "EMA8"
+   ],
+   "execution": "market",
+   "allocation": "invvol"
+  },
+  "train": {
+   "annualized_sharpe": 1.078264573738374,
+   "newey_west_t": 1.3102880460680346,
+   "mean_daily_bps": 4.1252515861506405,
+   "max_drawdown": -0.1314660819098914,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.45919667061288355,
+   "newey_west_t": 0.6592734571420373,
+   "mean_daily_bps": 1.5545487591742309,
+   "max_drawdown": -0.08389500344444656,
+   "days": 619
+  },
+  "trades_per_week": 6.516875841229377,
+  "fees_and_slippage_pct_per_year": 0.020273961873907013,
+  "funding_pct_per_year": 0.0023992578809576724
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 3,
+   "buffer": 0,
+   "strategies": [
+    "EMA8"
+   ],
+   "execution": "market",
+   "allocation": "mvo_shrunk"
+  },
+  "train": {
+   "annualized_sharpe": 0.9453475372422498,
+   "newey_west_t": 1.1820885542237225,
+   "mean_daily_bps": 3.6347282574623705,
+   "max_drawdown": -0.15271158064648316,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.5757528866691031,
+   "newey_west_t": 0.8343809112442264,
+   "mean_daily_bps": 2.0820762791380893,
+   "max_drawdown": -0.08565956447108825,
+   "days": 619
+  },
+  "trades_per_week": 6.202155775624627,
+  "fees_and_slippage_pct_per_year": 0.021006428176269794,
+  "funding_pct_per_year": 0.002199048283517067
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 3,
+   "buffer": 0,
+   "strategies": [
+    "EMA8"
+   ],
+   "execution": "limit",
+   "allocation": "invvol"
+  },
+  "train": {
+   "annualized_sharpe": 0.9612521410346764,
+   "newey_west_t": 1.1464754044383705,
+   "mean_daily_bps": 3.677550852688553,
+   "max_drawdown": -0.14086731780951423,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": -0.015336700368971517,
+   "newey_west_t": -0.021553283010953484,
+   "mean_daily_bps": -0.05103736839532865,
+   "max_drawdown": -0.09369423699438661,
+   "days": 619
+  },
+  "trades_per_week": 6.516875841229377,
+  "fees_and_slippage_pct_per_year": 0.0031430991823144126,
+  "funding_pct_per_year": 0.00215421595818891
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 3,
+   "buffer": 0,
+   "strategies": [
+    "EMA8"
+   ],
+   "execution": "limit",
+   "allocation": "mvo_shrunk"
+  },
+  "train": {
+   "annualized_sharpe": 0.7743348567268127,
+   "newey_west_t": 0.9582566214235568,
+   "mean_daily_bps": 2.9656025907396506,
+   "max_drawdown": -0.16733625558150145,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.17550847950548384,
+   "newey_west_t": 0.25067102758187976,
+   "mean_daily_bps": 0.6269399783686551,
+   "max_drawdown": -0.09281503135514768,
+   "days": 619
+  },
+  "trades_per_week": 6.202155775624627,
+  "fees_and_slippage_pct_per_year": 0.0034442849761584424,
+  "funding_pct_per_year": 0.001940909013855784
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 3,
+   "buffer": 2,
+   "strategies": [
+    "DON8",
+    "EMA8"
+   ],
+   "execution": "market",
+   "allocation": "invvol"
+  },
+  "train": {
+   "annualized_sharpe": 1.2203463448051934,
+   "newey_west_t": 1.5619429138252878,
+   "mean_daily_bps": 4.99592734073117,
+   "max_drawdown": -0.1601568385697616,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.47882949543132247,
+   "newey_west_t": 0.6992576791505154,
+   "mean_daily_bps": 1.6303230077105664,
+   "max_drawdown": -0.0922027516883871,
+   "days": 619
+  },
+  "trades_per_week": 3.0658075356324708,
+  "fees_and_slippage_pct_per_year": 0.009754423480439714,
+  "funding_pct_per_year": 0.002542318604597988
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 3,
+   "buffer": 2,
+   "strategies": [
+    "DON8",
+    "EMA8"
+   ],
+   "execution": "market",
+   "allocation": "mvo_shrunk"
+  },
+  "train": {
+   "annualized_sharpe": 1.1207277877985375,
+   "newey_west_t": 1.4025984312485473,
+   "mean_daily_bps": 4.636810353805163,
+   "max_drawdown": -0.201760532031088,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.8209610510661095,
+   "newey_west_t": 1.1913640490459096,
+   "mean_daily_bps": 2.990460444056427,
+   "max_drawdown": -0.09565398127975167,
+   "days": 619
+  },
+  "trades_per_week": 2.989840623245118,
+  "fees_and_slippage_pct_per_year": 0.010721133786018251,
+  "funding_pct_per_year": 0.0023804974225416337
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 3,
+   "buffer": 2,
+   "strategies": [
+    "DON8",
+    "EMA8"
+   ],
+   "execution": "limit",
+   "allocation": "invvol"
+  },
+  "train": {
+   "annualized_sharpe": 1.1522941109528417,
+   "newey_west_t": 1.4753767121035244,
+   "mean_daily_bps": 4.729777713460351,
+   "max_drawdown": -0.16897229157502236,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.31047133452962883,
+   "newey_west_t": 0.44727252413523505,
+   "mean_daily_bps": 1.0551567342397725,
+   "max_drawdown": -0.09505544558917445,
+   "days": 619
+  },
+  "trades_per_week": 3.0658075356324708,
+  "fees_and_slippage_pct_per_year": 0.0015322494694289912,
+  "funding_pct_per_year": 0.002399676110981259
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 3,
+   "buffer": 2,
+   "strategies": [
+    "DON8",
+    "EMA8"
+   ],
+   "execution": "limit",
+   "allocation": "mvo_shrunk"
+  },
+  "train": {
+   "annualized_sharpe": 1.044788322370356,
+   "newey_west_t": 1.311041750796201,
+   "mean_daily_bps": 4.338879565697658,
+   "max_drawdown": -0.2146849397199947,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.631399291277073,
+   "newey_west_t": 0.9006981776882322,
+   "mean_daily_bps": 2.2904565295142563,
+   "max_drawdown": -0.09908555876676961,
+   "days": 619
+  },
+  "trades_per_week": 2.989840623245118,
+  "fees_and_slippage_pct_per_year": 0.0017898698620782446,
+  "funding_pct_per_year": 0.0022432651467915233
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 3,
+   "buffer": 2,
+   "strategies": [
+    "DON8"
+   ],
+   "execution": "market",
+   "allocation": "invvol"
+  },
+  "train": {
+   "annualized_sharpe": 1.2115264449034564,
+   "newey_west_t": 1.5272902264344026,
+   "mean_daily_bps": 4.896122020397013,
+   "max_drawdown": -0.1464528947921746,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.455787254088651,
+   "newey_west_t": 0.6677897766260865,
+   "mean_daily_bps": 1.5590681029919897,
+   "max_drawdown": -0.09400438054416504,
+   "days": 619
+  },
+  "trades_per_week": 3.2123151523795093,
+  "fees_and_slippage_pct_per_year": 0.010521546969611002,
+  "funding_pct_per_year": 0.0024976917574319915
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 3,
+   "buffer": 2,
+   "strategies": [
+    "DON8"
+   ],
+   "execution": "market",
+   "allocation": "mvo_shrunk"
+  },
+  "train": {
+   "annualized_sharpe": 1.2018023462581435,
+   "newey_west_t": 1.4812549088326081,
+   "mean_daily_bps": 4.900714981389161,
+   "max_drawdown": -0.18213741365758473,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.8787760193824878,
+   "newey_west_t": 1.25809211243628,
+   "mean_daily_bps": 3.229230335332442,
+   "max_drawdown": -0.10019015798868192,
+   "days": 619
+  },
+  "trades_per_week": 3.12549582393682,
+  "fees_and_slippage_pct_per_year": 0.011769408892926886,
+  "funding_pct_per_year": 0.0023899737809340836
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 3,
+   "buffer": 2,
+   "strategies": [
+    "DON8"
+   ],
+   "execution": "limit",
+   "allocation": "invvol"
+  },
+  "train": {
+   "annualized_sharpe": 1.1374096881096296,
+   "newey_west_t": 1.4347165780733104,
+   "mean_daily_bps": 4.614252547690398,
+   "max_drawdown": -0.15618972637775042,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.3306165396599267,
+   "newey_west_t": 0.4778148033069664,
+   "mean_daily_bps": 1.1291458277474404,
+   "max_drawdown": -0.09676781469883222,
+   "days": 619
+  },
+  "trades_per_week": 3.2123151523795093,
+  "fees_and_slippage_pct_per_year": 0.001678326712667259,
+  "funding_pct_per_year": 0.0023699677393975056
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 3,
+   "buffer": 2,
+   "strategies": [
+    "DON8"
+   ],
+   "execution": "limit",
+   "allocation": "mvo_shrunk"
+  },
+  "train": {
+   "annualized_sharpe": 1.0983018959250044,
+   "newey_west_t": 1.357735675009257,
+   "mean_daily_bps": 4.509022550771046,
+   "max_drawdown": -0.19343530821881227,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.7198697698633272,
+   "newey_west_t": 1.0110832918668413,
+   "mean_daily_bps": 2.631714882591073,
+   "max_drawdown": -0.102987888426046,
+   "days": 619
+  },
+  "trades_per_week": 3.12549582393682,
+  "fees_and_slippage_pct_per_year": 0.001984416519151168,
+  "funding_pct_per_year": 0.002210533613812208
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 3,
+   "buffer": 2,
+   "strategies": [
+    "EMA8"
+   ],
+   "execution": "market",
+   "allocation": "invvol"
+  },
+  "train": {
+   "annualized_sharpe": 1.3307575163191938,
+   "newey_west_t": 1.6992757881679663,
+   "mean_daily_bps": 5.372705364619885,
+   "max_drawdown": -0.12127007161456904,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.3529886416908326,
+   "newey_west_t": 0.5089491710603443,
+   "mean_daily_bps": 1.213927014257206,
+   "max_drawdown": -0.09516777833776224,
+   "days": 619
+  },
+  "trades_per_week": 3.0875123677431433,
+  "fees_and_slippage_pct_per_year": 0.010025511328748484,
+  "funding_pct_per_year": 0.0025709246775023724
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 3,
+   "buffer": 2,
+   "strategies": [
+    "EMA8"
+   ],
+   "execution": "market",
+   "allocation": "mvo_shrunk"
+  },
+  "train": {
+   "annualized_sharpe": 1.3321788874679716,
+   "newey_west_t": 1.6641942531333127,
+   "mean_daily_bps": 5.383335235458282,
+   "max_drawdown": -0.16513679285928673,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.74065799321062,
+   "newey_west_t": 1.0414445216850758,
+   "mean_daily_bps": 2.7437269122396364,
+   "max_drawdown": -0.09484596063752271,
+   "days": 619
+  },
+  "trades_per_week": 2.9681357911344453,
+  "fees_and_slippage_pct_per_year": 0.011338483098584687,
+  "funding_pct_per_year": 0.00231444240119741
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 3,
+   "buffer": 2,
+   "strategies": [
+    "EMA8"
+   ],
+   "execution": "limit",
+   "allocation": "invvol"
+  },
+  "train": {
+   "annualized_sharpe": 1.221760309541451,
+   "newey_west_t": 1.5609001126394884,
+   "mean_daily_bps": 4.968676387269,
+   "max_drawdown": -0.13869559933800102,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.17180679067788648,
+   "newey_west_t": 0.24306244777949074,
+   "mean_daily_bps": 0.5877585214668624,
+   "max_drawdown": -0.09798343870990411,
+   "days": 619
+  },
+  "trades_per_week": 3.0875123677431433,
+  "fees_and_slippage_pct_per_year": 0.001664966496406998,
+  "funding_pct_per_year": 0.002404537102984668
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 3,
+   "buffer": 2,
+   "strategies": [
+    "EMA8"
+   ],
+   "execution": "limit",
+   "allocation": "mvo_shrunk"
+  },
+  "train": {
+   "annualized_sharpe": 1.2066680011058724,
+   "newey_west_t": 1.510135927941667,
+   "mean_daily_bps": 4.918539204434819,
+   "max_drawdown": -0.18292448701221087,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.5334153613687064,
+   "newey_west_t": 0.7294564367454051,
+   "mean_daily_bps": 1.9632849919476438,
+   "max_drawdown": -0.09883151415464386,
+   "days": 619
+  },
+  "trades_per_week": 2.9681357911344453,
+  "fees_and_slippage_pct_per_year": 0.0020917126358744736,
+  "funding_pct_per_year": 0.0021183861949718415
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 5,
+   "buffer": 0,
+   "strategies": [
+    "DON8",
+    "EMA8"
+   ],
+   "execution": "market",
+   "allocation": "invvol"
+  },
+  "train": {
+   "annualized_sharpe": 1.3072695200465185,
+   "newey_west_t": 1.7426346871955896,
+   "mean_daily_bps": 4.78089490240422,
+   "max_drawdown": -0.12911628226433514,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.5842554889096936,
+   "newey_west_t": 0.8340687915370473,
+   "mean_daily_bps": 1.8144379446621974,
+   "max_drawdown": -0.07108283406684957,
+   "days": 619
+  },
+  "trades_per_week": 8.839292877071319,
+  "fees_and_slippage_pct_per_year": 0.01659176093193384,
+  "funding_pct_per_year": 0.0018151750482686493
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 5,
+   "buffer": 0,
+   "strategies": [
+    "DON8",
+    "EMA8"
+   ],
+   "execution": "market",
+   "allocation": "mvo_shrunk"
+  },
+  "train": {
+   "annualized_sharpe": 1.256428828372899,
+   "newey_west_t": 1.645161627285151,
+   "mean_daily_bps": 4.872071607686712,
+   "max_drawdown": -0.1457124130337556,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.7542907714675314,
+   "newey_west_t": 1.0638453748555032,
+   "mean_daily_bps": 2.6815992158890865,
+   "max_drawdown": -0.08721638719654068,
+   "days": 619
+  },
+  "trades_per_week": 7.797460935759045,
+  "fees_and_slippage_pct_per_year": 0.02147742325015675,
+  "funding_pct_per_year": 0.0017576895420725474
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 5,
+   "buffer": 0,
+   "strategies": [
+    "DON8",
+    "EMA8"
+   ],
+   "execution": "limit",
+   "allocation": "invvol"
+  },
+  "train": {
+   "annualized_sharpe": 1.1634161840703765,
+   "newey_west_t": 1.5438546589801914,
+   "mean_daily_bps": 4.273194572640882,
+   "max_drawdown": -0.13961985060904558,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.23823885024285754,
+   "newey_west_t": 0.3435195317012179,
+   "mean_daily_bps": 0.7443210792586199,
+   "max_drawdown": -0.07331293982718023,
+   "days": 619
+  },
+  "trades_per_week": 8.839292877071319,
+  "fees_and_slippage_pct_per_year": 0.0026658915629616275,
+  "funding_pct_per_year": 0.0016162922956633628
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 5,
+   "buffer": 0,
+   "strategies": [
+    "DON8",
+    "EMA8"
+   ],
+   "execution": "limit",
+   "allocation": "mvo_shrunk"
+  },
+  "train": {
+   "annualized_sharpe": 1.0847152986944102,
+   "newey_west_t": 1.4236906559503029,
+   "mean_daily_bps": 4.221239857771904,
+   "max_drawdown": -0.16459529175387821,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.41027397121796505,
+   "newey_west_t": 0.5756115861100739,
+   "mean_daily_bps": 1.4786301766231031,
+   "max_drawdown": -0.08991365490470282,
+   "days": 619
+  },
+  "trades_per_week": 7.797460935759045,
+  "fees_and_slippage_pct_per_year": 0.0038434475809904197,
+  "funding_pct_per_year": 0.0015200637191799295
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 5,
+   "buffer": 0,
+   "strategies": [
+    "DON8"
+   ],
+   "execution": "market",
+   "allocation": "invvol"
+  },
+  "train": {
+   "annualized_sharpe": 1.2761528572399943,
+   "newey_west_t": 1.7125667199862329,
+   "mean_daily_bps": 4.67205456364261,
+   "max_drawdown": -0.12765910595376262,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.5792311846508079,
+   "newey_west_t": 0.8405563659429421,
+   "mean_daily_bps": 1.7875131112220157,
+   "max_drawdown": -0.07607271977093699,
+   "days": 619
+  },
+  "trades_per_week": 9.110603278454724,
+  "fees_and_slippage_pct_per_year": 0.017204102818563216,
+  "funding_pct_per_year": 0.0017834126024448421
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 5,
+   "buffer": 0,
+   "strategies": [
+    "DON8"
+   ],
+   "execution": "market",
+   "allocation": "mvo_shrunk"
+  },
+  "train": {
+   "annualized_sharpe": 1.2958581022651823,
+   "newey_west_t": 1.7155172382191548,
+   "mean_daily_bps": 4.958811623993627,
+   "max_drawdown": -0.13568368315315127,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.6900942102706297,
+   "newey_west_t": 0.9835963403245146,
+   "mean_daily_bps": 2.437206944796031,
+   "max_drawdown": -0.10158126022149505,
+   "days": 619
+  },
+  "trades_per_week": 8.101328585308458,
+  "fees_and_slippage_pct_per_year": 0.021889778018922144,
+  "funding_pct_per_year": 0.0017743050239191723
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 5,
+   "buffer": 0,
+   "strategies": [
+    "DON8"
+   ],
+   "execution": "limit",
+   "allocation": "invvol"
+  },
+  "train": {
+   "annualized_sharpe": 1.1551874127576032,
+   "newey_west_t": 1.5434278179614542,
+   "mean_daily_bps": 4.246291040187112,
+   "max_drawdown": -0.13930203216009907,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.30844886792231246,
+   "newey_west_t": 0.4530832817968635,
+   "mean_daily_bps": 0.957194988113874,
+   "max_drawdown": -0.07675015618272651,
+   "days": 619
+  },
+  "trades_per_week": 9.110603278454724,
+  "fees_and_slippage_pct_per_year": 0.002625290434014026,
+  "funding_pct_per_year": 0.0016100490674765065
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 5,
+   "buffer": 0,
+   "strategies": [
+    "DON8"
+   ],
+   "execution": "limit",
+   "allocation": "mvo_shrunk"
+  },
+  "train": {
+   "annualized_sharpe": 1.1343009969913138,
+   "newey_west_t": 1.5039076363843382,
+   "mean_daily_bps": 4.359477588216781,
+   "max_drawdown": -0.1557181027331549,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.4162776011696434,
+   "newey_west_t": 0.5905320912098375,
+   "mean_daily_bps": 1.4877810901302022,
+   "max_drawdown": -0.10171992712778932,
+   "days": 619
+  },
+  "trades_per_week": 8.101328585308458,
+  "fees_and_slippage_pct_per_year": 0.0037523209076421793,
+  "funding_pct_per_year": 0.001551459750644075
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 5,
+   "buffer": 0,
+   "strategies": [
+    "EMA8"
+   ],
+   "execution": "market",
+   "allocation": "invvol"
+  },
+  "train": {
+   "annualized_sharpe": 1.383628060517904,
+   "newey_west_t": 1.862913199778205,
+   "mean_daily_bps": 5.035525597990155,
+   "max_drawdown": -0.11117367246104526,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.4433958502262862,
+   "newey_west_t": 0.6277306995890171,
+   "mean_daily_bps": 1.384739769418554,
+   "max_drawdown": -0.077355875446521,
+   "days": 619
+  },
+  "trades_per_week": 8.915259789458672,
+  "fees_and_slippage_pct_per_year": 0.01669978277073555,
+  "funding_pct_per_year": 0.00183033804968444
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 5,
+   "buffer": 0,
+   "strategies": [
+    "EMA8"
+   ],
+   "execution": "market",
+   "allocation": "mvo_shrunk"
+  },
+  "train": {
+   "annualized_sharpe": 1.3892619360473886,
+   "newey_west_t": 1.8557534244427127,
+   "mean_daily_bps": 5.322178061849682,
+   "max_drawdown": -0.12106447758080341,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.6801739429662855,
+   "newey_west_t": 0.9528803524272011,
+   "mean_daily_bps": 2.428900743358818,
+   "max_drawdown": -0.08520161922108238,
+   "days": 619
+  },
+  "trades_per_week": 7.92768992842308,
+  "fees_and_slippage_pct_per_year": 0.02170164028158564,
+  "funding_pct_per_year": 0.0018364068205205316
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 5,
+   "buffer": 0,
+   "strategies": [
+    "EMA8"
+   ],
+   "execution": "limit",
+   "allocation": "invvol"
+  },
+  "train": {
+   "annualized_sharpe": 1.2095377183563714,
+   "newey_west_t": 1.619329054564923,
+   "mean_daily_bps": 4.427988581583346,
+   "max_drawdown": -0.12895198265290242,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.1384255371818779,
+   "newey_west_t": 0.1981032619626192,
+   "mean_daily_bps": 0.4343949645510597,
+   "max_drawdown": -0.07970048586406153,
+   "days": 619
+  },
+  "trades_per_week": 8.915259789458672,
+  "fees_and_slippage_pct_per_year": 0.0025617053070993738,
+  "funding_pct_per_year": 0.0016283234650853928
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 5,
+   "buffer": 0,
+   "strategies": [
+    "EMA8"
+   ],
+   "execution": "limit",
+   "allocation": "mvo_shrunk"
+  },
+  "train": {
+   "annualized_sharpe": 1.2036771697159532,
+   "newey_west_t": 1.6114331560542476,
+   "mean_daily_bps": 4.624230127938454,
+   "max_drawdown": -0.13845041184151252,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.34239699743655855,
+   "newey_west_t": 0.4768796920646238,
+   "mean_daily_bps": 1.2357480093383568,
+   "max_drawdown": -0.09117582439405514,
+   "days": 619
+  },
+  "trades_per_week": 7.92768992842308,
+  "fees_and_slippage_pct_per_year": 0.0037976684866991156,
+  "funding_pct_per_year": 0.0015789554953856042
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 5,
+   "buffer": 2,
+   "strategies": [
+    "DON8",
+    "EMA8"
+   ],
+   "execution": "market",
+   "allocation": "invvol"
+  },
+  "train": {
+   "annualized_sharpe": 1.1678454965210219,
+   "newey_west_t": 1.5497648103470458,
+   "mean_daily_bps": 4.95214712450656,
+   "max_drawdown": -0.1422779136741802,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.4982559668087089,
+   "newey_west_t": 0.7249422524476429,
+   "mean_daily_bps": 1.4929075224832575,
+   "max_drawdown": -0.06926294118773246,
+   "days": 619
+  },
+  "trades_per_week": 4.482047830853842,
+  "fees_and_slippage_pct_per_year": 0.008474382467178434,
+  "funding_pct_per_year": 0.0017119017900054869
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 5,
+   "buffer": 2,
+   "strategies": [
+    "DON8",
+    "EMA8"
+   ],
+   "execution": "market",
+   "allocation": "mvo_shrunk"
+  },
+  "train": {
+   "annualized_sharpe": 0.8808796763503984,
+   "newey_west_t": 1.189189129496005,
+   "mean_daily_bps": 3.8429144258816965,
+   "max_drawdown": -0.1666951988751747,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 1.058706425712151,
+   "newey_west_t": 1.5859887312092942,
+   "mean_daily_bps": 4.244302389560498,
+   "max_drawdown": -0.06431316456944158,
+   "days": 619
+  },
+  "trades_per_week": 4.210737429470438,
+  "fees_and_slippage_pct_per_year": 0.011398119299385223,
+  "funding_pct_per_year": 0.002524983421531258
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 5,
+   "buffer": 2,
+   "strategies": [
+    "DON8",
+    "EMA8"
+   ],
+   "execution": "limit",
+   "allocation": "invvol"
+  },
+  "train": {
+   "annualized_sharpe": 1.1061088422213685,
+   "newey_west_t": 1.465924531448598,
+   "mean_daily_bps": 4.697595102392303,
+   "max_drawdown": -0.15738502955970435,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.3521926553124993,
+   "newey_west_t": 0.5079978167874004,
+   "mean_daily_bps": 1.0532820997315764,
+   "max_drawdown": -0.07401675033503774,
+   "days": 619
+  },
+  "trades_per_week": 4.482047830853842,
+  "fees_and_slippage_pct_per_year": 0.001381738016882148,
+  "funding_pct_per_year": 0.0016496218381199916
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 5,
+   "buffer": 2,
+   "strategies": [
+    "DON8",
+    "EMA8"
+   ],
+   "execution": "limit",
+   "allocation": "mvo_shrunk"
+  },
+  "train": {
+   "annualized_sharpe": 0.7214576824309586,
+   "newey_west_t": 0.9710239349781703,
+   "mean_daily_bps": 3.16297334927062,
+   "max_drawdown": -0.19914729281737364,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.9261153866252276,
+   "newey_west_t": 1.3788602742975424,
+   "mean_daily_bps": 3.716620993932421,
+   "max_drawdown": -0.07658563095998283,
+   "days": 619
+  },
+  "trades_per_week": 4.210737429470438,
+  "fees_and_slippage_pct_per_year": 0.0020380927279714705,
+  "funding_pct_per_year": 0.0023141786547254592
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 5,
+   "buffer": 2,
+   "strategies": [
+    "DON8"
+   ],
+   "execution": "market",
+   "allocation": "invvol"
+  },
+  "train": {
+   "annualized_sharpe": 1.0402296942142741,
+   "newey_west_t": 1.391748239463465,
+   "mean_daily_bps": 4.360916321260936,
+   "max_drawdown": -0.14264665209080163,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.6087147021376156,
+   "newey_west_t": 0.8970990219308859,
+   "mean_daily_bps": 1.8497309305018894,
+   "max_drawdown": -0.06877344914837313,
+   "days": 619
+  },
+  "trades_per_week": 4.780489272375587,
+  "fees_and_slippage_pct_per_year": 0.009293919250484863,
+  "funding_pct_per_year": 0.0017208379782043448
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 5,
+   "buffer": 2,
+   "strategies": [
+    "DON8"
+   ],
+   "execution": "market",
+   "allocation": "mvo_shrunk"
+  },
+  "train": {
+   "annualized_sharpe": 0.5200581032038226,
+   "newey_west_t": 0.696907000285237,
+   "mean_daily_bps": 1.8523652023326915,
+   "max_drawdown": -0.16345287928397967,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 1.159930284594571,
+   "newey_west_t": 1.7647738385671103,
+   "mean_daily_bps": 4.714357426509724,
+   "max_drawdown": -0.061889258452474505,
+   "days": 619
+  },
+  "trades_per_week": 4.492900246909179,
+  "fees_and_slippage_pct_per_year": 0.011260291441720513,
+  "funding_pct_per_year": 0.002426348400205589
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 5,
+   "buffer": 2,
+   "strategies": [
+    "DON8"
+   ],
+   "execution": "limit",
+   "allocation": "invvol"
+  },
+  "train": {
+   "annualized_sharpe": 0.9794615711043052,
+   "newey_west_t": 1.307794141410501,
+   "mean_daily_bps": 4.09206689816638,
+   "max_drawdown": -0.15363252943419758,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.5030207036940924,
+   "newey_west_t": 0.7369983173470797,
+   "mean_daily_bps": 1.534989912630508,
+   "max_drawdown": -0.07317139952358853,
+   "days": 619
+  },
+  "trades_per_week": 4.780489272375587,
+  "fees_and_slippage_pct_per_year": 0.001366707792250135,
+  "funding_pct_per_year": 0.0016468609794008985
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 5,
+   "buffer": 2,
+   "strategies": [
+    "DON8"
+   ],
+   "execution": "limit",
+   "allocation": "mvo_shrunk"
+  },
+  "train": {
+   "annualized_sharpe": 0.4343066919988118,
+   "newey_west_t": 0.5834294571402286,
+   "mean_daily_bps": 1.5355306681837078,
+   "max_drawdown": -0.17899147812343796,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 1.0216640020205627,
+   "newey_west_t": 1.5464450341794653,
+   "mean_daily_bps": 4.171340195729495,
+   "max_drawdown": -0.06874897099382649,
+   "days": 619
+  },
+  "trades_per_week": 4.492900246909179,
+  "fees_and_slippage_pct_per_year": 0.0017729178398245406,
+  "funding_pct_per_year": 0.0022594830118219935
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 5,
+   "buffer": 2,
+   "strategies": [
+    "EMA8"
+   ],
+   "execution": "market",
+   "allocation": "invvol"
+  },
+  "train": {
+   "annualized_sharpe": 1.1491973163069442,
+   "newey_west_t": 1.553430335206532,
+   "mean_daily_bps": 4.828865268476662,
+   "max_drawdown": -0.12401641063999458,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.32880443701353196,
+   "newey_west_t": 0.47171680039318226,
+   "mean_daily_bps": 0.989374104385441,
+   "max_drawdown": -0.07646505296928252,
+   "days": 619
+  },
+  "trades_per_week": 4.498326454936847,
+  "fees_and_slippage_pct_per_year": 0.008350235837491192,
+  "funding_pct_per_year": 0.001673435710189819
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 5,
+   "buffer": 2,
+   "strategies": [
+    "EMA8"
+   ],
+   "execution": "market",
+   "allocation": "mvo_shrunk"
+  },
+  "train": {
+   "annualized_sharpe": 1.1149797720467272,
+   "newey_west_t": 1.4938070550189788,
+   "mean_daily_bps": 4.832228484061378,
+   "max_drawdown": -0.1442009040409412,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.9835983075550316,
+   "newey_west_t": 1.460280342394065,
+   "mean_daily_bps": 4.015315992623197,
+   "max_drawdown": -0.06894522597102803,
+   "days": 619
+  },
+  "trades_per_week": 4.237868469608778,
+  "fees_and_slippage_pct_per_year": 0.011761983994693527,
+  "funding_pct_per_year": 0.002730857021857598
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 5,
+   "buffer": 2,
+   "strategies": [
+    "EMA8"
+   ],
+   "execution": "limit",
+   "allocation": "invvol"
+  },
+  "train": {
+   "annualized_sharpe": 1.0947982306733135,
+   "newey_west_t": 1.4786071364192859,
+   "mean_daily_bps": 4.5893468731335805,
+   "max_drawdown": -0.13398289324259138,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.16248581364805842,
+   "newey_west_t": 0.2315925581469184,
+   "mean_daily_bps": 0.4880640115193698,
+   "max_drawdown": -0.07995330640197928,
+   "days": 619
+  },
+  "trades_per_week": 4.498326454936847,
+  "fees_and_slippage_pct_per_year": 0.001315089445248571,
+  "funding_pct_per_year": 0.0016040046593216737
+ },
+ {
+  "params": {
+   "checkins_local": [
+    9,
+    15,
+    21
+   ],
+   "max_coins": 5,
+   "buffer": 2,
+   "strategies": [
+    "EMA8"
+   ],
+   "execution": "limit",
+   "allocation": "mvo_shrunk"
+  },
+  "train": {
+   "annualized_sharpe": 1.017296214205345,
+   "newey_west_t": 1.363151989443254,
+   "mean_daily_bps": 4.388284675783259,
+   "max_drawdown": -0.16956230857384869,
+   "days": 671
+  },
+  "test": {
+   "annualized_sharpe": 0.7986936038447341,
+   "newey_west_t": 1.1806227163124106,
+   "mean_daily_bps": 3.269820234998567,
+   "max_drawdown": -0.07565880782321066,
+   "days": 619
+  },
+  "trades_per_week": 4.237868469608778,
+  "fees_and_slippage_pct_per_year": 0.002029850351231378,
+  "funding_pct_per_year": 0.0025097397940409757
+ }
+]
