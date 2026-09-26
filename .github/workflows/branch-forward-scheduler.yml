@@ -16,6 +16,7 @@ on:
     - cron: "10 1 * * *"
     - cron: "20 1 * * *"
     - cron: "30 1 * * *"
+    - cron: "40 1 * * *"
     - cron: "55 0,8,16 * * *"
     - cron: "5 1,9,17 * * *"
   workflow_dispatch:
@@ -52,6 +53,7 @@ jobs:
             [trend-portfolio-forward-v1.yml]=research/payoff-geometry-v1-1
             [cross-asset-trend-forward-v1.yml]=research/payoff-geometry-v1-1
             [cross-asset-trend-invvol-forward-v1.yml]=research/payoff-geometry-v1-1
+            [crypto-trend-core-v1.yml]=research/payoff-geometry-v1-1
           )
           case "${SCHEDULE:-manual}" in
             "20 0,8,16 * * *") targets="payoff-geometry-forward-v1.yml" ;;
@@ -62,6 +64,7 @@ jobs:
             "10 1 * * *") targets="trend-portfolio-forward-v1.yml" ;;
             "20 1 * * *") targets="cross-asset-trend-forward-v1.yml" ;;
             "30 1 * * *") targets="cross-asset-trend-invvol-forward-v1.yml" ;;
+            "40 1 * * *") targets="crypto-trend-core-v1.yml" ;;
             manual)
               if [ "${REQUESTED:-all}" = "all" ]; then targets="${!REF[*]}"; else targets="$REQUESTED"; fi ;;
             *) echo "unmapped schedule: $SCHEDULE"; exit 1 ;;
