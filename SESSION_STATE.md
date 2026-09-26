@@ -73,11 +73,13 @@
 - 08:05Z (second pass): no new PR #113, bridge or target-workflow runs; monitor only.
 
 ## Next action candidates
-- `ask_user`: merge PR #115 (schedules the daily trend-portfolio and cross-asset watches).
+- `ask_user`: merge PR #116 (schedules the inverse-vol watch). PR #115 merged `cb6d3ef`.
 - DONE `7039d5e`: canonical v3.1 (v3 + funding; crypto drag 1.0%/yr where history exists).
 - DONE `12629d6`: `universal-cross-asset-trend-forward-v1` (start 2026-09-28): crypto + XAUT/SILVER/USOIL/
   SPX500/NAS100 under v3.1; combined/tradfi/crypto daily series. Scheduling is in PR #115 (awaiting merge).
-- `implement` (next): pre-register inverse-volatility sleeve sizing as a forward variant beside ±1.
+- DONE `3af4521`: `universal-cross-asset-trend-invvol-forward-v1` (same universe and start; size = min(1, 15%/60-day vol)
+  fixed at entry). Historical crypto context (post-registration): Sharpe 0.96 → 1.11, drawdown/vol unchanged,
+  so it is mostly a scale-down within crypto; its value is cross-asset risk balance. Scheduling is in PR #116.
 - (superseded) pre-register a cross-asset trend universe screened only on availability, liquidity and
   correlation to the crypto factor (target effective N ≥ 6), with the same frozen rules and daily-P&L protocol.
 - `collect_evidence`: after the 08:25/08:40Z bridge runs, report the first post-start trades.

@@ -103,3 +103,26 @@ for tradfi perps it would decide the result.
    for coin concentration and drawdown depth and is standard managed-futures
    practice, not derived from this P&L.
 4. **VOL8's turnover** is a weakness to watch forward; it is not to be retuned.
+
+## Addendum: inverse-volatility sizing (registered before this was computed)
+
+`universal-cross-asset-trend-invvol-forward-v1` (`3af4521`) sizes each episode
+at entry as min(1, 15% / realized 60-day vol). The disclosed historical context
+below was computed after registration, on the crypto-only frozen window from
+2024-03-02 (924 days, after the sizing warm-up):
+
+| | ±1 | Inverse vol |
+| --- | ---: | ---: |
+| Sharpe | 0.96 | 1.11 |
+| Annualized volatility | 38.7% | 10.0% |
+| Max drawdown | −30.1% | −7.7% |
+| Max drawdown ÷ volatility | −0.78 | −0.77 |
+| Worst day | −11.1% | −3.4% |
+| Top-3 coins' share of P&L / of risk | 57% / 38% | 53% / 38% |
+| BTC + BNB share of P&L | 4.9% | 9.0% |
+
+Within crypto, sizing is close to a pure scale-down. The coins have similar
+volatility, so risk shares and drawdown-to-volatility barely change, and the
+Sharpe gain is modest. Its purpose is cross-asset: without it, gold and index
+sleeves carry a small fraction of crypto's risk and the added breadth is wasted.
+The forward comparison against the ±1 cross-asset watch is the actual test.
