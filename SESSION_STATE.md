@@ -4,7 +4,7 @@
 | Branch | Head | Status |
 | --- | --- | --- |
 | `fix/universal-existing-validation` | `0966172` | PR #113, draft; CI green 2026-09-25 18:42Z; no new runs |
-| `research/payoff-geometry-v1-1` | see `git log` | v1.1 payoff geometry; CI green (last run 36196258328) |
+| `research/payoff-geometry-v1-1` | see `git log` | v1.1 payoff geometry; CI green (last run 36228586717) |
 | `main` | origin/main | scheduled workflows green through 07:54Z; 8h and D4 scheduler bridges active |
 
 ## Forward evidence (descriptive only)
@@ -33,6 +33,7 @@
 ## Decisions
 - Workstream D (`universal-market-state-labels-v1`) was not built (post-hoc re-cut of v1 thresholds).
 - Monitor runs pick one action; 2026-09-26 08:05Z run = `collect_evidence` only, no code change.
+- 08:05Z (second pass): no new PR #113, bridge or target-workflow runs; monitor only.
 
 ## Next action candidates
 - `collect_evidence`: after the 08:25/08:40Z bridge runs, report the first post-start trades.
