@@ -14,6 +14,7 @@ on:
     - cron: "45 0,8,16 * * *"
     - cron: "50 0,8,16 * * *"
     - cron: "10 1 * * *"
+    - cron: "20 1 * * *"
     - cron: "55 0,8,16 * * *"
     - cron: "5 1,9,17 * * *"
   workflow_dispatch:
@@ -48,6 +49,7 @@ jobs:
             [research-control-plane.yml]=fix/universal-existing-validation
             [canonical-v3-forward-companion-v1.yml]=research/payoff-geometry-v1-1
             [trend-portfolio-forward-v1.yml]=research/payoff-geometry-v1-1
+            [cross-asset-trend-forward-v1.yml]=research/payoff-geometry-v1-1
           )
           case "${SCHEDULE:-manual}" in
             "20 0,8,16 * * *") targets="payoff-geometry-forward-v1.yml" ;;
@@ -56,6 +58,7 @@ jobs:
             "55 0,8,16 * * *") targets="universal-shadow-operational-monitor.yml" ;;
             "5 1,9,17 * * *") targets="research-control-plane.yml" ;;
             "10 1 * * *") targets="trend-portfolio-forward-v1.yml" ;;
+            "20 1 * * *") targets="cross-asset-trend-forward-v1.yml" ;;
             manual)
               if [ "${REQUESTED:-all}" = "all" ]; then targets="${!REF[*]}"; else targets="$REQUESTED"; fi ;;
             *) echo "unmapped schedule: $SCHEDULE"; exit 1 ;;
