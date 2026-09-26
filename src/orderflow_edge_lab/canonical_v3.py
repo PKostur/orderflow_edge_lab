@@ -38,6 +38,29 @@ ACCOUNTING = {
 }
 
 
+def align_funding(raw: pd.Series, index: pd.DatetimeIndex) -> tuple[pd.Series, float]:
+    """Sum settlement rates into bar opens: rates in (index[t-1], index[t]] land on index[t].
+
+    Returns the aligned series (missing = 0) and the fraction of bar intervals
+    after the first settlement that received at least one settlement.
+    """
+    out = pd.Series(0.0, index=index)
+    if raw is None or len(raw) == 0:
+        return out, 0.0
+    raw = raw.copy()
+    raw.index = pd.to_datetime(raw.index, utc=True)
+    raw = raw.sort_index()
+    raw = raw[(raw.index > index[0]) & (raw.index <= index[-1])]
+    if len(raw) == 0:
+        return out, 0.0
+    slot = index.searchsorted(raw.index, side="left")
+    sums = pd.Series(raw.to_numpy(dtype=float)).groupby(slot).sum()
+    out.iloc[sums.index.to_numpy()] = sums.to_numpy()
+    first = int(slot.min())
+    covered = len(set(slot.tolist()))
+    return out, covered / max(1, len(index) - first)
+
+
 def _sign(value: float) -> int:
     return 1 if value > 0.0 else (-1 if value < 0.0 else 0)
 
@@ -50,6 +73,7 @@ def run_canonical_backtest_v3(
     *,
     context: Mapping[str, pd.DataFrame] | None = None,
     return_equity: bool = False,
+    funding: pd.Series | None = None,
 ) -> dict[str, Any]:
     frame = _validate_frame(frame)
     if len(frame) < max(3, int(strategy.warmup_bars)):
@@ -78,6 +102,14 @@ def run_canonical_backtest_v3(
     c = (float(execution.round_trip_cost_bps) / 2.0
          + float(execution.slippage_bps_per_turnover_unit)) / 10_000.0
     m = len(pos)
+    if funding is not None:
+        funding_rates, funding_coverage = align_funding(funding, frame.index)
+        fund = funding_rates.to_numpy(dtype=float)
+        if not np.isfinite(fund).all():
+            raise UniversalBacktestError("funding rates must be finite")
+    else:
+        fund = np.zeros(len(frame))
+        funding_coverage = None
 
     equity = np.empty(m)
     level = 1.0
@@ -111,12 +143,28 @@ def run_canonical_backtest_v3(
             "gross_bps": (episode["gross"] - 1.0) * 10_000.0,
             "net_bps": (episode["net"] * exit_factor - 1.0) * 10_000.0,
             "cost_bps": (episode["cost_units"] + abs(exit_weight)) * c * 10_000.0,
+            "funding_bps": episode["funding"] * 10_000.0,
             "mfe_bps": mfe * 10_000.0,
             "mae_bps": mae * 10_000.0,
         })
         episode = None
 
+    def settle_funding(t: int) -> None:
+        # The position held into open t pays weight x rate before any trade at t.
+        nonlocal level
+        if current == 0.0 or fund[t] == 0.0:
+            return
+        flow = -current * float(fund[t])
+        factor = 1.0 + flow
+        if factor <= 0.0:
+            raise UniversalBacktestError("funding drives equity non-positive; bankruptcy model required")
+        level *= factor
+        if episode is not None:
+            episode["net"] *= factor
+            episode["funding"] += flow
+
     for t in range(m):
+        settle_funding(t)
         tgt = float(pos[t])
         exit_units = 0.0
         if _sign(tgt) != _sign(current):
@@ -142,13 +190,14 @@ def run_canonical_backtest_v3(
         if new != 0.0:
             if episode is None:
                 episode = {"start": t, "side": _sign(new), "entry_position": new,
-                           "gross": 1.0, "net": 1.0, "cost_units": 0.0}
+                           "gross": 1.0, "net": 1.0, "cost_units": 0.0, "funding": 0.0}
             episode["gross"] *= market_factor
             episode["net"] *= entry_factor * market_factor
             episode["cost_units"] += entry_units
         current = new * (1.0 + float(returns[t])) / market_factor if new != 0.0 else 0.0
         previous_target = tgt
 
+    settle_funding(m)
     terminal_turnover = abs(current)
     if episode is not None:
         close_episode(m, current)
@@ -171,6 +220,12 @@ def run_canonical_backtest_v3(
         },
         "accounting": {
             **ACCOUNTING,
+            **(
+                {"version": "3.1", "funding": "position held into each open pays weight x summed settlement rates",
+                 "funding_coverage": funding_coverage}
+                if funding is not None
+                else {}
+            ),
             "ledger_equity_reconciled": True,
             "ledger_compounded_return": ledger_equity - 1.0,
             "evaluated_intervals": m,
