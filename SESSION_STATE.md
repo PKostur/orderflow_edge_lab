@@ -111,6 +111,9 @@
   meanrev −1.05 (t −2.66). ETFs: nothing works (meanrev 0.00). Regime labels lag: trend earns +2.2 bp/day even on CHOP days.
   Decision: keep the trend-only core; no mean-reversion component.
 
+## Channel exit (`research/trend_channel_exit/RESULT.md`, declared `da679d0`): REJECTED
+- Core 1.36 (t 3.13) → core + 20-bar exit 0.90; up-month capture halved (5.1% → 2.7%), 2021 +93% → +25%. Slow exits are part of the edge.
+
 ## Decisions
 - Workstream D (`universal-market-state-labels-v1`) was not built (post-hoc re-cut of v1 thresholds).
 - Monitor runs pick one action; 2026-09-26 08:05Z run = `collect_evidence` only, no code change.
