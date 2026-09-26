@@ -57,6 +57,16 @@
 - Policy: freeze per-trade and regime diagnostics and new trend variants on the same strategies and
   coins. New work must add independent breadth or shorten time-to-answer.
 
+## Portfolio anatomy (`docs/PORTFOLIO_ANATOMY_2026_09_26.md`)
+- Strengths: convex "smile" (+8% in the worst basket months, +17% in the best); long and short both pay
+  under v3; +14% in 2025 and +18% in 2026 while the basket fell 35% and 24%.
+- Weaknesses: the top 1% of trades (26) = 102% of net P&L; drawdowns −30% (346 days) and −25%; volatility 38%;
+  ±1 sizing puts risk in DOGE/ENA/SUI (53% of P&L); VOL8 has a 15.6%/yr cost drag.
+- Crypto funding drag only 0.6%/yr. **MEXC tradfi perp funding is 10–84%/yr |rate| and unmodeled**, so
+  accounting v3.1 with funding must come before any cross-asset protocol.
+- Liquid tradfi by rule (≥10M 24h, no leveraged/inverse/single stock): XAUT, SILVER, USOIL, SPX500,
+  NAS100. Crypto + tradfi effective N 1.7 → 5.5.
+
 ## Decisions
 - Workstream D (`universal-market-state-labels-v1`) was not built (post-hoc re-cut of v1 thresholds).
 - Monitor runs pick one action; 2026-09-26 08:05Z run = `collect_evidence` only, no code change.
@@ -64,6 +74,7 @@
 
 ## Next action candidates
 - `ask_user`: merge PR #115 (schedules the daily trend portfolio watch).
+- `implement`: canonical v3.1 = v3 + funding cash flows (prerequisite for cross-asset).
 - `implement`: pre-register a cross-asset trend universe screened only on availability, liquidity and
   correlation to the crypto factor (target effective N ≥ 6), with the same frozen rules and daily-P&L protocol.
 - `collect_evidence`: after the 08:25/08:40Z bridge runs, report the first post-start trades.
