@@ -39,7 +39,13 @@
    is pre-registered (start 2026-09-27T00:00Z): DON8/EMA8/VOL8 forward trades under v2 and v3.
 3. **Effective N is about 16–31 per cell** even for thousands of trades. The raw
    N ≥ 20 sufficiency rule overstates the evidence.
-4. **VOL8 excursion ordering:** 37% of episodes are `SAME_BAR`, so ordering is unobservable.
+4. **Runtime pinning.** pandas 2.3 + numpy 2.5 emit a "generic timedelta unit … will raise an error" deprecation on
+   ordinary Timedelta math, and there is no lock file. numpy is capped `<2.6` on both forward branches
+   (`d5679d6`, `dcd5a4e`), all green. The bridges pin ref `0966172`, which still allows numpy <3.
+5. **Cross-Sectional Independent Venue Replication v1** has failed on every run since 2026-09-25: Bybit
+   returns HTTP 403 to GitHub-hosted runners. It's an environment problem, not code; it needs another
+   data source or a self-hosted runner (user decision).
+6. **VOL8 excursion ordering:** 37% of episodes are `SAME_BAR`, so ordering is unobservable.
 
 ## Decisions
 - Workstream D (`universal-market-state-labels-v1`) was not built (post-hoc re-cut of v1 thresholds).
