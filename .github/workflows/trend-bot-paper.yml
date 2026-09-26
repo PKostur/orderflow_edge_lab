@@ -6,6 +6,12 @@ name: Trend Bot Paper
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - research/payoff-geometry-v1-1
+    paths:
+      - "src/orderflow_edge_lab/trend_bot.py"
+      - ".github/workflows/trend-bot-paper.yml"
 
 permissions:
   contents: write
