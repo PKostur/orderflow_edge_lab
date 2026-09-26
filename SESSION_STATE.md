@@ -47,11 +47,24 @@
    data source or a self-hosted runner (user decision).
 6. **VOL8 excursion ordering:** 37% of episodes are `SAME_BAR`, so ordering is unobservable.
 
+## Evidence-rate reframe (2026-09-26, `docs/FIRST_PRINCIPLES_EVIDENCE_RATE_2026_09_26.md`)
+- Combined 30-sleeve v3 portfolio: historical Sharpe 1.07 net, t 1.71 (not significant even
+  in-sample), about 1,275 forward days to reach t = 2. Beta to basket −0.04, so hedging adds nothing.
+- Breadth: 10 coins = 2.0 independent bets; +12 alts = 2.6; the 3 strategies = 1.5. Only
+  non-crypto-factor assets add breadth (PAXG +0.35, TRX +0.33).
+- `universal-trend-portfolio-forward-v1` pre-registered (start 2026-09-28, daily P&L, v3). Scheduling
+  is in PR #115 (awaiting user merge).
+- Policy: freeze per-trade and regime diagnostics and new trend variants on the same strategies and
+  coins. New work must add independent breadth or shorten time-to-answer.
+
 ## Decisions
 - Workstream D (`universal-market-state-labels-v1`) was not built (post-hoc re-cut of v1 thresholds).
 - Monitor runs pick one action; 2026-09-26 08:05Z run = `collect_evidence` only, no code change.
 - 08:05Z (second pass): no new PR #113, bridge or target-workflow runs; monitor only.
 
 ## Next action candidates
+- `ask_user`: merge PR #115 (schedules the daily trend portfolio watch).
+- `implement`: pre-register a cross-asset trend universe screened only on availability, liquidity and
+  correlation to the crypto factor (target effective N ≥ 6), with the same frozen rules and daily-P&L protocol.
 - `collect_evidence`: after the 08:25/08:40Z bridge runs, report the first post-start trades.
 - `collect_evidence`: after 2026-09-27, report the v3 companion's first trades descriptively.
