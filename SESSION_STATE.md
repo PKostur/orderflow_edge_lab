@@ -73,6 +73,14 @@
   t 2.83 (funding drag 11.2%/yr).
 - Concentrated: 2021 +743%, 2022 −7%; excluding 2021 (post hoc) t 1.16. Supports but does not prove; no promotion.
 
+## Holdouts round 2 (registered `8cb2af0`, each run once)
+- Untouched coins (ZEC/LTC/UNI/DOT/DASH/ETC/BCH, 2020-26): **FAILED narrowly**, Sharpe 0.76, t 1.87; same sign as the
+  development coins, weaker.
+- ETF long history (20 cross-asset ETFs, 2007-26, rules mapped to daily): **FAILED, negative**: Sharpe −0.31, t −1.25;
+  only commodities positive; VOL8 t −3.07; FX t −2.60. The fast rules are crypto-specific.
+- Implication: tradfi breadth with these rules is likely noise, not edge. The cross-asset forward watch continues
+  unchanged, with a low prior. A slower-trend hypothesis would need new data or forward-only registration.
+
 ## Decisions
 - Workstream D (`universal-market-state-labels-v1`) was not built (post-hoc re-cut of v1 thresholds).
 - Monitor runs pick one action; 2026-09-26 08:05Z run = `collect_evidence` only, no code change.
