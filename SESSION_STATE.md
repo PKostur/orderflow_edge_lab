@@ -91,6 +91,15 @@
   existing paper/approval gates; authorizes nothing. Historical context: 180-day windows positive 75% of the time.
 - Scheduling is in PR #117 (awaiting user merge).
 
+## Human-constrained work (`research/human_constrained/RESULTS.md`, `457a0b0`)
+- Markowitz on 51 sleeves does not beat equal weight (0.74 vs 0.74, deeper drawdown, 70x turnover); not adopted.
+- Human simulator (CET check-ins, max 5 coins, market/limit, fees, slippage, funding) validated vs v3. 48-setting grid:
+  train/test rank corr −0.02, so tuning is noise. Robust: market > limit, 5 coins > 3, buffer reduces churn.
+  Principled pick K5 b2 market DON8+EMA8 invvol: 1.17 → 0.50.
+- Sessions: human timing costs little (CET 09/15/21 at 0.89 vs UTC 0.93); New York 10:00 (16:00 CET) best (1.04; 0.96 in 25-26),
+  but only 1 of 10, so a forward hypothesis.
+- Regimes: up months +3.2%/mo, down +0.6%, flat −0.9% (bleeds in chop; shorts catch crashes late).
+
 ## Decisions
 - Workstream D (`universal-market-state-labels-v1`) was not built (post-hoc re-cut of v1 thresholds).
 - Monitor runs pick one action; 2026-09-26 08:05Z run = `collect_evidence` only, no code change.
