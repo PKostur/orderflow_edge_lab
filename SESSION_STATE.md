@@ -67,6 +67,12 @@
 - Liquid tradfi by rule (≥10M 24h, no leveraged/inverse/single stock): XAUT, SILVER, USOIL, SPX500,
   NAS100. Crypto + tradfi effective N 1.7 → 5.5.
 
+## Pre-window holdout (`research/pre_window_holdout/RESULT.md`)
+- `universal-pre-window-crypto-holdout-v1` (registered `e622e7c`, run once): 2020-06..2023-12, 9 coins, data unused by
+  any protocol. **Primary PASSED**: combined v3 Sharpe 1.76, NW t 3.13. With Binance funding proxy: Sharpe 1.55,
+  t 2.83 (funding drag 11.2%/yr).
+- Concentrated: 2021 +743%, 2022 −7%; excluding 2021 (post hoc) t 1.16. Supports but does not prove; no promotion.
+
 ## Decisions
 - Workstream D (`universal-market-state-labels-v1`) was not built (post-hoc re-cut of v1 thresholds).
 - Monitor runs pick one action; 2026-09-26 08:05Z run = `collect_evidence` only, no code change.
