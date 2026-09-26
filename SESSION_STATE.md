@@ -118,6 +118,10 @@
 - Core 1.40 → 1.42 Sharpe; return 20.5% → 26.6%; 2023-26 returns roughly doubled, 2021 tempered (93% → 56%), so less
   single-year dependence. Realized vol overshoots (18.7% vs 15%); max drawdown −13.9% → −17.1%.
 
+## Funding overlay (`research/funding_overlay/RESULT.md`, declared `f69f540`): REJECTED
+- Core with Binance-proxy funding: Sharpe 1.19 (new honest baseline; 1.36 without funding). The overlay gives 0.99 and halves
+  the return: extreme funding = strongest trends (2021 +75% → +8%).
+
 ## Decisions
 - Workstream D (`universal-market-state-labels-v1`) was not built (post-hoc re-cut of v1 thresholds).
 - Monitor runs pick one action; 2026-09-26 08:05Z run = `collect_evidence` only, no code change.
