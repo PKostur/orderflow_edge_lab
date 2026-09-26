@@ -122,6 +122,12 @@ class PayoffGeometryForwardTests(unittest.TestCase):
         self.assertEqual(row["sample_progress"]["open_terminal_snapshot_count"], 1)
         self.assertFalse(row["sample_progress"]["ready_for_review"])
         self.assertEqual(row["formal_verdict"], "WITHHELD")
+        # Regression: private enrichment fields (pd.Timestamp) must not reach the report.
+        import json
+
+        json.dumps(report, allow_nan=False)
+        for snapshot in row["open_terminal_snapshots_not_scored"]:
+            self.assertFalse(any(str(key).startswith("_") for key in snapshot))
 
     def test_review_gate_requires_time_total_high_and_low_counts(self):
         config = self._config()

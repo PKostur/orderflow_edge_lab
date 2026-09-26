@@ -256,7 +256,10 @@ def build_payoff_geometry_forward_report(
                     ),
                 },
                 "open_terminal_snapshots_not_scored": sorted(
-                    open_snapshots,
+                    (
+                        {k: v for k, v in row.items() if not str(k).startswith("_")}
+                        for row in open_snapshots
+                    ),
                     key=lambda row: (str(row["entry"]), str(row["symbol"])),
                 ),
                 "sample_progress": {
