@@ -27,6 +27,7 @@ permissions:
 
 env:
   TARGET_REF: fix/universal-existing-validation
+  COMPANION_REF: research/payoff-geometry-v1-1
 
 jobs:
   dispatch:
@@ -59,3 +60,12 @@ jobs:
             echo "dispatch $wf @ $TARGET_REF"
             gh workflow run "$wf" --ref "$TARGET_REF"
           done
+          # Canonical v3 forward companion lives on its own research branch and
+          # runs with the prospective regime shadow's cadence.
+          case "${SCHEDULE:-manual}" in
+            "40 0,8,16 * * *"|manual)
+              if [ "${SCHEDULE:-manual}" != manual ] || [ "${REQUESTED:-all}" = "all" ]; then
+                echo "dispatch canonical-v3-forward-companion-v1.yml @ $COMPANION_REF"
+                gh workflow run canonical-v3-forward-companion-v1.yml --ref "$COMPANION_REF"
+              fi ;;
+          esac
