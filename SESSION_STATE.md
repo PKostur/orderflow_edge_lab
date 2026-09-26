@@ -81,6 +81,9 @@
 - Implication: tradfi breadth with these rules is likely noise, not edge. The cross-asset forward watch continues
   unchanged, with a low prior. A slower-trend hypothesis would need new data or forward-only registration.
 
+- Cost realism (`research/cost_realism/NOTE.md`, one snapshot): the 20 bps RT assumption is conservative for 14/15
+  forward instruments at 10–50k USDT; NAS100 at 50k is 21 bps.
+
 ## Decisions
 - Workstream D (`universal-market-state-labels-v1`) was not built (post-hoc re-cut of v1 thresholds).
 - Monitor runs pick one action; 2026-09-26 08:05Z run = `collect_evidence` only, no code change.
