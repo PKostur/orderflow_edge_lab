@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "protocol_name": "universal-descriptive-regime-labels-v1",
+  "status": "preregistered_descriptive_only",
+  "source_protocol": "universal-existing-strategy-backtests-v1",
+  "timeframe": "8h",
+  "primary_cost_bps": 20.0,
+  "implementation_freeze_commit": "f481ae50fee98953a6542334d10c123870e6301d",
+  "purpose": "Attach a separately versioned, causal, descriptive-only five-axis market-regime label to the unchanged canonical DON8, EMA8 and VOL8 historical trades. This protocol cannot filter trades, modify frozen candidates, promote a strategy, or authorize live trading or leverage.",
+  "labels": {
+    "trend_efficiency": {
+      "method": "kaufman_efficiency_ratio_absolute_net_close_change_over_total_absolute_close_path",
+      "window_bars": 42,
+      "percentile_history_bars": 540,
+      "lower_quantile": 0.3333333333333333,
+      "upper_quantile": 0.6666666666666666,
+      "persistence_bars": 3,
+      "states": ["CHOP", "MIXED", "TREND"],
+      "threshold_history_excludes_current_feature_bar": true
+    },
+    "volatility": {
+      "method": "garman_klass_ohlc_volatility",
+      "window_bars": 21,
+      "percentile_history_bars": 540,
+      "lower_quantile": 0.3333333333333333,
+      "upper_quantile": 0.6666666666666666,
+      "persistence_bars": 3,
+      "states": ["LOW", "MID", "HIGH"],
+      "threshold_history_excludes_current_feature_bar": true,
+      "annualization": "none"
+    },
+    "market_coupling": {
+      "method": "average_pairwise_pearson_correlation_of_close_to_close_log_returns",
+      "window_bars": 90,
+      "minimum_pair_count": 10,
+      "percentile_history_bars": 540,
+      "lower_quantile": 0.3333333333333333,
+      "upper_quantile": 0.6666666666666666,
+      "persistence_bars": 3,
+      "states": ["LOW", "MID", "HIGH"],
+      "threshold_history_excludes_current_feature_bar": true,
+      "same_global_coupling_state_applies_to_all_symbols_at_timestamp": true
+    },
+    "shock": {
+      "method": "absolute_one_bar_log_return_vs_trailing_sigma",
+      "sigma_history_bars": 540,
+      "sigma_threshold": 4.0,
+      "active_bars_including_event": 10,
+      "states": ["NORMAL", "SHOCK"],
+      "sigma_history_excludes_current_return": true,
+      "persistence_exception": "A shock becomes active immediately at the completed event bar and remains active for that bar plus the next nine completed bars; it is not delayed by the three-bar bucket switch rule."
+    },
+    "drawdown": {
+      "method": "close_distance_from_trailing_540bar_intrabar_high",
+      "lookback_bars": 540,
+      "near_high_threshold": -0.1,
+      "deep_drawdown_threshold": -0.2,
+      "persistence_bars": 3,
+      "states": ["NEAR_HIGH", "CORRECTION", "DEEP_DRAWDOWN"],
+      "threshold_rationale": "Fixed 10% and 20% drawdown bands are conventional descriptive market-loss thresholds. They are not calibrated to strategy PnL and are not claimed to transfer directly from equities to crypto."
+    }
+  },
+  "attribution": {
+    "trade_entry_uses_latest_completed_bar_strictly_before_entry": true,
+    "no_current_entry_bar_high_low_close_used": true,
+    "unknown_state_trades_are_retained_and_reported_but_excluded_from_substantive_joint_cells": true
+  },
+  "joint_cell_grid": {
+    "trend_states": ["CHOP", "MIXED", "TREND"],
+    "volatility_states": ["LOW", "MID", "HIGH"],
+    "coupling_states": ["LOW", "MID", "HIGH"],
+    "shock_states": ["NORMAL", "SHOCK"],
+    "drawdown_states": ["NEAR_HIGH", "CORRECTION", "DEEP_DRAWDOWN"],
+    "emit_all_cartesian_cells_including_empty": true,
+    "expected_joint_cells_per_strategy": 162
+  },
+  "bootstrap": {
+    "method": "nonoverlapping_calendar_blocks_by_trade_entry",
+    "block_days": 30,
+    "replicates": 1000,
+    "confidence_interval": [0.025, 0.975],
+    "seed": 20260925,
+    "shared_resamples_across_symbols_strategies_and_cells": true,
+    "p_value": "two_sided_centered_bootstrap_test_of_zero_pooled_trade_expectancy",
+    "interpretation": "Descriptive dependence-aware uncertainty only; pooled trade expectancy is not a portfolio return."
+  },
+  "multiplicity": {
+    "family": "all_nonempty_predeclared_joint_cells_with_valid_bootstrap_p_within_strategy",
+    "methods": ["Benjamini-Hochberg FDR", "Holm FWER"],
+    "alpha": 0.1,
+    "empty_cells_are_reported_but_not_tested": true,
+    "cell_selection_after_results_prohibited": true,
+    "decision_affecting_claims_require_separate_predeclared_protocol": true,
+    "stronger_strategy_selection_controls_reserved_for_later_decision_affecting_claims": [
+      "White Reality Check",
+      "Hansen SPA",
+      "Deflated Sharpe Ratio",
+      "Probability of Backtest Overfitting"
+    ]
+  },
+  "reported_metrics": [
+    "trade_count",
+    "expectancy_bps",
+    "median_net_bps",
+    "win_rate",
+    "profit_factor",
+    "correct_direction_rate",
+    "median_mfe_bps",
+    "median_correct_direction_mfe_bps",
+    "median_abs_mae_bps",
+    "per_symbol_compounded_return",
+    "median_symbol_compounded_return",
+    "positive_symbol_fraction",
+    "bootstrap_expectancy_interval",
+    "raw_bootstrap_p",
+    "bh_fdr_q",
+    "holm_fwer_p"
+  ],
+  "claims": {
+    "development_only": true,
+    "descriptive_only": true,
+    "same_period_not_future_oos": true,
+    "strategy_definitions_changed": false,
+    "trade_filter_authorized": false,
+    "regime_filter_authorized": false,
+    "candidate_promoted": false,
+    "profitable_edge_established": false,
+    "live_trading_authorized": false,
+    "leverage_authorized": false
+  },
+  "literature_basis": [
+    {
+      "topic": "Kaufman efficiency ratio",
+      "note": "Net absolute price change divided by the sum of absolute one-bar price changes; higher values indicate more directional, efficient movement."
+    },
+    {
+      "topic": "Garman-Klass volatility",
+      "note": "OHLC range-based volatility estimator using high-low and open-close information."
+    },
+    {
+      "topic": "block bootstrap",
+      "note": "Calendar blocks are resampled jointly across symbols and strategies to retain nearby temporal and cross-sectional dependence."
+    },
+    {
+      "topic": "multiple testing",
+      "note": "Benjamini-Hochberg FDR and Holm FWER adjustments are reported across every non-empty predeclared joint cell within each strategy."
+    }
+  ]
+}

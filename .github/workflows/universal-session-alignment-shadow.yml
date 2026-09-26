@@ -1,0 +1,95 @@
+name: Universal Session Alignment Prospective Shadow
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - fix/universal-existing-validation
+    paths:
+      - "config/universal_session_alignment_shadow_v1.json"
+      - "src/orderflow_edge_lab/universal_session_alignment_shadow.py"
+      - "src/orderflow_edge_lab/cli/universal_session_alignment_shadow.py"
+      - "tests/test_universal_session_alignment_shadow.py"
+      - ".github/workflows/universal-session-alignment-shadow.yml"
+      - "pyproject.toml"
+  schedule:
+    - cron: "25 0,8,16 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: universal-session-alignment-shadow
+  cancel-in-progress: true
+
+jobs:
+  shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run frozen shadow tests
+        run: python -m unittest tests.test_universal_session_alignment_shadow -v
+      - name: Run prospective shadow
+        run: |
+          mkdir -p artifacts/universal_session_alignment_shadow/source
+          orderflow-universal-session-shadow \
+            --config config/universal_session_alignment_shadow_v1.json \
+            --output artifacts/universal_session_alignment_shadow/report.json \
+            --source-dir artifacts/universal_session_alignment_shadow/source \
+            --max-workers 5
+      - name: Enforce freeze boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open("artifacts/universal_session_alignment_shadow/report.json",encoding="utf-8"))
+          if r["prospective_start_utc"] != "2026-09-24T00:00:00+00:00":
+              raise SystemExit("prospective boundary changed")
+          claims=r["claims"]
+          forbidden=("candidate_promoted","session_filter_authorized","live_trading_authorized","leverage_authorized")
+          if any(bool(claims.get(key)) for key in forbidden):
+              raise SystemExit("forbidden promotion/filter/live claim")
+          for report in r["reports"]:
+              for trade in report["completed_trades"]:
+                  if trade.get("terminal_liquidation"):
+                      raise SystemExit("terminal snapshot entered completed scoring")
+                  if trade["entry_utc"] < r["prospective_start_utc"]:
+                      raise SystemExit("pre-start trade entered prospective scoring")
+              if report["formal_verdict"] != "WITHHELD":
+                  raise SystemExit("early formal verdict")
+              for progress in report["hypothesis_sample_progress"]:
+                  if progress["formal_verdict"] != "WITHHELD":
+                      raise SystemExit("early hypothesis verdict")
+          print(json.dumps({
+              "watch_id":r["watch_id"],
+              "status":r["status"],
+              "as_of_utc":r["as_of_utc"],
+              "calendar_days_elapsed":r["calendar_days_elapsed"],
+              "completed_trades":{
+                  row["audit_id"]:row["summary"]["completed_trade_count"]
+                  for row in r["reports"]
+              },
+              "open_post_start_snapshots":{
+                  row["audit_id"]:row["evidence_progress"]["open_post_start_snapshot_count"]
+                  for row in r["reports"]
+              },
+              "observed_symbol_coverage":{
+                  row["audit_id"]:row["evidence_progress"]["completed_observed_symbol_count"]
+                  for row in r["reports"]
+              },
+              "ready_strategy_count":r["evidence_progress"]["ready_strategy_count"],
+          },indent=2))
+          PY
+      - name: Preserve prospective shadow evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: universal-session-alignment-shadow
+          path: artifacts/universal_session_alignment_shadow/
+          retention-days: 90
+          if-no-files-found: error

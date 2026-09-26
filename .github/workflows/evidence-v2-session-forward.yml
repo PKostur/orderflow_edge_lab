@@ -3,7 +3,7 @@ name: Evidence v2 Cross-Strategy Session Forward
 on:
   workflow_dispatch:
   push:
-    branches: [research/cross-market-etf-v1]
+    branches: [fix/universal-existing-validation]
     paths:
       - "config/evidence_v2_session_forward_watch_v1.json"
       - "src/orderflow_edge_lab/evidence_v2_session_forward.py"
@@ -18,7 +18,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: evidence-v2-session-forward-\${{ github.ref }}
+  group: evidence-v2-session-forward-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:

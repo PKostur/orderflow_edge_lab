@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "watch_id": "payoff-geometry-forward-v1",
+  "status": "frozen_future_structural_replication",
+  "hypothesis_provenance": {
+    "source_analysis": "payoff_geometry_v1",
+    "source_run_id": 36146460935,
+    "source_artifact_id": 10870356016,
+    "source_artifact_sha256": "f5be7e3aa0fda6ba9d630e5bbe1fc67cc9d91d8d9700bfb2d6d3738e6025b4be",
+    "source_cell_set_sha256": "04427db7d4b093c37be400c0746ee28377be6af98291a8ebca93c72db875bf62",
+    "historical_window": "2024-01-01T00:00:00Z through exclusive 2026-09-12T00:00:00Z",
+    "generated_after_inspecting_historical_diagnostic": true,
+    "historical_evidence_only": true,
+    "historical_result_does_not_count_toward_forward_review": true,
+    "complementary_VOL8_watch": "config/vol8_payoff_amplitude_forward_v1.json"
+  },
+  "prospective_start_utc": "2026-09-25T16:00:00Z",
+  "source": {
+    "venue": "MEXC Futures",
+    "interval": "8h",
+    "warmup_start_utc": "2026-06-01T00:00:00Z",
+    "symbols": [
+      "BTC_USDT",
+      "ETH_USDT",
+      "SOL_USDT",
+      "XRP_USDT",
+      "DOGE_USDT",
+      "BNB_USDT",
+      "ADA_USDT",
+      "LINK_USDT",
+      "SUI_USDT",
+      "ENA_USDT"
+    ]
+  },
+  "economics": {
+    "round_trip_cost_bps": 20,
+    "accounting": "canonical_accounting_v2",
+    "maximum_absolute_position": 1
+  },
+  "strategies": [
+    {
+      "audit_id": "DON8",
+      "family": "donchian_breakout",
+      "parameters": {
+        "lookback": 55
+      }
+    },
+    {
+      "audit_id": "EMA8",
+      "family": "ema_tsmom",
+      "parameters": {
+        "fast": 24,
+        "slow": 96,
+        "min_atr_spread": 0.25
+      }
+    }
+  ],
+  "volatility_state": {
+    "realized_window_bars": 20,
+    "rank_history_bars": 90,
+    "minimum_rank_history": 30,
+    "states": [
+      "LOW",
+      "MID",
+      "HIGH",
+      "UNKNOWN"
+    ],
+    "definition": "20-bar close-to-close realized volatility at the final completed bar before canonical entry, classified against the preceding 90-bar realized-volatility history into causal terciles",
+    "causality": "only completed bars strictly before canonical entry are used",
+    "labels_are_observational_only": true
+  },
+  "primary_hypotheses": [
+    {
+      "hypothesis_id": "DON8_HIGH_VS_LOW_MEDIAN_MFE",
+      "strategy_id": "DON8",
+      "comparison": "HIGH versus LOW pre-entry volatility",
+      "primary_metric": "median_mfe_bps",
+      "directional_hypothesis": "HIGH > LOW"
+    },
+    {
+      "hypothesis_id": "EMA8_HIGH_VS_LOW_MEDIAN_MFE",
+      "strategy_id": "EMA8",
+      "comparison": "HIGH versus LOW pre-entry volatility",
+      "primary_metric": "median_mfe_bps",
+      "directional_hypothesis": "HIGH > LOW"
+    }
+  ],
+  "secondary_diagnostics": [
+    "median_abs_mae_bps",
+    "median_gross_to_mfe_ratio",
+    "median_winner_gross_to_mfe_ratio",
+    "median_time_to_mfe_hours",
+    "correct_direction_rate",
+    "expectancy_bps",
+    "p10_p25_p50_p75_p90_mfe",
+    "p10_p25_p50_p75_p90_mae",
+    "p10_p25_p50_p75_p90_capture",
+    "p10_p25_p50_p75_p90_time_to_mfe"
+  ],
+  "review_gate": {
+    "minimum_calendar_days": 30,
+    "minimum_completed_post_start_trades_per_strategy": 20,
+    "minimum_completed_HIGH_trades_per_strategy": 8,
+    "minimum_completed_LOW_trades_per_strategy": 8,
+    "no_early_formal_pass_fail": true,
+    "terminal_snapshot_liquidations_count_as_completed": false
+  },
+  "interpretation": {
+    "primary_claim_scope": "payoff magnitude structure only",
+    "does_not_claim_positive_expectancy": true,
+    "does_not_claim_session_edge": true,
+    "does_not_authorize_volatility_filter": true,
+    "does_not_modify_original_trade_generation": true,
+    "same_period_historical_results_are_not_part_of_forward_evidence": true
+  },
+  "forbidden_changes_after_start": [
+    "strategy parameters",
+    "strategy signals",
+    "symbol universe",
+    "cost assumption",
+    "volatility-state definition",
+    "prospective start boundary",
+    "primary hypotheses",
+    "review gate",
+    "filtering or skipping original strategy trades"
+  ],
+  "claims": {
+    "candidate_promoted": false,
+    "volatility_filter_authorized": false,
+    "profitable_edge_established": false,
+    "live_trading_authorized": false,
+    "leverage_authorized": false
+  },
+  "pre_start_amendment": {
+    "recorded_before_prospective_start": true,
+    "reason": "Remove VOL8 because an independently frozen, more rigorous dedicated VOL8 payoff-amplitude watch (config/vol8_payoff_amplitude_forward_v1.json) now covers the same mechanism with continuous volatility rank and stronger review requirements.",
+    "forward_results_observed_before_amendment": false,
+    "DON8_hypothesis_changed": false,
+    "EMA8_hypothesis_changed": false,
+    "volatility_state_definition_changed": false,
+    "cost_or_symbol_universe_changed": false,
+    "prospective_start_changed": false
+  }
+}

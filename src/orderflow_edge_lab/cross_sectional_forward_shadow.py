@@ -76,6 +76,103 @@ def _funding_between(frame: pd.DataFrame, start: pd.Timestamp, end: pd.Timestamp
     return float(series[(series.index > start) & (series.index <= end)].sum())
 
 
+def _contribution_concentration(
+    contributions: Mapping[str, float],
+) -> dict[str, Any]:
+    values = {
+        str(symbol): float(value)
+        for symbol, value in contributions.items()
+        if math.isfinite(float(value))
+    }
+    active = {
+        symbol: value
+        for symbol, value in values.items()
+        if abs(value) > 1e-15
+    }
+    positive = {symbol: value for symbol, value in active.items() if value > 0.0}
+    negative = {symbol: value for symbol, value in active.items() if value < 0.0}
+    absolute_total = sum(abs(value) for value in active.values())
+    positive_total = sum(positive.values())
+    negative_total = sum(negative.values())
+    top_abs = (
+        max(active.items(), key=lambda item: abs(item[1]))
+        if active
+        else None
+    )
+    top_positive = (
+        max(positive.items(), key=lambda item: item[1])
+        if positive
+        else None
+    )
+    absolute_hhi = (
+        sum((abs(value) / absolute_total) ** 2 for value in active.values())
+        if absolute_total > 0.0
+        else None
+    )
+    arithmetic_net = sum(values.values())
+    removal_stress = [
+        {
+            "symbol": symbol,
+            "contribution": value,
+            "arithmetic_net_without_contributor": arithmetic_net - value,
+        }
+        for symbol, value in sorted(
+            active.items(),
+            key=lambda item: (-abs(item[1]), item[0]),
+        )
+    ]
+    net_without_top_abs = (
+        arithmetic_net - top_abs[1] if top_abs is not None else arithmetic_net
+    )
+    net_without_top_positive = (
+        arithmetic_net - top_positive[1]
+        if top_positive is not None
+        else arithmetic_net
+    )
+    return {
+        "arithmetic_net_contribution_sum": arithmetic_net,
+        "positive_contribution_sum": positive_total,
+        "negative_contribution_sum": negative_total,
+        "absolute_contribution_sum": absolute_total,
+        "active_contributor_count": len(active),
+        "positive_contributor_count": len(positive),
+        "negative_contributor_count": len(negative),
+        "absolute_contribution_hhi": absolute_hhi,
+        "positive_contributor_fraction_of_active": (
+            len(positive) / len(active) if active else None
+        ),
+        "arithmetic_net_without_largest_absolute_contributor": net_without_top_abs,
+        "arithmetic_net_without_largest_positive_contributor": net_without_top_positive,
+        "positive_net_survives_removing_largest_absolute_contributor": (
+            net_without_top_abs > 0.0 if arithmetic_net > 0.0 and top_abs is not None else None
+        ),
+        "positive_net_survives_removing_largest_positive_contributor": (
+            net_without_top_positive > 0.0
+            if arithmetic_net > 0.0 and top_positive is not None
+            else None
+        ),
+        "contributor_removal_stress": removal_stress,
+        "largest_absolute_contributor": (
+            {
+                "symbol": top_abs[0],
+                "contribution": top_abs[1],
+                "share_of_absolute_contribution": abs(top_abs[1]) / absolute_total,
+            }
+            if top_abs is not None and absolute_total > 0.0
+            else None
+        ),
+        "largest_positive_contributor": (
+            {
+                "symbol": top_positive[0],
+                "contribution": top_positive[1],
+                "share_of_positive_contribution": top_positive[1] / positive_total,
+            }
+            if top_positive is not None and positive_total > 0.0
+            else None
+        ),
+    }
+
+
 def build_rebalance_weights(
     frames: Mapping[str, pd.DataFrame],
     candidate: Mapping[str, Any],
@@ -145,15 +242,36 @@ def build_forward_report(
     weights = pd.Series(0.0, index=symbols, dtype=float)
     intervals: list[dict[str, Any]] = []
     rebalance_events: list[dict[str, Any]] = []
+    symbol_diag = {
+        symbol: {
+            "gross_return_sum": 0.0,
+            "funding_return_sum": 0.0,
+            "allocated_trading_cost_return_sum": 0.0,
+            "arithmetic_net_contribution_sum": 0.0,
+            "active_intervals": 0,
+            "long_intervals": 0,
+            "short_intervals": 0,
+            "absolute_turnover": 0.0,
+        }
+        for symbol in symbols
+    }
 
     first_exec = min(rebalance_weights) if rebalance_weights else None
     if first_exec is not None:
         day_starts = [ts for ts in common if first_exec <= ts <= current_day]
         for ts in day_starts:
             previous = weights.copy()
+            symbol_cost_return = {symbol: 0.0 for symbol in symbols}
             if ts in rebalance_weights:
                 weights = rebalance_weights[ts].copy()
-                turnover = float((weights - previous).abs().sum())
+                deltas = weights - previous
+                turnover = float(deltas.abs().sum())
+                for symbol in symbols:
+                    symbol_turnover = abs(float(deltas[symbol]))
+                    allocated_cost = -symbol_turnover * side_cost
+                    symbol_cost_return[symbol] = float(allocated_cost)
+                    symbol_diag[symbol]["absolute_turnover"] += symbol_turnover
+                    symbol_diag[symbol]["allocated_trading_cost_return_sum"] += float(allocated_cost)
                 rebalance_events.append({
                     "execution_time": ts.isoformat(),
                     "turnover": turnover,
@@ -166,6 +284,8 @@ def build_forward_report(
                 continue
             gross = 0.0
             funding_return = 0.0
+            symbol_gross_return = {symbol: 0.0 for symbol in symbols}
+            symbol_funding_return = {symbol: 0.0 for symbol in symbols}
             for symbol in symbols:
                 weight = float(weights[symbol])
                 if abs(weight) < 1e-15:
@@ -180,9 +300,28 @@ def build_forward_report(
                     if end not in frame.index:
                         raise CrossSectionalForwardError(f"{symbol}: missing next daily open {end}")
                     mark = float(frame.loc[end, "open"])
-                gross += weight * (mark / entry - 1.0)
-                funding_return += -weight * _funding_between(funding.get(symbol, pd.DataFrame()), ts, end)
+                symbol_gross = weight * (mark / entry - 1.0)
+                symbol_funding = -weight * _funding_between(
+                    funding.get(symbol, pd.DataFrame()), ts, end
+                )
+                symbol_gross_return[symbol] = float(symbol_gross)
+                symbol_funding_return[symbol] = float(symbol_funding)
+                gross += symbol_gross
+                funding_return += symbol_funding
+                symbol_diag[symbol]["gross_return_sum"] += float(symbol_gross)
+                symbol_diag[symbol]["funding_return_sum"] += float(symbol_funding)
+                symbol_diag[symbol]["active_intervals"] += 1
+                symbol_diag[symbol]["long_intervals"] += int(weight > 0)
+                symbol_diag[symbol]["short_intervals"] += int(weight < 0)
             trading_cost = turnover * side_cost
+            symbol_net_contributions = {
+                symbol: float(
+                    symbol_gross_return[symbol]
+                    + symbol_funding_return[symbol]
+                    + symbol_cost_return[symbol]
+                )
+                for symbol in symbols
+            }
             intervals.append({
                 "start": ts.isoformat(),
                 "end": end.isoformat(),
@@ -192,7 +331,55 @@ def build_forward_report(
                 "turnover": turnover,
                 "trading_cost_return": float(-trading_cost),
                 "net_return": float(gross + funding_return - trading_cost),
+                "symbol_net_contributions": symbol_net_contributions,
             })
+
+    for symbol in symbols:
+        d = symbol_diag[symbol]
+        d["arithmetic_net_contribution_sum"] = float(
+            d["gross_return_sum"]
+            + d["funding_return_sum"]
+            + d["allocated_trading_cost_return_sum"]
+        )
+
+    completed_periods: list[dict[str, Any]] = []
+    for i in range(max(0, len(rebalance_events) - 1)):
+        start = _utc(rebalance_events[i]["execution_time"])
+        end = _utc(rebalance_events[i + 1]["execution_time"])
+        rows = [
+            row
+            for row in intervals
+            if _utc(row["start"]) >= start and _utc(row["end"]) <= end
+        ]
+        period_returns = np.asarray([float(row["net_return"]) for row in rows], dtype=float)
+        compounded = float(np.prod(1.0 + period_returns) - 1.0) if len(period_returns) else 0.0
+        symbol_contributions = {
+            symbol: float(
+                sum(
+                    float((row.get("symbol_net_contributions") or {}).get(symbol, 0.0))
+                    for row in rows
+                )
+            )
+            for symbol in symbols
+        }
+        completed_periods.append(
+            {
+                "period_index": i + 1,
+                "start": start.isoformat(),
+                "end": end.isoformat(),
+                "net_return": compounded,
+                "net_pnl_per_1000_usdt": compounded * 1000.0,
+                "arithmetic_net_return_sum": float(
+                    sum(float(row["net_return"]) for row in rows)
+                ),
+                "daily_interval_count": len(rows),
+                "opening_weights": dict(rebalance_events[i]["weights"]),
+                "symbol_arithmetic_net_contributions": symbol_contributions,
+                "contribution_concentration": _contribution_concentration(
+                    symbol_contributions
+                ),
+            }
+        )
 
     returns = np.asarray([float(row["net_return"]) for row in intervals], dtype=float)
     if len(returns):
@@ -240,12 +427,22 @@ def build_forward_report(
         },
         "current_weights": {symbol: float(weights[symbol]) for symbol in symbols},
         "rebalance_events": rebalance_events,
+        "completed_holding_periods": completed_periods,
+        "symbol_diagnostics": symbol_diag,
+        "contribution_concentration": _contribution_concentration(
+            {
+                symbol: float(symbol_diag[symbol]["arithmetic_net_contribution_sum"])
+                for symbol in symbols
+            }
+        ),
         "portfolio_intervals": intervals,
         "claims": {
             "candidate_specification_frozen": True,
             "paper_shadow_only": True,
             "forward_sample_minimum_reached": completed_holding_periods >= minimum,
             "visible_forward_pnl_is_statistical_proof": False,
+            "contribution_concentration_diagnostics_are_non_gating": True,
+            "contributor_removal_stress_is_attribution_not_counterfactual_strategy": True,
             "verified_out_of_sample_evidence": False,
             "profitable_edge_established": False,
             "live_order_transmission_supported": False,

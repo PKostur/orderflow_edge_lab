@@ -6,6 +6,13 @@ on:
     paths:
       - "config/high_cadence_evidence_capture_v1.json"
       - ".github/workflows/high-cadence-evidence-capture-v1.yml"
+  push:
+    branches: [fix/universal-existing-validation]
+    paths:
+      - "config/high_cadence_evidence_capture_v1.json"
+      - "src/orderflow_edge_lab/cli/mexc_record.py"
+      - "tests/test_mexc_record.py"
+      - ".github/workflows/high-cadence-evidence-capture-v1.yml"
   workflow_dispatch:
   schedule:
     - cron: "2,32 * * * *"
@@ -82,6 +89,15 @@ jobs:
             --symbol ENA_USDT \
             --duration-seconds 900 \
             --output-dir artifacts/high_cadence
+      - name: Audit current microstructure capture quality
+        shell: bash
+        run: |
+          set -euo pipefail
+          FEATURE=$(find artifacts/high_cadence -name '*_mexc_features.jsonl' -print -quit)
+          test -n "$FEATURE"
+          python -m orderflow_edge_lab.cli.mexc_capture_quality audit "$FEATURE" \
+            --config config/mexc_capture_quality_v1.json \
+            --output artifacts/high_cadence/capture_quality.json
       - name: Produce PnL-independent state reports for every non-BTC symbol
         shell: bash
         run: |
@@ -103,15 +119,19 @@ jobs:
           rm -rf /tmp/high_cadence_previous
           mkdir -p /tmp/high_cadence_previous artifacts/high_cadence/history
           PREV_ID=""
-          while IFS=$'\t' read -r ARTIFACT_ID RUN_ID; do
-            [[ -z "${ARTIFACT_ID:-}" || -z "${RUN_ID:-}" ]] && continue
+          CURRENT_BRANCH="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
+          ARTIFACT_IDS="$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=high-cadence-state-ledger-v1&per_page=20" \
+            --jq '.artifacts | map(select(.expired == false)) | sort_by(.created_at) | reverse | .[].id' || true)"
+          for ARTIFACT_ID in $ARTIFACT_IDS; do
+            RUN_ID="$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}" --jq '.workflow_run.id // empty' 2>/dev/null || true)"
+            [[ -z "$RUN_ID" ]] && continue
             CONCLUSION="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}" --jq '.conclusion // ""' 2>/dev/null || true)"
-            if [[ "$CONCLUSION" == "success" ]]; then
+            HEAD_BRANCH="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}" --jq '.head_branch // ""' 2>/dev/null || true)"
+            if [[ "$CONCLUSION" == "success" && "$HEAD_BRANCH" == "$CURRENT_BRANCH" ]]; then
               PREV_ID="$ARTIFACT_ID"
               break
             fi
-          done < <(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=high-cadence-state-ledger-v1&per_page=20" \
-            --jq '.artifacts | map(select(.expired == false)) | sort_by(.created_at) | reverse | .[] | [.id, .workflow_run.id] | @tsv' || true)
+          done
           if [[ -n "$PREV_ID" ]]; then
             gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${PREV_ID}/zip" > /tmp/high_cadence_previous.zip
             unzip -q /tmp/high_cadence_previous.zip -d /tmp/high_cadence_previous
@@ -144,6 +164,15 @@ jobs:
           BATCH_ID=$(basename "$FEATURE" _mexc_features.jsonl)
           mkdir -p "artifacts/high_cadence/history/${BATCH_ID}"
           cp artifacts/high_cadence/market_state_*.json "artifacts/high_cadence/history/${BATCH_ID}/"
+          cp artifacts/high_cadence/capture_quality.json "artifacts/high_cadence/history/${BATCH_ID}/capture_quality.json"
+      - name: Aggregate cumulative capture-quality diagnostics
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t QUALITY_REPORTS < <(find artifacts/high_cadence/history -type f -name capture_quality.json | sort)
+          test "${#QUALITY_REPORTS[@]}" -ge 1
+          python -m orderflow_edge_lab.cli.mexc_capture_quality aggregate "${QUALITY_REPORTS[@]}" \
+            --output artifacts/high_cadence/capture_quality_aggregate.json
       - name: Aggregate each symbol by overlap-aware dependence cluster before strategy PnL
         shell: bash
         run: |
@@ -183,6 +212,9 @@ jobs:
               'protocol_sha256': hashlib.sha256(protocol.read_bytes()).hexdigest(),
               'cumulative_state_report_count': len(history_files),
               'raw_replay_retained_for_this_run': '${{ steps.retention.outputs.keep_raw }}' == 'true',
+              'head_branch': '${{ github.head_ref || github.ref_name }}',
+              'quality_report_present': (root/'capture_quality.json').exists(),
+              'quality_aggregate_present': (root/'capture_quality_aggregate.json').exists(),
               'files': files,
               'claims': {
                   'strategy_pnl_used_for_collection': False,
@@ -210,21 +242,13 @@ jobs:
             artifacts/high_cadence/history/
             artifacts/high_cadence/aggregates/
             artifacts/high_cadence/capture_manifest.json
+            artifacts/high_cadence/capture_quality_aggregate.json
             artifacts/high_cadence/multi_agent_report.json
             config/high_cadence_evidence_capture_v1.json
+            config/mexc_capture_quality_v1.json
             config/regime_research_v1_2.json
           retention-days: 90
           if-no-files-found: error
-      - name: Delete superseded cumulative state-ledger artifacts
-        if: always()
-        shell: bash
-        run: |
-          set -euo pipefail
-          mapfile -t IDS < <(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=high-cadence-state-ledger-v1&per_page=100" \
-            --jq '.artifacts | map(select(.expired == false)) | sort_by(.created_at) | reverse | .[1:] | .[].id' || true)
-          for ID in "${IDS[@]}"; do
-            [[ -z "$ID" ]] || gh api -X DELETE "repos/${GITHUB_REPOSITORY}/actions/artifacts/${ID}" || true
-          done
       - name: Preserve deterministic raw replay sample
         if: always() && steps.retention.outputs.keep_raw == 'true'
         uses: actions/upload-artifact@v4

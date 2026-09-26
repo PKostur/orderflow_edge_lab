@@ -1,0 +1,77 @@
+name: Cross-Sectional OKX Funding Coverage Audit v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - fix/universal-existing-validation
+    paths:
+      - "src/orderflow_edge_lab/funding_coverage.py"
+      - "src/orderflow_edge_lab/cli/cross_sectional_okx_funding_audit.py"
+      - "tests/test_funding_coverage.py"
+      - "config/cross_sectional_okx_funding_audit_v1.json"
+      - "docs/CROSS_SECTIONAL_OKX_FUNDING_AUDIT_V1.md"
+      - "pyproject.toml"
+      - ".github/workflows/cross-sectional-okx-funding-audit-v1.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cross-sectional-okx-funding-audit-v1
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run funding coverage tests
+        run: python -m unittest tests.test_funding_coverage -v
+      - name: Run OKX held-interval funding coverage audit
+        run: |
+          mkdir -p artifacts/cross_sectional_okx_funding_audit/source
+          python -m orderflow_edge_lab.cli.cross_sectional_okx_funding_audit \
+            --candidate config/cross_sectional_candidate_v1.json \
+            --config config/cross_sectional_okx_funding_audit_v1.json \
+            --output artifacts/cross_sectional_okx_funding_audit/report.json \
+            --source-dir artifacts/cross_sectional_okx_funding_audit/source \
+            --max-workers 1
+      - name: Enforce data-quality-only boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open("artifacts/cross_sectional_okx_funding_audit/report.json",encoding="utf-8"))
+          if r["analysis"] != "cross_sectional_funding_coverage_audit_v1":
+              raise SystemExit("wrong audit analysis")
+          if r["evidence_use"] != "data_quality_only":
+              raise SystemExit("funding audit escaped data-quality boundary")
+          if r["coverage_policy"]["missing_funding_is_zero_fill_admissible"]:
+              raise SystemExit("missing funding was incorrectly admitted as zero")
+          c=r["claims"]
+          if c["strategy_definition_changed"] or c["candidate_retested"] or c["historical_economic_result_repaired"]:
+              raise SystemExit("funding audit mutated research state")
+          if c["candidate_promoted"] or c["profitable_edge_established"] or c["live_trading_authorized"] or c["leverage_authorized"]:
+              raise SystemExit("forbidden funding-audit claim")
+          print(json.dumps({
+              "status":r["status"],
+              "coverage_fraction":r["coverage_fraction"],
+              "required_held_intervals":r["required_held_intervals"],
+              "covered_held_intervals":r["covered_held_intervals"],
+              "funding_economics_admissible":r["funding_economics_admissible"],
+          },indent=2))
+          PY
+      - name: Preserve funding coverage artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cross-sectional-okx-funding-audit-v1
+          path: artifacts/cross_sectional_okx_funding_audit/
+          retention-days: 90
+          if-no-files-found: warn

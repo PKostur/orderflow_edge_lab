@@ -1,0 +1,78 @@
+name: Cross-Sectional OKX Historical Funding Source Probe v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - fix/universal-existing-validation
+    paths:
+      - "src/orderflow_edge_lab/okx_market_data_history.py"
+      - "src/orderflow_edge_lab/cli/okx_historical_funding_source_probe.py"
+      - "tests/test_okx_market_data_history.py"
+      - "config/cross_sectional_okx_historical_funding_source_probe_v1.json"
+      - "docs/CROSS_SECTIONAL_OKX_HISTORICAL_FUNDING_SOURCE_PROBE_V1.md"
+      - ".github/workflows/cross-sectional-okx-historical-funding-source-probe-v1.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cross-sectional-okx-historical-funding-source-probe-v1
+  cancel-in-progress: true
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run source-probe tests
+        run: python -m unittest tests.test_okx_market_data_history -v
+      - name: Query OKX historical funding manifests
+        run: |
+          mkdir -p artifacts/cross_sectional_okx_historical_funding_source_probe
+          python -m orderflow_edge_lab.cli.okx_historical_funding_source_probe \
+            --config config/cross_sectional_okx_historical_funding_source_probe_v1.json \
+            --output artifacts/cross_sectional_okx_historical_funding_source_probe/report.json
+      - name: Enforce engineering-only boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open("artifacts/cross_sectional_okx_historical_funding_source_probe/report.json",encoding="utf-8"))
+          if r["analysis"] != "okx_historical_funding_source_probe_v1":
+              raise SystemExit("unexpected source-probe analysis")
+          if r["evidence_use"] != "engineering_source_discovery_only":
+              raise SystemExit("source probe escaped engineering boundary")
+          c=r["claims"]
+          forbidden=(
+              "candidate_pnl_computed",
+              "candidate_retested",
+              "historical_result_repaired",
+              "strategy_definition_changed",
+              "candidate_promoted",
+              "profitable_edge_established",
+              "live_trading_authorized",
+              "leverage_authorized",
+          )
+          if any(c[name] for name in forbidden):
+              raise SystemExit("source probe emitted forbidden research claim")
+          print(json.dumps({
+              "source_available":r["source_available"],
+              "query_count":r["query_count"],
+              "unique_manifest_file_count":r["unique_manifest_file_count"],
+              "unique_download_url_count":r["unique_download_url_count"],
+          },indent=2))
+          PY
+      - name: Preserve source probe
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cross-sectional-okx-historical-funding-source-probe-v1
+          path: artifacts/cross_sectional_okx_historical_funding_source_probe/
+          retention-days: 30
+          if-no-files-found: warn

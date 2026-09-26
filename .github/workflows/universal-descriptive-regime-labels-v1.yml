@@ -1,0 +1,104 @@
+name: Universal Descriptive Regime Labels v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - fix/universal-existing-validation
+    paths:
+      - "config/universal_descriptive_regime_labels_v1.json"
+      - "src/orderflow_edge_lab/descriptive_regime_labels_v1.py"
+      - "src/orderflow_edge_lab/cli/descriptive_regime_labels_v1.py"
+      - "tests/test_descriptive_regime_labels_v1.py"
+      - "docs/UNIVERSAL_DESCRIPTIVE_REGIME_LABELS_V1.md"
+      - ".github/workflows/universal-descriptive-regime-labels-v1.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: universal-descriptive-regime-labels-v1
+  cancel-in-progress: true
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run regime label tests
+        run: python -m unittest tests.test_descriptive_regime_labels_v1 -v
+      - name: Fetch frozen 8h historical snapshot
+        run: |
+          mkdir -p artifacts/data/8h
+          orderflow-strategy-tournament-data \
+            --config config/universal_existing_strategy_backtests_v1.json \
+            --interval 8h \
+            --output-dir artifacts/data/8h
+      - name: Run frozen descriptive regime diagnostic
+        run: |
+          mkdir -p artifacts/descriptive_regime_labels_v1
+          python -m orderflow_edge_lab.cli.descriptive_regime_labels_v1 \
+            --source-protocol config/universal_existing_strategy_backtests_v1.json \
+            --regime-config config/universal_descriptive_regime_labels_v1.json \
+            --data-dir artifacts/data/8h \
+            --output artifacts/descriptive_regime_labels_v1/report.json
+      - name: Enforce descriptive-only contract
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open("artifacts/descriptive_regime_labels_v1/report.json",encoding="utf-8"))
+          if r["analysis"] != "universal_descriptive_regime_labels_v1":
+              raise SystemExit("wrong regime-label analysis")
+          if r["fixed_joint_cell_count_per_strategy"] != 162:
+              raise SystemExit("joint regime cell contract changed")
+          if not r.get("joint_cell_set_sha256"):
+              raise SystemExit("missing joint cell-set hash")
+          if not r["state_semantics"]["trade_entry_uses_latest_completed_bar_strictly_before_entry"]:
+              raise SystemExit("entry-state causality lost")
+          if not r["bootstrap"]["shared_resamples_across_symbols_strategies_and_cells"]:
+              raise SystemExit("joint bootstrap dependence contract lost")
+          claims=r["claims"]
+          if not claims.get("development_only") or not claims.get("descriptive_only"):
+              raise SystemExit("regime layer escaped descriptive boundary")
+          forbidden=(
+              "trade_filter_authorized",
+              "regime_filter_authorized",
+              "candidate_promoted",
+              "profitable_edge_established",
+              "live_trading_authorized",
+              "leverage_authorized",
+          )
+          if any(bool(claims.get(key)) for key in forbidden):
+              raise SystemExit("regime diagnostic exceeded authority")
+          for strategy in r["strategies"]:
+              cells=strategy["joint_cells"]
+              if len(cells) != 162:
+                  raise SystemExit("empty or fixed joint cells were dropped")
+              for cell in cells:
+                  if "bh_fdr_q" not in cell or "holm_fwer_p" not in cell:
+                      raise SystemExit("multiplicity columns missing")
+          print(json.dumps({
+              "joint_cell_set_sha256":r["joint_cell_set_sha256"],
+              "strategies":[
+                  {
+                      "audit_id":s["audit_id"],
+                      "classified_trade_count":s["classified_trade_count"],
+                      "unclassified_trade_count":s["unclassified_trade_count"],
+                  }
+                  for s in r["strategies"]
+              ],
+          },indent=2))
+          PY
+      - name: Upload regime diagnostic artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: universal-descriptive-regime-labels-v1
+          path: artifacts/descriptive_regime_labels_v1/
+          retention-days: 90
+          if-no-files-found: error

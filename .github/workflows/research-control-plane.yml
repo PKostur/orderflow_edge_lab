@@ -1,0 +1,105 @@
+name: Research Control Plane Status
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - fix/universal-existing-validation
+    paths:
+      - "src/orderflow_edge_lab/research_control_plane.py"
+      - "src/orderflow_edge_lab/cli/research_control_plane.py"
+      - "tests/test_research_control_plane.py"
+      - ".github/workflows/research-control-plane.yml"
+      - "pyproject.toml"
+  schedule:
+    - cron: "5 1,9,17 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: research-control-plane-status
+  cancel-in-progress: true
+
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Pin control-plane snapshot time
+        run: echo "CONTROL_PLANE_AS_OF=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_ENV"
+      - name: Install runtime
+        run: python -m pip install -e ".[research,jev]"
+      - name: Run control plane tests
+        run: python -m unittest tests.test_research_control_plane -v
+      - name: Build fresh shadow
+        run: |
+          mkdir -p artifacts/research_control_plane/source
+          orderflow-universal-session-shadow \
+            --config config/universal_session_alignment_shadow_v1.json \
+            --output artifacts/research_control_plane/shadow.json \
+            --source-dir artifacts/research_control_plane/source \
+            --as-of "$CONTROL_PLANE_AS_OF" \
+            --max-workers 5
+      - name: Build Jev decision
+        run: |
+          orderflow-jev-research-decision \
+            --shadow-report artifacts/research_control_plane/shadow.json \
+            --output artifacts/research_control_plane/decision.json
+      - name: Execute bounded Jev action
+        run: |
+          orderflow-jev-research-action \
+            --shadow-report artifacts/research_control_plane/shadow.json \
+            --decision artifacts/research_control_plane/decision.json \
+            --output artifacts/research_control_plane/action.json
+      - name: Build operational monitor
+        run: |
+          orderflow-universal-shadow-monitor \
+            --config config/universal_session_alignment_shadow_v1.json \
+            --output artifacts/research_control_plane/operational.json \
+            --as-of "$CONTROL_PLANE_AS_OF" \
+            --max-workers 5
+      - name: Build unified status
+        run: |
+          orderflow-research-control-plane \
+            --shadow-report artifacts/research_control_plane/shadow.json \
+            --decision artifacts/research_control_plane/decision.json \
+            --action artifacts/research_control_plane/action.json \
+            --operational artifacts/research_control_plane/operational.json \
+            --output artifacts/research_control_plane/status.json
+      - name: Enforce control-plane authority boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open("artifacts/research_control_plane/status.json",encoding="utf-8"))
+          claims=r["claims"]
+          if any(bool(claims.get(k)) for k in ("live_trading_authorized","leverage_authorized","strategy_promotion_authorized")):
+              raise SystemExit("control plane exceeded authority")
+          if not bool(claims.get("operational_telemetry_not_evidence")):
+              raise SystemExit("operational telemetry/evidence boundary lost")
+          if r["stage"] == "HALTED_PROTOCOL_BREACH":
+              raise SystemExit("research control plane halted on protocol breach")
+          print(json.dumps({
+              "as_of_utc":r["as_of_utc"],
+              "stage":r["stage"],
+              "shadow_status":r["shadow_status"],
+              "latest_execution_boundary_utc":r["latest_execution_boundary_utc"],
+              "execution_boundaries_since_start_including_start":r["execution_boundaries_since_start_including_start"],
+              "evidence":r["evidence"],
+              "operations":r["operations"],
+              "decision":r["decision"],
+          },indent=2))
+          PY
+      - name: Preserve control-plane artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: research-control-plane-status
+          path: artifacts/research_control_plane/
+          retention-days: 90
+          if-no-files-found: error

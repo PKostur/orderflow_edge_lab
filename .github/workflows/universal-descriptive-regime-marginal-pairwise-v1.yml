@@ -1,0 +1,113 @@
+name: Universal Descriptive Regime Marginal Pairwise v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - fix/universal-existing-validation
+    paths:
+      - "config/universal_descriptive_regime_marginal_pairwise_v1.json"
+      - "src/orderflow_edge_lab/descriptive_regime_marginal_pairwise_v1.py"
+      - "src/orderflow_edge_lab/cli/descriptive_regime_marginal_pairwise_v1.py"
+      - "tests/test_descriptive_regime_marginal_pairwise_v1.py"
+      - "docs/UNIVERSAL_DESCRIPTIVE_REGIME_MARGINAL_PAIRWISE_V1.md"
+      - ".github/workflows/universal-descriptive-regime-marginal-pairwise-v1.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: universal-descriptive-regime-marginal-pairwise-v1
+  cancel-in-progress: true
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run marginal pairwise tests
+        run: python -m unittest tests.test_descriptive_regime_marginal_pairwise_v1 -v
+      - name: Fetch frozen 8h historical snapshot
+        run: |
+          mkdir -p artifacts/data/8h
+          orderflow-strategy-tournament-data \
+            --config config/universal_existing_strategy_backtests_v1.json \
+            --interval 8h \
+            --output-dir artifacts/data/8h
+      - name: Run frozen marginal and pairwise regime contrasts
+        run: |
+          mkdir -p artifacts/descriptive_regime_marginal_pairwise_v1
+          python -m orderflow_edge_lab.cli.descriptive_regime_marginal_pairwise_v1 \
+            --source-protocol config/universal_existing_strategy_backtests_v1.json \
+            --label-config config/universal_descriptive_regime_labels_v1.json \
+            --analysis-config config/universal_descriptive_regime_marginal_pairwise_v1.json \
+            --data-dir artifacts/data/8h \
+            --output artifacts/descriptive_regime_marginal_pairwise_v1/report.json
+      - name: Enforce fixed family and research boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open("artifacts/descriptive_regime_marginal_pairwise_v1/report.json",encoding="utf-8"))
+          if r["analysis"] != "universal_descriptive_regime_marginal_pairwise_v1":
+              raise SystemExit("wrong marginal/pairwise analysis")
+          if r["fixed_marginal_contrast_count_per_strategy"] != 14:
+              raise SystemExit("marginal family changed")
+          if r["fixed_pairwise_contrast_count_per_strategy"] != 78:
+              raise SystemExit("pairwise family changed")
+          if r["fixed_total_contrast_count_per_strategy"] != 92:
+              raise SystemExit("total contrast family changed")
+          if not r.get("contrast_contract_sha256"):
+              raise SystemExit("contrast contract hash missing")
+          if not r["bootstrap"]["shared_block_draws_across_symbols_strategies_and_contrasts"]:
+              raise SystemExit("shared block resampling contract lost")
+          h=r["hierarchy"]
+          if not h["all_marginal_parent_states_are_always_emitted"] or not h["all_pairwise_state_combinations_are_always_emitted"]:
+              raise SystemExit("hierarchy/symmetry contract lost")
+          claims=r["claims"]
+          forbidden=(
+              "historical_pnl_selected_axes",
+              "historical_pnl_selected_pairs",
+              "trade_filter_authorized",
+              "regime_filter_authorized",
+              "candidate_promoted",
+              "profitable_edge_established",
+              "live_trading_authorized",
+              "leverage_authorized",
+          )
+          if any(bool(claims.get(k)) for k in forbidden):
+              raise SystemExit("marginal/pairwise layer exceeded authority")
+          for strategy in r["strategies"]:
+              if strategy["contrast_count"] != 92:
+                  raise SystemExit("fixed contrasts dropped")
+              if strategy["marginal_contrast_count"] != 14 or strategy["pairwise_contrast_count"] != 78:
+                  raise SystemExit("tier contrast count changed")
+              for row in strategy["contrasts"]:
+                  if not row["inference_eligible"] and row["bootstrap"]["null_centered_two_sided_block_bootstrap_p"] is not None:
+                      raise SystemExit("ineligible contrast received inferential p")
+                  for key in ("bh_fdr_q","by_dependency_robust_fdr_q","holm_fwer_p"):
+                      if key not in row["global_multiplicity"]:
+                          raise SystemExit("global multiplicity field missing")
+          print(json.dumps({
+              "contrast_contract_sha256":r["contrast_contract_sha256"],
+              "strategies":[
+                  {
+                      "audit_id":s["audit_id"],
+                      "multiplicity_audit":s["multiplicity_audit"],
+                  }
+                  for s in r["strategies"]
+              ],
+          },indent=2))
+          PY
+      - name: Upload marginal pairwise artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: universal-descriptive-regime-marginal-pairwise-v1
+          path: artifacts/descriptive_regime_marginal_pairwise_v1/
+          retention-days: 90
+          if-no-files-found: error

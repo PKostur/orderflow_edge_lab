@@ -4,6 +4,13 @@ on:
   workflow_dispatch:
   pull_request:
     branches: [main]
+    paths:
+      - "config/cross_sectional_candidate_v1.json"
+      - "src/orderflow_edge_lab/cross_sectional_forward_shadow.py"
+      - "src/orderflow_edge_lab/cli/cross_sectional_forward_shadow.py"
+      - "tests/test_cross_sectional_forward_shadow.py"
+      - ".github/workflows/cross-sectional-forward-shadow-v1.yml"
+      - "pyproject.toml"
   push:
     branches: [release/cross-sectional-forward-v1]
   schedule:
@@ -47,6 +54,10 @@ jobs:
               raise SystemExit('cross-sectional candidate or paper-only boundary is invalid')
           if c.get('verified_out_of_sample_evidence') or c.get('profitable_edge_established') or c.get('live_order_transmission_supported'):
               raise SystemExit('cross-sectional forward shadow emitted a forbidden promotion claim')
+          if not c.get('contribution_concentration_diagnostics_are_non_gating'):
+              raise SystemExit('contribution concentration diagnostics lost non-gating boundary')
+          if not c.get('contributor_removal_stress_is_attribution_not_counterfactual_strategy'):
+              raise SystemExit('contribution removal stress lost attribution-only boundary')
           print(json.dumps({
               'candidate_id': r['candidate_id'],
               'status': r['status'],
@@ -56,6 +67,11 @@ jobs:
               'completed_holding_periods': r['metrics']['completed_holding_periods'],
               'open_symbol_positions': r['metrics']['open_symbol_positions'],
               'current_weights': r['current_weights'],
+              'contribution_concentration': r['contribution_concentration'],
+              'latest_completed_period_contribution_concentration': (
+                  r['completed_holding_periods'][-1]['contribution_concentration']
+                  if r['completed_holding_periods'] else None
+              ),
           }, indent=2))
           PY
       - name: Deterministic multi-agent release gate

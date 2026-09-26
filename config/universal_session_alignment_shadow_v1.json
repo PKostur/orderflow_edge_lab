@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "watch_id": "universal-session-alignment-shadow-v1",
+  "status": "FROZEN_BEFORE_PROSPECTIVE_START",
+  "prospective_start_utc": "2026-09-24T00:00:00Z",
+  "source": {
+    "venue": "MEXC Futures",
+    "bars": "public futures klines",
+    "interval": "8h",
+    "warmup_start_utc": "2026-06-01T00:00:00Z",
+    "symbols": [
+      "BTC_USDT",
+      "ETH_USDT",
+      "SOL_USDT",
+      "XRP_USDT",
+      "DOGE_USDT",
+      "BNB_USDT",
+      "ADA_USDT",
+      "LINK_USDT",
+      "SUI_USDT",
+      "ENA_USDT"
+    ]
+  },
+  "economics": {
+    "round_trip_cost_bps": 20,
+    "canonical_accounting_version": 2,
+    "max_abs_position": 1,
+    "diagnostic_portfolio": "equal 10% initial capital sleeve per frozen symbol; completed post-start trades compound within their own symbol sleeve; inactive sleeves remain cash"
+  },
+  "variants": [
+    {
+      "audit_id": "DON8",
+      "family": "donchian_breakout",
+      "parameters": {
+        "lookback": 55
+      },
+      "role": "FROZEN_EXISTING_STRATEGY"
+    },
+    {
+      "audit_id": "EMA8",
+      "family": "ema_tsmom",
+      "parameters": {
+        "fast": 24,
+        "slow": 96,
+        "min_atr_spread": 0.25
+      },
+      "role": "FROZEN_EXISTING_CONTROL"
+    },
+    {
+      "audit_id": "VOL8",
+      "family": "vol_scaled_momentum",
+      "parameters": {
+        "lookback": 24,
+        "vol_window": 96,
+        "threshold": 0.5
+      },
+      "role": "FROZEN_EXISTING_CONTROL"
+    }
+  ],
+  "shadow_labels": {
+    "exclusive_session_regime": "DST-aware regime from the existing Asia, London and New York session definitions, assigned at canonical trade entry",
+    "btc_prior_bar_direction": "trade side versus the latest completed BTC_USDT open-to-close bar before entry",
+    "own_prior_3bar_direction": "trade side versus open of the third preceding completed bar to close of the immediately preceding completed bar"
+  },
+  "frozen_hypotheses": [
+    {
+      "hypothesis_id": "SESSION_ASIA_LONDON_VS_LONDON_NEW_YORK",
+      "applies_to": [
+        "DON8",
+        "EMA8",
+        "VOL8"
+      ],
+      "factor": "exclusive_session_regime",
+      "aligned_state": "ASIA+LONDON",
+      "comparison_state": "LONDON+NEW_YORK",
+      "development_observation": "ASIA+LONDON had stronger historical after-cost return than LONDON+NEW_YORK on the inspected 8h development snapshot.",
+      "formal_directional_claim": "withheld_until_prospective_review"
+    },
+    {
+      "hypothesis_id": "DON8_BTC_PRIOR_BAR_ALIGNMENT",
+      "applies_to": [
+        "DON8"
+      ],
+      "factor": "btc_prior_bar_direction",
+      "aligned_state": "ALIGNED",
+      "comparison_state": "AGAINST",
+      "development_observation": "BTC prior-bar alignment separated DON8 historical expectancy and correct-direction travel.",
+      "formal_directional_claim": "withheld_until_prospective_review"
+    },
+    {
+      "hypothesis_id": "EMA8_OWN_PRIOR_3BAR_ALIGNMENT",
+      "applies_to": [
+        "EMA8"
+      ],
+      "factor": "own_prior_3bar_direction",
+      "aligned_state": "ALIGNED",
+      "comparison_state": "AGAINST",
+      "development_observation": "Own prior-three-bar alignment separated EMA8 historical expectancy.",
+      "formal_directional_claim": "withheld_until_prospective_review"
+    },
+    {
+      "hypothesis_id": "EMA8_BTC_PRIOR_BAR_ALIGNMENT_SECONDARY",
+      "applies_to": [
+        "EMA8"
+      ],
+      "factor": "btc_prior_bar_direction",
+      "aligned_state": "ALIGNED",
+      "comparison_state": "AGAINST",
+      "development_observation": "BTC prior-bar alignment also separated EMA8 historical expectancy.",
+      "formal_directional_claim": "withheld_until_prospective_review"
+    },
+    {
+      "hypothesis_id": "VOL8_OWN_PRIOR_3BAR_ALIGNMENT",
+      "applies_to": [
+        "VOL8"
+      ],
+      "factor": "own_prior_3bar_direction",
+      "aligned_state": "ALIGNED",
+      "comparison_state": "AGAINST",
+      "development_observation": "Own prior-three-bar alignment separated VOL8 historical expectancy and correct-direction travel more clearly than BTC alignment.",
+      "formal_directional_claim": "withheld_until_prospective_review"
+    }
+  ],
+  "reporting": {
+    "review_after_calendar_days": 30,
+    "minimum_completed_trades_per_strategy": 20,
+    "no_early_pass_fail": true,
+    "metrics": [
+      "completed_trade_count",
+      "equal_weight_symbol_sleeve_completed_trade_return",
+      "equal_weight_symbol_sleeve_max_drawdown",
+      "equal_weight_symbol_sleeve_curve",
+      "median_observed_symbol_compounded_return",
+      "positive_observed_symbol_fraction",
+      "expectancy_bps",
+      "win_rate",
+      "profit_factor",
+      "correct_direction_rate",
+      "mean_correct_direction_mfe_bps",
+      "median_correct_direction_mfe_bps",
+      "pooled_completed_trade_sequence_drawdown",
+      "factor_state_differences"
+    ]
+  },
+  "forbidden": [
+    "strategy_parameter_changes",
+    "signal_rule_changes",
+    "symbol_exclusions",
+    "session_definition_changes",
+    "alignment_definition_changes",
+    "cost_changes",
+    "retroactive_start_changes",
+    "filtering_or_skipping_original_strategy_trades",
+    "using_pre_start_entries_as_prospective_evidence",
+    "counting_terminal_snapshot_liquidations_as_completed_trades",
+    "early_pass_fail_before_review_requirement",
+    "live_or_leverage_authorization"
+  ],
+  "claims": {
+    "original_strategy_trades_unchanged": true,
+    "labels_are_observational_only": true,
+    "candidate_promoted": false,
+    "session_filter_authorized": false,
+    "live_trading_authorized": false,
+    "leverage_authorized": false
+  },
+  "hypothesis_definition_commit": "5415416440430bce912123694e8965e671326423",
+  "freeze_note": "Hypothesis definitions were committed before the 2026-09-24T00:00:00Z prospective boundary; later commits only implement or test the frozen watch. Before the prospective boundary, reporting semantics were clarified so cumulative return uses equal-weight independent symbol sleeves rather than sequentially compounding overlapping cross-symbol trades; frozen hypotheses and strategy rules were not changed.",
+  "implementation_freeze_commit": "d900f609229536cdf6d9d4245de02e02aa7ae740",
+  "implementation_freeze_note": "All prospective scoring, evidence-progress, equal-weight symbol-sleeve equity-curve, and reporting semantics were finalized in this commit before the 2026-09-24T00:00:00Z prospective boundary. Subsequent changes must not alter these semantics for this watch."
+}

@@ -104,6 +104,12 @@ def main() -> None:
         "completed_holding_periods": report["metrics"]["completed_holding_periods"],
         "open_symbol_positions": report["metrics"]["open_symbol_positions"],
         "current_weights": report["current_weights"],
+        "contribution_concentration": report["contribution_concentration"],
+        "latest_completed_period_contribution_concentration": (
+            report["completed_holding_periods"][-1]["contribution_concentration"]
+            if report["completed_holding_periods"]
+            else None
+        ),
         "claims": report["claims"],
     }, indent=2))
 

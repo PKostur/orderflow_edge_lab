@@ -1,0 +1,105 @@
+name: Universal Regime Marginal Pairwise Prospective Shadow v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - fix/universal-existing-validation
+    paths:
+      - "config/universal_regime_marginal_pairwise_shadow_v1.json"
+      - "config/universal_regime_marginal_pairwise_shadow_v1_anchor_binding.json"
+      - "config/universal_descriptive_regime_labels_v1.json"
+      - "src/orderflow_edge_lab/regime_marginal_pairwise_shadow_v1.py"
+      - "src/orderflow_edge_lab/cli/regime_marginal_pairwise_shadow_v1.py"
+      - "tests/test_regime_marginal_pairwise_shadow_v1.py"
+      - "docs/UNIVERSAL_REGIME_MARGINAL_PAIRWISE_SHADOW_V1.md"
+      - ".github/workflows/universal-regime-marginal-pairwise-shadow-v1.yml"
+  schedule:
+    - cron: "40 0,8,16 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: universal-regime-marginal-pairwise-shadow-v1
+  cancel-in-progress: true
+
+jobs:
+  shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run prospective regime shadow tests
+        run: python -m unittest tests.test_regime_marginal_pairwise_shadow_v1 -v
+      - name: Run prospective regime shadow
+        run: |
+          mkdir -p artifacts/universal_regime_marginal_pairwise_shadow/source
+          python -m orderflow_edge_lab.cli.regime_marginal_pairwise_shadow_v1 \
+            --config config/universal_regime_marginal_pairwise_shadow_v1.json \
+            --anchor-binding config/universal_regime_marginal_pairwise_shadow_v1_anchor_binding.json \
+            --label-config config/universal_descriptive_regime_labels_v1.json \
+            --output artifacts/universal_regime_marginal_pairwise_shadow/report.json \
+            --source-dir artifacts/universal_regime_marginal_pairwise_shadow/source \
+            --max-workers 5
+      - name: Enforce prospective boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open("artifacts/universal_regime_marginal_pairwise_shadow/report.json",encoding="utf-8"))
+          start="2026-09-26T00:00:00+00:00"
+          if r["prospective_start_utc"] != start:
+              raise SystemExit("prospective start changed")
+          if r["historical_anchor_count"] != 0:
+              raise SystemExit("unexpected historical anchor entered frozen watch")
+          if not r["claims"]["incomplete_8h_bars_excluded"]:
+              raise SystemExit("incomplete 8h bar exclusion lost")
+          if not r["claims"]["pre_start_entries_excluded"]:
+              raise SystemExit("pre-start exclusion lost")
+          if not r["claims"]["terminal_snapshot_liquidations_not_scored"]:
+              raise SystemExit("terminal snapshot exclusion lost")
+          claims=r["claims"]
+          for key in ("candidate_promoted","regime_filter_authorized","profitable_edge_established","live_trading_authorized","leverage_authorized"):
+              if bool(claims.get(key)):
+                  raise SystemExit(f"prospective watch exceeded authority: {key}")
+          for strategy in r["reports"]:
+              if strategy["fixed_contrast_count"] != 92:
+                  raise SystemExit("frozen 92-contrast family changed")
+              for trade in strategy["completed_trades"]:
+                  if trade["entry"] < start:
+                      raise SystemExit("pre-start entry entered prospective evidence")
+                  if trade["terminal_liquidation"]:
+                      raise SystemExit("terminal liquidation entered completed evidence")
+              if not r["inferential_window_open"]:
+                  for contrast in strategy["contrasts"]:
+                      if contrast["bootstrap"]["null_centered_two_sided_block_bootstrap_p"] is not None:
+                          raise SystemExit("early prospective inferential p-value exposed")
+                      if contrast["global_multiplicity"]["holm_fwer_p"] is not None:
+                          raise SystemExit("early prospective multiplicity exposed")
+          if r["status"] == "PRE_START":
+              if any(s["completed_post_start_trade_count"] or s["open_post_start_snapshot_count"] for s in r["reports"]):
+                  raise SystemExit("pre-start run contains prospective trade evidence")
+          print(json.dumps({
+              "watch_id":r["watch_id"],
+              "status":r["status"],
+              "as_of_utc":r["as_of_utc"],
+              "calendar_days_elapsed":r["calendar_days_elapsed"],
+              "inferential_window_open":r["inferential_window_open"],
+              "historical_anchor_count":r["historical_anchor_count"],
+              "completed_trades":{s["audit_id"]:s["completed_post_start_trade_count"] for s in r["reports"]},
+              "open_snapshots":{s["audit_id"]:s["open_post_start_snapshot_count"] for s in r["reports"]},
+          },indent=2))
+          PY
+      - name: Preserve prospective regime evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: universal-regime-marginal-pairwise-shadow-v1
+          path: artifacts/universal_regime_marginal_pairwise_shadow/
+          retention-days: 90
+          if-no-files-found: error

@@ -1,0 +1,148 @@
+name: Jev Research Decision Layer
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - fix/universal-existing-validation
+    paths:
+      - "src/orderflow_edge_lab/jev_research_decision.py"
+      - "src/orderflow_edge_lab/cli/jev_research_decision.py"
+      - "src/orderflow_edge_lab/jev_research_action.py"
+      - "src/orderflow_edge_lab/cli/jev_research_action.py"
+      - "tests/test_jev_research_decision.py"
+      - "tests/test_jev_research_action.py"
+      - "config/jev_research_decision_v1.json"
+      - ".github/workflows/jev-research-decision.yml"
+      - "pyproject.toml"
+  schedule:
+    - cron: "45 0,8,16 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jev-research-decision
+  cancel-in-progress: true
+
+jobs:
+  decide:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research and Jev runtime
+        run: python -m pip install -e ".[research,jev]"
+      - name: Smoke test TypeSafe SDK contract
+        run: |
+          python - <<'PY'
+          from importlib.metadata import version
+          from typesafe_sdk import AsyncTypeSafeClient, Choice, Noul, RetryPolicy, Score
+          Choice(instructions="choice", criteria={"a": None, "b": None})
+          Noul(instructions="noul", criteria={"true": "yes", "false": "no"})
+          Score(instructions="score", criteria=["low", "high"])
+          RetryPolicy(max_retries=0, timeout=1.0)
+          print("typesafe-sdk", version("typesafe-sdk"))
+          print("sdk_contract_ok")
+          PY
+      - name: Run Jev decision and action tests
+        run: |
+          python -m unittest tests.test_jev_research_decision -v
+          python -m unittest tests.test_jev_research_action -v
+      - name: Build fresh frozen shadow state
+        run: |
+          mkdir -p artifacts/jev_decision/source
+          orderflow-universal-session-shadow \
+            --config config/universal_session_alignment_shadow_v1.json \
+            --output artifacts/jev_decision/shadow_report.json \
+            --source-dir artifacts/jev_decision/source \
+            --max-workers 5
+      - name: Run bounded Jev decision layer
+        run: |
+          orderflow-jev-research-decision \
+            --shadow-report artifacts/jev_decision/shadow_report.json \
+            --output artifacts/jev_decision/decision.json
+      - name: Execute bounded research action
+        run: |
+          orderflow-jev-research-action \
+            --shadow-report artifacts/jev_decision/shadow_report.json \
+            --decision artifacts/jev_decision/decision.json \
+            --output artifacts/jev_decision/action.json
+      - name: Enforce Jev authority boundary
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open("artifacts/jev_decision/decision.json",encoding="utf-8"))
+          veto=d["policy"]["hard_vetoes"]
+          if any(bool(veto.get(k)) for k in (
+              "strategy_promotion_authorized",
+              "live_trading_authorized",
+              "leverage_authorized",
+              "frozen_definition_changes_authorized",
+          )):
+              raise SystemExit("Jev authority boundary violated")
+          contract=d["decision_contract"]
+          if contract["decision_contract_id"] != "jev-research-decision-v1":
+              raise SystemExit("unexpected Jev decision contract")
+          provider=d["provider"]
+          resolution=d["provider_resolution"]
+          source=d["policy"]["selection_source"]
+          if provider == "offline_deterministic" and resolution not in ("auto_offline_no_api_key", "explicit_offline"):
+              raise SystemExit("unexpected offline provider resolution")
+          if provider == "typesafe_jev" and resolution not in ("auto_typesafe_jev", "explicit_typesafe_jev"):
+              raise SystemExit("unexpected Jev provider resolution")
+          if provider == "offline_deterministic" and source == "jev_bounded_choice":
+              raise SystemExit("offline fallback mislabeled as Jev")
+          if provider == "typesafe_jev" and source == "offline_bounded_choice":
+              raise SystemExit("real Jev mislabeled as offline")
+          a=json.load(open("artifacts/jev_decision/action.json",encoding="utf-8"))
+          if a["decision_id"] != d["decision_id"]:
+              raise SystemExit("Jev action/decision id mismatch")
+          if any(bool(v) for v in a["authority_boundary"].values()):
+              raise SystemExit("Jev action exceeded research-only authority")
+          selected=d["policy"]["selected_action"]
+          action_status=a["result"]["status"]
+          if selected == "stop_protocol_breach":
+              raise SystemExit("research pipeline halted on frozen-protocol breach")
+          expected_status={
+              "collect_more_evidence":"ACCUMULATE_UNCHANGED",
+              "inspect_state_coverage":"DESCRIPTIVE_INSPECTION_ONLY",
+              "prepare_formal_review":"READY",
+          }.get(selected)
+          if expected_status is not None and action_status != expected_status:
+              raise SystemExit(
+                  f"Jev action status mismatch: {selected} expected {expected_status} got {action_status}"
+              )
+          claims=d["claims"]
+          for key in (
+              "jev_cannot_promote_strategy",
+              "jev_cannot_authorize_live_trading",
+              "jev_cannot_authorize_leverage",
+              "jev_cannot_change_frozen_definitions",
+          ):
+              if not bool(claims.get(key)):
+                  raise SystemExit(f"required Jev boundary claim false: {key}")
+          print(json.dumps({
+              "provider":d["provider"],
+              "provider_resolution":d["provider_resolution"],
+              "model":d["model"],
+              "selected_action":d["policy"]["selected_action"],
+              "selection_source":d["policy"]["selection_source"],
+              "proposed_action":d["policy"]["proposed_action"],
+              "proposed_action_confidence":d["policy"]["proposed_action_confidence"],
+              "hard_vetoes":veto,
+          },indent=2))
+          PY
+      - name: Preserve Jev decision artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jev-research-decision
+          path: artifacts/jev_decision/
+          retention-days: 90
+          if-no-files-found: error

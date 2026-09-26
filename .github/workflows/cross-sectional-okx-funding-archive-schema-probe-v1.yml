@@ -1,0 +1,78 @@
+name: Cross-Sectional OKX Funding Archive Schema Probe v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - fix/universal-existing-validation
+    paths:
+      - "src/orderflow_edge_lab/okx_funding_archive_schema.py"
+      - "src/orderflow_edge_lab/cli/okx_funding_archive_schema_probe.py"
+      - "tests/test_okx_funding_archive_schema.py"
+      - "config/cross_sectional_okx_funding_archive_schema_probe_v1.json"
+      - "docs/CROSS_SECTIONAL_OKX_FUNDING_ARCHIVE_SCHEMA_PROBE_V1.md"
+      - ".github/workflows/cross-sectional-okx-funding-archive-schema-probe-v1.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cross-sectional-okx-funding-archive-schema-probe-v1
+  cancel-in-progress: true
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Run archive-schema tests
+        run: python -m unittest tests.test_okx_funding_archive_schema -v
+      - name: Inspect fixed OKX archive samples
+        run: |
+          mkdir -p artifacts/cross_sectional_okx_funding_archive_schema_probe
+          python -m orderflow_edge_lab.cli.okx_funding_archive_schema_probe \
+            --config config/cross_sectional_okx_funding_archive_schema_probe_v1.json \
+            --output artifacts/cross_sectional_okx_funding_archive_schema_probe/report.json
+      - name: Enforce engineering-only boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open("artifacts/cross_sectional_okx_funding_archive_schema_probe/report.json",encoding="utf-8"))
+          if r["analysis"] != "okx_funding_archive_schema_probe_v1":
+              raise SystemExit("unexpected archive-schema analysis")
+          if r["evidence_use"] != "engineering_schema_discovery_only":
+              raise SystemExit("archive probe escaped engineering boundary")
+          if r["sample_count"] != 2:
+              raise SystemExit("fixed sample count changed")
+          c=r["claims"]
+          forbidden=(
+              "candidate_pnl_computed",
+              "candidate_retested",
+              "historical_result_repaired",
+              "strategy_definition_changed",
+              "candidate_promoted",
+              "profitable_edge_established",
+              "live_trading_authorized",
+              "leverage_authorized",
+          )
+          if any(c[name] for name in forbidden):
+              raise SystemExit("archive probe emitted forbidden research claim")
+          print(json.dumps({
+              "sample_count":r["sample_count"],
+              "distinct_csv_headers":r["distinct_csv_headers"],
+          },indent=2))
+          PY
+      - name: Preserve archive-schema probe
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cross-sectional-okx-funding-archive-schema-probe-v1
+          path: artifacts/cross_sectional_okx_funding_archive_schema_probe/
+          retention-days: 30
+          if-no-files-found: warn

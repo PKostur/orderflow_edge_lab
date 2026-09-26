@@ -10,7 +10,8 @@ requires-python = ">=3.10"
 dependencies = ["websockets>=12,<16"]
 
 [project.optional-dependencies]
-research = ["numpy>=2,<3", "pandas>=2,<3", "scikit-learn>=1.7,<2"]
+research = ["numpy>=2,<2.6", "pandas>=2,<3", "scikit-learn>=1.7,<2"]
+jev = ["typesafe-sdk>=0.7,<1"]
 
 [project.scripts]
 orderflow-paper = "orderflow_edge_lab.cli.paper:main"
@@ -71,6 +72,15 @@ orderflow-discovery-aggregate = "orderflow_edge_lab.cli.discovery_aggregate:main
 orderflow-strategy-tournament-data = "orderflow_edge_lab.cli.strategy_tournament_data:main"
 orderflow-strategy-tournament = "orderflow_edge_lab.cli.strategy_tournament:main"
 orderflow-universal-backtest = "orderflow_edge_lab.cli.universal_backtest:main"
+orderflow-universal-existing-validation = "orderflow_edge_lab.cli.universal_existing_validation:main"
+orderflow-payoff-geometry = "orderflow_edge_lab.cli.payoff_geometry:main"
+orderflow-universal-session-shadow = "orderflow_edge_lab.cli.universal_session_alignment_shadow:main"
+orderflow-universal-shadow-monitor = "orderflow_edge_lab.cli.universal_shadow_operational_monitor:main"
+orderflow-research-control-plane = "orderflow_edge_lab.cli.research_control_plane:main"
+orderflow-volatility-state-forward = "orderflow_edge_lab.cli.volatility_state_forward:main"
+orderflow-vol8-payoff-amplitude-forward = "orderflow_edge_lab.cli.vol8_payoff_amplitude_forward:main"
+orderflow-jev-research-decision = "orderflow_edge_lab.cli.jev_research_decision:main"
+orderflow-jev-research-action = "orderflow_edge_lab.cli.jev_research_action:main"
 orderflow-strategy-tournament-aggregate = "orderflow_edge_lab.cli.strategy_tournament_aggregate:main"
 orderflow-ena-mean-reversion-risk = "orderflow_edge_lab.cli.ena_mean_reversion_risk:main"
 orderflow-ena-forward-shadow = "orderflow_edge_lab.cli.ena_forward_shadow:main"
@@ -80,6 +90,8 @@ orderflow-htf-trend-forward-shadow = "orderflow_edge_lab.cli.htf_trend_forward_s
 orderflow-htf-fibonacci-forward-shadow = "orderflow_edge_lab.cli.htf_fibonacci_forward_shadow:main"
 orderflow-htf-fibonacci-paired-forward = "orderflow_edge_lab.cli.htf_fibonacci_paired_forward:main"
 orderflow-cross-sectional-forward-shadow = "orderflow_edge_lab.cli.cross_sectional_forward_shadow:main"
+orderflow-cross-sectional-venue-replication = "orderflow_edge_lab.cli.cross_sectional_venue_replication:main"
+orderflow-cross-sectional-okx-funding-audit = "orderflow_edge_lab.cli.cross_sectional_okx_funding_audit:main"
 orderflow-markov-ev-shadow = "orderflow_edge_lab.cli.markov_ev_shadow:main"
 
 [project.gui-scripts]

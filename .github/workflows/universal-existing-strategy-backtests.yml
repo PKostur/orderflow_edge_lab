@@ -23,26 +23,18 @@ jobs:
         run: |
           mkdir -p artifacts/data/8h
           orderflow-strategy-tournament-data \
-            --symbols BTCUSDT ETHUSDT SOLUSDT XRPUSDT DOGEUSDT BNBUSDT ADAUSDT LINKUSDT SUIUSDT ENAUSDT \
+            --config config/universal_existing_strategy_backtests_v1.json \
             --interval 8h \
-            --start 2024-01-01 \
-            --end 2026-09-13 \
             --output-dir artifacts/data/8h
-      - name: Universal DON8
+      - name: Compatibility and diagnostic validation
         run: |
-          orderflow-universal-backtest --data-dir artifacts/data/8h --family donchian_breakout \
-            --grid-json '{"lookback":[55]}' --costs 12,16,20 --output artifacts/DON8_universal.json
-      - name: Universal EMA8
-        run: |
-          orderflow-universal-backtest --data-dir artifacts/data/8h --family ema_tsmom \
-            --grid-json '{"fast":[24],"slow":[96],"min_atr_spread":[0.25]}' --costs 12,16,20 --output artifacts/EMA8_universal.json
-      - name: Universal VOL8
-        run: |
-          orderflow-universal-backtest --data-dir artifacts/data/8h --family vol_scaled_momentum \
-            --grid-json '{"lookback":[24],"vol_window":[96],"threshold":[0.5]}' --costs 12,16,20 --output artifacts/VOL8_universal.json
+          orderflow-universal-existing-validation \
+            --config config/universal_existing_strategy_backtests_v1.json \
+            --data-dir artifacts/data/8h \
+            --output artifacts/universal_existing_validation.json
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: universal-existing-strategy-backtests
-          path: artifacts/*.json
+          path: artifacts/
           retention-days: 30
