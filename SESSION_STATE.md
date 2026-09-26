@@ -122,6 +122,11 @@
 - Core with Binance-proxy funding: Sharpe 1.19 (new honest baseline; 1.36 without funding). The overlay gives 0.99 and halves
   the return: extreme funding = strongest trends (2021 +75% → +8%).
 
+## Chop-regime search (`research/chop_regime_search/RESULT.md`, declared `36be8f0`): NO PASS
+- 6 candidates in CHOP (mean reversion, z-reversal, squeeze breakout, pullback, cross-sectional reversal, funding carry) vs
+  trend-only (0.77 same basis). All reversal types lose; the squeeze breakout nearly passes (0.81, lower drawdown, ties in
+  2023–26). Standing aside in chop again costs money. Keep trend-following through chop.
+
 ## Decisions
 - Workstream D (`universal-market-state-labels-v1`) was not built (post-hoc re-cut of v1 thresholds).
 - Monitor runs pick one action; 2026-09-26 08:05Z run = `collect_evidence` only, no code change.
