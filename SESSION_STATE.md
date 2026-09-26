@@ -100,6 +100,12 @@
   but only 1 of 10, so a forward hypothesis.
 - Regimes: up months +3.2%/mo, down +0.6%, flat −0.9% (bleeds in chop; shorts catch crashes late).
 
+## Trend bot (PARKED by user, 2026-09-26)
+- `trend_bot.py` (`d792fd9`): paper-only target-position bot for crypto-trend-core. Risk gates, kill switches,
+  hash-chained journal, idempotent per bar. Workflow `trend-bot-paper.yml` verified end to end (fail-closed halt
+  persisted on `bot-state/crypto-trend-core-paper`). Not scheduled. Open design point: gross exposure is only ~26%
+  (per-sleeve vol sizing), so portfolio-level vol targeting is needed before any real use.
+
 ## Decisions
 - Workstream D (`universal-market-state-labels-v1`) was not built (post-hoc re-cut of v1 thresholds).
 - Monitor runs pick one action; 2026-09-26 08:05Z run = `collect_evidence` only, no code change.
