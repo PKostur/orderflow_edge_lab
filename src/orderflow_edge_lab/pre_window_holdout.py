@@ -18,6 +18,7 @@ import pandas as pd
 from orderflow_edge_lab.trend_portfolio_forward import _utc, sleeve_daily_returns, summarize
 
 PROTOCOL_ID = "universal-pre-window-crypto-holdout-v1"
+PROTOCOL_IDS = (PROTOCOL_ID, "universal-untouched-coins-holdout-v1")
 
 
 class HoldoutError(ValueError):
@@ -31,14 +32,17 @@ def clip_to_window(frames: Mapping[str, pd.DataFrame], window: Mapping[str, str]
         f = f.copy()
         f.index = pd.to_datetime(f.index, utc=True)
         f = f.loc[(f.index >= start) & (f.index < end)]
-        if len(f) and f.index.max() >= _utc("2024-01-01T00:00:00Z"):
+        # Default guard is the development-window start (frozen v1 behaviour); a protocol
+        # whose data was never used anywhere may disable it with an explicit null.
+        guard = window["must_end_before"] if "must_end_before" in window else "2024-01-01T00:00:00Z"
+        if guard and len(f) and f.index.max() >= _utc(guard):
             raise HoldoutError(f"{s}: data overlaps the development window")
         out[s] = f
     return out
 
 
 def evaluate(config: Mapping[str, Any], frames: Mapping[str, pd.DataFrame]) -> dict[str, Any]:
-    if config.get("protocol_id") != PROTOCOL_ID:
+    if config.get("protocol_id") not in PROTOCOL_IDS:
         raise HoldoutError("wrong protocol config")
     clipped = clip_to_window(frames, config["window"])
     symbols = [s for s in config["source"]["symbols"] if len(clipped.get(s, [])) > 200]
@@ -73,7 +77,7 @@ def evaluate(config: Mapping[str, Any], frames: Mapping[str, pd.DataFrame]) -> d
     ).hexdigest()
     return {
         "schema_version": 1,
-        "protocol_id": PROTOCOL_ID,
+        "protocol_id": str(config["protocol_id"]),
         "window": dict(config["window"]),
         "symbols_evaluated": symbols,
         "bars_per_symbol": {s: int(len(clipped[s])) for s in sorted(clipped)},

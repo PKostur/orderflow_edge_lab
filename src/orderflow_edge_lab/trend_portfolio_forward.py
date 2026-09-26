@@ -80,6 +80,7 @@ def sleeve_daily_returns(
                 window=int(sizing["window_bars"]),
                 target_vol=float(sizing["target_annual_vol"]),
                 cap=float(sizing["cap"]),
+                bars_per_year=int(sizing.get("bars_per_year", 3 * 365)),
             )
         for symbol in config["source"]["symbols"]:
             result = run_canonical_backtest_v3(

@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "protocol_id": "universal-etf-long-history-holdout-v1",
+  "status": "FROZEN_BEFORE_EVALUATION",
+  "question": "Do the frozen DON8/EMA8/VOL8 rules, mapped to daily bars at the same calendar horizons, earn positive net returns as a risk-balanced cross-asset portfolio over 2007-2026, on asset classes the rules were never designed on?",
+  "registration_note": "Registered 2026-09-26, before any strategy result on this data was computed. Only Yahoo chart availability (GLD from 2004-11-18) was checked. The universe rule, the 8h-to-daily parameter mapping, costs and the primary hypothesis are fixed here. Prior literature (time-series momentum across asset classes) exists and is not new evidence; this tests these specific frozen parameters.",
+  "evaluation_rule": "run exactly once from a commit containing this file",
+  "universe_rule": {
+    "instruments": "US-listed ETFs with inception on or before 2007-01-01, one per exposure, covering equity, government and credit bonds, gold, silver, oil, broad commodities, major currencies and real estate",
+    "symbols": {
+      "equity": ["SPY", "QQQ", "DIA", "IWM", "EFA", "EEM", "EWJ"],
+      "bonds": ["TLT", "IEF", "LQD"],
+      "commodities": ["GLD", "SLV", "USO", "DBC"],
+      "fx": ["FXE", "FXY", "FXB", "FXA", "FXC", "FXF"],
+      "real_estate": ["VNQ"]
+    },
+    "excluded_by_inception": ["UNG (2007-04)"]
+  },
+  "window": {"start": "2007-01-01T00:00:00Z", "end_exclusive": "2026-09-01T00:00:00Z", "must_end_before": null},
+  "source": {
+    "provider": "Yahoo Finance chart API v8, daily, split- and dividend-adjusted (OHLC scaled by adjclose/close)",
+    "bar_stamp": "each trading day at 00:00 UTC; weekends and holidays are simply absent"
+  },
+  "parameter_mapping": {
+    "rule": "8h bar counts divided by 3 to keep the same calendar horizon; thresholds unchanged",
+    "DON8": {"lookback": "55 -> 18"},
+    "EMA8": {"fast": "24 -> 8", "slow": "96 -> 32", "atr_period": "14 -> 5", "min_atr_spread": "0.25 unchanged"},
+    "VOL8": {"lookback": "24 -> 8", "vol_window": "96 -> 32", "threshold": "0.5 unchanged"},
+    "sizing_window": "180 8h bars -> 60 daily bars"
+  },
+  "strategies": [
+    {"audit_id": "DON8", "family": "donchian_breakout", "parameters": {"lookback": 18}},
+    {"audit_id": "EMA8", "family": "ema_tsmom", "parameters": {"fast": 8, "slow": 32, "min_atr_spread": 0.25, "atr_period": 5}},
+    {"audit_id": "VOL8", "family": "vol_scaled_momentum", "parameters": {"lookback": 8, "vol_window": 32, "threshold": 0.5}}
+  ],
+  "economics": {
+    "accounting": "canonical_v3_fixed_quantity",
+    "round_trip_cost_bps": 10,
+    "max_abs_position": 1,
+    "not_modelled": "short borrow fees, cash yield on idle capital, ETF dividends only via adjusted prices",
+    "portfolio": "equal capital across sleeves that have data that day, rebalanced daily"
+  },
+  "sizing": {
+    "method": "entry_inverse_vol", "window_bars": 60, "target_annual_vol": 0.15, "cap": 1.0, "bars_per_year": 252,
+    "rationale": "across asset classes with 5-80% volatility, equal risk per sleeve is the a-priori choice; +/-1 is reported as secondary"
+  },
+  "hypotheses": {
+    "primary": {
+      "series": "inverse-vol-sized combined portfolio daily net return",
+      "test": "Newey-West t (5 lags) of the mean daily net return",
+      "pass_rule": "mean > 0 and t >= 2.0"
+    },
+    "secondary_descriptive": [
+      "+/-1 sized combined portfolio",
+      "per-strategy and per-asset-class Sharpe and t",
+      "per-year returns, including 2008, 2020 and 2022",
+      "correlation of the portfolio's daily returns with SPY"
+    ]
+  },
+  "claims": {
+    "strategy_definitions_modified": false,
+    "strategy_promotion_authorized": false,
+    "live_trading_authorized": false,
+    "leverage_authorized": false
+  }
+}

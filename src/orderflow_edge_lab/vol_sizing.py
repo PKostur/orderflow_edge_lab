@@ -28,9 +28,10 @@ def entry_sized_target(
     window: int,
     target_vol: float,
     cap: float,
+    bars_per_year: int = BARS_PER_YEAR,
 ) -> pd.Series:
     close = frame["close"].astype(float)
-    realized = np.log(close).diff().rolling(window, min_periods=window).std(ddof=1) * math.sqrt(BARS_PER_YEAR)
+    realized = np.log(close).diff().rolling(window, min_periods=window).std(ddof=1) * math.sqrt(bars_per_year)
     raw = raw_target.reindex(frame.index).fillna(0.0).to_numpy(dtype=float)
     vol = realized.to_numpy(dtype=float)
     out = np.zeros(len(raw))
@@ -48,11 +49,13 @@ def entry_sized_target(
 
 
 def vol_sized_strategy(
-    base: StrategyPlugin, *, window: int, target_vol: float, cap: float
+    base: StrategyPlugin, *, window: int, target_vol: float, cap: float, bars_per_year: int = BARS_PER_YEAR
 ) -> FunctionStrategy:
     def target(frame: pd.DataFrame, params: Mapping[str, Any]) -> pd.Series:
         raw = base.generate_target(frame, params, None)
-        return entry_sized_target(frame, raw, window=window, target_vol=target_vol, cap=cap)
+        return entry_sized_target(
+            frame, raw, window=window, target_vol=target_vol, cap=cap, bars_per_year=bars_per_year
+        )
 
     return FunctionStrategy(
         strategy_id=f"{base.strategy_id}+invvol",
