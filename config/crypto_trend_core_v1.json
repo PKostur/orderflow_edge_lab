@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "watch_id": "crypto-trend-core-v1",
+  "status": "FROZEN_BEFORE_PROSPECTIVE_START",
+  "question": "Does a focused crypto trend book (DON8 + EMA8, 17 perpetuals, inverse-vol entry sizing, costs and funding charged) earn positive net returns going forward?",
+  "prospective_start_utc": "2026-09-29T00:00:00Z",
+  "registration_note": "Registered 2026-09-26, before any day at or after the start existed. This candidate distils the evidence to date; its design is not independent of that evidence, which is why it is judged only on forward data.",
+  "design_choices_disclosed": {
+    "drop_VOL8": "VOL8 had the weakest result in every dataset (dev window Sharpe 0.72 with 15.6%/yr cost drag; untouched coins t 0.97; ETF history t -3.07). Chosen after seeing data.",
+    "universe": "the 10 development coins plus the 7 untouched-holdout coins (ZEC, LTC, UNI, DOT, DASH, ETC, BCH), chosen by that holdout's mechanical rule; ENA included. Chosen after seeing data.",
+    "sizing": "entry inverse-vol, the constants of universal-cross-asset-trend-invvol-forward-v1, fixed a priori",
+    "accounting": "canonical v3.1 (fixed quantity plus funding); funding cost 11%/yr in the 2021 boom, so it is always charged"
+  },
+  "evidence_basis": {
+    "development_window_2024_2026": "combined 30-sleeve v3 Sharpe 1.07, t 1.71 (in-sample)",
+    "pre_window_holdout_2020_2023": "passed: Sharpe 1.76, t 3.13; 1.55 / 2.83 with funding proxy; concentrated in 2021",
+    "untouched_coins_holdout": "failed narrowly: Sharpe 0.76, t 1.87; DON8 t 2.05, EMA8 t 1.85",
+    "etf_long_history_holdout": "failed: Sharpe -0.31; these rules are crypto-specific"
+  },
+  "groups": {
+    "crypto": ["ADA_USDT", "BNB_USDT", "BTC_USDT", "DOGE_USDT", "ENA_USDT", "ETH_USDT", "LINK_USDT", "SOL_USDT", "SUI_USDT", "XRP_USDT",
+               "ZEC_USDT", "LTC_USDT", "UNI_USDT", "DOT_USDT", "DASH_USDT", "ETC_USDT", "BCH_USDT"]
+  },
+  "source": {"venue": "MEXC Futures", "interval": "8h", "warmup_start_utc": "2026-05-01T00:00:00Z", "funding": "contract/funding_rate/history"},
+  "strategies": [
+    {"audit_id": "DON8", "family": "donchian_breakout", "parameters": {"lookback": 55}},
+    {"audit_id": "EMA8", "family": "ema_tsmom", "parameters": {"fast": 24, "slow": 96, "min_atr_spread": 0.25}}
+  ],
+  "sizing": {"method": "entry_inverse_vol", "window_bars": 180, "target_annual_vol": 0.15, "cap": 1.0, "bars_per_year": 1095},
+  "economics": {
+    "accounting": "canonical_v3.1_fixed_quantity_with_funding",
+    "round_trip_cost_bps": 20,
+    "max_abs_position": 1,
+    "portfolio": "equal capital across the 34 strategy x coin sleeves, rebalanced daily; inter-sleeve rebalancing not charged"
+  },
+  "reporting": {
+    "primary_series": "crypto",
+    "statistic": "mean daily net return, Newey-West t (5 lags), annualized Sharpe, max drawdown, funding contribution",
+    "newey_west_lags": 5,
+    "review_after_days": 180
+  },
+  "review_criteria_at_180_days": {
+    "purpose": "decide whether the evidence justifies submitting the candidate to the repository's existing paper/approval gates; this file authorizes nothing",
+    "all_required": [
+      "forward mean daily net return > 0",
+      "forward max drawdown not worse than -25% (about 1.7x the 15% sleeve vol target, a guardrail)",
+      "realized funding drag within 2x of the forward-period funding estimate reported by this watch",
+      "no data-integrity or reconciliation failure in any run"
+    ],
+    "note": "180 days cannot reach t=2 at plausible Sharpe (the minimum detectable Sharpe is about 2.8), so this is a sanity gate, not proof of edge. Proof needs roughly 3 or more years, or pooled independent evidence."
+  },
+  "claims": {
+    "descriptive_only": true,
+    "strategy_definitions_modified": false,
+    "verified_out_of_sample_evidence": false,
+    "strategy_promotion_authorized": false,
+    "paper_trading_authorized": false,
+    "live_trading_authorized": false,
+    "leverage_authorized": false
+  }
+}

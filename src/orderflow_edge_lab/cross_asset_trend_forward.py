@@ -22,7 +22,7 @@ from orderflow_edge_lab.trend_portfolio_forward import (
 )
 
 WATCH_ID = "universal-cross-asset-trend-forward-v1"
-WATCH_IDS = (WATCH_ID, "universal-cross-asset-trend-invvol-forward-v1")
+WATCH_IDS = (WATCH_ID, "universal-cross-asset-trend-invvol-forward-v1", "crypto-trend-core-v1")
 
 
 class CrossAssetTrendError(ValueError):

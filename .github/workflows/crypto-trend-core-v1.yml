@@ -1,0 +1,60 @@
+name: Crypto Trend Core v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/payoff-geometry-v1-1
+    paths:
+      - "src/orderflow_edge_lab/canonical_v3.py"
+      - "src/orderflow_edge_lab/cross_asset_trend_forward.py"
+      - "src/orderflow_edge_lab/trend_portfolio_forward.py"
+      - "config/crypto_trend_core_v1.json"
+      - "src/orderflow_edge_lab/vol_sizing.py"
+      - "tests/test_cross_asset_trend_forward.py"
+      - ".github/workflows/crypto-trend-core-v1.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: crypto-trend-core-v1
+  cancel-in-progress: true
+
+jobs:
+  companion:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e ".[research]"
+      - name: Run tests
+        run: python -m unittest tests.test_canonical_v31_funding tests.test_trend_portfolio_forward tests.test_cross_asset_trend_forward tests.test_vol_sizing tests.test_crypto_trend_core -v
+      - name: Run forward companion
+        run: python -m orderflow_edge_lab.cross_asset_trend_forward --config config/crypto_trend_core_v1.json --output artifacts/crypto_trend_core/report.json
+      - name: Enforce frozen boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open("artifacts/crypto_trend_core/report.json",encoding="utf-8"))
+          if r["prospective_start_utc"] != "2026-09-29T00:00:00+00:00":
+              raise SystemExit("prospective start changed")
+          for key, flag in r["claims"].items():
+              if key.endswith("_authorized") and flag:
+                  raise SystemExit(f"companion exceeded authority: {key}")
+          for series in r["daily_returns"].values():
+              for stamp in series:
+                  if stamp <= r["prospective_start_utc"]:
+                      raise SystemExit("pre-start day scored")
+          print(json.dumps({"status":r["status"],"days":r["forward"]["crypto"]["days"],"funding":r["funding_contribution"]["crypto"]}))
+          PY
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: crypto-trend-core-v1
+          path: artifacts/crypto_trend_core/report.json
+          if-no-files-found: error
