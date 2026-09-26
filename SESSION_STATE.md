@@ -20,12 +20,15 @@
 1. **Scheduled workflows (partly resolved).** Cron fires only from `main`. The user added
    `prospective-8h-evidence-scheduler-bridge-v1.yml` (cron 00/08/16 :25 and :40) and a D4 bridge on
    `main`; they run the regime shadow, VOL8 forward and session-alignment collectors from pinned
-   ref `0966172`, and disable themselves once native workflows reach `main`. Operational monitor,
-   control plane and jev decision are still unscheduled.
+   ref `0966172`, and disable themselves once native workflows reach `main`. PR #114 (open, awaiting
+   user merge) schedules the rest: payoff-geometry forward, jev decision, operational monitor,
+   control plane, and the v3 forward companion.
 2. **Short-side accounting asymmetry.** The canonical ledger compounds shorts as
    constant-notional (`Π(1−r)`) and longs as fixed-quantity. DON8 short ledger-minus-static gap
    p50 −244 bps, p10 −1,029 bps. Fixed-quantity re-score: DON8 short PF 0.87→1.35, EMA8 short PF
-   0.86→1.30, longs identical. Frozen; adopting it needs canonical v3.
+   0.86→1.30, longs identical. `canonical_v3` (fixed quantity between target changes) is implemented
+   and reproduces this; v2 stays bound to frozen protocols. `universal-canonical-v3-forward-companion-v1`
+   is pre-registered (start 2026-09-27T00:00Z): DON8/EMA8/VOL8 forward trades under v2 and v3.
 3. **Effective N is about 16–31 per cell** even for thousands of trades. The raw
    N ≥ 20 sufficiency rule overstates the evidence.
 4. **VOL8 excursion ordering:** 37% of episodes are `SAME_BAR`, so ordering is unobservable.
@@ -37,5 +40,5 @@
 
 ## Next action candidates
 - `collect_evidence`: after the 08:25/08:40Z bridge runs, report the first post-start trades.
-- `ask_user`: whether to schedule operational monitor / control plane / jev decision (finding 1).
-- `ask_user`: whether to start canonical accounting v3 (fixed-quantity shorts).
+- `ask_user`: merge PR #114, then dispatch it once with `all`.
+- `collect_evidence`: after 2026-09-27, report the v3 companion's first trades descriptively.
