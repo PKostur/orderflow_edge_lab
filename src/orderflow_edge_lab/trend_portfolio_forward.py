@@ -57,7 +57,11 @@ def _daily(series: pd.Series) -> pd.Series:
     return series.loc[(series.index.hour == 0) & (series.index.minute == 0)]
 
 
-def sleeve_daily_returns(config: Mapping[str, Any], frames: Mapping[str, pd.DataFrame]) -> pd.DataFrame:
+def sleeve_daily_returns(
+    config: Mapping[str, Any],
+    frames: Mapping[str, pd.DataFrame],
+    funding: Mapping[str, pd.Series] | None = None,
+) -> pd.DataFrame:
     execution = ExecutionModel(
         round_trip_cost_bps=float(config["economics"]["round_trip_cost_bps"]),
         max_abs_position=float(config["economics"]["max_abs_position"]),
@@ -67,7 +71,8 @@ def sleeve_daily_returns(config: Mapping[str, Any], frames: Mapping[str, pd.Data
         strategy = legacy_strategy(str(spec["family"]))
         for symbol in config["source"]["symbols"]:
             result = run_canonical_backtest_v3(
-                frames[symbol], strategy, dict(spec["parameters"]), execution, return_equity=True
+                frames[symbol], strategy, dict(spec["parameters"]), execution, return_equity=True,
+                funding=None if funding is None else funding.get(symbol, pd.Series(dtype=float)),
             )
             equity = result.get("equity_path")
             if equity is None or len(equity) < 2:
@@ -133,9 +138,13 @@ def summarize(returns: pd.Series, *, nw_lags: int) -> dict[str, Any]:
     }
 
 
-def portfolio_series(config: Mapping[str, Any], frames: Mapping[str, pd.DataFrame]) -> dict[str, pd.Series]:
+def portfolio_series(
+    config: Mapping[str, Any],
+    frames: Mapping[str, pd.DataFrame],
+    funding: Mapping[str, pd.Series] | None = None,
+) -> dict[str, pd.Series]:
     symbols = [str(s) for s in config["source"]["symbols"]]
-    sleeves = sleeve_daily_returns(config, frames)
+    sleeves = sleeve_daily_returns(config, frames, funding)
     plain = sleeves.mean(axis=1)
     basket = basket_daily_returns(frames, symbols).reindex(plain.index)
     hedge = config["hedge"]
