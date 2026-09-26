@@ -1,19 +1,20 @@
 name: Branch Forward Scheduler
 
-# GitHub only fires `schedule` triggers from the default branch. The forward
-# shadow, monitor, Jev decision and control-plane workflows live on the research
-# branch, so their own cron entries never run. This keeps each original cadence
-# and dispatches them on the research branch (its code and frozen configs).
+# GitHub only fires `schedule` triggers from the default branch. The prospective
+# 8h and D4 scheduler bridges on `main` already run the regime shadow, VOL8
+# forward, session-alignment and volatility-state-transfer collectors. This
+# workflow covers the forward workflows those bridges do not: payoff-geometry
+# forward, Jev decision, operational monitor and research control plane on the
+# research branch, plus the canonical v3 forward companion on its own branch.
+# Each keeps its original cadence and runs its branch's code unchanged.
 
 on:
   schedule:
     - cron: "20 0,8,16 * * *"
-    - cron: "25 0,8,16 * * *"
-    - cron: "40 0,8,16 * * *"
     - cron: "45 0,8,16 * * *"
+    - cron: "50 0,8,16 * * *"
     - cron: "55 0,8,16 * * *"
     - cron: "5 1,9,17 * * *"
-    - cron: "35 1,7,13,19 * * *"
   workflow_dispatch:
     inputs:
       workflow:
@@ -25,16 +26,12 @@ permissions:
   actions: write
   contents: read
 
-env:
-  TARGET_REF: fix/universal-existing-validation
-  COMPANION_REF: research/payoff-geometry-v1-1
-
 jobs:
   dispatch:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Dispatch forward workflows on the research branch
+      - name: Dispatch forward workflows
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
@@ -42,30 +39,27 @@ jobs:
           REQUESTED: ${{ inputs.workflow }}
         run: |
           set -euo pipefail
-          all="payoff-geometry-forward-v1.yml universal-session-alignment-shadow.yml vol8-payoff-amplitude-forward-v1.yml universal-regime-marginal-pairwise-shadow-v1.yml jev-research-decision.yml universal-shadow-operational-monitor.yml research-control-plane.yml volatility-state-transfer-forward.yml"
+          # workflow file -> ref it runs on (fixed allow-list)
+          declare -A REF=(
+            [payoff-geometry-forward-v1.yml]=fix/universal-existing-validation
+            [jev-research-decision.yml]=fix/universal-existing-validation
+            [universal-shadow-operational-monitor.yml]=fix/universal-existing-validation
+            [research-control-plane.yml]=fix/universal-existing-validation
+            [canonical-v3-forward-companion-v1.yml]=research/payoff-geometry-v1-1
+          )
           case "${SCHEDULE:-manual}" in
             "20 0,8,16 * * *") targets="payoff-geometry-forward-v1.yml" ;;
-            "25 0,8,16 * * *") targets="universal-session-alignment-shadow.yml vol8-payoff-amplitude-forward-v1.yml" ;;
-            "40 0,8,16 * * *") targets="universal-regime-marginal-pairwise-shadow-v1.yml" ;;
             "45 0,8,16 * * *") targets="jev-research-decision.yml" ;;
+            "50 0,8,16 * * *") targets="canonical-v3-forward-companion-v1.yml" ;;
             "55 0,8,16 * * *") targets="universal-shadow-operational-monitor.yml" ;;
             "5 1,9,17 * * *") targets="research-control-plane.yml" ;;
-            "35 1,7,13,19 * * *") targets="volatility-state-transfer-forward.yml" ;;
             manual)
-              if [ "${REQUESTED:-all}" = "all" ]; then targets="$all"; else targets="$REQUESTED"; fi ;;
+              if [ "${REQUESTED:-all}" = "all" ]; then targets="${!REF[*]}"; else targets="$REQUESTED"; fi ;;
             *) echo "unmapped schedule: $SCHEDULE"; exit 1 ;;
           esac
           for wf in $targets; do
-            case " $all " in *" $wf "*) ;; *) echo "not an allowed target: $wf"; exit 1 ;; esac
-            echo "dispatch $wf @ $TARGET_REF"
-            gh workflow run "$wf" --ref "$TARGET_REF"
+            ref="${REF[$wf]:-}"
+            if [ -z "$ref" ]; then echo "not an allowed target: $wf"; exit 1; fi
+            echo "dispatch $wf @ $ref"
+            gh workflow run "$wf" --ref "$ref"
           done
-          # Canonical v3 forward companion lives on its own research branch and
-          # runs with the prospective regime shadow's cadence.
-          case "${SCHEDULE:-manual}" in
-            "40 0,8,16 * * *"|manual)
-              if [ "${SCHEDULE:-manual}" != manual ] || [ "${REQUESTED:-all}" = "all" ]; then
-                echo "dispatch canonical-v3-forward-companion-v1.yml @ $COMPANION_REF"
-                gh workflow run canonical-v3-forward-companion-v1.yml --ref "$COMPANION_REF"
-              fi ;;
-          esac
