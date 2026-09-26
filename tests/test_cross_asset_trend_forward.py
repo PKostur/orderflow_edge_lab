@@ -55,5 +55,29 @@ class CrossAssetTests(unittest.TestCase):
         json.dumps(b, allow_nan=False)
 
 
+class InvVolWatchTests(unittest.TestCase):
+    def _cfg(self) -> dict:
+        return json.loads(
+            Path("config/universal_cross_asset_trend_invvol_forward_v1.json").read_text(encoding="utf-8")
+        )
+
+    def test_same_universe_start_and_signals_as_the_plain_watch(self):
+        plain, inv = _config(), self._cfg()
+        for key in ("groups", "strategies", "prospective_start_utc", "economics"):
+            self.assertEqual(plain[key], inv[key])
+        self.assertEqual(inv["sizing"]["method"], "entry_inverse_vol")
+        self.assertLessEqual(inv["sizing"]["cap"], 1.0)
+
+    def test_sizing_shrinks_exposure_relative_to_plain(self):
+        frames, funding = _inputs(900, 0.0)
+        a = build_report(_config(), frames, funding, as_of="2026-10-20T00:00:00Z")
+        b = build_report(self._cfg(), frames, funding, as_of="2026-10-20T00:00:00Z")
+        self.assertEqual(b["watch_id"], "universal-cross-asset-trend-invvol-forward-v1")
+        # synthetic assets have ~66% vol, so 15% target sizes to ~0.23 and cuts daily volatility
+        va = np.std(list(a["daily_returns"]["combined"].values()))
+        vb = np.std(list(b["daily_returns"]["combined"].values()))
+        self.assertLess(vb, 0.5 * va)
+
+
 if __name__ == "__main__":
     unittest.main()

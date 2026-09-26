@@ -22,6 +22,7 @@ from orderflow_edge_lab.trend_portfolio_forward import (
 )
 
 WATCH_ID = "universal-cross-asset-trend-forward-v1"
+WATCH_IDS = (WATCH_ID, "universal-cross-asset-trend-invvol-forward-v1")
 
 
 class CrossAssetTrendError(ValueError):
@@ -35,7 +36,7 @@ def build_report(
     *,
     as_of: Any,
 ) -> dict[str, Any]:
-    if config.get("watch_id") != WATCH_ID:
+    if config.get("watch_id") not in WATCH_IDS:
         raise CrossAssetTrendError("wrong watch config")
     as_of_ts = _utc(as_of)
     start = _utc(config["prospective_start_utc"])
@@ -75,7 +76,7 @@ def build_report(
     days = forward["combined"]["days"]
     return {
         "schema_version": 1,
-        "watch_id": WATCH_ID,
+        "watch_id": str(config["watch_id"]),
         "status": "PRE_START" if days == 0 else "COLLECTING",
         "as_of_utc": as_of_ts.isoformat(),
         "prospective_start_utc": start.isoformat(),

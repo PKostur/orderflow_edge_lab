@@ -67,8 +67,20 @@ def sleeve_daily_returns(
         max_abs_position=float(config["economics"]["max_abs_position"]),
     )
     columns = {}
+    sizing = config.get("sizing")
     for spec in config["strategies"]:
         strategy = legacy_strategy(str(spec["family"]))
+        if sizing:
+            if sizing.get("method") != "entry_inverse_vol":
+                raise TrendPortfolioError(f"unknown sizing method: {sizing.get('method')}")
+            from orderflow_edge_lab.vol_sizing import vol_sized_strategy
+
+            strategy = vol_sized_strategy(
+                strategy,
+                window=int(sizing["window_bars"]),
+                target_vol=float(sizing["target_annual_vol"]),
+                cap=float(sizing["cap"]),
+            )
         for symbol in config["source"]["symbols"]:
             result = run_canonical_backtest_v3(
                 frames[symbol], strategy, dict(spec["parameters"]), execution, return_equity=True,

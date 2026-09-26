@@ -1,0 +1,60 @@
+name: Cross-Asset Trend InvVol Forward v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/payoff-geometry-v1-1
+    paths:
+      - "src/orderflow_edge_lab/canonical_v3.py"
+      - "src/orderflow_edge_lab/cross_asset_trend_forward.py"
+      - "src/orderflow_edge_lab/trend_portfolio_forward.py"
+      - "config/universal_cross_asset_trend_invvol_forward_v1.json"
+      - "src/orderflow_edge_lab/vol_sizing.py"
+      - "tests/test_cross_asset_trend_forward.py"
+      - ".github/workflows/cross-asset-trend-invvol-forward-v1.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cross-asset-trend-invvol-forward-v1
+  cancel-in-progress: true
+
+jobs:
+  companion:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e ".[research]"
+      - name: Run tests
+        run: python -m unittest tests.test_canonical_v31_funding tests.test_trend_portfolio_forward tests.test_cross_asset_trend_forward tests.test_vol_sizing -v
+      - name: Run forward companion
+        run: python -m orderflow_edge_lab.cross_asset_trend_forward --config config/universal_cross_asset_trend_invvol_forward_v1.json --output artifacts/cross_asset_trend_invvol_forward/report.json
+      - name: Enforce frozen boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open("artifacts/cross_asset_trend_invvol_forward/report.json",encoding="utf-8"))
+          if r["prospective_start_utc"] != "2026-09-28T00:00:00+00:00":
+              raise SystemExit("prospective start changed")
+          for key, flag in r["claims"].items():
+              if key.endswith("_authorized") and flag:
+                  raise SystemExit(f"companion exceeded authority: {key}")
+          for series in r["daily_returns"].values():
+              for stamp in series:
+                  if stamp <= r["prospective_start_utc"]:
+                      raise SystemExit("pre-start day scored")
+          print(json.dumps({"status":r["status"],"days":r["forward"]["combined"]["days"],"funding":r["funding_contribution"]["combined"]}))
+          PY
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: cross-asset-trend-invvol-forward-v1
+          path: artifacts/cross_asset_trend_invvol_forward/report.json
+          if-no-files-found: error
