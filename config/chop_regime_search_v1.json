@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "protocol_id": "chop-regime-search-v1",
+  "status": "DECLARED_BEFORE_EVALUATION",
+  "question": "Is there a strategy that, run only in CHOP-labelled regimes with the trend core elsewhere, beats trend-only in both halves of history?",
+  "registration_note": "Declared 2026-09-27 before any candidate result. Six candidates with textbook or a-priori parameters are all reported; any pass is a forward hypothesis, not a finding.",
+  "regime": "frozen descriptive_regime_labels_v1 trend efficiency (see config/regime_switch_v1.json)",
+  "book": "TREND/MIXED -> frozen DON8+EMA8 core target; CHOP -> candidate target; UNKNOWN -> flat",
+  "candidates": {
+    "C1_bb_meanrev": "bb_mean_reversion 20/2.0, RSI14 30/70, max_hold 20 (reference; failed in regime-switch-v1)",
+    "C2_zscore_reversal": "intraday_reversal lookback 3 bars (1 day), z 1.5, exit |z|<0.15, max_hold 6",
+    "C3_squeeze_breakout": "bb_squeeze_breakout 20/2.0, squeeze_q 0.2 over 200 bars, exit at mid, max_hold 40",
+    "C4_trend_pullback": "trend_pullback EMA 24/96, RSI14 long<40 short>60, exit on EMA cross, max_hold 30",
+    "C5_xs_reversal": "among CHOP coins each bar: long 3 worst, short 3 best 3-bar returns (market neutral)",
+    "C6_funding_carry": "hold the funding-receiving side when |3-day per-8h funding| > 0.01%"
+  },
+  "comparators": {"trend_only": "core everywhere except UNKNOWN", "chop_flat": "core outside CHOP, flat in CHOP"},
+  "economics": {"accounting": "canonical v3.1", "funding": "Binance USDT-M proxy, charged to every book", "round_trip_cost_bps": 20,
+                "sizing": "entry inverse-vol 15% per sleeve, cap 1, 180 bars"},
+  "universe": {"symbols_from": "config/crypto_trend_core_v1.json", "window": ["2020-06-01T00:00:00Z", "2026-09-12T00:00:00Z"]},
+  "halves": [["2020-06-01", "2023-07-01"], ["2023-07-01", "2026-09-12"]],
+  "pass_rule": "combined-book Sharpe > trend_only Sharpe in BOTH halves; reported alongside full-period Sharpe and the candidate's own CHOP-only mean",
+  "multiplicity_note": "6 candidates: with no real effect about 1.5 would beat trend_only in both halves by chance if halves were independent coin flips, so a pass is a forward hypothesis only",
+  "claims": {"strategy_promotion_authorized": false, "live_trading_authorized": false, "verified_out_of_sample_evidence": false}
+}
