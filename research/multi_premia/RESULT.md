@@ -48,3 +48,29 @@ Every neighbour keeps the blend Sharpe at or above 1.6, and above trend alone
 (1.23–1.25). Max drawdown ranges from −13% to −17%. The result is not a knife
 edge. The weakest neighbour is 14-day rebalancing, which slows the
 market-neutral legs.
+
+## Stress tests (descriptive)
+
+**Costs.** At 20, 40 and 60 bps round trip the blend Sharpe is 2.09, 1.94 and
+1.80. It remains strong at three times the assumed cost.
+
+**Crises** (period return; blend vs 70-coin basket):
+
+| Period | Blend | Basket |
+| --- | ---: | ---: |
+| LUNA, May 2022 | +3.0% | −30.7% |
+| FTX, Nov 2022 | −2.3% | −32.1% |
+| May 2021 crash | −5.2% | −48.9% |
+
+In the 10 worst basket weeks (mean −25.7%), the blend averaged +0.7% a week.
+
+**Tails.**
+- Worst day: blend −3.7%; trend −5.4%; XS momentum −14.3%; carry −11.9%.
+- Worst week: blend −4.5%; XS momentum −22%; carry −15.2%.
+- Carry's worst weeks (squeezes): 2020-11-29, 2024-03-03, 2026-07-19,
+  2024-03-10.
+
+**Reading.** Diversification makes the blend far safer than its legs. The
+market-neutral legs carry real squeeze and reversal tails (−15% to −22%
+weeks), so they must never run alone or with leverage. The blend is resilient
+in crypto crashes and tolerant of costs.
