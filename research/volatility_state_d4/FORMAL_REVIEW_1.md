@@ -9,8 +9,10 @@ prospective sample.
 - Gate: at least 5 independent clusters across at least 3 UTC dates, now
   satisfied with 11 clusters over 2026-09-25, 26 and 27. The protocol defines
   no p-value or binary threshold, and none is invented here.
-- Bound snapshot: bridge run 36338618227, collector ref `0966172`, aggregate
-  SHA-256 in `FORMAL_REVIEW_1.json`, and the 11 cluster ids.
+- Bound snapshot: bridge run `36338618227`, collector ref
+  `096617250b9164caafa7e1859aa00d480ea7cce2`, artifact ID `10937803160`,
+  artifact digest `sha256:ad0bb3698587ef90c29a4356046b5c6126e60aa59b9cca01f099e81ea0e8297b`,
+  aggregate SHA-256 in `FORMAL_REVIEW_1.json`, and the 11 cluster ids.
 
 | Measure | Value |
 | --- | --- |
