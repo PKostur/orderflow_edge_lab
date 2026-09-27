@@ -15,6 +15,11 @@ class D4FormalReviewTests(unittest.TestCase):
         agg = json.loads(snap.read_text(encoding="utf-8"))
         self.assertEqual([c["cluster_id"] for c in agg["clusters"]], rec["bound_snapshot"]["cluster_ids"])
         self.assertTrue(agg["review_progress"]["ready_for_review"])
+        cfg = Path("config/volatility_state_transfer_forward_v1.json")
+        self.assertEqual(
+            hashlib.sha256(cfg.read_bytes()).hexdigest(),
+            rec["bound_snapshot"]["frozen_config_sha256"],
+        )
         self.assertEqual(len(rec["bound_snapshot"]["collector_ref"]), 40)
         self.assertEqual(rec["bound_snapshot"]["source_artifact_id"], 10937803160)
         self.assertEqual(rec["bound_snapshot"]["source_artifact_name"], "volatility-state-forward-ledger-v1")
@@ -25,10 +30,27 @@ class D4FormalReviewTests(unittest.TestCase):
 
     def test_conclusion_matches_snapshot(self):
         rec = json.loads(Path("research/volatility_state_d4/FORMAL_REVIEW_1.json").read_text(encoding="utf-8"))
+        snap = Path(rec["bound_snapshot"]["aggregate_file"])
+        agg = json.loads(snap.read_text(encoding="utf-8"))
+        exact_vals = [c["cluster_median_primary_spearman"] for c in agg["clusters"]]
         vals = rec["observed"]["cluster_median_spearman"]
         self.assertEqual(len(vals), 11)
-        self.assertTrue(all(v < 0 for v in vals))
-        self.assertAlmostEqual(statistics.median(vals), rec["observed"]["median_of_cluster_medians"], places=5)
+        self.assertEqual(vals, [round(v, 6) for v in exact_vals])
+        self.assertTrue(all(v < 0 for v in exact_vals))
+        self.assertEqual(rec["observed"]["negative_clusters"], len(exact_vals))
+        self.assertEqual(rec["observed"]["distinct_utc_dates"], agg["distinct_utc_dates"])
+        self.assertEqual(rec["observed"]["eligible_clusters"], agg["eligible_cluster_count"])
+        self.assertAlmostEqual(
+            rec["observed"]["median_of_cluster_medians"],
+            agg["cluster_median_spearman_median"],
+            places=12,
+        )
+        self.assertAlmostEqual(
+            rec["observed"]["median_pooled_within_symbol_rank_correlation"],
+            agg["median_pooled_within_symbol_rank_correlation"],
+            places=12,
+        )
+        self.assertEqual(rec["observed"]["positive_cluster_fraction"], agg["positive_cluster_fraction"])
         self.assertEqual(rec["formal_conclusion"], "NOT_REPLICATED_DIRECTIONALLY")
         self.assertFalse(any(rec["claims"].values()))
         self.assertTrue(rec["lock"]["first_eligible_formal_review_snapshot"])
