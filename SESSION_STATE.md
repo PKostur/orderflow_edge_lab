@@ -129,6 +129,10 @@
   trend-only (0.77 same basis). All reversal types lose; the squeeze breakout nearly passes (0.81, lower drawdown, ties in
   2023–26). Standing aside in chop again costs money. Keep trend-following through chop.
 
+## Untouched-coins holdout v2 (`research/untouched_coins_holdout_v2/RESULT.md`, `97ae976` + amendment `0a864e5`)
+- 53 never-evaluated liquid perps, full history, core design with funding: **PASSED marginally**, Sharpe 0.91, t 2.001.
+  55% of coins positive; gains from 2021/2023, and 2024-26 about flat. Survivorship may flatter. Next: quarterly new-listing holdout.
+
 ## Decisions
 - Workstream D (`universal-market-state-labels-v1`) was not built (post-hoc re-cut of v1 thresholds).
 - Monitor runs pick one action; 2026-09-26 08:05Z run = `collect_evidence` only, no code change.
