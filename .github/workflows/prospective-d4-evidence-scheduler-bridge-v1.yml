@@ -6,8 +6,10 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/prospective-d4-evidence-scheduler-bridge-v1.yml"
-  schedule:
-    - cron: "35 1,7,13,19 * * *"
+
+# Automatic D4 accumulation was stopped after the first preregistered review
+# gate was satisfied by run 36338618227. Manual diagnostic dispatch remains
+# available, but later observations cannot revise Formal Review 1.
 
 permissions:
   contents: read
@@ -67,7 +69,7 @@ jobs:
 
   d4-forward:
     needs: native-workflow-guard
-    if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && needs.native-workflow-guard.outputs.d4 == 'true'
+    if: github.event_name == 'workflow_dispatch' && needs.native-workflow-guard.outputs.d4 == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 35
     concurrency:
