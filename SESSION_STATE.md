@@ -89,7 +89,9 @@
   universe are disclosed post-evidence choices, so it is judged forward only.
 - 180-day sanity gate (mean > 0, max drawdown > −25%, funding within 2x, no integrity failures) → eligible for the
   existing paper/approval gates; authorizes nothing. Historical context: 180-day windows positive 75% of the time.
-- Scheduling is in PR #117 (awaiting user merge).
+- Scheduling is in PR #117 (awaiting user merge), which also schedules the vol-target companion.
+- `crypto-trend-core-voltarget-v1` (`19f8bb6`, start 2026-09-29): same book plus a portfolio vol target (12%, 60-day, max 3x,
+  weekly). 12% is disclosed as chosen for the measured 1.25x overshoot. Latest leverage 0.90.
 
 ## Human-constrained work (`research/human_constrained/RESULTS.md`, `457a0b0`)
 - Markowitz on 51 sleeves does not beat equal weight (0.74 vs 0.74, deeper drawdown, 70x turnover); not adopted.
