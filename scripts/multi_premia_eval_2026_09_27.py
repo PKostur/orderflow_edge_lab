@@ -87,7 +87,8 @@ books = books[(books != 0).all(axis=1).cumsum() > 0]
 vol = books.rolling(90, min_periods=60).std().shift(1)
 inv = (1.0 / vol).where(np.isfinite(1.0 / vol))
 w = inv.div(inv.sum(axis=1), axis=0)
-w = w.where(w.index.dayofweek == 0).ffill()
+w.loc[w.index.dayofweek != 0] = np.nan  # rebalance weights on Mondays only
+w = w.ffill()
 s4 = (w * books).sum(axis=1).where(w.notna().all(axis=1)).dropna()
 books = books.loc[s4.index]
 books["S4"] = s4
