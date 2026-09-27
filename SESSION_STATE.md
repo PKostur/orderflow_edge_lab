@@ -133,6 +133,10 @@
 - 53 never-evaluated liquid perps, full history, core design with funding: **PASSED marginally**, Sharpe 0.91, t 2.001.
   55% of coins positive; gains from 2021/2023, and 2024-26 about flat. Survivorship may flatter. Next: quarterly new-listing holdout.
 
+## Ensemble and new-listing holdout
+- `trend-horizon-ensemble-v1` (`43976bb`): 6-horizon average vs core, NOT adopted (fails the both-halves rule; differences small).
+- `new-listing-holdout-v1` registered; first batch due 2027-03-12; scheduling in PR #118 (awaiting merge).
+
 ## Decisions
 - Workstream D (`universal-market-state-labels-v1`) was not built (post-hoc re-cut of v1 thresholds).
 - Monitor runs pick one action; 2026-09-26 08:05Z run = `collect_evidence` only, no code change.
