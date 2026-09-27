@@ -137,6 +137,10 @@
 - `trend-horizon-ensemble-v1` (`43976bb`): 6-horizon average vs core, NOT adopted (fails the both-halves rule; differences small).
 - `new-listing-holdout-v1` registered; first batch due 2027-03-12; scheduling in PR #118 (awaiting merge).
 
+## Multi-premia (`research/multi_premia/RESULT.md`, declared `c7b80d6`): ALL PASS, best result so far
+- 70 coins 2020-26: trend 1.23; cross-sectional momentum 0.90 (t 2.20); funding carry 1.63 (t 3.48); **equal-risk blend 2.09 (t 4.48), max drawdown −14%**,
+  beating trend in both halves. Correlations ≤ 0.30. Carry is valid with real MEXC funding and mostly price-driven. Next: forward-register the blend.
+
 ## Decisions
 - Workstream D (`universal-market-state-labels-v1`) was not built (post-hoc re-cut of v1 thresholds).
 - Monitor runs pick one action; 2026-09-26 08:05Z run = `collect_evidence` only, no code change.
