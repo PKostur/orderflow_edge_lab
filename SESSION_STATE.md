@@ -141,6 +141,11 @@
 - 70 coins 2020-26: trend 1.23; cross-sectional momentum 0.90 (t 2.20); funding carry 1.63 (t 3.48); **equal-risk blend 2.09 (t 4.48), max drawdown −14%**,
   beating trend in both halves. Correlations ≤ 0.30. Carry is valid with real MEXC funding and mostly price-driven. Forward watch `multi-premia-blend-v1` registered (start 2026-09-29, real MEXC funding); scheduled: PRs #118 and #119 merged. Robustness: all 8 neighbours keep blend Sharpe 1.6–2.2 (> trend 1.23), so not a knife edge. Stress: Sharpe 2.09/1.94/1.80 at 20/40/60 bps; LUNA +3%, FTX −2%, May-21 −5% vs basket −31/−32/−49%; worst blend week −4.5%, but legs alone −15 to −22%.
 
+## D4 formal review 1 (on `fix/universal-existing-validation`, `research/volatility_state_d4/FORMAL_REVIEW_1.md`)
+- Gate met (11 clusters over 3 UTC dates). All 11 cluster median Spearman values are negative (median −0.178), so the hypothesis is
+  NOT REPLICATED directionally. Bound to run 36338618227 (aggregate SHA-256 8752bbec…); later clusters are post-review only.
+  D4 is not a strategy foundation.
+
 ## Decisions
 - Workstream D (`universal-market-state-labels-v1`) was not built (post-hoc re-cut of v1 thresholds).
 - Monitor runs pick one action; 2026-09-26 08:05Z run = `collect_evidence` only, no code change.
