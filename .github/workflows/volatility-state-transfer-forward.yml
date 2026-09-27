@@ -14,8 +14,9 @@ on:
       - "config/volatility_state_transfer_forward_v1.json"
       - ".github/workflows/volatility-state-transfer-forward.yml"
       - "pyproject.toml"
-  schedule:
-    - cron: "35 1,7,13,19 * * *"
+  # Automatic collection stopped after Formal Review 1 reached the frozen
+  # 5-cluster / 3-UTC-date gate. workflow_dispatch remains for post-review
+  # diagnostics, which cannot revise the locked first formal conclusion.
 
 permissions:
   contents: read
