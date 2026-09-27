@@ -32,3 +32,19 @@ result so far and comes from diversification, not tuning. Caveats: all data
 is seen except S2's rules on the 53 coins; survivorship in the coin list; the
 market-neutral legs have large standalone drawdowns (−44%) and short-squeeze
 tail risk. Next: a forward registration of the S4 book.
+
+## Robustness (declared in `multi-premia-robustness-v1`; not used for selection)
+
+One dimension at a time around the frozen point:
+
+| Varied | Values | Blend Sharpe |
+| --- | --- | --- |
+| XS momentum lookback | 14 / 30 / 60 days | 2.08 / 2.09 / 1.91 |
+| Carry lookback | 3 / 7 / 14 days | 2.10 / 2.09 / 1.97 |
+| Rebalance | 3 / 7 / 14 days | 1.88 / 2.09 / 1.60 |
+| Quantile | 0.20 / 0.25 / 0.33 | 1.95 / 2.09 / 2.16 |
+
+Every neighbour keeps the blend Sharpe at or above 1.6, and above trend alone
+(1.23–1.25). Max drawdown ranges from −13% to −17%. The result is not a knife
+edge. The weakest neighbour is 14-day rebalancing, which slows the
+market-neutral legs.

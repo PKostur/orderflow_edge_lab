@@ -139,7 +139,7 @@
 
 ## Multi-premia (`research/multi_premia/RESULT.md`, declared `c7b80d6`): ALL PASS, best result so far
 - 70 coins 2020-26: trend 1.23; cross-sectional momentum 0.90 (t 2.20); funding carry 1.63 (t 3.48); **equal-risk blend 2.09 (t 4.48), max drawdown −14%**,
-  beating trend in both halves. Correlations ≤ 0.30. Carry is valid with real MEXC funding and mostly price-driven. Forward watch `multi-premia-blend-v1` registered (start 2026-09-29, real MEXC funding); scheduling in PR #119 (#118 merged: new-listing holdout scheduled).
+  beating trend in both halves. Correlations ≤ 0.30. Carry is valid with real MEXC funding and mostly price-driven. Forward watch `multi-premia-blend-v1` registered (start 2026-09-29, real MEXC funding); scheduled: PRs #118 and #119 merged. Robustness: all 8 neighbours keep blend Sharpe 1.6–2.2 (> trend 1.23), so not a knife edge.
 
 ## Decisions
 - Workstream D (`universal-market-state-labels-v1`) was not built (post-hoc re-cut of v1 thresholds).
