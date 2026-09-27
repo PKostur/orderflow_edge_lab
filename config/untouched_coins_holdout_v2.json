@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "protocol_id": "untouched-coins-holdout-v2",
+  "status": "FROZEN_BEFORE_EVALUATION",
+  "question": "Does the frozen crypto-trend-core design (DON8 + EMA8, entry inverse-vol sizing, v3.1 with funding, 20 bps) earn positive net returns on liquid crypto perps that no repository protocol has evaluated, over their full history to the freeze?",
+  "registration_note": "Registered 2026-09-27 before any strategy result on these coins was computed. Selection used only MEXC contract metadata and 24h turnover. Some coins' prices (no strategy results) appeared in the 2026-09-26 effective-bets correlation study.",
+  "evaluation_rule": "run exactly once from a commit containing this file",
+  "selection_rule": {
+    "pool": "top 100 MEXC USDT perps by 24h turnover on 2026-09-27",
+    "exclude_zones": "tradfi, stock, stockindex, Forex, Commodities, metals",
+    "exclude_used": "the 17 crypto-trend-core coins and any symbol referenced by another repository protocol",
+    "min_history": "listed at least 365 days before 2026-09-12",
+    "excluded_as_used_elsewhere": {
+      "ARB_USDT": [
+        "config/volatility_state_transfer_forward_v1.json",
+        "docs/VOLATILITY_STATE_D4_FORWARD_V1.md"
+      ],
+      "FILECOIN_USDT": [
+        "config/volatility_state_transfer_forward_v1.json",
+        "docs/VOLATILITY_STATE_D4_FORWARD_V1.md"
+      ],
+      "NEAR_USDT": [
+        "config/volatility_state_transfer_forward_v1.json",
+        "docs/VOLATILITY_STATE_D4_FORWARD_V1.md"
+      ]
+    },
+    "result_count": 53
+  },
+  "survivorship_caveat": "selecting by current turnover favours surviving, popular coins; delisted coins are unavailable from MEXC. Per-coin breadth is reported so this bias can be judged.",
+  "window": {
+    "start": "2020-06-01T00:00:00Z",
+    "end_exclusive": "2026-09-12T00:00:00Z"
+  },
+  "source": {
+    "venue": "MEXC Futures",
+    "interval": "8h",
+    "symbols": [
+      "TAO_USDT",
+      "QNT_USDT",
+      "PEPE_USDT",
+      "WLD_USDT",
+      "AVAX_USDT",
+      "ONDO_USDT",
+      "HYPE_USDT",
+      "SEI_USDT",
+      "AAVE_USDT",
+      "XPL_USDT",
+      "PUMPFUN_USDT",
+      "XLM_USDT",
+      "FET_USDT",
+      "INJ_USDT",
+      "TIA_USDT",
+      "KAS_USDT",
+      "FARTCOIN_USDT",
+      "ICP_USDT",
+      "ATOM_USDT",
+      "BR_USDT",
+      "HBAR_USDT",
+      "ORDI_USDT",
+      "SHIB_USDT",
+      "VIRTUAL_USDT",
+      "APT_USDT",
+      "RARE_USDT",
+      "PHA_USDT",
+      "OP_USDT",
+      "JUP_USDT",
+      "RENDER_USDT",
+      "PENGU_USDT",
+      "TRUMPOFFICIAL_USDT",
+      "AKE_USDT",
+      "GRASS_USDT",
+      "LDO_USDT",
+      "PYTH_USDT",
+      "XMR_USDT",
+      "JTO_USDT",
+      "AR_USDT",
+      "ZRO_USDT",
+      "WLFI_USDT",
+      "RUNE_USDT",
+      "ZEN_USDT",
+      "NIL_USDT",
+      "GALA_USDT",
+      "CRV_USDT",
+      "WIF_USDT",
+      "ETHFI_USDT",
+      "EIGEN_USDT",
+      "LSK_USDT",
+      "POL_USDT",
+      "CFX_USDT",
+      "AERO_USDT"
+    ]
+  },
+  "strategies": [
+    {
+      "audit_id": "DON8",
+      "family": "donchian_breakout",
+      "parameters": {
+        "lookback": 55
+      }
+    },
+    {
+      "audit_id": "EMA8",
+      "family": "ema_tsmom",
+      "parameters": {
+        "fast": 24,
+        "slow": 96,
+        "min_atr_spread": 0.25
+      }
+    }
+  ],
+  "sizing": {
+    "method": "entry_inverse_vol",
+    "window_bars": 180,
+    "target_annual_vol": 0.15,
+    "cap": 1.0,
+    "bars_per_year": 1095
+  },
+  "economics": {
+    "accounting": "canonical_v3.1",
+    "round_trip_cost_bps": 20,
+    "max_abs_position": 1,
+    "funding": "Binance USDT-M history (symbol or 1000-prefixed) where available, otherwise MEXC history (from 2025-04); coverage reported per coin",
+    "portfolio": "equal capital across sleeves with data that day, rebalanced daily"
+  },
+  "hypotheses": {
+    "primary": {
+      "series": "combined portfolio daily net return",
+      "test": "Newey-West t (5 lags)",
+      "pass_rule": "mean > 0 and t >= 2.0"
+    },
+    "secondary_descriptive": [
+      "unsized (+/-1) version",
+      "per-year returns",
+      "share of coins with positive total sleeve return",
+      "per-strategy Sharpe"
+    ]
+  },
+  "claims": {
+    "strategy_definitions_modified": false,
+    "strategy_promotion_authorized": false,
+    "live_trading_authorized": false
+  }
+}
