@@ -16,8 +16,9 @@ class D4FormalReviewTests(unittest.TestCase):
         self.assertEqual([c["cluster_id"] for c in agg["clusters"]], rec["bound_snapshot"]["cluster_ids"])
         self.assertTrue(agg["review_progress"]["ready_for_review"])
         cfg = Path("config/volatility_state_transfer_forward_v1.json")
+        canonical_cfg = cfg.read_text(encoding="utf-8").replace("\r\n", "\n").encode("utf-8")
         self.assertEqual(
-            hashlib.sha256(cfg.read_bytes()).hexdigest(),
+            hashlib.sha256(canonical_cfg).hexdigest(),
             rec["bound_snapshot"]["frozen_config_sha256"],
         )
         self.assertEqual(len(rec["bound_snapshot"]["collector_ref"]), 40)
