@@ -16,7 +16,7 @@ from orderflow_edge_lab.canonical_v3 import run_canonical_backtest_v3
 from orderflow_edge_lab.mexc_history import fetch_mexc_futures_klines
 from orderflow_edge_lab.trend_exits import core_strategy
 from orderflow_edge_lab.trend_portfolio_forward import _daily, summarize
-from orderflow_edge_lab.universal_backtest import ExecutionModel
+from orderflow_edge_lab.universal_backtest import ExecutionModel, UniversalBacktestError
 from orderflow_edge_lab.vol_sizing import vol_sized_strategy
 
 cfg = json.load(open("config/untouched_coins_holdout_v2.json", encoding="utf-8"))
@@ -74,13 +74,19 @@ sized = vol_sized_strategy(core, window=int(sz["window_bars"]), target_vol=float
                            cap=float(sz["cap"]), bars_per_year=int(sz["bars_per_year"]))
 ex_m = ExecutionModel(round_trip_cost_bps=float(cfg["economics"]["round_trip_cost_bps"]))
 cols, cols_pm, coin_total, coverage = {}, {}, {}, {}
+bankrupt_pm: list[str] = []
 for s, f in frames.items():
     r = run_canonical_backtest_v3(f, sized, {}, ex_m, return_equity=True, funding=funding[s])
     cols[s] = _daily(r["equity_path"].iloc[:-1]).pct_change()
     coin_total[s] = float(r["total_return"])
     coverage[s] = r["accounting"].get("funding_coverage")
-    rp = run_canonical_backtest_v3(f, core, {}, ex_m, return_equity=True, funding=funding[s])
-    cols_pm[s] = _daily(rp["equity_path"].iloc[:-1]).pct_change()
+    try:
+        rp = run_canonical_backtest_v3(f, core, {}, ex_m, return_equity=True, funding=funding[s])
+        cols_pm[s] = _daily(rp["equity_path"].iloc[:-1]).pct_change()
+    except UniversalBacktestError:
+        # Amendment (before any result was seen): an unsized +/-1 sleeve whose equity reaches zero
+        # is reported as bankrupt and excluded from the secondary; the primary is unaffected.
+        bankrupt_pm.append(s)
 
 
 def port(c):
@@ -97,7 +103,7 @@ out = {
     "symbols_missing": sorted(set(cfg["source"]["symbols"]) - set(frames)),
     "funding_source": sources, "funding_coverage": coverage,
     "primary": {**primary, "pass_rule": cfg["hypotheses"]["primary"]["pass_rule"], "passed": passed},
-    "secondary": {"plus_minus_one": summarize(dpm, nw_lags=5),
+    "secondary": {"plus_minus_one": summarize(dpm, nw_lags=5), "plus_minus_one_bankrupt_sleeves": bankrupt_pm,
                   "per_year": {str(y): float((1 + x).prod() - 1) for y, x in d.groupby(d.index.year)},
                   "share_coins_positive": float(np.mean([v > 0 for v in coin_total.values()])),
                   "coin_total_return_quantiles": [float(q) for q in np.quantile(list(coin_total.values()), [0.1, 0.25, 0.5, 0.75, 0.9])]},
