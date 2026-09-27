@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "review_id": "volatility-state-transfer-forward-v1-formal-review-1",
+  "watch_id": "volatility-state-transfer-forward-v1",
+  "reviewed_at_utc": "2026-09-27T18:30:00Z",
+  "gate": {
+    "minimum_independent_clusters": 5,
+    "minimum_distinct_utc_dates": 3,
+    "ready_for_review": true,
+    "note": "The frozen protocol defines only this sample gate; it defines no numerical p-value or binary threshold, and none is invented here."
+  },
+  "bound_snapshot": {
+    "source_run_id": 36338618227,
+    "source_workflow": "Prospective D4 Evidence Scheduler Bridge v1",
+    "source_run_head_sha": "1beb91e60d646948840554ebf966925db955c115",
+    "collector_ref": "0966172",
+    "aggregate_file": "research/volatility_state_d4/review_snapshot_aggregate_run36338618227.json",
+    "aggregate_sha256": "8752bbecff039a8d14fe25e80d8e06f4d8c6b4f445cac163f3a84a71e1183e8e",
+    "frozen_config_sha256": "30eb5956ccf840e58d08eb0be146614da4a61086b9f5d45e13b80f9d92c64f7a",
+    "cluster_ids": [
+      "gha-36144801023-attempt-1",
+      "gha-36146173561-attempt-1",
+      "gha-36147836217-attempt-1",
+      "gha-36153161274-attempt-1",
+      "gha-36223825709-attempt-1",
+      "gha-36241613666-attempt-1",
+      "gha-36258688259-attempt-1",
+      "gha-36275172448-attempt-1",
+      "gha-36301496852-attempt-1",
+      "gha-36321618350-attempt-1",
+      "gha-36338618227-attempt-1"
+    ]
+  },
+  "hypothesis": "higher local_range_to_spread_15s ranks higher subsequent volatility_expansion_ratio_60s (positive rank relationship)",
+  "observed": {
+    "eligible_clusters": 11,
+    "distinct_utc_dates": [
+      "2026-09-25",
+      "2026-09-26",
+      "2026-09-27"
+    ],
+    "cluster_median_spearman": [
+      -0.030234,
+      -0.0851,
+      -0.385348,
+      -0.15667,
+      -0.334162,
+      -0.112942,
+      -0.275602,
+      -0.190576,
+      -0.316602,
+      -0.083142,
+      -0.177821
+    ],
+    "median_of_cluster_medians": -0.1778207674054945,
+    "median_pooled_within_symbol_rank_correlation": -0.1772577801971812,
+    "positive_cluster_fraction": 0.0,
+    "negative_clusters": 11
+  },
+  "formal_conclusion": "NOT_REPLICATED_DIRECTIONALLY",
+  "conclusion_text": "The frozen positive D4 rank relationship did not replicate directionally in the completed prospective sample: all 11 eligible clusters (3 UTC dates, 6 symbols each) show a negative median Spearman.",
+  "descriptive_context_not_preregistered": "Under a null of symmetric cluster signs, 11/11 negative has a two-sided sign-test probability of about 0.001. Reported as context only; it was not a pre-registered decision rule.",
+  "scope": "State-prediction experiment only; says nothing about strategy PnL.",
+  "consequences": [
+    "Do not use the D4 relationship as a foundation for any strategy candidate.",
+    "Any reuse requires a completely new, independently specified hypothesis and version; the reversed sign observed here must not be adopted post hoc as a new hypothesis on this sample."
+  ],
+  "post_review_policy": "This review is bound to the 11 cluster ids above. Clusters accumulated after this snapshot are reported as post-review accumulation and cannot revise this first formal conclusion.",
+  "claims": {
+    "strategy_promotion_authorized": false,
+    "live_trading_authorized": false,
+    "leverage_authorized": false
+  }
+}
