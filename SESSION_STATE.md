@@ -164,3 +164,7 @@
   correlation to the crypto factor (target effective N ≥ 6), with the same frozen rules and daily-P&L protocol.
 - `collect_evidence`: after the 08:25/08:40Z bridge runs, report the first post-start trades.
 - `collect_evidence`: after 2026-09-27, report the v3 companion's first trades descriptively.
+
+## Multi-premia human (`research/multi_premia_human/RESULT.md`, declared `e938530`): H5 PASSES
+- Daily 08 UTC check-in, top-5 coins: Sharpe 1.19, t 2.65, DD −31% (V_ALL same timing 1.75, DD −12%; H10 1.40). Recent half weak
+  (0.66; 2025 −2%, 2026 −24%). Next: forward-only registration of H5; no promotion.
