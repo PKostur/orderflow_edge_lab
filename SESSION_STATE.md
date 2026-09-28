@@ -16,6 +16,7 @@
 | v3 forward companion | today | PRE_START (starts 2026-09-27) | 0 / 0 / 0 |
 
 - Monitor 2026-09-28 ~08:00Z: no forward days yet. All scheduled runs green. trend-portfolio/cross-asset/invvol ran 06:47–07:18Z: status PRE_START, 0 complete days (started 09-28 00:00Z). Core/voltarget/multi-premia: no runs since 09-27, PRE_START (09-29). v3 companion COLLECTING, day 1, 0 trades. Regime shadow day 2, 0·0 for all. D4: main push 36354216176 ("Stop automatic D4 collection after locked formal review") skipped d4-forward, so there are no post-review clusters. New-listing not due. Non-scheduled: PR #113 CI `efa8447` failed on Windows only (D4 review snapshot hash); fixed by `db09888`, now green.
+- Monitor 2026-09-28 07:46Z: nothing new. Core 36392716890 / voltarget 36392943826 (07:38/07:40Z) PRE_START (09-29); all other watches match the previous line; no failures; D4 has no post-review clusters; new-listing has no runs.
 - Only open post-start episode: DON8 LINK LONG from 2026-09-25 16:00Z, pre-entry vol HIGH, currently +160 bps net (MFE 258, MAE −122). Open, so not scored.
 - Direction mix: DON8 long 10/10, EMA8 long 10/10, VOL8 long 9/10 (1 flat); no shorts. The book is effectively one long crypto-beta bet, so short-side and v3 evidence will be slow to arrive.
 - Jev and control plane: offline deterministic provider, action `collect_more_evidence` / `ACCUMULATE_UNCHANGED`.
