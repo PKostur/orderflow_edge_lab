@@ -168,3 +168,5 @@
 ## Multi-premia human (`research/multi_premia_human/RESULT.md`, declared `e938530`): H5 PASSES
 - Daily 08 UTC check-in, top-5 coins: Sharpe 1.19, t 2.65, DD −31% (V_ALL same timing 1.75, DD −12%; H10 1.40). Recent half weak
   (0.66; 2025 −2%, 2026 −24%). Forward watch registered (same workflow as the blend, start 09-29); no promotion.
+- Untouched holdout (`research/multi_premia_untouched/RESULT.md`, `1014716`, run once, 60 unused coins): **blend PASSES**, Sharpe 1.39,
+  t 3.16, DD −11%, halves 1.41/1.37. Carry alone fails (t 0.9). H5 human book fails (0.60, t 1.40): concentration is the weak link.
