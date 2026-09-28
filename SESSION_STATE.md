@@ -23,7 +23,7 @@
 - Monitor task `orderflow-research-monitor`: 01:30/09:30/17:30 local; reads all watches incl. `human_report.json`.
 
 ## Open issues
-- Cross-Sectional Independent Venue Replication fails every run (Bybit 403 on GitHub runners); needs another source (user decision).
+- Bybit venue replication (403 on GitHub runners) is superseded by `cross-sectional-okx-replication-v1` (green; D2 independent venue, descriptive transfer only).
 - numpy capped `<2.6` on forward branches; bridges on ref `0966172` still allow numpy <3.
 - Old 10-coin book is all long (crypto beta); short-side/v3 forward evidence will be slow. Effective N per cell is ~16–31.
 
@@ -44,4 +44,4 @@
 
 ## Next action candidates
 - `collect_evidence`: first forward days from the ~06:45–08:30 UTC runs on 09-29/09-30.
-- Optional (user): alternative data source for the Bybit replication; a fresh independent premium (basis, OI) registered forward-only.
+- `xs-low-vol-v1` declared: evaluate dev (70 coins) then confirmation (60 coins) once.

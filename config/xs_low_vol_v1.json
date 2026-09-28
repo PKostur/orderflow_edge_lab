@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "protocol_id": "xs-low-vol-v1",
+  "status": "DECLARED_BEFORE_EVALUATION",
+  "question": "Does a market-neutral low-volatility premium (long low-vol coins, short high-vol coins, beta-balanced) earn positive net returns, and does adding it as a fourth equal-risk leg improve the multi-premia blend?",
+  "registration_note": "Declared 2026-09-28 before any result of this signal on any coin. Parameters are a priori (60-day vol, weekly, quartiles, same as the other legs). Basis was not chosen because funding is derived from it (would duplicate the carry leg); OI history is not available.",
+  "signal": {
+    "score": "minus trailing 60-day stdev of daily open-to-open returns, using days strictly before d",
+    "portfolio": "long lowest-vol quartile, short highest-vol quartile",
+    "beta_balance": "long and short sides each scaled to unit ex-ante vol (inverse of their average trailing vol), then the book normalised to 1.0x gross",
+    "rebalance_days": 7,
+    "quantile": 0.25,
+    "min_names": 8
+  },
+  "economics": {"round_trip_cost_bps": 20, "funding": "Binance proxy, charged on held weights"},
+  "samples": {
+    "development": "the 70 multi-premia-v1 coins, 2020-06-01 to 2026-09-12 (cached data)",
+    "confirmation": "the 60 multi-premia-untouched-holdout-v1 coins, same window; run once after development"
+  },
+  "halves": [["2020-06-01", "2023-07-01"], ["2023-07-01", "2026-09-12"]],
+  "pass_rules": {
+    "standalone": "on BOTH samples: mean > 0, Newey-West t >= 2 (development) and t >= 1.5 (confirmation), Sharpe > 0 in both halves",
+    "blend_addition": "on BOTH samples: 4-leg equal-risk blend Sharpe > 3-leg blend Sharpe"
+  },
+  "if_passed": "register a forward watch only; no change to multi-premia-blend-v1",
+  "claims": {"strategy_promotion_authorized": false, "live_trading_authorized": false, "leverage_authorized": false}
+}
