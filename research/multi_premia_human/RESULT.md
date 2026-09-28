@@ -19,3 +19,8 @@ Per year, H5: 2021 +107%, 2022 +26%, 2023 +79%, 2024 +41%, 2025 −2%, 2026 −2
   (0.66; 2025–26 negative). The edge now depends on a few names, so H5 is a much riskier book than the blend.
 - Monotone in K: each extra coin helps. A human who can manage 10 positions keeps noticeably more (1.40, halves both > 1).
 - No further tuning; next step is forward-only (pre-register H5 alongside the blend watch), not promotion.
+
+## Forward registration (2026-09-28, before the 2026-09-29 start)
+- `multi_premia_human_forward.py` scores V_ALL / H5 / H10 from the frozen `multi-premia-blend-v1` config and start
+  (2026-09-29), in the same workflow run as the blend. Judged at 180 days, same review as the blend; H5 is the primary book.
+  The report includes `latest_book` (the coins and weights a human would hold), descriptive only.

@@ -9,6 +9,7 @@ on:
       - "src/orderflow_edge_lab/multi_premia_forward.py"
       - "src/orderflow_edge_lab/xs_premia.py"
       - "config/multi_premia_blend_v1.json"
+      - "src/orderflow_edge_lab/multi_premia_human_forward.py"
       - ".github/workflows/multi-premia-blend-v1.yml"
 
 permissions:
@@ -30,28 +31,33 @@ jobs:
       - name: Install
         run: python -m pip install -e ".[research]"
       - name: Tests
-        run: python -m unittest tests.test_xs_premia tests.test_multi_premia_forward -v
+        run: python -m unittest tests.test_xs_premia tests.test_multi_premia_forward tests.test_multi_premia_human_forward -v
       - name: Run forward watch
         run: python -m orderflow_edge_lab.multi_premia_forward --output artifacts/multi_premia_blend/report.json
+      - name: Run human-constrained forward watch (multi-premia-human-v1)
+        run: python -m orderflow_edge_lab.multi_premia_human_forward --output artifacts/multi_premia_blend/human_report.json
       - name: Enforce frozen boundary
         run: |
           python - <<'PY'
           import json
-          r=json.load(open("artifacts/multi_premia_blend/report.json",encoding="utf-8"))
-          if r["prospective_start_utc"] != "2026-09-29T00:00:00+00:00":
-              raise SystemExit("prospective start changed")
-          for key, flag in r["claims"].items():
-              if key.endswith("_authorized") and flag:
-                  raise SystemExit(f"watch exceeded authority: {key}")
-          for series in r["daily_returns"].values():
-              for stamp in series:
-                  if stamp <= r["prospective_start_utc"]:
-                      raise SystemExit("pre-start day scored")
-          print(json.dumps({"status":r["status"],"coins":r["coins_with_data"],"missing":r["missing_symbols"]}))
+          for path in ("artifacts/multi_premia_blend/report.json", "artifacts/multi_premia_blend/human_report.json"):
+            r=json.load(open(path,encoding="utf-8"))
+            if r["prospective_start_utc"] != "2026-09-29T00:00:00+00:00":
+                raise SystemExit("prospective start changed")
+            for key, flag in r["claims"].items():
+                if key.endswith("_authorized") and flag:
+                    raise SystemExit(f"watch exceeded authority: {key}")
+            for series in r["daily_returns"].values():
+                for stamp in series:
+                    if stamp <= r["prospective_start_utc"]:
+                        raise SystemExit("pre-start day scored")
+            print(json.dumps({"status":r["status"],"coins":r["coins_with_data"],"missing":r["missing_symbols"]}))
           PY
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: multi-premia-blend-v1
-          path: artifacts/multi_premia_blend/report.json
+          path: |
+            artifacts/multi_premia_blend/report.json
+            artifacts/multi_premia_blend/human_report.json
           if-no-files-found: error

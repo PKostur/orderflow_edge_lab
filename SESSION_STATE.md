@@ -167,4 +167,4 @@
 
 ## Multi-premia human (`research/multi_premia_human/RESULT.md`, declared `e938530`): H5 PASSES
 - Daily 08 UTC check-in, top-5 coins: Sharpe 1.19, t 2.65, DD −31% (V_ALL same timing 1.75, DD −12%; H10 1.40). Recent half weak
-  (0.66; 2025 −2%, 2026 −24%). Next: forward-only registration of H5; no promotion.
+  (0.66; 2025 −2%, 2026 −24%). Forward watch registered (same workflow as the blend, start 09-29); no promotion.
