@@ -1,174 +1,47 @@
-# Session state (updated 2026-09-28 ~08:00Z)
+# Session state (updated 2026-09-28 22:45Z)
 
 ## Branches
-| Branch | Head | Status |
-| --- | --- | --- |
-| `fix/universal-existing-validation` | `0966172` | PR #113, draft; CI green 2026-09-25 18:42Z; no new runs |
-| `research/payoff-geometry-v1-1` | see `git log` | v1.1 payoff geometry; CI green (last run 36228586717) |
-| `main` | `d1cde34` | PR #114 merged: branch-forward-scheduler live; scheduled workflows green through 07:54Z; 8h and D4 scheduler bridges active |
+| Branch | Status |
+| --- | --- |
+| `fix/universal-existing-validation` | PR #113, draft, never merge; D4 formal review lives here |
+| `research/payoff-geometry-v1-1` | all research below; CI green |
+| `main` | `branch-forward-scheduler` dispatches branch watches (cron only fires from main); 8h bridge runs old watches from ref `0966172` |
 
-## Forward evidence (descriptive only)
-| Watch | Last run | Status | DON8 / EMA8 / VOL8 completed · open |
+## Forward watches (descriptive only; verdicts only at each review horizon)
+| Watch | Start | Status 09-28 | Review |
 | --- | --- | --- | --- |
-| regime marginal pairwise shadow v1 (8h bridge, ref `0966172`) | 05:24Z | ACCUMULATING, day 0 | 0·0 / 0·0 / 0·0 |
-| payoff-geometry forward v1 (fixed in `cef1490`) | 09:49Z | ACCUMULATING, day 0 | 0·1 / 0·0 / – |
-| session-alignment (control plane 08:55Z) | 08:55Z | WAITING_FOR_COMPLETIONS | 0·1 / 0·0 / 0·0 |
-| v3 forward companion | today | PRE_START (starts 2026-09-27) | 0 / 0 / 0 |
+| `multi-premia-blend-v1` (lead candidate) | 09-29 | PRE_START, 70 coins | 180 days |
+| `multi-premia-human-v1-forward` (H5/H10/V_ALL, same workflow) | 09-29 | PRE_START; H5 book DASH/LSK/PHA/WLFI/ZEC | 180 days |
+| `crypto-trend-core-v1`, `-voltarget-v1` | 09-29 | PRE_START | 180-day sanity gate |
+| trend-portfolio, cross-asset, cross-asset-invvol | 09-28 | PRE_START (first full day scores 09-29) | per config |
+| v3 forward companion | 09-27 | COLLECTING, 0 trades | per config |
+| regime shadow / payoff-geometry / session-alignment (8h bridge) | 09-25 | green; only open episode DON8 LINK long | per config |
+| `new-listing-holdout-v1` | quarterly | first batch 2027-03-12 | – |
 
-- Monitor 2026-09-28 ~08:00Z: no forward days yet. All scheduled runs green. trend-portfolio/cross-asset/invvol ran 06:47–07:18Z: status PRE_START, 0 complete days (started 09-28 00:00Z). Core/voltarget/multi-premia: no runs since 09-27, PRE_START (09-29). v3 companion COLLECTING, day 1, 0 trades. Regime shadow day 2, 0·0 for all. D4: main push 36354216176 ("Stop automatic D4 collection after locked formal review") skipped d4-forward, so there are no post-review clusters. New-listing not due. Non-scheduled: PR #113 CI `efa8447` failed on Windows only (D4 review snapshot hash); fixed by `db09888`, now green.
-- Monitor 2026-09-28 07:46Z: nothing new. Core 36392716890 / voltarget 36392943826 (07:38/07:40Z) PRE_START (09-29); all other watches match the previous line; no failures; D4 has no post-review clusters; new-listing has no runs.
-- Monitor 2026-09-28 22:39Z: nothing new, all runs green. Multi-premia 36417642567 (11:46Z) is PRE_START (starts 09-29), with H5 book DASH/LSK/PHA/WLFI/ZEC (decided 09-26). v3 companion 36455422009 COLLECTING, 0 trades. No new D4 clusters, no new-listing runs.
-- Only open post-start episode: DON8 LINK LONG from 2026-09-25 16:00Z, pre-entry vol HIGH, currently +160 bps net (MFE 258, MAE −122). Open, so not scored.
-- Direction mix: DON8 long 10/10, EMA8 long 10/10, VOL8 long 9/10 (1 flat); no shorts. The book is effectively one long crypto-beta bet, so short-side and v3 evidence will be slow to arrive.
-- Jev and control plane: offline deterministic provider, action `collect_more_evidence` / `ACCUMULATE_UNCHANGED`.
+- Monitor 2026-09-28 22:39Z: nothing new, all runs green.
+- D4: formally reviewed, NOT_REPLICATED_DIRECTIONALLY (run 36338618227, SHA 8752bbec…). Automatic D4 collection stopped on main; any later cluster is post-review only.
+- Monitor task `orderflow-research-monitor`: 01:30/09:30/17:30 local; reads all watches incl. `human_report.json`.
 
-- Coverage: 10 symbols × 805 8h bars, 2026-01-01 → 2026-09-26 00:00Z, no gaps. 92 contrasts frozen; anchors 0; inferential window closed.
-- The bridge alternates jobs: 05:15Z run did session-alignment and VOL8 forward; 05:24Z run did the regime shadow.
-- The operational monitor, control plane, Jev decision, payoff-geometry forward and v3 companion now run via the `main` scheduler (first dispatch 2026-09-26 ~09:40Z, all green after the fix).
+## Open issues
+- Cross-Sectional Independent Venue Replication fails every run (Bybit 403 on GitHub runners); needs another source (user decision).
+- numpy capped `<2.6` on forward branches; bridges on ref `0966172` still allow numpy <3.
+- Old 10-coin book is all long (crypto beta); short-side/v3 forward evidence will be slow. Effective N per cell is ~16–31.
 
-## Open findings (unresolved)
-1. **Scheduled workflows (partly resolved).** Cron fires only from `main`. The user added
-   `prospective-8h-evidence-scheduler-bridge-v1.yml` (cron 00/08/16 :25 and :40) and a D4 bridge on
-   `main`; they run the regime shadow, VOL8 forward and session-alignment collectors from pinned
-   ref `0966172`. RESOLVED for the rest: PR #114 (merged) schedules payoff-geometry forward, jev
-   decision, operational monitor, control plane and the v3 companion.
-   Bug found on first post-start run: payoff-geometry forward leaked a private Timestamp field into
-   the JSON. Fixed on the PR #113 branch in `cef1490` with a regression test.
-2. **Short-side accounting asymmetry.** The canonical ledger compounds shorts as
-   constant-notional (`Π(1−r)`) and longs as fixed-quantity. DON8 short ledger-minus-static gap
-   p50 −244 bps, p10 −1,029 bps. Fixed-quantity re-score: DON8 short PF 0.87→1.35, EMA8 short PF
-   0.86→1.30, longs identical. `canonical_v3` (fixed quantity between target changes) is implemented
-   and reproduces this; v2 stays bound to frozen protocols. `universal-canonical-v3-forward-companion-v1`
-   is pre-registered (start 2026-09-27T00:00Z): DON8/EMA8/VOL8 forward trades under v2 and v3.
-3. **Effective N is about 16–31 per cell** even for thousands of trades. The raw
-   N ≥ 20 sufficiency rule overstates the evidence.
-4. **Runtime pinning.** pandas 2.3 + numpy 2.5 emit a "generic timedelta unit … will raise an error" deprecation on
-   ordinary Timedelta math, and there is no lock file. numpy is capped `<2.6` on both forward branches
-   (`d5679d6`, `dcd5a4e`), all green. The bridges pin ref `0966172`, which still allows numpy <3.
-5. **Cross-Sectional Independent Venue Replication v1** has failed on every run since 2026-09-25: Bybit
-   returns HTTP 403 to GitHub-hosted runners. It's an environment problem, not code; it needs another
-   data source or a self-hosted runner (user decision).
-6. **VOL8 excursion ordering:** 37% of episodes are `SAME_BAR`, so ordering is unobservable.
+## Evidence so far (one line each; details in `research/*/RESULT.md` and `docs/`)
+- Trend core (DON8+EMA8, invvol, v3.1): pre-window holdout PASS (t 3.13); untouched 7 coins narrow FAIL (t 1.87); untouched 53 coins PASS (t 2.00); ETFs FAIL (rules are crypto-specific).
+- Rejected refinements: regime switch, channel exit, funding overlay, chop-regime search, horizon ensemble, Markowitz. Vol target adopted as candidate.
+- Multi-premia blend (trend + XS momentum + funding carry, equal risk): dev Sharpe 2.09 (t 4.48), robust to neighbours (1.6–2.2), costs (1.80 at 60 bps), crises.
+- **Untouched-coins holdout (60 unused coins, run once): blend PASS, Sharpe 1.39, t 3.16, DD −11%, halves 1.41/1.37.** Carry alone fails (t 0.9).
+- Human-constrained (≤5 coins, daily 08 UTC): dev H5 PASS (1.19, DD −31%) but holdout H5 0.60 (t 1.40). Concentration is the weak link; ≥10 coins keeps more (dev 1.40).
+- Human execution: CET 09/15/21 timing costs little; market > limit; tuning grids are noise.
+- Canonical accounting: v2 frozen; v3 (fixed quantity) and v3.1 (+funding) for new work.
+- Trend bot (`trend_bot.py`, paper only): parked by user.
 
-## Evidence-rate reframe (2026-09-26, `docs/FIRST_PRINCIPLES_EVIDENCE_RATE_2026_09_26.md`)
-- Combined 30-sleeve v3 portfolio: historical Sharpe 1.07 net, t 1.71 (not significant even
-  in-sample), about 1,275 forward days to reach t = 2. Beta to basket −0.04, so hedging adds nothing.
-- Breadth: 10 coins = 2.0 independent bets; +12 alts = 2.6; the 3 strategies = 1.5. Only
-  non-crypto-factor assets add breadth (PAXG +0.35, TRX +0.33).
-- `universal-trend-portfolio-forward-v1` pre-registered (start 2026-09-28, daily P&L, v3). Scheduling
-  is in PR #115 (awaiting user merge).
-- Policy: freeze per-trade and regime diagnostics and new trend variants on the same strategies and
-  coins. New work must add independent breadth or shorten time-to-answer.
-
-## Portfolio anatomy (`docs/PORTFOLIO_ANATOMY_2026_09_26.md`)
-- Strengths: convex "smile" (+8% in the worst basket months, +17% in the best); long and short both pay
-  under v3; +14% in 2025 and +18% in 2026 while the basket fell 35% and 24%.
-- Weaknesses: the top 1% of trades (26) = 102% of net P&L; drawdowns −30% (346 days) and −25%; volatility 38%;
-  ±1 sizing puts risk in DOGE/ENA/SUI (53% of P&L); VOL8 has a 15.6%/yr cost drag.
-- Crypto funding drag only 0.6%/yr. **MEXC tradfi perp funding is 10–84%/yr |rate| and unmodeled**, so
-  accounting v3.1 with funding must come before any cross-asset protocol.
-- Liquid tradfi by rule (≥10M 24h, no leveraged/inverse/single stock): XAUT, SILVER, USOIL, SPX500,
-  NAS100. Crypto + tradfi effective N 1.7 → 5.5.
-
-## Pre-window holdout (`research/pre_window_holdout/RESULT.md`)
-- `universal-pre-window-crypto-holdout-v1` (registered `e622e7c`, run once): 2020-06..2023-12, 9 coins, data unused by
-  any protocol. **Primary PASSED**: combined v3 Sharpe 1.76, NW t 3.13. With Binance funding proxy: Sharpe 1.55,
-  t 2.83 (funding drag 11.2%/yr).
-- Concentrated: 2021 +743%, 2022 −7%; excluding 2021 (post hoc) t 1.16. Supports but does not prove; no promotion.
-
-## Holdouts round 2 (registered `8cb2af0`, each run once)
-- Untouched coins (ZEC/LTC/UNI/DOT/DASH/ETC/BCH, 2020-26): **FAILED narrowly**, Sharpe 0.76, t 1.87; same sign as the
-  development coins, weaker.
-- ETF long history (20 cross-asset ETFs, 2007-26, rules mapped to daily): **FAILED, negative**: Sharpe −0.31, t −1.25;
-  only commodities positive; VOL8 t −3.07; FX t −2.60. The fast rules are crypto-specific.
-- Implication: tradfi breadth with these rules is likely noise, not edge. The cross-asset forward watch continues
-  unchanged, with a low prior. A slower-trend hypothesis would need new data or forward-only registration.
-
-- Cost realism (`research/cost_realism/NOTE.md`, one snapshot): the 20 bps RT assumption is conservative for 14/15
-  forward instruments at 10–50k USDT; NAS100 at 50k is 21 bps.
-
-## Focus: `crypto-trend-core-v1` (registered `7875591`, start 2026-09-29)
-- DON8 + EMA8, 17 crypto perps, entry inverse-vol 15%, v3.1 with funding, 20 bps; daily net P&L. VOL8 drop and the
-  universe are disclosed post-evidence choices, so it is judged forward only.
-- 180-day sanity gate (mean > 0, max drawdown > −25%, funding within 2x, no integrity failures) → eligible for the
-  existing paper/approval gates; authorizes nothing. Historical context: 180-day windows positive 75% of the time.
-- Scheduled: PR #117 merged (`e5d594c`); both core watches run daily at 01:40 and 01:50 UTC; first dispatch green.
-- `crypto-trend-core-voltarget-v1` (`19f8bb6`, start 2026-09-29): same book plus a portfolio vol target (12%, 60-day, max 3x,
-  weekly). 12% is disclosed as chosen for the measured 1.25x overshoot. Latest leverage 0.90.
-
-## Human-constrained work (`research/human_constrained/RESULTS.md`, `457a0b0`)
-- Markowitz on 51 sleeves does not beat equal weight (0.74 vs 0.74, deeper drawdown, 70x turnover); not adopted.
-- Human simulator (CET check-ins, max 5 coins, market/limit, fees, slippage, funding) validated vs v3. 48-setting grid:
-  train/test rank corr −0.02, so tuning is noise. Robust: market > limit, 5 coins > 3, buffer reduces churn.
-  Principled pick K5 b2 market DON8+EMA8 invvol: 1.17 → 0.50.
-- Sessions: human timing costs little (CET 09/15/21 at 0.89 vs UTC 0.93); New York 10:00 (16:00 CET) best (1.04; 0.96 in 25-26),
-  but only 1 of 10, so a forward hypothesis.
-- Regimes: up months +3.2%/mo, down +0.6%, flat −0.9% (bleeds in chop; shorts catch crashes late).
-
-## Trend bot (PARKED by user, 2026-09-26)
-- `trend_bot.py` (`d792fd9`): paper-only target-position bot for crypto-trend-core. Risk gates, kill switches,
-  hash-chained journal, idempotent per bar. Workflow `trend-bot-paper.yml` verified end to end (fail-closed halt
-  persisted on `bot-state/crypto-trend-core-paper`). Not scheduled. Open design point: gross exposure is only ~26%
-  (per-sleeve vol sizing), so portfolio-level vol targeting is needed before any real use.
-
-## Regime switch (`research/regime_switch/RESULT.md`, declared `cb3a97f`)
-- Trend↔mean-reversion switch on the frozen ER labels: crypto trend-only 0.89 (t 2.12) > chop filter 0.73 > switch 0.67 >
-  meanrev −1.05 (t −2.66). ETFs: nothing works (meanrev 0.00). Regime labels lag: trend earns +2.2 bp/day even on CHOP days.
-  Decision: keep the trend-only core; no mean-reversion component.
-
-## Channel exit (`research/trend_channel_exit/RESULT.md`, declared `da679d0`): REJECTED
-- Core 1.36 (t 3.13) → core + 20-bar exit 0.90; up-month capture halved (5.1% → 2.7%), 2021 +93% → +25%. Slow exits are part of the edge.
-
-## Portfolio vol target (`research/portfolio_vol_target/RESULT.md`, declared `5dc4dba`): ADOPTED as candidate
-- Core 1.40 → 1.42 Sharpe; return 20.5% → 26.6%; 2023-26 returns roughly doubled, 2021 tempered (93% → 56%), so less
-  single-year dependence. Realized vol overshoots (18.7% vs 15%); max drawdown −13.9% → −17.1%.
-
-## Funding overlay (`research/funding_overlay/RESULT.md`, declared `f69f540`): REJECTED
-- Core with Binance-proxy funding: Sharpe 1.19 (new honest baseline; 1.36 without funding). The overlay gives 0.99 and halves
-  the return: extreme funding = strongest trends (2021 +75% → +8%).
-
-## Chop-regime search (`research/chop_regime_search/RESULT.md`, declared `36be8f0`): NO PASS
-- 6 candidates in CHOP (mean reversion, z-reversal, squeeze breakout, pullback, cross-sectional reversal, funding carry) vs
-  trend-only (0.77 same basis). All reversal types lose; the squeeze breakout nearly passes (0.81, lower drawdown, ties in
-  2023–26). Standing aside in chop again costs money. Keep trend-following through chop.
-
-## Untouched-coins holdout v2 (`research/untouched_coins_holdout_v2/RESULT.md`, `97ae976` + amendment `0a864e5`)
-- 53 never-evaluated liquid perps, full history, core design with funding: **PASSED marginally**, Sharpe 0.91, t 2.001.
-  55% of coins positive; gains from 2021/2023, and 2024-26 about flat. Survivorship may flatter. Next: quarterly new-listing holdout.
-
-## Ensemble and new-listing holdout
-- `trend-horizon-ensemble-v1` (`43976bb`): 6-horizon average vs core, NOT adopted (fails the both-halves rule; differences small).
-- `new-listing-holdout-v1` registered; first batch due 2027-03-12; scheduling in PR #118 (awaiting merge).
-
-## Multi-premia (`research/multi_premia/RESULT.md`, declared `c7b80d6`): ALL PASS, best result so far
-- 70 coins 2020-26: trend 1.23; cross-sectional momentum 0.90 (t 2.20); funding carry 1.63 (t 3.48); **equal-risk blend 2.09 (t 4.48), max drawdown −14%**,
-  beating trend in both halves. Correlations ≤ 0.30. Carry is valid with real MEXC funding and mostly price-driven. Forward watch `multi-premia-blend-v1` registered (start 2026-09-29, real MEXC funding); scheduled: PRs #118 and #119 merged. Robustness: all 8 neighbours keep blend Sharpe 1.6–2.2 (> trend 1.23), so not a knife edge. Stress: Sharpe 2.09/1.94/1.80 at 20/40/60 bps; LUNA +3%, FTX −2%, May-21 −5% vs basket −31/−32/−49%; worst blend week −4.5%, but legs alone −15 to −22%.
-
-## D4 formal review 1 (on `fix/universal-existing-validation`, `research/volatility_state_d4/FORMAL_REVIEW_1.md`)
-- Gate met (11 clusters over 3 UTC dates). All 11 cluster median Spearman values are negative (median −0.178), so the hypothesis is
-  NOT REPLICATED directionally. Bound to run 36338618227 (aggregate SHA-256 8752bbec…); later clusters are post-review only.
-  D4 is not a strategy foundation.
-
-## Decisions
-- Workstream D (`universal-market-state-labels-v1`) was not built (post-hoc re-cut of v1 thresholds).
-- Monitor runs pick one action; 2026-09-26 08:05Z run = `collect_evidence` only, no code change.
-- 08:05Z (second pass): no new PR #113, bridge or target-workflow runs; monitor only.
+## Rules in force
+- Automatic live order transmission disabled; no promotion, leverage, filters, live trading; outputs descriptive.
+- Pre-register before evaluation; holdouts run once; never edit frozen configs/modules or canonical v2.
+- Evidence-rate rule: no new per-trade/regime diagnostics or trend variants on the old 10 coins; new work adds breadth or shortens time-to-answer.
 
 ## Next action candidates
-- `ask_user`: merge PR #116 (schedules the inverse-vol watch). PR #115 merged `cb6d3ef`.
-- DONE `7039d5e`: canonical v3.1 (v3 + funding; crypto drag 1.0%/yr where history exists).
-- DONE `12629d6`: `universal-cross-asset-trend-forward-v1` (start 2026-09-28): crypto + XAUT/SILVER/USOIL/
-  SPX500/NAS100 under v3.1; combined/tradfi/crypto daily series. Scheduling is in PR #115 (awaiting merge).
-- DONE `3af4521`: `universal-cross-asset-trend-invvol-forward-v1` (same universe and start; size = min(1, 15%/60-day vol)
-  fixed at entry). Historical crypto context (post-registration): Sharpe 0.96 → 1.11, drawdown/vol unchanged,
-  so it is mostly a scale-down within crypto; its value is cross-asset risk balance. Scheduling is in PR #116.
-- (superseded) pre-register a cross-asset trend universe screened only on availability, liquidity and
-  correlation to the crypto factor (target effective N ≥ 6), with the same frozen rules and daily-P&L protocol.
-- `collect_evidence`: after the 08:25/08:40Z bridge runs, report the first post-start trades.
-- `collect_evidence`: after 2026-09-27, report the v3 companion's first trades descriptively.
-
-## Multi-premia human (`research/multi_premia_human/RESULT.md`, declared `e938530`): H5 PASSES
-- Daily 08 UTC check-in, top-5 coins: Sharpe 1.19, t 2.65, DD −31% (V_ALL same timing 1.75, DD −12%; H10 1.40). Recent half weak
-  (0.66; 2025 −2%, 2026 −24%). Forward watch registered (same workflow as the blend, start 09-29); no promotion.
-- Untouched holdout (`research/multi_premia_untouched/RESULT.md`, `1014716`, run once, 60 unused coins): **blend PASSES**, Sharpe 1.39,
-  t 3.16, DD −11%, halves 1.41/1.37. Carry alone fails (t 0.9). H5 human book fails (0.60, t 1.40): concentration is the weak link.
+- `collect_evidence`: first forward days from the ~06:45–08:30 UTC runs on 09-29/09-30.
+- Optional (user): alternative data source for the Bybit replication; a fresh independent premium (basis, OI) registered forward-only.
