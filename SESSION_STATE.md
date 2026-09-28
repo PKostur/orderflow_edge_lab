@@ -29,7 +29,7 @@
 
 ## Evidence so far (one line each; details in `research/*/RESULT.md` and `docs/`)
 - Trend core (DON8+EMA8, invvol, v3.1): pre-window holdout PASS (t 3.13); untouched 7 coins narrow FAIL (t 1.87); untouched 53 coins PASS (t 2.00); ETFs FAIL (rules are crypto-specific).
-- Rejected refinements: regime switch, channel exit, funding overlay, chop-regime search, horizon ensemble, Markowitz. Vol target adopted as candidate.
+- Rejected refinements: regime switch, channel exit, funding overlay, chop-regime search, horizon ensemble, Markowitz, XS low-vol leg (`research/xs_low_vol`, Sharpe ~0.1 both samples). Vol target adopted as candidate.
 - Multi-premia blend (trend + XS momentum + funding carry, equal risk): dev Sharpe 2.09 (t 4.48), robust to neighbours (1.6–2.2), costs (1.80 at 60 bps), crises.
 - **Untouched-coins holdout (60 unused coins, run once): blend PASS, Sharpe 1.39, t 3.16, DD −11%, halves 1.41/1.37.** Carry alone fails (t 0.9).
 - Human-constrained (≤5 coins, daily 08 UTC): dev H5 PASS (1.19, DD −31%) but holdout H5 0.60 (t 1.40). Concentration is the weak link; ≥10 coins keeps more (dev 1.40).
@@ -44,4 +44,4 @@
 
 ## Next action candidates
 - `collect_evidence`: first forward days from the ~06:45–08:30 UTC runs on 09-29/09-30.
-- `xs-low-vol-v1` declared: evaluate dev (70 coins) then confirmation (60 coins) once.
+- Optional: no further premium candidates with free data; wait for forward evidence.
