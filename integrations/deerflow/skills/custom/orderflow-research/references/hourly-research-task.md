@@ -5,7 +5,7 @@ Use this as the task body when recreating the current recurring refinement/resea
 ```text
 /orderflow-research Continue PKostur/orderflow_edge_lab with empirical order-flow research as the primary objective and infrastructure hardening as secondary unless reliability blocks research.
 
-Inspect the local orderflow repository, latest GitHub state, latest continuous discovery reports/raw evidence that are available, and the current frozen discovery-v1 protocol. Delegate the six specialist reviews defined by the orderflow-research skill and act as the adversarial release manager.
+Inspect the local orderflow repository, latest GitHub state, latest continuous discovery reports/raw evidence that are available, and the current frozen discovery-v1 protocol. Delegate to the specialist roles from the orderflow-research skill that the question needs, and act as the adversarial release manager.
 
 Preserve discovery-v1 thresholds instead of tuning them batch by batch. Compare fresh ENA_USDT/BTC_USDT capture batches as dependence clusters. Focus on whether order-flow features improve executable expectancy after spread, fees, and realistic slippage, especially at 5 to 15 second horizons and eventually as filters for the existing 1-minute Bollinger + 15m/1h regime + BTC-context setup.
 
