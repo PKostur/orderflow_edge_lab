@@ -18,7 +18,7 @@
 | regime shadow / payoff-geometry / session-alignment (8h bridge) | 09-25 | green; only open episode DON8 LINK long | per config |
 | `new-listing-holdout-v1` | quarterly | first batch 2027-03-12 | – |
 
-- Monitor 2026-09-28 22:39Z: nothing new, all runs green.
+- Monitor 2026-09-29 21:10Z: nothing new (all watches 0 forward days; v3 companion 0 trades; 8h bridge ACCUMULATING; no D4 runs since 09-27); all runs green.
 - D4: formally reviewed, NOT_REPLICATED_DIRECTIONALLY (run 36338618227, SHA 8752bbec…). Automatic D4 collection stopped on main; any later cluster is post-review only.
 - Monitor task `orderflow-research-monitor`: 01:30/09:30/17:30 local; reads all watches incl. `human_report.json`; refreshes the dashboard https://claude.ai/artifact/6sLH5A6SuwBcgZHHLzPUoR via `scripts/dashboard_snapshot.py`.
 - PR #120 (open): STATUS.md/INDEX.md list the research-branch watches (docs only; user merges).
