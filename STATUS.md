@@ -7,7 +7,7 @@ frozen artifact disagree, the frozen artifact wins.
 
 - Generated-by convention: this file is maintained by hand (or by a future
   automation) from the canonical artifacts listed inside it.
-- Last reviewed: 2026-09-29 (after Prospective Formal Review 1)
+- Last reviewed: 2026-09-29 (after Prospective Formal Review 1); research-branch watches added 2026-09-29
 - Repository commit at review: see `git log -1`
 
 ## Standing safety boundary (unchanged by this file)
@@ -53,6 +53,22 @@ independent capture batches — never by hand and never from cumulative artifact
 net means −3.6 to −12.5 bps/trade, PF 0.06–0.31, at both 4 and 8 bps friction.
 See `research/SESSION_WATCH_FORMAL_REVIEW_1_2026_09_29.md`. These IDs are
 terminal: no retuning, re-siding, or re-phasing under the same IDs.
+
+## Research-branch forward watches (daily, descriptive until review)
+
+| Watch | Config (on `research/payoff-geometry-v1-1`) | Prospective start | Review | Status |
+|---|---|---|---|---|
+| `multi-premia-blend-v1` — equal-risk blend of trend, cross-sectional momentum, funding carry (70 coins) | `config/multi_premia_blend_v1.json` | 2026-09-29 00:00 UTC | 180 days | `ACCUMULATING` |
+| `multi-premia-human-v1-forward` — same blend held as top-5 / top-10 coins at a daily 08:00 UTC check-in | `config/multi_premia_human_v1.json` (runs in the blend workflow) | 2026-09-29 00:00 UTC | 180 days | `ACCUMULATING` |
+| `crypto-trend-core-v1` / `crypto-trend-core-voltarget-v1` — DON8+EMA8, 17 perps, inverse-vol, v3.1 | `config/crypto_trend_core_v1.json`, `config/crypto_trend_core_voltarget_v1.json` | 2026-09-29 00:00 UTC | 180-day sanity gate | `ACCUMULATING` |
+| `universal-trend-portfolio-forward-v1` | `config/universal_trend_portfolio_forward_v1.json` | 2026-09-28 00:00 UTC | per config | `ACCUMULATING` |
+| `universal-cross-asset-trend-forward-v1` / `-invvol-forward-v1` | `config/universal_cross_asset_trend_*forward_v1.json` | 2026-09-28 00:00 UTC | per config | `ACCUMULATING` |
+| `universal-canonical-v3-forward-companion-v1` | `config/universal_canonical_v3_forward_companion_v1.json` | 2026-09-27 00:00 UTC | per config | `ACCUMULATING` |
+| `new-listing-holdout-v1` (quarterly) | `config/new_listing_holdout_v1.json` | first batch 2027-03-12 | per batch | `WAITING` |
+
+These are dispatched daily by `branch-forward-scheduler.yml` on `main`. Historical context (development and
+one-shot holdouts, descriptive only) is in `research/payoff-geometry-v1-1:research/*/RESULT.md`; the strongest is the multi-premia blend
+on 60 untouched coins (Sharpe 1.39, t 3.16). None of this is OOS evidence until the forward review dates.
 
 ## Research stop rule (active)
 

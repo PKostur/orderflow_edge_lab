@@ -19,6 +19,7 @@ For the single-page operational view (next decision dates, stop rules), see
 |---|---|---|---|
 | DON8 cross-strategy session forward watch | `evidence_v2_cross_strategy_session_forward_v1` (`config/evidence_v2_session_forward_watch_v1.json`) | 2026-09-23 00:00:00 UTC; 30-day review (earliest 2026-10-23) | `research/VALIDATION_PRIORITY_FREEZE_2026_09_23.md`, `research/EVIDENCE_V2_SESSION_AUDIT_2026_09_22.md` |
 | W3 — CVD London/New-York wide-range | `SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST_V1` | 2026-09-22 18:10:00 UTC | `research/SESSION_PROSPECTIVE_STATUS_2026_09_22.md`, `config/session_watch_cvd_lny_v1.json` |
+| Multi-premia blend + human-constrained variants; crypto trend core (+vol target); trend portfolio; cross-asset trend (+invvol); canonical v3 companion; new-listing holdout | see `STATUS.md` → Research-branch forward watches | 2026-09-27 to 2026-09-29 | branch `research/payoff-geometry-v1-1`: `research/multi_premia*/RESULT.md`, `research/crypto_trend_core/`, `SESSION_STATE.md` |
 
 ## Closed — falsified (IDs are terminal; no retuning under these IDs)
 
