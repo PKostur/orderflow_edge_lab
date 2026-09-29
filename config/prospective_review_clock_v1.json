@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "protocol_name": "prospective-review-clock-v1",
+  "status": "observability_only",
+  "purpose": "Report elapsed time and accumulation-window facts for preregistered prospective watches. This clock computes no strategy verdicts, inspects no strategy PnL, and never gates merges by itself.",
+  "claims": {
+    "computes_strategy_verdicts": false,
+    "inspects_strategy_pnl": false,
+    "alters_frozen_definitions": false,
+    "promotes_any_strategy": false,
+    "live_order_transmission_supported": false
+  },
+  "watches": [
+    {
+      "watch_id": "evidence_v2_cross_strategy_session_forward_v1",
+      "priority": 1,
+      "family": "donchian_breakout_8h",
+      "prospective_start_utc": "2026-09-23T00:00:00Z",
+      "review_gate": {
+        "type": "calendar_days",
+        "minimum_days": 30
+      },
+      "canonical_artifacts": [
+        "research/VALIDATION_PRIORITY_FREEZE_2026_09_23.md",
+        "research/EVIDENCE_V2_SESSION_AUDIT_2026_09_22.md"
+      ],
+      "forward_workflow": "evidence-v2-session-forward.yml"
+    },
+    {
+      "watch_id": "SESSION_W1_ALIGNED_SHORT_ASIA_OPENING",
+      "priority": 2,
+      "family": "ena_session_microstructure",
+      "prospective_start_utc": "2026-09-22T15:39:58Z",
+      "review_gate": {
+        "type": "batches_and_days",
+        "minimum_batches": 10,
+        "minimum_days": 5
+      },
+      "batch_counting": "frozen discovery-aggregation pipeline over independent capture batches",
+      "canonical_artifacts": [
+        "research/SESSION_PROSPECTIVE_STATUS_2026_09_22.md"
+      ]
+    },
+    {
+      "watch_id": "SESSION_W2_ALIGNED_BTC_SHORT_ASIA_OPENING",
+      "priority": 2,
+      "family": "btc_aligned_session_microstructure",
+      "prospective_start_utc": "2026-09-22T15:39:58Z",
+      "review_gate": {
+        "type": "batches_and_days",
+        "minimum_batches": 10,
+        "minimum_days": 5
+      },
+      "batch_counting": "frozen discovery-aggregation pipeline over independent capture batches",
+      "canonical_artifacts": [
+        "research/SESSION_PROSPECTIVE_STATUS_2026_09_22.md"
+      ]
+    },
+    {
+      "watch_id": "SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST_V1",
+      "priority": 3,
+      "family": "cvd_london_new_york_overlap",
+      "prospective_start_utc": "2026-09-22T18:10:00Z",
+      "review_gate": {
+        "type": "signals_batches_and_days",
+        "minimum_signals": 20,
+        "minimum_batches": 8,
+        "minimum_days": 7
+      },
+      "batch_counting": "frozen discovery-aggregation pipeline over independent capture batches",
+      "canonical_artifacts": [
+        "research/SESSION_PROSPECTIVE_STATUS_2026_09_22.md",
+        "config/session_watch_cvd_lny_v1.json"
+      ]
+    }
+  ]
+}

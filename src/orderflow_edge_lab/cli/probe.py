@@ -15,14 +15,14 @@ Do not commit tokens or paste them into chat.
 from __future__ import annotations
 
 import argparse
-import base64
 import csv
 from dataclasses import asdict
+import base64  # noqa: F401  retained: patch target for tests (probe.base64)
 import json
+import urllib  # noqa: F401  retained: tests patch probe.urllib.request.build_opener
+import urllib.request  # noqa: F401
 import os
 from pathlib import Path
-import urllib.parse
-import urllib.request
 
 from orderflow_edge_lab.dxfeed import NoRedirect, probe_connection
 from orderflow_edge_lab.adapters import normalize_dxfeed_rows
