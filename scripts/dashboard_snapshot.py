@@ -59,7 +59,8 @@ def latest_run(workflow: str) -> dict | None:
             if line.startswith("name:"):
                 name = line.split(":", 1)[1].strip().strip('"')
                 break
-    out = json.loads(gh("run", "list", "-w", name, "-b", BRANCH, "-L", "1",
+    # latest completed run: an in-progress run has no report artifact yet
+    out = json.loads(gh("run", "list", "-w", name, "-b", BRANCH, "-s", "completed", "-L", "1",
                         "--json", "databaseId,conclusion,status,createdAt,url"))
     return out[0] if out else None
 
