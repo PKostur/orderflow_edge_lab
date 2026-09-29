@@ -64,6 +64,9 @@ See [data access and quality checks](docs/DXFEED.md).
 
 - [Manual paper control and checkpoint recovery](docs/DEPLOYMENT.md): inspect,
   submit, approve, reject, close, and halt paper execution.
+- [Backtest council](docs/BACKTEST_COUNCIL.md): adversarial review of a backtest by
+  deterministic members (look-ahead, costs and funding, timing null, concentration,
+  folds, breadth, multiple testing, leverage path) and a rule-based judge.
 - [Future-observation audit](docs/RESEARCH_PROTOCOL.md): verify supplied records
   against frozen rules and produce hashed, descriptive reports without certifying
   out-of-sample evidence or deployment eligibility.

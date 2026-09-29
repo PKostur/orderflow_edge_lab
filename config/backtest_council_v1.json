@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "council_id": "backtest_council_v1",
+  "status": "THRESHOLD_FREEZE",
+  "purpose": "Deterministic adversarial review of universal_backtest results. Implements the mandatory_controls of universal_backtest_framework_v1 as independent members plus a rule-based judge.",
+  "member_controls": {
+    "lookahead_auditor": "no_lookahead_check",
+    "sample_clerk": "sample_size",
+    "cost_skeptic": "cost_stress (includes adverse perpetual funding)",
+    "null_examiner": "reversed_or_sign_control (circular-shift timing null)",
+    "concentration_prosecutor": "concentration (best trades, best day)",
+    "fold_examiner": "time_fold (walk-forward folds, block bootstrap interval)",
+    "breadth_examiner": "symbol_breadth",
+    "multiple_testing_auditor": "deflated Sharpe over grid or Bonferroni over declared trials",
+    "risk_path_auditor": "liquidation path at declared leverage",
+    "direction_auditor": "long/short split (warning only)",
+    "believer": "strongest factual case (never votes)"
+  },
+  "verdicts": {
+    "REJECT": "Any member FAIL.",
+    "REVISE_OR_EXTEND": "No FAIL, at least one WARN.",
+    "SHADOW_ELIGIBLE": "All mandatory controls PASS. Eligible for a separately frozen prospective shadow only."
+  },
+  "thresholds": {
+    "lookahead_cut_points": 12,
+    "lookahead_tolerance": 1e-9,
+    "min_trades_fail": 30,
+    "min_trades_warn": 100,
+    "cost_stress_multiplier": 1.5,
+    "funding_interval_hours": 8,
+    "funding_stress_bps_per_crossing": 1.0,
+    "null_draws": 500,
+    "null_min_shift_fraction": 0.1,
+    "null_p_warn": 0.05,
+    "null_p_fail": 0.20,
+    "top_trade_fraction": 0.05,
+    "best_day_share_warn": 0.5,
+    "fold_days": 30,
+    "fold_positive_warn": 0.5,
+    "fold_positive_fail": 0.35,
+    "bootstrap_block_length": 10,
+    "bootstrap_resamples": 2000,
+    "bootstrap_confidence": 0.95,
+    "breadth_positive_warn": 0.6,
+    "breadth_positive_fail": 0.5,
+    "dsr_probability_warn": 0.95,
+    "dsr_probability_fail": 0.5,
+    "adjusted_p_warn": 0.05,
+    "neighborhood_positive_warn": 0.5,
+    "maintenance_margin_rate": 0.004,
+    "seed": 17
+  },
+  "research_rules": [
+    "Thresholds are frozen before use. Do not loosen them to pass a candidate.",
+    "A council run inspects data. That data is then spent for independent validation.",
+    "A REJECT is not fixed by re-tuning on the same data.",
+    "The council never changes strategy definitions, costs, sessions or symbols of frozen candidates."
+  ],
+  "claims": {
+    "profitable_edge_established": false,
+    "verified_out_of_sample_evidence": false,
+    "live_trading_authorized": false
+  }
+}
