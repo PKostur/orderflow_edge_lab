@@ -12,6 +12,34 @@ dependencies = ["websockets>=12,<16"]
 [project.optional-dependencies]
 research = ["numpy>=2,<2.6", "pandas>=2,<3", "scikit-learn>=1.7,<2"]
 jev = ["typesafe-sdk>=0.7,<1"]
+dev = ["ruff==0.16.9"]
+
+[tool.ruff]
+# Lint gate only; formatting is intentionally left untouched.
+target-version = "py310"
+line-length = 120
+extend-exclude = ["integrations"]
+
+[tool.ruff.lint]
+# Engineering gate: real errors (E9: syntax/undefined-name, and F401 unused
+# imports). Style rules (E/W cosmetics, naming, import order) are deliberately
+# not part of this gate: the codebase long predates them and tightening them
+# would be a breaking change. Unused local assignments (F841) are also
+# deliberately excluded: the remaining five occurrences sit inside frozen
+# research computation paths whose numeric outputs must not be touched.
+select = ["E9", "F401"]
+
+[tool.ruff.lint.per-file-ignores]
+# Frozen research-protocol modules and dated one-shot evaluator scripts: their source is part of the
+# evidence record, so unused imports are left in place rather than edited.
+"src/orderflow_edge_lab/cross_sectional_venue_replication.py" = ["F401"]
+"src/orderflow_edge_lab/new_listing_holdout.py" = ["F401"]
+"src/orderflow_edge_lab/okx_funding_archive_schema.py" = ["F401"]
+"src/orderflow_edge_lab/pre_window_holdout.py" = ["F401"]
+"src/orderflow_edge_lab/regime_marginal_pairwise_shadow_v1.py" = ["F401"]
+"src/orderflow_edge_lab/regime_switch.py" = ["F401"]
+"src/orderflow_edge_lab/universal_shadow_operational_monitor.py" = ["F401"]
+"scripts/*_20[0-9][0-9]_[0-9][0-9]_[0-9][0-9].py" = ["F401"]
 
 [project.scripts]
 orderflow-paper = "orderflow_edge_lab.cli.paper:main"
@@ -42,6 +70,8 @@ orderflow-candidate-freeze = "orderflow_edge_lab.cli.candidate_freeze:main"
 orderflow-holdout-audit = "orderflow_edge_lab.cli.holdout_audit:main"
 orderflow-trial-ledger = "orderflow_edge_lab.cli.trial_ledger:main"
 orderflow-multi-agent = "orderflow_edge_lab.cli.multi_agent:main"
+orderflow-review-clock = "orderflow_edge_lab.cli.review_clock:main"
+orderflow-capture-health = "orderflow_edge_lab.cli.capture_health:main"
 orderflow-backtest = "orderflow_edge_lab.cli.orderflow_backtest:main"
 orderflow-direction-pair = "orderflow_edge_lab.cli.direction_pair:main"
 orderflow-risk-ladder = "orderflow_edge_lab.cli.risk_ladder:main"
@@ -94,6 +124,8 @@ orderflow-cross-sectional-forward-shadow = "orderflow_edge_lab.cli.cross_section
 orderflow-cross-sectional-venue-replication = "orderflow_edge_lab.cli.cross_sectional_venue_replication:main"
 orderflow-cross-sectional-okx-funding-audit = "orderflow_edge_lab.cli.cross_sectional_okx_funding_audit:main"
 orderflow-markov-ev-shadow = "orderflow_edge_lab.cli.markov_ev_shadow:main"
+
+orderflow = "orderflow_edge_lab.cli.main:main"
 
 [project.gui-scripts]
 orderflow-dxfeed-login = "orderflow_edge_lab.cli.login:main"

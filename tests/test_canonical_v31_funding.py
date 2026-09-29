@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 
 from orderflow_edge_lab.canonical_v3 import align_funding, run_canonical_backtest_v3
-from orderflow_edge_lab.universal_backtest import ExecutionModel, FunctionStrategy, legacy_strategy
+from orderflow_edge_lab.universal_backtest import ExecutionModel, legacy_strategy
 from tests.test_canonical_v3 import _fixed, _frame
 
 

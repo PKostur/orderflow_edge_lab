@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
-from typing import Any, Iterable, Mapping
+from typing import Any, Mapping
 
 from orderflow_edge_lab.news_monitor import NewsMonitorConfig, monitor_news
 from orderflow_edge_lab.sentiment_monitor import (

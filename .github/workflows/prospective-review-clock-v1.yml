@@ -1,0 +1,54 @@
+name: Prospective Review Clock v1
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "3 6 * * *"
+  pull_request:
+    paths:
+      - "src/orderflow_edge_lab/review_clock.py"
+      - "src/orderflow_edge_lab/cli/review_clock.py"
+      - "config/prospective_review_clock_v1.json"
+      - "tests/test_review_clock.py"
+      - ".github/workflows/prospective-review-clock-v1.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  clock-report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .
+      - name: Run review-clock unit tests
+        run: python -m unittest tests.test_review_clock -v
+      - name: Produce daily clock report
+        run: |
+          mkdir -p artifacts
+          orderflow-review-clock --output artifacts/prospective_review_clock.json
+      - name: Assert report stays observability-only
+        run: |
+          python - <<'PY'
+          import json
+          report = json.load(open('artifacts/prospective_review_clock.json', encoding='utf-8'))
+          claims = report['claims']
+          assert claims['computes_strategy_verdicts'] is False
+          assert claims['inspects_strategy_pnl'] is False
+          assert claims['promotes_any_strategy'] is False
+          assert claims['live_order_transmission_supported'] is False
+          print('review-clock report is observability-only; watch_count =', report['watch_count'])
+          PY
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prospective-review-clock
+          path: artifacts/prospective_review_clock.json
+          if-no-files-found: error
+          retention-days: 60

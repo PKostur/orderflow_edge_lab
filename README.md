@@ -28,6 +28,24 @@ The same control plane runs hourly in GitHub Actions with read-only repository p
 5. Make research runs reproducible with frozen configuration, immutable raw inputs, hashes, and run manifests.
 6. Paper trade and approval-test before any future broker or exchange integration is considered.
 
+## Current state
+
+- [STATUS.md](STATUS.md) — active prospective watches, next scheduled decision dates, stop rules, and closed lanes.
+- [research/INDEX.md](research/INDEX.md) — navigational index of every research lane and its terminal state.
+- [docs/README.md](docs/README.md) — documentation map.
+
+## Commands
+
+Every installed command is available as a flat script (for example `orderflow-multi-agent`) and through a single dispatcher:
+
+```bash
+orderflow --list          # grouped command table
+orderflow --list-json     # machine-readable
+orderflow paper --help    # same implementation as orderflow-paper
+orderflow review-clock    # daily elapsed-time report for preregistered watches
+orderflow capture-health  # descriptive MEXC capture inventory and gap report
+```
+
 ## MEXC Futures order flow
 
 The repository can record public MEXC Futures `push.deal` and incremental `push.depth` streams for `ENA_USDT`, `BTC_USDT`, or other Futures symbols without API keys.

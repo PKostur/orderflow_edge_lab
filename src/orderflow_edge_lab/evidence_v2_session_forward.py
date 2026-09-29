@@ -1,12 +1,10 @@
 from __future__ import annotations
 
 import json
-import math
 import statistics
 from pathlib import Path
 from typing import Any, Mapping
 
-import numpy as np
 import pandas as pd
 
 from orderflow_edge_lab.strategy_tournament import generate_target_position
