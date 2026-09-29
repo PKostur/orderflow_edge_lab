@@ -20,8 +20,8 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install
@@ -372,7 +372,7 @@ jobs:
           PY
       - name: Preserve cumulative validated discovery ledger
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: orderflow-discovery-ledger-v1
           path: |
@@ -402,7 +402,7 @@ jobs:
           done
       - name: Preserve compact discovery report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: orderflow-discovery-report
           path: |
@@ -439,7 +439,7 @@ jobs:
           retention-days: 14
       - name: Preserve deterministic raw discovery replay sample
         if: always() && steps.retention.outputs.keep_raw == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: orderflow-discovery-replay-${{ github.run_id }}
           path: |

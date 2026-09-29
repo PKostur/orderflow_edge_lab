@@ -51,10 +51,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ env.COLLECTOR_REF }}
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install pinned research runtime
@@ -89,10 +89,10 @@ jobs:
       group: bridge-universal-session-alignment-shadow
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ env.COLLECTOR_REF }}
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install pinned research runtime
@@ -136,7 +136,7 @@ jobs:
           PY
       - name: Preserve session shadow evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: universal-session-alignment-shadow
           path: artifacts/universal_session_alignment_shadow/
@@ -152,10 +152,10 @@ jobs:
       group: bridge-vol8-payoff-amplitude-forward-v1
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ env.COLLECTOR_REF }}
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install pinned research runtime
@@ -199,7 +199,7 @@ jobs:
           PY
       - name: Preserve VOL8 amplitude evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: vol8-payoff-amplitude-forward-v1
           path: artifacts/vol8_payoff_amplitude/
@@ -215,10 +215,10 @@ jobs:
       group: bridge-universal-regime-marginal-pairwise-shadow-v1
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ env.COLLECTOR_REF }}
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install pinned research runtime
@@ -275,7 +275,7 @@ jobs:
           PY
       - name: Preserve regime shadow evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: universal-regime-marginal-pairwise-shadow-v1
           path: artifacts/universal_regime_marginal_pairwise_shadow/

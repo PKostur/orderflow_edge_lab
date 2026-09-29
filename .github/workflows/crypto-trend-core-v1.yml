@@ -26,8 +26,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install
@@ -53,7 +53,7 @@ jobs:
           print(json.dumps({"status":r["status"],"days":r["forward"]["crypto"]["days"],"funding":r["funding_contribution"]["crypto"]}))
           PY
       - name: Upload report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: crypto-trend-core-v1
           path: artifacts/crypto_trend_core/report.json

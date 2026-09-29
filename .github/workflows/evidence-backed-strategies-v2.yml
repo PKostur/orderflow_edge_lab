@@ -22,8 +22,8 @@ jobs:
       matrix:
         interval: [4h, 8h, 1d]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install research runtime
@@ -36,7 +36,7 @@ jobs:
             --output-dir "artifacts/evidence_v2/data/${{ matrix.interval }}" \
             --max-workers 8
       - name: Preserve immutable timeframe data
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: evidence-v2-data-${{ matrix.interval }}
           path: artifacts/evidence_v2/data/${{ matrix.interval }}/
@@ -55,13 +55,13 @@ jobs:
         family: [donchian_breakout, ema_tsmom, vol_scaled_momentum]
         interval: [4h, 8h, 1d]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install research runtime
         run: python -m pip install -e ".[research]"
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v7
         with:
           name: evidence-v2-data-${{ matrix.interval }}
           path: artifacts/evidence_v2/data/${{ matrix.interval }}
@@ -74,7 +74,7 @@ jobs:
             --interval "${{ matrix.interval }}" \
             --data-dir "artifacts/evidence_v2/data/${{ matrix.interval }}" \
             --output "artifacts/evidence_v2/price/${{ matrix.family }}_${{ matrix.interval }}.json"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: evidence-v2-price-${{ matrix.family }}-${{ matrix.interval }}
           path: artifacts/evidence_v2/price/*.json
@@ -86,8 +86,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install research runtime
@@ -99,7 +99,7 @@ jobs:
             --config config/evidence_backed_strategies_v2.json \
             --output artifacts/evidence_v2/basis/basis_convergence.json \
             --max-workers 5
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: always()
         with:
           name: evidence-v2-basis-convergence
@@ -113,13 +113,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install research runtime
         run: python -m pip install -e ".[research]"
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v7
         with:
           pattern: evidence-v2-price-*
           path: artifacts/evidence_v2/all_price
@@ -145,7 +145,7 @@ jobs:
               'top': r['leaderboard'][:10],
           }, indent=2))
           PY
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: evidence-v2-price-leaderboard
           path: artifacts/evidence_v2/aggregate/
@@ -159,8 +159,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install research runtime
@@ -175,7 +175,7 @@ jobs:
           if r['release_manager']['status'] != 'reviewable':
               raise SystemExit('release manager blocked evidence-backed tournament')
           PY
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: evidence-v2-release-gate
           path: artifacts/evidence_v2/gate/

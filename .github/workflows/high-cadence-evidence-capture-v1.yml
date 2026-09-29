@@ -32,8 +32,8 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install research runtime
@@ -235,7 +235,7 @@ jobs:
           PY
       - name: Preserve cumulative compact state ledger
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: high-cadence-state-ledger-v1
           path: |
@@ -251,7 +251,7 @@ jobs:
           if-no-files-found: error
       - name: Preserve deterministic raw replay sample
         if: always() && steps.retention.outputs.keep_raw == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: high-cadence-market-replay-${{ github.run_id }}
           path: |

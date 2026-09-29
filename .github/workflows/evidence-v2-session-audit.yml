@@ -20,8 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install research runtime
@@ -50,7 +50,7 @@ jobs:
             --data-8h artifacts/evidence_v2_session/data/8h \
             --output artifacts/evidence_v2_session/session_audit.json
       - name: Preserve session audit
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: evidence-v2-session-audit
           path: artifacts/evidence_v2_session/
