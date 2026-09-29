@@ -1,0 +1,2012 @@
+{
+  "analysis": "prospective_session_development_watch",
+  "claims": {
+    "development_watch_only": true,
+    "leverage_authorized": false,
+    "live_order_transmission_supported": false,
+    "promotion_before_review_target_forbidden": true
+  },
+  "context_symbol": "BTC_USDT",
+  "prospective_review_requirement": {
+    "minimum_new_calendar_days": 5,
+    "minimum_new_independent_batches": 10
+  },
+  "prospective_watch_start_utc": "2026-09-22T15:39:58Z",
+  "schema_version": 1,
+  "symbol": "ENA_USDT",
+  "watches": [
+    {
+      "cells": [
+        {
+          "batch_curve": [
+            {
+              "batch_id": "batch_1:6aafc5ffc729",
+              "cumulative_net_bps": -2.957169529480323,
+              "net_bps": -2.957169529480323
+            },
+            {
+              "batch_id": "batch_1:b65af2a0c317",
+              "cumulative_net_bps": -39.72050068629948,
+              "net_bps": -36.763331156819156
+            },
+            {
+              "batch_id": "batch_1:937184dbe421",
+              "cumulative_net_bps": -49.18372467863682,
+              "net_bps": -9.463223992337337
+            },
+            {
+              "batch_id": "batch_1:76a0711d8e52",
+              "cumulative_net_bps": -47.92943218477137,
+              "net_bps": 1.2542924938654458
+            },
+            {
+              "batch_id": "batch_1:cd1c54cc4ae7",
+              "cumulative_net_bps": -92.8657555509206,
+              "net_bps": -44.936323366149225
+            },
+            {
+              "batch_id": "batch_1:dc8b5fd0b5e6",
+              "cumulative_net_bps": -127.98469856230241,
+              "net_bps": -35.118943011381816
+            },
+            {
+              "batch_id": "batch_1:2796b1b5170a",
+              "cumulative_net_bps": -199.13104679203332,
+              "net_bps": -71.14634822973092
+            },
+            {
+              "batch_id": "batch_1:0464c5839060",
+              "cumulative_net_bps": -226.79923166681925,
+              "net_bps": -27.668184874785926
+            },
+            {
+              "batch_id": "batch_1:33d64e3fb39f",
+              "cumulative_net_bps": -248.7284340002438,
+              "net_bps": -21.929202333424534
+            },
+            {
+              "batch_id": "batch_1:99791d752e7d",
+              "cumulative_net_bps": -264.2189617416812,
+              "net_bps": -15.490527741437425
+            }
+          ],
+          "calendar_days": 6,
+          "cumulative_net_bps": -264.2189617416812,
+          "daily_curve": [
+            {
+              "cumulative_net_bps": -39.720500686299474,
+              "date_utc": "2026-09-23",
+              "net_bps": -39.720500686299474
+            },
+            {
+              "cumulative_net_bps": -47.929432184771365,
+              "date_utc": "2026-09-24",
+              "net_bps": -8.208931498471891
+            },
+            {
+              "cumulative_net_bps": -127.98469856230241,
+              "date_utc": "2026-09-25",
+              "net_bps": -80.05526637753104
+            },
+            {
+              "cumulative_net_bps": -226.79923166681925,
+              "date_utc": "2026-09-26",
+              "net_bps": -98.81453310451684
+            },
+            {
+              "cumulative_net_bps": -248.7284340002438,
+              "date_utc": "2026-09-27",
+              "net_bps": -21.929202333424534
+            },
+            {
+              "cumulative_net_bps": -264.2189617416812,
+              "date_utc": "2026-09-28",
+              "net_bps": -15.490527741437425
+            }
+          ],
+          "fee_bps_round_trip": 4.0,
+          "giveback_from_peak_bps": -264.2189617416812,
+          "gross_mean_bps": 0.3805621679221753,
+          "horizon_ms": 5000,
+          "independent_batches": 10,
+          "largest_positive_batch_share": 1.0,
+          "max_drawdown_bps": -269.249771251989,
+          "net_mean_bps": -3.6194378320778244,
+          "net_median_bps": -4.0,
+          "observations": 73,
+          "peak_cumulative_net_bps": 0.0,
+          "positive_batch_fraction": 0.1,
+          "positive_day_fraction": 0.0,
+          "profit_factor": 0.30620788580425307,
+          "win_rate": 0.3150684931506849
+        },
+        {
+          "batch_curve": [
+            {
+              "batch_id": "batch_1:6aafc5ffc729",
+              "cumulative_net_bps": 8.075933439018142,
+              "net_bps": 8.075933439018142
+            },
+            {
+              "batch_id": "batch_1:b65af2a0c317",
+              "cumulative_net_bps": -46.70311473028495,
+              "net_bps": -54.779048169303096
+            },
+            {
+              "batch_id": "batch_1:937184dbe421",
+              "cumulative_net_bps": -59.566691404572666,
+              "net_bps": -12.863576674287717
+            },
+            {
+              "batch_id": "batch_1:76a0711d8e52",
+              "cumulative_net_bps": -49.00210566059398,
+              "net_bps": 10.564585743978679
+            },
+            {
+              "batch_id": "batch_1:cd1c54cc4ae7",
+              "cumulative_net_bps": -250.3920809849037,
+              "net_bps": -201.38997532430975
+            },
+            {
+              "batch_id": "batch_1:dc8b5fd0b5e6",
+              "cumulative_net_bps": -285.775100263378,
+              "net_bps": -35.38301927847428
+            },
+            {
+              "batch_id": "batch_1:2796b1b5170a",
+              "cumulative_net_bps": -433.85551790925695,
+              "net_bps": -148.08041764587892
+            },
+            {
+              "batch_id": "batch_1:0464c5839060",
+              "cumulative_net_bps": -435.85755806989914,
+              "net_bps": -2.0020401606421814
+            },
+            {
+              "batch_id": "batch_1:33d64e3fb39f",
+              "cumulative_net_bps": -451.85372379215164,
+              "net_bps": -15.996165722252472
+            },
+            {
+              "batch_id": "batch_1:99791d752e7d",
+              "cumulative_net_bps": -493.27500417400415,
+              "net_bps": -41.42128038185254
+            }
+          ],
+          "calendar_days": 6,
+          "cumulative_net_bps": -493.27500417400415,
+          "daily_curve": [
+            {
+              "cumulative_net_bps": -46.70311473028496,
+              "date_utc": "2026-09-23",
+              "net_bps": -46.70311473028496
+            },
+            {
+              "cumulative_net_bps": -49.002105660594,
+              "date_utc": "2026-09-24",
+              "net_bps": -2.2989909303090386
+            },
+            {
+              "cumulative_net_bps": -285.775100263378,
+              "date_utc": "2026-09-25",
+              "net_bps": -236.77299460278402
+            },
+            {
+              "cumulative_net_bps": -435.85755806989914,
+              "date_utc": "2026-09-26",
+              "net_bps": -150.0824578065211
+            },
+            {
+              "cumulative_net_bps": -451.85372379215164,
+              "date_utc": "2026-09-27",
+              "net_bps": -15.996165722252472
+            },
+            {
+              "cumulative_net_bps": -493.27500417400415,
+              "date_utc": "2026-09-28",
+              "net_bps": -41.42128038185254
+            }
+          ],
+          "fee_bps_round_trip": 4.0,
+          "giveback_from_peak_bps": -501.35093761302227,
+          "gross_mean_bps": -2.7571918380000566,
+          "horizon_ms": 15000,
+          "independent_batches": 10,
+          "largest_positive_batch_share": 0.5667538355699501,
+          "max_drawdown_bps": -501.35093761302215,
+          "net_mean_bps": -6.757191838000057,
+          "net_median_bps": -5.473893658572312,
+          "observations": 73,
+          "peak_cumulative_net_bps": 8.075933439018142,
+          "positive_batch_fraction": 0.2,
+          "positive_day_fraction": 0.0,
+          "profit_factor": 0.25961641069289043,
+          "win_rate": 0.2602739726027397
+        },
+        {
+          "batch_curve": [
+            {
+              "batch_id": "batch_1:6aafc5ffc729",
+              "cumulative_net_bps": -8.016187472938745,
+              "net_bps": -8.016187472938745
+            },
+            {
+              "batch_id": "batch_1:b65af2a0c317",
+              "cumulative_net_bps": -71.11475216313231,
+              "net_bps": -63.09856469019357
+            },
+            {
+              "batch_id": "batch_1:937184dbe421",
+              "cumulative_net_bps": -80.60288209576423,
+              "net_bps": -9.48812993263192
+            },
+            {
+              "batch_id": "batch_1:76a0711d8e52",
+              "cumulative_net_bps": -66.13305728958258,
+              "net_bps": 14.469824806181649
+            },
+            {
+              "batch_id": "batch_1:cd1c54cc4ae7",
+              "cumulative_net_bps": -219.5751302196377,
+              "net_bps": -153.44207293005513
+            },
+            {
+              "batch_id": "batch_1:dc8b5fd0b5e6",
+              "cumulative_net_bps": -326.37313936444343,
+              "net_bps": -106.79800914480572
+            },
+            {
+              "batch_id": "batch_1:2796b1b5170a",
+              "cumulative_net_bps": -497.36554300801356,
+              "net_bps": -170.9924036435701
+            },
+            {
+              "batch_id": "batch_1:0464c5839060",
+              "cumulative_net_bps": -546.3259003597539,
+              "net_bps": -48.960357351740285
+            },
+            {
+              "batch_id": "batch_1:33d64e3fb39f",
+              "cumulative_net_bps": -566.7602925733819,
+              "net_bps": -20.43439221362807
+            },
+            {
+              "batch_id": "batch_1:99791d752e7d",
+              "cumulative_net_bps": -601.4859705784838,
+              "net_bps": -34.72567800510194
+            }
+          ],
+          "calendar_days": 6,
+          "cumulative_net_bps": -601.4859705784838,
+          "daily_curve": [
+            {
+              "cumulative_net_bps": -71.11475216313232,
+              "date_utc": "2026-09-23",
+              "net_bps": -71.11475216313232
+            },
+            {
+              "cumulative_net_bps": -66.1330572895826,
+              "date_utc": "2026-09-24",
+              "net_bps": 4.981694873549728
+            },
+            {
+              "cumulative_net_bps": -326.37313936444343,
+              "date_utc": "2026-09-25",
+              "net_bps": -260.2400820748608
+            },
+            {
+              "cumulative_net_bps": -546.3259003597539,
+              "date_utc": "2026-09-26",
+              "net_bps": -219.95276099531037
+            },
+            {
+              "cumulative_net_bps": -566.7602925733819,
+              "date_utc": "2026-09-27",
+              "net_bps": -20.43439221362807
+            },
+            {
+              "cumulative_net_bps": -601.4859705784838,
+              "date_utc": "2026-09-28",
+              "net_bps": -34.72567800510194
+            }
+          ],
+          "fee_bps_round_trip": 4.0,
+          "giveback_from_peak_bps": -601.4859705784838,
+          "gross_mean_bps": -4.47163338842935,
+          "horizon_ms": 30000,
+          "independent_batches": 10,
+          "largest_positive_batch_share": 1.0,
+          "max_drawdown_bps": -607.9161382849475,
+          "net_mean_bps": -8.47163338842935,
+          "net_median_bps": -5.847233767433565,
+          "observations": 71,
+          "peak_cumulative_net_bps": 0.0,
+          "positive_batch_fraction": 0.1,
+          "positive_day_fraction": 0.16666666666666666,
+          "profit_factor": 0.27758335280972524,
+          "win_rate": 0.323943661971831
+        },
+        {
+          "batch_curve": [
+            {
+              "batch_id": "batch_1:6aafc5ffc729",
+              "cumulative_net_bps": -10.957169529480323,
+              "net_bps": -10.957169529480323
+            },
+            {
+              "batch_id": "batch_1:b65af2a0c317",
+              "cumulative_net_bps": -75.72050068629947,
+              "net_bps": -64.76333115681915
+            },
+            {
+              "batch_id": "batch_1:937184dbe421",
+              "cumulative_net_bps": -93.1837246786368,
+              "net_bps": -17.463223992337337
+            },
+            {
+              "batch_id": "batch_1:76a0711d8e52",
+              "cumulative_net_bps": -99.92943218477136,
+              "net_bps": -6.745707506134554
+            },
+            {
+              "batch_id": "batch_1:cd1c54cc4ae7",
+              "cumulative_net_bps": -204.8657555509206,
+              "net_bps": -104.93632336614922
+            },
+            {
+              "batch_id": "batch_1:dc8b5fd0b5e6",
+              "cumulative_net_bps": -279.9846985623024,
+              "net_bps": -75.11894301138182
+            },
+            {
+              "batch_id": "batch_1:2796b1b5170a",
+              "cumulative_net_bps": -427.1310467920333,
+              "net_bps": -147.1463482297309
+            },
+            {
+              "batch_id": "batch_1:0464c5839060",
+              "cumulative_net_bps": -482.79923166681925,
+              "net_bps": -55.66818487478592
+            },
+            {
+              "batch_id": "batch_1:33d64e3fb39f",
+              "cumulative_net_bps": -520.7284340002437,
+              "net_bps": -37.929202333424534
+            },
+            {
+              "batch_id": "batch_1:99791d752e7d",
+              "cumulative_net_bps": -556.2189617416811,
+              "net_bps": -35.490527741437425
+            }
+          ],
+          "calendar_days": 6,
+          "cumulative_net_bps": -556.2189617416813,
+          "daily_curve": [
+            {
+              "cumulative_net_bps": -75.72050068629947,
+              "date_utc": "2026-09-23",
+              "net_bps": -75.72050068629947
+            },
+            {
+              "cumulative_net_bps": -99.92943218477137,
+              "date_utc": "2026-09-24",
+              "net_bps": -24.20893149847189
+            },
+            {
+              "cumulative_net_bps": -279.9846985623024,
+              "date_utc": "2026-09-25",
+              "net_bps": -180.05526637753104
+            },
+            {
+              "cumulative_net_bps": -482.79923166681925,
+              "date_utc": "2026-09-26",
+              "net_bps": -202.81453310451684
+            },
+            {
+              "cumulative_net_bps": -520.7284340002437,
+              "date_utc": "2026-09-27",
+              "net_bps": -37.929202333424534
+            },
+            {
+              "cumulative_net_bps": -556.2189617416811,
+              "date_utc": "2026-09-28",
+              "net_bps": -35.490527741437425
+            }
+          ],
+          "fee_bps_round_trip": 8.0,
+          "giveback_from_peak_bps": -556.2189617416813,
+          "gross_mean_bps": 0.3805621679221753,
+          "horizon_ms": 5000,
+          "independent_batches": 10,
+          "largest_positive_batch_share": null,
+          "max_drawdown_bps": -556.218961741681,
+          "net_mean_bps": -7.619437832077826,
+          "net_median_bps": -8.0,
+          "observations": 73,
+          "peak_cumulative_net_bps": 0.0,
+          "positive_batch_fraction": 0.0,
+          "positive_day_fraction": 0.0,
+          "profit_factor": 0.0761928876428533,
+          "win_rate": 0.136986301369863
+        },
+        {
+          "batch_curve": [
+            {
+              "batch_id": "batch_1:6aafc5ffc729",
+              "cumulative_net_bps": 0.07593343901814187,
+              "net_bps": 0.07593343901814187
+            },
+            {
+              "batch_id": "batch_1:b65af2a0c317",
+              "cumulative_net_bps": -82.70311473028495,
+              "net_bps": -82.7790481693031
+            },
+            {
+              "batch_id": "batch_1:937184dbe421",
+              "cumulative_net_bps": -103.56669140457267,
+              "net_bps": -20.863576674287717
+            },
+            {
+              "batch_id": "batch_1:76a0711d8e52",
+              "cumulative_net_bps": -101.00210566059398,
+              "net_bps": 2.5645857439786788
+            },
+            {
+              "batch_id": "batch_1:cd1c54cc4ae7",
+              "cumulative_net_bps": -362.39208098490377,
+              "net_bps": -261.3899753243098
+            },
+            {
+              "batch_id": "batch_1:dc8b5fd0b5e6",
+              "cumulative_net_bps": -437.775100263378,
+              "net_bps": -75.38301927847428
+            },
+            {
+              "batch_id": "batch_1:2796b1b5170a",
+              "cumulative_net_bps": -661.855517909257,
+              "net_bps": -224.08041764587892
+            },
+            {
+              "batch_id": "batch_1:0464c5839060",
+              "cumulative_net_bps": -691.8575580698991,
+              "net_bps": -30.00204016064218
+            },
+            {
+              "batch_id": "batch_1:33d64e3fb39f",
+              "cumulative_net_bps": -723.8537237921516,
+              "net_bps": -31.99616572225247
+            },
+            {
+              "batch_id": "batch_1:99791d752e7d",
+              "cumulative_net_bps": -785.2750041740042,
+              "net_bps": -61.42128038185254
+            }
+          ],
+          "calendar_days": 6,
+          "cumulative_net_bps": -785.2750041740042,
+          "daily_curve": [
+            {
+              "cumulative_net_bps": -82.70311473028495,
+              "date_utc": "2026-09-23",
+              "net_bps": -82.70311473028495
+            },
+            {
+              "cumulative_net_bps": -101.002105660594,
+              "date_utc": "2026-09-24",
+              "net_bps": -18.29899093030904
+            },
+            {
+              "cumulative_net_bps": -437.775100263378,
+              "date_utc": "2026-09-25",
+              "net_bps": -336.772994602784
+            },
+            {
+              "cumulative_net_bps": -691.8575580698991,
+              "date_utc": "2026-09-26",
+              "net_bps": -254.0824578065211
+            },
+            {
+              "cumulative_net_bps": -723.8537237921516,
+              "date_utc": "2026-09-27",
+              "net_bps": -31.99616572225247
+            },
+            {
+              "cumulative_net_bps": -785.2750041740042,
+              "date_utc": "2026-09-28",
+              "net_bps": -61.42128038185254
+            }
+          ],
+          "fee_bps_round_trip": 8.0,
+          "giveback_from_peak_bps": -785.3509376130223,
+          "gross_mean_bps": -2.7571918380000566,
+          "horizon_ms": 15000,
+          "independent_batches": 10,
+          "largest_positive_batch_share": 0.9712429890655208,
+          "max_drawdown_bps": -785.3509376130227,
+          "net_mean_bps": -10.757191838000058,
+          "net_median_bps": -9.473893658572312,
+          "observations": 73,
+          "peak_cumulative_net_bps": 0.07593343901814187,
+          "positive_batch_fraction": 0.2,
+          "positive_day_fraction": 0.0,
+          "profit_factor": 0.12276158505093829,
+          "win_rate": 0.1780821917808219
+        },
+        {
+          "batch_curve": [
+            {
+              "batch_id": "batch_1:6aafc5ffc729",
+              "cumulative_net_bps": -16.016187472938746,
+              "net_bps": -16.016187472938746
+            },
+            {
+              "batch_id": "batch_1:b65af2a0c317",
+              "cumulative_net_bps": -107.11475216313232,
+              "net_bps": -91.09856469019357
+            },
+            {
+              "batch_id": "batch_1:937184dbe421",
+              "cumulative_net_bps": -124.60288209576424,
+              "net_bps": -17.48812993263192
+            },
+            {
+              "batch_id": "batch_1:76a0711d8e52",
+              "cumulative_net_bps": -118.1330572895826,
+              "net_bps": 6.469824806181649
+            },
+            {
+              "batch_id": "batch_1:cd1c54cc4ae7",
+              "cumulative_net_bps": -327.57513021963774,
+              "net_bps": -209.44207293005513
+            },
+            {
+              "batch_id": "batch_1:dc8b5fd0b5e6",
+              "cumulative_net_bps": -470.37313936444343,
+              "net_bps": -142.79800914480572
+            },
+            {
+              "batch_id": "batch_1:2796b1b5170a",
+              "cumulative_net_bps": -717.3655430080136,
+              "net_bps": -246.9924036435701
+            },
+            {
+              "batch_id": "batch_1:0464c5839060",
+              "cumulative_net_bps": -794.3259003597539,
+              "net_bps": -76.96035735174029
+            },
+            {
+              "batch_id": "batch_1:33d64e3fb39f",
+              "cumulative_net_bps": -830.7602925733819,
+              "net_bps": -36.43439221362807
+            },
+            {
+              "batch_id": "batch_1:99791d752e7d",
+              "cumulative_net_bps": -885.4859705784838,
+              "net_bps": -54.72567800510194
+            }
+          ],
+          "calendar_days": 6,
+          "cumulative_net_bps": -885.4859705784838,
+          "daily_curve": [
+            {
+              "cumulative_net_bps": -107.11475216313232,
+              "date_utc": "2026-09-23",
+              "net_bps": -107.11475216313232
+            },
+            {
+              "cumulative_net_bps": -118.1330572895826,
+              "date_utc": "2026-09-24",
+              "net_bps": -11.018305126450272
+            },
+            {
+              "cumulative_net_bps": -470.37313936444343,
+              "date_utc": "2026-09-25",
+              "net_bps": -352.2400820748608
+            },
+            {
+              "cumulative_net_bps": -794.3259003597539,
+              "date_utc": "2026-09-26",
+              "net_bps": -323.95276099531037
+            },
+            {
+              "cumulative_net_bps": -830.7602925733819,
+              "date_utc": "2026-09-27",
+              "net_bps": -36.43439221362807
+            },
+            {
+              "cumulative_net_bps": -885.4859705784838,
+              "date_utc": "2026-09-28",
+              "net_bps": -54.72567800510194
+            }
+          ],
+          "fee_bps_round_trip": 8.0,
+          "giveback_from_peak_bps": -885.4859705784838,
+          "gross_mean_bps": -4.47163338842935,
+          "horizon_ms": 30000,
+          "independent_batches": 10,
+          "largest_positive_batch_share": 1.0,
+          "max_drawdown_bps": -885.4859705784837,
+          "net_mean_bps": -12.47163338842935,
+          "net_median_bps": -9.847233767433565,
+          "observations": 71,
+          "peak_cumulative_net_bps": 0.0,
+          "positive_batch_fraction": 0.1,
+          "positive_day_fraction": 0.0,
+          "profit_factor": 0.15397612715932743,
+          "win_rate": 0.16901408450704225
+        }
+      ],
+      "conditions": null,
+      "development_snapshot_30s_4bps": {
+        "calendar_days": 7,
+        "cumulative_net_bps": 138.5,
+        "gross_mean_bps": 6.2,
+        "independent_batches": 9,
+        "max_drawdown_bps": -242.7,
+        "net_mean_bps": 2.2,
+        "observations": 63,
+        "positive_batch_fraction_pct": 55.6,
+        "positive_day_fraction_pct": 57.1,
+        "profit_factor": 1.24,
+        "win_rate_pct": 55.6
+      },
+      "direction": "SHORT",
+      "family": "aligned",
+      "prospective_calendar_days": 6,
+      "prospective_independent_batches": 10,
+      "prospective_unique_signals": 73,
+      "prospective_watch_start_utc": "2026-09-22T15:39:58Z",
+      "ready_for_review": true,
+      "review_requirement": {
+        "minimum_new_calendar_days": 5,
+        "minimum_new_independent_batches": 10,
+        "minimum_new_signals": 0
+      },
+      "session_phase": "ASIA_OPENING",
+      "side": -1,
+      "status": "READY_FOR_REVIEW",
+      "travel_by_fee": [
+        {
+          "fee_bps_round_trip": 4.0,
+          "gross_travel_monotonic_non_decreasing": false,
+          "horizons": [
+            {
+              "gross_mean_bps": 0.3805621679221753,
+              "horizon_ms": 5000,
+              "independent_batches": 10,
+              "net_mean_bps": -3.6194378320778244,
+              "observations": 73,
+              "positive_batch_fraction": 0.1
+            },
+            {
+              "gross_mean_bps": -2.7571918380000566,
+              "horizon_ms": 15000,
+              "independent_batches": 10,
+              "net_mean_bps": -6.757191838000057,
+              "observations": 73,
+              "positive_batch_fraction": 0.2
+            },
+            {
+              "gross_mean_bps": -4.47163338842935,
+              "horizon_ms": 30000,
+              "independent_batches": 10,
+              "net_mean_bps": -8.47163338842935,
+              "observations": 71,
+              "positive_batch_fraction": 0.1
+            }
+          ]
+        },
+        {
+          "fee_bps_round_trip": 8.0,
+          "gross_travel_monotonic_non_decreasing": false,
+          "horizons": [
+            {
+              "gross_mean_bps": 0.3805621679221753,
+              "horizon_ms": 5000,
+              "independent_batches": 10,
+              "net_mean_bps": -7.619437832077826,
+              "observations": 73,
+              "positive_batch_fraction": 0.0
+            },
+            {
+              "gross_mean_bps": -2.7571918380000566,
+              "horizon_ms": 15000,
+              "independent_batches": 10,
+              "net_mean_bps": -10.757191838000058,
+              "observations": 73,
+              "positive_batch_fraction": 0.2
+            },
+            {
+              "gross_mean_bps": -4.47163338842935,
+              "horizon_ms": 30000,
+              "independent_batches": 10,
+              "net_mean_bps": -12.47163338842935,
+              "observations": 71,
+              "positive_batch_fraction": 0.1
+            }
+          ]
+        }
+      ],
+      "watch_id": "SESSION_W1_ALIGNED_SHORT_ASIA_OPENING"
+    },
+    {
+      "cells": [
+        {
+          "batch_curve": [
+            {
+              "batch_id": "batch_1:6aafc5ffc729",
+              "cumulative_net_bps": 2.422902234252126,
+              "net_bps": 2.422902234252126
+            },
+            {
+              "batch_id": "batch_1:b65af2a0c317",
+              "cumulative_net_bps": -11.582012930532393,
+              "net_bps": -14.004915164784519
+            },
+            {
+              "batch_id": "batch_1:937184dbe421",
+              "cumulative_net_bps": -16.07252158801041,
+              "net_bps": -4.490508657478017
+            },
+            {
+              "batch_id": "batch_1:76a0711d8e52",
+              "cumulative_net_bps": -14.818229094144964,
+              "net_bps": 1.2542924938654458
+            },
+            {
+              "batch_id": "batch_1:cd1c54cc4ae7",
+              "cumulative_net_bps": -2.795408113985342,
+              "net_bps": 12.022820980159622
+            },
+            {
+              "batch_id": "batch_1:dc8b5fd0b5e6",
+              "cumulative_net_bps": -37.122028565013736,
+              "net_bps": -34.32662045102839
+            },
+            {
+              "batch_id": "batch_1:2796b1b5170a",
+              "cumulative_net_bps": -74.54580248513878,
+              "net_bps": -37.42377392012505
+            },
+            {
+              "batch_id": "batch_1:0464c5839060",
+              "cumulative_net_bps": -82.02779519012749,
+              "net_bps": -7.481992704988716
+            },
+            {
+              "batch_id": "batch_1:33d64e3fb39f",
+              "cumulative_net_bps": -97.44007193681081,
+              "net_bps": -15.412276746683322
+            },
+            {
+              "batch_id": "batch_1:99791d752e7d",
+              "cumulative_net_bps": -124.83414283972448,
+              "net_bps": -27.39407090291367
+            }
+          ],
+          "calendar_days": 6,
+          "cumulative_net_bps": -124.83414283972449,
+          "daily_curve": [
+            {
+              "cumulative_net_bps": -11.582012930532393,
+              "date_utc": "2026-09-23",
+              "net_bps": -11.582012930532393
+            },
+            {
+              "cumulative_net_bps": -14.818229094144964,
+              "date_utc": "2026-09-24",
+              "net_bps": -3.2362161636125713
+            },
+            {
+              "cumulative_net_bps": -37.122028565013736,
+              "date_utc": "2026-09-25",
+              "net_bps": -22.30379947086877
+            },
+            {
+              "cumulative_net_bps": -82.0277951901275,
+              "date_utc": "2026-09-26",
+              "net_bps": -44.90576662511376
+            },
+            {
+              "cumulative_net_bps": -97.44007193681082,
+              "date_utc": "2026-09-27",
+              "net_bps": -15.412276746683322
+            },
+            {
+              "cumulative_net_bps": -124.83414283972449,
+              "date_utc": "2026-09-28",
+              "net_bps": -27.39407090291367
+            }
+          ],
+          "fee_bps_round_trip": 4.0,
+          "giveback_from_peak_bps": -127.25704507397661,
+          "gross_mean_bps": 0.09893303625860972,
+          "horizon_ms": 5000,
+          "independent_batches": 10,
+          "largest_positive_batch_share": 0.7657840096186069,
+          "max_drawdown_bps": -127.71850917777982,
+          "net_mean_bps": -3.9010669637413904,
+          "net_median_bps": -4.2452543287390085,
+          "observations": 32,
+          "peak_cumulative_net_bps": 2.422902234252126,
+          "positive_batch_fraction": 0.3,
+          "positive_day_fraction": 0.0,
+          "profit_factor": 0.26281881419600484,
+          "win_rate": 0.3125
+        },
+        {
+          "batch_curve": [
+            {
+              "batch_id": "batch_1:6aafc5ffc729",
+              "cumulative_net_bps": 5.175574620360338,
+              "net_bps": 5.175574620360338
+            },
+            {
+              "batch_id": "batch_1:b65af2a0c317",
+              "cumulative_net_bps": -4.210553415528107,
+              "net_bps": -9.386128035888445
+            },
+            {
+              "batch_id": "batch_1:937184dbe421",
+              "cumulative_net_bps": -8.210553415528107,
+              "net_bps": -4.0
+            },
+            {
+              "batch_id": "batch_1:76a0711d8e52",
+              "cumulative_net_bps": 2.3540323284505718,
+              "net_bps": 10.564585743978679
+            },
+            {
+              "batch_id": "batch_1:cd1c54cc4ae7",
+              "cumulative_net_bps": 7.535076149504583,
+              "net_bps": 5.181043821054011
+            },
+            {
+              "batch_id": "batch_1:dc8b5fd0b5e6",
+              "cumulative_net_bps": -34.65596934336185,
+              "net_bps": -42.19104549286644
+            },
+            {
+              "batch_id": "batch_1:2796b1b5170a",
+              "cumulative_net_bps": -120.65991395839319,
+              "net_bps": -86.00394461503133
+            },
+            {
+              "batch_id": "batch_1:0464c5839060",
+              "cumulative_net_bps": -125.87909045004322,
+              "net_bps": -5.219176491650035
+            },
+            {
+              "batch_id": "batch_1:33d64e3fb39f",
+              "cumulative_net_bps": -140.5490910319608,
+              "net_bps": -14.670000581917579
+            },
+            {
+              "batch_id": "batch_1:99791d752e7d",
+              "cumulative_net_bps": -187.95631711985698,
+              "net_bps": -47.40722608789615
+            }
+          ],
+          "calendar_days": 6,
+          "cumulative_net_bps": -187.95631711985695,
+          "daily_curve": [
+            {
+              "cumulative_net_bps": -4.210553415528107,
+              "date_utc": "2026-09-23",
+              "net_bps": -4.210553415528107
+            },
+            {
+              "cumulative_net_bps": 2.3540323284505718,
+              "date_utc": "2026-09-24",
+              "net_bps": 6.564585743978679
+            },
+            {
+              "cumulative_net_bps": -34.65596934336185,
+              "date_utc": "2026-09-25",
+              "net_bps": -37.010001671812425
+            },
+            {
+              "cumulative_net_bps": -125.87909045004321,
+              "date_utc": "2026-09-26",
+              "net_bps": -91.22312110668136
+            },
+            {
+              "cumulative_net_bps": -140.54909103196078,
+              "date_utc": "2026-09-27",
+              "net_bps": -14.670000581917579
+            },
+            {
+              "cumulative_net_bps": -187.95631711985692,
+              "date_utc": "2026-09-28",
+              "net_bps": -47.40722608789615
+            }
+          ],
+          "fee_bps_round_trip": 4.0,
+          "giveback_from_peak_bps": -203.3587016227462,
+          "gross_mean_bps": -1.8736349099955292,
+          "horizon_ms": 15000,
+          "independent_batches": 10,
+          "largest_positive_batch_share": 0.5049702517293323,
+          "max_drawdown_bps": -203.35870162274622,
+          "net_mean_bps": -5.87363490999553,
+          "net_median_bps": -5.7924266143865,
+          "observations": 32,
+          "peak_cumulative_net_bps": 15.402384502889252,
+          "positive_batch_fraction": 0.3,
+          "positive_day_fraction": 0.16666666666666666,
+          "profit_factor": 0.2088600046728755,
+          "win_rate": 0.1875
+        },
+        {
+          "batch_curve": [
+            {
+              "batch_id": "batch_1:6aafc5ffc729",
+              "cumulative_net_bps": 1.9641235032337203,
+              "net_bps": 1.9641235032337203
+            },
+            {
+              "batch_id": "batch_1:b65af2a0c317",
+              "cumulative_net_bps": -13.416379042730176,
+              "net_bps": -15.380502545963896
+            },
+            {
+              "batch_id": "batch_1:937184dbe421",
+              "cumulative_net_bps": -20.849939645076297,
+              "net_bps": -7.43356060234612
+            },
+            {
+              "batch_id": "batch_1:76a0711d8e52",
+              "cumulative_net_bps": -6.380114838894649,
+              "net_bps": 14.469824806181649
+            },
+            {
+              "batch_id": "batch_1:cd1c54cc4ae7",
+              "cumulative_net_bps": 12.186126078651355,
+              "net_bps": 18.566240917546004
+            },
+            {
+              "batch_id": "batch_1:dc8b5fd0b5e6",
+              "cumulative_net_bps": -63.122781914481024,
+              "net_bps": -75.30890799313238
+            },
+            {
+              "batch_id": "batch_1:2796b1b5170a",
+              "cumulative_net_bps": -166.4596908946944,
+              "net_bps": -103.3369089802134
+            },
+            {
+              "batch_id": "batch_1:0464c5839060",
+              "cumulative_net_bps": -186.0130144195015,
+              "net_bps": -19.553323524807087
+            },
+            {
+              "batch_id": "batch_1:33d64e3fb39f",
+              "cumulative_net_bps": -212.53661355908753,
+              "net_bps": -26.52359913958601
+            },
+            {
+              "batch_id": "batch_1:99791d752e7d",
+              "cumulative_net_bps": -260.2753842485598,
+              "net_bps": -47.73877068947228
+            }
+          ],
+          "calendar_days": 6,
+          "cumulative_net_bps": -260.27538424855976,
+          "daily_curve": [
+            {
+              "cumulative_net_bps": -13.416379042730176,
+              "date_utc": "2026-09-23",
+              "net_bps": -13.416379042730176
+            },
+            {
+              "cumulative_net_bps": -6.380114838894647,
+              "date_utc": "2026-09-24",
+              "net_bps": 7.036264203835529
+            },
+            {
+              "cumulative_net_bps": -63.12278191448102,
+              "date_utc": "2026-09-25",
+              "net_bps": -56.74266707558637
+            },
+            {
+              "cumulative_net_bps": -186.0130144195015,
+              "date_utc": "2026-09-26",
+              "net_bps": -122.89023250502048
+            },
+            {
+              "cumulative_net_bps": -212.53661355908753,
+              "date_utc": "2026-09-27",
+              "net_bps": -26.52359913958601
+            },
+            {
+              "cumulative_net_bps": -260.2753842485598,
+              "date_utc": "2026-09-28",
+              "net_bps": -47.73877068947228
+            }
+          ],
+          "fee_bps_round_trip": 4.0,
+          "giveback_from_peak_bps": -272.4615103272111,
+          "gross_mean_bps": -4.395980137050316,
+          "horizon_ms": 30000,
+          "independent_batches": 10,
+          "largest_positive_batch_share": 0.5304611582855112,
+          "max_drawdown_bps": -272.46151032721116,
+          "net_mean_bps": -8.395980137050314,
+          "net_median_bps": -5.847233767433565,
+          "observations": 31,
+          "peak_cumulative_net_bps": 12.186126078651355,
+          "positive_batch_fraction": 0.3,
+          "positive_day_fraction": 0.16666666666666666,
+          "profit_factor": 0.19299515501808207,
+          "win_rate": 0.22580645161290322
+        },
+        {
+          "batch_curve": [
+            {
+              "batch_id": "batch_1:6aafc5ffc729",
+              "cumulative_net_bps": -1.5770977657478742,
+              "net_bps": -1.5770977657478742
+            },
+            {
+              "batch_id": "batch_1:b65af2a0c317",
+              "cumulative_net_bps": -23.582012930532393,
+              "net_bps": -22.00491516478452
+            },
+            {
+              "batch_id": "batch_1:937184dbe421",
+              "cumulative_net_bps": -32.07252158801041,
+              "net_bps": -8.490508657478017
+            },
+            {
+              "batch_id": "batch_1:76a0711d8e52",
+              "cumulative_net_bps": -38.81822909414497,
+              "net_bps": -6.745707506134554
+            },
+            {
+              "batch_id": "batch_1:cd1c54cc4ae7",
+              "cumulative_net_bps": -38.795408113985346,
+              "net_bps": 0.022820980159622195
+            },
+            {
+              "batch_id": "batch_1:dc8b5fd0b5e6",
+              "cumulative_net_bps": -93.12202856501374,
+              "net_bps": -54.32662045102839
+            },
+            {
+              "batch_id": "batch_1:2796b1b5170a",
+              "cumulative_net_bps": -166.54580248513878,
+              "net_bps": -73.42377392012504
+            },
+            {
+              "batch_id": "batch_1:0464c5839060",
+              "cumulative_net_bps": -186.0277951901275,
+              "net_bps": -19.481992704988716
+            },
+            {
+              "batch_id": "batch_1:33d64e3fb39f",
+              "cumulative_net_bps": -209.44007193681082,
+              "net_bps": -23.41227674668332
+            },
+            {
+              "batch_id": "batch_1:99791d752e7d",
+              "cumulative_net_bps": -252.8341428397245,
+              "net_bps": -43.39407090291367
+            }
+          ],
+          "calendar_days": 6,
+          "cumulative_net_bps": -252.83414283972448,
+          "daily_curve": [
+            {
+              "cumulative_net_bps": -23.582012930532393,
+              "date_utc": "2026-09-23",
+              "net_bps": -23.582012930532393
+            },
+            {
+              "cumulative_net_bps": -38.81822909414497,
+              "date_utc": "2026-09-24",
+              "net_bps": -15.236216163612571
+            },
+            {
+              "cumulative_net_bps": -93.12202856501374,
+              "date_utc": "2026-09-25",
+              "net_bps": -54.30379947086877
+            },
+            {
+              "cumulative_net_bps": -186.0277951901275,
+              "date_utc": "2026-09-26",
+              "net_bps": -92.90576662511377
+            },
+            {
+              "cumulative_net_bps": -209.44007193681082,
+              "date_utc": "2026-09-27",
+              "net_bps": -23.41227674668332
+            },
+            {
+              "cumulative_net_bps": -252.8341428397245,
+              "date_utc": "2026-09-28",
+              "net_bps": -43.39407090291367
+            }
+          ],
+          "fee_bps_round_trip": 8.0,
+          "giveback_from_peak_bps": -252.83414283972448,
+          "gross_mean_bps": 0.09893303625860972,
+          "horizon_ms": 5000,
+          "independent_batches": 10,
+          "largest_positive_batch_share": 1.0,
+          "max_drawdown_bps": -252.83414283972448,
+          "net_mean_bps": -7.90106696374139,
+          "net_median_bps": -8.245254328739009,
+          "observations": 32,
+          "peak_cumulative_net_bps": 0.0,
+          "positive_batch_fraction": 0.1,
+          "positive_day_fraction": 0.0,
+          "profit_factor": 0.059847299247998004,
+          "win_rate": 0.09375
+        },
+        {
+          "batch_curve": [
+            {
+              "batch_id": "batch_1:6aafc5ffc729",
+              "cumulative_net_bps": 1.1755746203603383,
+              "net_bps": 1.1755746203603383
+            },
+            {
+              "batch_id": "batch_1:b65af2a0c317",
+              "cumulative_net_bps": -16.21055341552811,
+              "net_bps": -17.386128035888447
+            },
+            {
+              "batch_id": "batch_1:937184dbe421",
+              "cumulative_net_bps": -24.21055341552811,
+              "net_bps": -8.0
+            },
+            {
+              "batch_id": "batch_1:76a0711d8e52",
+              "cumulative_net_bps": -21.645967671549432,
+              "net_bps": 2.5645857439786788
+            },
+            {
+              "batch_id": "batch_1:cd1c54cc4ae7",
+              "cumulative_net_bps": -28.46492385049542,
+              "net_bps": -6.818956178945989
+            },
+            {
+              "batch_id": "batch_1:dc8b5fd0b5e6",
+              "cumulative_net_bps": -90.65596934336186,
+              "net_bps": -62.19104549286644
+            },
+            {
+              "batch_id": "batch_1:2796b1b5170a",
+              "cumulative_net_bps": -212.6599139583932,
+              "net_bps": -122.00394461503133
+            },
+            {
+              "batch_id": "batch_1:0464c5839060",
+              "cumulative_net_bps": -229.87909045004324,
+              "net_bps": -17.219176491650035
+            },
+            {
+              "batch_id": "batch_1:33d64e3fb39f",
+              "cumulative_net_bps": -252.5490910319608,
+              "net_bps": -22.670000581917577
+            },
+            {
+              "batch_id": "batch_1:99791d752e7d",
+              "cumulative_net_bps": -315.956317119857,
+              "net_bps": -63.40722608789615
+            }
+          ],
+          "calendar_days": 6,
+          "cumulative_net_bps": -315.9563171198569,
+          "daily_curve": [
+            {
+              "cumulative_net_bps": -16.210553415528107,
+              "date_utc": "2026-09-23",
+              "net_bps": -16.210553415528107
+            },
+            {
+              "cumulative_net_bps": -21.64596767154943,
+              "date_utc": "2026-09-24",
+              "net_bps": -5.435414256021321
+            },
+            {
+              "cumulative_net_bps": -90.65596934336185,
+              "date_utc": "2026-09-25",
+              "net_bps": -69.01000167181242
+            },
+            {
+              "cumulative_net_bps": -229.8790904500432,
+              "date_utc": "2026-09-26",
+              "net_bps": -139.22312110668136
+            },
+            {
+              "cumulative_net_bps": -252.54909103196078,
+              "date_utc": "2026-09-27",
+              "net_bps": -22.670000581917577
+            },
+            {
+              "cumulative_net_bps": -315.9563171198569,
+              "date_utc": "2026-09-28",
+              "net_bps": -63.40722608789615
+            }
+          ],
+          "fee_bps_round_trip": 8.0,
+          "giveback_from_peak_bps": -317.13189174021727,
+          "gross_mean_bps": -1.8736349099955292,
+          "horizon_ms": 15000,
+          "independent_batches": 10,
+          "largest_positive_batch_share": 0.6856887122891875,
+          "max_drawdown_bps": -317.13189174021727,
+          "net_mean_bps": -9.873634909995529,
+          "net_median_bps": -9.7924266143865,
+          "observations": 32,
+          "peak_cumulative_net_bps": 1.1755746203603383,
+          "positive_batch_fraction": 0.2,
+          "positive_day_fraction": 0.0,
+          "profit_factor": 0.08889831217070525,
+          "win_rate": 0.125
+        },
+        {
+          "batch_curve": [
+            {
+              "batch_id": "batch_1:6aafc5ffc729",
+              "cumulative_net_bps": -2.0358764967662797,
+              "net_bps": -2.0358764967662797
+            },
+            {
+              "batch_id": "batch_1:b65af2a0c317",
+              "cumulative_net_bps": -25.416379042730178,
+              "net_bps": -23.380502545963896
+            },
+            {
+              "batch_id": "batch_1:937184dbe421",
+              "cumulative_net_bps": -36.8499396450763,
+              "net_bps": -11.43356060234612
+            },
+            {
+              "batch_id": "batch_1:76a0711d8e52",
+              "cumulative_net_bps": -30.38011483889465,
+              "net_bps": 6.469824806181649
+            },
+            {
+              "batch_id": "batch_1:cd1c54cc4ae7",
+              "cumulative_net_bps": -19.813873921348645,
+              "net_bps": 10.566240917546004
+            },
+            {
+              "batch_id": "batch_1:dc8b5fd0b5e6",
+              "cumulative_net_bps": -115.12278191448102,
+              "net_bps": -95.30890799313238
+            },
+            {
+              "batch_id": "batch_1:2796b1b5170a",
+              "cumulative_net_bps": -254.4596908946944,
+              "net_bps": -139.3369089802134
+            },
+            {
+              "batch_id": "batch_1:0464c5839060",
+              "cumulative_net_bps": -286.0130144195015,
+              "net_bps": -31.553323524807087
+            },
+            {
+              "batch_id": "batch_1:33d64e3fb39f",
+              "cumulative_net_bps": -320.53661355908747,
+              "net_bps": -34.52359913958601
+            },
+            {
+              "batch_id": "batch_1:99791d752e7d",
+              "cumulative_net_bps": -384.27538424855976,
+              "net_bps": -63.73877068947228
+            }
+          ],
+          "calendar_days": 6,
+          "cumulative_net_bps": -384.27538424855976,
+          "daily_curve": [
+            {
+              "cumulative_net_bps": -25.416379042730178,
+              "date_utc": "2026-09-23",
+              "net_bps": -25.416379042730178
+            },
+            {
+              "cumulative_net_bps": -30.38011483889465,
+              "date_utc": "2026-09-24",
+              "net_bps": -4.963735796164471
+            },
+            {
+              "cumulative_net_bps": -115.12278191448101,
+              "date_utc": "2026-09-25",
+              "net_bps": -84.74266707558637
+            },
+            {
+              "cumulative_net_bps": -286.0130144195015,
+              "date_utc": "2026-09-26",
+              "net_bps": -170.89023250502046
+            },
+            {
+              "cumulative_net_bps": -320.53661355908747,
+              "date_utc": "2026-09-27",
+              "net_bps": -34.52359913958601
+            },
+            {
+              "cumulative_net_bps": -384.27538424855976,
+              "date_utc": "2026-09-28",
+              "net_bps": -63.73877068947228
+            }
+          ],
+          "fee_bps_round_trip": 8.0,
+          "giveback_from_peak_bps": -384.27538424855976,
+          "gross_mean_bps": -4.395980137050316,
+          "horizon_ms": 30000,
+          "independent_batches": 10,
+          "largest_positive_batch_share": 0.6202277620254455,
+          "max_drawdown_bps": -384.2753842485597,
+          "net_mean_bps": -12.395980137050314,
+          "net_median_bps": -9.847233767433565,
+          "observations": 31,
+          "peak_cumulative_net_bps": 0.0,
+          "positive_batch_fraction": 0.2,
+          "positive_day_fraction": 0.0,
+          "profit_factor": 0.09558380268704718,
+          "win_rate": 0.12903225806451613
+        }
+      ],
+      "conditions": null,
+      "development_snapshot_30s_4bps": {
+        "calendar_days": 5,
+        "cumulative_net_bps": 180.1,
+        "gross_mean_bps": 8.87,
+        "independent_batches": 7,
+        "max_drawdown_bps": -133.8,
+        "net_mean_bps": 4.87,
+        "observations": 37,
+        "positive_batch_fraction_pct": 42.9,
+        "positive_day_fraction_pct": 20,
+        "profit_factor": 1.58,
+        "win_rate_pct": 59.5
+      },
+      "direction": "SHORT",
+      "family": "aligned_btc",
+      "prospective_calendar_days": 6,
+      "prospective_independent_batches": 10,
+      "prospective_unique_signals": 32,
+      "prospective_watch_start_utc": "2026-09-22T15:39:58Z",
+      "ready_for_review": true,
+      "review_requirement": {
+        "minimum_new_calendar_days": 5,
+        "minimum_new_independent_batches": 10,
+        "minimum_new_signals": 0
+      },
+      "session_phase": "ASIA_OPENING",
+      "side": -1,
+      "status": "READY_FOR_REVIEW",
+      "travel_by_fee": [
+        {
+          "fee_bps_round_trip": 4.0,
+          "gross_travel_monotonic_non_decreasing": false,
+          "horizons": [
+            {
+              "gross_mean_bps": 0.09893303625860972,
+              "horizon_ms": 5000,
+              "independent_batches": 10,
+              "net_mean_bps": -3.9010669637413904,
+              "observations": 32,
+              "positive_batch_fraction": 0.3
+            },
+            {
+              "gross_mean_bps": -1.8736349099955292,
+              "horizon_ms": 15000,
+              "independent_batches": 10,
+              "net_mean_bps": -5.87363490999553,
+              "observations": 32,
+              "positive_batch_fraction": 0.3
+            },
+            {
+              "gross_mean_bps": -4.395980137050316,
+              "horizon_ms": 30000,
+              "independent_batches": 10,
+              "net_mean_bps": -8.395980137050314,
+              "observations": 31,
+              "positive_batch_fraction": 0.3
+            }
+          ]
+        },
+        {
+          "fee_bps_round_trip": 8.0,
+          "gross_travel_monotonic_non_decreasing": false,
+          "horizons": [
+            {
+              "gross_mean_bps": 0.09893303625860972,
+              "horizon_ms": 5000,
+              "independent_batches": 10,
+              "net_mean_bps": -7.90106696374139,
+              "observations": 32,
+              "positive_batch_fraction": 0.1
+            },
+            {
+              "gross_mean_bps": -1.8736349099955292,
+              "horizon_ms": 15000,
+              "independent_batches": 10,
+              "net_mean_bps": -9.873634909995529,
+              "observations": 32,
+              "positive_batch_fraction": 0.2
+            },
+            {
+              "gross_mean_bps": -4.395980137050316,
+              "horizon_ms": 30000,
+              "independent_batches": 10,
+              "net_mean_bps": -12.395980137050314,
+              "observations": 31,
+              "positive_batch_fraction": 0.2
+            }
+          ]
+        }
+      ],
+      "watch_id": "SESSION_W2_ALIGNED_BTC_SHORT_ASIA_OPENING"
+    },
+    {
+      "cells": [
+        {
+          "batch_curve": [
+            {
+              "batch_id": "batch_1:d6ca8f5f4678",
+              "cumulative_net_bps": -7.808979669570611,
+              "net_bps": -7.808979669570611
+            },
+            {
+              "batch_id": "batch_1:81d0d070d249",
+              "cumulative_net_bps": -14.141307426151151,
+              "net_bps": -6.33232775658054
+            },
+            {
+              "batch_id": "batch_1:509b89b905f9",
+              "cumulative_net_bps": 13.146514111054294,
+              "net_bps": 27.287821537205446
+            },
+            {
+              "batch_id": "batch_1:b2e9d461c32b",
+              "cumulative_net_bps": -2.0497393011551246,
+              "net_bps": -15.196253412209419
+            },
+            {
+              "batch_id": "batch_1:4a3de92a9e35",
+              "cumulative_net_bps": -19.772692785615188,
+              "net_bps": -17.722953484460064
+            },
+            {
+              "batch_id": "batch_1:fba855437667",
+              "cumulative_net_bps": -25.41654073550488,
+              "net_bps": -5.643847949889695
+            }
+          ],
+          "calendar_days": 5,
+          "cumulative_net_bps": -25.41654073550488,
+          "daily_curve": [
+            {
+              "cumulative_net_bps": -7.808979669570611,
+              "date_utc": "2026-09-23",
+              "net_bps": -7.808979669570611
+            },
+            {
+              "cumulative_net_bps": 13.146514111054294,
+              "date_utc": "2026-09-25",
+              "net_bps": 20.955493780624906
+            },
+            {
+              "cumulative_net_bps": -2.0497393011551246,
+              "date_utc": "2026-09-26",
+              "net_bps": -15.196253412209419
+            },
+            {
+              "cumulative_net_bps": -19.772692785615188,
+              "date_utc": "2026-09-28",
+              "net_bps": -17.722953484460064
+            },
+            {
+              "cumulative_net_bps": -25.41654073550488,
+              "date_utc": "2026-09-29",
+              "net_bps": -5.643847949889695
+            }
+          ],
+          "fee_bps_round_trip": 4.0,
+          "giveback_from_peak_bps": -40.54285282635714,
+          "gross_mean_bps": 1.6894053876813744,
+          "horizon_ms": 5000,
+          "independent_batches": 6,
+          "largest_positive_batch_share": 1.0,
+          "max_drawdown_bps": -42.751381793024045,
+          "net_mean_bps": -2.3105946123186256,
+          "net_median_bps": -6.236802863108123,
+          "observations": 11,
+          "peak_cumulative_net_bps": 15.12631209085226,
+          "positive_batch_fraction": 0.16666666666666666,
+          "positive_day_fraction": 0.2,
+          "profit_factor": 0.6134297340081885,
+          "win_rate": 0.2727272727272727
+        },
+        {
+          "batch_curve": [
+            {
+              "batch_id": "batch_1:d6ca8f5f4678",
+              "cumulative_net_bps": -5.428367376088424,
+              "net_bps": -5.428367376088424
+            },
+            {
+              "batch_id": "batch_1:81d0d070d249",
+              "cumulative_net_bps": -0.5849659396674944,
+              "net_bps": 4.84340143642093
+            },
+            {
+              "batch_id": "batch_1:509b89b905f9",
+              "cumulative_net_bps": 63.32377150874426,
+              "net_bps": 63.908737448411756
+            },
+            {
+              "batch_id": "batch_1:b2e9d461c32b",
+              "cumulative_net_bps": 73.33739475343017,
+              "net_bps": 10.013623244685917
+            },
+            {
+              "batch_id": "batch_1:4a3de92a9e35",
+              "cumulative_net_bps": 44.06968290731109,
+              "net_bps": -29.267711846119084
+            },
+            {
+              "batch_id": "batch_1:fba855437667",
+              "cumulative_net_bps": 28.035598757760333,
+              "net_bps": -16.034084149550758
+            }
+          ],
+          "calendar_days": 5,
+          "cumulative_net_bps": 28.035598757760333,
+          "daily_curve": [
+            {
+              "cumulative_net_bps": -5.428367376088424,
+              "date_utc": "2026-09-23",
+              "net_bps": -5.428367376088424
+            },
+            {
+              "cumulative_net_bps": 63.32377150874425,
+              "date_utc": "2026-09-25",
+              "net_bps": 68.75213888483268
+            },
+            {
+              "cumulative_net_bps": 73.33739475343017,
+              "date_utc": "2026-09-26",
+              "net_bps": 10.013623244685917
+            },
+            {
+              "cumulative_net_bps": 44.06968290731109,
+              "date_utc": "2026-09-28",
+              "net_bps": -29.267711846119084
+            },
+            {
+              "cumulative_net_bps": 28.035598757760333,
+              "date_utc": "2026-09-29",
+              "net_bps": -16.034084149550758
+            }
+          ],
+          "fee_bps_round_trip": 4.0,
+          "giveback_from_peak_bps": -45.30179599566984,
+          "gross_mean_bps": 6.54869079616003,
+          "horizon_ms": 15000,
+          "independent_batches": 6,
+          "largest_positive_batch_share": 0.8113771227570086,
+          "max_drawdown_bps": -49.06245720400347,
+          "net_mean_bps": 2.5486907961600305,
+          "net_median_bps": -5.428367376088424,
+          "observations": 11,
+          "peak_cumulative_net_bps": 73.33739475343017,
+          "positive_batch_fraction": 0.5,
+          "positive_day_fraction": 0.4,
+          "profit_factor": 1.4081703315392997,
+          "win_rate": 0.45454545454545453
+        },
+        {
+          "batch_curve": [
+            {
+              "batch_id": "batch_1:d6ca8f5f4678",
+              "cumulative_net_bps": -6.856734752179069,
+              "net_bps": -6.856734752179069
+            },
+            {
+              "batch_id": "batch_1:81d0d070d249",
+              "cumulative_net_bps": -21.09083286895984,
+              "net_bps": -14.234098116780771
+            },
+            {
+              "batch_id": "batch_1:509b89b905f9",
+              "cumulative_net_bps": 20.05155204473976,
+              "net_bps": 41.1423849136996
+            },
+            {
+              "batch_id": "batch_1:b2e9d461c32b",
+              "cumulative_net_bps": 39.77872790769469,
+              "net_bps": 19.727175862954923
+            },
+            {
+              "batch_id": "batch_1:4a3de92a9e35",
+              "cumulative_net_bps": 16.504457720308213,
+              "net_bps": -23.274270187386474
+            },
+            {
+              "batch_id": "batch_1:fba855437667",
+              "cumulative_net_bps": 54.66641506609986,
+              "net_bps": 38.16195734579165
+            }
+          ],
+          "calendar_days": 5,
+          "cumulative_net_bps": 54.66641506609986,
+          "daily_curve": [
+            {
+              "cumulative_net_bps": -6.856734752179069,
+              "date_utc": "2026-09-23",
+              "net_bps": -6.856734752179069
+            },
+            {
+              "cumulative_net_bps": 20.05155204473976,
+              "date_utc": "2026-09-25",
+              "net_bps": 26.90828679691883
+            },
+            {
+              "cumulative_net_bps": 39.77872790769469,
+              "date_utc": "2026-09-26",
+              "net_bps": 19.727175862954923
+            },
+            {
+              "cumulative_net_bps": 16.504457720308213,
+              "date_utc": "2026-09-28",
+              "net_bps": -23.274270187386474
+            },
+            {
+              "cumulative_net_bps": 54.66641506609986,
+              "date_utc": "2026-09-29",
+              "net_bps": 38.16195734579165
+            }
+          ],
+          "fee_bps_round_trip": 4.0,
+          "giveback_from_peak_bps": 7.105427357601002e-15,
+          "gross_mean_bps": 8.969674096918169,
+          "horizon_ms": 30000,
+          "independent_batches": 6,
+          "largest_positive_batch_share": 0.415447381739919,
+          "max_drawdown_bps": -27.22398706092077,
+          "net_mean_bps": 4.969674096918169,
+          "net_median_bps": 1.3952953024960504,
+          "observations": 11,
+          "peak_cumulative_net_bps": 54.66641506609985,
+          "positive_batch_fraction": 0.5,
+          "positive_day_fraction": 0.6,
+          "profit_factor": 1.919863968442117,
+          "win_rate": 0.5454545454545454
+        },
+        {
+          "batch_curve": [
+            {
+              "batch_id": "batch_1:d6ca8f5f4678",
+              "cumulative_net_bps": -11.808979669570611,
+              "net_bps": -11.808979669570611
+            },
+            {
+              "batch_id": "batch_1:81d0d070d249",
+              "cumulative_net_bps": -26.14130742615115,
+              "net_bps": -14.33232775658054
+            },
+            {
+              "batch_id": "batch_1:509b89b905f9",
+              "cumulative_net_bps": -6.8534858889457055,
+              "net_bps": 19.287821537205446
+            },
+            {
+              "batch_id": "batch_1:b2e9d461c32b",
+              "cumulative_net_bps": -30.049739301155125,
+              "net_bps": -23.19625341220942
+            },
+            {
+              "batch_id": "batch_1:4a3de92a9e35",
+              "cumulative_net_bps": -55.77269278561519,
+              "net_bps": -25.722953484460064
+            },
+            {
+              "batch_id": "batch_1:fba855437667",
+              "cumulative_net_bps": -69.41654073550488,
+              "net_bps": -13.643847949889695
+            }
+          ],
+          "calendar_days": 5,
+          "cumulative_net_bps": -69.41654073550488,
+          "daily_curve": [
+            {
+              "cumulative_net_bps": -11.808979669570611,
+              "date_utc": "2026-09-23",
+              "net_bps": -11.808979669570611
+            },
+            {
+              "cumulative_net_bps": -6.853485888945707,
+              "date_utc": "2026-09-25",
+              "net_bps": 4.955493780624904
+            },
+            {
+              "cumulative_net_bps": -30.049739301155128,
+              "date_utc": "2026-09-26",
+              "net_bps": -23.19625341220942
+            },
+            {
+              "cumulative_net_bps": -55.77269278561519,
+              "date_utc": "2026-09-28",
+              "net_bps": -25.722953484460064
+            },
+            {
+              "cumulative_net_bps": -69.41654073550488,
+              "date_utc": "2026-09-29",
+              "net_bps": -13.643847949889695
+            }
+          ],
+          "fee_bps_round_trip": 8.0,
+          "giveback_from_peak_bps": -69.41654073550488,
+          "gross_mean_bps": 1.6894053876813744,
+          "horizon_ms": 5000,
+          "independent_batches": 6,
+          "largest_positive_batch_share": 1.0,
+          "max_drawdown_bps": -69.41654073550488,
+          "net_mean_bps": -6.310594612318625,
+          "net_median_bps": -10.236802863108123,
+          "observations": 11,
+          "peak_cumulative_net_bps": 0.0,
+          "positive_batch_fraction": 0.16666666666666666,
+          "positive_day_fraction": 0.2,
+          "profit_factor": 0.3026287487380757,
+          "win_rate": 0.18181818181818182
+        },
+        {
+          "batch_curve": [
+            {
+              "batch_id": "batch_1:d6ca8f5f4678",
+              "cumulative_net_bps": -9.428367376088424,
+              "net_bps": -9.428367376088424
+            },
+            {
+              "batch_id": "batch_1:81d0d070d249",
+              "cumulative_net_bps": -12.584965939667494,
+              "net_bps": -3.1565985635790703
+            },
+            {
+              "batch_id": "batch_1:509b89b905f9",
+              "cumulative_net_bps": 43.32377150874426,
+              "net_bps": 55.908737448411756
+            },
+            {
+              "batch_id": "batch_1:b2e9d461c32b",
+              "cumulative_net_bps": 45.337394753430175,
+              "net_bps": 2.013623244685917
+            },
+            {
+              "batch_id": "batch_1:4a3de92a9e35",
+              "cumulative_net_bps": 8.06968290731109,
+              "net_bps": -37.267711846119084
+            },
+            {
+              "batch_id": "batch_1:fba855437667",
+              "cumulative_net_bps": -15.964401242239667,
+              "net_bps": -24.034084149550758
+            }
+          ],
+          "calendar_days": 5,
+          "cumulative_net_bps": -15.964401242239669,
+          "daily_curve": [
+            {
+              "cumulative_net_bps": -9.428367376088424,
+              "date_utc": "2026-09-23",
+              "net_bps": -9.428367376088424
+            },
+            {
+              "cumulative_net_bps": 43.32377150874426,
+              "date_utc": "2026-09-25",
+              "net_bps": 52.75213888483268
+            },
+            {
+              "cumulative_net_bps": 45.337394753430175,
+              "date_utc": "2026-09-26",
+              "net_bps": 2.013623244685917
+            },
+            {
+              "cumulative_net_bps": 8.06968290731109,
+              "date_utc": "2026-09-28",
+              "net_bps": -37.267711846119084
+            },
+            {
+              "cumulative_net_bps": -15.964401242239667,
+              "date_utc": "2026-09-29",
+              "net_bps": -24.034084149550758
+            }
+          ],
+          "fee_bps_round_trip": 8.0,
+          "giveback_from_peak_bps": -61.30179599566984,
+          "gross_mean_bps": 6.54869079616003,
+          "horizon_ms": 15000,
+          "independent_batches": 6,
+          "largest_positive_batch_share": 0.9652358222180356,
+          "max_drawdown_bps": -61.30179599566985,
+          "net_mean_bps": -1.45130920383997,
+          "net_median_bps": -9.428367376088424,
+          "observations": 11,
+          "peak_cumulative_net_bps": 45.337394753430175,
+          "positive_batch_fraction": 0.3333333333333333,
+          "positive_day_fraction": 0.4,
+          "profit_factor": 0.8282019020210388,
+          "win_rate": 0.36363636363636365
+        },
+        {
+          "batch_curve": [
+            {
+              "batch_id": "batch_1:d6ca8f5f4678",
+              "cumulative_net_bps": -10.856734752179069,
+              "net_bps": -10.856734752179069
+            },
+            {
+              "batch_id": "batch_1:81d0d070d249",
+              "cumulative_net_bps": -33.090832868959836,
+              "net_bps": -22.23409811678077
+            },
+            {
+              "batch_id": "batch_1:509b89b905f9",
+              "cumulative_net_bps": 0.051552044739764824,
+              "net_bps": 33.1423849136996
+            },
+            {
+              "batch_id": "batch_1:b2e9d461c32b",
+              "cumulative_net_bps": 11.778727907694686,
+              "net_bps": 11.72717586295492
+            },
+            {
+              "batch_id": "batch_1:4a3de92a9e35",
+              "cumulative_net_bps": -19.49554227969179,
+              "net_bps": -31.274270187386474
+            },
+            {
+              "batch_id": "batch_1:fba855437667",
+              "cumulative_net_bps": 10.666415066099859,
+              "net_bps": 30.16195734579165
+            }
+          ],
+          "calendar_days": 5,
+          "cumulative_net_bps": 10.666415066099857,
+          "daily_curve": [
+            {
+              "cumulative_net_bps": -10.856734752179069,
+              "date_utc": "2026-09-23",
+              "net_bps": -10.856734752179069
+            },
+            {
+              "cumulative_net_bps": 0.05155204473976127,
+              "date_utc": "2026-09-25",
+              "net_bps": 10.90828679691883
+            },
+            {
+              "cumulative_net_bps": 11.778727907694682,
+              "date_utc": "2026-09-26",
+              "net_bps": 11.72717586295492
+            },
+            {
+              "cumulative_net_bps": -19.49554227969179,
+              "date_utc": "2026-09-28",
+              "net_bps": -31.274270187386474
+            },
+            {
+              "cumulative_net_bps": 10.666415066099859,
+              "date_utc": "2026-09-29",
+              "net_bps": 30.16195734579165
+            }
+          ],
+          "fee_bps_round_trip": 8.0,
+          "giveback_from_peak_bps": -1.1123128415948287,
+          "gross_mean_bps": 8.969674096918169,
+          "horizon_ms": 30000,
+          "independent_batches": 6,
+          "largest_positive_batch_share": 0.44171283939122163,
+          "max_drawdown_bps": -37.3480817291054,
+          "net_mean_bps": 0.9696740969181689,
+          "net_median_bps": -2.6047046975039496,
+          "observations": 11,
+          "peak_cumulative_net_bps": 11.778727907694686,
+          "positive_batch_fraction": 0.5,
+          "positive_day_fraction": 0.6,
+          "profit_factor": 1.130025099437801,
+          "win_rate": 0.45454545454545453
+        }
+      ],
+      "conditions": {
+        "btc_flow_alignment": "against",
+        "range_to_spread_15s": "high>6",
+        "spread_bps": "wide>3",
+        "trading_session_regime": "LONDON+NEW_YORK"
+      },
+      "development_snapshot_30s_4bps": {
+        "cumulative_net_bps": 406.8,
+        "gross_mean_bps": 33.06,
+        "independent_batches": 4,
+        "net_mean_bps": 29.06,
+        "note": "Discovery subset only. Excluded from prospective scoring.",
+        "observations": 14,
+        "win_rate_pct": 71.4
+      },
+      "direction": "BOTH",
+      "family": "cvd",
+      "prospective_calendar_days": 5,
+      "prospective_independent_batches": 6,
+      "prospective_unique_signals": 11,
+      "prospective_watch_start_utc": "2026-09-22T18:10:00Z",
+      "ready_for_review": false,
+      "review_requirement": {
+        "minimum_new_calendar_days": 7,
+        "minimum_new_independent_batches": 8,
+        "minimum_new_signals": 20
+      },
+      "session_phase": null,
+      "side": null,
+      "status": "ACCUMULATING",
+      "travel_by_fee": [
+        {
+          "fee_bps_round_trip": 4.0,
+          "gross_travel_monotonic_non_decreasing": true,
+          "horizons": [
+            {
+              "gross_mean_bps": 1.6894053876813744,
+              "horizon_ms": 5000,
+              "independent_batches": 6,
+              "net_mean_bps": -2.3105946123186256,
+              "observations": 11,
+              "positive_batch_fraction": 0.16666666666666666
+            },
+            {
+              "gross_mean_bps": 6.54869079616003,
+              "horizon_ms": 15000,
+              "independent_batches": 6,
+              "net_mean_bps": 2.5486907961600305,
+              "observations": 11,
+              "positive_batch_fraction": 0.5
+            },
+            {
+              "gross_mean_bps": 8.969674096918169,
+              "horizon_ms": 30000,
+              "independent_batches": 6,
+              "net_mean_bps": 4.969674096918169,
+              "observations": 11,
+              "positive_batch_fraction": 0.5
+            }
+          ]
+        },
+        {
+          "fee_bps_round_trip": 8.0,
+          "gross_travel_monotonic_non_decreasing": true,
+          "horizons": [
+            {
+              "gross_mean_bps": 1.6894053876813744,
+              "horizon_ms": 5000,
+              "independent_batches": 6,
+              "net_mean_bps": -6.310594612318625,
+              "observations": 11,
+              "positive_batch_fraction": 0.16666666666666666
+            },
+            {
+              "gross_mean_bps": 6.54869079616003,
+              "horizon_ms": 15000,
+              "independent_batches": 6,
+              "net_mean_bps": -1.45130920383997,
+              "observations": 11,
+              "positive_batch_fraction": 0.3333333333333333
+            },
+            {
+              "gross_mean_bps": 8.969674096918169,
+              "horizon_ms": 30000,
+              "independent_batches": 6,
+              "net_mean_bps": 0.9696740969181689,
+              "observations": 11,
+              "positive_batch_fraction": 0.5
+            }
+          ]
+        }
+      ],
+      "watch_id": "SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST"
+    }
+  ]
+}

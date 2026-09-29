@@ -17,15 +17,15 @@ For the single-page operational view (next decision dates, stop rules), see
 
 | Lane / watch | ID / config | Boundary | Canonical artifacts |
 |---|---|---|---|
-| DON8 cross-strategy session forward watch | `evidence_v2_cross_strategy_session_forward_v1` (`config/evidence_v2_session_forward_watch_v1.json`) | 2026-09-23 00:00:00 UTC; 30-day review | `research/VALIDATION_PRIORITY_FREEZE_2026_09_23.md`, `research/EVIDENCE_V2_SESSION_AUDIT_2026_09_22.md` |
-| W1 — ENA short Asia opening | `SESSION_W1_ALIGNED_SHORT_ASIA_OPENING` | 2026-09-22 15:39:58 UTC | `research/SESSION_PROSPECTIVE_STATUS_2026_09_22.md` |
-| W2 — BTC-aligned short Asia opening | `SESSION_W2_ALIGNED_BTC_SHORT_ASIA_OPENING` | 2026-09-22 15:39:58 UTC | `research/SESSION_PROSPECTIVE_STATUS_2026_09_22.md` |
+| DON8 cross-strategy session forward watch | `evidence_v2_cross_strategy_session_forward_v1` (`config/evidence_v2_session_forward_watch_v1.json`) | 2026-09-23 00:00:00 UTC; 30-day review (earliest 2026-10-23) | `research/VALIDATION_PRIORITY_FREEZE_2026_09_23.md`, `research/EVIDENCE_V2_SESSION_AUDIT_2026_09_22.md` |
 | W3 — CVD London/New-York wide-range | `SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST_V1` | 2026-09-22 18:10:00 UTC | `research/SESSION_PROSPECTIVE_STATUS_2026_09_22.md`, `config/session_watch_cvd_lny_v1.json` |
 
 ## Closed — falsified (IDs are terminal; no retuning under these IDs)
 
 | Lane | Research ID | Terminal state | Canonical record |
 |---|---|---|---|
+| Session watch W1 (ENA short Asia opening) | `SESSION_W1_ALIGNED_SHORT_ASIA_OPENING` | `FALSIFIED` at Formal Review 1 (2026-09-29): all six predeclared cells negative after gates met | `SESSION_WATCH_FORMAL_REVIEW_1_2026_09_29.md` |
+| Session watch W2 (BTC-aligned short Asia opening) | `SESSION_W2_ALIGNED_BTC_SHORT_ASIA_OPENING` | `FALSIFIED` at Formal Review 1 (2026-09-29): all six predeclared cells negative after gates met | `SESSION_WATCH_FORMAL_REVIEW_1_2026_09_29.md` |
 | ETF session families (ORB continuation, VWAP vol reversion, gap reversion) | `cross_market_etf_v1` | `FALSIFIED_D0_ALL_FAMILIES`; August D3 holdout sealed and uninspected | `cross_market_etf_v1/STATUS.md`, `cross_market_etf_v1/D0_REPORT.md`, `cross_market_etf_v1/FINAL_WRAP_2026_09_21.md` |
 | Futures one-minute price transfer + NQ/GC/CL replications | `cross_market_futures_v1` | Falsified; frozen futures **order-flow** protocol remains blocked only on event-data entitlement | `cross_market_etf_v1/FINAL_WRAP_2026_09_21.md` |
 | OCC outlier run 51 (plus pre-period check) | `occ_r51` / `occ_r51_preperiod` | See frozen protocols and results | `outliers/occ_r51/PROTOCOL.md`, `outliers/occ_r51_preperiod/PROTOCOL.md`, `outlier_reports/occ_r51_results.md` |

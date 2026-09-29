@@ -7,8 +7,8 @@ frozen artifact disagree, the frozen artifact wins.
 
 - Generated-by convention: this file is maintained by hand (or by a future
   automation) from the canonical artifacts listed inside it.
-- Last reviewed: 2026-09-29
-- Repository commit at review: `23f4ce879c624900d5a6445f30df03ded131da57`
+- Last reviewed: 2026-09-29 (after Prospective Formal Review 1)
+- Repository commit at review: see `git log -1`
 
 ## Standing safety boundary (unchanged by this file)
 
@@ -37,16 +37,22 @@ No promoted strategy exists. The live execution boundary remains closed.
 before 2026-10-23 00:00:00 UTC. When the review window matures, the locked
 workflow (not this file) computes the verdict.
 
-## Secondary prospective watches (independent, still accumulating)
+## Secondary prospective watches
 
 | Watch | Family / focus | Prospective boundary | Review gate | Status |
 |---|---|---|---|---|
-| `SESSION_W1_ALIGNED_SHORT_ASIA_OPENING` | ENA session microstructure | 2026-09-22 15:39:58 UTC | ≥10 new independent batches and ≥5 new calendar days | `ACCUMULATING` |
-| `SESSION_W2_ALIGNED_BTC_SHORT_ASIA_OPENING` | BTC-aligned session watch | 2026-09-22 15:39:58 UTC | ≥10 new independent batches and ≥5 new calendar days | `ACCUMULATING` |
-| `SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST_V1` | CVD, London/New-York overlap | 2026-09-22 18:10:00 UTC | ≥20 new signals, ≥8 new batches, ≥7 new calendar days | `ACCUMULATING` |
+| `SESSION_W1_ALIGNED_SHORT_ASIA_OPENING` | ENA session microstructure | 2026-09-22 15:39:58 UTC | ≥10 new independent batches and ≥5 new calendar days | **CLOSED — FALSIFIED** (Formal Review 1, 2026-09-29) |
+| `SESSION_W2_ALIGNED_BTC_SHORT_ASIA_OPENING` | BTC-aligned session watch | 2026-09-22 15:39:58 UTC | ≥10 new independent batches and ≥5 new calendar days | **CLOSED — FALSIFIED** (Formal Review 1, 2026-09-29) |
+| `SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST_V1` | CVD, London/New-York overlap | 2026-09-22 18:10:00 UTC | ≥20 new signals, ≥8 new batches, ≥7 new calendar days | `ACCUMULATING` (6/8 batches, 5/7 days as of 2026-09-29; partial numbers uninterpreted) |
 
 Review counts are computed only by the frozen discovery-aggregation pipeline over
 independent capture batches — never by hand and never from cumulative artifacts.
+
+**Formal Review 1** (2026-09-29): W1 and W2 reached their frozen review gates
+(10 batches / 6 days each) and were **falsified in every predeclared cell** —
+net means −3.6 to −12.5 bps/trade, PF 0.06–0.31, at both 4 and 8 bps friction.
+See `research/SESSION_WATCH_FORMAL_REVIEW_1_2026_09_29.md`. These IDs are
+terminal: no retuning, re-siding, or re-phasing under the same IDs.
 
 ## Research stop rule (active)
 
