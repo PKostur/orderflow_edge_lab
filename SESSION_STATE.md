@@ -20,7 +20,8 @@
 
 - Monitor 2026-09-28 22:39Z: nothing new, all runs green.
 - D4: formally reviewed, NOT_REPLICATED_DIRECTIONALLY (run 36338618227, SHA 8752bbec…). Automatic D4 collection stopped on main; any later cluster is post-review only.
-- Monitor task `orderflow-research-monitor`: 01:30/09:30/17:30 local; reads all watches incl. `human_report.json`.
+- Monitor task `orderflow-research-monitor`: 01:30/09:30/17:30 local; reads all watches incl. `human_report.json`; refreshes the dashboard https://claude.ai/artifact/6sLH5A6SuwBcgZHHLzPUoR via `scripts/dashboard_snapshot.py`.
+- PR #120 (open): STATUS.md/INDEX.md list the research-branch watches (docs only; user merges).
 
 ## Open issues
 - Bybit venue replication (403 on GitHub runners) is superseded by `cross-sectional-okx-replication-v1` (green; D2 independent venue, descriptive transfer only).
