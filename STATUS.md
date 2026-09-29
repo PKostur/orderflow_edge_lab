@@ -54,6 +54,28 @@ net means −3.6 to −12.5 bps/trade, PF 0.06–0.31, at both 4 and 8 bps frict
 See `research/SESSION_WATCH_FORMAL_REVIEW_1_2026_09_29.md`. These IDs are
 terminal: no retuning, re-siding, or re-phasing under the same IDs.
 
+## Forward watches (generated)
+
+<!-- BEGIN GENERATED: forward-watches (scripts/generate_status.py) -->
+
+_Generated 2026-09-29T21:15:58Z from `config/prospective_review_clock_v1.json` and the latest dashboard snapshot. Do not edit by hand._
+
+| Watch | Config | Start | Review gate | Earliest review | Status | Scored days |
+|---|---|---|---|---|---|---|
+| `evidence_v2_cross_strategy_session_forward_v1` | – | 2026-09-23 | 30 calendar days | **2026-10-23** | `see workflow` | – |
+| `universal-canonical-v3-forward-companion-v1` | `config/universal_canonical_v3_forward_companion_v1.json` | 2026-09-27 | 90 calendar days | **2026-12-26** | `COLLECTING` | 2 |
+| `crypto-trend-core-v1` | `config/crypto_trend_core_v1.json` | 2026-09-29 | 180 calendar days | **2027-03-28** | `PRE_START` | 0 |
+| `crypto-trend-core-voltarget-v1` | `config/crypto_trend_core_voltarget_v1.json` | 2026-09-29 | 180 calendar days | **2027-03-28** | `PRE_START` | 0 |
+| `multi-premia-blend-v1` | `config/multi_premia_blend_v1.json` | 2026-09-29 | 180 calendar days | **2027-03-28** | `PRE_START` | 0 |
+| `multi-premia-human-v1-forward` | `config/multi_premia_blend_v1.json` | 2026-09-29 | 180 calendar days | **2027-03-28** | `PRE_START` | 0 |
+| `universal-cross-asset-trend-forward-v1` | `config/universal_cross_asset_trend_forward_v1.json` | 2026-09-28 | 365 calendar days | **2027-09-28** | `PRE_START` | 0 |
+| `universal-cross-asset-trend-invvol-forward-v1` | `config/universal_cross_asset_trend_invvol_forward_v1.json` | 2026-09-28 | 365 calendar days | **2027-09-28** | `PRE_START` | 0 |
+| `universal-trend-portfolio-forward-v1` | `config/universal_trend_portfolio_forward_v1.json` | 2026-09-28 | 365 calendar days | **2027-09-28** | `PRE_START` | 0 |
+
+No verdict of any kind before a watch's earliest review date; the frozen workflow computes it.
+
+<!-- END GENERATED: forward-watches -->
+
 ## Research stop rule (active)
 
 Until a predeclared review target is reached:

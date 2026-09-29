@@ -77,6 +77,7 @@ def watch_entry(spec, cache: dict[int, pathlib.Path]) -> dict:
     wf, fname, name, group, primary, horizon = spec
     e = {"id": wf.removesuffix(".yml") + ("-human" if fname.startswith("human") else ""), "name": name, "group": group,
          "workflow": wf, "primary": primary, "review_days": horizon}
+    clock = json.loads(pathlib.Path("config/prospective_review_clock_v1.json").read_text(encoding="utf-8"))
     run = latest_run(wf)
     if not run:
         e["status"] = "NO_RUNS"
@@ -93,6 +94,9 @@ def watch_entry(spec, cache: dict[int, pathlib.Path]) -> dict:
         e["status"] = "NO_REPORT"
         return e
     r = json.loads(found[0].read_text(encoding="utf-8"))
+    gate = next((w["review_gate"] for w in clock["watches"] if w["watch_id"] == r.get("watch_id")), {})
+    if gate.get("type") == "calendar_days":
+        e["review_days"] = int(gate["minimum_days"])  # the registered gate, not the display default
     e.update(watch_id=r.get("watch_id"), status=r.get("status"), as_of=r.get("as_of_utc"),
              start=(r.get("prospective_start_utc") or "")[:10], review_open=bool(r.get("review_window_open")))
     books = {}
