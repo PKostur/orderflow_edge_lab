@@ -27,7 +27,7 @@
 ## Open issues
 - Bybit venue replication workflow disabled (superseded by green `cross-sectional-okx-replication-v1`).
 - `Universal Existing Strategy Backtests` on main fails twice weekly: main's workflow uses old CLI args; the fixed workflow and config come with this branch (and PR #113's history), so it is fixed only when this branch lands.
-- Trend-core 180-day review: the funding criterion cannot be evaluated (reports carry no forward funding estimate); the registered evaluator will return INCOMPLETE for it.
+- Trend-core 180-day review funding criterion: registered pre-start estimate −0.97%/yr (`research/forward_formal_reviews/`), vol-target uses core funding × overlay leverage.
 - numpy capped `<2.6` on forward branches; bridges on ref `0966172` still allow numpy <3.
 - Old 10-coin book is all long (crypto beta); short-side/v3 forward evidence will be slow. Effective N per cell is ~16–31.
 

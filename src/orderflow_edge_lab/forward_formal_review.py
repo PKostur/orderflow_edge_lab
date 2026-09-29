@@ -28,8 +28,29 @@ def _max_drawdown(returns: list[float]) -> float:
     return mdd
 
 
+def _funding(spec: Mapping[str, Any], report: Mapping[str, Any], core_report: Mapping[str, Any] | None,
+             ratio_cap: float) -> dict[str, Any]:
+    reg = spec.get("funding") or {}
+    estimate = reg.get("estimate_annualized")
+    scale = 1.0
+    if spec["watch_id"] == "crypto-trend-core-voltarget-v1":
+        source = core_report
+        scale = (report.get("overlay_state") or {}).get("forward_mean_leverage")
+    else:
+        source = report
+    realized = ((source or {}).get("funding_contribution") or {}).get("combined", {}).get("annualized")
+    if estimate in (None, 0) or realized is None or scale is None:
+        return {"status": "not_evaluable", "reason": "missing registered estimate, realized funding or overlay leverage"}
+    realized = float(realized) * float(scale)
+    limit = ratio_cap * abs(float(estimate)) * float(scale)
+    ok = realized >= 0.0 or abs(realized) <= limit
+    return {"realized_annualized": realized, "estimate_annualized": float(estimate), "scale": float(scale),
+            "limit_abs": limit, "status": "pass" if ok else "fail"}
+
+
 def evaluate(spec: Mapping[str, Any], report: Mapping[str, Any], run_conclusions: Iterable[str],
-             *, as_of: str | None = None) -> dict[str, Any]:
+             *, as_of: str | None = None, core_report: Mapping[str, Any] | None = None) -> dict[str, Any]:
+    """`core_report` is the crypto-trend-core-v1 report, needed only for the vol-target review's funding criterion."""
     if report.get("watch_id") != spec["watch_id"]:
         raise ValueError(f"report is for {report.get('watch_id')!r}, review is for {spec['watch_id']!r}")
     start = _utc(report["prospective_start_utc"])
@@ -54,15 +75,7 @@ def evaluate(spec: Mapping[str, Any], report: Mapping[str, Any], run_conclusions
         res["max_drawdown"] = {"value": mdd, "threshold": c["max_drawdown_not_worse_than"],
                                "status": "not_evaluable" if not returns else ("pass" if mdd >= c["max_drawdown_not_worse_than"] else "fail")}
     if "funding_drag_within_ratio_of_estimate" in c:
-        fc = (report.get("funding_contribution") or {}).get(spec["series"]) or (report.get("funding_contribution") or {}).get("combined") or {}
-        realized, estimate = fc.get("annualized"), fc.get("estimate_annualized")
-        if realized is None or estimate in (None, 0):
-            res["funding_drag"] = {"status": "not_evaluable",
-                                   "reason": "the frozen report carries no forward-period funding estimate to compare with"}
-        else:
-            ratio = abs(float(realized)) / abs(float(estimate))
-            res["funding_drag"] = {"realized": realized, "estimate": estimate, "ratio": ratio,
-                                   "status": "pass" if ratio <= c["funding_drag_within_ratio_of_estimate"] else "fail"}
+        res["funding_drag"] = _funding(spec, report, core_report, float(c["funding_drag_within_ratio_of_estimate"]))
     if c.get("all_runs_succeeded"):
         runs = list(run_conclusions)
         bad = [r for r in runs if r != "success"]
@@ -81,13 +94,15 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--report", required=True, help="the watch's report JSON at or after the horizon")
     p.add_argument("--run-conclusions", required=True, help="JSON list of every scheduled run conclusion in the window")
     p.add_argument("--config", default=str(DEFAULT_CONFIG))
+    p.add_argument("--core-report", default=None, help="crypto-trend-core-v1 report (vol-target review only)")
     p.add_argument("--output", required=True)
     a = p.parse_args(argv)
     cfg = json.loads(Path(a.config).read_text(encoding="utf-8"))
     spec = next(s for s in cfg["reviews"] if s["watch_id"] == a.watch_id)
     report = json.loads(Path(a.report).read_text(encoding="utf-8"))
     runs = json.loads(Path(a.run_conclusions).read_text(encoding="utf-8"))
-    result = evaluate(spec, report, runs)
+    core = json.loads(Path(a.core_report).read_text(encoding="utf-8")) if a.core_report else None
+    result = evaluate(spec, report, runs, core_report=core)
     result["claims"] = cfg["claims"]
     Path(a.output).write_text(json.dumps(result, indent=2, default=float) + "\n", encoding="utf-8")
     print(json.dumps({"watch_id": a.watch_id, "verdict": result["verdict"]}))

@@ -15,7 +15,11 @@
       "report_file": "report.json",
       "series": "S4_blend",
       "horizon_days": 180,
-      "criteria": {"mean_daily_return_gt": 0.0, "max_drawdown_not_worse_than": -0.20, "all_runs_succeeded": true},
+      "criteria": {
+        "mean_daily_return_gt": 0.0,
+        "max_drawdown_not_worse_than": -0.2,
+        "all_runs_succeeded": true
+      },
       "threshold_rationale": "drawdown guardrail about 1.4x the worst drawdown seen in development (-14%) and the untouched holdout (-11%)"
     },
     {
@@ -23,7 +27,11 @@
       "report_file": "human_report.json",
       "series": "H5",
       "horizon_days": 180,
-      "criteria": {"mean_daily_return_gt": 0.0, "max_drawdown_not_worse_than": -0.35, "all_runs_succeeded": true},
+      "criteria": {
+        "mean_daily_return_gt": 0.0,
+        "max_drawdown_not_worse_than": -0.35,
+        "all_runs_succeeded": true
+      },
       "threshold_rationale": "secondary book; guardrail about 1.1x the development drawdown (-31%); the untouched holdout already failed this book (Sharpe 0.60), so a pass here is weak evidence"
     },
     {
@@ -31,19 +39,57 @@
       "report_file": "report.json",
       "series": "combined",
       "horizon_days": 180,
-      "criteria": {"mean_daily_return_gt": 0.0, "max_drawdown_not_worse_than": -0.25, "funding_drag_within_ratio_of_estimate": 2.0, "all_runs_succeeded": true},
-      "threshold_rationale": "verbatim from config/crypto_trend_core_v1.json review_criteria_at_180_days"
+      "criteria": {
+        "mean_daily_return_gt": 0.0,
+        "max_drawdown_not_worse_than": -0.25,
+        "funding_drag_within_ratio_of_estimate": 2.0,
+        "all_runs_succeeded": true
+      },
+      "threshold_rationale": "verbatim from config/crypto_trend_core_v1.json review_criteria_at_180_days",
+      "funding": {
+        "estimate_annualized": -0.009733,
+        "estimate_source": "research/forward_formal_reviews/trend_core_funding_estimate_2026_09_30.json (frozen pipeline, pre-start window 2026-07-15 to 2026-09-29, 75 days)",
+        "realized": "report funding_contribution.combined.annualized",
+        "rule": "pass if realized >= 0 (funding received) or |realized| <= 2 x |estimate|"
+      }
     },
     {
       "watch_id": "crypto-trend-core-voltarget-v1",
       "report_file": "report.json",
       "series": "core_voltarget",
       "horizon_days": 180,
-      "criteria": {"mean_daily_return_gt": 0.0, "max_drawdown_not_worse_than": -0.25, "funding_drag_within_ratio_of_estimate": 2.0, "all_runs_succeeded": true},
-      "threshold_rationale": "verbatim from config/crypto_trend_core_voltarget_v1.json review_criteria_at_180_days"
+      "criteria": {
+        "mean_daily_return_gt": 0.0,
+        "max_drawdown_not_worse_than": -0.25,
+        "funding_drag_within_ratio_of_estimate": 2.0,
+        "all_runs_succeeded": true
+      },
+      "threshold_rationale": "verbatim from config/crypto_trend_core_voltarget_v1.json review_criteria_at_180_days",
+      "funding": {
+        "estimate_annualized": -0.009733,
+        "estimate_source": "same as crypto-trend-core-v1",
+        "realized": "crypto-trend-core-v1 report funding_contribution.combined.annualized x this report's overlay_state.forward_mean_leverage (this watch reports no funding split; it is the core book scaled by the overlay)",
+        "rule": "pass if realized >= 0 or |realized| <= 2 x |estimate| x forward_mean_leverage"
+      }
     }
   ],
-  "descriptive_only_fields": ["annualized_sharpe", "newey_west_t", "minimum_detectable_sharpe", "cumulative_return"],
+  "descriptive_only_fields": [
+    "annualized_sharpe",
+    "newey_west_t",
+    "minimum_detectable_sharpe",
+    "cumulative_return"
+  ],
   "note": "180 days cannot establish an edge (minimum detectable Sharpe about 2.8). A PASS only means nothing has gone wrong; it is not out-of-sample proof.",
-  "claims": {"strategy_promotion_authorized": false, "paper_trading_authorized": false, "live_trading_authorized": false}
+  "claims": {
+    "strategy_promotion_authorized": false,
+    "paper_trading_authorized": false,
+    "live_trading_authorized": false
+  },
+  "amendments": [
+    {
+      "date": "2026-09-29T21:45Z",
+      "before_any_forward_day": true,
+      "change": "added the funding estimate and realized-funding source for the two trend-core reviews; the watch reports carry no estimate of their own"
+    }
+  ]
 }

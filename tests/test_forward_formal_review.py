@@ -53,16 +53,28 @@ class ForwardFormalReviewTests(unittest.TestCase):
         out = evaluate(spec, _report(spec["watch_id"], "S4_blend", [0.001] * 182), ["success"] * 181 + ["failure"])
         self.assertEqual(out["verdict"], "FAIL")
 
-    def test_trend_core_funding_criterion_is_incomplete_without_an_estimate(self):
+    def test_trend_core_funding_uses_registered_estimate(self):
         spec = _spec("crypto-trend-core-v1")
-        out = evaluate(spec, _report(spec["watch_id"], "combined", [0.001] * 182, funding={"annualized": -0.01, "days": 182}),
-                       ["success"] * 182)
-        self.assertEqual(out["criteria"]["funding_drag"]["status"], "not_evaluable")
-        self.assertEqual(out["verdict"], "INCOMPLETE")
-        with_est = _report(spec["watch_id"], "combined", [0.001] * 182,
-                           funding={"annualized": -0.01, "estimate_annualized": -0.008, "days": 182})
-        self.assertEqual(evaluate(spec, with_est, ["success"] * 182)["verdict"], "PASS_SANITY_GATE")
+        est = spec["funding"]["estimate_annualized"]
+        ok = evaluate(spec, _report(spec["watch_id"], "combined", [0.001] * 182, funding={"annualized": 1.5 * est}), ["success"] * 182)
+        self.assertEqual(ok["verdict"], "PASS_SANITY_GATE")
+        bad = evaluate(spec, _report(spec["watch_id"], "combined", [0.001] * 182, funding={"annualized": 3 * est}), ["success"] * 182)
+        self.assertEqual(bad["criteria"]["funding_drag"]["status"], "fail")
+        received = evaluate(spec, _report(spec["watch_id"], "combined", [0.001] * 182, funding={"annualized": 0.02}), ["success"] * 182)
+        self.assertEqual(received["criteria"]["funding_drag"]["status"], "pass")
+        missing = evaluate(spec, _report(spec["watch_id"], "combined", [0.001] * 182), ["success"] * 182)
+        self.assertEqual(missing["verdict"], "INCOMPLETE")
 
+    def test_voltarget_funding_scales_core_funding_by_overlay_leverage(self):
+        spec = _spec("crypto-trend-core-voltarget-v1")
+        est = spec["funding"]["estimate_annualized"]
+        rep = _report(spec["watch_id"], "core_voltarget", [0.001] * 182)
+        rep["overlay_state"] = {"forward_mean_leverage": 1.5}
+        core = {"funding_contribution": {"combined": {"annualized": 1.8 * est}}}
+        out = evaluate(spec, rep, ["success"] * 182, core_report=core)
+        self.assertAlmostEqual(out["criteria"]["funding_drag"]["realized_annualized"], 2.7 * est)
+        self.assertEqual(out["verdict"], "PASS_SANITY_GATE")
+        self.assertEqual(evaluate(spec, rep, ["success"] * 182)["verdict"], "INCOMPLETE")
 
 if __name__ == "__main__":
     unittest.main()
