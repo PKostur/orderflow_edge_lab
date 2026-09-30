@@ -133,4 +133,4 @@ For transparency, the unchanged archived BTC-aligned 30-second baseline at 8 bps
 
 ## Validation
 
-353 repository tests passed, including 16 tests for the classifier and freeze contract. The deterministic release-manager gate is reviewable with zero errors; its two existing phrase-scan warnings concern the word "frictionless" elsewhere in the repository. No profitability or live-execution gate has passed.
+425 repository tests passed after integrating current main, including 16 tests for the classifier and freeze contract. The deterministic release-manager gate is reviewable with zero errors; its two existing phrase-scan warnings concern the word "frictionless" elsewhere in the repository. No profitability or live-execution gate has passed.
