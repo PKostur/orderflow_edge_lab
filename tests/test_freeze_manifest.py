@@ -1,3 +1,4 @@
+import hashlib
 import json
 import shutil
 import tempfile
@@ -104,6 +105,32 @@ class VerificationTests(unittest.TestCase):
             self.assertIn("manifest_entry_invalid", codes)
             self.assertFalse(report["verified"])
 
+    def test_hashing_is_independent_of_line_endings(self):
+        # A Windows checkout with CRLF conversion must not register as a change to
+        # a frozen definition; the contract is about content, not about platform.
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            unix = root / "unix.json"
+            windows = root / "windows.json"
+            unix.write_bytes(b'{\n  "threshold": 1\n}\n')
+            windows.write_bytes(b'{\r\n  "threshold": 1\r\n}\r\n')
+            self.assertEqual(file_sha256(unix), file_sha256(windows))
+
+            plain = root / "plain.json"
+            plain.write_bytes(b'{\n  "threshold": 1\n}\n')
+            converted = root / "converted.json"
+            converted.write_bytes(b'{\r\n  "threshold": 1\r\n}\r\n')
+            manifest = self._manifest([_entry("plain.json", sha=file_sha256(converted))])
+            report = verify_frozen_manifest(manifest, repo_root=root)
+            self.assertTrue(report["verified"], msg=json.dumps(report["findings"], indent=2))
+
+    def test_binary_content_is_hashed_raw(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            binary = root / "blob.bin"
+            binary.write_bytes(b"\x00\xff\r\n\x80")
+            self.assertEqual(file_sha256(binary), hashlib.sha256(b"\x00\xff\r\n\x80").hexdigest())
+
     def test_missing_change_rule_is_a_warning(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -157,6 +184,24 @@ class RealManifestTests(unittest.TestCase):
         self.assertIn("config/regime_research_v1.json", paths)
         references = {entry["freeze_reference"] for entry in manifest["files"]}
         self.assertTrue(any(reference and "37ec950f" in reference for reference in references))
+
+    def test_manifest_verifies_against_a_crlf_checkout(self):
+        # Reproduction of the Windows CI failure: rewriting every frozen definition
+        # with CRLF must not change a single hash.
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            shutil.copytree(REPO_ROOT / "config", root / "config")
+            for path in (root / "config").glob("*.json"):
+                path.write_bytes(path.read_bytes().replace(b"\n", b"\r\n"))
+            manifest = load_manifest(REPO_ROOT / "config" / "frozen_manifest_v1.json")
+            report = verify_frozen_manifest(manifest, repo_root=root)
+            self.assertTrue(report["verified"], msg=json.dumps(report["findings"], indent=2))
+            self.assertEqual(report["files_changed"], 0)
+
+    def test_config_definitions_are_covered_by_the_attribute_rule(self):
+        # .gitattributes pins config/*.json so a Windows checkout keeps their bytes.
+        rules = (REPO_ROOT / ".gitattributes").read_text(encoding="utf-8")
+        self.assertIn("config/*.json -text", rules)
 
     def test_tampering_with_a_copy_is_detected(self):
         with tempfile.TemporaryDirectory() as directory:

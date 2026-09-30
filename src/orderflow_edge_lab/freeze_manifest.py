@@ -18,6 +18,9 @@ hand edit plus a review, not a flag.
 A note on scope. This manifest covers *research* definitions, not documentation.
 ``STATUS.md``, ``README.md``, ``docs/`` and the navigation layer are expected to
 change and are not listed.
+
+Hashes are taken over normalised text (line endings reduced to ``\n``), so the
+contract is about content rather than about which platform checked the file out.
 """
 
 from __future__ import annotations
@@ -43,10 +46,29 @@ def _canonical_sha256(value: object) -> str:
     return hashlib.sha256(raw).hexdigest()
 
 
-def file_sha256(path: Path | str) -> str:
-    """Return the SHA-256 of a file's bytes."""
+def frozen_bytes(path: Path | str) -> bytes:
+    """Return the bytes a frozen definition is hashed over.
 
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    Frozen definitions are text. Line endings are normalised to ``\n`` before
+    hashing so that a checkout on a platform which converts to CRLF (a Windows
+    runner with ``core.autocrlf``) does not report every frozen file as changed.
+    Without this the contract would fire on the platform, not on the content.
+
+    Content that is not valid UTF-8 is hashed raw, byte for byte.
+    """
+
+    raw = Path(path).read_bytes()
+    try:
+        text = raw.decode("utf-8")
+    except UnicodeDecodeError:
+        return raw
+    return text.replace("\r\n", "\n").replace("\r", "\n").encode("utf-8")
+
+
+def file_sha256(path: Path | str) -> str:
+    """Return the SHA-256 of a frozen definition's normalised content."""
+
+    return hashlib.sha256(frozen_bytes(path)).hexdigest()
 
 
 def _valid_sha256(value: object) -> bool:

@@ -80,6 +80,19 @@ class ScanTests(unittest.TestCase):
             self.assertEqual(scan["downloads"], [])
             self.assertFalse(scan["uses_artifact_rest_api"])
 
+    def test_workflow_paths_are_recorded_in_posix_form(self):
+        # Retention requirements declare producer paths with forward slashes, so a
+        # platform-native path here would make every declaration fail on Windows.
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / ".github" / "workflows").mkdir(parents=True)
+            path = root / ".github" / "workflows" / "sample.yml"
+            path.write_text(NO_RUN_INLINE, encoding="utf-8")
+            scan = scan_workflow(path)
+            self.assertNotIn("\\", scan["path"])
+            scans = {key: value for key, value in [(scan["path"], scan)]}
+            self.assertEqual(next(iter(scans)), scan["path"])
+
     def test_normalization_and_matching(self):
         self.assertEqual(
             normalize_artifact_name("orderflow-discovery-replay-${{ github.run_id }}"),
@@ -167,6 +180,12 @@ jobs:
             )
             self.assertTrue(report["contract_ok"])
             self.assertEqual(report["requirements"][0]["declared_producer_uploads_it"], True)
+            # The declared producer must match the producer recorded for the file,
+            # on every platform.
+            self.assertEqual(
+                report["requirements"][0]["producing_workflows"], [".github/workflows/inline.yml"]
+            )
+            self.assertNotIn("\\", json.dumps(report["artifact_producers"]))
 
     def test_markdown_renders_findings(self):
         with tempfile.TemporaryDirectory() as directory:

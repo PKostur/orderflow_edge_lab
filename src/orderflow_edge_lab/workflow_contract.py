@@ -171,7 +171,10 @@ def scan_workflow(path: Path) -> dict[str, Any]:
         downloads.append({"kind": "shell_name", "value": match.group("value")})
 
     return {
-        "path": str(path),
+        # Forward slashes always: retention requirements declare producer paths in
+        # POSIX form, so recording a platform-native path would make every
+        # declaration fail to match on Windows.
+        "path": Path(path).as_posix(),
         "name": workflow_name,
         "uploads": uploads,
         "downloads": downloads,
@@ -188,7 +191,7 @@ def scan_workflows(root: Path | str = Path("."), *, workflow_dir: Path | str = D
         raise WorkflowContractError(f"workflow directory not found: {directory}")
     scans: dict[str, dict[str, Any]] = {}
     for path in sorted(directory.glob("*.yml")) + sorted(directory.glob("*.yaml")):
-        scans[str(path.relative_to(root))] = scan_workflow(path)
+        scans[path.relative_to(root).as_posix()] = scan_workflow(path)
     if not scans:
         raise WorkflowContractError(f"no workflow files under {directory}")
     return scans
@@ -209,11 +212,17 @@ def load_requirements(path: Path | str = DEFAULT_REQUIREMENTS) -> dict[str, Any]
     return payload
 
 
-def _producer_index(scans: Mapping[str, Mapping[str, Any]]) -> dict[str, list[str]]:
-    index: dict[str, list[str]] = {}
+def _producer_index(scans: Mapping[str, Mapping[str, Any]]) -> dict[str, list[tuple[str, str]]]:
+    """Artifact name -> [(workflow path, raw artifact name)].
+
+    Tuples rather than ``"path:name"`` strings: a Windows path can contain a
+    colon, and splitting on it would silently mangle the producer.
+    """
+
+    index: dict[str, list[tuple[str, str]]] = {}
     for relative, scan in scans.items():
         for name in scan.get("uploads", []):
-            index.setdefault(normalize_artifact_name(name), []).append(f"{relative}:{name}")
+            index.setdefault(normalize_artifact_name(name), []).append((relative, name))
     return index
 
 
@@ -270,12 +279,7 @@ def audit_workflow_contract(
         for download in scan.get("downloads", []):
             value = str(download["value"])
             satisfied_by = sorted(
-                {
-                    entry.split(":")[0]
-                    for name, entries in producers.items()
-                    if matches(name, value)
-                    for entry in entries
-                }
+                {entry[0] for name, entries in producers.items() if matches(name, value) for entry in entries}
             )
             consumers.append(
                 {
@@ -302,14 +306,15 @@ def audit_workflow_contract(
     requirement_records: list[dict[str, Any]] = []
     for requirement in requirements["requirements"]:
         artifact = str(requirement.get("artifact_name", ""))
-        declared_producer = str(requirement.get("artifact_producer", ""))
+        declared_raw = str(requirement.get("artifact_producer", ""))
+        declared_producer = Path(declared_raw).as_posix() if declared_raw else ""
         produced = sorted(
-            {entry.split(":")[0] for name, entries in producers.items() if matches(name, artifact) for entry in entries}
+            {entry[0] for name, entries in producers.items() if matches(name, artifact) for entry in entries}
         )
         record = {
             "requirement_id": requirement.get("requirement_id"),
             "artifact_name": artifact,
-            "declared_producer": declared_producer,
+            "declared_producer": declared_raw,
             "producing_workflows": produced,
             "declared_producer_uploads_it": False,
         }
@@ -343,7 +348,10 @@ def audit_workflow_contract(
         "schema_version": 1,
         "analysis": "workflow_artifact_contract",
         "workflows_scanned": len(scans),
-        "artifact_producers": {name: sorted(entries) for name, entries in sorted(producers.items())},
+        "artifact_producers": {
+            name: sorted(f"{path}:{artifact}" for path, artifact in entries)
+            for name, entries in sorted(producers.items())
+        },
         "consumers": consumers,
         "requirements": requirement_records,
         "findings": findings,
