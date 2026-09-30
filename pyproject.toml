@@ -13,6 +13,7 @@ dependencies = ["websockets>=12,<16"]
 research = ["numpy>=2,<3", "pandas>=2,<3"]
 
 [project.scripts]
+orderflow-lsk-conditional = "orderflow_edge_lab.lsk_conditional_regime:main"
 orderflow-paper = "orderflow_edge_lab.cli.paper:main"
 orderflow-paper-audit = "orderflow_edge_lab.cli.paper_audit:main"
 orderflow-runtime-snapshot = "orderflow_edge_lab.cli.runtime_snapshot:main"

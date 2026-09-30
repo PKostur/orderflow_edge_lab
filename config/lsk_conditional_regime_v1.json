@@ -1,0 +1,23 @@
+{
+  "protocol": "lsk-conditional-regime-v1",
+  "symbol": "LSK_USDT",
+  "context_symbol": "BTC_USDT",
+  "horizon_ms": 30000,
+  "grid_seconds": 5,
+  "baseline_seconds": 300,
+  "minimum_baseline_samples": 40,
+  "maximum_state_age_ms": 5000,
+  "maximum_btc_age_ms": 5000,
+  "maximum_quote_delay_ms": 1000,
+  "dependence_gap_seconds": 300,
+  "costs": [
+    {"name": "fee4", "fee_bps": 4, "latency_ms": 0, "slippage_bps_rt": 0, "adverse_selection_bps_rt": 0},
+    {"name": "fee8", "fee_bps": 8, "latency_ms": 0, "slippage_bps_rt": 0, "adverse_selection_bps_rt": 0},
+    {"name": "conservative", "fee_bps": 8, "latency_ms": 250, "slippage_bps_rt": 2, "adverse_selection_bps_rt": 2},
+    {"name": "severe", "fee_bps": 8, "latency_ms": 1000, "slippage_bps_rt": 4, "adverse_selection_bps_rt": 4}
+  ],
+  "thresholds": {"upper_quantile": 0.75, "lower_quantile": 0.25, "minimum_range_spread": 2, "maximum_spread_bps": 5, "moving_displacement_spread": 1, "mature_displacement_spread": 4},
+  "forward_gate": {"minimum_clusters": 10, "minimum_trades": 60, "minimum_positive_cluster_fraction": 0.8, "minimum_pf": 1.2, "maximum_best_cluster_positive_profit_share": 0.5, "minimum_branch_clusters": 3, "minimum_branch_trades": 20},
+  "design": "Single prespecified interaction, no threshold search. Fixed-time prior-only rolling quartiles. Price response uses flow-oriented 10s midpoint displacement in spread units divided by max(0.25, absolute rolling 10s flow ratio); 15s displacement describes maturity. ORIGINAL: above-median participation and depth-update activity, range expansion, upper-quartile positive efficiency, moving but not mature displacement, stable spread. REVERSED: upper-quartile flow, lower-quartile and declining efficiency under sustained same-side pressure, mature aligned displacement, activity deceleration and range contraction, non-improving spread within liquidity cap. Otherwise NO_TRADE. Missing, stale or degenerate history abstains. Epoch changes invalidate state history and pending fills.",
+  "claims": {"ready_for_live": false, "promotable": false, "pnl_threshold_optimization": false}
+}

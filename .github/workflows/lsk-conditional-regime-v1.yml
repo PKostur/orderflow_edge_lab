@@ -1,0 +1,40 @@
+name: Frozen LSK Conditional Regime v1
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: lsk-conditional-regime-v1
+  cancel-in-progress: false
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e .
+      - name: Verify frozen identity before collecting unseen data
+        run: |
+          orderflow-lsk-conditional --mode forward --freeze config/lsk_conditional_regime_v1.freeze.json --output artifacts/lsk/preflight.json
+          git rev-parse HEAD > artifacts/lsk/source_commit.txt
+      - name: Record one fixed twenty-minute LSK and BTC capture
+        run: orderflow-mexc-record --symbol LSK_USDT --symbol BTC_USDT --duration-seconds 1200 --output-dir artifacts/lsk/capture
+      - name: Evaluate the unchanged classifier and all controls
+        shell: bash
+        run: |
+          mapfile -t FEATURES < <(find artifacts/lsk/capture -name '*_mexc_features.jsonl' | sort)
+          test "${#FEATURES[@]}" -eq 1
+          orderflow-lsk-conditional "${FEATURES[@]}" --mode forward --freeze config/lsk_conditional_regime_v1.freeze.json --output artifacts/lsk/forward.json
+      - name: Preserve all evidence including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lsk-conditional-v1-${{ github.run_id }}
+          path: |
+            artifacts/lsk/
+            config/lsk_conditional_regime_v1.json
+            config/lsk_conditional_regime_v1.freeze.json
+          retention-days: 30
