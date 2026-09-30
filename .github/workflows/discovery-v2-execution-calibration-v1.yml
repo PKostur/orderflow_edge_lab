@@ -1,0 +1,58 @@
+name: Discovery v2 Execution Calibration v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/discovery-process-v2]
+    paths:
+      - 'config/discovery_v2_execution_calibration_v1.json'
+      - 'research/discovery_v2/adapters/run_nautilus_execution_calibration.py'
+      - '.github/workflows/discovery-v2-execution-calibration-v1.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: discovery-v2-execution-calibration-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  event-driven-execution:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install local research runtime
+        run: python -m pip install -e '.[research]' pytest
+      - name: Rebuild frozen MEXC calibration data and canonical targets
+        run: |
+          mkdir -p research/discovery_v2/execution_data research/discovery_v2/results
+          python -m orderflow_edge_lab.cli.discovery_v2_calibration \
+            --config config/discovery_v2_engine_calibration_v1.json \
+            --data-dir research/discovery_v2/execution_data \
+            --output research/discovery_v2/results/execution_reference_parity.json
+      - name: Install NautilusTrader 2.x and pandas
+        run: |
+          python -m pip install -U --pre nautilus_trader pandas
+          python -c "import nautilus_trader; print('NautilusTrader', nautilus_trader.__version__)"
+      - name: Run independent event-driven next-open execution calibration
+        run: |
+          python research/discovery_v2/adapters/run_nautilus_execution_calibration.py \
+            --config config/discovery_v2_execution_calibration_v1.json \
+            --data-dir research/discovery_v2/execution_data \
+            --output research/discovery_v2/results/nautilus_event_driven_execution.json
+      - name: Preserve execution-calibration evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: discovery-v2-execution-calibration-v1
+          path: |
+            config/discovery_v2_execution_calibration_v1.json
+            research/discovery_v2/execution_data/
+            research/discovery_v2/results/
+            research/discovery_v2/adapters/run_nautilus_execution_calibration.py
+          retention-days: 30
+          if-no-files-found: error

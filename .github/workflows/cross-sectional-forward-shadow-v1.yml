@@ -33,6 +33,7 @@ jobs:
           orderflow-cross-sectional-forward-shadow \
             --candidate config/cross_sectional_candidate_v1.json \
             --output artifacts/cross_sectional_forward/report.json \
+            --session-output artifacts/cross_sectional_forward/session_report.json \
             --source-dir artifacts/cross_sectional_forward/source \
             --max-workers 5
       - name: Enforce paper-only and claim boundaries

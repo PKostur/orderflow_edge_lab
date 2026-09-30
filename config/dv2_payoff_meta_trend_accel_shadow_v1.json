@@ -1,0 +1,77 @@
+{
+  "shadow_id": "dv2_payoff_meta_trend_accel_shadow_v1",
+  "status": "FROZEN_RESEARCH_SHADOW_BEFORE_PROSPECTIVE_START",
+  "frozen_at_utc": "2026-09-16T18:31:00Z",
+  "prospective_start_utc": "2026-09-17T00:00:00Z",
+  "provenance": {
+    "source_rule": "discovery_v2_sprint13_payoff_meta_v1",
+    "source_rule_freeze_commit": "815df9b5c3acec3b66d7b145ac7a9fabdd0524a3",
+    "source_rule_status": "FALSIFIED_D0_NEAR_SURVIVOR",
+    "source_rule_promoted": false,
+    "purpose": "Collect genuinely new observations for the exact failed-near-survivor rule without spending additional retrospective degrees of freedom.",
+    "cannot_retroactively_convert_D0_failure_to_pass": true,
+    "not_D4_candidate_validation": true,
+    "not_authorized_for_live_or_leverage": true
+  },
+  "data": {
+    "venue": "MEXC perpetuals",
+    "history_start_utc": "2026-01-01T00:00:00Z",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "actual_public_funding_required": true,
+    "training_history_before_prospective_start_allowed": true,
+    "pre_start_pnl_in_prospective_metrics": false,
+    "no_2025_data": true
+  },
+  "primary_setup": {
+    "score": "sum of completed close-to-close returns t-4..t minus sum t-9..t-5",
+    "direction": "long highest two scores and short lowest two",
+    "state_gate": "BTC Wilder ADX14 >= 25 at completed signal close",
+    "weighting": "25% absolute weight in each of four selected legs",
+    "gross_exposure": 1.0,
+    "intended_net_exposure": 0.0,
+    "holding_period": "one day next-open to next-open"
+  },
+  "features": {
+    "inherit_exact_formulas_from": "research/discovery_v2/sprint12/FREEZE_CLARIFICATION.md",
+    "feature_count": 8,
+    "no_feature_changes": true
+  },
+  "payoff_model": {
+    "pipeline": "StandardScaler -> Ridge",
+    "ridge_alpha": 10.0,
+    "fit_intercept": true,
+    "training_window_prior_primary_setups": 80,
+    "minimum_prior_primary_setups": 60,
+    "label": "standalone next-open to next-open net bps after actual funding and forced 10 bps/side cash-position-cash transaction costs",
+    "same_open_exit_label_excluded_from_current_fit": true,
+    "trade_if_predicted_standalone_net_bps_greater_than": 0.0,
+    "otherwise": "PASS_AND_CASH",
+    "model_or_threshold_retuning_after_start": false
+  },
+  "execution": {
+    "transaction_cost_bps_per_side_on_actual_turnover": 10.0,
+    "actual_funding": true,
+    "leverage": 1.0,
+    "execution": "next UTC daily open after completed signal close",
+    "paper_shadow_only": true,
+    "no_order_transmission": true
+  },
+  "prospective_accounting": {
+    "include_only_positions_whose_entry_timestamp_is_on_or_after_start": true,
+    "completed_trade_requires_exit_data_available": true,
+    "open_forward_position_may_be_reported_but_not_scored_as_completed": true,
+    "score_candidate_and_ungated_parent_on_same_post_start_calendar": true,
+    "also_report_reversed_primary_same_decisions": true,
+    "also_report_accepted_vs_rejected_realized_standalone_payoff": true,
+    "do_not_apply_new_pass_fail_thresholds_during_shadow": true,
+    "reason": "Prospective shadow is evidence collection, not another adaptive gate search."
+  },
+  "claims": {
+    "persistent_edge_established": false,
+    "D0_passed": false,
+    "candidate_promoted": false,
+    "D4_validation": false,
+    "live_execution_supported": false,
+    "leverage_supported": false
+  }
+}

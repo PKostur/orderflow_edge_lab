@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "framework_id": "universal_backtest_framework_v1",
+  "status": "ARCHITECTURE_FREEZE",
+  "purpose": "One reusable interface for plugging arbitrary strategies into the existing data, execution, regime, robustness and reporting infrastructure.",
+  "strategy_contract": {
+    "required": ["strategy_id","required_fields","generate_target"],
+    "generate_target": "Input is a causal timestamp-indexed market frame plus immutable parameters and optional context frames. Output is target position in [-1,1] or explicit order intents.",
+    "optional": ["parameter_grid","warmup_bars","context_requirements","custom_metrics"]
+  },
+  "layers": [
+    {"name":"data_catalog","responsibility":"Load/cache/validate normalized OHLCV, trades, quotes, order book, funding and context across venues."},
+    {"name":"feature_context","responsibility":"Indicators, sessions, regimes, cross-asset context and causal feature alignment."},
+    {"name":"strategy_plugin","responsibility":"Only strategy-specific signal/target logic."},
+    {"name":"execution_engine","responsibility":"Next-bar/event execution, fees, spread, slippage, latency, partial fills and leverage/margin assumptions."},
+    {"name":"portfolio_engine","responsibility":"Position accounting, capital allocation, multi-asset equity and exposure."},
+    {"name":"experiment_engine","responsibility":"Parameter sweeps, symbols, timeframes, costs, folds, walk-forward and controls."},
+    {"name":"analytics","responsibility":"Equity curve, EV, WR, PF, DD, MFE/MAE, concentration, turnover, cost sensitivity and regime attribution."},
+    {"name":"evidence_registry","responsibility":"Immutable run manifests, candidate freezes, development/validation separation and comparable scoreboards."}
+  ],
+  "backends": {
+    "vectorized":"Default for bar strategies and large research sweeps.",
+    "event_driven":"Use for tick/order-book/order-type strategies and execution-sensitive validation.",
+    "external_adapter_future":["vectorbt","nautilustrader"]
+  },
+  "standard_run_dimensions":["strategy","parameter_set","market","symbol","timeframe","period","cost_case","regime_view","direction"],
+  "mandatory_controls":["no_lookahead_check","reversed_or_sign_control_when_meaningful","cost_stress","time_fold","symbol_breadth","concentration"],
+  "compatibility_goal":"Existing strategy_tournament families should be wrapped as plugins without changing their historical definitions.",
+  "claims":{"changes_existing_frozen_candidates":false,"live_trading_authorized":false}
+}

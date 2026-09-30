@@ -324,6 +324,23 @@ jobs:
           test "${#CONDITION_REPORTS[@]}" -ge 1
           orderflow-condition-aggregate "${CONDITION_REPORTS[@]}" \
             --output artifacts/orderflow/condition_aggregate.json
+
+          orderflow-session-strategy-report \
+            artifacts/orderflow/condition_aggregate.json \
+            --output artifacts/orderflow/session_strategy_report.json
+
+          orderflow-session-excursion-aggregate \
+            artifacts/orderflow/history \
+            --horizon-ms 30000 \
+            --fee-bps 4 \
+            --rr-target 3 \
+            --risk-fraction 0.0025 \
+            --output artifacts/orderflow/session_excursion_report.json
+
+          orderflow-session-watch \
+            artifacts/orderflow/condition_aggregate.json \
+            --watch-config config/session_development_watch_v1.json \
+            --output artifacts/orderflow/session_watch_report.json
       - name: Write cumulative ledger manifest
         run: |
           python - <<'PY'
@@ -366,6 +383,9 @@ jobs:
             artifacts/orderflow/conditioned_result_aggregate_v1.json
             artifacts/orderflow/discovery_aggregate.json
             artifacts/orderflow/condition_aggregate.json
+            artifacts/orderflow/session_strategy_report.json
+            artifacts/orderflow/session_excursion_report.json
+            artifacts/orderflow/session_watch_report.json
             config/regime_research_v1_2.json
             config/orderflow_discovery_v1.json
           if-no-files-found: warn

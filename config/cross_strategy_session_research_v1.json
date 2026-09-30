@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "protocol_name": "cross-strategy-session-research-v1",
+  "created_utc": "2026-09-22T18:25:00Z",
+  "purpose": "Apply session attribution consistently across established repository strategies without changing their frozen signal, execution, exit, cost, or promotion rules.",
+  "session_views": {
+    "coarse_crypto_8h": {
+      "ASIA_00_08": "00:00-08:00 UTC",
+      "LONDON_PLUS_OVERLAP_08_16": "08:00-16:00 UTC",
+      "NY_POST_PLUS_LATE_16_24": "16:00-24:00 UTC",
+      "warning": "Fixed UTC strategy-bar windows, not pure named exchange sessions."
+    },
+    "daily_holding_attribution": {
+      "method": "Attribute realized holding-period price/funding PnL to lower-timeframe UTC session buckets; keep transaction costs separate.",
+      "preferred_source_interval": "1h"
+    },
+    "intraday_signal_conditioning": {
+      "method": "Group unchanged signals by causal session at signal time and compare cumulative after-cost path, EV, PF, MFE/MAE, drawdown and concentration."
+    }
+  },
+  "strategies": [
+    {
+      "candidate_id": "mexc_8h_ema24_96_atr025_v1",
+      "family": "ema_tsmom",
+      "universe": "10-coin MEXC perpetual panel",
+      "status": "active_forward_shadow",
+      "session_mode": "coarse_crypto_8h",
+      "automated": true
+    },
+    {
+      "candidate_id": "mexc_8h_ema24_96_atr025_fibcore_v1",
+      "family": "ema_tsmom_fibonacci_entry_gate",
+      "universe": "10-coin MEXC perpetual panel",
+      "status": "active_forward_shadow",
+      "session_mode": "coarse_crypto_8h",
+      "automated": true
+    },
+    {
+      "candidate_id": "mexc_8h_ema24_96_atr025_markov_ev_v1",
+      "family": "markov_ev_veto_clone_of_htf_trend",
+      "universe": "10-coin MEXC perpetual panel",
+      "status": "active_forward_shadow",
+      "session_mode": "coarse_crypto_8h",
+      "automated": true
+    },
+    {
+      "candidate_id": "mexc_xs_mom30_7_dn_v1",
+      "family": "cross_sectional_momentum",
+      "universe": "10-coin MEXC perpetual panel",
+      "status": "active_forward_shadow",
+      "session_mode": "daily_holding_attribution",
+      "automated": true,
+      "next_implementation": "implemented: fetch 8h bars and emit additive price+funding session attribution; transaction costs remain separate"
+    },
+    {
+      "candidate_id": "mexc_xs_mom30_7_dn_markov_ev_v1",
+      "family": "markov_ev_veto_clone_of_cross_sectional_momentum",
+      "universe": "10-coin MEXC perpetual panel",
+      "status": "active_forward_shadow",
+      "session_mode": "daily_holding_attribution",
+      "automated": false
+    },
+    {
+      "candidate_id": "dv2_payoff_meta_trend_accel_shadow_v1",
+      "family": "cross_sectional_trend_acceleration_payoff_meta",
+      "universe": "10-coin MEXC perpetual panel",
+      "status": "prospective_research_shadow_source_rule_falsified",
+      "session_mode": "daily_holding_attribution",
+      "automated": true,
+      "existing_branch": "research/dv2-payoff-session-metrics-v1"
+    },
+    {
+      "candidate_id": "rv_persistence",
+      "family": "gold_relative_value_persistence_state",
+      "universe": "XAUUSD",
+      "status": "prospective_state_shadow",
+      "session_mode": "intraday_state_anchor_analysis",
+      "automated": true,
+      "economic_scoring": false
+    },
+    {
+      "candidate_id": "gold_cross_session_state_v1",
+      "family": "XAUUSD_cross_session_return_transmission",
+      "universe": "XAUUSD",
+      "status": "state_research_not_trading_candidate",
+      "session_mode": "intraday_signal_conditioning",
+      "automated": true,
+      "economic_scoring": false
+    }
+  ],
+  "interpretation": {
+    "primary": "cumulative return path first",
+    "secondary": [
+      "win_rate",
+      "expectancy",
+      "profit_factor",
+      "drawdown",
+      "positive_period_fraction",
+      "return_concentration",
+      "MFE_MAE_when_available"
+    ],
+    "same_lineage_is_not_independent_replication": true,
+    "session_result_does_not_modify_current_frozen_strategy": true,
+    "new_session_filter_requires_new_candidate_id_and_future_freeze": true
+  },
+  "excluded_from_new_optimization": [
+    "terminally rejected discovery-v1 orderflow rescue variants",
+    "failed gold technical tournament families",
+    "failed gold/silver promotable candidate after independent replication",
+    "failed ETF/futures price families under their terminal IDs"
+  ],
+  "claims": {
+    "live_trading_authorized": false,
+    "leverage_authorized": false,
+    "session_filter_promoted": false
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "protocol_name": "discovery-v2-evaluation-v1",
+  "status": "methodology_calibration",
+  "frozen_at_utc": "2026-09-16T11:35:00Z",
+  "purpose": "Replace headline-return ranking with a multi-dimensional evidence vector and explicit multiple-testing, concentration and execution-fragility diagnostics.",
+  "observation_unit": "completed economic observation such as a closed trade or completed holding period; dependent sub-events must be clustered before evaluation",
+  "statistics": {
+    "annualization_is_required_for_selection": false,
+    "block_bootstrap_resamples": 4000,
+    "block_bootstrap_length": 5,
+    "confidence_level": 0.95,
+    "cscv_partitions": 8,
+    "minimum_variants_for_pbo": 4,
+    "deflated_sharpe_min_probability": 0.95,
+    "pbo_max": 0.20,
+    "reality_check_max_p": 0.10
+  },
+  "economics": {
+    "cost_multipliers": [1.0, 1.5, 2.0],
+    "minimum_break_even_to_base_cost_ratio": 1.5,
+    "all_reported_returns_are_net_unless_explicitly_named_gross": true
+  },
+  "concentration": {
+    "maximum_best_symbol_positive_pnl_share": 0.50,
+    "maximum_best_calendar_month_positive_pnl_share": 0.50,
+    "maximum_top5_positive_pnl_share": 0.50,
+    "leave_one_symbol_out_expectancy_must_remain_positive": true
+  },
+  "independence": {
+    "levels": {
+      "D0": "same source and overlapping historical period",
+      "D1": "same source and genuinely later untouched period",
+      "D2": "different source with overlapping historical period",
+      "D3": "different source and genuinely later period",
+      "D4": "prospectively generated post-freeze evidence"
+    },
+    "minimum_for_live_review": "D4"
+  },
+  "promotion_logic": {
+    "single_composite_score_forbidden": true,
+    "one_dimension_cannot_compensate_for_failure_in_another": true,
+    "failed_locked_candidate_id_must_close": true,
+    "development_screening_is_not_promotion": true
+  },
+  "claims": {
+    "methodology_calibration_is_edge_evidence": false,
+    "live_order_transmission_supported": false
+  }
+}

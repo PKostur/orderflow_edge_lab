@@ -8,7 +8,6 @@ from pathlib import Path
 from typing import Any, Mapping, Sequence
 
 from orderflow_edge_lab.direction_pair import _summarize as _direction_summarize
-from orderflow_edge_lab.market_state_scan import MarketStateScanError
 from orderflow_edge_lab.orderflow_backtest import (
     BacktestConfig,
     _first_quote_at_or_after,

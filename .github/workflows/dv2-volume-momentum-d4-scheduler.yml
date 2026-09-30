@@ -1,0 +1,18 @@
+name: DV2 Volume Momentum D4 Scheduler - RETIRED
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  retired:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Candidate terminal status
+        run: |
+          echo "dv2_volume_confirmed_momentum_30d_v1 is retired."
+          echo "Reason: frozen non-overlapping Binance 2025 D3 temporal holdout failed."
+          echo "No scheduled D4 evidence collection is permitted for this dead candidate ID."
+          echo "Historical D0/D2 evidence remains preserved for audit; it does not override D3 failure."

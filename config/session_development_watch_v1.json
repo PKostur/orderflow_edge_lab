@@ -1,0 +1,131 @@
+{
+  "protocol_name": "session-development-watch-v1",
+  "status": "development_watch_only",
+  "created_date": "2026-09-22",
+  "source_audit": "research/MEXC_SESSION_STRATEGY_AUDIT_2026_09_22.md",
+  "watches": [
+    {
+      "watch_id": "SESSION_W1_ALIGNED_SHORT_ASIA_OPENING",
+      "family": "aligned",
+      "side": -1,
+      "direction": "SHORT",
+      "session_phase": "ASIA_OPENING",
+      "horizons_ms": [
+        5000,
+        15000,
+        30000
+      ],
+      "fees_bps_round_trip": [
+        4,
+        8
+      ],
+      "development_snapshot_30s_4bps": {
+        "observations": 63,
+        "independent_batches": 9,
+        "calendar_days": 7,
+        "gross_mean_bps": 6.2,
+        "net_mean_bps": 2.2,
+        "cumulative_net_bps": 138.5,
+        "win_rate_pct": 55.6,
+        "profit_factor": 1.24,
+        "positive_batch_fraction_pct": 55.6,
+        "positive_day_fraction_pct": 57.1,
+        "max_drawdown_bps": -242.7
+      },
+      "stress_note": "At 8 bps friction the 30-second mean is approximately -1.80 bps.",
+      "concentration_note": "Removing the strongest day, 2026-09-21, makes the remaining cumulative result negative.",
+      "interpretation": "Track prospectively as a session/direction travel hypothesis; do not trade or promote."
+    },
+    {
+      "watch_id": "SESSION_W2_ALIGNED_BTC_SHORT_ASIA_OPENING",
+      "family": "aligned_btc",
+      "side": -1,
+      "direction": "SHORT",
+      "session_phase": "ASIA_OPENING",
+      "horizons_ms": [
+        5000,
+        15000,
+        30000
+      ],
+      "fees_bps_round_trip": [
+        4,
+        8
+      ],
+      "development_snapshot_30s_4bps": {
+        "observations": 37,
+        "independent_batches": 7,
+        "calendar_days": 5,
+        "gross_mean_bps": 8.87,
+        "net_mean_bps": 4.87,
+        "cumulative_net_bps": 180.1,
+        "win_rate_pct": 59.5,
+        "profit_factor": 1.58,
+        "positive_batch_fraction_pct": 42.9,
+        "positive_day_fraction_pct": 20,
+        "max_drawdown_bps": -133.8
+      },
+      "stress_note": "At 8 bps friction the 30-second mean remains approximately +0.87 bps, but batch/day consistency is weak.",
+      "concentration_note": "September 21 dominates the cumulative result.",
+      "interpretation": "Secondary diagnostic only; weaker consistency than SESSION_W1 despite higher mean return."
+    },
+    {
+      "watch_id": "SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST",
+      "family": "cvd",
+      "side": null,
+      "direction": "BOTH",
+      "session_phase": null,
+      "prospective_watch_start_utc": "2026-09-22T18:10:00Z",
+      "conditions": {
+        "trading_session_regime": "LONDON+NEW_YORK",
+        "spread_bps": "wide>3",
+        "range_to_spread_15s": "high>6",
+        "btc_flow_alignment": "against"
+      },
+      "horizons_ms": [
+        5000,
+        15000,
+        30000
+      ],
+      "fees_bps_round_trip": [
+        4,
+        8
+      ],
+      "development_snapshot_30s_4bps": {
+        "observations": 14,
+        "independent_batches": 4,
+        "gross_mean_bps": 33.06,
+        "net_mean_bps": 29.06,
+        "cumulative_net_bps": 406.8,
+        "win_rate_pct": 71.4,
+        "note": "Discovery subset only. Excluded from prospective scoring."
+      },
+      "stress_note": "Discovery 30-second mean remained approximately +25.06 bps at 8 bps friction, but only four independent batches.",
+      "concentration_note": "Discovery PnL is highly concentrated: the Sep 19 batch contributed about +374.64 of +406.77 bps, approximately 92.1% of total discovery PnL. Excluding that batch leaves about +32.13 bps across five observations and three batches.",
+      "interpretation": "Prospective watch of the exact CVD/London-New-York/wide-spread/high-range/BTC-against state. No parameter changes.",
+      "prospective_review_requirement": {
+        "minimum_new_signals": 20,
+        "minimum_new_independent_batches": 8,
+        "minimum_new_calendar_days": 7
+      }
+    }
+  ],
+  "prospective_review_requirement": {
+    "minimum_new_independent_batches": 10,
+    "minimum_new_calendar_days": 5,
+    "evaluate": [
+      "5s_15s_30s_gross_travel_profile",
+      "4bps_and_8bps_net_expectancy",
+      "cumulative_net_return",
+      "profit_factor",
+      "max_drawdown",
+      "positive_batch_fraction",
+      "positive_day_fraction",
+      "top_day_concentration"
+    ],
+    "promotion_forbidden_until_new_evidence": true,
+    "future_rows_must_have_signal_observed_after_watch_start": true
+  },
+  "live_or_leverage_authorized": false,
+  "prospective_watch_start_utc": "2026-09-22T15:39:58Z",
+  "prospective_watch_boundary_commit": "db5f173cfd7831839de685936cbeb1e474488c18"
+}

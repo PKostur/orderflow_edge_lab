@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "protocol_id": "markov_price_diagnostics_v1",
+  "frozen_at_utc": "2026-09-15T17:24:00Z",
+  "purpose": "Price-state Markov diagnostics only. This protocol must not alter candidate signals, entries, exits, sizing, costs, funding, forward clocks, or promotion status.",
+  "fit_policy": {
+    "fit_on_pre_freeze_price_history_only": true,
+    "use_post_freeze_prices_for_current_state_only": true,
+    "use_strategy_pnl_for_state_definition": false,
+    "use_strategy_pnl_for_transition_fit": false,
+    "retune_state_thresholds_after_results": false
+  },
+  "state_definition": {
+    "order": 1,
+    "return": "close_to_close_log_return",
+    "direction_scale": "rolling_std_of_prior_returns_only",
+    "direction_scale_lookback_bars": 30,
+    "direction_z_down_lt": -0.5,
+    "direction_z_up_gt": 0.5,
+    "volatility_short_lookback_bars": 10,
+    "volatility_long_lookback_bars": 60,
+    "volatility_ratio_low_lt": 0.8,
+    "volatility_ratio_high_gt": 1.2,
+    "states": [
+      "DOWN|LOW",
+      "DOWN|NORMAL",
+      "DOWN|HIGH",
+      "FLAT|LOW",
+      "FLAT|NORMAL",
+      "FLAT|HIGH",
+      "UP|LOW",
+      "UP|NORMAL",
+      "UP|HIGH"
+    ],
+    "transition_smoothing_alpha": 0.5,
+    "minimum_state_transition_count_for_reliable_label": 20
+  },
+  "candidates": [
+    {
+      "candidate_id": "ena_bb40_rsi25_75_atr15_v1",
+      "candidate_config": "config/ena_mean_reversion_candidate_v1.json",
+      "symbols": ["ENA_USDT"],
+      "interval": "1h",
+      "training_start_utc": "2026-03-01T00:00:00Z",
+      "training_end_exclusive_utc": "2026-09-12T00:00:00Z",
+      "forecast_steps": [1, 3, 6, 12, 20]
+    },
+    {
+      "candidate_id": "mexc_8h_ema24_96_atr025_v1",
+      "candidate_config": "config/htf_trend_candidate_v1.json",
+      "symbols": [
+        "BTC_USDT",
+        "ETH_USDT",
+        "SOL_USDT",
+        "XRP_USDT",
+        "DOGE_USDT",
+        "BNB_USDT",
+        "ADA_USDT",
+        "LINK_USDT",
+        "SUI_USDT",
+        "ENA_USDT"
+      ],
+      "interval": "8h",
+      "training_start_utc": "2026-07-01T00:00:00Z",
+      "training_end_exclusive_utc": "2026-09-12T00:00:00Z",
+      "forecast_steps": [1, 3, 6]
+    },
+    {
+      "candidate_id": "mexc_xs_mom30_7_dn_v1",
+      "candidate_config": "config/cross_sectional_candidate_v1.json",
+      "symbols": [
+        "BTC_USDT",
+        "ETH_USDT",
+        "SOL_USDT",
+        "XRP_USDT",
+        "DOGE_USDT",
+        "BNB_USDT",
+        "ADA_USDT",
+        "LINK_USDT",
+        "SUI_USDT",
+        "ENA_USDT"
+      ],
+      "interval": "1d",
+      "training_start_utc": "2026-01-01T00:00:00Z",
+      "training_end_exclusive_utc": "2026-09-12T00:00:00Z",
+      "forecast_steps": [1, 3, 7]
+    }
+  ],
+  "claims": {
+    "diagnostic_only": true,
+    "candidate_specifications_modified": false,
+    "verified_out_of_sample_edge": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "protocol_name": "discovery-process-v2",
+  "status": "research_architecture",
+  "modifies_existing_frozen_candidates": false,
+  "live_order_transmission_supported": false,
+  "engines": {
+    "discovery": {
+      "name": "orderflow_edge_lab",
+      "role": "fast hypothesis screening only",
+      "final_evidence_allowed": false
+    },
+    "crypto_bias_audit": {
+      "name": "freqtrade",
+      "required_checks": ["lookahead-analysis", "recursive-analysis", "dry-run/backtest consistency"]
+    },
+    "event_driven_replication": {
+      "name": "nautilustrader",
+      "implementation_independence_required": true,
+      "shared_signal_code_allowed": false
+    },
+    "execution_specialist": {
+      "name": "hummingbot",
+      "required_for": ["market_making", "cross_exchange_arbitrage", "liquidity_provision", "order_book_execution"]
+    },
+    "cross_asset_replication": {
+      "name": "lean",
+      "preferred_for": ["gold", "futures", "equities", "fx", "cross_asset"]
+    }
+  },
+  "independence_levels": {
+    "D0": "same source, same period",
+    "D1": "same source, later period",
+    "D2": "independent source, overlapping period",
+    "D3": "independent source, later period",
+    "D4": "prospective data captured after freeze"
+  },
+  "mandatory_evaluation": {
+    "validity": [
+      "lookahead_audit",
+      "timestamp_alignment",
+      "survivorship_and_universe_audit",
+      "future_funding_or_borrow_audit",
+      "trial_ledger_complete",
+      "independent_engine_comparison"
+    ],
+    "economics": [
+      "gross_expectancy",
+      "net_expectancy",
+      "sharpe",
+      "sortino",
+      "max_drawdown",
+      "time_under_water",
+      "profit_factor",
+      "turnover",
+      "fees",
+      "slippage",
+      "funding_or_borrow",
+      "break_even_friction",
+      "benchmark_relative_return",
+      "market_beta"
+    ],
+    "statistical": [
+      "block_bootstrap_ci",
+      "deflated_sharpe_ratio",
+      "probability_of_backtest_overfitting_when_applicable",
+      "reality_check_style_family_test_when_applicable",
+      "parameter_neighborhood_stability",
+      "engine_dispersion"
+    ],
+    "concentration": [
+      "best_symbol_pnl_share",
+      "best_period_pnl_share",
+      "top_five_trade_pnl_share",
+      "contribution_hhi",
+      "performance_without_best_symbol",
+      "performance_without_best_period"
+    ],
+    "execution_stress": {
+      "cost_multipliers": [1.0, 1.5, 2.0],
+      "decision_delays": [0, 1],
+      "partial_fill_stress_required_for_limit_orders": true,
+      "capacity_estimate_required": true
+    }
+  },
+  "candidate_states": [
+    "IDEA",
+    "DISCOVERY_ONLY",
+    "FALSIFIED",
+    "REPLICATION_PENDING",
+    "ENGINE_REPLICATED",
+    "LOCKED_VALIDATION",
+    "VALIDATION_FAILED",
+    "PROSPECTIVE_SHADOW",
+    "EVIDENCE_ACCUMULATING",
+    "LIVE_REVIEW_ELIGIBLE"
+  ],
+  "hard_blocks": [
+    "unexplained_lookahead",
+    "future_information_leakage",
+    "unlogged_trials",
+    "retune_on_locked_validation",
+    "execution_accounting_mismatch",
+    "negative_unlevered_expectancy_rescued_by_leverage"
+  ],
+  "promotion": {
+    "discovery_to_replication": {
+      "positive_gross_expectancy": true,
+      "positive_net_expectancy_baseline": true,
+      "positive_benchmark_relative_result": true,
+      "reversed_or_null_weaker": true,
+      "single_symbol_pnl_share_max": 0.50
+    },
+    "replication_to_locked_validation": {
+      "independent_engine_agreement": true,
+      "positive_net_at_cost_multiplier": 1.5,
+      "isolated_parameter_peak_allowed": false,
+      "selection_bias_diagnostics_required": true
+    },
+    "locked_validation_to_shadow": {
+      "positive_net_locked_result": true,
+      "positive_benchmark_relative_locked_result": true,
+      "within_preregistered_drawdown_tolerance": true
+    }
+  }
+}

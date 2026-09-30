@@ -1,0 +1,26 @@
+{
+  "candidate_id": "ETF_H2_VWAP_REVERSION_CONTEXT_V1",
+  "shadow_start_date": "2026-09-22",
+  "through_date": "2026-09-21",
+  "status": "ACCUMULATING",
+  "observation_target": {
+    "minimum_filtered_trades": 20,
+    "minimum_distinct_sessions": 10,
+    "minimum_calendar_days": 20,
+    "target_met": false
+  },
+  "trades": 0,
+  "distinct_sessions": 0,
+  "calendar_days_elapsed": 0,
+  "constant_notional_cumulative_bps_2": 0.0,
+  "constant_notional_cumulative_bps_4": 0.0,
+  "portfolio_model": "four fixed 25% sleeves; unused sleeves cash",
+  "portfolio_compounded_return_pct": 0.0,
+  "portfolio_max_drawdown_pct": 0.0,
+  "diagnostic_convention": {
+    "mfe_mae_window": "entry bar through the minute immediately before the exit bar; exit is at exit-bar open",
+    "backfill_before_shadow_start": false
+  },
+  "note": "Initial state created before the first completed US session on the prospective start date.",
+  "live_or_leverage_authorized": false
+}

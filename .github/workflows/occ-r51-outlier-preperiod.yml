@@ -1,0 +1,60 @@
+name: OCC R5.1 External Outlier Preperiod
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/occ-r51-outlier-preperiod.yml"
+      - "research/outliers/occ_r51_preperiod/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: occ-r51-outlier-preperiod-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  study:
+    name: frozen-preperiod-study
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Syntax check OCC study
+        run: python -m py_compile scripts/occ_r51_outlier.py
+      - name: Run frozen retrospective preperiod study
+        run: |
+          python scripts/occ_r51_outlier.py \
+            --start 2026-03-01 \
+            --end 2026-06-01 \
+            --output-dir artifacts/occ_r51_outlier_preperiod
+      - name: Print decision-relevant comparison
+        if: success()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('artifacts/occ_r51_outlier_preperiod/report.json').read_text(encoding='utf-8'))
+          print('OCC R5.1 RETROSPECTIVE PREPERIOD')
+          for cost in ('0.0','12.0','16.0','20.0'):
+              print('\nround_trip_cost_bps:', cost)
+              a=r['aggregate'].get(cost,{})
+              for variant in ('original_lookahead','confirmed_htf','same_tf'):
+                  print(variant, json.dumps(a.get(variant,{}), sort_keys=True))
+              print('lookahead_impact', json.dumps(r['lookahead_impact'].get(cost,{}), sort_keys=True))
+          PY
+      - name: Preserve complete preperiod evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: occ-r51-outlier-preperiod-results
+          path: artifacts/occ_r51_outlier_preperiod/
+          retention-days: 30
+          if-no-files-found: warn

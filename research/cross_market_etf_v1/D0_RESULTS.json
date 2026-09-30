@@ -1,0 +1,147 @@
+{
+  "research_id": "cross_market_etf_v1",
+  "stage": "D0_discovery",
+  "status": "ALL_FAMILIES_FALSIFIED_D0",
+  "protocol_source": {
+    "freeze_commit": "f3156a7460399d38f0dc3c7b6f5d7109858eb0d2",
+    "clarification_commit": "98b77ae7027efd9edc71aff78204abbda0855cd5"
+  },
+  "data": {
+    "provider": "Massive",
+    "reacquired_range": ["2026-06-01", "2026-07-31"],
+    "d0_window": ["2026-07-06", "2026-07-31"],
+    "august_holdout_inspected": false,
+    "interpolation_used": false,
+    "d0_integrity": {
+      "SPY": {"sessions": 20, "full_390": 20, "incomplete": 0, "min_minutes": 390, "avg_minutes": 390.0},
+      "QQQ": {"sessions": 20, "full_390": 20, "incomplete": 0, "min_minutes": 390, "avg_minutes": 390.0},
+      "GLD": {"sessions": 20, "full_390": 20, "incomplete": 0, "min_minutes": 390, "avg_minutes": 390.0},
+      "USO": {"sessions": 20, "full_390": 15, "incomplete": 5, "min_minutes": 372, "avg_minutes": 388.75}
+    }
+  },
+  "families": {
+    "ETF_H1_ORB15_CONTINUATION": {
+      "eligibility": {
+        "total_ticker_sessions": 80,
+        "opening_range_complete": 80,
+        "breakout_found": 76,
+        "executable_signals": 76
+      },
+      "metrics": {
+        "signals": 76,
+        "sessions_with_signals": 20,
+        "tickers_with_signals": 4,
+        "pooled_net_mean_bps_2bps": 1.265032,
+        "pooled_reversed_mean_bps_2bps": -5.265032,
+        "positive_tickers": 4,
+        "positive_pnl_concentration": 0.566297,
+        "half1_net_mean_bps_2bps": -5.159065,
+        "half2_net_mean_bps_2bps": 7.68913
+      },
+      "ticker_results": {
+        "GLD": {"signals": 18, "mean_net_bps_2bps": 3.721047, "total_net_bps_2bps": 66.978851},
+        "QQQ": {"signals": 19, "mean_net_bps_2bps": 4.809615, "total_net_bps_2bps": 91.382684},
+        "SPY": {"signals": 19, "mean_net_bps_2bps": 0.158272, "total_net_bps_2bps": 3.007174},
+        "USO": {"signals": 20, "mean_net_bps_2bps": -3.261313, "total_net_bps_2bps": -65.226263}
+      },
+      "gates": {
+        "minimum_total_signals_30": true,
+        "minimum_sessions_with_signals_10": true,
+        "minimum_tickers_with_signals_3": true,
+        "pooled_net_mean_bps_2bps_positive": true,
+        "original_beats_reversed_at_2bps": true,
+        "minimum_positive_tickers_3": true,
+        "max_positive_pnl_share_single_ticker_0_60": true,
+        "both_calendar_halves_positive_at_2bps": false
+      },
+      "d0_survival": false,
+      "terminal_status": "FALSIFIED_D0",
+      "failure_reason": "First frozen D0 calendar half is negative after 2 bps friction."
+    },
+    "ETF_H2_VWAP_VOL_REVERSION": {
+      "eligibility": {
+        "total_ticker_sessions": 80,
+        "sessions_with_valid_math": 80,
+        "threshold_signal_sessions": 75,
+        "executable_signals": 75
+      },
+      "metrics": {
+        "signals": 75,
+        "sessions_with_signals": 20,
+        "tickers_with_signals": 4,
+        "pooled_net_mean_bps_2bps": 1.836739,
+        "pooled_reversed_mean_bps_2bps": -5.836739,
+        "positive_tickers": 2,
+        "positive_pnl_concentration": 0.918878,
+        "half1_net_mean_bps_2bps": 0.729645,
+        "half2_net_mean_bps_2bps": 2.805445
+      },
+      "ticker_results": {
+        "GLD": {"signals": 18, "mean_net_bps_2bps": -1.376429, "total_net_bps_2bps": -24.775715},
+        "QQQ": {"signals": 19, "mean_net_bps_2bps": 0.857277, "total_net_bps_2bps": 16.288261},
+        "SPY": {"signals": 19, "mean_net_bps_2bps": -2.01353, "total_net_bps_2bps": -38.257067},
+        "USO": {"signals": 19, "mean_net_bps_2bps": 9.710522, "total_net_bps_2bps": 184.499911}
+      },
+      "gates": {
+        "minimum_total_signals_30": true,
+        "minimum_sessions_with_signals_10": true,
+        "minimum_tickers_with_signals_3": true,
+        "pooled_net_mean_bps_2bps_positive": true,
+        "original_beats_reversed_at_2bps": true,
+        "minimum_positive_tickers_3": false,
+        "max_positive_pnl_share_single_ticker_0_60": false,
+        "both_calendar_halves_positive_at_2bps": true
+      },
+      "d0_survival": false,
+      "terminal_status": "FALSIFIED_D0",
+      "failure_reason": "Only two tickers are positive and 91.8878% of positive ticker contribution comes from one ticker."
+    },
+    "ETF_H3_GAP_REVERSION": {
+      "eligibility": {
+        "total_ticker_sessions": 80,
+        "sessions_with_valid_sigma_and_exact_times": 80,
+        "threshold_signal_sessions": 42,
+        "executable_signals": 42
+      },
+      "metrics": {
+        "signals": 42,
+        "sessions_with_signals": 16,
+        "tickers_with_signals": 4,
+        "pooled_net_mean_bps_2bps": -16.391733,
+        "pooled_reversed_mean_bps_2bps": 12.391733,
+        "positive_tickers": 2,
+        "positive_pnl_concentration": 0.885284,
+        "half1_net_mean_bps_2bps": -28.01186,
+        "half2_net_mean_bps_2bps": -8.490046
+      },
+      "ticker_results": {
+        "GLD": {"signals": 11, "mean_net_bps_2bps": -28.10849, "total_net_bps_2bps": -309.193387},
+        "QQQ": {"signals": 12, "mean_net_bps_2bps": 1.731319, "total_net_bps_2bps": 20.775829},
+        "SPY": {"signals": 8, "mean_net_bps_2bps": 20.041308, "total_net_bps_2bps": 160.330466},
+        "USO": {"signals": 11, "mean_net_bps_2bps": -50.942334, "total_net_bps_2bps": -560.365675}
+      },
+      "gates": {
+        "minimum_total_signals_30": true,
+        "minimum_sessions_with_signals_10": true,
+        "minimum_tickers_with_signals_3": true,
+        "pooled_net_mean_bps_2bps_positive": false,
+        "original_beats_reversed_at_2bps": false,
+        "minimum_positive_tickers_3": false,
+        "max_positive_pnl_share_single_ticker_0_60": false,
+        "both_calendar_halves_positive_at_2bps": false
+      },
+      "d0_survival": false,
+      "terminal_status": "FALSIFIED_D0",
+      "failure_reason": "Negative pooled expectancy, reversed control dominates, breadth and concentration fail, and both frozen calendar halves are negative."
+    }
+  },
+  "holdout": {
+    "august_status": "LOCKED_NOT_INSPECTED",
+    "reason": "Every frozen D0 family failed at least one D0 survival gate."
+  },
+  "research_actions": {
+    "parameter_changes_after_d0": false,
+    "ticker_specific_tuning_after_d0": false,
+    "failed_family_ids_reused": false
+  }
+}

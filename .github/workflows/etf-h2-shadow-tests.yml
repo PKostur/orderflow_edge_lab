@@ -1,0 +1,22 @@
+name: ETF H2 shadow tests
+
+on:
+  push:
+    branches:
+      - research/cross-market-etf-v1
+    paths:
+      - "research/cross_market_etf_v1/h2_shadow_tracker.py"
+      - "research/cross_market_etf_v1/test_h2_shadow_tracker.py"
+      - ".github/workflows/etf-h2-shadow-tests.yml"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run shadow tracker unit tests
+        run: python -m unittest research/cross_market_etf_v1/test_h2_shadow_tracker.py

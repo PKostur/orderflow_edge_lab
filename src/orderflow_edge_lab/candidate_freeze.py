@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from .research_protocol import ResearchProtocolError, verify_freeze
+from .research_protocol import verify_freeze
 
 UTC = timezone.utc
 
