@@ -28,6 +28,7 @@
 - Landing PR research → main open (user decides; it also carries PR #113's commits). PR #120 closed as superseded.
 
 ## Open issues
+- PR #123 (LSK conditional regime, user's): reviewed; branch updated (`1f93504`: main merged, manifest + registry gap entries, INDEX 'not established'). Rule traded 0/234; forward gate out of reach; no captures advised.
 - Bybit venue replication workflow disabled (superseded by green `cross-sectional-okx-replication-v1`).
 - `Universal Existing Strategy Backtests` on main fails twice weekly: main's workflow uses old CLI args; the fixed workflow and config come with this branch (and PR #113's history), so it is fixed only when this branch lands.
 - Trend-core 180-day review funding criterion: registered pre-start estimate −0.97%/yr (`research/forward_formal_reviews/`), vol-target uses core funding × overlay leverage.
