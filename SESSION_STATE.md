@@ -37,7 +37,7 @@
 
 ## Evidence so far (one line each; details in `research/*/RESULT.md` and `docs/`)
 - Trend core (DON8+EMA8, invvol, v3.1): pre-window holdout PASS (t 3.13); untouched 7 coins narrow FAIL (t 1.87); untouched 53 coins PASS (t 2.00); ETFs FAIL (rules are crypto-specific).
-- Rejected refinements: regime switch, channel exit, funding overlay, chop-regime search, horizon ensemble, Markowitz, XS low-vol leg, strategy zoo v1 (7 families: weekend, BTC lead-lag, residual reversal, MAX, 180d-high, volume shock, skew; all fail, `research/strategy_zoo`). Vol target adopted as candidate.
+- Rejected refinements: regime switch, channel exit, funding overlay, chop-regime search, horizon ensemble, Markowitz, XS low-vol leg, strategy zoos v1+v2 (12 families incl. pairs, session, 8h reversal, high-vol breakout, vol-managed momentum; all fail, `research/strategy_zoo`). Vol target adopted as candidate.
 - Multi-premia blend (trend + XS momentum + funding carry, equal risk): dev Sharpe 2.09 (t 4.48), robust to neighbours (1.6–2.2), costs (1.80 at 60 bps), crises.
 - **Untouched-coins holdout (60 unused coins, run once): blend PASS, Sharpe 1.39, t 3.16, DD −11%, halves 1.41/1.37.** Carry alone fails (t 0.9).
 - Human-constrained (≤5 coins, daily 08 UTC): dev H5 PASS (1.19, DD −31%) but holdout H5 0.60 (t 1.40). Concentration is the weak link; ≥10 coins keeps more (dev 1.40).
