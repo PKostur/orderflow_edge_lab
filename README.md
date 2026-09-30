@@ -42,9 +42,21 @@ Every installed command is available as a flat script (for example `orderflow-mu
 orderflow --list          # grouped command table
 orderflow --list-json     # machine-readable
 orderflow paper --help    # same implementation as orderflow-paper
-orderflow review-clock    # daily elapsed-time report for preregistered watches
-orderflow capture-health  # descriptive MEXC capture inventory and gap report
+orderflow review-clock     # daily elapsed-time report for preregistered watches
+orderflow capture-health   # descriptive MEXC capture inventory and gap report
+orderflow review-packet    # hash-pinned review skeleton from a frozen counting report
+orderflow artifact-coverage # are the artifacts a predeclared review needs still retrievable?
+orderflow ops-digest       # one daily digest of clock + captures + ledger + coverage
+orderflow robustness       # cluster interval, design power, concentration, negative controls
+orderflow research-hygiene # pre-registration, frozen hashes, workflow/artifact graph, inspection registry
+orderflow discovery-screen # does a candidate clear the declared friction before a window is spent?
+orderflow orthogonality    # redundancy clusters, incremental information, leave-one-out stability
 ```
+
+The wait-window observability commands are aggregation only: they count no evidence, compute no
+verdict, and promote nothing. The validation commands analyse an already-frozen report or check a
+contract; they add no threshold to an open watch and label every number they produce as post-hoc.
+See [docs/README.md](docs/README.md) and [docs/VALIDATION_TOOLING.md](docs/VALIDATION_TOOLING.md).
 
 ## MEXC Futures order flow
 

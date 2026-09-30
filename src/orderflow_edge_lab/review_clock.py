@@ -99,6 +99,10 @@ def clock_report(
         entry: dict[str, Any] = {
             "watch_id": watch_id,
             "priority": watch.get("priority"),
+            "terminal_state": watch.get("terminal_state"),
+            "terminal_review_utc": watch.get("terminal_review_utc"),
+            "terminal_note": watch.get("terminal_note"),
+            "open_watch": watch.get("terminal_state") is None,
             "family": watch.get("family"),
             "prospective_start_utc": start.isoformat().replace("+00:00", "Z"),
             "elapsed_days": round(elapsed_days, 4),
@@ -126,6 +130,7 @@ def clock_report(
         watches.append(entry)
 
     derivable = [w for w in watches if w["review_window_matured"] is not None]
+    open_watches = [w for w in watches if w["open_watch"]]
     return {
         "schema_version": 1,
         "protocol_name": payload.get("protocol_name", "prospective-review-clock"),
@@ -134,12 +139,17 @@ def clock_report(
         "watch_count": len(watches),
         "watches": watches,
         "summary": {
+            "open_watch_count": len(open_watches),
+            "terminal_watch_count": len(watches) - len(open_watches),
             "watches_with_derivable_review_target": len(derivable),
             "watches_with_matured_review_window": sum(
                 1 for w in derivable if w["review_window_matured"]
             ),
             "all_windows_still_accumulating": not any(
                 w["review_window_matured"] for w in derivable
+            ),
+            "all_open_windows_still_accumulating": not any(
+                w["review_window_matured"] for w in derivable if w["open_watch"]
             ),
         },
         "claims": {

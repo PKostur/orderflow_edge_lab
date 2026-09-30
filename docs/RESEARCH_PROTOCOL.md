@@ -42,9 +42,9 @@ calculation. This catches arithmetic and direction errors but does not prove tha
 the supplied prices were executable fills.
 
 `cost_components_r` must contain nonnegative `fees`, `slippage`, `spread`, and
-`other` values whose sum equals `cost_r`. A zero-cost real-market observation is
-rejected because frictionless observations are not acceptable evidence for this
-execution-oriented research. A candidate may use only one transaction-cost model
+`other` values whose sum equals `cost_r`. An observation that declares no
+transaction costs is rejected because cost-free observations are not acceptable
+evidence for this execution-oriented research. A candidate may use only one transaction-cost model
 within a validation audit. Materially different execution assumptions require a
 separately frozen candidate so incompatible cost regimes cannot be pooled into one
 return summary. The source, price, and cost labels remain operator declarations,

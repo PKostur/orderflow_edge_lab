@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "version": "hypothesis-inspection-registry-v1",
+  "recorded_at_utc": "2026-09-30T00:00:00Z",
+  "purpose": "One entry per lane that was inspected, so that 'previously inspected data is spent' is auditable and a terminal identifier cannot be quietly reopened. Descriptive accounting only: the canonical record of each lane remains the authority and no number is recomputed here.",
+  "claims": {
+    "adjudicates_evidence": false,
+    "recomputes_lane_results": false,
+    "reopens_terminal_identifiers": false,
+    "computes_strategy_verdicts": false,
+    "live_order_transmission_supported": false
+  },
+  "entries": [
+    {
+      "hypothesis_id": "cross_market_etf_v1",
+      "family": "etf_session_families",
+      "statement": "Session-family edge transfers from index futures context to ETF instruments.",
+      "evidence_kind": "development",
+      "data_window": {
+        "description": "D0 discovery and pre-August evaluation windows; the August holdout remains sealed and uninspected"
+      },
+      "dependence_clusters": "session days within one capture era",
+      "registered_at_utc": "2026-09-21T00:00:00Z",
+      "status": "FALSIFIED",
+      "outcome_summary": "Falsified in all families at D0; the August holdout was never opened.",
+      "data_spent": true,
+      "id_reusable": false,
+      "canonical_record": "research/cross_market_etf_v1/FINAL_WRAP_2026_09_21.md"
+    },
+    {
+      "hypothesis_id": "cross_market_futures_v1",
+      "family": "futures_price_transfer",
+      "statement": "Price-transfer and replication effects persist across futures instruments.",
+      "evidence_kind": "development",
+      "data_window": {
+        "description": "Pre-August transfer and replication windows"
+      },
+      "dependence_clusters": "session days",
+      "registered_at_utc": "2026-09-21T00:00:00Z",
+      "status": "FALSIFIED",
+      "outcome_summary": "Falsified; the order-flow lane remains blocked only on data entitlement.",
+      "data_spent": true,
+      "id_reusable": false,
+      "canonical_record": "research/cross_market_etf_v1/FINAL_WRAP_2026_09_21.md"
+    },
+    {
+      "hypothesis_id": "discovery_v1_short_horizon_family",
+      "family": "discovery_v1_self_improvement",
+      "statement": "A short-horizon order-flow strategy family can be improved to positive expectancy by the 332-epoch self-improvement sequence.",
+      "evidence_kind": "development",
+      "data_window": {
+        "description": "The full 332-epoch self-improvement sequence"
+      },
+      "dependence_clusters": "epochs are not independent draws over one capture era",
+      "registered_at_utc": "2026-09-21T00:00:00Z",
+      "status": "CLOSED",
+      "outcome_summary": "Negative median gross expectancy before costs; rescue attempts exhausted.",
+      "data_spent": true,
+      "id_reusable": false,
+      "canonical_record": "research/self_improvement/CONTINUOUS_SELF_IMPROVEMENT_REPORT_V1.md"
+    },
+    {
+      "hypothesis_id": "don8_session_conditioned_development_record",
+      "family": "donchian_breakout_8h",
+      "statement": "The unchanged Donchian-55 8h strategy contributes positively after costs in the London window and outperforms its Asia window contribution.",
+      "evidence_kind": "development",
+      "data_window": {
+        "description": "Development years and folds used to form the session-conditioned record"
+      },
+      "dependence_clusters": "development folds and years",
+      "registered_at_utc": "2026-09-22T00:00:00Z",
+      "status": "EVALUATED",
+      "outcome_summary": "Positive in development on every year, fold majority and symbol breadth, both sides. Development evidence only; not prospective and not executable.",
+      "data_spent": true,
+      "id_reusable": false,
+      "canonical_record": "research/CROSS_STRATEGY_SESSION_EVIDENCE_2026_09_22.md"
+    },
+    {
+      "hypothesis_id": "session_w1_aligned_short_asia_opening",
+      "family": "session_microstructure",
+      "statement": "Aligned short into the Asia opening has positive after-cost expectancy on ENA.",
+      "evidence_kind": "prospective",
+      "data_window": {
+        "start_utc": "2026-09-22T15:39:58Z",
+        "end_utc": "2026-09-29T00:00:00Z",
+        "open": false
+      },
+      "dependence_clusters": "independent capture batches",
+      "registered_at_utc": "2026-09-22T15:39:58Z",
+      "status": "FALSIFIED",
+      "outcome_summary": "Reached its frozen gate and was falsified in every predeclared cell at both friction levels (Formal Review 1).",
+      "data_spent": true,
+      "id_reusable": false,
+      "canonical_record": "research/SESSION_WATCH_FORMAL_REVIEW_1_2026_09_29.md"
+    },
+    {
+      "hypothesis_id": "session_w2_aligned_btc_short_asia_opening",
+      "family": "session_microstructure_btc_aligned",
+      "statement": "The BTC-aligned short into the Asia opening has positive after-cost expectancy.",
+      "evidence_kind": "prospective",
+      "data_window": {
+        "start_utc": "2026-09-22T15:39:58Z",
+        "end_utc": "2026-09-29T00:00:00Z",
+        "open": false
+      },
+      "dependence_clusters": "independent capture batches",
+      "registered_at_utc": "2026-09-22T15:39:58Z",
+      "status": "FALSIFIED",
+      "outcome_summary": "Reached its frozen gate and was falsified in every predeclared cell at both friction levels (Formal Review 1).",
+      "data_spent": true,
+      "id_reusable": false,
+      "canonical_record": "research/SESSION_WATCH_FORMAL_REVIEW_1_2026_09_29.md"
+    },
+    {
+      "hypothesis_id": "session_w3_cvd_lny_wide_range_btc_against",
+      "family": "cvd_london_newyork_overlap",
+      "statement": "In the London/New York overlap under a wide-range BTC-against condition, cumulative net is positive, profit factor exceeds one and the positive batch fraction exceeds one half.",
+      "evidence_kind": "prospective",
+      "data_window": {
+        "start_utc": "2026-09-22T18:10:00Z",
+        "end_utc": null,
+        "open": true
+      },
+      "dependence_clusters": "independent capture batches",
+      "registered_at_utc": "2026-09-22T18:10:00Z",
+      "status": "REGISTERED",
+      "outcome_summary": "Accumulating toward its frozen gate; no partial-period endpoint is interpreted.",
+      "data_spent": false,
+      "id_reusable": true,
+      "canonical_record": "config/session_watch_cvd_lny_v1.json"
+    },
+    {
+      "hypothesis_id": "evidence_v2_cross_strategy_session_forward_v1",
+      "family": "don8_forward_session",
+      "statement": "The unchanged Donchian-55 8h strategy continues to produce positive after-cost equal-weight portfolio contribution during 08:00-16:00 UTC and outperforms its own 00:00-08:00 UTC contribution.",
+      "evidence_kind": "prospective",
+      "data_window": {
+        "start_utc": "2026-09-23T00:00:00Z",
+        "end_utc": null,
+        "open": true
+      },
+      "dependence_clusters": "forward scoring dates and the shared-bar cross-section of ten symbols",
+      "registered_at_utc": "2026-09-22T20:01:45Z",
+      "status": "REGISTERED",
+      "outcome_summary": "Accumulating to the 2026-10-23 review. No early pass or fail is permitted; the metrics are declared without a numeric threshold, so the review is descriptive.",
+      "data_spent": false,
+      "id_reusable": true,
+      "canonical_record": "config/evidence_v2_session_forward_watch_v1.json"
+    },
+    {
+      "hypothesis_id": "state_60s_volatility_expansion_transfer",
+      "family": "volatility_regime_state",
+      "statement": "The 60s volatility-expansion state label transfers across symbols.",
+      "evidence_kind": "transfer",
+      "data_window": {
+        "description": "Six-symbol transfer evaluation within one capture era"
+      },
+      "dependence_clusters": "one capture era; the six symbols are one dependence cluster, not six",
+      "registered_at_utc": "2026-09-22T00:00:00Z",
+      "status": "EVALUATED",
+      "outcome_summary": "Label prediction transfers (median Spearman positive with all six symbols positive), but this is transfer evidence from a single dependence cluster and was never converted into executable expectancy.",
+      "data_spent": true,
+      "id_reusable": false,
+      "canonical_record": "research/self_improvement/CONTINUOUS_SELF_IMPROVEMENT_REPORT_V1.md"
+    },
+    {
+      "hypothesis_id": "ema15m_ema20_50_remembered_tradingview",
+      "family": "trend_structure_15m",
+      "statement": "A 15m EMA20/50 condition seen previously in TradingView marks a tradable trend state.",
+      "evidence_kind": "observational",
+      "data_window": {
+        "description": "Already-inspected development observation; no independent window was ever reserved"
+      },
+      "dependence_clusters": "not established",
+      "registered_at_utc": "2026-09-22T00:00:00Z",
+      "status": "EVALUATED",
+      "outcome_summary": "Recorded as an already-inspected development hypothesis. It is not verified out-of-sample evidence and may not be reintroduced as if it were fresh.",
+      "data_spent": true,
+      "id_reusable": false,
+      "canonical_record": "STATUS.md"
+    }
+  ],
+  "registry_sha256": "6080f2f145eb32d4c9a9548e399073a39ccb7185ac7eba8e1fed07833bf45921"
+}
