@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "protocol_id": "custom-sentiment-v1",
+  "status": "DECLARED_BEFORE_EVALUATION",
+  "question": "Does a strategy designed from the strategy-zoo diagnosis (trade with the trend, fade only forced flows) earn a premium, and does market sentiment (Crypto Fear & Greed Index) work as a standalone signal or as a secondary input to the multi-premia legs?",
+  "registration_note": "Declared 2026-10-01 before any result. CONTAMINATED BY DESIGN: C1 was designed after seeing strategy-zoo v1/v2 on these same samples, and the blend legs are fully seen, so every number is descriptive and a pass only makes a book eligible for a forward watch. Parameters are round a-priori values, nothing is searched. Fear & Greed history: api.alternative.me/fng (daily, since 2018-02), snapshot saved with the result; the value stamped day d-1 is the latest one used for a position held over day d.",
+  "trial_family": "custom-sentiment-v1 (3 standalone books, 2 overlays)",
+  "design": {"dependence_cluster": "calendar week", "design_effect_bps": "not estimated; Newey-West 5 lags", "design_units": "daily portfolio net returns"},
+  "samples": "development = 70 multi-premia-v1 coins, confirmation = 60 multi-premia-untouched-holdout-v1 coins (BTC signal-only there); 2020-06-01 to 2026-09-12; 20 bps; funding proxy",
+  "standalone": {
+    "C1_forced_flow_with_trend": "per coin, daily. Trend state at d: open above its 50-day mean and the 50-day mean above its value 5 days earlier (up), or the mirror (down). Forced-flow signature on day d-1: return beyond 2.5 x the prior 20-day stdev against the trend AND day d-1 volume above 2 x its prior 30-day mean. Then hold with the trend (long after a forced drop in an uptrend, short after a forced spike in a downtrend) for 3 days from the open of d. Size min(1, 15% / annualized 60-day vol) / number of coins with data.",
+    "F1_extreme_fear_buy": "equal-weight basket long from the first day Fear & Greed <= 20 until it is >= 50, flat otherwise",
+    "F2_sentiment_following": "equal-weight basket long when the 7-day mean Fear & Greed >= 55, short when <= 45, flat in between"
+  },
+  "overlays_on_multi_premia_blend": {
+    "O1_greed_brake": "trend leg S1 scaled by 0.5 on days when Fear & Greed >= 80 (extreme greed), else 1",
+    "O2_panic_momentum_pause": "cross-sectional momentum leg S2 scaled by 0.5 on days when Fear & Greed <= 25 (momentum-crash risk after panics), else 1",
+    "note": "leg returns are scaled directly (the extra turnover of changing size is ignored, which favours the overlays slightly); blend weights are then recomputed with the unchanged inverse-vol rule"
+  },
+  "pass_rules": {
+    "standalone": "development mean > 0, NW t >= 2, both halves positive; confirmation Sharpe > 0 and NW t >= 1.5",
+    "overlay": "blend Sharpe higher than the unchanged blend on BOTH samples and in at least 3 of the 4 sample-halves, and max drawdown not deeper on either sample",
+    "multiple_testing": "5 tests; development t < 2.6 labelled as not surviving Bonferroni"
+  },
+  "if_passed": "register a forward watch only; the multi-premia-blend-v1 watch is unchanged",
+  "claims": {"strategy_promotion_authorized": false, "live_trading_authorized": false, "leverage_authorized": false}
+}
