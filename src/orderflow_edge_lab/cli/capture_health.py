@@ -27,6 +27,14 @@ def build_parser() -> argparse.ArgumentParser:
         help="Flag 'no_recent_capture' when the newest capture is older than this (default: 26).",
     )
     parser.add_argument("--output", help="Optional path for an exclusive-create JSON report.")
+    parser.add_argument(
+        "--fail-on-stoppage",
+        action="store_true",
+        help=(
+            "Exit 3 when the report concludes captures have stopped (stale or absent). "
+            "Off by default so the report stays descriptive for ad-hoc use."
+        ),
+    )
     return parser
 
 
@@ -47,6 +55,10 @@ def main(argv: list[str] | None = None) -> int:
         if args.output:
             _write_exclusive(Path(args.output), payload)
         print(json.dumps(payload, sort_keys=True, indent=2))
+        if args.fail_on_stoppage and payload["stoppage"]["capture_stopped"]:
+            # Exit 3 (distinct from the 2 used for failures) so a caller can
+            # surface a silent capture stoppage without treating it as a crash.
+            return 3
         return 0
     except (OSError, ValueError, TypeError, CaptureHealthError) as exc:
         print(json.dumps({"status": "failed", "error_type": type(exc).__name__, "reason": str(exc)}))

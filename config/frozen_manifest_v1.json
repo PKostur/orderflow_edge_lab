@@ -1,0 +1,93 @@
+{
+  "files": [
+    {
+      "change_rule": "Preserve as frozen; do not retune batch by batch. A successor version must be frozen before later evidence is inspected.",
+      "freeze_reference": null,
+      "frozen_for": "discovery-v1 thresholds and candidate definitions",
+      "path": "config/orderflow_discovery_v1.json",
+      "sha256": "1813d40cdef3954e2f4a734fdb31d98cb173a6bb9a35d7eededb05a0832fca0c"
+    },
+    {
+      "change_rule": "Versioned successor only.",
+      "freeze_reference": null,
+      "frozen_for": "discovery process v2 mandate and economics policy",
+      "path": "config/discovery_process_v2.json",
+      "sha256": "81e8df69970c2bfcda38408405a534a68f40a5a7abf758df534c89bbfdc1ac1e"
+    },
+    {
+      "change_rule": "Preserve the pre-registered families/targets; start a new version before viewing later evidence.",
+      "freeze_reference": null,
+      "frozen_for": "pre-registered regime-research-v1 feature families and targets",
+      "path": "config/regime_research_v1.json",
+      "sha256": "b61495e3bfad95d42b7cb60dd707654d8ed6759e4f4efb3ef5e1a522f9af3c69"
+    },
+    {
+      "change_rule": "Versioned successor only.",
+      "freeze_reference": null,
+      "frozen_for": "regime-research-v1.1 pre-registered extension",
+      "path": "config/regime_research_v1_1.json",
+      "sha256": "64fb23c51504028c339d77027bcc13e5d5e5e954ad68a553c22518834d748880"
+    },
+    {
+      "change_rule": "Versioned successor only.",
+      "freeze_reference": null,
+      "frozen_for": "regime-research-v1.2 pre-registered extension",
+      "path": "config/regime_research_v1_2.json",
+      "sha256": "1c32a42b224217960c9fea1c77ade96e2b2f8d525455d7be24ed8a6acf0740a2"
+    },
+    {
+      "change_rule": "Versioned successor only.",
+      "freeze_reference": null,
+      "frozen_for": "regime-research-v1.3 pre-registered extension",
+      "path": "config/regime_research_v1_3.json",
+      "sha256": "eca555d507f7e8fba522c927c8eedad3be52fd87a654e145714ab30ffe775f01"
+    },
+    {
+      "change_rule": "Thresholds are frozen before use; a later value requires a new versioned freeze.",
+      "freeze_reference": null,
+      "frozen_for": "frozen state thresholds",
+      "path": "config/state_threshold_freeze_v1.json",
+      "sha256": "c832b2e35c6e736df4c0ea7bb7f6ab10310b06bfe82bc56ca221d5792eaa7770"
+    },
+    {
+      "change_rule": "Versioned successor only.",
+      "freeze_reference": null,
+      "frozen_for": "frozen strategy conditioning block",
+      "path": "config/strategy_conditioning_v1.json",
+      "sha256": "4d09b745004e891e7c93a2f2bc6d3f11a7d9515c43e54dd9dc770eee899954f9"
+    },
+    {
+      "change_rule": "Versioned successor only.",
+      "freeze_reference": null,
+      "frozen_for": "frozen strategy conditioning block v1.1",
+      "path": "config/strategy_conditioning_v1_1.json",
+      "sha256": "2bd6e4c1605064456772f6e8743f34fe617ed2874290108c222efee3278b7baf"
+    },
+    {
+      "change_rule": "No parameter, symbol, side, session, cost or retroactive-start change. A numeric decision rule belongs to the next versioned watch, never to this one.",
+      "freeze_reference": "freeze_commit 37ec950f1ff4420c877a3dc370e7d0d7419947ae",
+      "frozen_for": "DON8 prospective forward watch definition",
+      "path": "config/evidence_v2_session_forward_watch_v1.json",
+      "sha256": "fb6a6e823db421b0420dfa39ad7af78f7ea2c9e7d6441ceab5472a6da47e3958"
+    },
+    {
+      "change_rule": "W1 and W2 are terminal after falsification; W3 accumulates to its frozen gate. No retuning under the same identifiers.",
+      "freeze_reference": "prospective_watch_boundary_commit db5f173cfd7831839de685936cbeb1e474488c18",
+      "frozen_for": "session development watches W1/W2/W3",
+      "path": "config/session_development_watch_v1.json",
+      "sha256": "ce5899d36a4b5c6a86f8a1242247f532c559881d3b14f9c624e2590138aa6661"
+    },
+    {
+      "change_rule": "Session definition, spread/range buckets, BTC flow relation and horizon are frozen; forbidden list is binding.",
+      "freeze_reference": null,
+      "frozen_for": "W3 binding watch definition with review_rule thresholds",
+      "path": "config/session_watch_cvd_lny_v1.json",
+      "sha256": "f19319521bf88d1aec6a31719d6420e5c1684913151126bae6334b9e6e00b250"
+    }
+  ],
+  "manifest_sha256": "36a3577fa94e7a5f32b6b79af10b89052c6aefe4715a9c4f9c94400633368ef1",
+  "purpose": "Frozen research definitions whose numeric content must not move without a deliberate, reviewable version bump.",
+  "recorded_at_utc": "2026-09-30T00:00:00Z",
+  "schema_version": 1,
+  "version": "frozen-manifest-v1"
+}

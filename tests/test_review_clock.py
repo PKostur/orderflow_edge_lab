@@ -74,7 +74,18 @@ class ConfigTests(unittest.TestCase):
         self.assertIn("evidence_v2_cross_strategy_session_forward_v1", ids)
         self.assertIn("SESSION_W1_ALIGNED_SHORT_ASIA_OPENING", ids)
         self.assertIn("SESSION_W2_ALIGNED_BTC_SHORT_ASIA_OPENING", ids)
-        self.assertIn("SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST_V1", ids)
+        self.assertIn("SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST", ids)
+
+    def test_w3_watch_id_matches_the_frozen_pipeline_id(self):
+        # The clock must report the frozen watch_id verbatim: the ID in
+        # config/session_development_watch_v1.json carries no version suffix.
+        clock_ids = {w["watch_id"] for w in load_clock_config(REPO_CONFIG)["watches"]}
+        frozen = json.loads(
+            Path("config/session_development_watch_v1.json").read_text(encoding="utf-8")
+        )
+        for watch in frozen["watches"]:
+            if str(watch["watch_id"]).startswith("SESSION_W3"):
+                self.assertIn(watch["watch_id"], clock_ids)
 
     def test_malformed_configs_fail_closed(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -175,6 +186,17 @@ class ClockReportTests(unittest.TestCase):
             if w["watch_id"] == "evidence_v2_cross_strategy_session_forward_v1"
         )
         self.assertEqual(don8["earliest_review_utc"], "2026-10-23T00:00:00Z")
+
+    def test_terminal_watches_are_marked_and_not_counted_as_open(self):
+        report = clock_report(REPO_CONFIG, now=datetime(2026, 9, 29, tzinfo=timezone.utc))
+        by_id = {watch["watch_id"]: watch for watch in report["watches"]}
+        self.assertEqual(by_id["SESSION_W1_ALIGNED_SHORT_ASIA_OPENING"]["terminal_state"], "FALSIFIED")
+        self.assertEqual(by_id["SESSION_W2_ALIGNED_BTC_SHORT_ASIA_OPENING"]["terminal_state"], "FALSIFIED")
+        self.assertFalse(by_id["SESSION_W1_ALIGNED_SHORT_ASIA_OPENING"]["open_watch"])
+        self.assertTrue(by_id["evidence_v2_cross_strategy_session_forward_v1"]["open_watch"])
+        self.assertTrue(by_id["SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST"]["open_watch"])
+        self.assertEqual(report["summary"]["open_watch_count"], 2)
+        self.assertEqual(report["summary"]["terminal_watch_count"], 2)
 
     def test_report_is_deterministic_for_fixed_now(self):
         first = clock_report(REPO_CONFIG, now=datetime(2026, 9, 29, tzinfo=timezone.utc))

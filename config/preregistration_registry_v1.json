@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "version": "preregistration-registry-v1",
+  "registry_path": "config/preregistration_registry_v1.json",
+  "recorded_at_utc": "2026-09-30T00:00:00Z",
+  "purpose": "Mechanically describe whether each frozen prospective watch fixed a numeric decision rule, a trial family and a design before its window opened. Reports gaps; never patches a frozen watch.",
+  "requirements": {
+    "required_decision_rule_fields": [
+      "metric",
+      "direction",
+      "threshold",
+      "inconclusive_when"
+    ],
+    "required_design_fields": [
+      "dependence_cluster",
+      "design_effect_bps",
+      "design_units"
+    ],
+    "required_trial_family": true,
+    "alternative_accepted_shape": "review_rule with numeric bounds and requirement flags together with a declared metric list",
+    "applies_to": "watches frozen at or after this registry version",
+    "rule": "A watch that declares metrics without any numeric threshold can only be reviewed descriptively. It cannot be formally passed or failed, and a numeric rule written after the window opened must be labelled post-hoc and must not be applied to that window."
+  },
+  "watches": [
+    {
+      "watch_id": "evidence_v2_cross_strategy_session_forward_v1",
+      "config_path": "config/evidence_v2_session_forward_watch_v1.json",
+      "role": "primary prospective decision",
+      "frozen": true,
+      "acknowledged_gap": {
+        "reason": "The watch declares eleven reporting metrics and forbids parameter, symbol, side, session, cost and start changes, but fixes no numeric threshold for any metric. It was frozen 2026-09-22T20:01:45Z and its prospective window opened 2026-09-23T00:00:00Z. No threshold may be retrofitted now: inventing one after the window opened is the failure this contract exists to prevent.",
+        "recorded_at_utc": "2026-09-30T00:00:00Z",
+        "canonical_record": "research/DON8_FORMAL_REVIEW_CRITERIA_2026_10_23.md",
+        "consequence": "The 2026-10-23 review reports the declared metrics and labels any added numeric rule as post-hoc. A numeric decision rule is required for the next versioned watch."
+      }
+    },
+    {
+      "watch_id": "session_development_watch_v1",
+      "config_path": "config/session_development_watch_v1.json",
+      "role": "secondary prospective session watches",
+      "frozen": true,
+      "acknowledged_gap": {
+        "reason": "Declares metrics to evaluate and numeric data-volume gates (10 new independent batches and 5 new calendar days; 20 signals, 8 batches and 7 days for W3) but no outcome threshold. The numeric entries are dependence guards on how much evidence must accumulate, not rules on what the evidence must show.",
+        "recorded_at_utc": "2026-09-30T00:00:00Z",
+        "canonical_record": "research/SESSION_WATCH_FORMAL_REVIEW_1_2026_09_29.md",
+        "consequence": "W1 and W2 reached their gates and were falsified in every predeclared cell on 2026-09-29; those identifiers are terminal. W3 remains accumulating."
+      }
+    },
+    {
+      "watch_id": "WATCH_CVD_LNY_WIDE_RANGE_BTC_AGAINST_V1",
+      "config_path": "config/session_watch_cvd_lny_v1.json",
+      "role": "W3 binding watch definition",
+      "frozen": true
+    }
+  ],
+  "claims": {
+    "changes_frozen_definitions": false,
+    "retrofits_thresholds_onto_open_windows": false,
+    "computes_strategy_verdicts": false,
+    "live_order_transmission_supported": false
+  }
+}

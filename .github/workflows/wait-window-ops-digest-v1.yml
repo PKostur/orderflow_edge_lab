@@ -1,0 +1,134 @@
+name: Wait-Window Ops Digest v1
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 6 * * *"
+  pull_request:
+    paths:
+      - "src/orderflow_edge_lab/ops_digest.py"
+      - "src/orderflow_edge_lab/artifact_coverage.py"
+      - "src/orderflow_edge_lab/review_packet.py"
+      - "config/evidence_retention_requirements_v1.json"
+      - "config/prospective_review_clock_v1.json"
+      - "tests/test_ops_digest.py"
+      - "tests/test_artifact_coverage.py"
+      - "tests/test_review_packet.py"
+      - ".github/workflows/wait-window-ops-digest-v1.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .
+      - name: Run observability unit tests
+        run: |
+          python -m unittest tests.test_ops_digest tests.test_artifact_coverage tests.test_review_packet tests.test_review_clock -v
+      - name: Fetch the newest retained capture sample
+        id: fetch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/captures
+          # Raw replay samples are retained on a ~4-hourly cadence, so capture
+          # freshness is read at that resolution here too.
+          ARTIFACT_ID="$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?per_page=100" \
+            --jq '.artifacts | map(select(.expired == false and (.name | startswith("orderflow-discovery-replay-")))) | sort_by(.created_at) | reverse | .[0].id // empty' || true)"
+          if [[ -z "$ARTIFACT_ID" ]]; then
+            echo "no unexpired orderflow-discovery-replay-* artifact found"
+            echo "capture_dir=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" > /tmp/replay.zip
+          unzip -q -o /tmp/replay.zip -d artifacts/captures
+          SAMPLE="$(find artifacts/captures -type f -name '*_mexc_raw.jsonl' -print -quit || true)"
+          if [[ -n "$SAMPLE" ]]; then
+            echo "capture_dir=$(dirname "$SAMPLE")" >> "$GITHUB_OUTPUT"
+          else
+            echo "capture_dir=" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Inventory retained CI artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?per_page=100" --paginate \
+            --jq '.artifacts[] | {name, id, created_at, expires_at, size_in_bytes, expired}' \
+            > artifacts/artifact_inventory.jsonl || true
+          wc -l artifacts/artifact_inventory.jsonl
+      - name: Audit retention coverage
+        run: |
+          orderflow-artifact-coverage \
+            --requirements config/evidence_retention_requirements_v1.json \
+            --inventory artifacts/artifact_inventory.jsonl \
+            --repo-root . \
+            --output artifacts/coverage.json \
+            --markdown artifacts/coverage.md
+      - name: Build the daily digest
+        env:
+          CAPTURE_DIR: ${{ steps.fetch.outputs.capture_dir }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -n "${CAPTURE_DIR}" ]]; then
+            DATA_DIR="${GITHUB_WORKSPACE}/${CAPTURE_DIR}"
+          else
+            DATA_DIR="${GITHUB_WORKSPACE}/artifacts/no_capture_sample"
+          fi
+          orderflow-ops-digest \
+            --clock-config config/prospective_review_clock_v1.json \
+            --data-dir "${DATA_DIR}" \
+            --ledger-manifest research/DISCOVERY_LEDGER_MANIFEST_2026_09_29.json \
+            --coverage-report artifacts/coverage.json \
+            --output artifacts/ops_digest.json \
+            --markdown artifacts/ops_digest.md
+      - name: Assert the digest stays reporting-only
+        run: |
+          python - <<'PY'
+          import json
+          digest = json.load(open('artifacts/ops_digest.json', encoding='utf-8'))
+          claims = digest['claims']
+          assert claims['computes_strategy_verdicts'] is False
+          assert claims['inspects_strategy_pnl'] is False
+          assert claims['counts_prospective_batches'] is False
+          assert claims['promotes_any_strategy'] is False
+          assert claims['live_order_transmission_supported'] is False
+          print('digest_status:', digest['digest_status'])
+          print('highest_alert_severity:', digest['highest_alert_severity'])
+          for alert in digest['alerts']:
+              print(f"[{alert['severity']}] {alert['code']}: {alert['detail']}")
+          PY
+      - name: Publish to the job summary
+        if: always()
+        run: |
+          {
+            cat artifacts/ops_digest.md
+            echo
+            cat artifacts/coverage.md
+          } >> "$GITHUB_STEP_SUMMARY" || echo "no digest markdown to publish"
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wait-window-ops-digest-v1
+          path: |
+            artifacts/ops_digest.json
+            artifacts/ops_digest.md
+            artifacts/coverage.json
+            artifacts/coverage.md
+          if-no-files-found: error
+          retention-days: 90

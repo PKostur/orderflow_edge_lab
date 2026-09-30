@@ -13,6 +13,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   capture-health:
@@ -27,37 +28,104 @@ jobs:
         run: python -m pip install -e .
       - name: Run capture-health unit tests
         run: python -m unittest tests.test_capture_health -v
-      - name: Produce capture health summary
+      - name: Fetch the newest retained capture sample
+        id: fetch
         env:
-          CAPTURE_ARTIFACT_DIR: ${{ github.workspace }}/artifacts/captures
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
         run: |
-          mkdir -p artifacts
-          orderflow-capture-health --data-dir "$CAPTURE_ARTIFACT_DIR" --output artifacts/capture_health.json || true
-          cat artifacts/capture_health.json
-      - name: Report findings without failing the runner
+          set -euo pipefail
+          mkdir -p artifacts/captures
+          # Raw replay samples are retained on a ~4-hourly cadence, so this watch
+          # resolves a capture stoppage at roughly 4-hour resolution, not per run.
+          ARTIFACT_ID="$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?per_page=100" \
+            --jq '.artifacts | map(select(.expired == false and (.name | startswith("orderflow-discovery-replay-")))) | sort_by(.created_at) | reverse | .[0].id // empty' || true)"
+          if [[ -z "$ARTIFACT_ID" ]]; then
+            echo "no unexpired orderflow-discovery-replay-* artifact found"
+            echo "capture_dir=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" > /tmp/replay.zip
+          unzip -q -o /tmp/replay.zip -d artifacts/captures
+          SAMPLE="$(find artifacts/captures -type f -name '*_mexc_raw.jsonl' -print -quit || true)"
+          if [[ -z "$SAMPLE" ]]; then
+            echo "retained artifact ${ARTIFACT_ID} carries no raw capture sample"
+            echo "capture_dir=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "capture_dir=$(dirname "$SAMPLE")" >> "$GITHUB_OUTPUT"
+          ls -la "$(dirname "$SAMPLE")"
+      - name: Produce capture health summary
+        id: health
+        shell: bash
+        run: |
+          set +e
+          orderflow-capture-health \
+            --data-dir "${CAPTURE_ARTIFACT_DIR}" \
+            --output artifacts/capture_health.json > artifacts/capture_health_stdout.txt 2>&1
+          CODE=$?
+          set -e
+          echo "exit_code=$CODE" >> "$GITHUB_OUTPUT"
+          cat artifacts/capture_health_stdout.txt
+          if [[ ! -s artifacts/capture_health.json ]]; then
+            echo '{"status":"no_report","reason":"capture health produced no JSON report"}' > artifacts/capture_health.json
+          fi
+        env:
+          # Falls back to an empty directory when no sample is retained; the report
+          # then says the directory is absent instead of silently reporting healthy.
+          CAPTURE_ARTIFACT_DIR: ${{ steps.fetch.outputs.capture_dir != '' && format('{0}/{1}', github.workspace, steps.fetch.outputs.capture_dir) || format('{0}/artifacts/no_capture_sample', github.workspace) }}
+      - name: Publish the alarm to the job summary
         if: always()
         run: |
           python - <<'PY'
           import json, os
           path = 'artifacts/capture_health.json'
+          summary = os.environ.get('GITHUB_STEP_SUMMARY')
+          lines = ['# Capture health watch', '']
           if not os.path.isfile(path):
-              print('no capture health report produced; nothing to flag')
-              raise SystemExit(0)
-          report = json.load(open(path, encoding='utf-8'))
-          print('data_dir_exists:', report['data_dir_exists'])
-          print('capture_counts:', report['capture_counts'])
-          print('stale:', report['stale'], '| newest:', report['newest_capture_started_utc'])
-          for finding in report['findings']:
-              print(f"[{finding['severity']}] {finding['code']}: {finding['detail']}")
-          if not report['claims']['live_order_transmission_supported'] is False:
-              raise SystemExit('capture health claims were tampered with')
-          print('capture-health report is reporting-only; live boundary intact')
+              lines.append('No capture health report was produced.')
+          else:
+              with open(path, encoding='utf-8') as handle:
+                  report = json.load(handle)
+              if report.get('status') == 'no_report':
+                  lines.append(f"Report unavailable: {report.get('reason')}")
+              else:
+                  stoppage = report['stoppage']
+                  lines.extend([
+                      f"- Data directory: `{report['data_dir']}` (exists: {report['data_dir_exists']})",
+                      f"- Counts: {report['capture_counts']}",
+                      f"- Newest capture: {report['newest_capture_started_utc']} "
+                      f"({report['hours_since_newest_capture']}h old, stale threshold {report['stale_after_hours']}h)",
+                      f"- **Capture stopped: {stoppage['capture_stopped']}** "
+                      f"(severity: {stoppage['severity']}, reason: {stoppage['reason']})",
+                      '',
+                      '## Findings',
+                      '',
+                  ])
+                  for finding in report['findings']:
+                      lines.append(f"- [{finding['severity']}] `{finding['code']}`: {finding['detail']}")
+                  if not report['findings']:
+                      lines.append('- none')
+                  if report['claims']['live_order_transmission_supported'] is not False:
+                      raise SystemExit('capture health claims were tampered with')
+          text = '\n'.join(lines) + '\n'
+          print(text)
+          if summary:
+              with open(summary, 'a', encoding='utf-8') as handle:
+                  handle.write(text)
           PY
+      - name: Fail the watch when captures have stopped
+        if: always() && steps.health.outputs.exit_code == '3'
+        run: |
+          echo "::error title=Capture stoppage::capture-health concluded that captures have stopped; see the job summary"
+          exit 1
       - name: Upload evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: capture-health-watch
-          path: artifacts/capture_health.json
+          path: |
+            artifacts/capture_health.json
+            artifacts/capture_health_stdout.txt
           if-no-files-found: warn
           retention-days: 30

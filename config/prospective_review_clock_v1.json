@@ -38,8 +38,12 @@
       },
       "batch_counting": "frozen discovery-aggregation pipeline over independent capture batches",
       "canonical_artifacts": [
-        "research/SESSION_PROSPECTIVE_STATUS_2026_09_22.md"
-      ]
+        "research/SESSION_PROSPECTIVE_STATUS_2026_09_22.md",
+        "research/SESSION_WATCH_FORMAL_REVIEW_1_2026_09_29.md"
+      ],
+      "terminal_state": "FALSIFIED",
+      "terminal_review_utc": "2026-09-29T00:00:00Z",
+      "terminal_note": "Falsified in every predeclared cell at Formal Review 1. The ID is terminal: no retuning, re-siding, or re-phasing. This entry is retained only so the clock does not silently drop the watch."
     },
     {
       "watch_id": "SESSION_W2_ALIGNED_BTC_SHORT_ASIA_OPENING",
@@ -53,11 +57,16 @@
       },
       "batch_counting": "frozen discovery-aggregation pipeline over independent capture batches",
       "canonical_artifacts": [
-        "research/SESSION_PROSPECTIVE_STATUS_2026_09_22.md"
-      ]
+        "research/SESSION_PROSPECTIVE_STATUS_2026_09_22.md",
+        "research/SESSION_WATCH_FORMAL_REVIEW_1_2026_09_29.md"
+      ],
+      "terminal_state": "FALSIFIED",
+      "terminal_review_utc": "2026-09-29T00:00:00Z",
+      "terminal_note": "Falsified in every predeclared cell at Formal Review 1. The ID is terminal: no retuning, re-siding, or re-phasing. This entry is retained only so the clock does not silently drop the watch."
     },
     {
-      "watch_id": "SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST_V1",
+      "watch_id": "SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST",
+      "watch_id_note": "Matches the frozen watch_id in config/session_development_watch_v1.json exactly. Earlier notes abbreviated this ID with a '_V1' suffix; the frozen pipeline ID has no suffix, and the clock must report the frozen ID verbatim.",
       "priority": 3,
       "family": "cvd_london_new_york_overlap",
       "prospective_start_utc": "2026-09-22T18:10:00Z",

@@ -322,7 +322,7 @@ def build_validation_report(registry_path, observations_path, *, observed_throug
             "The candidate-level summary is an as-of-observed-through summary and may include outcomes excluded from their original per-window summary after those outcomes mature.",
             "Event-level summaries do not assume independence; overlap diagnostics and daily clustering are descriptive only.",
             "Gross R is recomputed from supplied prices and initial stop distance, but supplied prices and fill timestamps are not independently verified.",
-            "Explicit positive transaction costs reduce frictionless backtest risk but do not prove fills were executable.",
+            "Explicit positive transaction costs reduce backtest optimism but do not prove fills were executable.",
             "Descriptive summaries do not establish independence, significance, or profitability.",
         ],
     }

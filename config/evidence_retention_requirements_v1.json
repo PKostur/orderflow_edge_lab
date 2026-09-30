@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "protocol_name": "evidence-retention-requirements-v1",
+  "status": "reporting_only",
+  "created_utc": "2026-09-29T00:00:00Z",
+  "purpose": "Declare, per prospective watch, which CI artifacts and local canonical files must still be retrievable so that the frozen counting pipeline and the predeclared review can run. This file adds no research criterion, changes no gate, and authorises no promotion. The required-through dates below are OPERATIONAL RETENTION MARGINS (slack added to the frozen review date), not research gates.",
+  "claims": {
+    "adds_research_criteria": false,
+    "changes_frozen_gates": false,
+    "counts_prospective_batches": false,
+    "computes_strategy_verdicts": false,
+    "promotes_any_strategy": false,
+    "live_order_transmission_supported": false
+  },
+  "requirements": [
+    {
+      "requirement_id": "don8_forward_report",
+      "lane": "evidence_v2_cross_strategy_session_forward_v1",
+      "artifact_name": "evidence-v2-cross-strategy-session-forward",
+      "artifact_producer": ".github/workflows/evidence-v2-session-forward.yml",
+      "must_remain_retrievable_through_utc": "2026-10-24T00:00:00Z",
+      "max_age_hours": 24.0,
+      "recomputable_anchor_utc": "2026-06-01T00:00:00Z",
+      "rederivation_horizon_days": 150,
+      "notes": "The DON8 review window opens at 2026-10-23T00:00:00Z; one extra day of margin keeps the newest cumulative forward report available while the review runs. The producer runs three times daily with a 30-day artifact retention, so a single missed run must not be the reason the evidence disappears. Re-derivation needs MEXC public futures klines back to the frozen 2026-06-01 warmup; once that lookback is no longer served, the retained report is the only copy."
+    },
+    {
+      "requirement_id": "session_watch_counting_report",
+      "lane": "SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST",
+      "artifact_name": "orderflow-discovery-ledger-v1",
+      "artifact_producer": ".github/workflows/orderflow-continuous-discovery.yml",
+      "must_remain_retrievable_through_utc": "2026-10-09T00:00:00Z",
+      "max_age_hours": 24.0,
+      "notes": "The frozen discovery-aggregation pipeline recomputes the W3 counting report (session_watch_report.json) from the cumulative ledger artifact on every capture run. The required-through date is retention slack for the watch to reach its frozen 20-signal / 8-batch / 7-day gate; it is not a gate and does not permit an early review.",
+      "local_paths": [
+        "research/SESSION_WATCH_REPORT_2026_09_29.json",
+        "research/DISCOVERY_LEDGER_MANIFEST_2026_09_29.json",
+        "config/session_development_watch_v1.json"
+      ]
+    },
+    {
+      "requirement_id": "session_watch_falsified_record",
+      "lane": "SESSION_W1_SESSION_W2_FORMAL_REVIEW_1",
+      "artifact_name": "orderflow-discovery-ledger-v1",
+      "artifact_producer": ".github/workflows/orderflow-continuous-discovery.yml",
+      "must_remain_retrievable_through_utc": "2026-10-09T00:00:00Z",
+      "max_age_hours": null,
+      "notes": "W1/W2 are terminal (falsified at Formal Review 1). Their falsification record is committed to the repository and does not depend on an expiring artifact; this requirement exists only to keep the shared counting artifact observable alongside it. No re-review under these IDs is permitted.",
+      "local_paths": [
+        "research/SESSION_WATCH_FORMAL_REVIEW_1_2026_09_29.md"
+      ]
+    },
+    {
+      "requirement_id": "observability_reports",
+      "lane": "wait_window_observability",
+      "artifact_name": "wait-window-ops-digest-v1",
+      "artifact_producer": ".github/workflows/wait-window-ops-digest-v1.yml",
+      "must_remain_retrievable_through_utc": "2026-10-24T00:00:00Z",
+      "max_age_hours": 26.0,
+      "notes": "The daily ops digest records elapsed watch time, capture freshness, ledger batch counts, and coverage findings during the accumulate phase. Missing digests are an observability gap, not a research failure; the requirement exists so a silent scheduler stop becomes visible."
+    }
+  ]
+}
