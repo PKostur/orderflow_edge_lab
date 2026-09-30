@@ -58,8 +58,9 @@ Delayed entry and horizon exit must stay within the signal's sequence/snapshot e
 After editable installation:
 
 ```powershell
-orderflow-lsk-conditional known_capture.jsonl --create-freeze --freeze config/lsk_conditional_regime_v1.freeze.json --output artifacts/lsk/exploratory.json
+orderflow-lsk-conditional known_capture.jsonl --freeze config/lsk_conditional_regime_v1.freeze.json --output artifacts/lsk/exploratory.json
 orderflow-lsk-conditional new_capture.jsonl --mode forward --freeze config/lsk_conditional_regime_v1.freeze.json --output artifacts/lsk/forward.json
+python scripts/lsk_forward_capture.py
 ```
 
-Supply all retained known replay paths in the initial freeze command. Do not use `--create-freeze` again. For aggregation, supply the accumulated eligible forward capture paths in one invocation; keep historical and forward inputs separate. Preserve the full replay, capture logs, source run/commit identity, freeze, decision ledger and report.
+The shipped freeze already records all twelve known source hashes. Do not use `--create-freeze` again. The last command registers and starts a new twenty-minute public-data capture, retaining an attempt record even on failure. It does not place orders. For aggregation, supply the accumulated eligible forward capture paths in one invocation; keep historical and forward inputs separate. Preserve the full replay, capture logs, source run/commit identity, freeze, decision ledger and report.

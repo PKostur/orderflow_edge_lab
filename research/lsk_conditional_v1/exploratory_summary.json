@@ -1,0 +1,1204 @@
+{
+  "protocol": "lsk-conditional-regime-v1",
+  "mode": "exploratory",
+  "freeze": {
+    "protocol": "lsk-conditional-regime-v1",
+    "frozen_at_utc": "2026-09-30T09:00:06.334036+00:00",
+    "frozen_at_ns": 1790758806334036700,
+    "config_sha256": "e5c9b231e3aa077fb974b979cb705bf560f88e222f898d6bee1b8d9f8f2ef796",
+    "implementation_sha256": "f13a202fdacf1523d4654d00e0fbf0b49137031b70035ba0bd405982e1df7340",
+    "dependency_sha256": "dd9785d5baed185e8768f4ef81fd298c6eb1f33c92fe0f2cbc4824220d0ac161",
+    "base_signal_config": {
+      "symbol": "ENA_USDT",
+      "context_symbol": "BTC_USDT",
+      "horizons_ms": [
+        1000,
+        5000,
+        15000,
+        30000
+      ],
+      "fee_bps_round_trip": [
+        0.0,
+        4.0,
+        8.0
+      ],
+      "min_trade_count": 5,
+      "min_trade_flow_ratio": 0.25,
+      "min_book_imbalance": 0.25,
+      "min_microprice_edge": 0.2,
+      "cooldown_ms": 2000
+    },
+    "known_source_sha256": [
+      "09d1e9de93f0164dbb3f95a2f92a910c39e277678dd672dcf259db4221eeb3fd",
+      "0aced434b4067d786233b7514ba867b88cc20991a46bfa87d91d7f099d91840a",
+      "11884c206d447e9ebad78c0bfaf6b74ab3315d4b3d876e35d4c4eeab084390a5",
+      "2315184193c134faba8819369f445dc2bb9cb744b183c937e03e8be8d48fbe2a",
+      "276e345a824cd12c8d4cb880c17d5b8a8bf2eae078ebc1e5c2314ed9fc955da3",
+      "2b74b927221313a2aebb3f4dd04a32ca1868d5df2926b432b147d4c00e9ed9f9",
+      "38d768b350956c32c32aac709dd8ace07a3eb1e14a43ea182e5bbdbbcd45079a",
+      "b05d79f025277fc71afdac1000bf70091e19852475bb829d89b3a718beb2309c",
+      "c4f32467effbdb709aece232f51130db59c2eb3a37f355355885924e2711662c",
+      "c89836c6aa4193ffcef7e61cdcb233d0969cf1e4c17dccad7c594f0d7555b2bb",
+      "cecdd9f2785ceadceb81cb3e873de2fa1523bf2f9a7698925a1bfe5486e8e6a4",
+      "d7874eb0d47efe5513d246cad213f6edc648c009b02c4fcbabda550361c0b9f4"
+    ],
+    "trial_id": "LSK-CONDITIONAL-001",
+    "trial_count": 1,
+    "forward_rule": "Capture start strictly after freeze; known source hashes forbidden. First ten independent clusters are the fixed assessment; no early success or threshold changes. At least 150 capture minutes before candidate revision.",
+    "ready_for_live": false
+  },
+  "summary": [
+    {
+      "strategy": "classifier",
+      "cost": "fee4",
+      "trades": 0,
+      "net_mean_bps": null,
+      "net_total_bps": 0,
+      "pf": null,
+      "independent_clusters": 5,
+      "active_clusters": 0,
+      "intended_trades": 0,
+      "missing_interior_fills": 0,
+      "tail_censored_trades": 0,
+      "opportunity_mean_bps": 0.0,
+      "eligible_opportunities": 234,
+      "positive_cluster_fraction": 0.0,
+      "equal_active_cluster_mean_bps": null,
+      "median_active_cluster_mean_bps": null,
+      "best_cluster_positive_profit_share": null,
+      "leave_best_cluster_out": {
+        "trades": 0,
+        "net_mean_bps": null,
+        "net_total_bps": 0,
+        "pf": null
+      },
+      "clusters": {
+        "cluster_1": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        },
+        "cluster_2": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        },
+        "cluster_3": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        },
+        "cluster_4": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        },
+        "cluster_5": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        }
+      }
+    },
+    {
+      "strategy": "always_original",
+      "cost": "fee4",
+      "trades": 219,
+      "net_mean_bps": -15.90405250274886,
+      "net_total_bps": -3482.9874981020002,
+      "pf": 0.6383993389109277,
+      "independent_clusters": 5,
+      "active_clusters": 5,
+      "intended_trades": 234,
+      "missing_interior_fills": 4,
+      "tail_censored_trades": 11,
+      "opportunity_mean_bps": null,
+      "eligible_opportunities": 234,
+      "positive_cluster_fraction": 0.4,
+      "equal_active_cluster_mean_bps": -16.42225073470271,
+      "median_active_cluster_mean_bps": -22.707509706052885,
+      "best_cluster_positive_profit_share": 0.5238135714381186,
+      "leave_best_cluster_out": {
+        "trades": 181,
+        "net_mean_bps": -21.008366617056303,
+        "net_total_bps": -3802.514357687191,
+        "pf": 0.5712010972377324
+      },
+      "clusters": {
+        "cluster_1": {
+          "trades": 49,
+          "net_mean_bps": 5.928045910269623,
+          "net_total_bps": 290.47424960321155,
+          "pf": 1.1040986272843678
+        },
+        "cluster_2": {
+          "trades": 38,
+          "net_mean_bps": -41.41628733345927,
+          "net_total_bps": -1573.8189186714524,
+          "pf": 0.2225794116606608
+        },
+        "cluster_3": {
+          "trades": 54,
+          "net_mean_bps": -22.707509706052885,
+          "net_total_bps": -1226.2055241268558,
+          "pf": 0.45894070284488897
+        },
+        "cluster_4": {
+          "trades": 38,
+          "net_mean_bps": 8.408601568031333,
+          "net_total_bps": 319.52685958519066,
+          "pf": 1.418058485113291
+        },
+        "cluster_5": {
+          "trades": 40,
+          "net_mean_bps": -32.32410411230235,
+          "net_total_bps": -1292.964164492094,
+          "pf": 0.27635365442727694
+        }
+      }
+    },
+    {
+      "strategy": "always_reversed",
+      "cost": "fee4",
+      "trades": 219,
+      "net_mean_bps": 1.8952018685870706,
+      "net_total_bps": 415.04920922056846,
+      "pf": 1.0554820109736718,
+      "independent_clusters": 5,
+      "active_clusters": 5,
+      "intended_trades": 234,
+      "missing_interior_fills": 4,
+      "tail_censored_trades": 11,
+      "opportunity_mean_bps": null,
+      "eligible_opportunities": 234,
+      "positive_cluster_fraction": 0.6,
+      "equal_active_cluster_mean_bps": 2.439684158433646,
+      "median_active_cluster_mean_bps": 9.357332580002977,
+      "best_cluster_positive_profit_share": 0.4449269614341962,
+      "leave_best_cluster_out": {
+        "trades": 181,
+        "net_mean_bps": -3.373638106084559,
+        "net_total_bps": -610.6284972013052,
+        "pf": 0.9105289694796007
+      },
+      "clusters": {
+        "cluster_1": {
+          "trades": 49,
+          "net_mean_bps": -21.53845667185487,
+          "net_total_bps": -1055.3843769208886,
+          "pf": 0.6970238825575915
+        },
+        "cluster_2": {
+          "trades": 38,
+          "net_mean_bps": 26.991518590049306,
+          "net_total_bps": 1025.6777064218736,
+          "pf": 2.563735718525834
+        },
+        "cluster_3": {
+          "trades": 54,
+          "net_mean_bps": 9.357332580002977,
+          "net_total_bps": 505.2959593201607,
+          "pf": 1.3821380261579157
+        },
+        "cluster_4": {
+          "trades": 38,
+          "net_mean_bps": -21.96943432029504,
+          "net_total_bps": -834.8385041712115,
+          "pf": 0.3731346759338361
+        },
+        "cluster_5": {
+          "trades": 40,
+          "net_mean_bps": 19.357460614265857,
+          "net_total_bps": 774.2984245706343,
+          "pf": 2.1263684130706175
+        }
+      }
+    },
+    {
+      "strategy": "unconditional_aligned",
+      "cost": "fee4",
+      "trades": 474,
+      "net_mean_bps": -16.34914814485006,
+      "net_total_bps": -7749.496220658927,
+      "pf": 0.5963920048014475,
+      "independent_clusters": 5,
+      "active_clusters": 5,
+      "intended_trades": 498,
+      "missing_interior_fills": 9,
+      "tail_censored_trades": 15,
+      "opportunity_mean_bps": null,
+      "eligible_opportunities": 498,
+      "positive_cluster_fraction": 0.2,
+      "equal_active_cluster_mean_bps": -16.3910775683876,
+      "median_active_cluster_mean_bps": -18.5943215894508,
+      "best_cluster_positive_profit_share": 1.0,
+      "leave_best_cluster_out": {
+        "trades": 388,
+        "net_mean_bps": -20.995613018101643,
+        "net_total_bps": -8146.297851023437,
+        "pf": 0.5343053916246245
+      },
+      "clusters": {
+        "cluster_1": {
+          "trades": 104,
+          "net_mean_bps": -15.989185446038297,
+          "net_total_bps": -1662.875286387983,
+          "pf": 0.7632270165342556
+        },
+        "cluster_2": {
+          "trades": 100,
+          "net_mean_bps": -18.5943215894508,
+          "net_total_bps": -1859.43215894508,
+          "pf": 0.44263359093334803
+        },
+        "cluster_3": {
+          "trades": 106,
+          "net_mean_bps": -20.3247804282729,
+          "net_total_bps": -2154.4267253969274,
+          "pf": 0.4402736786140653
+        },
+        "cluster_4": {
+          "trades": 86,
+          "net_mean_bps": 4.613972446098958,
+          "net_total_bps": 396.8016303645104,
+          "pf": 1.2323518190157712
+        },
+        "cluster_5": {
+          "trades": 78,
+          "net_mean_bps": -31.661072824274964,
+          "net_total_bps": -2469.5636802934473,
+          "pf": 0.2481239523865266
+        }
+      }
+    },
+    {
+      "strategy": "classifier",
+      "cost": "fee8",
+      "trades": 0,
+      "net_mean_bps": null,
+      "net_total_bps": 0,
+      "pf": null,
+      "independent_clusters": 5,
+      "active_clusters": 0,
+      "intended_trades": 0,
+      "missing_interior_fills": 0,
+      "tail_censored_trades": 0,
+      "opportunity_mean_bps": 0.0,
+      "eligible_opportunities": 234,
+      "positive_cluster_fraction": 0.0,
+      "equal_active_cluster_mean_bps": null,
+      "median_active_cluster_mean_bps": null,
+      "best_cluster_positive_profit_share": null,
+      "leave_best_cluster_out": {
+        "trades": 0,
+        "net_mean_bps": null,
+        "net_total_bps": 0,
+        "pf": null
+      },
+      "clusters": {
+        "cluster_1": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        },
+        "cluster_2": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        },
+        "cluster_3": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        },
+        "cluster_4": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        },
+        "cluster_5": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        }
+      }
+    },
+    {
+      "strategy": "always_original",
+      "cost": "fee8",
+      "trades": 219,
+      "net_mean_bps": -19.90405250274886,
+      "net_total_bps": -4358.987498102,
+      "pf": 0.5716657950257203,
+      "independent_clusters": 5,
+      "active_clusters": 5,
+      "intended_trades": 234,
+      "missing_interior_fills": 4,
+      "tail_censored_trades": 11,
+      "opportunity_mean_bps": null,
+      "eligible_opportunities": 234,
+      "positive_cluster_fraction": 0.4,
+      "equal_active_cluster_mean_bps": -20.42225073470271,
+      "median_active_cluster_mean_bps": -26.707509706052885,
+      "best_cluster_positive_profit_share": 0.6394127876181008,
+      "leave_best_cluster_out": {
+        "trades": 181,
+        "net_mean_bps": -25.0083666170563,
+        "net_total_bps": -4526.514357687191,
+        "pf": 0.5147542383969914
+      },
+      "clusters": {
+        "cluster_1": {
+          "trades": 49,
+          "net_mean_bps": 1.928045910269623,
+          "net_total_bps": 94.47424960321153,
+          "pf": 1.0327311025912758
+        },
+        "cluster_2": {
+          "trades": 38,
+          "net_mean_bps": -45.41628733345927,
+          "net_total_bps": -1725.8189186714524,
+          "pf": 0.19067253667008227
+        },
+        "cluster_3": {
+          "trades": 54,
+          "net_mean_bps": -26.707509706052885,
+          "net_total_bps": -1442.2055241268558,
+          "pf": 0.4011752217057196
+        },
+        "cluster_4": {
+          "trades": 38,
+          "net_mean_bps": 4.408601568031333,
+          "net_total_bps": 167.52685958519066,
+          "pf": 1.197482743522909
+        },
+        "cluster_5": {
+          "trades": 40,
+          "net_mean_bps": -36.32410411230235,
+          "net_total_bps": -1452.964164492094,
+          "pf": 0.23572957650254567
+        }
+      }
+    },
+    {
+      "strategy": "always_reversed",
+      "cost": "fee8",
+      "trades": 219,
+      "net_mean_bps": -2.1047981314129296,
+      "net_total_bps": -460.95079077943154,
+      "pf": 0.9416974411591794,
+      "independent_clusters": 5,
+      "active_clusters": 5,
+      "intended_trades": 234,
+      "missing_interior_fills": 4,
+      "tail_censored_trades": 11,
+      "opportunity_mean_bps": null,
+      "eligible_opportunities": 234,
+      "positive_cluster_fraction": 0.6,
+      "equal_active_cluster_mean_bps": -1.560315841566354,
+      "median_active_cluster_mean_bps": 5.357332580002976,
+      "best_cluster_positive_profit_share": 0.491583540406675,
+      "leave_best_cluster_out": {
+        "trades": 181,
+        "net_mean_bps": -7.3736381060845595,
+        "net_total_bps": -1334.6284972013052,
+        "pf": 0.814294988415614
+      },
+      "clusters": {
+        "cluster_1": {
+          "trades": 49,
+          "net_mean_bps": -25.53845667185487,
+          "net_total_bps": -1251.3843769208886,
+          "pf": 0.6519476556512713
+        },
+        "cluster_2": {
+          "trades": 38,
+          "net_mean_bps": 22.991518590049306,
+          "net_total_bps": 873.6777064218736,
+          "pf": 2.2145131797505013
+        },
+        "cluster_3": {
+          "trades": 54,
+          "net_mean_bps": 5.357332580002976,
+          "net_total_bps": 289.2959593201607,
+          "pf": 1.2041022734205127
+        },
+        "cluster_4": {
+          "trades": 38,
+          "net_mean_bps": -25.96943432029504,
+          "net_total_bps": -986.8385041712115,
+          "pf": 0.3046267383751182
+        },
+        "cluster_5": {
+          "trades": 40,
+          "net_mean_bps": 15.357460614265857,
+          "net_total_bps": 614.2984245706343,
+          "pf": 1.8137776899904738
+        }
+      }
+    },
+    {
+      "strategy": "unconditional_aligned",
+      "cost": "fee8",
+      "trades": 474,
+      "net_mean_bps": -20.349148144850055,
+      "net_total_bps": -9645.496220658926,
+      "pf": 0.5256478214304915,
+      "independent_clusters": 5,
+      "active_clusters": 5,
+      "intended_trades": 498,
+      "missing_interior_fills": 9,
+      "tail_censored_trades": 15,
+      "opportunity_mean_bps": null,
+      "eligible_opportunities": 498,
+      "positive_cluster_fraction": 0.2,
+      "equal_active_cluster_mean_bps": -20.3910775683876,
+      "median_active_cluster_mean_bps": -22.594321589450796,
+      "best_cluster_positive_profit_share": 1.0,
+      "leave_best_cluster_out": {
+        "trades": 388,
+        "net_mean_bps": -24.995613018101643,
+        "net_total_bps": -9698.297851023437,
+        "pf": 0.47481442092419995
+      },
+      "clusters": {
+        "cluster_1": {
+          "trades": 104,
+          "net_mean_bps": -19.989185446038295,
+          "net_total_bps": -2078.8752863879827,
+          "pf": 0.7131429938603805
+        },
+        "cluster_2": {
+          "trades": 100,
+          "net_mean_bps": -22.594321589450796,
+          "net_total_bps": -2259.4321589450797,
+          "pf": 0.3681956692239937
+        },
+        "cluster_3": {
+          "trades": 106,
+          "net_mean_bps": -24.3247804282729,
+          "net_total_bps": -2578.4267253969274,
+          "pf": 0.37824206879880695
+        },
+        "cluster_4": {
+          "trades": 86,
+          "net_mean_bps": 0.613972446098958,
+          "net_total_bps": 52.80163036451039,
+          "pf": 1.0282721578490257
+        },
+        "cluster_5": {
+          "trades": 78,
+          "net_mean_bps": -35.66107282427497,
+          "net_total_bps": -2781.5636802934473,
+          "pf": 0.20440133284361736
+        }
+      }
+    },
+    {
+      "strategy": "classifier",
+      "cost": "conservative",
+      "trades": 0,
+      "net_mean_bps": null,
+      "net_total_bps": 0,
+      "pf": null,
+      "independent_clusters": 5,
+      "active_clusters": 0,
+      "intended_trades": 0,
+      "missing_interior_fills": 0,
+      "tail_censored_trades": 0,
+      "opportunity_mean_bps": 0.0,
+      "eligible_opportunities": 234,
+      "positive_cluster_fraction": 0.0,
+      "equal_active_cluster_mean_bps": null,
+      "median_active_cluster_mean_bps": null,
+      "best_cluster_positive_profit_share": null,
+      "leave_best_cluster_out": {
+        "trades": 0,
+        "net_mean_bps": null,
+        "net_total_bps": 0,
+        "pf": null
+      },
+      "clusters": {
+        "cluster_1": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        },
+        "cluster_2": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        },
+        "cluster_3": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        },
+        "cluster_4": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        },
+        "cluster_5": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        }
+      }
+    },
+    {
+      "strategy": "always_original",
+      "cost": "conservative",
+      "trades": 218,
+      "net_mean_bps": -24.690523402354106,
+      "net_total_bps": -5382.534101713195,
+      "pf": 0.49974781027544585,
+      "independent_clusters": 5,
+      "active_clusters": 5,
+      "intended_trades": 234,
+      "missing_interior_fills": 4,
+      "tail_censored_trades": 12,
+      "opportunity_mean_bps": null,
+      "eligible_opportunities": 234,
+      "positive_cluster_fraction": 0.2,
+      "equal_active_cluster_mean_bps": -25.129302159602037,
+      "median_active_cluster_mean_bps": -33.36354295028926,
+      "best_cluster_positive_profit_share": 1.0,
+      "leave_best_cluster_out": {
+        "trades": 170,
+        "net_mean_bps": -31.92953928434722,
+        "net_total_bps": -5428.021678339028,
+        "pf": 0.3157786334827242
+      },
+      "clusters": {
+        "cluster_1": {
+          "trades": 48,
+          "net_mean_bps": 0.9476578463715243,
+          "net_total_bps": 45.487576625833164,
+          "pf": 1.016093226346351
+        },
+        "cluster_2": {
+          "trades": 38,
+          "net_mean_bps": -50.03800574742111,
+          "net_total_bps": -1901.4442184020022,
+          "pf": 0.14185167658703232
+        },
+        "cluster_3": {
+          "trades": 54,
+          "net_mean_bps": -33.36354295028926,
+          "net_total_bps": -1801.63131931562,
+          "pf": 0.324518808250636
+        },
+        "cluster_4": {
+          "trades": 38,
+          "net_mean_bps": -1.3793286227237544,
+          "net_total_bps": -52.41448766350267,
+          "pf": 0.9463155590056486
+        },
+        "cluster_5": {
+          "trades": 40,
+          "net_mean_bps": -41.81329132394758,
+          "net_total_bps": -1672.5316529579034,
+          "pf": 0.19351686187930797
+        }
+      }
+    },
+    {
+      "strategy": "always_reversed",
+      "cost": "conservative",
+      "trades": 218,
+      "net_mean_bps": -5.10327502998068,
+      "net_total_bps": -1112.5139565357883,
+      "pf": 0.8633043564747523,
+      "independent_clusters": 5,
+      "active_clusters": 5,
+      "intended_trades": 234,
+      "missing_interior_fills": 4,
+      "tail_censored_trades": 12,
+      "opportunity_mean_bps": null,
+      "eligible_opportunities": 234,
+      "positive_cluster_fraction": 0.6,
+      "equal_active_cluster_mean_bps": -4.534064184722069,
+      "median_active_cluster_mean_bps": 3.0369756970272266,
+      "best_cluster_positive_profit_share": 0.531149773954132,
+      "leave_best_cluster_out": {
+        "trades": 180,
+        "net_mean_bps": -10.568861376733242,
+        "net_total_bps": -1902.3950478119837,
+        "pf": 0.745044340939901
+      },
+      "clusters": {
+        "cluster_1": {
+          "trades": 48,
+          "net_mean_bps": -32.62952614323624,
+          "net_total_bps": -1566.2172548753397,
+          "pf": 0.574436848880821
+        },
+        "cluster_2": {
+          "trades": 38,
+          "net_mean_bps": 20.786344507268296,
+          "net_total_bps": 789.8810912761952,
+          "pf": 2.1668230256366585
+        },
+        "cluster_3": {
+          "trades": 54,
+          "net_mean_bps": 3.0369756970272266,
+          "net_total_bps": 163.99668763947022,
+          "pf": 1.1082253783298983
+        },
+        "cluster_4": {
+          "trades": 38,
+          "net_mean_bps": -27.195059405335456,
+          "net_total_bps": -1033.4122574027474,
+          "pf": 0.2877491113028322
+        },
+        "cluster_5": {
+          "trades": 40,
+          "net_mean_bps": 13.33094442066583,
+          "net_total_bps": 533.2377768266332,
+          "pf": 1.6542042176981804
+        }
+      }
+    },
+    {
+      "strategy": "unconditional_aligned",
+      "cost": "conservative",
+      "trades": 473,
+      "net_mean_bps": -24.90397078326927,
+      "net_total_bps": -11779.578180486364,
+      "pf": 0.4529046449765126,
+      "independent_clusters": 5,
+      "active_clusters": 5,
+      "intended_trades": 498,
+      "missing_interior_fills": 9,
+      "tail_censored_trades": 16,
+      "opportunity_mean_bps": null,
+      "eligible_opportunities": 498,
+      "positive_cluster_fraction": 0.0,
+      "equal_active_cluster_mean_bps": -24.92989368941733,
+      "median_active_cluster_mean_bps": -26.223969967077856,
+      "best_cluster_positive_profit_share": null,
+      "leave_best_cluster_out": {
+        "trades": 387,
+        "net_mean_bps": -29.40071028695141,
+        "net_total_bps": -11378.074881050195,
+        "pf": 0.41426061992393903
+      },
+      "clusters": {
+        "cluster_1": {
+          "trades": 103,
+          "net_mean_bps": -23.881693364685294,
+          "net_total_bps": -2459.8144165625854,
+          "pf": 0.6631728326385621
+        },
+        "cluster_2": {
+          "trades": 100,
+          "net_mean_bps": -26.223969967077856,
+          "net_total_bps": -2622.3969967077855,
+          "pf": 0.3107210344465215
+        },
+        "cluster_3": {
+          "trades": 106,
+          "net_mean_bps": -30.200029431684385,
+          "net_total_bps": -3201.2031197585447,
+          "pf": 0.30806172769368795
+        },
+        "cluster_4": {
+          "trades": 86,
+          "net_mean_bps": -4.668643016699617,
+          "net_total_bps": -401.5032994361671,
+          "pf": 0.8093504149467321
+        },
+        "cluster_5": {
+          "trades": 78,
+          "net_mean_bps": -39.6751326669395,
+          "net_total_bps": -3094.6603480212807,
+          "pf": 0.1616275589821337
+        }
+      }
+    },
+    {
+      "strategy": "classifier",
+      "cost": "severe",
+      "trades": 0,
+      "net_mean_bps": null,
+      "net_total_bps": 0,
+      "pf": null,
+      "independent_clusters": 5,
+      "active_clusters": 0,
+      "intended_trades": 0,
+      "missing_interior_fills": 0,
+      "tail_censored_trades": 0,
+      "opportunity_mean_bps": 0.0,
+      "eligible_opportunities": 234,
+      "positive_cluster_fraction": 0.0,
+      "equal_active_cluster_mean_bps": null,
+      "median_active_cluster_mean_bps": null,
+      "best_cluster_positive_profit_share": null,
+      "leave_best_cluster_out": {
+        "trades": 0,
+        "net_mean_bps": null,
+        "net_total_bps": 0,
+        "pf": null
+      },
+      "clusters": {
+        "cluster_1": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        },
+        "cluster_2": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        },
+        "cluster_3": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        },
+        "cluster_4": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        },
+        "cluster_5": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        }
+      }
+    },
+    {
+      "strategy": "always_original",
+      "cost": "severe",
+      "trades": 217,
+      "net_mean_bps": -29.411429644218515,
+      "net_total_bps": -6382.280232795418,
+      "pf": 0.4455752222981822,
+      "independent_clusters": 5,
+      "active_clusters": 5,
+      "intended_trades": 234,
+      "missing_interior_fills": 4,
+      "tail_censored_trades": 13,
+      "opportunity_mean_bps": null,
+      "eligible_opportunities": 234,
+      "positive_cluster_fraction": 0.0,
+      "equal_active_cluster_mean_bps": -29.899114692677205,
+      "median_active_cluster_mean_bps": -36.76664401608859,
+      "best_cluster_positive_profit_share": null,
+      "leave_best_cluster_out": {
+        "trades": 179,
+        "net_mean_bps": -34.24786660593376,
+        "net_total_bps": -6130.368122462143,
+        "pf": 0.4085651095206644
+      },
+      "clusters": {
+        "cluster_1": {
+          "trades": 48,
+          "net_mean_bps": -6.375349970585517,
+          "net_total_bps": -306.0167985881048,
+          "pf": 0.898789298315553
+        },
+        "cluster_2": {
+          "trades": 38,
+          "net_mean_bps": -50.29567619183291,
+          "net_total_bps": -1911.2356952896507,
+          "pf": 0.15170966276518758
+        },
+        "cluster_3": {
+          "trades": 54,
+          "net_mean_bps": -36.76664401608859,
+          "net_total_bps": -1985.398776868784,
+          "pf": 0.2938907420379598
+        },
+        "cluster_4": {
+          "trades": 38,
+          "net_mean_bps": -6.629266061401968,
+          "net_total_bps": -251.9121103332748,
+          "pf": 0.780236827951894
+        },
+        "cluster_5": {
+          "trades": 39,
+          "net_mean_bps": -49.428637223477025,
+          "net_total_bps": -1927.716851715604,
+          "pf": 0.15335737811039502
+        }
+      }
+    },
+    {
+      "strategy": "always_reversed",
+      "cost": "severe",
+      "trades": 217,
+      "net_mean_bps": -8.644270184613186,
+      "net_total_bps": -1875.8066300610615,
+      "pf": 0.7788038992875143,
+      "independent_clusters": 5,
+      "active_clusters": 5,
+      "intended_trades": 234,
+      "missing_interior_fills": 4,
+      "tail_censored_trades": 13,
+      "opportunity_mean_bps": null,
+      "eligible_opportunities": 234,
+      "positive_cluster_fraction": 0.4,
+      "equal_active_cluster_mean_bps": -8.022860668053214,
+      "median_active_cluster_mean_bps": -1.480381846657025,
+      "best_cluster_positive_profit_share": 0.5013885552058398,
+      "leave_best_cluster_out": {
+        "trades": 179,
+        "net_mean_bps": -13.187737963755241,
+        "net_total_bps": -2360.605095512188,
+        "pf": 0.6923702838740352
+      },
+      "clusters": {
+        "cluster_1": {
+          "trades": 48,
+          "net_mean_bps": -34.013887165811035,
+          "net_total_bps": -1632.6665839589296,
+          "pf": 0.5573531144857028
+        },
+        "cluster_2": {
+          "trades": 38,
+          "net_mean_bps": 12.757854353977025,
+          "net_total_bps": 484.79846545112696,
+          "pf": 1.600919983084872
+        },
+        "cluster_3": {
+          "trades": 54,
+          "net_mean_bps": -1.480381846657025,
+          "net_total_bps": -79.94061971947936,
+          "pf": 0.9495236349788118
+        },
+        "cluster_4": {
+          "trades": 38,
+          "net_mean_bps": -29.739766755447093,
+          "net_total_bps": -1130.1111367069896,
+          "pf": 0.264554104172504
+        },
+        "cluster_5": {
+          "trades": 39,
+          "net_mean_bps": 12.361878073672058,
+          "net_total_bps": 482.11324487321025,
+          "pf": 1.5575161027096587
+        }
+      }
+    },
+    {
+      "strategy": "unconditional_aligned",
+      "cost": "severe",
+      "trades": 473,
+      "net_mean_bps": -28.86540687651964,
+      "net_total_bps": -13653.337452593789,
+      "pf": 0.4041629277569897,
+      "independent_clusters": 5,
+      "active_clusters": 5,
+      "intended_trades": 498,
+      "missing_interior_fills": 9,
+      "tail_censored_trades": 16,
+      "opportunity_mean_bps": null,
+      "eligible_opportunities": 498,
+      "positive_cluster_fraction": 0.0,
+      "equal_active_cluster_mean_bps": -29.020362539042093,
+      "median_active_cluster_mean_bps": -29.40481974134795,
+      "best_cluster_positive_profit_share": null,
+      "leave_best_cluster_out": {
+        "trades": 387,
+        "net_mean_bps": -33.19157499243036,
+        "net_total_bps": -12845.139522070549,
+        "pf": 0.37468202054936833
+      },
+      "clusters": {
+        "cluster_1": {
+          "trades": 104,
+          "net_mean_bps": -27.815174919370673,
+          "net_total_bps": -2892.77819161455,
+          "pf": 0.6229779369051163
+        },
+        "cluster_2": {
+          "trades": 100,
+          "net_mean_bps": -29.40481974134795,
+          "net_total_bps": -2940.481974134795,
+          "pf": 0.2635519032888957
+        },
+        "cluster_3": {
+          "trades": 106,
+          "net_mean_bps": -33.399946379113096,
+          "net_total_bps": -3540.394316185988,
+          "pf": 0.27696978682252354
+        },
+        "cluster_4": {
+          "trades": 86,
+          "net_mean_bps": -9.397650354921389,
+          "net_total_bps": -808.1979305232395,
+          "pf": 0.6593872033696649
+        },
+        "cluster_5": {
+          "trades": 77,
+          "net_mean_bps": -45.08422130045736,
+          "net_total_bps": -3471.4850401352164,
+          "pf": 0.12769614997639478
+        }
+      }
+    }
+  ],
+  "paired_control_deltas": [
+    {
+      "cost": "fee4",
+      "control": "always_original",
+      "matched_opportunity_delta_mean_bps": 15.90405250274886,
+      "cluster_delta_mean_bps": {
+        "cluster_1": -5.928045910269623,
+        "cluster_2": 41.41628733345927,
+        "cluster_3": 22.707509706052885,
+        "cluster_4": -8.408601568031333,
+        "cluster_5": 32.32410411230235
+      }
+    },
+    {
+      "cost": "fee4",
+      "control": "always_reversed",
+      "matched_opportunity_delta_mean_bps": -1.8952018685870706,
+      "cluster_delta_mean_bps": {
+        "cluster_1": 21.53845667185487,
+        "cluster_2": -26.991518590049306,
+        "cluster_3": -9.357332580002977,
+        "cluster_4": 21.96943432029504,
+        "cluster_5": -19.357460614265857
+      }
+    },
+    {
+      "cost": "fee8",
+      "control": "always_original",
+      "matched_opportunity_delta_mean_bps": 19.90405250274886,
+      "cluster_delta_mean_bps": {
+        "cluster_1": -1.928045910269623,
+        "cluster_2": 45.41628733345927,
+        "cluster_3": 26.707509706052885,
+        "cluster_4": -4.408601568031333,
+        "cluster_5": 36.32410411230235
+      }
+    },
+    {
+      "cost": "fee8",
+      "control": "always_reversed",
+      "matched_opportunity_delta_mean_bps": 2.1047981314129296,
+      "cluster_delta_mean_bps": {
+        "cluster_1": 25.53845667185487,
+        "cluster_2": -22.991518590049306,
+        "cluster_3": -5.357332580002976,
+        "cluster_4": 25.96943432029504,
+        "cluster_5": -15.357460614265857
+      }
+    },
+    {
+      "cost": "conservative",
+      "control": "always_original",
+      "matched_opportunity_delta_mean_bps": 24.690523402354106,
+      "cluster_delta_mean_bps": {
+        "cluster_1": -0.9476578463715243,
+        "cluster_2": 50.03800574742111,
+        "cluster_3": 33.36354295028926,
+        "cluster_4": 1.3793286227237544,
+        "cluster_5": 41.81329132394758
+      }
+    },
+    {
+      "cost": "conservative",
+      "control": "always_reversed",
+      "matched_opportunity_delta_mean_bps": 5.10327502998068,
+      "cluster_delta_mean_bps": {
+        "cluster_1": 32.62952614323624,
+        "cluster_2": -20.786344507268296,
+        "cluster_3": -3.0369756970272266,
+        "cluster_4": 27.195059405335456,
+        "cluster_5": -13.33094442066583
+      }
+    },
+    {
+      "cost": "severe",
+      "control": "always_original",
+      "matched_opportunity_delta_mean_bps": 29.411429644218515,
+      "cluster_delta_mean_bps": {
+        "cluster_1": 6.375349970585517,
+        "cluster_2": 50.29567619183291,
+        "cluster_3": 36.76664401608859,
+        "cluster_4": 6.629266061401968,
+        "cluster_5": 49.428637223477025
+      }
+    },
+    {
+      "cost": "severe",
+      "control": "always_reversed",
+      "matched_opportunity_delta_mean_bps": 8.644270184613186,
+      "cluster_delta_mean_bps": {
+        "cluster_1": 34.013887165811035,
+        "cluster_2": -12.757854353977025,
+        "cluster_3": 1.480381846657025,
+        "cluster_4": 29.739766755447093,
+        "cluster_5": -12.361878073672058
+      }
+    }
+  ],
+  "branches_severe": {
+    "ORIGINAL": {
+      "trades": 0,
+      "net_mean_bps": null,
+      "net_total_bps": 0,
+      "pf": null,
+      "active_clusters": 0,
+      "clusters": {
+        "cluster_1": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        },
+        "cluster_2": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        },
+        "cluster_3": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        },
+        "cluster_4": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        },
+        "cluster_5": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        }
+      }
+    },
+    "REVERSED": {
+      "trades": 0,
+      "net_mean_bps": null,
+      "net_total_bps": 0,
+      "pf": null,
+      "active_clusters": 0,
+      "clusters": {
+        "cluster_1": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        },
+        "cluster_2": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        },
+        "cluster_3": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        },
+        "cluster_4": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        },
+        "cluster_5": {
+          "trades": 0,
+          "net_mean_bps": null,
+          "net_total_bps": 0,
+          "pf": null
+        }
+      }
+    }
+  },
+  "numeric_screen_checks": {
+    "complete_interior_fills": true,
+    "minimum_clusters": false,
+    "minimum_trades": false,
+    "positive_clusters": false,
+    "pf": false,
+    "positive_median": false,
+    "dispersed_profit": false,
+    "survives_best_cluster_removal": false,
+    "both_branches_replicated": false
+  },
+  "numeric_conditions_met": false,
+  "numeric_screen_pass": false,
+  "chronological_cohort_completeness_verified": false,
+  "forward_sequence_audit_required": true,
+  "representatives": [
+    {
+      "cluster": "cluster_1",
+      "sha256": "0aced434b4067d786233b7514ba867b88cc20991a46bfa87d91d7f099d91840a",
+      "start_ns": 1789399219684647700,
+      "end_ns": 1789400117335285361
+    },
+    {
+      "cluster": "cluster_2",
+      "sha256": "276e345a824cd12c8d4cb880c17d5b8a8bf2eae078ebc1e5c2314ed9fc955da3",
+      "start_ns": 1789408189931904154,
+      "end_ns": 1789409088306800061
+    },
+    {
+      "cluster": "cluster_3",
+      "sha256": "09d1e9de93f0164dbb3f95a2f92a910c39e277678dd672dcf259db4221eeb3fd",
+      "start_ns": 1789412196228969912,
+      "end_ns": 1789413094128351403
+    },
+    {
+      "cluster": "cluster_4",
+      "sha256": "c89836c6aa4193ffcef7e61cdcb233d0969cf1e4c17dccad7c594f0d7555b2bb",
+      "start_ns": 1789415520637906545,
+      "end_ns": 1789416418263051072
+    },
+    {
+      "cluster": "cluster_5",
+      "sha256": "cecdd9f2785ceadceb81cb3e873de2fa1523bf2f9a7698925a1bfe5486e8e6a4",
+      "start_ns": 1789418925683206518,
+      "end_ns": 1789419822996354389
+    }
+  ],
+  "decision_counts": {
+    "NO_TRADE": 234
+  },
+  "abstention_reasons": {
+    "warmup": 101,
+    "missing_state": 34,
+    "missing_lag": 10,
+    "pressure_or_liquidity_veto": 16,
+    "indeterminate": 73
+  },
+  "missing_fills": 287,
+  "promotable": false,
+  "ready_for_live": false,
+  "verified_out_of_sample_evidence": false,
+  "interpretation": "Exploratory event economics; no portfolio or live-fill claim. Forward mode only establishes temporal eligibility; provenance/holdout audits remain required."
+}
