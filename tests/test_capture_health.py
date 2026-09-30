@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import contextlib
+import io
 import json
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -123,6 +125,54 @@ class SummaryTests(unittest.TestCase):
             self.assertEqual(json.dumps(first, sort_keys=True), json.dumps(second, sort_keys=True))
 
 
+class StoppageTests(unittest.TestCase):
+    """The stoppage alarm is the signal that must not stay quiet."""
+
+    def test_fresh_capture_is_not_a_stoppage(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            _write_capture(root, "20260920T120000Z", "raw")
+            _write_capture(root, "20260920T120000Z", "features")
+            now = datetime(2026, 9, 20, 13, 0, tzinfo=timezone.utc)
+            report = build_health_summary(root, now=now, stale_after_hours=26.0)
+            self.assertFalse(report["stoppage"]["capture_stopped"])
+            self.assertIsNone(report["stoppage"]["severity"])
+
+    def test_stale_capture_is_a_warning_stoppage(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            _write_capture(root, TS, "raw")
+            _write_capture(root, TS, "features")
+            now = datetime(2026, 9, 20, 12, 0, tzinfo=timezone.utc).replace(day=21, hour=15)
+            report = build_health_summary(root, now=now, stale_after_hours=26.0)
+            self.assertTrue(report["stoppage"]["capture_stopped"])
+            self.assertEqual(report["stoppage"]["severity"], "warning")
+            codes = {finding["code"] for finding in report["findings"]}
+            self.assertIn("capture_stopped", codes)
+
+    def test_long_stoppage_escalates_to_error(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            _write_capture(root, TS, "raw")
+            _write_capture(root, TS, "features")
+            now = datetime(2026, 9, 20, 12, 0, tzinfo=timezone.utc).replace(day=24)
+            report = build_health_summary(root, now=now, stale_after_hours=26.0)
+            self.assertEqual(report["stoppage"]["severity"], "error")
+            severities = {(f["code"], f["severity"]) for f in report["findings"]}
+            self.assertIn(("capture_stopped", "error"), severities)
+
+    def test_existing_but_empty_directory_is_an_error(self):
+        with tempfile.TemporaryDirectory() as directory:
+            report = build_health_summary(Path(directory))
+            self.assertTrue(report["stoppage"]["capture_stopped"])
+            self.assertEqual(report["stoppage"]["severity"], "error")
+
+    def test_absent_directory_is_a_warning_stoppage(self):
+        report = build_health_summary(Path("definitely/not/here"))
+        self.assertTrue(report["stoppage"]["capture_stopped"])
+        self.assertEqual(report["stoppage"]["severity"], "warning")
+
+
 class GuardTests(unittest.TestCase):
     def test_impossible_timestamp_is_flagged_not_swallowed(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -138,6 +188,40 @@ class GuardTests(unittest.TestCase):
             self.assertIn(("unparsable_capture_timestamp", "error"), codes)
             self.assertEqual(report["capture_counts"]["total_groups"], 2)
             self.assertEqual(report["newest_capture_started_utc"], "2026-09-20T12:00:00Z")
+
+
+class CliStoppageTests(unittest.TestCase):
+    def test_report_is_descriptive_by_default(self):
+        from orderflow_edge_lab.cli.capture_health import main
+
+        with tempfile.TemporaryDirectory() as directory:
+            buffer = io.StringIO()
+            with contextlib.redirect_stdout(buffer):
+                rc = main(["--data-dir", directory])
+            self.assertEqual(rc, 0)
+
+    def test_fail_on_stoppage_exits_three(self):
+        from orderflow_edge_lab.cli.capture_health import main
+
+        with tempfile.TemporaryDirectory() as directory:
+            buffer = io.StringIO()
+            with contextlib.redirect_stdout(buffer):
+                rc = main(["--data-dir", directory, "--fail-on-stoppage"])
+            self.assertEqual(rc, 3)
+
+    def test_fail_on_stoppage_stays_zero_when_fresh(self):
+        from orderflow_edge_lab.cli.capture_health import main
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            now = datetime.now(timezone.utc).replace(microsecond=0)
+            ts = now.strftime("%Y%m%dT%H%M%SZ")
+            _write_capture(root, ts, "raw")
+            _write_capture(root, ts, "features")
+            buffer = io.StringIO()
+            with contextlib.redirect_stdout(buffer):
+                rc = main(["--data-dir", directory, "--fail-on-stoppage"])
+            self.assertEqual(rc, 0)
 
 
 if __name__ == "__main__":

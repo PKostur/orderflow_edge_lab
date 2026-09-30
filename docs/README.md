@@ -33,6 +33,49 @@ engineering tests do not need it.
 - [MULTI_AGENT](MULTI_AGENT.md) — the deterministic hardening control plane and its report semantics.
 - [SESSION_AUDIT](SESSION_AUDIT.md) / [SESSION_METRICS](SESSION_METRICS.md) — session audit and metrics.
 - [DEADLINE_RELEASE_RUNBOOK](DEADLINE_RELEASE_RUNBOOK.md) — standalone install/run/release without external services.
+- [DON8_REVIEW_RUNBOOK](DON8_REVIEW_RUNBOOK.md) — operational steps for the 2026-10-23 DON8 review (packet generation, robustness context, coverage audit, record and archive).
+- [VALIDATION_TOOLING](VALIDATION_TOOLING.md) — validation statistics, pre-registration contract, frozen hash manifest and workflow/artifact contract.
+
+### Wait-window observability commands
+
+Aggregation and reporting only; none of these counts evidence, computes a verdict, or promotes anything.
+
+| Command | Purpose |
+|---|---|
+| `orderflow review-clock` | Elapsed days and remaining days for each preregistered watch. |
+| `orderflow capture-health` | Descriptive inventory of recorded captures; `--fail-on-stoppage` exits 3 when captures have stopped. |
+| `orderflow review-packet` | Hash-pinned review skeleton from a frozen counting report; every verdict cell is left empty. |
+| `orderflow artifact-coverage` | Whether the artifacts a predeclared review needs are still retrievable, against `config/evidence_retention_requirements_v1.json`. |
+| `orderflow ops-digest` | One daily digest of clock + capture health + ledger batch count + coverage findings. |
+
+Scheduled runs: `prospective-review-clock-v1.yml` (daily), `capture-health-watch-v1.yml` (daily, alarms on stoppage), and `wait-window-ops-digest-v1.yml` (daily, publishes the digest artifact).
+
+### Validation statistics and research hygiene
+
+See [VALIDATION_TOOLING](VALIDATION_TOOLING.md) for the rules (cluster resampling, post-hoc
+labelling, caller-declared thresholds) and the contract every new watch must satisfy.
+
+| Command | Purpose |
+|---|---|
+| `orderflow robustness` | Descriptive robustness of a frozen forward report: cluster bootstrap interval, minimum detectable effect at the frozen gate, concentration, friction sensitivity, control arms and negative controls. |
+| `orderflow research-hygiene` | Pre-registration audit, frozen-definition hash check, workflow-to-artifact contract, inspection registry. Exits 2 at or above the chosen severity. |
+| `orderflow discovery-screen` | Discovery-time economics screen: does the candidate clear the declared break-even multiple, and does the declared cost match measured friction? |
+| `orderflow orthogonality` | Redundancy clusters, incremental information against existing regime variables, and leave-one-out stability. |
+
+Scheduled run: `research-hygiene-v1.yml` (weekly and on demand).
+
+## Command aliases and deprecation
+
+Several research commands exist as a superseding pair or trio of frozen generations. The older name is kept so published workflows and historical records continue to run; it is **deprecated** for new work and must not be reinterpreted as a different specification.
+
+| Deprecated alias | Prefer | Note |
+|---|---|---|
+| `orderflow-market-state-aggregate` | `orderflow-market-state-aggregate-v1-1`, then `-v1-2` | Each version reads its own frozen protocol; they are not interchangeable. |
+| `orderflow-state-promotion-report` | `orderflow-state-promotion-report-v1-2` | Same rule: versioned protocol, frozen separately. |
+| `orderflow-strategy-conditioning-freeze` | `orderflow-strategy-conditioning-freeze-v1-1` | Historical freezes must keep using the version they were frozen under. |
+| `orderflow-sentiment-monitor` | `orderflow-sentiment-monitor-v1-1` | Versioned protocol, frozen separately. |
+
+Removing an alias is a separate, explicitly-approved change: a deprecated name may still appear in a frozen record, and deleting it would make that record unreproducible. Flat `orderflow-<name>` scripts remain canonical alongside the `orderflow <name>` dispatcher.
 
 ## Research records
 

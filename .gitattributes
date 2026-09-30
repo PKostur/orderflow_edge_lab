@@ -1,0 +1,11 @@
+# Frozen research definitions under config/ are hashed by
+# config/frozen_manifest_v1.json. Disable end-of-line conversion for them so a
+# checkout on a platform that would otherwise rewrite CRLF (a Windows runner
+# with core.autocrlf) leaves their bytes exactly as committed. The hash contract
+# also normalises line endings before hashing, so this is belt and braces: the
+# manifest should fire on content, never on the platform that checked it out.
+config/*.json -text
+
+# Recorded evidence and captured JSON lines are hashed and compared elsewhere in
+# the repository; leave their bytes alone too.
+*.jsonl -text

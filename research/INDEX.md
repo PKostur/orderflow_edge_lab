@@ -18,7 +18,7 @@ For the single-page operational view (next decision dates, stop rules), see
 | Lane / watch | ID / config | Boundary | Canonical artifacts |
 |---|---|---|---|
 | DON8 cross-strategy session forward watch | `evidence_v2_cross_strategy_session_forward_v1` (`config/evidence_v2_session_forward_watch_v1.json`) | 2026-09-23 00:00:00 UTC; 30-day review (earliest 2026-10-23) | `research/VALIDATION_PRIORITY_FREEZE_2026_09_23.md`, `research/EVIDENCE_V2_SESSION_AUDIT_2026_09_22.md` |
-| W3 — CVD London/New-York wide-range | `SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST_V1` | 2026-09-22 18:10:00 UTC | `research/SESSION_PROSPECTIVE_STATUS_2026_09_22.md`, `config/session_watch_cvd_lny_v1.json` |
+| W3 — CVD London/New-York wide-range | `SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST` (frozen ID; earlier notes wrote a `_V1` suffix that the frozen config does not use) | 2026-09-22 18:10:00 UTC | `research/SESSION_PROSPECTIVE_STATUS_2026_09_22.md`, `config/session_watch_cvd_lny_v1.json` |
 
 ## Closed — falsified (IDs are terminal; no retuning under these IDs)
 
@@ -53,6 +53,12 @@ For the single-page operational view (next decision dates, stop rules), see
 - `config/regime_research_v1*.json` — pre-registered market-state feature families.
 - `config/economics.json`, `config/candidates.json` — economics policy and frozen candidate registry.
 - Protocol documents: `docs/RESEARCH_PROTOCOL.md`, `docs/PROMOTION_GATE.md`, `docs/REGIME_RESEARCH.md`.
+
+## Review procedure
+
+The procedural rules for the DON8 review record are pre-registered in
+`DON8_FORMAL_REVIEW_CRITERIA_2026_10_23.md` (written 2026-09-29, before the window
+closed). They add no numeric threshold and modify no frozen definition.
 
 ## Conventions
 

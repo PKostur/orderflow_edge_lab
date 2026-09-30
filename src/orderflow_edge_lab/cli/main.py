@@ -96,6 +96,15 @@ _COMMANDS: dict[str, str] = {
     "orderflow-multi-agent": "multi_agent",
     "orderflow-review-clock": "review_clock",
     "orderflow-capture-health": "capture_health",
+    # Wait-window observability and retention
+    "orderflow-review-packet": "review_packet",
+    "orderflow-artifact-coverage": "artifact_coverage",
+    "orderflow-ops-digest": "ops_digest",
+    # Validation statistics and hygiene
+    "orderflow-robustness": "robustness",
+    "orderflow-research-hygiene": "research_hygiene",
+    "orderflow-discovery-screen": "discovery_screen",
+    "orderflow-orthogonality": "orthogonality",
     # Paper execution and reliability
     "orderflow-paper": "paper",
     "orderflow-paper-audit": "paper_audit",

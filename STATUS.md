@@ -7,7 +7,7 @@ frozen artifact disagree, the frozen artifact wins.
 
 - Generated-by convention: this file is maintained by hand (or by a future
   automation) from the canonical artifacts listed inside it.
-- Last reviewed: 2026-09-29 (after Prospective Formal Review 1)
+- Last reviewed: 2026-09-29 (after Prospective Formal Review 1; wait-window observability added)
 - Repository commit at review: see `git log -1`
 
 ## Standing safety boundary (unchanged by this file)
@@ -43,16 +43,72 @@ workflow (not this file) computes the verdict.
 |---|---|---|---|---|
 | `SESSION_W1_ALIGNED_SHORT_ASIA_OPENING` | ENA session microstructure | 2026-09-22 15:39:58 UTC | ≥10 new independent batches and ≥5 new calendar days | **CLOSED — FALSIFIED** (Formal Review 1, 2026-09-29) |
 | `SESSION_W2_ALIGNED_BTC_SHORT_ASIA_OPENING` | BTC-aligned session watch | 2026-09-22 15:39:58 UTC | ≥10 new independent batches and ≥5 new calendar days | **CLOSED — FALSIFIED** (Formal Review 1, 2026-09-29) |
-| `SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST_V1` | CVD, London/New-York overlap | 2026-09-22 18:10:00 UTC | ≥20 new signals, ≥8 new batches, ≥7 new calendar days | `ACCUMULATING` (6/8 batches, 5/7 days as of 2026-09-29; partial numbers uninterpreted) |
+| `SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST` | CVD, London/New-York overlap | 2026-09-22 18:10:00 UTC | ≥20 new signals, ≥8 new batches, ≥7 new calendar days | `ACCUMULATING` (6/8 batches, 5/7 days as of 2026-09-29; partial numbers uninterpreted) |
+
+Watch IDs are quoted exactly as the frozen configs define them. Earlier notes wrote W3
+with a `_V1` suffix; the frozen ID in `config/session_development_watch_v1.json` has no
+suffix, and tooling now reports the frozen ID verbatim.
 
 Review counts are computed only by the frozen discovery-aggregation pipeline over
 independent capture batches — never by hand and never from cumulative artifacts.
+W3, unlike DON8, does carry numeric thresholds: `config/session_watch_cvd_lny_v1.json`
+`review_rule` requires profit factor above 1.0, a positive batch fraction above 0.5, positive
+cumulative net at 4 bps and positive expected value, with data-volume gates of 20 signals,
+8 independent batches and 7 calendar days.
 
 **Formal Review 1** (2026-09-29): W1 and W2 reached their frozen review gates
 (10 batches / 6 days each) and were **falsified in every predeclared cell** —
 net means −3.6 to −12.5 bps/trade, PF 0.06–0.31, at both 4 and 8 bps friction.
 See `research/SESSION_WATCH_FORMAL_REVIEW_1_2026_09_29.md`. These IDs are
 terminal: no retuning, re-siding, or re-phasing under the same IDs.
+
+## Wait-window observability (reporting only)
+
+No tool below counts evidence, computes a verdict, or promotes anything. Review counts
+remain the exclusive output of the frozen discovery-aggregation pipeline.
+
+| Tool | What it answers | Cadence |
+|---|---|---|
+| `orderflow review-clock` | How much calendar time each watch has accumulated, and when a calendar gate matures | daily (`prospective-review-clock-v1.yml`) |
+| `orderflow capture-health` | Is the capture stream still alive? `--fail-on-stoppage` exits 3 when it is not | daily, alarms (`capture-health-watch-v1.yml`) |
+| `orderflow review-packet` | Hash-pinned review skeleton with empty verdict cells for a watch that has met its gate | on demand, at review time |
+| `orderflow artifact-coverage` | Would the frozen pipeline still find every input it needs? Declared in `config/evidence_retention_requirements_v1.json` | daily, in the digest |
+| `orderflow ops-digest` | One daily artifact combining clock, captures, ledger batch count, and coverage | daily (`wait-window-ops-digest-v1.yml`) |
+
+## Validation tooling (analysis and contracts)
+
+Added 2026-09-30. These tools analyse an already-frozen report or check a contract. They add no
+threshold to an open watch, change no frozen definition, and label every number they produce on an
+already-open watch as `post_hoc_descriptive`. See `docs/VALIDATION_TOOLING.md`.
+
+| Tool | What it answers |
+|---|---|
+| `orderflow robustness` | Cluster bootstrap interval, minimum detectable effect at the frozen gate, concentration, friction sensitivity, control arms and negative controls for a frozen forward report. |
+| `orderflow research-hygiene` | Pre-registration audit, frozen-definition hash check (`config/frozen_manifest_v1.json`), workflow-to-artifact contract, inspection registry integrity. |
+| `orderflow discovery-screen` | Would a candidate clear the declared round-trip cost, and does the declared cost match measured friction? |
+| `orderflow orthogonality` | Redundancy clusters, incremental information against existing regime variables, leave-one-out stability. |
+
+Pre-registration status of the frozen watches, reported mechanically by the hygiene audit:
+
+| Watch | Decision rule | Trial family |
+|---|---|---|
+| `WATCH_CVD_LNY_WIDE_RANGE_BTC_AGAINST_V1` (W3) | Numeric thresholds in `review_rule` (profit factor above 1.0, positive batch fraction above 0.5, positive cumulative net at 4 bps, positive EV) | not declared |
+| `evidence_v2_cross_strategy_session_forward_v1` (DON8) | Eleven metrics declared, **no numeric threshold for any** | not declared |
+| `session_development_watch_v1` (W1/W2/W3 gates) | Data-volume gates only (batches, days, signals) | not declared |
+
+The two gaps cannot be repaired retroactively: adding a numeric rule after the window opened is
+post-hoc by definition. They are recorded as acknowledged gaps in
+`config/preregistration_registry_v1.json`, and the contract that future watches must satisfy
+(full `decision_rule` block, `trial_family`, and a `design` block with dependence cluster and design
+effect) is stated there.
+
+**Next review to be prepared:** W3 is expected to reach its frozen gate before DON8. The
+procedure for assembling a review from the frozen counting report is the same in both
+cases — see `docs/DON8_REVIEW_RUNBOOK.md` (the DON8 case) and the packet command. The
+pre-registered procedural rules for the DON8 review record are frozen in
+`research/DON8_FORMAL_REVIEW_CRITERIA_2026_10_23.md`, written while the window was still
+open. Those rules add no numeric threshold and change no frozen definition; they exist so
+the review cannot choose its own procedure after seeing the outcome.
 
 ## Research stop rule (active)
 

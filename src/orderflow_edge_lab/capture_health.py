@@ -218,6 +218,35 @@ def build_health_summary(
             {"severity": "warning", "code": "no_captures_found", "detail": inventory["data_dir"]}
         )
 
+    # Stoppage assessment: the one signal that must not stay quiet during a
+    # prospective window. A silent capture stop delays every open watch while
+    # looking healthy in aggregate, so it is reported as its own block and as a
+    # dedicated finding with a severity that escalates past 2x the threshold.
+    stoppage: dict[str, Any] = {"capture_stopped": False, "severity": None, "reason": None}
+    if not inventory["exists"]:
+        stoppage = {
+            "capture_stopped": True,
+            "severity": "warning",
+            "reason": f"no capture directory at {inventory['data_dir']}",
+        }
+    elif not inventory["captures"]:
+        stoppage = {
+            "capture_stopped": True,
+            "severity": "error",
+            "reason": "capture directory exists but holds no recognised captures",
+        }
+    elif stale and hours_since_newest is not None:
+        severity = "error" if hours_since_newest > 2.0 * float(stale_after_hours) else "warning"
+        stoppage = {
+            "capture_stopped": True,
+            "severity": severity,
+            "reason": f"newest capture is {hours_since_newest}h old (threshold {stale_after_hours}h)",
+        }
+    if stoppage["capture_stopped"]:
+        findings.append(
+            {"severity": stoppage["severity"], "code": "capture_stopped", "detail": stoppage["reason"]}
+        )
+
     payload: dict[str, Any] = {
         "schema_version": 1,
         "protocol_name": "mexc-capture-health",
@@ -236,6 +265,7 @@ def build_health_summary(
         "newest_capture_started_utc": newest_iso,
         "hours_since_newest_capture": hours_since_newest,
         "stale": stale,
+        "stoppage": stoppage,
         "findings": findings,
         "claims": {
             "counts_prospective_batches": False,
