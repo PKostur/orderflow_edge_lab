@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "watch_id": "zoo-mirror-forward-v1",
+  "status": "FROZEN_BEFORE_PROSPECTIVE_START",
+  "question": "Do the mirror images of two strategy-zoo-v1 families that were reliably wrong-signed in both samples earn positive net returns going forward?",
+  "registration_note": "Registered 2026-10-01. Both books were chosen AFTER seeing strategy-zoo-v1 (Z2 and Z4 were negative in both samples and nearly every regime), so no historical number counts as evidence; only days after the start are scored. Rules are the exact negation of the frozen zoo v1 definitions (src/orderflow_edge_lab/strategy_zoo.py), same universe and costs as multi-premia-blend-v1.",
+  "prospective_start_utc": "2026-10-03T00:00:00Z",
+  "books": {
+    "M2_btc_shock_reversal": "negated Z2: after a BTC day above +2% hold the equal-weight alt basket (ex BTC) SHORT for the day; after one below -2% hold it LONG; else flat",
+    "M4_lottery_momentum": "negated Z4 score: cross-sectional, long the quartile with the largest single-day return over the last 30 days, short the quartile with the smallest, 0.5 gross each side, weekly rebalance"
+  },
+  "universe_config": "config/multi_premia_blend_v1.json (70 coins, MEXC, warm-up from 2026-01-01)",
+  "economics": {"round_trip_cost_bps": 20, "funding": "MEXC realized funding charged on held weights"},
+  "reporting": {"review_after_days": 180, "statistic": "daily net return, Newey-West t (5 lags), max drawdown", "before_review": "descriptive only"},
+  "trial_family": "strategy-zoo-v1 mirrors (2 books)",
+  "design": {"dependence_cluster": "calendar week", "design_effect_bps": "not estimated; Newey-West 5 lags", "design_units": "daily portfolio net returns"},
+  "claims": {"strategy_promotion_authorized": false, "paper_trading_authorized": false, "live_trading_authorized": false, "leverage_authorized": false}
+}

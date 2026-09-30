@@ -203,6 +203,21 @@
         "docs/CANONICAL_ACCOUNTING_V3.md"
       ],
       "forward_workflow": "canonical-v3-forward-companion-v1.yml"
+    },
+    {
+      "watch_id": "zoo-mirror-forward-v1",
+      "priority": 12,
+      "family": "strategy_zoo_mirrors",
+      "prospective_start_utc": "2026-10-03T00:00:00Z",
+      "review_gate": {
+        "type": "calendar_days",
+        "minimum_days": 180
+      },
+      "canonical_artifacts": [
+        "config/zoo_mirror_forward_v1.json",
+        "research/strategy_zoo/RESULT.md"
+      ],
+      "forward_workflow": "multi-premia-blend-v1.yml"
     }
   ]
 }

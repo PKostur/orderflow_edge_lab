@@ -29,6 +29,7 @@ WATCHES = [
     ("trend-portfolio-forward-v1.yml", "report.json", "Trend portfolio (10 coins)", "Trend", "plain", 180),
     ("cross-asset-trend-forward-v1.yml", "report.json", "Cross-asset trend", "Cross-asset", "combined", 180),
     ("cross-asset-trend-invvol-forward-v1.yml", "report.json", "Cross-asset trend, inverse-vol", "Cross-asset", "combined", 180),
+    ("multi-premia-blend-v1.yml", "zoo_mirror_report.json", "Zoo mirrors (BTC shock reversal, lottery momentum)", "Forward-only candidates", "M4_lottery_momentum", 180),
     ("canonical-v3-forward-companion-v1.yml", "report.json", "Canonical v3 companion", "Accounting", None, None),
 ]
 
@@ -76,7 +77,7 @@ def cumulative(series: dict[str, float], keep: int = 400) -> list[list]:
 
 def watch_entry(spec, cache: dict[int, pathlib.Path]) -> dict:
     wf, fname, name, group, primary, horizon = spec
-    e = {"id": wf.removesuffix(".yml") + ("-human" if fname.startswith("human") else ""), "name": name, "group": group,
+    e = {"id": wf.removesuffix(".yml") + ("" if fname == "report.json" else "-" + fname.removesuffix("_report.json")), "name": name, "group": group,
          "workflow": wf, "primary": primary, "review_days": horizon}
     clock = json.loads(pathlib.Path("config/prospective_review_clock_v1.json").read_text(encoding="utf-8"))
     run = latest_run(wf)
