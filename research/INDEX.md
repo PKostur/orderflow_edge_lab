@@ -34,6 +34,7 @@ For the single-page operational view (next decision dates, stop rules), see
 
 | Lane | Scope | Canonical artifacts |
 |---|---|---|
+| LSK conditional regime v1 (trial `LSK-CONDITIONAL-001`) | Frozen original/reversed/no-trade classifier on LSK order flow; traded 0 of 234 eligible replay signals (62% abstained on data sufficiency), so its forward gate (60 trades, 10 clusters) is out of practical reach; no forward captures run | `lsk_conditional_v1/REPORT.md`, `config/lsk_conditional_regime_v1.json`, `config/preregistration_registry_v1.json` |
 | Continuous self-improvement sequence (332 epochs: v1 pilot, v2 state refinement, v3 adversarial/horizon stress, cross-symbol screens) | Frozen discovery-v1 strategy family; state-prediction transfer; conditioning and stop-rescue attempts | `self_improvement/CONTINUOUS_SELF_IMPROVEMENT_REPORT_V1.md`, `self_improvement_v1_summary.json` |
 | Volatility/liquidity state transfer into strategy conditioning | Positive state-prediction transfer (60s volatility expansion, median rho +0.352) did **not** convert into positive executable expectancy | `self_improvement/CONTINUOUS_SELF_IMPROVEMENT_REPORT_V1.md`, `config/state_threshold_freeze_v1.json` |
 

@@ -210,9 +210,9 @@ class RealRegistryTests(unittest.TestCase):
     def test_audit_is_clean_and_every_gap_is_acknowledged(self):
         self.assertTrue(self.report["audit_ok"])
         self.assertEqual(self.report["highest_severity"], "warning")
-        self.assertEqual(self.report["watches_total"], 3)
-        self.assertEqual(self.report["frozen_watch_count"], 3)
-        self.assertEqual(self.report["acknowledged_gap_count"], 2)
+        self.assertEqual(self.report["watches_total"], 4)  # DON8, W3 development gates, W3, LSK
+        self.assertEqual(self.report["frozen_watch_count"], 4)
+        self.assertEqual(self.report["acknowledged_gap_count"], 3)
 
     def test_don8_watch_declares_metrics_without_thresholds(self):
         entry = self.by_id["evidence_v2_cross_strategy_session_forward_v1"]
