@@ -1,0 +1,482 @@
+{
+  "schema_version": 1,
+  "protocol_id": "news-sentiment-v1",
+  "status": "FROZEN_BEFORE_COLLECTION",
+  "purpose": "Collect public crypto news and Reddit headlines, score them with a frozen word list, aggregate daily market and per-coin sentiment, and evaluate four frozen strategies on forward data only.",
+  "registration_note": "Frozen 2026-10-01 before the first item is collected. No historical news archive is available for free, so nothing here is backtested: collection starts now, strategies are scored only from prospective_start_utc (after a 30-day baseline). Scoring is a transparent word-list model (no paid API). X/Twitter is excluded: scraping violates its terms and the official API is paid. Satisfies AGENTS.md: news becomes a strategy input only through this separately frozen specification. Pre-collection adjustment (2026-10-01, from a local test run whose items were discarded): request pause raised from 3 s to 10 s because Reddit rate-limits back-to-back requests.",
+  "sources": {
+    "news_rss": {
+      "coindesk": "https://www.coindesk.com/arc/outboundfeeds/rss/",
+      "cointelegraph": "https://cointelegraph.com/rss",
+      "decrypt": "https://decrypt.co/feed",
+      "theblock": "https://www.theblock.co/rss.xml",
+      "bitcoinmagazine": "https://bitcoinmagazine.com/.rss/full/",
+      "cryptoslate": "https://cryptoslate.com/feed/",
+      "newsbtc": "https://www.newsbtc.com/feed/",
+      "utoday": "https://u.today/rss",
+      "beincrypto": "https://beincrypto.com/feed/",
+      "bitcoinist": "https://bitcoinist.com/feed/"
+    },
+    "social_rss": {
+      "reddit_cryptocurrency": "https://www.reddit.com/r/CryptoCurrency/new/.rss",
+      "reddit_bitcoin": "https://www.reddit.com/r/Bitcoin/new/.rss",
+      "reddit_ethereum": "https://www.reddit.com/r/ethereum/new/.rss"
+    },
+    "user_agent": "orderflow-edge-lab research monitor (github.com/PKostur/orderflow_edge_lab)",
+    "pause_between_requests_seconds": 10,
+    "failure_policy": "a failed source is recorded in the run report and skipped; the run never fails because one source is down"
+  },
+  "collection": {
+    "cadence": "every 8 hours",
+    "text_used": "title plus the first 400 characters of the summary with HTML stripped",
+    "dedupe_key": "sha256 of source + link (title if no link)",
+    "timestamp": "published time from the feed if present, else fetch time; items are assigned to the UTC day of that time"
+  },
+  "coin_tagging": {
+    "universe": "the 70 multi-premia-blend-v1 coins",
+    "rule": "a coin is mentioned if its full name (case-insensitive, whole word) appears, or its ticker appears as $TICKER, or its ticker appears in upper case as a whole word and is at least 3 letters and not in the ambiguous list",
+    "names": {
+      "BTC": [
+        "bitcoin"
+      ],
+      "ETH": [
+        "ethereum",
+        "ether"
+      ],
+      "SOL": [
+        "solana"
+      ],
+      "XRP": [
+        "xrp",
+        "ripple"
+      ],
+      "ADA": [
+        "cardano"
+      ],
+      "BNB": [
+        "bnb",
+        "binance coin"
+      ],
+      "DOGE": [
+        "dogecoin"
+      ],
+      "LINK": [
+        "chainlink"
+      ],
+      "SUI": [
+        "sui network"
+      ],
+      "ENA": [
+        "ethena"
+      ],
+      "ZEC": [
+        "zcash"
+      ],
+      "LTC": [
+        "litecoin"
+      ],
+      "UNI": [
+        "uniswap"
+      ],
+      "DOT": [
+        "polkadot"
+      ],
+      "DASH": [
+        "dash coin"
+      ],
+      "ETC": [
+        "ethereum classic"
+      ],
+      "BCH": [
+        "bitcoin cash"
+      ],
+      "TAO": [
+        "bittensor"
+      ],
+      "QNT": [
+        "quant network"
+      ],
+      "PEPE": [
+        "pepe"
+      ],
+      "WLD": [
+        "worldcoin",
+        "world network"
+      ],
+      "AVAX": [
+        "avalanche"
+      ],
+      "ONDO": [
+        "ondo"
+      ],
+      "HYPE": [
+        "hyperliquid"
+      ],
+      "SEI": [
+        "sei network"
+      ],
+      "AAVE": [
+        "aave"
+      ],
+      "XPL": [
+        "plasma xpl"
+      ],
+      "PUMPFUN": [
+        "pump.fun",
+        "pumpfun"
+      ],
+      "XLM": [
+        "stellar"
+      ],
+      "FET": [
+        "fetch.ai",
+        "artificial superintelligence alliance"
+      ],
+      "INJ": [
+        "injective"
+      ],
+      "TIA": [
+        "celestia"
+      ],
+      "KAS": [
+        "kaspa"
+      ],
+      "FARTCOIN": [
+        "fartcoin"
+      ],
+      "ICP": [
+        "internet computer"
+      ],
+      "ATOM": [
+        "cosmos"
+      ],
+      "HBAR": [
+        "hedera"
+      ],
+      "ORDI": [
+        "ordi"
+      ],
+      "SHIB": [
+        "shiba inu"
+      ],
+      "VIRTUAL": [
+        "virtuals protocol"
+      ],
+      "APT": [
+        "aptos"
+      ],
+      "PHA": [
+        "phala"
+      ],
+      "OP": [
+        "optimism"
+      ],
+      "JUP": [
+        "jupiter exchange"
+      ],
+      "RENDER": [
+        "render network"
+      ],
+      "PENGU": [
+        "pudgy penguins"
+      ],
+      "TRUMPOFFICIAL": [
+        "official trump",
+        "trump coin",
+        "$trump"
+      ],
+      "GRASS": [
+        "grass network"
+      ],
+      "LDO": [
+        "lido"
+      ],
+      "PYTH": [
+        "pyth network"
+      ],
+      "XMR": [
+        "monero"
+      ],
+      "JTO": [
+        "jito"
+      ],
+      "AR": [
+        "arweave"
+      ],
+      "ZRO": [
+        "layerzero"
+      ],
+      "WLFI": [
+        "world liberty financial"
+      ],
+      "RUNE": [
+        "thorchain"
+      ],
+      "ZEN": [
+        "horizen"
+      ],
+      "GALA": [
+        "gala games"
+      ],
+      "CRV": [
+        "curve dao",
+        "curve finance"
+      ],
+      "WIF": [
+        "dogwifhat"
+      ],
+      "ETHFI": [
+        "ether.fi"
+      ],
+      "EIGEN": [
+        "eigenlayer",
+        "eigencloud"
+      ],
+      "LSK": [
+        "lisk"
+      ],
+      "POL": [
+        "polygon"
+      ],
+      "CFX": [
+        "conflux"
+      ],
+      "AERO": [
+        "aerodrome"
+      ]
+    },
+    "ambiguous_tickers": [
+      "ONE",
+      "AR",
+      "OP",
+      "BR",
+      "AKE",
+      "NIL",
+      "POL",
+      "UNI",
+      "DOT",
+      "ZEN",
+      "RARE",
+      "GALA",
+      "SEI",
+      "SUI",
+      "TAO",
+      "HYPE",
+      "ONDO",
+      "PEPE",
+      "LINK",
+      "DASH",
+      "APT",
+      "RUNE",
+      "AERO",
+      "GRASS",
+      "EIGEN",
+      "PENGU",
+      "TRUMP",
+      "LSK"
+    ]
+  },
+  "scoring": {
+    "model": "count positive and negative lexicon words in the text; a word preceded within 3 words by a negator counts for the other side; score = (pos - neg) / (pos + neg + 1), in (-1, 1)",
+    "negators": [
+      "not",
+      "no",
+      "never",
+      "without",
+      "fails to",
+      "failed to",
+      "isn't",
+      "wasn't",
+      "won't",
+      "don't",
+      "doesn't",
+      "didn't"
+    ],
+    "positive": [
+      "surge",
+      "surges",
+      "surged",
+      "soar",
+      "soars",
+      "soared",
+      "rally",
+      "rallies",
+      "rallied",
+      "gain",
+      "gains",
+      "gained",
+      "jump",
+      "jumps",
+      "jumped",
+      "climb",
+      "climbs",
+      "climbed",
+      "rise",
+      "rises",
+      "rose",
+      "rebound",
+      "rebounds",
+      "recover",
+      "recovers",
+      "recovery",
+      "bullish",
+      "breakout",
+      "record",
+      "all-time high",
+      "ath",
+      "high",
+      "highs",
+      "upgrade",
+      "upgraded",
+      "approval",
+      "approved",
+      "approves",
+      "adopt",
+      "adopts",
+      "adoption",
+      "partnership",
+      "partners",
+      "launch",
+      "launches",
+      "inflow",
+      "inflows",
+      "accumulate",
+      "accumulation",
+      "buy",
+      "buys",
+      "bought",
+      "etf approval",
+      "outperform",
+      "outperforms",
+      "strong",
+      "strength",
+      "boost",
+      "boosts",
+      "optimism",
+      "optimistic",
+      "growth",
+      "profit",
+      "profits",
+      "win",
+      "wins",
+      "support",
+      "milestone",
+      "integration",
+      "listing",
+      "listed",
+      "institutional demand",
+      "upside"
+    ],
+    "negative": [
+      "crash",
+      "crashes",
+      "crashed",
+      "plunge",
+      "plunges",
+      "plunged",
+      "drop",
+      "drops",
+      "dropped",
+      "fall",
+      "falls",
+      "fell",
+      "slump",
+      "slumps",
+      "tumble",
+      "tumbles",
+      "tumbled",
+      "sink",
+      "sinks",
+      "sank",
+      "decline",
+      "declines",
+      "declined",
+      "bearish",
+      "breakdown",
+      "sell-off",
+      "selloff",
+      "sell",
+      "sells",
+      "sold",
+      "dump",
+      "dumps",
+      "dumped",
+      "liquidation",
+      "liquidations",
+      "liquidated",
+      "hack",
+      "hacked",
+      "exploit",
+      "exploited",
+      "breach",
+      "stolen",
+      "theft",
+      "scam",
+      "fraud",
+      "lawsuit",
+      "sues",
+      "sued",
+      "charged",
+      "ban",
+      "bans",
+      "banned",
+      "crackdown",
+      "investigation",
+      "probe",
+      "sanction",
+      "sanctions",
+      "delist",
+      "delisted",
+      "delisting",
+      "outflow",
+      "outflows",
+      "loss",
+      "losses",
+      "lose",
+      "loses",
+      "fear",
+      "fears",
+      "panic",
+      "risk",
+      "risks",
+      "warning",
+      "warns",
+      "weak",
+      "weakness",
+      "downgrade",
+      "bankrupt",
+      "bankruptcy",
+      "insolvent",
+      "collapse",
+      "collapses",
+      "rug pull",
+      "downside",
+      "low",
+      "lows"
+    ]
+  },
+  "aggregation": {
+    "daily_market": "mean item score of all items dated that UTC day, plus item count, separately for news and social and combined",
+    "daily_coin": "for each coin: mention count and mean score of items mentioning it"
+  },
+  "strategies": {
+    "prospective_start_utc": "2026-11-01T00:00:00Z",
+    "signal_timing": "positions held over day d use only items dated d-1 or earlier",
+    "N1_news_momentum": "weekly (Mondays): among coins with >= 3 mentions in the last 7 days (need >= 6 such coins, else flat), long the 3 with the highest summed item score and short the 3 with the lowest, 0.5 gross per side",
+    "N2_attention_breakout": "a coin enters on day d if its mentions over d-3..d-1 are >= 3 x its mean 3-day count over the prior 30 days and its mean score over d-3..d-1 is > 0; held 7 days; longs equal-weighted at 0.5 gross, hedged with a 0.5 gross short in the equal-weight basket; flat if none",
+    "N3_market_tone_following": "equal-weight basket long when the 7-day mean market score is above its prior 30-day mean, short when below",
+    "N4_news_panic_momentum_pause": "overlay: the multi-premia momentum leg S2 scaled by 0.5 on days when the 3-day mean market score is at or below the 10th percentile of its prior 60 days; compared with the unchanged blend",
+    "economics": "20 bps round trip, MEXC funding on held weights, same data as multi-premia-blend-v1"
+  },
+  "review": {
+    "descriptive_after_days": 90,
+    "verdict_after_days": 180,
+    "rule": "per book: mean > 0, Newey-West t >= 2 at 180 days for a standalone book; the overlay must raise the blend Sharpe and not deepen its drawdown; anything else is FAIL"
+  },
+  "claims": {
+    "strategy_promotion_authorized": false,
+    "paper_trading_authorized": false,
+    "live_trading_authorized": false,
+    "news_is_causal": false
+  }
+}

@@ -218,6 +218,20 @@
         "research/strategy_zoo/RESULT.md"
       ],
       "forward_workflow": "multi-premia-blend-v1.yml"
+    },
+    {
+      "watch_id": "news-sentiment-v1-forward",
+      "priority": 13,
+      "family": "news_sentiment",
+      "prospective_start_utc": "2026-11-01T00:00:00Z",
+      "review_gate": {
+        "type": "calendar_days",
+        "minimum_days": 180
+      },
+      "canonical_artifacts": [
+        "config/news_sentiment_v1.json"
+      ],
+      "forward_workflow": "news-sentiment-v1.yml"
     }
   ]
 }
