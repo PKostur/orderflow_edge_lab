@@ -41,6 +41,8 @@
 - Multi-premia blend (trend + XS momentum + funding carry, equal risk): dev Sharpe 2.09 (t 4.48), robust to neighbours (1.6–2.2), costs (1.80 at 60 bps), crises.
 - **Untouched-coins holdout (60 unused coins, run once): blend PASS, Sharpe 1.39, t 3.16, DD −11%, halves 1.41/1.37.** Carry alone fails (t 0.9).
 - Human-constrained (≤5 coins, daily 08 UTC): dev H5 PASS (1.19, DD −31%) but holdout H5 0.60 (t 1.40). Concentration is the weak link; ≥10 coins keeps more (dev 1.40).
+- Custom + sentiment (`research/custom_sentiment`, Fear & Greed): all 5 fail; near misses O2 momentum pause after panic (dev +0.11 Sharpe, conf −0.002), F2 sentiment-following (bull beta), C1 forced-flow-with-trend (conf t 2.76, dev t 0.70).
+- Zoo mirrors M2 BTC-shock reversal + M4 lottery momentum: forward-only watch from 2026-10-03 (blend workflow, `zoo_mirror_report.json`).
 - Human execution: CET 09/15/21 timing costs little; market > limit; tuning grids are noise.
 - Canonical accounting: v2 frozen; v3 (fixed quantity) and v3.1 (+funding) for new work.
 - Trend bot (`trend_bot.py`, paper only): parked by user.

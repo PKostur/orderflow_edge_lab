@@ -1,0 +1,280 @@
+{
+ "development": {
+  "coins": 70,
+  "books": {
+   "C1_forced_flow_with_trend": {
+    "sharpe": 0.2984108623649214,
+    "t": 0.7019641172493639,
+    "annual_return": 0.0013757446650427107,
+    "max_drawdown": -0.008346693675713057,
+    "days": 2198,
+    "halves": [
+     0.6408125064522889,
+     -0.2950169374739258
+    ],
+    "regimes": {
+     "trend_efficiency": {
+      "CHOP": 0.1224376541183708,
+      "MIXED": 0.03975753304920027,
+      "TREND": 0.688182104867584
+     },
+     "volatility": {
+      "HIGH_VOL": 0.6936915209683873,
+      "LOW_VOL": -0.17454224544213803
+     },
+     "direction": {
+      "BEAR": 0.40751094429929224,
+      "BULL": 0.3104384557938679
+     }
+    },
+    "exposure_share": 0.22156505914467697,
+    "blend3_sharpe": 2.08248801282003,
+    "blend4_sharpe": 1.0402329085986741
+   },
+   "F1_extreme_fear_buy": {
+    "sharpe": -0.18862699589734103,
+    "t": -0.48683413729546515,
+    "annual_return": -0.10581872282933212,
+    "max_drawdown": -0.8200602352308048,
+    "days": 1943,
+    "halves": [
+     -0.40769087066914517,
+     0.07869182331213533
+    ],
+    "regimes": {
+     "trend_efficiency": {
+      "CHOP": -0.5107445160220375,
+      "MIXED": -1.100583158045628,
+      "TREND": 1.087496225989052
+     },
+     "volatility": {
+      "HIGH_VOL": 0.25020300672873697,
+      "LOW_VOL": -0.7020363524581972
+     },
+     "direction": {
+      "BEAR": 0.28935768404497947,
+      "BULL": -1.2029001237091825
+     }
+    },
+    "exposure_share": 0.3901183736489964,
+    "blend3_sharpe": 1.938533795726365,
+    "blend4_sharpe": 1.4350128179027966
+   },
+   "F2_sentiment_following": {
+    "sharpe": 0.7476722135538801,
+    "t": 1.944654142325083,
+    "annual_return": 0.5835947294950053,
+    "max_drawdown": -0.7892279843198408,
+    "days": 2278,
+    "halves": [
+     1.1608794155275084,
+     0.26284419771827405
+    ],
+    "regimes": {
+     "trend_efficiency": {
+      "CHOP": 0.6659406314331684,
+      "MIXED": 0.7042453090279303,
+      "TREND": 0.8675269865264691
+     },
+     "volatility": {
+      "HIGH_VOL": 0.9329640934618669,
+      "LOW_VOL": 0.5708807059971412
+     },
+     "direction": {
+      "BEAR": -0.016540988061857706,
+      "BULL": 1.6044323718495195
+     }
+    },
+    "exposure_share": 0.8775241439859526,
+    "blend3_sharpe": 2.0879142038430487,
+    "blend4_sharpe": 2.083528276942596
+   }
+  },
+  "overlays": {
+   "O1_greed_brake": {
+    "sharpe": 2.062188327834076,
+    "t": 4.454999459622875,
+    "annual_return": 0.2638257148764547,
+    "max_drawdown": -0.14057556761568446,
+    "days": 2168,
+    "halves": [
+     2.3655747760516004,
+     1.7848446602492205
+    ],
+    "share_days_scaled": 0.06729475100942127
+   },
+   "O2_panic_momentum_pause": {
+    "sharpe": 2.200206841041786,
+    "t": 4.7159016103113105,
+    "annual_return": 0.2985579631572425,
+    "max_drawdown": -0.12760431884538526,
+    "days": 2168,
+    "halves": [
+     2.444735375771086,
+     2.037894535865668
+    ],
+    "share_days_scaled": 0.22117541498429788
+   }
+  },
+  "blend_base": {
+   "sharpe": 2.0879142038430487,
+   "t": 4.477727122740452,
+   "annual_return": 0.2852977363620647,
+   "max_drawdown": -0.14088716393460832,
+   "days": 2168,
+   "halves": [
+    2.3655062432318155,
+    1.8598630875657662
+   ]
+  }
+ },
+ "confirmation": {
+  "coins": 60,
+  "books": {
+   "C1_forced_flow_with_trend": {
+    "sharpe": 1.1993985283151365,
+    "t": 2.760261763579923,
+    "annual_return": 0.004493465344999572,
+    "max_drawdown": -0.004415781568824717,
+    "days": 2114,
+    "halves": [
+     1.6743023227556617,
+     0.6345929496525049
+    ],
+    "regimes": {
+     "trend_efficiency": {
+      "CHOP": 0.5544429209114705,
+      "MIXED": 1.9278026808914652,
+      "TREND": 1.1730804774048262
+     },
+     "volatility": {
+      "HIGH_VOL": 1.0913575434604519,
+      "LOW_VOL": 1.2961124456063884
+     },
+     "direction": {
+      "BEAR": 1.2580985011749606,
+      "BULL": 1.1163814720973904
+     }
+    },
+    "exposure_share": 0.2521286660359508,
+    "blend3_sharpe": 1.3883365289337408,
+    "blend4_sharpe": 1.3914316546583698
+   },
+   "F1_extreme_fear_buy": {
+    "sharpe": -0.23627547098756338,
+    "t": -0.6040855475029805,
+    "annual_return": -0.13336890450223585,
+    "max_drawdown": -0.8209196684463871,
+    "days": 1943,
+    "halves": [
+     -0.3386679191232885,
+     -0.13054118200807885
+    ],
+    "regimes": {
+     "trend_efficiency": {
+      "CHOP": -0.03364525106014551,
+      "MIXED": -0.6136696342035134,
+      "TREND": 0.01814316918103012
+     },
+     "volatility": {
+      "HIGH_VOL": 0.10163678549878442,
+      "LOW_VOL": -0.5753680770027683
+     },
+     "direction": {
+      "BEAR": -0.1066785099067731,
+      "BULL": -0.6523347214192144
+     }
+    },
+    "exposure_share": 0.3901183736489964,
+    "blend3_sharpe": 1.1328120664629204,
+    "blend4_sharpe": 0.8043938462149224
+   },
+   "F2_sentiment_following": {
+    "sharpe": 0.6679563709971009,
+    "t": 1.7400243869437702,
+    "annual_return": 0.5516004402761039,
+    "max_drawdown": -0.884562938635267,
+    "days": 2255,
+    "halves": [
+     1.068627585976875,
+     0.1876576553093467
+    ],
+    "regimes": {
+     "trend_efficiency": {
+      "CHOP": 0.21162706316705968,
+      "MIXED": 1.3378710595606593,
+      "TREND": 0.607401541942244
+     },
+     "volatility": {
+      "HIGH_VOL": 0.6891092570267412,
+      "LOW_VOL": 0.7658635093295743
+     },
+     "direction": {
+      "BEAR": -0.01170555077499758,
+      "BULL": 1.6479098820822233
+     }
+    },
+    "exposure_share": 0.8762749445676274,
+    "blend3_sharpe": 1.3883365289337408,
+    "blend4_sharpe": 1.4367645402161422
+   }
+  },
+  "overlays": {
+   "O1_greed_brake": {
+    "sharpe": 1.347660799108783,
+    "t": 3.0916388395272296,
+    "annual_return": 0.15420323428182836,
+    "max_drawdown": -0.1068255552822287,
+    "days": 2049,
+    "halves": [
+     1.4076436291599084,
+     1.300124349773783
+    ],
+    "share_days_scaled": 0.058183538315988645
+   },
+   "O2_panic_momentum_pause": {
+    "sharpe": 1.3864415261277108,
+    "t": 3.161327489718694,
+    "annual_return": 0.16010549022661608,
+    "max_drawdown": -0.10682555528222892,
+    "days": 2049,
+    "halves": [
+     1.321441492190741,
+     1.4400951833318785
+    ],
+    "share_days_scaled": 0.23320719016083255
+   }
+  },
+  "blend_base": {
+   "sharpe": 1.3883365289337408,
+   "t": 3.163039612155887,
+   "annual_return": 0.1636149033254592,
+   "max_drawdown": -0.10682555528222915,
+   "days": 2049,
+   "halves": [
+    1.4115346200504075,
+    1.371132417792675
+   ]
+  }
+ },
+ "verdicts": {
+  "C1_forced_flow_with_trend": {
+   "overall": "FAIL",
+   "bonferroni_survives": false
+  },
+  "F1_extreme_fear_buy": {
+   "overall": "FAIL",
+   "bonferroni_survives": false
+  },
+  "F2_sentiment_following": {
+   "overall": "FAIL",
+   "bonferroni_survives": false
+  },
+  "O1_greed_brake": {
+   "overall": "FAIL"
+  },
+  "O2_panic_momentum_pause": {
+   "overall": "FAIL"
+  }
+ }
+}
