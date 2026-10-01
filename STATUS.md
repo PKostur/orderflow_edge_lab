@@ -66,7 +66,7 @@ terminal: no retuning, re-siding, or re-phasing under the same IDs.
 
 <!-- BEGIN GENERATED: forward-watches (scripts/generate_status.py) -->
 
-_Generated 2026-10-01T21:38:02Z from `config/prospective_review_clock_v1.json` and the latest dashboard snapshot. Do not edit by hand._
+_Generated 2026-10-01T22:34:08Z from `config/prospective_review_clock_v1.json` and the latest dashboard snapshot. Do not edit by hand._
 
 | Watch | Config | Start | Review gate | Earliest review | Status | Scored days |
 |---|---|---|---|---|---|---|
@@ -74,8 +74,8 @@ _Generated 2026-10-01T21:38:02Z from `config/prospective_review_clock_v1.json` a
 | `universal-canonical-v3-forward-companion-v1` | `config/universal_canonical_v3_forward_companion_v1.json` | 2026-09-27 | 90 calendar days | **2026-12-26** | `COLLECTING` | 4 |
 | `crypto-trend-core-v1` | `config/crypto_trend_core_v1.json` | 2026-09-29 | 180 calendar days | **2027-03-28** | `COLLECTING` | 2 |
 | `crypto-trend-core-voltarget-v1` | `config/crypto_trend_core_voltarget_v1.json` | 2026-09-29 | 180 calendar days | **2027-03-28** | `COLLECTING` | 2 |
-| `multi-premia-blend-v1` | `config/multi_premia_blend_v1.json` | 2026-09-29 | 180 calendar days | **2027-03-28** | `COLLECTING` | 1 |
-| `multi-premia-human-v1-forward` | `config/multi_premia_blend_v1.json` | 2026-09-29 | 180 calendar days | **2027-03-28** | `COLLECTING` | 1 |
+| `multi-premia-blend-v1` | `config/multi_premia_blend_v1.json` | 2026-09-29 | 180 calendar days | **2027-03-28** | `COLLECTING` | 2 |
+| `multi-premia-human-v1-forward` | `config/multi_premia_blend_v1.json` | 2026-09-29 | 180 calendar days | **2027-03-28** | `COLLECTING` | 2 |
 | `zoo-mirror-forward-v1` | `config/zoo_mirror_forward_v1.json` | 2026-10-03 | 180 calendar days | **2027-04-01** | `PRE_START` | 0 |
 | `news-sentiment-v1-forward` | `config/news_sentiment_v1.json` | 2026-11-01 | 180 calendar days | **2027-04-30** | `PRE_START` | 0 |
 | `universal-cross-asset-trend-forward-v1` | `config/universal_cross_asset_trend_forward_v1.json` | 2026-09-28 | 365 calendar days | **2027-09-28** | `COLLECTING` | 3 |
