@@ -18,7 +18,7 @@ dev = ["ruff==0.16.9"]
 # Lint gate only; formatting is intentionally left untouched.
 target-version = "py310"
 line-length = 120
-extend-exclude = ["integrations"]
+extend-exclude = ["integrations", "third_party"]
 
 [tool.ruff.lint]
 # Engineering gate: real errors (E9: syntax/undefined-name, and F401 unused
