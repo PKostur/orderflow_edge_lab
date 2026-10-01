@@ -1,0 +1,46 @@
+{
+  "protocol": "lsk-conditional-regime-v1",
+  "frozen_at_utc": "2026-09-30T09:00:06.334036+00:00",
+  "frozen_at_ns": 1790758806334036700,
+  "config_sha256": "e5c9b231e3aa077fb974b979cb705bf560f88e222f898d6bee1b8d9f8f2ef796",
+  "implementation_sha256": "f13a202fdacf1523d4654d00e0fbf0b49137031b70035ba0bd405982e1df7340",
+  "dependency_sha256": "dd9785d5baed185e8768f4ef81fd298c6eb1f33c92fe0f2cbc4824220d0ac161",
+  "base_signal_config": {
+    "symbol": "ENA_USDT",
+    "context_symbol": "BTC_USDT",
+    "horizons_ms": [
+      1000,
+      5000,
+      15000,
+      30000
+    ],
+    "fee_bps_round_trip": [
+      0.0,
+      4.0,
+      8.0
+    ],
+    "min_trade_count": 5,
+    "min_trade_flow_ratio": 0.25,
+    "min_book_imbalance": 0.25,
+    "min_microprice_edge": 0.2,
+    "cooldown_ms": 2000
+  },
+  "known_source_sha256": [
+    "09d1e9de93f0164dbb3f95a2f92a910c39e277678dd672dcf259db4221eeb3fd",
+    "0aced434b4067d786233b7514ba867b88cc20991a46bfa87d91d7f099d91840a",
+    "11884c206d447e9ebad78c0bfaf6b74ab3315d4b3d876e35d4c4eeab084390a5",
+    "2315184193c134faba8819369f445dc2bb9cb744b183c937e03e8be8d48fbe2a",
+    "276e345a824cd12c8d4cb880c17d5b8a8bf2eae078ebc1e5c2314ed9fc955da3",
+    "2b74b927221313a2aebb3f4dd04a32ca1868d5df2926b432b147d4c00e9ed9f9",
+    "38d768b350956c32c32aac709dd8ace07a3eb1e14a43ea182e5bbdbbcd45079a",
+    "b05d79f025277fc71afdac1000bf70091e19852475bb829d89b3a718beb2309c",
+    "c4f32467effbdb709aece232f51130db59c2eb3a37f355355885924e2711662c",
+    "c89836c6aa4193ffcef7e61cdcb233d0969cf1e4c17dccad7c594f0d7555b2bb",
+    "cecdd9f2785ceadceb81cb3e873de2fa1523bf2f9a7698925a1bfe5486e8e6a4",
+    "d7874eb0d47efe5513d246cad213f6edc648c009b02c4fcbabda550361c0b9f4"
+  ],
+  "trial_id": "LSK-CONDITIONAL-001",
+  "trial_count": 1,
+  "forward_rule": "Capture start strictly after freeze; known source hashes forbidden. First ten independent clusters are the fixed assessment; no early success or threshold changes. At least 150 capture minutes before candidate revision.",
+  "ready_for_live": false
+}

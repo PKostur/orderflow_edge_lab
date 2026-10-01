@@ -83,9 +83,23 @@
       "frozen_for": "W3 binding watch definition with review_rule thresholds",
       "path": "config/session_watch_cvd_lny_v1.json",
       "sha256": "f19319521bf88d1aec6a31719d6420e5c1684913151126bae6334b9e6e00b250"
+    },
+    {
+      "change_rule": "Trial LSK-CONDITIONAL-001 is terminal. Any successor is a new versioned config frozen before its data is inspected.",
+      "freeze_reference": "commit 9579f35, frozen 2026-09-30T09:00:06Z before replay evaluation",
+      "frozen_for": "lsk-conditional-regime-v1 classifier thresholds, costs and forward gate",
+      "path": "config/lsk_conditional_regime_v1.json",
+      "sha256": "e5c9b231e3aa077fb974b979cb705bf560f88e222f898d6bee1b8d9f8f2ef796"
+    },
+    {
+      "change_rule": "Trial LSK-CONDITIONAL-001 is terminal. Any successor is a new versioned config frozen before its data is inspected.",
+      "freeze_reference": "commit 9579f35, frozen 2026-09-30T09:00:06Z before replay evaluation",
+      "frozen_for": "lsk-conditional-regime-v1 freeze record (source, config and capture hashes)",
+      "path": "config/lsk_conditional_regime_v1.freeze.json",
+      "sha256": "57984c5770a17cac1bc882152ff2005e597ea21a96c9b267c2fd799eb2c6a0ec"
     }
   ],
-  "manifest_sha256": "36a3577fa94e7a5f32b6b79af10b89052c6aefe4715a9c4f9c94400633368ef1",
+  "manifest_sha256": "5eafaa71a76c4ffe01e9520c7e2e9d8fa85ee6a5f5aac776874e29bb68515a79",
   "purpose": "Frozen research definitions whose numeric content must not move without a deliberate, reviewable version bump.",
   "recorded_at_utc": "2026-09-30T00:00:00Z",
   "schema_version": 1,

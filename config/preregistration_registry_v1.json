@@ -51,6 +51,18 @@
       "config_path": "config/session_watch_cvd_lny_v1.json",
       "role": "W3 binding watch definition",
       "frozen": true
+    },
+    {
+      "watch_id": "lsk-conditional-regime-v1",
+      "config_path": "config/lsk_conditional_regime_v1.json",
+      "role": "exploratory conditional-regime trial LSK-CONDITIONAL-001",
+      "frozen": true,
+      "acknowledged_gap": {
+        "reason": "The config was frozen 2026-09-30T09:00:06Z (commit 9579f35), before this registry's contract reached main (2026-09-30T11:06Z). It fixes a numeric forward_gate (clusters, trades, positive-cluster fraction, PF, concentration, branch minima) but no trial_family or design block, and it cannot be edited without breaking its freeze.",
+        "recorded_at_utc": "2026-09-30T18:30:00Z",
+        "canonical_record": "research/lsk_conditional_v1/REPORT.md",
+        "consequence": "Historical replay: the frozen rule traded 0 of 234 eligible signals (62% abstained on data sufficiency), so the forward gate of 60 trades over 10 clusters is out of practical reach. Recorded as NOT ESTABLISHED; no forward captures are run under this trial. A successor must declare trial_family, design and a power estimate before any capture."
+      }
     }
   ],
   "claims": {

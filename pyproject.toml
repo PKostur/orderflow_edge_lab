@@ -29,6 +29,7 @@ extend-exclude = ["integrations"]
 select = ["E9", "F401"]
 
 [project.scripts]
+orderflow-lsk-conditional = "orderflow_edge_lab.lsk_conditional_regime:main"
 orderflow-paper = "orderflow_edge_lab.cli.paper:main"
 orderflow-paper-audit = "orderflow_edge_lab.cli.paper_audit:main"
 orderflow-runtime-snapshot = "orderflow_edge_lab.cli.runtime_snapshot:main"
