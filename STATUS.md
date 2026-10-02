@@ -66,12 +66,12 @@ terminal: no retuning, re-siding, or re-phasing under the same IDs.
 
 <!-- BEGIN GENERATED: forward-watches (scripts/generate_status.py) -->
 
-_Generated 2026-10-01T22:34:08Z from `config/prospective_review_clock_v1.json` and the latest dashboard snapshot. Do not edit by hand._
+_Generated 2026-10-02T06:42:36Z from `config/prospective_review_clock_v1.json` and the latest dashboard snapshot. Do not edit by hand._
 
 | Watch | Config | Start | Review gate | Earliest review | Status | Scored days |
 |---|---|---|---|---|---|---|
 | `evidence_v2_cross_strategy_session_forward_v1` | – | 2026-09-23 | 30 calendar days | **2026-10-23** | `see workflow` | – |
-| `universal-canonical-v3-forward-companion-v1` | `config/universal_canonical_v3_forward_companion_v1.json` | 2026-09-27 | 90 calendar days | **2026-12-26** | `COLLECTING` | 4 |
+| `universal-canonical-v3-forward-companion-v1` | `config/universal_canonical_v3_forward_companion_v1.json` | 2026-09-27 | 90 calendar days | **2026-12-26** | `COLLECTING` | 5 |
 | `crypto-trend-core-v1` | `config/crypto_trend_core_v1.json` | 2026-09-29 | 180 calendar days | **2027-03-28** | `COLLECTING` | 2 |
 | `crypto-trend-core-voltarget-v1` | `config/crypto_trend_core_voltarget_v1.json` | 2026-09-29 | 180 calendar days | **2027-03-28** | `COLLECTING` | 2 |
 | `multi-premia-blend-v1` | `config/multi_premia_blend_v1.json` | 2026-09-29 | 180 calendar days | **2027-03-28** | `COLLECTING` | 2 |
