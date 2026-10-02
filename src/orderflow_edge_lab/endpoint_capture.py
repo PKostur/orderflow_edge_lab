@@ -71,7 +71,11 @@ def _network_scope(address: ipaddress.IPv4Address | ipaddress.IPv6Address) -> st
         return "unspecified"
     if address.is_private:
         return "private"
-    return "public"
+    if address.is_reserved:
+        return "reserved"
+    if address.is_global:
+        return "public"
+    return "non_global"
 
 
 def _score_observation(row: Mapping[str, Any], started: datetime, ended: datetime) -> RankedEndpoint:
