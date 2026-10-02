@@ -9,3 +9,6 @@ config/*.json -text
 # Recorded evidence and captured JSON lines are hashed and compared elsewhere in
 # the repository; leave their bytes alone too.
 *.jsonl -text
+
+# Hash-bound D4 formal-review snapshots must remain byte-identical.
+research/volatility_state_d4/review_snapshot_*.json -text
