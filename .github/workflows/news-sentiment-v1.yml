@@ -69,7 +69,7 @@ jobs:
       - name: Score strategies on forward days
         run: python -m orderflow_edge_lab.news_sentiment_forward --daily artifacts/news_sentiment/current/daily.json --output artifacts/news_sentiment/current/forward_report.json
       - name: Upload ledger
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: news-sentiment-ledger-v1
           path: artifacts/news_sentiment/current/

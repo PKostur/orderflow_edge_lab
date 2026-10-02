@@ -33,7 +33,7 @@ jobs:
             --data-dir artifacts/data/8h \
             --output artifacts/universal_existing_validation.json
       - name: Upload
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: universal-existing-strategy-backtests
           path: artifacts/

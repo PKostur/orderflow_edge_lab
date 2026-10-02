@@ -29,7 +29,7 @@ jobs:
       - name: Evaluate due batches
         run: python -m orderflow_edge_lab.new_listing_holdout --output-dir artifacts/new_listing_holdout
       - name: Upload
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: new-listing-holdout-v1
           path: artifacts/new_listing_holdout/

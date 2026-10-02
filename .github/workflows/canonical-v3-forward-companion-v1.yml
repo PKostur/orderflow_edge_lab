@@ -51,7 +51,7 @@ jobs:
           print(json.dumps({"status":r["status"],"trades":{s["audit_id"]:s["completed_trade_count"] for s in r["strategies"]}}))
           PY
       - name: Upload report
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: canonical-v3-forward-companion-v1
           path: artifacts/canonical_v3_forward_companion/report.json

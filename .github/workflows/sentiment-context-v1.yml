@@ -170,7 +170,7 @@ jobs:
               raise SystemExit('release manager blocked sentiment evidence collection')
           PY
       - name: Preserve cumulative sentiment v1.1 evidence
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: sentiment-context-ledger-v1-1
           path: |

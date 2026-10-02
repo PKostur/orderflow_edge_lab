@@ -56,7 +56,7 @@ jobs:
           if r['release_manager']['status'] != 'reviewable':
               raise SystemExit('release manager blocked cross-sectional replication')
           PY
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: published-cross-sectional-v1-1

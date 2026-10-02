@@ -182,7 +182,7 @@ jobs:
           PY
       - name: Preserve gamma trial evidence
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: gamma-exposure-trial-v1
           path: artifacts/gamma/

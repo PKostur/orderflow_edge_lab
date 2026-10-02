@@ -52,7 +52,7 @@ jobs:
           print(json.dumps({"status":r["status"],"days":r["forward"]["combined"]["days"],"funding":r["funding_contribution"]["combined"]}))
           PY
       - name: Upload report
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: cross-asset-trend-forward-v1
           path: artifacts/cross_asset_trend_forward/report.json

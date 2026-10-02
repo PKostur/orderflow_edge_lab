@@ -80,7 +80,7 @@ jobs:
             --output research/discovery_v2/results/external_signal_parity.json
       - name: Preserve calibration evidence
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: discovery-v2-engine-calibration-v1
           path: |

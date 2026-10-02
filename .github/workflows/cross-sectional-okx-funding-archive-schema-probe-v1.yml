@@ -70,7 +70,7 @@ jobs:
           PY
       - name: Preserve archive-schema probe
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: cross-sectional-okx-funding-archive-schema-probe-v1
           path: artifacts/cross_sectional_okx_funding_archive_schema_probe/

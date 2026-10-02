@@ -70,7 +70,7 @@ jobs:
           PY
       - name: Preserve source probe
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: cross-sectional-okx-historical-funding-source-probe-v1
           path: artifacts/cross_sectional_okx_historical_funding_source_probe/

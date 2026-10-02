@@ -236,7 +236,7 @@ jobs:
           PY
       - name: Preserve cumulative D4 ledger
         if: steps.boundary.outputs.eligible == 'true'
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: volatility-state-forward-ledger-v1
           path: |

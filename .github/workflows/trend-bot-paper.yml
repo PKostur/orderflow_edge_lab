@@ -60,7 +60,7 @@ jobs:
           git commit -m "paper cycle $(date -u +%Y-%m-%dT%H:%MZ): $(cat ../cycle.json | tail -1)" || echo "no change"
           git push origin "HEAD:$STATE_BRANCH"
       - name: Upload cycle output
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: trend-bot-paper-${{ github.run_id }}
           path: |

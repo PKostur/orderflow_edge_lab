@@ -140,7 +140,7 @@ jobs:
           PY
       - name: Preserve Jev decision artifact
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: jev-research-decision
           path: artifacts/jev_decision/

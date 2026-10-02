@@ -62,7 +62,7 @@ jobs:
           PY
       - name: Preserve forward session evidence
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: evidence-v2-cross-strategy-session-forward
           path: artifacts/evidence_v2_session_forward/

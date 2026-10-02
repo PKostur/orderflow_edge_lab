@@ -84,7 +84,7 @@ jobs:
           /tmp/orderflow-release-smoke/bin/python -m pip install artifacts/release/wheels/orderflow_edge_lab-*.whl
           /tmp/orderflow-release-smoke/bin/orderflow-readiness --help >/dev/null
       - name: Preserve standalone bundle
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: orderflow-edge-lab-deadline-standalone
           path: |

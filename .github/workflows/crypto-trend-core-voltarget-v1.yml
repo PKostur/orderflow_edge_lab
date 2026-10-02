@@ -55,7 +55,7 @@ jobs:
           print(json.dumps({"status":r["status"],"days":r["forward"]["core"]["days"],"overlay":r["overlay_state"]}))
           PY
       - name: Upload report
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: crypto-trend-core-voltarget-v1
           path: artifacts/crypto_trend_core_voltarget/report.json

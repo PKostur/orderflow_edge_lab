@@ -58,7 +58,7 @@ jobs:
           PY
       - name: Preserve complete OCC outlier evidence
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: occ-r51-outlier-results
           path: artifacts/occ_r51_outlier/

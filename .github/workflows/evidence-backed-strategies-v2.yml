@@ -36,7 +36,7 @@ jobs:
             --output-dir "artifacts/evidence_v2/data/${{ matrix.interval }}" \
             --max-workers 8
       - name: Preserve immutable timeframe data
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: evidence-v2-data-${{ matrix.interval }}
           path: artifacts/evidence_v2/data/${{ matrix.interval }}/
@@ -74,7 +74,7 @@ jobs:
             --interval "${{ matrix.interval }}" \
             --data-dir "artifacts/evidence_v2/data/${{ matrix.interval }}" \
             --output "artifacts/evidence_v2/price/${{ matrix.family }}_${{ matrix.interval }}.json"
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           name: evidence-v2-price-${{ matrix.family }}-${{ matrix.interval }}
           path: artifacts/evidence_v2/price/*.json
@@ -99,7 +99,7 @@ jobs:
             --config config/evidence_backed_strategies_v2.json \
             --output artifacts/evidence_v2/basis/basis_convergence.json \
             --max-workers 5
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: evidence-v2-basis-convergence
@@ -145,7 +145,7 @@ jobs:
               'top': r['leaderboard'][:10],
           }, indent=2))
           PY
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           name: evidence-v2-price-leaderboard
           path: artifacts/evidence_v2/aggregate/
@@ -175,7 +175,7 @@ jobs:
           if r['release_manager']['status'] != 'reviewable':
               raise SystemExit('release manager blocked evidence-backed tournament')
           PY
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@v7
         with:
           name: evidence-v2-release-gate
           path: artifacts/evidence_v2/gate/

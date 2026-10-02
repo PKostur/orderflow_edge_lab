@@ -61,7 +61,7 @@ jobs:
             --output artifacts/orderflow/stop_risk.json
       - name: Preserve capture and reports
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: fresh-mexc-orderflow-exploratory
           path: artifacts/orderflow/

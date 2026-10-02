@@ -130,7 +130,7 @@ jobs:
 
       - name: Preserve forward evidence
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: htf-fibonacci-forward-shadow-v1
           path: artifacts/htf_fibonacci_forward/

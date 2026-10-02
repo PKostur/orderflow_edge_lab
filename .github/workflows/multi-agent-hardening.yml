@@ -42,7 +42,7 @@ jobs:
           PY
       - name: Upload evidence
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: multi-agent-hardening-report
           path: artifacts/multi_agent_report.json

@@ -198,7 +198,7 @@ jobs:
           if r['release_manager']['status'] != 'reviewable': raise SystemExit('release manager blocked derivatives context collection')
           PY
       - name: Preserve cumulative derivatives context
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: mexc-derivatives-context-ledger-v1
           path: |

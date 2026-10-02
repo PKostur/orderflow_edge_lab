@@ -59,7 +59,7 @@ jobs:
             print(json.dumps({"status":r["status"],"coins":r["coins_with_data"],"missing":r["missing_symbols"]}))
           PY
       - name: Upload
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: multi-premia-blend-v1
           path: |

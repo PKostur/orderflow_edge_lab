@@ -37,7 +37,7 @@ jobs:
             --max-workers 8
       - name: Preserve timeframe data and manifest
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: price-tournament-v1-1-data-${{ matrix.interval }}
           path: artifacts/tournament_data/${{ matrix.interval }}/
@@ -84,7 +84,7 @@ jobs:
             --data-dir "artifacts/tournament_data/${{ matrix.interval }}" \
             --output "artifacts/tournament_results/${{ matrix.family }}_${{ matrix.interval }}.json"
       - name: Preserve every trial including losers
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: price-tournament-v1-1-${{ matrix.family }}-${{ matrix.interval }}
           path: artifacts/tournament_results/*.json
@@ -158,7 +158,7 @@ jobs:
               raise SystemExit('deterministic release manager blocked tournament evidence')
           PY
       - name: Preserve leaderboard and gate report
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: price-strategy-tournament-v1-1-leaderboard
           path: artifacts/tournament_leaderboard/

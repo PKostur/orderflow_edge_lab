@@ -76,7 +76,7 @@ jobs:
           },indent=2))
           PY
       - name: Preserve venue-replication artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: cross-sectional-independent-venue-replication-v1
           path: artifacts/cross_sectional_venue_replication/

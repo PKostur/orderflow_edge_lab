@@ -66,7 +66,7 @@ jobs:
               raise SystemExit('release manager blocked Fibonacci setup-quality lane')
           PY
       - name: Upload complete Fibonacci evidence
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: fibonacci-setup-quality-v1

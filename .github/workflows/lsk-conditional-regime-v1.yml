@@ -24,7 +24,7 @@ jobs:
         run: python scripts/lsk_forward_capture.py
       - name: Preserve all evidence including failures
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: lsk-conditional-v1-${{ github.run_id }}
           path: |

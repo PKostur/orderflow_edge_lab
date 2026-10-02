@@ -68,7 +68,7 @@ jobs:
           print(json.dumps({"cell_set_sha256":r["cell_set_sha256"],"cells":expected},indent=2))
           PY
       - name: Upload payoff geometry v1.1 artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: payoff-geometry-v1-1
           path: |

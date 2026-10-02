@@ -87,7 +87,7 @@ jobs:
           PY
       - name: Preserve prospective shadow evidence
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: universal-session-alignment-shadow
           path: artifacts/universal_session_alignment_shadow/

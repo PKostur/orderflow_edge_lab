@@ -46,7 +46,7 @@ jobs:
             --output research/discovery_v2/results/nautilus_event_driven_execution.json
       - name: Preserve execution-calibration evidence
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: discovery-v2-execution-calibration-v1
           path: |

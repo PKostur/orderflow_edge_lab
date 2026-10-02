@@ -86,7 +86,7 @@ jobs:
           PY
       - name: Preserve shadow evidence
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: markov-ev-shadow-v1
           path: artifacts/markov_ev_shadow/

@@ -85,7 +85,7 @@ jobs:
           PY
       - name: Preserve immutable forward-shadow snapshot
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: dv2-payoff-meta-forward-shadow-v1
           path: |

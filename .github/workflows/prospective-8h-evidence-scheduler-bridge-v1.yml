@@ -136,7 +136,7 @@ jobs:
           PY
       - name: Preserve session shadow evidence
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: universal-session-alignment-shadow
           path: artifacts/universal_session_alignment_shadow/
@@ -199,7 +199,7 @@ jobs:
           PY
       - name: Preserve VOL8 amplitude evidence
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: vol8-payoff-amplitude-forward-v1
           path: artifacts/vol8_payoff_amplitude/
@@ -275,7 +275,7 @@ jobs:
           PY
       - name: Preserve regime shadow evidence
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: universal-regime-marginal-pairwise-shadow-v1
           path: artifacts/universal_regime_marginal_pairwise_shadow/

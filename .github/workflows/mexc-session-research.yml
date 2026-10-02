@@ -28,7 +28,7 @@ jobs:
           mkdir -p artifacts/session_research
           orderflow-mexc-session-research             --start "$START"             --end "$END"             --symbol ENA_USDT             --symbol BTC_USDT             --interval 15m             --output artifacts/session_research/mexc_session_30d.json
       - name: Preserve session study
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: mexc-session-research-30d
           path: artifacts/session_research/mexc_session_30d.json
