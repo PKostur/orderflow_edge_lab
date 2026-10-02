@@ -22,7 +22,7 @@ class EndpointCaptureTests(unittest.TestCase):
                 {
                     "process_name": "VolumetricaBridge",
                     "pid": 1234,
-                    "remote_address": "203.0.113.10",
+                    "remote_address": "8.8.8.8",
                     "remote_port": 443,
                     "reverse_dns": "customer.dxfeed.com",
                     "confidence": "high",
@@ -37,7 +37,7 @@ class EndpointCaptureTests(unittest.TestCase):
     def test_explicit_dxfeed_dns_yields_network_candidate_but_never_api_authorization(self):
         result = analyze_capture(self.base_report())
         self.assertTrue(result["candidate_is_unambiguous"])
-        self.assertEqual(result["candidate"]["remote_address"], "203.0.113.10")
+        self.assertEqual(result["candidate"]["remote_address"], "8.8.8.8")
         self.assertGreaterEqual(result["candidate"]["score"], 100)
         self.assertTrue(result["candidate"]["provider_candidate_eligible"])
         self.assertEqual(result["candidate"]["network_scope"], "public")
@@ -75,7 +75,7 @@ class EndpointCaptureTests(unittest.TestCase):
         report = self.base_report()
         row = report["observations"][0]
         row.update({
-            "reverse_dns": "ec2-203-0-113-10.compute.amazonaws.com",
+            "reverse_dns": "edge.example.net",
             "confidence": "low",
             "evidence": ["tls_port_443"],
             "samples_seen": 50,
@@ -84,6 +84,22 @@ class EndpointCaptureTests(unittest.TestCase):
         self.assertIsNone(result["candidate"])
         self.assertFalse(result["candidate_is_unambiguous"])
         self.assertIn("repeated_observation", result["ranked_endpoints"][0]["reasons"])
+        self.assertFalse(result["ranked_endpoints"][0]["provider_candidate_eligible"])
+
+    def test_documentation_range_never_becomes_provider_candidate(self):
+        report = self.base_report()
+        row = report["observations"][0]
+        row.update({
+            "remote_address": "203.0.113.10",
+            "remote_port": 7300,
+            "reverse_dns": "customer.dxfeed.com",
+            "confidence": "high",
+            "evidence": ["reverse_dns_contains_dxfeed", "remote_port_7300"],
+        })
+        result = analyze_capture(report)
+        self.assertIsNone(result["candidate"])
+        self.assertFalse(result["candidate_is_unambiguous"])
+        self.assertNotEqual(result["ranked_endpoints"][0]["network_scope"], "public")
         self.assertFalse(result["ranked_endpoints"][0]["provider_candidate_eligible"])
 
     def test_loopback_native_port_never_becomes_provider_candidate(self):
@@ -134,7 +150,7 @@ class EndpointCaptureTests(unittest.TestCase):
     def test_tied_high_signal_candidates_fail_closed(self):
         report = self.base_report()
         second = deepcopy(report["observations"][0])
-        second["remote_address"] = "203.0.113.11"
+        second["remote_address"] = "8.8.4.4"
         second["reverse_dns"] = "backup.dxfeed.com"
         report["observations"].append(second)
         report["endpoint_count"] = 2
