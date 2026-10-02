@@ -7,7 +7,7 @@ name = "orderflow-edge-lab"
 version = "1.0.0"
 description = "Research-first order-flow validation and paper execution infrastructure"
 requires-python = ">=3.10"
-dependencies = ["websockets>=12,<16"]
+dependencies = ["websockets>=12,<17"]
 
 [project.optional-dependencies]
 research = ["numpy>=2,<2.6", "pandas>=2,<3", "scikit-learn>=1.7,<2"]
