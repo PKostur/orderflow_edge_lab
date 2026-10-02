@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "protocol_id": "prop-firm-v6",
+  "status": "DECLARED_BEFORE_EVALUATION",
+  "question": "Which challenge + funded approach gives the shortest expected time from buying the first challenge to receiving the first meaningful payout (at least 1% of the account), counting retries and funded accounts that breach before paying?",
+  "registration_note": "Declared 2026-10-03 before any v6 simulation. Payout-eligibility rules: Breakout on-demand USDC (kraken.com/learn/breakout-vs-hyrotrader); HyroTrader on-demand with at most 5% of the balance per payout (same source; minimum funded days not stated, assumed 0); FTMO first reward after 14 days (assumed from prior FTMO terms, verify). Challenge approaches are the fastest v5 ones plus the cheapest; funded approaches are fixed a priori. Historical seen data, descriptive; both samples must agree.",
+  "payout_rules": {
+    "HyroTrader_1step": {"first_eligible_day": 1, "max_per_payout": 0.05},
+    "Breakout_classic_1step": {"first_eligible_day": 1, "max_per_payout": null},
+    "FTMO_2step": {"first_eligible_day": 14, "max_per_payout": null}
+  },
+  "meaningful_payout": "withdraw as soon as eligible and profit >= 1% of the account; the account then continues from 1.0",
+  "challenge_approaches": ["C01_blend_2x_headroom", "C05_constant_vol_25", "C13_blend_3x_profit_lock", "C14_btc_gamble", "C15_btc_trend"],
+  "funded_approaches": {
+    "P1_half_headroom": "blend 0.5x, headroom scaling",
+    "P2_three_quarter_headroom": "blend 0.75x, headroom scaling",
+    "P3_one_x_headroom": "blend 1x, headroom scaling",
+    "P4_sprint_then_protect": "blend 1.5x with headroom scaling until the first payout, then 0.75x with headroom scaling",
+    "P5_constant_vol_15": "blend scaled to 15% annual vol (30-day trailing), cap 2x, headroom scaling"
+  },
+  "metrics": {
+    "p_pass": "challenge pass probability per attempt",
+    "D_challenge": "mean attempt length (days)",
+    "p_pay": "probability a funded account pays >= 1% before breaching (within 365 days)",
+    "D_funded": "mean days from funded to first payout or breach",
+    "expected_days_to_first_payout": "(D_challenge / p_pass + D_funded) / p_pay  (renewal: each funded breach restarts with new challenges)",
+    "expected_fees_to_first_payout": "fee / (p_pass x p_pay)",
+    "first_year_payouts": "mean total payouts in the first 365 funded days (approach's own withdrawal policy)"
+  },
+  "choice_rule": "per firm, the pair with the lowest worst-case (over samples) expected_days_to_first_payout among pairs whose funded 12-month survival >= 0.6 on both samples; BTC challenge approaches are reported but flagged (both samples share one BTC path)",
+  "claims": {"strategy_promotion_authorized": false, "live_trading_authorized": false, "purchase_advice": false}
+}
