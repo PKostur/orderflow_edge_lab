@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "protocol_id": "universal-pre-window-crypto-holdout-v1",
+  "status": "FROZEN_BEFORE_EVALUATION",
+  "question": "Do the frozen DON8/EMA8/VOL8 rules, combined as the equal-capital v3 portfolio, earn positive net returns on 2020-06..2023-12 MEXC data that no protocol, parameter choice or study in this repository has used?",
+  "registration_note": "Registered 2026-09-26, before any strategy result on this window was computed. A repository-wide search found no reference to any date before 2024 in src/, scripts/, config/, docs/, research/ or integrations/. Strategy parameters were frozen on 2024-01-01..2026-09-12. Only MEXC kline availability (listing dates and bar counts) was checked on this window.",
+  "evaluation_rule": "run exactly once from a commit containing this file; any rerun must reproduce the same numbers from the same data hash",
+  "window": {
+    "start": "2020-06-05T00:00:00Z",
+    "end_exclusive": "2024-01-01T00:00:00Z",
+    "must_not_overlap": "2024-01-01..2026-09-12 frozen development window"
+  },
+  "source": {
+    "venue": "MEXC Futures",
+    "interval": "8h",
+    "symbols": ["ADA_USDT", "BNB_USDT", "BTC_USDT", "DOGE_USDT", "ETH_USDT", "LINK_USDT", "SOL_USDT", "SUI_USDT", "XRP_USDT"],
+    "excluded": {"ENA_USDT": "no MEXC candles before 2024"},
+    "late_listing": {"SUI_USDT": "2023-05-03; its sleeves join when their data starts"}
+  },
+  "strategies": [
+    {"audit_id": "DON8", "family": "donchian_breakout", "parameters": {"lookback": 55}},
+    {"audit_id": "EMA8", "family": "ema_tsmom", "parameters": {"fast": 24, "slow": 96, "min_atr_spread": 0.25}},
+    {"audit_id": "VOL8", "family": "vol_scaled_momentum", "parameters": {"lookback": 24, "vol_window": 96, "threshold": 0.5}}
+  ],
+  "economics": {
+    "accounting": "canonical_v3_fixed_quantity",
+    "round_trip_cost_bps": 20,
+    "max_abs_position": 1,
+    "funding": "not charged: MEXC funding history is not available before 2025-04. The 2025-26 crypto funding drag was 1.0%/yr, and it is reported alongside as a known bias.",
+    "portfolio": "equal capital across sleeves that have data that day, rebalanced daily at 00:00 UTC"
+  },
+  "hypotheses": {
+    "primary": {
+      "series": "combined portfolio daily net return",
+      "test": "Newey-West t (5 lags) of the mean daily net return",
+      "pass_rule": "mean > 0 and t >= 2.0",
+      "direction": "one hypothesis, stated in advance; no alternative series or window may replace it"
+    },
+    "secondary_descriptive": [
+      "per-strategy portfolio Sharpe and t",
+      "per-year returns (2020H2, 2021, 2022, 2023)",
+      "long vs short contribution",
+      "the same portfolio with inverse-vol entry sizing (universal-cross-asset-trend-invvol-forward-v1 constants)"
+    ]
+  },
+  "interpretation_limits": [
+    "Backward holdout, not forward: 2021's boom and 2022's crash are general knowledge, although no parameter was fitted to them.",
+    "Nine coins; about 2 effective independent bets (see FIRST_PRINCIPLES_EVIDENCE_RATE_2026_09_26.md).",
+    "A pass is supporting evidence, not promotion; a fail is recorded, and the rules are not retuned."
+  ],
+  "claims": {
+    "strategy_definitions_modified": false,
+    "strategy_promotion_authorized": false,
+    "live_trading_authorized": false,
+    "leverage_authorized": false
+  }
+}

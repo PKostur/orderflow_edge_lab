@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "protocol_id": "universal-untouched-coins-holdout-v1",
+  "status": "FROZEN_BEFORE_EVALUATION",
+  "question": "Do the frozen DON8/EMA8/VOL8 rules, as the equal-capital v3 portfolio, earn positive net returns on crypto perpetuals no repository protocol has ever evaluated, over their full MEXC history?",
+  "registration_note": "Registered 2026-09-26, before any strategy result on these coins was computed. They are chosen mechanically: the top 60 MEXC USDT perps by 24h turnover on 2026-09-26, excluding the 10 development coins, keeping those with at least 300 8h bars in 2020-06..2020-12. Only kline availability was checked. Their 2026 price correlations (no strategy P&L) appeared in the effective-bets analysis for UNI, DOT, LTC and BCH.",
+  "evaluation_rule": "run exactly once from a commit containing this file",
+  "selection_rule": {
+    "pool": "MEXC USDT perps, top 60 by 24h turnover on 2026-09-26",
+    "exclude": ["ADA", "BNB", "BTC", "DOGE", "ENA", "ETH", "LINK", "SOL", "SUI", "XRP"],
+    "history": ">= 300 8h bars between 2020-06-01 and 2020-12-31",
+    "result": ["ZEC_USDT", "LTC_USDT", "UNI_USDT", "DOT_USDT", "DASH_USDT", "ETC_USDT", "BCH_USDT"]
+  },
+  "window": {
+    "start": "2020-06-01T00:00:00Z",
+    "end_exclusive": "2026-09-12T00:00:00Z",
+    "must_end_before": null
+  },
+  "source": {
+    "venue": "MEXC Futures",
+    "interval": "8h",
+    "symbols": ["ZEC_USDT", "LTC_USDT", "UNI_USDT", "DOT_USDT", "DASH_USDT", "ETC_USDT", "BCH_USDT"]
+  },
+  "strategies": [
+    {"audit_id": "DON8", "family": "donchian_breakout", "parameters": {"lookback": 55}},
+    {"audit_id": "EMA8", "family": "ema_tsmom", "parameters": {"fast": 24, "slow": 96, "min_atr_spread": 0.25}},
+    {"audit_id": "VOL8", "family": "vol_scaled_momentum", "parameters": {"lookback": 24, "vol_window": 96, "threshold": 0.5}}
+  ],
+  "economics": {
+    "accounting": "canonical_v3_fixed_quantity",
+    "round_trip_cost_bps": 20,
+    "max_abs_position": 1,
+    "funding": "primary is without funding, for comparability with the pre-window holdout; a funding-charged sensitivity using Binance USDT-M history as a proxy is pre-registered as secondary",
+    "portfolio": "equal capital across sleeves that have data that day, rebalanced daily at 00:00 UTC"
+  },
+  "hypotheses": {
+    "primary": {
+      "series": "combined portfolio daily net return",
+      "test": "Newey-West t (5 lags) of the mean daily net return",
+      "pass_rule": "mean > 0 and t >= 2.0"
+    },
+    "secondary_descriptive": [
+      "per-strategy Sharpe and t",
+      "per-year returns",
+      "inverse-vol entry sizing",
+      "Binance-funding-charged version of the primary series"
+    ]
+  },
+  "interpretation_limits": [
+    "These coins share the crypto factor with the development coins, so they add little independent breadth; this tests the rules on unseen instruments, not on an independent asset class.",
+    "2024-2026 overlaps the development window in time, though not in instruments."
+  ],
+  "claims": {
+    "strategy_definitions_modified": false,
+    "strategy_promotion_authorized": false,
+    "live_trading_authorized": false,
+    "leverage_authorized": false
+  }
+}

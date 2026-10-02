@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "protocol_id": "kronos-v1",
+  "status": "DECLARED_BEFORE_ANY_FORECAST",
+  "question": "Does the Kronos K-line foundation model, used zero-shot, rank crypto perps by next-week return well enough to earn a net premium after costs, add something beyond plain momentum, and forecast volatility better than trailing realized volatility?",
+  "registration_note": "Declared 2026-10-01 before any Kronos forecast was produced on our data. Kronos pre-training data ends June 2024 (arXiv 2508.02739); the published weights were uploaded once on 2025-06-30 and later commits only edit the README, so July 2024 onward is unseen by the model. Caveat: the authors evaluated from July 2024, so model design may be partly tuned on that window; a forward watch is the clean test. Zero-shot only: no fine-tuning on our data.",
+  "pins": {
+    "code": "github.com/shiyu-coder/Kronos @ 67b630e67f6a18c9e9be918d9b4337c960db1e9a (MIT), model/ vendored under third_party/kronos",
+    "model": "NeoQuasar/Kronos-small @ 901c26c1332695a2a8f243eb2f37243a37bea320 (weights commit ac5c409a31, 2025-06-30)",
+    "tokenizer": "NeoQuasar/Kronos-Tokenizer-base @ 0e0117387f39004a9016484a186a908917e22426",
+    "weights_sha256": "recorded at first download in research/kronos/pins.json"
+  },
+  "forecast": {
+    "bars": "MEXC 8h OHLCV (open, high, low, close, volume)",
+    "lookback_bars": 400,
+    "pred_len_bars": 21,
+    "sampling": {"T": 1.0, "top_p": 0.9, "sample_count": 5},
+    "seed": 20261001,
+    "context": "the 400 bars that opened before 00:00 UTC of the rebalance day (the last closes at 00:00)",
+    "predicted_return": "predicted close of the 21st bar / last context close - 1",
+    "predicted_move": "mean absolute predicted 8h log return over the 21 bars, x sqrt(21)",
+    "coin_eligibility": "at least 400 bars of history before the rebalance day"
+  },
+  "test_window": {"start": "2024-07-01", "end": "2026-09-12", "rebalance": "the strategy-zoo/multi-premia weekly grid (every 7th day of the daily index)"},
+  "samples": "70 development coins and 60 untouched coins (multi-premia caches), evaluated separately and pooled; none of their post-June-2024 data is in Kronos's pre-training",
+  "books": {
+    "K1_kronos_xs": "cross-sectional: long the top quartile of predicted 7-day return, short the bottom quartile, 0.5 gross per side, weekly, 20 bps, funding proxy (run_xs machinery)",
+    "K1_reference_momentum": "frozen 30-day/7-day XS momentum on the same coins and window (reference only)"
+  },
+  "diagnostics": {
+    "rank_ic": "per rebalance, Spearman correlation between predicted and realized 7-day return; reported as mean and t over rebalances",
+    "K2_volatility": "per rebalance, Spearman correlation of predicted_move with realized 7-day absolute log return, versus the same correlation for trailing 30-day realized vol; Kronos is better if its mean correlation is higher on both samples"
+  },
+  "pass_rules": {
+    "K1": "pooled 130-coin book: mean > 0, Newey-West t >= 2, Sharpe > 0 in both halves of the window (split at 2025-08-07); AND on each sample separately Sharpe > 0; AND correlation with the reference momentum book below 0.7",
+    "blend_addition": "descriptive: 4-leg blend (S1, S2, S3, K1) vs 3-leg over the window",
+    "K2": "descriptive only (sizing changes would be a separate registration)"
+  },
+  "if_passed": "register a forward watch (weekly, CPU on GitHub Actions); nothing promoted",
+  "claims": {"strategy_promotion_authorized": false, "live_trading_authorized": false, "fine_tuning_on_project_data": false}
+}

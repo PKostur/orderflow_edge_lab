@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "control_plane_id": "research-control-plane-status-v1",
+  "scope": "read_only_status_surface",
+  "implementation_freeze_commit": "b6382563ca0e8b2f5a45ab4e20766c52a7e2ec6e",
+  "inputs": [
+    "universal-session-alignment-shadow-v1",
+    "jev-research-decision-v1",
+    "jev-research-action-v1",
+    "universal-shadow-operational-monitor-v1"
+  ],
+  "stage_order": [
+    "PRE_START",
+    "WAITING_FOR_FIRST_POST_START_CHANGE",
+    "WAITING_FOR_COMPLETIONS",
+    "ACCUMULATING_COMPLETED_EVIDENCE",
+    "READY_FOR_REVIEW",
+    "HALTED_PROTOCOL_BREACH"
+  ],
+  "validation": {
+    "workflow": "Research Control Plane Status",
+    "run_id": 36041230651,
+    "as_of_utc": "2026-09-24T18:26:32+00:00",
+    "artifact_id": 10825893968,
+    "artifact_sha256": "3950f43c73a5ef2e33069600f338c34a5696038ba851c4f839ecfcbc30db5f4e",
+    "tests": 4,
+    "stage": "WAITING_FOR_FIRST_POST_START_CHANGE",
+    "selected_action": "collect_more_evidence",
+    "action_status": "ACCUMULATE_UNCHANGED"
+  },
+  "claims": {
+    "frozen_shadow_unchanged": true,
+    "jev_v1_unchanged": true,
+    "operational_telemetry_not_evidence": true,
+    "live_trading_authorized": false,
+    "leverage_authorized": false,
+    "strategy_promotion_authorized": false
+  },
+  "freeze_note": "Control plane v1 is a read-only composition layer. Changes to stage semantics, evidence boundaries, or authority boundaries require a new control-plane version."
+}

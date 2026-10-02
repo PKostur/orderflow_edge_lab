@@ -23,7 +23,7 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Validate frozen protocol and current public endpoint
         run: |
           python - <<'PY'
@@ -52,8 +52,8 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install research runtime
@@ -198,7 +198,7 @@ jobs:
           if r['release_manager']['status'] != 'reviewable': raise SystemExit('release manager blocked derivatives context collection')
           PY
       - name: Preserve cumulative derivatives context
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: mexc-derivatives-context-ledger-v1
           path: |

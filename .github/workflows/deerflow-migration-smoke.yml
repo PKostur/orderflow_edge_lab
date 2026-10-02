@@ -20,7 +20,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout order-flow project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: orderflow_edge_lab
       - name: Clone current DeerFlow main

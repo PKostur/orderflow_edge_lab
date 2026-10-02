@@ -19,8 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install
@@ -165,7 +165,7 @@ jobs:
           PY
       - name: Preserve compact transfer evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: cross-pair-market-condition-transfer-${{ github.run_id }}
           path: |
@@ -182,7 +182,7 @@ jobs:
           retention-days: 14
       - name: Preserve deterministic cross-pair replay sample
         if: always() && steps.retention.outputs.keep_replay == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: cross-pair-market-replay-${{ github.run_id }}
           path: artifacts/cross_pair/capture/

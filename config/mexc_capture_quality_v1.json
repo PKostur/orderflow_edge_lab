@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "protocol_id": "mexc-capture-quality-v1",
+  "expected_symbols": [
+    "BTC_USDT",
+    "ETH_USDT",
+    "SOL_USDT",
+    "XRP_USDT",
+    "DOGE_USDT",
+    "BNB_USDT",
+    "ADA_USDT",
+    "LINK_USDT",
+    "SUI_USDT",
+    "ENA_USDT"
+  ],
+  "minimum_valid_book_fraction": 0.95,
+  "interpretation": {
+    "FAIL": "structural capture defect such as missing symbol rows, malformed rows, or timestamp regression",
+    "WARN": "capture completed but recovered gaps, reconnects, or reduced valid-book coverage were observed",
+    "PASS": "no configured structural defect or warning was observed"
+  },
+  "claims": {
+    "diagnostic_only": true,
+    "retroactive_evidence_exclusion_authorized": false,
+    "strategy_pnl_used": false,
+    "changes_high_cadence_capture_protocol": false
+  }
+}

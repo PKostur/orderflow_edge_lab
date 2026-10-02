@@ -27,8 +27,8 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install research runtime
@@ -98,8 +98,8 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install research runtime
@@ -170,7 +170,7 @@ jobs:
               raise SystemExit('release manager blocked sentiment evidence collection')
           PY
       - name: Preserve cumulative sentiment v1.1 evidence
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: sentiment-context-ledger-v1-1
           path: |

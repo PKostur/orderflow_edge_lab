@@ -71,6 +71,28 @@ def _commits_url(
     )
 
 
+def _parse_symbol_aliases(
+    values: list[str],
+    symbols: tuple[str, ...],
+) -> dict[str, str]:
+    aliases = {symbol: symbol for symbol in symbols}
+    for raw in values:
+        if "=" not in raw:
+            raise ValueError("--symbol-alias must use LOGICAL=NATIVE")
+        logical, native = (part.strip().upper() for part in raw.split("=", 1))
+        if not logical or not native:
+            raise ValueError("--symbol-alias must use non-empty LOGICAL=NATIVE")
+        if logical not in aliases:
+            raise ValueError(
+                f"--symbol-alias logical symbol is not in --symbol panel: {logical}"
+            )
+        aliases[logical] = native
+    native_values = list(aliases.values())
+    if len(set(native_values)) != len(native_values):
+        raise ValueError("venue-native symbol aliases must be one-to-one")
+    return aliases
+
+
 async def _snapshot_symbol(
     engine: FeatureEngine,
     raw_writer: AppendOnlyJsonl,
@@ -79,30 +101,126 @@ async def _snapshot_symbol(
     rest_base: str,
     symbol: str,
     snapshot_limit: int,
+    venue_symbol: str | None = None,
     reason: str | None = None,
+    max_attempts: int = 3,
 ) -> None:
-    payload = await asyncio.to_thread(
-        _fetch_json,
-        _depth_url(rest_base, symbol, snapshot_limit),
-    )
-    received_at_ns = time.time_ns()
-    raw_record: dict[str, Any] = {
-        "record_type": "rest_snapshot",
-        "source": "mexc_futures_public_rest",
-        "symbol": symbol,
-        "received_at_ns": received_at_ns,
-        "payload": payload,
-    }
-    if reason is not None:
-        raw_record["reason"] = reason
-    raw_writer.write(raw_record)
-    feature_writer.write(
-        {
-            **engine.load_snapshot(symbol, payload),
+    if max_attempts < 1:
+        raise ValueError("max_attempts must be >= 1")
+    last_error: MexcOrderFlowError | None = None
+    for attempt in range(1, max_attempts + 1):
+        payload = await asyncio.to_thread(
+            _fetch_json,
+            _depth_url(rest_base, venue_symbol or symbol, snapshot_limit),
+        )
+        received_at_ns = time.time_ns()
+        try:
+            feature = engine.load_snapshot(symbol, payload)
+        except MexcOrderFlowError as exc:
+            last_error = exc
+            raw_writer.write(
+                {
+                    "record_type": "rest_snapshot_rejected",
+                    "source": "mexc_futures_public_rest",
+                    "symbol": symbol,
+                    "venue_symbol": venue_symbol or symbol,
+                    "received_at_ns": received_at_ns,
+                    "attempt": attempt,
+                    "reason": str(exc),
+                    "payload": payload,
+                }
+            )
+            if attempt >= max_attempts:
+                break
+            await asyncio.sleep(0.25 * attempt)
+            continue
+
+        raw_record: dict[str, Any] = {
+            "record_type": "rest_snapshot",
+            "source": "mexc_futures_public_rest",
+            "symbol": symbol,
+            "venue_symbol": venue_symbol or symbol,
             "received_at_ns": received_at_ns,
-            **({"snapshot_reason": reason} if reason else {}),
+            "attempt": attempt,
+            "payload": payload,
         }
+        if reason is not None:
+            raw_record["reason"] = reason
+        raw_writer.write(raw_record)
+        feature_writer.write(
+            {
+                **feature,
+                "received_at_ns": received_at_ns,
+                "snapshot_attempt": attempt,
+                **({"snapshot_reason": reason} if reason else {}),
+            }
+        )
+        return
+
+    raise MexcOrderFlowError(
+        f"{symbol}: unable to obtain a valid depth snapshot after {max_attempts} attempts: "
+        f"{last_error}"
     )
+
+
+async def _bootstrap_snapshots(
+    engine: FeatureEngine,
+    raw_writer: AppendOnlyJsonl,
+    feature_writer: AppendOnlyJsonl,
+    *,
+    rest_base: str,
+    symbols: tuple[str, ...],
+    venue_symbols: Mapping[str, str],
+    snapshot_limit: int,
+    snapshot_max_attempts: int,
+    failure_policy: str,
+) -> set[str]:
+    if failure_policy not in {"fail", "continue"}:
+        raise ValueError("failure_policy must be fail or continue")
+    unavailable: set[str] = set()
+    for symbol in symbols:
+        try:
+            await _snapshot_symbol(
+                engine,
+                raw_writer,
+                feature_writer,
+                rest_base=rest_base,
+                symbol=symbol,
+                snapshot_limit=snapshot_limit,
+                venue_symbol=venue_symbols[symbol],
+                reason="post_subscription_initial_snapshot",
+                max_attempts=snapshot_max_attempts,
+            )
+        except MexcOrderFlowError as exc:
+            if failure_policy == "fail":
+                raise
+            unavailable.add(symbol)
+            received_at_ns = time.time_ns()
+            raw_writer.write(
+                {
+                    "record_type": "snapshot_unavailable",
+                    "source": "mexc_futures_public_rest",
+                    "symbol": symbol,
+                    "venue_symbol": venue_symbols[symbol],
+                    "received_at_ns": received_at_ns,
+                    "snapshot_max_attempts": snapshot_max_attempts,
+                    "failure_policy": failure_policy,
+                    "reason": str(exc),
+                }
+            )
+            feature_writer.write(
+                {
+                    "record_type": "symbol_unavailable",
+                    "feature_schema_version": FEATURE_SCHEMA_VERSION,
+                    "source": "mexc_futures_public_rest",
+                    "symbol": symbol,
+                    "venue_symbol": venue_symbols[symbol],
+                    "received_at_ns": received_at_ns,
+                    "snapshot_max_attempts": snapshot_max_attempts,
+                    "reason": str(exc),
+                }
+            )
+    return unavailable
 
 
 async def _recover_depth(
@@ -112,8 +230,10 @@ async def _recover_depth(
     *,
     rest_base: str,
     symbol: str,
+    venue_symbol: str,
     pending: Mapping[str, Any],
     snapshot_limit: int,
+    snapshot_max_attempts: int,
 ) -> dict[str, Any]:
     book = engine.books[symbol]
     begin, end, version = depth_version_range(pending)
@@ -133,13 +253,14 @@ async def _recover_depth(
 
     commits = await asyncio.to_thread(
         _fetch_json,
-        _commits_url(rest_base, symbol),
+        _commits_url(rest_base, venue_symbol),
     )
     raw_writer.write(
         {
             "record_type": "rest_depth_commits",
             "source": "mexc_futures_public_rest",
             "symbol": symbol,
+            "venue_symbol": venue_symbol,
             "received_at_ns": time.time_ns(),
             "stop_version": end,
             "payload": commits,
@@ -167,7 +288,9 @@ async def _recover_depth(
         rest_base=rest_base,
         symbol=symbol,
         snapshot_limit=snapshot_limit,
+        venue_symbol=venue_symbol,
         reason="depth_gap_fallback",
+        max_attempts=snapshot_max_attempts,
     )
 
     try:
@@ -199,9 +322,12 @@ async def _run_connection(
     ws_url: str,
     rest_base: str,
     symbols: tuple[str, ...],
+    venue_symbols: Mapping[str, str],
     snapshot_limit: int,
+    snapshot_max_attempts: int,
+    snapshot_failure_policy: str,
     deadline: float | None,
-) -> None:
+) -> set[str]:
     try:
         import websockets
     except ImportError as exc:
@@ -209,6 +335,7 @@ async def _run_connection(
             "websockets package is required; reinstall the project"
         ) from exc
 
+    native_to_logical = {native: logical for logical, native in venue_symbols.items()}
     try:
         async with websockets.connect(
             ws_url,
@@ -229,11 +356,12 @@ async def _run_connection(
             # buffered while REST snapshots are obtained, eliminating the
             # snapshot-before-subscription blind window.
             for symbol in symbols:
+                venue_symbol = venue_symbols[symbol]
                 await ws.send(
                     json.dumps(
                         {
                             "method": "sub.deal",
-                            "param": {"symbol": symbol},
+                            "param": {"symbol": venue_symbol},
                             "gzip": False,
                             "compress": False,
                         },
@@ -245,7 +373,7 @@ async def _run_connection(
                         {
                             "method": "sub.depth",
                             "param": {
-                                "symbol": symbol,
+                                "symbol": venue_symbol,
                                 "compress": False,
                             },
                             "gzip": False,
@@ -254,16 +382,17 @@ async def _run_connection(
                     )
                 )
 
-            for symbol in symbols:
-                await _snapshot_symbol(
-                    engine,
-                    raw_writer,
-                    feature_writer,
-                    rest_base=rest_base,
-                    symbol=symbol,
-                    snapshot_limit=snapshot_limit,
-                    reason="post_subscription_initial_snapshot",
-                )
+            unavailable_symbols = await _bootstrap_snapshots(
+                engine,
+                raw_writer,
+                feature_writer,
+                rest_base=rest_base,
+                symbols=symbols,
+                venue_symbols=venue_symbols,
+                snapshot_limit=snapshot_limit,
+                snapshot_max_attempts=snapshot_max_attempts,
+                failure_policy=snapshot_failure_policy,
+            )
 
             pinger = asyncio.create_task(_ping_loop(ws))
             try:
@@ -291,7 +420,8 @@ async def _run_connection(
                     received_at_ns = time.time_ns()
                     payload = decode_ws_message(raw)
                     channel = str(payload.get("channel", ""))
-                    symbol = str(payload.get("symbol", ""))
+                    venue_symbol = str(payload.get("symbol", ""))
+                    symbol = native_to_logical.get(venue_symbol, venue_symbol)
 
                     raw_writer.write(
                         {
@@ -300,12 +430,13 @@ async def _run_connection(
                             "received_at_ns": received_at_ns,
                             "channel": channel,
                             "symbol": symbol or None,
+                            "venue_symbol": venue_symbol or None,
                             "payload": payload,
                         }
                     )
 
                     if channel == "push.depth":
-                        if symbol not in engine.books:
+                        if symbol not in engine.books or symbol in unavailable_symbols:
                             continue
                         data = payload.get("data")
                         if not isinstance(data, Mapping):
@@ -321,8 +452,10 @@ async def _run_connection(
                                 feature_writer,
                                 rest_base=rest_base,
                                 symbol=symbol,
+                                venue_symbol=venue_symbol,
                                 pending=data,
                                 snapshot_limit=snapshot_limit,
+                                snapshot_max_attempts=snapshot_max_attempts,
                             )
                         feature_writer.write(
                             {
@@ -331,7 +464,7 @@ async def _run_connection(
                             }
                         )
                     elif channel == "push.deal":
-                        if symbol not in engine.books:
+                        if symbol not in engine.books or symbol in unavailable_symbols:
                             continue
                         for feature in engine.on_deals(
                             symbol,
@@ -349,6 +482,7 @@ async def _run_connection(
                     pinger,
                     return_exceptions=True,
                 )
+            return unavailable_symbols
     except websockets.exceptions.ConnectionClosed as exc:
         raise ConnectionError(
             "MEXC websocket connection closed"
@@ -365,6 +499,7 @@ async def run(args: argparse.Namespace) -> tuple[Path, Path]:
     )
     if not symbols:
         raise ValueError("at least one --symbol is required")
+    venue_symbols = _parse_symbol_aliases(args.symbol_alias, symbols)
     if args.duration_seconds < 0:
         raise ValueError(
             "--duration-seconds cannot be negative"
@@ -372,6 +507,14 @@ async def run(args: argparse.Namespace) -> tuple[Path, Path]:
     if not 1 <= args.snapshot_limit <= 1000:
         raise ValueError(
             "--snapshot-limit must be in [1, 1000]"
+        )
+    if args.snapshot_max_attempts < 1:
+        raise ValueError(
+            "--snapshot-max-attempts must be >= 1"
+        )
+    if args.snapshot_failure_policy not in {"fail", "continue"}:
+        raise ValueError(
+            "--snapshot-failure-policy must be fail or continue"
         )
     if args.trade_window_seconds <= 0:
         raise ValueError(
@@ -416,9 +559,16 @@ async def run(args: argparse.Namespace) -> tuple[Path, Path]:
                 "source": "mexc_futures_public",
                 "started_at_ns": time.time_ns(),
                 "symbols": list(symbols),
+                "venue_symbol_aliases": {
+                    logical: native
+                    for logical, native in venue_symbols.items()
+                    if logical != native
+                },
                 "rest_base": args.rest_base,
                 "ws_url": args.ws_url,
                 "snapshot_limit": args.snapshot_limit,
+                "snapshot_max_attempts": args.snapshot_max_attempts,
+                "snapshot_failure_policy": args.snapshot_failure_policy,
                 "depth_subscription_compress": False,
                 "depth_level_schema": (
                     "price_contract_volume_order_count"
@@ -432,19 +582,23 @@ async def run(args: argparse.Namespace) -> tuple[Path, Path]:
         )
 
         reconnects = 0
+        unavailable_symbols: set[str] = set()
         while (
             deadline is None
             or time.monotonic() < deadline
         ):
             try:
-                await _run_connection(
+                unavailable_symbols = await _run_connection(
                     engine,
                     raw_writer,
                     feature_writer,
                     ws_url=args.ws_url,
                     rest_base=args.rest_base,
                     symbols=symbols,
+                    venue_symbols=venue_symbols,
                     snapshot_limit=args.snapshot_limit,
+                    snapshot_max_attempts=args.snapshot_max_attempts,
+                    snapshot_failure_policy=args.snapshot_failure_policy,
                     deadline=deadline,
                 )
                 break
@@ -483,6 +637,7 @@ async def run(args: argparse.Namespace) -> tuple[Path, Path]:
                 "ended_at_ns": time.time_ns(),
                 "depth_stats": engine.depth_stats_snapshot(),
                 "reconnects": reconnects,
+                "snapshot_unavailable_symbols": sorted(unavailable_symbols),
             }
         )
         feature_writer.write(
@@ -511,6 +666,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="Futures symbol; repeat for multiple symbols",
     )
     parser.add_argument(
+        "--symbol-alias",
+        action="append",
+        default=[],
+        help="Venue transport alias in LOGICAL=NATIVE form; repeat as needed",
+    )
+    parser.add_argument(
         "--output-dir",
         default="data/mexc_orderflow",
     )
@@ -532,6 +693,21 @@ def build_parser() -> argparse.ArgumentParser:
         "--snapshot-limit",
         type=int,
         default=1000,
+    )
+    parser.add_argument(
+        "--snapshot-max-attempts",
+        type=int,
+        default=3,
+        help="Strict REST depth snapshot retry budget per bootstrap/recovery",
+    )
+    parser.add_argument(
+        "--snapshot-failure-policy",
+        choices=("fail", "continue"),
+        default="fail",
+        help=(
+            "fail aborts after exhausted strict snapshot validation; continue "
+            "marks that symbol unavailable while preserving strict validation"
+        ),
     )
     parser.add_argument(
         "--trade-window-seconds",

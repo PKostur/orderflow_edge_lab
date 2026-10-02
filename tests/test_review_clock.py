@@ -195,7 +195,11 @@ class ClockReportTests(unittest.TestCase):
         self.assertFalse(by_id["SESSION_W1_ALIGNED_SHORT_ASIA_OPENING"]["open_watch"])
         self.assertTrue(by_id["evidence_v2_cross_strategy_session_forward_v1"]["open_watch"])
         self.assertTrue(by_id["SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST"]["open_watch"])
-        self.assertEqual(report["summary"]["open_watch_count"], 2)
+        # every configured watch without a terminal state is open (DON8, W3 and the research-branch watches)
+        open_ids = [w["watch_id"] for w in report["watches"] if w["open_watch"]]
+        self.assertEqual(report["summary"]["open_watch_count"], len(open_ids))
+        self.assertIn("multi-premia-blend-v1", open_ids)
+        self.assertEqual(len(open_ids), len(report["watches"]) - report["summary"]["terminal_watch_count"])
         self.assertEqual(report["summary"]["terminal_watch_count"], 2)
 
     def test_report_is_deterministic_for_fixed_now(self):

@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "watch_id": "vol8-payoff-amplitude-forward-v1",
+  "status": "frozen_observational_payoff_amplitude_forward_watch",
+  "purpose": "Prospectively test whether causal pre-entry realized-volatility rank predicts subsequent VOL8 excursion amplitude without filtering, resizing, retuning, or changing VOL8 trade generation.",
+  "prospective_start_utc": "2026-09-26T00:00:00Z",
+  "hypothesis_source": {
+    "source": "payoff_geometry_v1 historical development diagnostic",
+    "artifact_run_id": 36146460935,
+    "artifact_id": 10870356016,
+    "artifact_sha256": "f5be7e3aa0fda6ba9d630e5bbe1fc67cc9d91d8d9700bfb2d6d3738e6025b4be",
+    "generated_after_historical_results": true,
+    "historical_period_is_not_independent_validation": true,
+    "observation": "VOL8 historical LOW versus HIGH causal pre-entry volatility showed nearly unchanged win rate but larger favorable and adverse excursion scale in HIGH volatility.",
+    "no_historical_cell_promoted": true
+  },
+  "source": {
+    "venue": "MEXC Futures public klines",
+    "market_type": "perpetual futures",
+    "interval": "8h",
+    "warmup_start_utc": "2026-06-01T00:00:00Z",
+    "symbols": [
+      "BTC_USDT",
+      "ETH_USDT",
+      "SOL_USDT",
+      "XRP_USDT",
+      "DOGE_USDT",
+      "BNB_USDT",
+      "ADA_USDT",
+      "LINK_USDT",
+      "SUI_USDT",
+      "ENA_USDT"
+    ]
+  },
+  "strategy": {
+    "audit_id": "VOL8",
+    "family": "vol_scaled_momentum",
+    "parameters": {
+      "lookback": 24,
+      "vol_window": 96,
+      "threshold": 0.5
+    },
+    "round_trip_cost_bps": 20,
+    "execution_accounting": "canonical_accounting_v2",
+    "max_abs_position": 1,
+    "trade_generation_changed": false
+  },
+  "causal_pre_entry_volatility": {
+    "realized_window_bars": 20,
+    "rank_history_bars": 90,
+    "minimum_rank_history": 30,
+    "realized_measure": "population standard deviation of completed close-to-close returns",
+    "current_value_timing": "realized volatility at the final completed bar strictly before canonical entry",
+    "rank_history_timing": "preceding realized-volatility observations strictly before the current pre-entry value",
+    "percentile_formula": "(count(history < current) + 0.5 * count(history == current)) / count(history)",
+    "percentile_range": [
+      0,
+      1
+    ],
+    "state_labels": {
+      "LOW": "current <= historical 1/3 quantile",
+      "MID": "historical 1/3 quantile < current < historical 2/3 quantile",
+      "HIGH": "current >= historical 2/3 quantile",
+      "UNKNOWN": "insufficient causal history"
+    }
+  },
+  "hypotheses": [
+    {
+      "hypothesis_id": "VOL8_VOL_RANK_TO_FAVORABLE_EXCURSION",
+      "role": "primary_mechanism",
+      "relationship": "Spearman(pre_entry_volatility_percentile, canonical_mfe_bps)",
+      "expected_direction": "positive"
+    },
+    {
+      "hypothesis_id": "VOL8_VOL_RANK_TO_ADVERSE_EXCURSION",
+      "role": "primary_mechanism",
+      "relationship": "Spearman(pre_entry_volatility_percentile, abs(canonical_mae_bps))",
+      "expected_direction": "positive"
+    },
+    {
+      "hypothesis_id": "VOL8_VOL_RANK_TO_DIRECTION_ACCURACY",
+      "role": "separation_diagnostic",
+      "relationship": "Spearman(pre_entry_volatility_percentile, correct_direction_indicator)",
+      "expected_direction": "not_prespecified; report to distinguish amplitude from directional hit-rate effects"
+    }
+  ],
+  "reporting": {
+    "completed_trade_only": true,
+    "terminal_liquidation_excluded": true,
+    "pre_start_entry_excluded": true,
+    "metrics": [
+      "completed_trade_count",
+      "observed_symbol_count",
+      "per_symbol_completed_trade_count",
+      "spearman_vol_percentile_vs_mfe",
+      "spearman_vol_percentile_vs_abs_mae",
+      "spearman_vol_percentile_vs_correct_direction",
+      "LOW_MID_HIGH counts",
+      "LOW_MID_HIGH win_rate",
+      "LOW_MID_HIGH expectancy_bps",
+      "LOW_MID_HIGH median_mfe_bps",
+      "LOW_MID_HIGH median_abs_mae_bps",
+      "LOW_MID_HIGH median_winner_gross_to_mfe_ratio",
+      "LOW_MID_HIGH median_time_to_mfe_hours"
+    ],
+    "dependence_note": "simultaneous and nearby cross-symbol trades are not treated as independent trials",
+    "bootstrap": {
+      "method": "calendar_block_resampling_by_trade_entry",
+      "block_days": 7,
+      "replicates": 1000,
+      "confidence_interval": [
+        0.025,
+        0.975
+      ],
+      "seed": 20260926,
+      "shared_resamples_across_all_reported_relationships": true
+    }
+  },
+  "review_rule": {
+    "minimum_calendar_days": 30,
+    "minimum_completed_trades": 60,
+    "minimum_observed_symbols": 6,
+    "minimum_distinct_7d_entry_blocks": 4,
+    "early_pass_fail_permitted": false,
+    "formal_output": "READY_FOR_REVIEW only; this watch does not itself issue strategy promotion or trading-edge verdicts"
+  },
+  "forbidden_changes": [
+    "VOL8 strategy parameters",
+    "VOL8 signal or execution timing",
+    "symbol universe",
+    "20 bps cost assumption",
+    "prospective start boundary",
+    "volatility percentile definition",
+    "volatility state definitions",
+    "hypotheses",
+    "review thresholds",
+    "filtering or skipping original VOL8 trades",
+    "position sizing from volatility state"
+  ],
+  "claims": {
+    "observational_mechanism_only": true,
+    "strategy_filter_authorized": false,
+    "strategy_promotion_authorized": false,
+    "profitable_edge_established": false,
+    "live_trading_authorized": false,
+    "leverage_authorized": false
+  },
+  "freeze_note": "This hypothesis was generated from the already-inspected historical payoff-geometry artifact and therefore begins a new prospective evidence lane. Historical payoff cells are not validation. The watch observes every unchanged post-start VOL8 trade and does not use volatility to gate or size positions."
+}

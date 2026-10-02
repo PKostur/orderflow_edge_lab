@@ -27,10 +27,10 @@ jobs:
     env:
       CI: "1"
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
-          node-version: "20"
+          node-version: "24"
       - name: Verify current Ruflo CLI
         run: npx -y ruflo@latest --version
       - name: Initialize Ruflo Codex integration in disposable runner workspace
@@ -52,7 +52,7 @@ jobs:
         shell: bash
         run: |
           npx -y ruflo@latest swarm init --topology hierarchical --max-agents 7 --strategy specialized
-          npx -y ruflo@latest memory store --namespace "orderflow/ci" --key "compatibility-smoke" --value "Ruflo coordination smoke passed without trading credentials or live-order capability."
+          npx -y ruflo@latest memory store --namespace "orderflow-ci" --key "compatibility-smoke" --value "Ruflo coordination smoke passed without trading credentials or live-order capability."
           npx -y ruflo@latest memory search --query "compatibility smoke"
       - name: Check MetaHarness command availability
         run: npx -y ruflo@latest metaharness --help

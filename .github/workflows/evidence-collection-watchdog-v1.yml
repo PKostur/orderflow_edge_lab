@@ -19,7 +19,7 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Validate watchdog protocol
         run: |
           python - <<'PY'
@@ -43,7 +43,7 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Dispatch stale collectors only when idle
         shell: bash
         run: |
@@ -98,7 +98,7 @@ jobs:
               json.dump(report, f, indent=2)
           PY
       - name: Preserve watchdog report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: evidence-collection-watchdog-v1-2-${{ github.run_id }}
           path: watchdog_report.json

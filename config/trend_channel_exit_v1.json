@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "protocol_id": "trend-channel-exit-v1",
+  "status": "DECLARED_BEFORE_EVALUATION",
+  "question": "Does a textbook 20-bar opposite-channel trailing exit (Turtle System 2: enter 55 / exit 20) on the frozen DON8/EMA8 entries reduce crash lag and giveback without cutting the big winners?",
+  "registration_note": "Declared 2026-09-27 before any result of this overlay was computed. Crypto history 2020-2026 has been seen for the trend rules, so the result is descriptive; evidence must come from post-freeze listings and forward data.",
+  "overlay": {"exit_window_bars": 20, "exit_rule": "long exits when the completed close < min(low) of the prior 20 bars; shorts mirror",
+              "reentry": "only on a fresh entry event: new 55-bar breakout (DON8) or new transition into +/-1 (EMA8)",
+              "provenance": "Turtle System 2 exit length; not tuned"},
+  "universe": {"source": "MEXC 8h", "symbols_from": "config/crypto_trend_core_v1.json", "window": ["2020-06-01T00:00:00Z", "2026-09-12T00:00:00Z"]},
+  "trend_parameters": {"DON8": {"lookback": 55}, "EMA8": {"fast": 24, "slow": 96, "min_atr_spread": 0.25}},
+  "sizing": {"method": "entry_inverse_vol", "target_annual_vol": 0.15, "cap": 1.0, "window_bars": 180, "bars_per_year": 1095},
+  "economics": {"accounting": "canonical v3", "round_trip_cost_bps": 20, "funding": "not charged (no history before 2025-04)"},
+  "comparisons": ["core (frozen) vs core + exit", "DON8 alone vs DON8 + exit", "EMA8 alone vs EMA8 + exit"],
+  "reported": ["Sharpe", "Newey-West t", "max drawdown", "per-year", "mean return in DOWN / FLAT / UP basket months",
+               "time in market", "share of net P&L from the top 1% of trades"],
+  "claims": {"strategy_promotion_authorized": false, "live_trading_authorized": false, "verified_out_of_sample_evidence": false}
+}

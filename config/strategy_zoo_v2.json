@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "protocol_id": "strategy-zoo-v2",
+  "status": "DECLARED_BEFORE_EVALUATION",
+  "question": "Do five further untested families (pairs trading, session timing, 8h cross-sectional reversal, high-volatility breakout, volatility-managed momentum) earn positive net returns on a broad crypto universe, and in which regimes?",
+  "registration_note": "Declared 2026-10-01 before any result of these families. One a-priori parameter set each, nothing searched. Same samples, costs, funding, halves, regimes and pass rules as strategy-zoo-v1 (config/strategy_zoo_v1.json). Intraday (8h) books also report gross returns because costs are expected to dominate them. The Z2/Z4 mirror ideas from zoo v1 are deliberately NOT included (chosen after seeing data).",
+  "trial_family": "strategy-zoo-v2 (5 families, one parameter set each)",
+  "design": {"dependence_cluster": "calendar week", "design_effect_bps": "not estimated; Newey-West 5 lags on daily portfolio returns", "design_units": "daily portfolio net returns (8h books summed per UTC day)"},
+  "strategies": {
+    "Y1_pairs": "every 7 days pair coins greedily by highest 90-day correlation of daily log returns (non-overlapping, at most floor(N/4) pairs, correlation >= 0.7); spread = log price ratio, z-score over 20 days; open short-rich/long-cheap when |z| > 2, close when |z| < 0.5 or the pair is dropped; each active pair gets gross 1 / max pairs, split equally between legs",
+    "Y2_us_session": "8h bars: hold the equal-weight basket long only in the bar that opens 16:00 UTC (US afternoon), flat otherwise",
+    "Y3_8h_reversal": "8h bars: cross-sectional, rank coins by their previous 8h return, long the bottom quartile and short the top quartile, rebalanced every 8h bar",
+    "Y4_highvol_breakout": "per coin, daily: when the coin's 20-day realized vol is above its prior 180-day median, enter long on a close above the prior 20-day high of opens or short below the prior 20-day low; exit on the opposite 10-day extreme; size min(1, 15% / annualized 60-day vol), divided by the number of coins with data",
+    "Y5_volmanaged_xs_momentum": "the frozen 30-day/7-day cross-sectional momentum book (multi-premia S2) scaled each day by min(1, 20% / its own trailing 30-day annualized vol, prior days only); scale-down only, never leverage"
+  },
+  "pass_rules": "identical to strategy-zoo-v1: development mean > 0, NW t >= 2 and both halves positive; confirmation Sharpe > 0 and NW t >= 1.5; Bonferroni label at t >= 2.7 (5 tests: 2.58, reported at 2.7 for consistency with v1)",
+  "claims": {"strategy_promotion_authorized": false, "live_trading_authorized": false, "leverage_authorized": false}
+}

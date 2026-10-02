@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "protocol_id": "regime-switch-trend-meanrev-v1",
+  "status": "DECLARED_BEFORE_EVALUATION",
+  "question": "Does switching between trend following (trending or mixed regimes) and mean reversion (choppy regimes), using the frozen efficiency-ratio regime labels, improve on trend-only, and does it help where trend-only failed?",
+  "registration_note": "Declared 2026-09-27 before any result of these variants was computed. All historical data used here has been seen for the trend rules, so every result is descriptive. The ETF universe is additionally contaminated: trend-only is already known to lose there, so mean reversion is expected to look better. Real evidence must come from post-freeze listings and forward data.",
+  "regime": {
+    "source": "descriptive_regime_labels_v1 trend_efficiency definition, unchanged",
+    "kaufman_er_window_bars": 42,
+    "percentile_history_bars": 540,
+    "lower_quantile": 0.3333333333333333,
+    "upper_quantile": 0.6666666666666666,
+    "persistence_bars": 3,
+    "labels": {"LOW": "CHOP", "MID": "MIXED", "HIGH": "TREND"}
+  },
+  "components": {
+    "trend": "mean of the DON8 and EMA8 frozen targets (+1/0/-1 each)",
+    "mean_reversion": {
+      "family": "bb_mean_reversion",
+      "parameters": {"period": 20, "std": 2.0, "rsi_period": 14, "rsi_low": 30, "rsi_high": 70, "max_hold": 20},
+      "provenance": "textbook defaults (Bollinger 20/2, RSI 14 at 30/70), not the repository's tuned ENA 1h candidate"
+    }
+  },
+  "variants": {
+    "trend_only": "trend target in every regime except UNKNOWN warm-up (flat)",
+    "meanrev_only": "mean-reversion target in every regime except UNKNOWN",
+    "switch": "TREND or MIXED -> trend target; CHOP -> mean-reversion target; UNKNOWN -> flat",
+    "chop_filter": "TREND or MIXED -> trend target; CHOP -> flat; UNKNOWN -> flat"
+  },
+  "universes": {
+    "crypto": {"source": "MEXC 8h", "window": ["2020-06-01T00:00:00Z", "2026-09-12T00:00:00Z"], "round_trip_cost_bps": 20,
+                "trend_parameters": {"DON8": {"lookback": 55}, "EMA8": {"fast": 24, "slow": 96, "min_atr_spread": 0.25}},
+                "symbols_from": "config/crypto_trend_core_v1.json"},
+    "etf": {"source": "Yahoo daily adjusted", "window": ["2007-01-01T00:00:00Z", "2026-09-01T00:00:00Z"], "round_trip_cost_bps": 10,
+             "trend_parameters": {"DON8": {"lookback": 18}, "EMA8": {"fast": 8, "slow": 32, "min_atr_spread": 0.25, "atr_period": 5}},
+             "symbols_from": "config/universal_etf_long_history_holdout_v1.json",
+             "contaminated": true}
+  },
+  "sizing": {"method": "entry_inverse_vol", "target_annual_vol": 0.15, "cap": 1.0,
+             "window_bars": {"crypto": 180, "etf": 60}, "bars_per_year": {"crypto": 1095, "etf": 252}},
+  "accounting": "canonical v3, fixed quantity; funding not charged (no history before 2025-04), a known bias",
+  "portfolio": "equal capital across coins/ETFs, daily at 00:00 UTC stamps",
+  "primary_comparison": "switch versus trend_only on crypto: difference in annualized Sharpe and in mean daily net return, plus the share of days spent in each regime",
+  "variants_count_note": "4 variants x 2 universes declared; all 8 are reported",
+  "claims": {"strategy_promotion_authorized": false, "live_trading_authorized": false, "verified_out_of_sample_evidence": false}
+}

@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "watch_id": "universal-cross-asset-trend-forward-v1",
+  "status": "FROZEN_BEFORE_PROSPECTIVE_START",
+  "question": "Does adding liquid MEXC tradfi perpetuals to the frozen DON8/EMA8/VOL8 trend portfolio raise independent breadth and net returns after costs and funding?",
+  "prospective_start_utc": "2026-09-28T00:00:00Z",
+  "registration_note": "Registered 2026-09-26, before any day at or after the start existed. The universe comes from a mechanical rule applied to MEXC contract metadata and 24h turnover on 2026-09-26; no strategy P&L on any tradfi instrument was computed before registration.",
+  "universe_rule": {
+    "zone": "MEXC USDT perpetuals tagged mc-trade-zone-tradfi",
+    "classes": ["Forex", "Commodities", "stockindex"],
+    "exclude": "leveraged or inverse ETF proxies, single stocks, sector ETFs",
+    "listed_at_least_days_before_registration": 90,
+    "minimum_24h_turnover_usdt": 10000000,
+    "one_contract_per_underlying": "keep the higher 24h turnover (USOIL over UKOIL)",
+    "result_on_2026-09-26": ["XAUT_USDT", "SILVER_USDT", "USOIL_USDT", "SPX500_USDT", "NAS100_USDT"],
+    "snapshot_24h_turnover_musdt": {"XAUT_USDT": 96.9, "SILVER_USDT": 99.6, "USOIL_USDT": 36.9, "UKOIL_USDT": 28.2, "SPX500_USDT": 43.6, "NAS100_USDT": 11.8}
+  },
+  "groups": {
+    "crypto": ["ADA_USDT", "BNB_USDT", "BTC_USDT", "DOGE_USDT", "ENA_USDT", "ETH_USDT", "LINK_USDT", "SOL_USDT", "SUI_USDT", "XRP_USDT"],
+    "tradfi": ["XAUT_USDT", "SILVER_USDT", "USOIL_USDT", "SPX500_USDT", "NAS100_USDT"]
+  },
+  "source": {
+    "venue": "MEXC Futures",
+    "interval": "8h",
+    "warmup_start_utc": "2026-02-01T00:00:00Z",
+    "funding": "contract/funding_rate/history, all settlements up to as_of"
+  },
+  "strategies": [
+    {"audit_id": "DON8", "family": "donchian_breakout", "parameters": {"lookback": 55}},
+    {"audit_id": "EMA8", "family": "ema_tsmom", "parameters": {"fast": 24, "slow": 96, "min_atr_spread": 0.25}},
+    {"audit_id": "VOL8", "family": "vol_scaled_momentum", "parameters": {"lookback": 24, "vol_window": 96, "threshold": 0.5}}
+  ],
+  "economics": {
+    "accounting": "canonical_v3.1_fixed_quantity_with_funding",
+    "round_trip_cost_bps": 20,
+    "max_abs_position": 1,
+    "portfolio": "equal capital across all strategy x symbol sleeves in the group, rebalanced daily at 00:00 UTC; inter-sleeve rebalancing not charged"
+  },
+  "reporting": {
+    "primary_series": "combined",
+    "secondary_series": ["tradfi", "crypto"],
+    "statistic": "mean daily net return, Newey-West t (5 lags), annualized Sharpe (sqrt 365), funding contribution",
+    "newey_west_lags": 5,
+    "breadth": "participation ratio of the group's forward daily sleeve returns, reported once there are at least 60 days",
+    "review_after_days": 365,
+    "before_review": "descriptive only: no verdict, no promotion"
+  },
+  "known_risks": [
+    "Tradfi perp funding is large and unstable (10-84%/yr absolute over 2025-2026); it is charged, not assumed away.",
+    "Tradfi perps track venue index prices that may move on weekends while the underlying market is closed.",
+    "20 bps round trip is assumed for all instruments; the liquidity floor exists so that assumption stays credible."
+  ],
+  "claims": {
+    "descriptive_only": true,
+    "strategy_definitions_modified": false,
+    "verified_out_of_sample_evidence": false,
+    "strategy_promotion_authorized": false,
+    "regime_filter_authorized": false,
+    "live_trading_authorized": false,
+    "leverage_authorized": false
+  }
+}

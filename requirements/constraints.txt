@@ -1,0 +1,21 @@
+# Pinned versions for CI and forward watches (pip constraints file).
+# Taken from the packages a green GitHub Actions run installed on 2026-09-29
+# (Universal Existing Strategy Backtests, Linux, Python 3.11), within pyproject's ranges.
+# Python 3.10 (still in the CI matrix) gets the newest releases that support it.
+# Use: python -m pip install -c requirements/constraints.txt -e ".[research]"
+# Update deliberately: bump here, run the full suite and one forward-watch dry run, then commit.
+numpy==2.4.6; python_version >= "3.11"
+numpy==2.2.6; python_version < "3.11"
+pandas==2.3.3
+scikit-learn==1.9.1; python_version >= "3.11"
+scikit-learn==1.7.2; python_version < "3.11"
+scipy==1.17.1; python_version >= "3.11"
+scipy==1.15.3; python_version < "3.11"
+joblib==1.6.0
+threadpoolctl==3.7.0
+python-dateutil==2.9.0.post0
+pytz==2026.4
+tzdata==2026.4
+six==1.17.0
+websockets==15.0.1
+ruff==0.16.9

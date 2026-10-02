@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "monitor_id": "universal-shadow-operational-monitor-v1",
+  "scope": "operational_telemetry_only",
+  "source_watch_id": "universal-session-alignment-shadow-v1",
+  "implementation_freeze_commit": "f005391ee9daf53b93817d9909dac95795f23088",
+  "validation": {
+    "workflow": "Universal Shadow Operational Monitor",
+    "run_id": 36040634020,
+    "as_of_utc": "2026-09-24T18:22:49.412468+00:00",
+    "latest_execution_boundary_utc": "2026-09-24T16:00:00+00:00",
+    "execution_boundaries_since_start_including_start": 3,
+    "artifact_id": 10825494900,
+    "artifact_sha256": "e2065218ee0b858329c38163a80faa620f701aaf7aef7beb98189fca1cab99ad"
+  },
+  "first_checkpoint": {
+    "DON8": {
+      "long": 9,
+      "short": 1,
+      "flat": 0,
+      "carried_pre_start": 10,
+      "post_start_changes": 0,
+      "median_position_age_hours": 744
+    },
+    "EMA8": {
+      "long": 10,
+      "short": 0,
+      "flat": 0,
+      "carried_pre_start": 10,
+      "post_start_changes": 0,
+      "median_position_age_hours": 848
+    },
+    "VOL8": {
+      "long": 10,
+      "short": 0,
+      "flat": 0,
+      "carried_pre_start": 10,
+      "post_start_changes": 0,
+      "median_position_age_hours": 96
+    }
+  },
+  "claims": {
+    "not_prospective_evidence": true,
+    "frozen_shadow_unchanged": true,
+    "jev_v1_unchanged": true,
+    "strategy_rules_unchanged": true,
+    "live_trading_authorized": false,
+    "leverage_authorized": false
+  },
+  "freeze_note": "Operational monitor v1 is frozen to explain target-state persistence only. Changes to its telemetry semantics should use a new monitor version."
+}

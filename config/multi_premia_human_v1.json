@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "protocol_id": "multi-premia-human-v1",
+  "status": "DECLARED_BEFORE_EVALUATION",
+  "question": "How much of the multi-premia blend survives when a human holds at most K coins and trades once a day at a CET check-in?",
+  "registration_note": "Declared 2026-09-28 before any result of this construction. Legs, parameters, universe and window are exactly multi-premia-v1; nothing is tuned here. K=5 is the user's constraint (<=5 coins); K=3 and K=10 are reported as sensitivity only and never selected.",
+  "base_protocol": "multi-premia-v1 (config/multi_premia_v1.json)",
+  "construction": {
+    "coin_weight": "net per-coin target = sum over legs of (leg blend weight x leg per-coin weight). S1 per-coin weight = vol-sized trend target / number of coins with data; S2/S3 per-coin weights = frozen quantile weights at their last weekly rebalance; leg blend weights = S4 inverse-vol Monday weights.",
+    "truncation": "each day hold only the K coins with the largest |net target|; rescale them so their gross equals the full-universe gross, capped at 1.0x (no leverage)",
+    "execution": "decided on data up to 00:00 UTC; traded at the 08:00 UTC 8h open (09:00/10:00 CET check-in); held 24h to the next 08:00 UTC open",
+    "reference": "V_ALL = the same aggregation and timing with no truncation"
+  },
+  "economics": {"round_trip_cost_bps": 20, "funding": "same Binance proxy as multi-premia-v1, charged on held weights"},
+  "halves": [["2020-06-01", "2023-07-01"], ["2023-07-01", "2026-09-12"]],
+  "pass_rule": "H5 passes if Newey-West t >= 2, Sharpe >= 0.5 x V_ALL Sharpe, and Sharpe > 0 in both halves",
+  "claims": {"strategy_promotion_authorized": false, "live_trading_authorized": false, "leverage_authorized": false}
+}

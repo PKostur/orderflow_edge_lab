@@ -81,6 +81,157 @@
         "research/SESSION_PROSPECTIVE_STATUS_2026_09_22.md",
         "config/session_watch_cvd_lny_v1.json"
       ]
+    },
+    {
+      "watch_id": "multi-premia-blend-v1",
+      "priority": 4,
+      "family": "multi_premia_blend",
+      "prospective_start_utc": "2026-09-29T00:00:00Z",
+      "review_gate": {
+        "type": "calendar_days",
+        "minimum_days": 180
+      },
+      "canonical_artifacts": [
+        "config/multi_premia_blend_v1.json",
+        "research/multi_premia/RESULT.md",
+        "research/multi_premia_untouched/RESULT.md"
+      ],
+      "forward_workflow": "multi-premia-blend-v1.yml"
+    },
+    {
+      "watch_id": "multi-premia-human-v1-forward",
+      "priority": 5,
+      "family": "multi_premia_human_book",
+      "prospective_start_utc": "2026-09-29T00:00:00Z",
+      "review_gate": {
+        "type": "calendar_days",
+        "minimum_days": 180
+      },
+      "canonical_artifacts": [
+        "config/multi_premia_blend_v1.json",
+        "research/multi_premia_human/RESULT.md",
+        "config/multi_premia_human_v1.json"
+      ],
+      "forward_workflow": "multi-premia-blend-v1.yml"
+    },
+    {
+      "watch_id": "crypto-trend-core-v1",
+      "priority": 6,
+      "family": "trend_core_don8_ema8",
+      "prospective_start_utc": "2026-09-29T00:00:00Z",
+      "review_gate": {
+        "type": "calendar_days",
+        "minimum_days": 180
+      },
+      "canonical_artifacts": [
+        "config/crypto_trend_core_v1.json",
+        "research/crypto_trend_core/"
+      ],
+      "forward_workflow": "crypto-trend-core-v1.yml"
+    },
+    {
+      "watch_id": "crypto-trend-core-voltarget-v1",
+      "priority": 7,
+      "family": "trend_core_vol_target",
+      "prospective_start_utc": "2026-09-29T00:00:00Z",
+      "review_gate": {
+        "type": "calendar_days",
+        "minimum_days": 180
+      },
+      "canonical_artifacts": [
+        "config/crypto_trend_core_voltarget_v1.json",
+        "research/portfolio_vol_target/RESULT.md"
+      ],
+      "forward_workflow": "crypto-trend-core-voltarget-v1.yml"
+    },
+    {
+      "watch_id": "universal-trend-portfolio-forward-v1",
+      "priority": 8,
+      "family": "trend_portfolio_10_coins",
+      "prospective_start_utc": "2026-09-28T00:00:00Z",
+      "review_gate": {
+        "type": "calendar_days",
+        "minimum_days": 365
+      },
+      "canonical_artifacts": [
+        "config/universal_trend_portfolio_forward_v1.json",
+        "docs/FIRST_PRINCIPLES_EVIDENCE_RATE_2026_09_26.md"
+      ],
+      "forward_workflow": "trend-portfolio-forward-v1.yml"
+    },
+    {
+      "watch_id": "universal-cross-asset-trend-forward-v1",
+      "priority": 9,
+      "family": "cross_asset_trend",
+      "prospective_start_utc": "2026-09-28T00:00:00Z",
+      "review_gate": {
+        "type": "calendar_days",
+        "minimum_days": 365
+      },
+      "canonical_artifacts": [
+        "config/universal_cross_asset_trend_forward_v1.json",
+        "docs/PORTFOLIO_ANATOMY_2026_09_26.md"
+      ],
+      "forward_workflow": "cross-asset-trend-forward-v1.yml"
+    },
+    {
+      "watch_id": "universal-cross-asset-trend-invvol-forward-v1",
+      "priority": 10,
+      "family": "cross_asset_trend_invvol",
+      "prospective_start_utc": "2026-09-28T00:00:00Z",
+      "review_gate": {
+        "type": "calendar_days",
+        "minimum_days": 365
+      },
+      "canonical_artifacts": [
+        "config/universal_cross_asset_trend_invvol_forward_v1.json",
+        "docs/PORTFOLIO_ANATOMY_2026_09_26.md"
+      ],
+      "forward_workflow": "cross-asset-trend-invvol-forward-v1.yml"
+    },
+    {
+      "watch_id": "universal-canonical-v3-forward-companion-v1",
+      "priority": 11,
+      "family": "canonical_v3_accounting",
+      "prospective_start_utc": "2026-09-27T00:00:00Z",
+      "review_gate": {
+        "type": "calendar_days",
+        "minimum_days": 90
+      },
+      "canonical_artifacts": [
+        "config/universal_canonical_v3_forward_companion_v1.json",
+        "docs/CANONICAL_ACCOUNTING_V3.md"
+      ],
+      "forward_workflow": "canonical-v3-forward-companion-v1.yml"
+    },
+    {
+      "watch_id": "zoo-mirror-forward-v1",
+      "priority": 12,
+      "family": "strategy_zoo_mirrors",
+      "prospective_start_utc": "2026-10-03T00:00:00Z",
+      "review_gate": {
+        "type": "calendar_days",
+        "minimum_days": 180
+      },
+      "canonical_artifacts": [
+        "config/zoo_mirror_forward_v1.json",
+        "research/strategy_zoo/RESULT.md"
+      ],
+      "forward_workflow": "multi-premia-blend-v1.yml"
+    },
+    {
+      "watch_id": "news-sentiment-v1-forward",
+      "priority": 13,
+      "family": "news_sentiment",
+      "prospective_start_utc": "2026-11-01T00:00:00Z",
+      "review_gate": {
+        "type": "calendar_days",
+        "minimum_days": 180
+      },
+      "canonical_artifacts": [
+        "config/news_sentiment_v1.json"
+      ],
+      "forward_workflow": "news-sentiment-v1.yml"
     }
   ]
 }

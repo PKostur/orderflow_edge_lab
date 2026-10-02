@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "decision_contract_id": "jev-research-decision-v1",
+  "scope": "research_orchestration_only",
+  "model": "jev-latest",
+  "min_choice_confidence": 0.65,
+  "provider_policy": {
+    "auto": "use TypeSafe Jev when TYPESAFE_API_KEY is available; fail closed if that Jev path cannot run; otherwise use offline deterministic fallback only when no API key is configured",
+    "jev": "require TypeSafe Jev",
+    "offline": "deterministic fallback only"
+  },
+  "allowed_actions": [
+    "collect_more_evidence",
+    "inspect_data_quality",
+    "inspect_state_coverage",
+    "prepare_formal_review",
+    "stop_protocol_breach"
+  ],
+  "zero_completed_trade_actions": [
+    "collect_more_evidence",
+    "inspect_data_quality"
+  ],
+  "hard_vetoes": [
+    "strategy_promotion",
+    "live_trading",
+    "leverage",
+    "frozen_definition_changes"
+  ],
+  "questions": [
+    "research_action",
+    "dominant_uncertainty",
+    "protocol_intact",
+    "evidence_maturity"
+  ],
+  "claims": {
+    "frozen_trading_shadow_unchanged": true,
+    "actual_jev_output_must_identify_provider_and_model": true,
+    "offline_fallback_must_not_be_labeled_as_jev": true
+  },
+  "default_provider": "auto",
+  "timeout_s": 3,
+  "implementation_freeze_commit": "9f55453e0512f3cf789e0e6e2ff2c5cbed3f9c7f",
+  "validation": {
+    "workflow": "Jev Research Decision Layer",
+    "run_id": 36013217427,
+    "typesafe_sdk_version": "0.7.1",
+    "decision_tests": 8,
+    "action_tests": 6,
+    "provider_resolution": "auto_offline_no_api_key",
+    "selected_action": "collect_more_evidence",
+    "executed_action_status": "ACCUMULATE_UNCHANGED"
+  },
+  "implementation_freeze_note": "Jev research-decision v1 and bounded action semantics are frozen at the implementation commit above. Later changes must use a new decision-contract version if they alter questions, allowed actions, provider resolution, authority boundaries, or action semantics."
+}

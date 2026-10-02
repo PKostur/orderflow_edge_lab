@@ -1,0 +1,940 @@
+{
+ "development": {
+  "coins": 70,
+  "books": {
+   "Z1_weekend": {
+    "sharpe": 0.7517028672021625,
+    "t": 1.8652062691052653,
+    "annual_return": 0.3569205468030847,
+    "max_drawdown": -0.6246036961957872,
+    "days": 2289,
+    "halves": [
+     0.9693243071175491,
+     0.524880953605465
+    ],
+    "regimes": {
+     "trend_efficiency": {
+      "CHOP": {
+       "days": 760,
+       "mean_bps_day": -4.052573084356753,
+       "sharpe": -0.34421075143334473
+      },
+      "MIXED": {
+       "days": 732,
+       "mean_bps_day": -14.294458524075225,
+       "sharpe": -0.987280768354411
+      },
+      "TREND": {
+       "days": 723,
+       "mean_bps_day": 48.14230608190791,
+       "sharpe": 3.77812690789393
+      }
+     },
+     "volatility": {
+      "HIGH_VOL": {
+       "days": 1096,
+       "mean_bps_day": 16.1625372345172,
+       "sharpe": 1.1964069497709606
+      },
+      "LOW_VOL": {
+       "days": 1113,
+       "mean_bps_day": 3.555018793960301,
+       "sharpe": 0.27994132234281915
+      }
+     },
+     "direction": {
+      "BEAR": {
+       "days": 1098,
+       "mean_bps_day": -0.1238186665658437,
+       "sharpe": -0.009951312026334732
+      },
+      "BULL": {
+       "days": 1091,
+       "mean_bps_day": 19.04822488049597,
+       "sharpe": 1.3879850643112894
+      }
+     }
+    },
+    "blend3_sharpe": 2.0879142038430487,
+    "blend4_sharpe": 2.133068515427129,
+    "corr_to_legs": {
+     "S1": 0.11347331669952147,
+     "S2": -0.04454065500766575,
+     "S3": 0.014112646628684236
+    }
+   },
+   "Z2_btc_leadlag": {
+    "sharpe": -1.013191463503632,
+    "t": -2.6566278904660363,
+    "annual_return": -0.5829316113216814,
+    "max_drawdown": -0.9944703558335316,
+    "days": 2282,
+    "halves": [
+     -1.40540069196776,
+     -0.5044939893452202
+    ],
+    "regimes": {
+     "trend_efficiency": {
+      "CHOP": {
+       "days": 760,
+       "mean_bps_day": -22.192788871942373,
+       "sharpe": -1.5750761688965205
+      },
+      "MIXED": {
+       "days": 732,
+       "mean_bps_day": -19.380735313832037,
+       "sharpe": -1.213727199554133
+      },
+      "TREND": {
+       "days": 723,
+       "mean_bps_day": -8.249117780674803,
+       "sharpe": -0.4674091820765682
+      }
+     },
+     "volatility": {
+      "HIGH_VOL": {
+       "days": 1096,
+       "mean_bps_day": -29.660200928229152,
+       "sharpe": -1.6640968351031828
+      },
+      "LOW_VOL": {
+       "days": 1113,
+       "mean_bps_day": -3.932333731710601,
+       "sharpe": -0.284294456261718
+      }
+     },
+     "direction": {
+      "BEAR": {
+       "days": 1098,
+       "mean_bps_day": -13.57282129532821,
+       "sharpe": -0.8593295269261341
+      },
+      "BULL": {
+       "days": 1091,
+       "mean_bps_day": -18.642407540518786,
+       "sharpe": -1.1707878887214735
+      }
+     }
+    },
+    "blend3_sharpe": 2.0879142038430487,
+    "blend4_sharpe": 1.3549248195783086,
+    "corr_to_legs": {
+     "S1": -0.04003658838542408,
+     "S2": -0.04479011426727761,
+     "S3": 0.038778898646504655
+    }
+   },
+   "Z3_residual_reversal": {
+    "sharpe": -0.3290041682829249,
+    "t": -0.784128445410577,
+    "annual_return": -0.1034134980092054,
+    "max_drawdown": -0.8226765622806331,
+    "days": 2135,
+    "halves": [
+     -0.006073583590756109,
+     -0.7758829293383791
+    ],
+    "regimes": {
+     "trend_efficiency": {
+      "CHOP": {
+       "days": 703,
+       "mean_bps_day": -3.989857925696976,
+       "sharpe": -0.5757167022597556
+      },
+      "MIXED": {
+       "days": 709,
+       "mean_bps_day": -2.8049991588047534,
+       "sharpe": -0.3599592544949972
+      },
+      "TREND": {
+       "days": 723,
+       "mean_bps_day": -1.736330285685712,
+       "sharpe": -0.16338347946418555
+      }
+     },
+     "volatility": {
+      "HIGH_VOL": {
+       "days": 1038,
+       "mean_bps_day": -1.004024933564128,
+       "sharpe": -0.11497794295284734
+      },
+      "LOW_VOL": {
+       "days": 1097,
+       "mean_bps_day": -4.564087001703508,
+       "sharpe": -0.5370306560389233
+      }
+     },
+     "direction": {
+      "BEAR": {
+       "days": 1061,
+       "mean_bps_day": 1.5697012147743419,
+       "sharpe": 0.24553384046108273
+      },
+      "BULL": {
+       "days": 1074,
+       "mean_bps_day": -7.182899730711256,
+       "sharpe": -0.6943663627570198
+      }
+     }
+    },
+    "blend3_sharpe": 2.125905710566211,
+    "blend4_sharpe": 1.9895544219226844,
+    "corr_to_legs": {
+     "S1": -0.1511838219578876,
+     "S2": -0.3922907721578939,
+     "S3": -0.07960374293928965
+    }
+   },
+   "Z4_max_lottery": {
+    "sharpe": -1.020115783225456,
+    "t": -2.4307656459174822,
+    "annual_return": -0.36862367522051204,
+    "max_drawdown": -0.9499310634478761,
+    "days": 2240,
+    "halves": [
+     -0.8844951884515592,
+     -1.3291315613464834
+    ],
+    "regimes": {
+     "trend_efficiency": {
+      "CHOP": {
+       "days": 760,
+       "mean_bps_day": -3.1786250486589824,
+       "sharpe": -0.4051162326512049
+      },
+      "MIXED": {
+       "days": 732,
+       "mean_bps_day": -15.153109184558703,
+       "sharpe": -1.8671623383833675
+      },
+      "TREND": {
+       "days": 723,
+       "mean_bps_day": -11.810139195560831,
+       "sharpe": -0.9122391618807271
+      }
+     },
+     "volatility": {
+      "HIGH_VOL": {
+       "days": 1096,
+       "mean_bps_day": -12.605755206111397,
+       "sharpe": -1.097629323352053
+      },
+      "LOW_VOL": {
+       "days": 1113,
+       "mean_bps_day": -7.395016974456594,
+       "sharpe": -0.9217528943759927
+      }
+     },
+     "direction": {
+      "BEAR": {
+       "days": 1098,
+       "mean_bps_day": -4.671901802688583,
+       "sharpe": -0.6560702218687928
+      },
+      "BULL": {
+       "days": 1091,
+       "mean_bps_day": -15.505786818621644,
+       "sharpe": -1.278896662332141
+      }
+     }
+    },
+    "blend3_sharpe": 2.0879142038430487,
+    "blend4_sharpe": 1.6872806372801088,
+    "corr_to_legs": {
+     "S1": -0.24945643323046954,
+     "S2": -0.34559562775312,
+     "S3": -0.1904016386471641
+    }
+   },
+   "Z5_high_proximity": {
+    "sharpe": -0.0501585376632311,
+    "t": -0.11243189203693245,
+    "annual_return": -0.013230170997013017,
+    "max_drawdown": -0.3997867458286376,
+    "days": 2016,
+    "halves": [
+     -0.16042126997061193,
+     0.03549610713966827
+    ],
+    "regimes": {
+     "trend_efficiency": {
+      "CHOP": {
+       "days": 677,
+       "mean_bps_day": 1.1466794831763056,
+       "sharpe": 0.17181114488634486
+      },
+      "MIXED": {
+       "days": 674,
+       "mean_bps_day": 1.7790603117014816,
+       "sharpe": 0.2382582621946366
+      },
+      "TREND": {
+       "days": 665,
+       "mean_bps_day": -4.069367013170229,
+       "sharpe": -0.5410948928271302
+      }
+     },
+     "volatility": {
+      "HIGH_VOL": {
+       "days": 926,
+       "mean_bps_day": -3.095971130667051,
+       "sharpe": -0.4197176336583031
+      },
+      "LOW_VOL": {
+       "days": 1090,
+       "mean_bps_day": 1.9597512508593062,
+       "sharpe": 0.2761044856595678
+      }
+     },
+     "direction": {
+      "BEAR": {
+       "days": 1052,
+       "mean_bps_day": -6.089345389884307,
+       "sharpe": -0.906134794363358
+      },
+      "BULL": {
+       "days": 964,
+       "mean_bps_day": 5.887189778627848,
+       "sharpe": 0.7614391863915874
+      }
+     }
+    },
+    "blend3_sharpe": 1.7029051097076,
+    "blend4_sharpe": 1.4965952258448358,
+    "corr_to_legs": {
+     "S1": 0.05654531313254797,
+     "S2": 0.40619544105225514,
+     "S3": -0.019664069588668877
+    }
+   },
+   "Z6_volume_shock": {
+    "sharpe": 0.007436794750638607,
+    "t": 0.01765152401110369,
+    "annual_return": 0.0021682737532466006,
+    "max_drawdown": -0.6019172218743538,
+    "days": 2107,
+    "halves": [
+     -0.19570408658320843,
+     0.29243236313959
+    ],
+    "regimes": {
+     "trend_efficiency": {
+      "CHOP": {
+       "days": 698,
+       "mean_bps_day": 1.2303463137835011,
+       "sharpe": 0.21313442501665347
+      },
+      "MIXED": {
+       "days": 698,
+       "mean_bps_day": 1.5560901835623864,
+       "sharpe": 0.20528975873949892
+      },
+      "TREND": {
+       "days": 711,
+       "mean_bps_day": -2.559447039469416,
+       "sharpe": -0.25579169450262834
+      }
+     },
+     "volatility": {
+      "HIGH_VOL": {
+       "days": 1011,
+       "mean_bps_day": -1.0353445797630962,
+       "sharpe": -0.11096110991929216
+      },
+      "LOW_VOL": {
+       "days": 1096,
+       "mean_bps_day": 1.069251095095954,
+       "sharpe": 0.16418874253356416
+      }
+     },
+     "direction": {
+      "BEAR": {
+       "days": 1052,
+       "mean_bps_day": -1.4189689996702413,
+       "sharpe": -0.2757779912382008
+      },
+      "BULL": {
+       "days": 1055,
+       "mean_bps_day": 1.5335746139694502,
+       "sharpe": 0.15253396450479373
+      }
+     }
+    },
+    "blend3_sharpe": 2.0193132683178483,
+    "blend4_sharpe": 1.6330194891248182,
+    "corr_to_legs": {
+     "S1": 0.22678129101088976,
+     "S2": 0.39767319954332814,
+     "S3": 0.15542251540383206
+    }
+   },
+   "Z7_skewness": {
+    "sharpe": -0.8429407657776563,
+    "t": -2.198841749731885,
+    "annual_return": -0.2704784688433778,
+    "max_drawdown": -0.8809293431547992,
+    "days": 2135,
+    "halves": [
+     -0.973821751004641,
+     -0.7476559486913844
+    ],
+    "regimes": {
+     "trend_efficiency": {
+      "CHOP": {
+       "days": 703,
+       "mean_bps_day": -3.2327895376310356,
+       "sharpe": -0.5260708869589895
+      },
+      "MIXED": {
+       "days": 709,
+       "mean_bps_day": -13.40237447447719,
+       "sharpe": -1.7806444700722466
+      },
+      "TREND": {
+       "days": 723,
+       "mean_bps_day": -5.596408420091704,
+       "sharpe": -0.47988320544262925
+      }
+     },
+     "volatility": {
+      "HIGH_VOL": {
+       "days": 1038,
+       "mean_bps_day": -9.487055462393464,
+       "sharpe": -0.9042652144714264
+      },
+      "LOW_VOL": {
+       "days": 1097,
+       "mean_bps_day": -5.445373076682617,
+       "sharpe": -0.800187006170018
+      }
+     },
+     "direction": {
+      "BEAR": {
+       "days": 1061,
+       "mean_bps_day": -3.3321774153386765,
+       "sharpe": -0.6045991216209812
+      },
+      "BULL": {
+       "days": 1074,
+       "mean_bps_day": -11.439197018073475,
+       "sharpe": -1.0289088132009838
+      }
+     }
+    },
+    "blend3_sharpe": 2.125905710566211,
+    "blend4_sharpe": 1.7150517809172197,
+    "corr_to_legs": {
+     "S1": -0.25866688567716695,
+     "S2": -0.3763054066835308,
+     "S3": -0.13231608451656812
+    }
+   }
+  },
+  "regime_share": {
+   "trend_efficiency": {
+    "CHOP": 0.343,
+    "MIXED": 0.331,
+    "TREND": 0.326
+   },
+   "volatility": {
+    "LOW_VOL": 0.504,
+    "HIGH_VOL": 0.496
+   },
+   "direction": {
+    "BEAR": 0.501,
+    "BULL": 0.499
+   }
+  }
+ },
+ "confirmation": {
+  "coins": 60,
+  "books": {
+   "Z1_weekend": {
+    "sharpe": 0.6644642111943383,
+    "t": 1.6181143168451477,
+    "annual_return": 0.3414960003369566,
+    "max_drawdown": -0.7021030363606424,
+    "days": 2261,
+    "halves": [
+     0.7848959710040301,
+     0.5390416176521459
+    ],
+    "regimes": {
+     "trend_efficiency": {
+      "CHOP": {
+       "days": 735,
+       "mean_bps_day": -4.679250447581952,
+       "sharpe": -0.34670692848743756
+      },
+      "MIXED": {
+       "days": 710,
+       "mean_bps_day": 5.676652866678207,
+       "sharpe": 0.3819209278428484
+      },
+      "TREND": {
+       "days": 742,
+       "mean_bps_day": 25.144824031268026,
+       "sharpe": 1.8521151695337637
+      }
+     },
+     "volatility": {
+      "HIGH_VOL": {
+       "days": 968,
+       "mean_bps_day": 11.090088643785315,
+       "sharpe": 0.7736168920127905
+      },
+      "LOW_VOL": {
+       "days": 1213,
+       "mean_bps_day": 7.442572925458857,
+       "sharpe": 0.5420989167189196
+      }
+     },
+     "direction": {
+      "BEAR": {
+       "days": 1265,
+       "mean_bps_day": -1.1206316653319406,
+       "sharpe": -0.08352018128948564
+      },
+      "BULL": {
+       "days": 896,
+       "mean_bps_day": 23.586705234560796,
+       "sharpe": 1.5880555210112273
+      }
+     }
+    },
+    "blend3_sharpe": 1.3883365289337408,
+    "blend4_sharpe": 1.3970138007337598,
+    "corr_to_legs": {
+     "S1": 0.05646564673985706,
+     "S2": -0.06751316188100016,
+     "S3": 0.009270547023314857
+    }
+   },
+   "Z2_btc_leadlag": {
+    "sharpe": -0.9979507052535916,
+    "t": -2.6110037072537047,
+    "annual_return": -0.5888487643656481,
+    "max_drawdown": -0.993962022136143,
+    "days": 2259,
+    "halves": [
+     -1.4012299177005785,
+     -0.46758132421425486
+    ],
+    "regimes": {
+     "trend_efficiency": {
+      "CHOP": {
+       "days": 735,
+       "mean_bps_day": -25.704818957781587,
+       "sharpe": -1.8185187182648288
+      },
+      "MIXED": {
+       "days": 710,
+       "mean_bps_day": -1.552496437547091,
+       "sharpe": -0.09412406621683471
+      },
+      "TREND": {
+       "days": 742,
+       "mean_bps_day": -18.515986889461573,
+       "sharpe": -1.0646041640197723
+      }
+     },
+     "volatility": {
+      "HIGH_VOL": {
+       "days": 968,
+       "mean_bps_day": -27.657191041415462,
+       "sharpe": -1.5351104840566172
+      },
+      "LOW_VOL": {
+       "days": 1213,
+       "mean_bps_day": -5.346563745875833,
+       "sharpe": -0.3729251334911056
+      }
+     },
+     "direction": {
+      "BEAR": {
+       "days": 1265,
+       "mean_bps_day": -8.905167836549108,
+       "sharpe": -0.5766965703108311
+      },
+      "BULL": {
+       "days": 896,
+       "mean_bps_day": -23.00282550257119,
+       "sharpe": -1.3522766628993048
+      }
+     }
+    },
+    "blend3_sharpe": 1.3883365289337408,
+    "blend4_sharpe": 0.7534660564960503,
+    "corr_to_legs": {
+     "S1": 0.0159846126707392,
+     "S2": -0.03975592759265874,
+     "S3": 0.005769427281394852
+    }
+   },
+   "Z3_residual_reversal": {
+    "sharpe": -1.2543843476580767,
+    "t": -3.0000090313743746,
+    "annual_return": -0.4643930988183061,
+    "max_drawdown": -0.9630524930225668,
+    "days": 2079,
+    "halves": [
+     -1.3186295610162906,
+     -1.2925593935890198
+    ],
+    "regimes": {
+     "trend_efficiency": {
+      "CHOP": {
+       "days": 697,
+       "mean_bps_day": -8.465145014344856,
+       "sharpe": -0.8452216495288303
+      },
+      "MIXED": {
+       "days": 667,
+       "mean_bps_day": -14.035073948079567,
+       "sharpe": -1.640547985069727
+      },
+      "TREND": {
+       "days": 715,
+       "mean_bps_day": -15.649960260670445,
+       "sharpe": -1.3555446766103896
+      }
+     },
+     "volatility": {
+      "HIGH_VOL": {
+       "days": 926,
+       "mean_bps_day": -8.713300747380313,
+       "sharpe": -0.8422136513480432
+      },
+      "LOW_VOL": {
+       "days": 1153,
+       "mean_bps_day": -15.94345662851052,
+       "sharpe": -1.597805197085107
+      }
+     },
+     "direction": {
+      "BEAR": {
+       "days": 1201,
+       "mean_bps_day": -10.058969229714663,
+       "sharpe": -1.411517882008586
+      },
+      "BULL": {
+       "days": 878,
+       "mean_bps_day": -16.36731200439578,
+       "sharpe": -1.2400457633340436
+      }
+     }
+    },
+    "blend3_sharpe": 1.3650485113394262,
+    "blend4_sharpe": 0.6458906643689648,
+    "corr_to_legs": {
+     "S1": -0.18709078943907856,
+     "S2": -0.4421719972578747,
+     "S3": -0.2094643290726268
+    }
+   },
+   "Z4_max_lottery": {
+    "sharpe": -0.9611633468279079,
+    "t": -2.5681191986067033,
+    "annual_return": -0.35489950621578525,
+    "max_drawdown": -0.9373399464927114,
+    "days": 2114,
+    "halves": [
+     -1.061547170998351,
+     -0.9188909440127476
+    ],
+    "regimes": {
+     "trend_efficiency": {
+      "CHOP": {
+       "days": 721,
+       "mean_bps_day": -7.193544557491808,
+       "sharpe": -0.754027236374743
+      },
+      "MIXED": {
+       "days": 676,
+       "mean_bps_day": -13.178803325516018,
+       "sharpe": -1.524973723087025
+      },
+      "TREND": {
+       "days": 717,
+       "mean_bps_day": -9.00918391085973,
+       "sharpe": -0.7613427418939782
+      }
+     },
+     "volatility": {
+      "HIGH_VOL": {
+       "days": 954,
+       "mean_bps_day": -10.272738517270799,
+       "sharpe": -0.9426223085435744
+      },
+      "LOW_VOL": {
+       "days": 1160,
+       "mean_bps_day": -9.271387062595263,
+       "sharpe": -0.9832448426132975
+      }
+     },
+     "direction": {
+      "BEAR": {
+       "days": 1219,
+       "mean_bps_day": -8.80172227294334,
+       "sharpe": -1.2168917197185123
+      },
+      "BULL": {
+       "days": 895,
+       "mean_bps_day": -10.978438086445715,
+       "sharpe": -0.8405435944262789
+      }
+     }
+    },
+    "blend3_sharpe": 1.3883365289337408,
+    "blend4_sharpe": 0.8347699413322376,
+    "corr_to_legs": {
+     "S1": -0.11492729223195128,
+     "S2": -0.4717966243086046,
+     "S3": -0.07519774199688045
+    }
+   },
+   "Z5_high_proximity": {
+    "sharpe": 0.588983938164022,
+    "t": 1.2450953300736416,
+    "annual_return": 0.1912040660110985,
+    "max_drawdown": -0.452614450345718,
+    "days": 1960,
+    "halves": [
+     0.9273945458859735,
+     0.27968486442525214
+    ],
+    "regimes": {
+     "trend_efficiency": {
+      "CHOP": {
+       "days": 669,
+       "mean_bps_day": -0.23794772358320468,
+       "sharpe": -0.028862426465173112
+      },
+      "MIXED": {
+       "days": 648,
+       "mean_bps_day": 12.534362443670604,
+       "sharpe": 1.336944481560614
+      },
+      "TREND": {
+       "days": 643,
+       "mean_bps_day": 3.5836960886415308,
+       "sharpe": 0.3961451137960818
+      }
+     },
+     "volatility": {
+      "HIGH_VOL": {
+       "days": 853,
+       "mean_bps_day": 4.641805617813933,
+       "sharpe": 0.5016452463831502
+      },
+      "LOW_VOL": {
+       "days": 1107,
+       "mean_bps_day": 5.698226042838846,
+       "sharpe": 0.6617133275476873
+      }
+     },
+     "direction": {
+      "BEAR": {
+       "days": 1201,
+       "mean_bps_day": 3.338344082077531,
+       "sharpe": 0.41323374344322916
+      },
+      "BULL": {
+       "days": 759,
+       "mean_bps_day": 8.24511881270458,
+       "sharpe": 0.8200936604975437
+      }
+     }
+    },
+    "blend3_sharpe": 1.2503061744471524,
+    "blend4_sharpe": 1.2100492400129879,
+    "corr_to_legs": {
+     "S1": 0.13030842689574168,
+     "S2": 0.49718605650089726,
+     "S3": 0.14520358879378886
+    }
+   },
+   "Z6_volume_shock": {
+    "sharpe": 0.09865011109821854,
+    "t": 0.22606219893648566,
+    "annual_return": 0.032323727895558714,
+    "max_drawdown": -0.5107035583808313,
+    "days": 2051,
+    "halves": [
+     -0.01477550624340165,
+     0.26989537021932125
+    ],
+    "regimes": {
+     "trend_efficiency": {
+      "CHOP": {
+       "days": 688,
+       "mean_bps_day": 0.0853236662962817,
+       "sharpe": 0.010781896593664754
+      },
+      "MIXED": {
+       "days": 662,
+       "mean_bps_day": 6.13626363509267,
+       "sharpe": 0.7157169402641387
+      },
+      "TREND": {
+       "days": 701,
+       "mean_bps_day": -3.287562589998065,
+       "sharpe": -0.32081945312851506
+      }
+     },
+     "volatility": {
+      "HIGH_VOL": {
+       "days": 898,
+       "mean_bps_day": -1.6629774432019633,
+       "sharpe": -0.1815911915282728
+      },
+      "LOW_VOL": {
+       "days": 1153,
+       "mean_bps_day": 2.87049573048561,
+       "sharpe": 0.32485615223495873
+      }
+     },
+     "direction": {
+      "BEAR": {
+       "days": 1201,
+       "mean_bps_day": 3.372385397288089,
+       "sharpe": 0.4875161479065248
+      },
+      "BULL": {
+       "days": 850,
+       "mean_bps_day": -2.6281259163393544,
+       "sharpe": -0.23330780109876054
+      }
+     }
+    },
+    "blend3_sharpe": 1.2484178763075988,
+    "blend4_sharpe": 1.1022479454474434,
+    "corr_to_legs": {
+     "S1": 0.09673656912049788,
+     "S2": 0.23634126759317522,
+     "S3": 0.08683137772211315
+    }
+   },
+   "Z7_skewness": {
+    "sharpe": -0.024641316711406007,
+    "t": -0.06522311988050751,
+    "annual_return": -0.007414707784565027,
+    "max_drawdown": -0.7179683212812564,
+    "days": 2079,
+    "halves": [
+     0.2473343416964846,
+     -0.3623903850516178
+    ],
+    "regimes": {
+     "trend_efficiency": {
+      "CHOP": {
+       "days": 697,
+       "mean_bps_day": 7.278313640656293,
+       "sharpe": 0.9968351010258215
+      },
+      "MIXED": {
+       "days": 667,
+       "mean_bps_day": -9.888502149146515,
+       "sharpe": -1.2807555033018942
+      },
+      "TREND": {
+       "days": 715,
+       "mean_bps_day": 1.5388988758624147,
+       "sharpe": 0.16236826536662102
+      }
+     },
+     "volatility": {
+      "HIGH_VOL": {
+       "days": 926,
+       "mean_bps_day": 2.2117946098645445,
+       "sharpe": 0.2476562958419755
+      },
+      "LOW_VOL": {
+       "days": 1153,
+       "mean_bps_day": -2.1426326439169427,
+       "sharpe": -0.2800739863710969
+      }
+     },
+     "direction": {
+      "BEAR": {
+       "days": 1201,
+       "mean_bps_day": -3.8235415014951672,
+       "sharpe": -0.5619200246026504
+      },
+      "BULL": {
+       "days": 878,
+       "mean_bps_day": 4.7491340701526585,
+       "sharpe": 0.4808006573677252
+      }
+     }
+    },
+    "blend3_sharpe": 1.3650485113394262,
+    "blend4_sharpe": 1.1552714728086826,
+    "corr_to_legs": {
+     "S1": -0.0015953134281611507,
+     "S2": -0.26859374933493907,
+     "S3": -0.10577989818814625
+    }
+   }
+  },
+  "regime_share": {
+   "trend_efficiency": {
+    "TREND": 0.339,
+    "CHOP": 0.336,
+    "MIXED": 0.325
+   },
+   "volatility": {
+    "LOW_VOL": 0.556,
+    "HIGH_VOL": 0.444
+   },
+   "direction": {
+    "BEAR": 0.585,
+    "BULL": 0.415
+   }
+  }
+ },
+ "verdicts": {
+  "Z1_weekend": {
+   "development_pass": false,
+   "confirmation_pass": true,
+   "bonferroni_survives": false,
+   "overall": "FAIL"
+  },
+  "Z2_btc_leadlag": {
+   "development_pass": false,
+   "confirmation_pass": false,
+   "bonferroni_survives": false,
+   "overall": "FAIL"
+  },
+  "Z3_residual_reversal": {
+   "development_pass": false,
+   "confirmation_pass": false,
+   "bonferroni_survives": false,
+   "overall": "FAIL"
+  },
+  "Z4_max_lottery": {
+   "development_pass": false,
+   "confirmation_pass": false,
+   "bonferroni_survives": false,
+   "overall": "FAIL"
+  },
+  "Z5_high_proximity": {
+   "development_pass": false,
+   "confirmation_pass": false,
+   "bonferroni_survives": false,
+   "overall": "FAIL"
+  },
+  "Z6_volume_shock": {
+   "development_pass": false,
+   "confirmation_pass": false,
+   "bonferroni_survives": false,
+   "overall": "FAIL"
+  },
+  "Z7_skewness": {
+   "development_pass": false,
+   "confirmation_pass": false,
+   "bonferroni_survives": false,
+   "overall": "FAIL"
+  }
+ }
+}

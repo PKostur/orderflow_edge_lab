@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "protocol_id": "multi-premia-robustness-v1",
+  "status": "DECLARED_BEFORE_EVALUATION",
+  "purpose": "Robustness, not selection: check whether the blend's result survives neighbouring parameters. The registered forward watch keeps its frozen parameters whatever this shows.",
+  "grid": {"S2_lookback_days": [14, 30, 60], "S3_lookback_days": [3, 7, 14], "rebalance_days": [3, 7, 14], "quantile": [0.2, 0.25, 0.33]},
+  "method": "vary one dimension at a time around the frozen point (30, 7, 7, 0.25); report the blend, S2 and S3 Sharpe, and max drawdown for every point",
+  "robust_if": "every neighbour keeps blend Sharpe >= 1.5 and >= S1 trend alone",
+  "data": "same cached 70-coin data as multi-premia-v1",
+  "claims": {"strategy_promotion_authorized": false}
+}

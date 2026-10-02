@@ -1,0 +1,68 @@
+name: Trend Bot Paper
+
+# One paper cycle of the crypto-trend-core bot right after each 8h bar close.
+# State and the hash-chained journal persist on the bot-state branch.
+# Paper adapter only: there is no live order transmission path in this code.
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/payoff-geometry-v1-1
+    paths:
+      - "src/orderflow_edge_lab/trend_bot.py"
+      - ".github/workflows/trend-bot-paper.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: trend-bot-paper
+  cancel-in-progress: false
+
+env:
+  STATE_BRANCH: bot-state/crypto-trend-core-paper
+
+jobs:
+  cycle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e ".[research]"
+      - name: Bot tests
+        run: python -m unittest tests.test_trend_bot tests.test_vol_sizing -v
+      - name: Check out bot state
+        run: |
+          git fetch origin "$STATE_BRANCH" && git worktree add bot_state "origin/$STATE_BRANCH" && \
+            (cd bot_state && git switch -c "$STATE_BRANCH") || \
+            (git worktree add --detach bot_state && cd bot_state && git switch --orphan "$STATE_BRANCH")
+      - name: Run one paper cycle
+        id: cycle
+        run: |
+          set +e
+          python -m orderflow_edge_lab.trend_bot --state-dir bot_state/paper | tee cycle.json
+          code=${PIPESTATUS[0]}
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          # 0 = cycle done, 2 = fail-closed halt (journaled); anything else is an error
+          if [ "$code" != "0" ] && [ "$code" != "2" ]; then exit "$code"; fi
+      - name: Persist state
+        run: |
+          cd bot_state
+          git config user.name "trend-bot"
+          git config user.email "trend-bot@users.noreply.github.com"
+          rm -f paper/state.lock paper/*.partial
+          git add paper
+          git commit -m "paper cycle $(date -u +%Y-%m-%dT%H:%MZ): $(cat ../cycle.json | tail -1)" || echo "no change"
+          git push origin "HEAD:$STATE_BRANCH"
+      - name: Upload cycle output
+        uses: actions/upload-artifact@v6
+        with:
+          name: trend-bot-paper-${{ github.run_id }}
+          path: |
+            cycle.json
+            bot_state/paper/state.json

@@ -72,6 +72,88 @@ def test_report_is_paper_only_and_cost_aware() -> None:
     assert report["metrics"]["executed_rebalances"] == 1
     assert report["metrics"]["open_symbol_positions"] == 4
     assert report["economics"]["round_trip_cost_bps"] == 20.0
+    assert "symbol_diagnostics" in report
+    assert set(report["symbol_diagnostics"]) == set(frames)
+    total_symbol_net = sum(
+        row["arithmetic_net_contribution_sum"]
+        for row in report["symbol_diagnostics"].values()
+    )
+    total_interval_net = sum(row["net_return"] for row in report["portfolio_intervals"])
+    assert abs(total_symbol_net - total_interval_net) < 1e-12
+    assert sum(
+        row["allocated_trading_cost_return_sum"]
+        for row in report["symbol_diagnostics"].values()
+    ) < 0.0
+    concentration = report["contribution_concentration"]
+    assert concentration["active_contributor_count"] == 4
+    assert concentration["absolute_contribution_hhi"] is not None
+    assert concentration["largest_absolute_contributor"] is not None
+    assert len(concentration["contributor_removal_stress"]) == 4
+    top = concentration["largest_absolute_contributor"]
+    assert abs(
+        concentration["arithmetic_net_without_largest_absolute_contributor"]
+        - (total_symbol_net - top["contribution"])
+    ) < 1e-12
+    if total_symbol_net > 0.0:
+        assert (
+            concentration["positive_net_survives_removing_largest_absolute_contributor"]
+            == (
+                concentration["arithmetic_net_without_largest_absolute_contributor"]
+                > 0.0
+            )
+        )
+    assert abs(
+        concentration["arithmetic_net_contribution_sum"] - total_symbol_net
+    ) < 1e-12
     assert report["claims"]["paper_shadow_only"] is True
+    assert report["claims"]["contribution_concentration_diagnostics_are_non_gating"] is True
+    assert report["claims"]["contributor_removal_stress_is_attribution_not_counterfactual_strategy"] is True
     assert report["claims"]["profitable_edge_established"] is False
     assert report["claims"]["live_order_transmission_supported"] is False
+
+
+def test_completed_holding_period_decomposition_reconciles() -> None:
+    candidate = _candidate()
+    frames = _frames()
+    funding = {
+        symbol: pd.DataFrame(
+            columns=["funding_rate"],
+            index=pd.DatetimeIndex([], tz="UTC"),
+        )
+        for symbol in frames
+    }
+    report = build_forward_report(
+        frames,
+        funding,
+        candidate,
+        as_of_utc="2026-09-22T12:00:00Z",
+    )
+    assert report["metrics"]["completed_holding_periods"] == 1
+    assert len(report["completed_holding_periods"]) == 1
+    period = report["completed_holding_periods"][0]
+    assert period["daily_interval_count"] == 7
+    matching = [
+        row["net_return"]
+        for row in report["portfolio_intervals"]
+        if pd.Timestamp(row["start"]) >= pd.Timestamp(period["start"])
+        and pd.Timestamp(row["end"]) <= pd.Timestamp(period["end"])
+    ]
+    expected = 1.0
+    for value in matching:
+        expected *= 1.0 + value
+    expected -= 1.0
+    assert abs(period["net_return"] - expected) < 1e-12
+    symbol_sum = sum(period["symbol_arithmetic_net_contributions"].values())
+    interval_sum = sum(matching)
+    assert abs(symbol_sum - interval_sum) < 1e-12
+    period_concentration = period["contribution_concentration"]
+    assert abs(
+        period_concentration["arithmetic_net_contribution_sum"] - interval_sum
+    ) < 1e-12
+    assert period_concentration["largest_absolute_contributor"] is not None
+    assert period_concentration["contributor_removal_stress"]
+    top = period_concentration["largest_absolute_contributor"]
+    assert abs(
+        period_concentration["arithmetic_net_without_largest_absolute_contributor"]
+        - (interval_sum - top["contribution"])
+    ) < 1e-12
