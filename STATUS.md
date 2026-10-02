@@ -66,7 +66,7 @@ terminal: no retuning, re-siding, or re-phasing under the same IDs.
 
 <!-- BEGIN GENERATED: forward-watches (scripts/generate_status.py) -->
 
-_Generated 2026-10-02T06:42:36Z from `config/prospective_review_clock_v1.json` and the latest dashboard snapshot. Do not edit by hand._
+_Generated 2026-10-02T20:54:58Z from `config/prospective_review_clock_v1.json` and the latest dashboard snapshot. Do not edit by hand._
 
 | Watch | Config | Start | Review gate | Earliest review | Status | Scored days |
 |---|---|---|---|---|---|---|
@@ -78,9 +78,9 @@ _Generated 2026-10-02T06:42:36Z from `config/prospective_review_clock_v1.json` a
 | `multi-premia-human-v1-forward` | `config/multi_premia_blend_v1.json` | 2026-09-29 | 180 calendar days | **2027-03-28** | `COLLECTING` | 2 |
 | `zoo-mirror-forward-v1` | `config/zoo_mirror_forward_v1.json` | 2026-10-03 | 180 calendar days | **2027-04-01** | `PRE_START` | 0 |
 | `news-sentiment-v1-forward` | `config/news_sentiment_v1.json` | 2026-11-01 | 180 calendar days | **2027-04-30** | `PRE_START` | 0 |
-| `universal-cross-asset-trend-forward-v1` | `config/universal_cross_asset_trend_forward_v1.json` | 2026-09-28 | 365 calendar days | **2027-09-28** | `COLLECTING` | 3 |
-| `universal-cross-asset-trend-invvol-forward-v1` | `config/universal_cross_asset_trend_invvol_forward_v1.json` | 2026-09-28 | 365 calendar days | **2027-09-28** | `COLLECTING` | 3 |
-| `universal-trend-portfolio-forward-v1` | `config/universal_trend_portfolio_forward_v1.json` | 2026-09-28 | 365 calendar days | **2027-09-28** | `COLLECTING` | 3 |
+| `universal-cross-asset-trend-forward-v1` | `config/universal_cross_asset_trend_forward_v1.json` | 2026-09-28 | 365 calendar days | **2027-09-28** | `COLLECTING` | 4 |
+| `universal-cross-asset-trend-invvol-forward-v1` | `config/universal_cross_asset_trend_invvol_forward_v1.json` | 2026-09-28 | 365 calendar days | **2027-09-28** | `COLLECTING` | 4 |
+| `universal-trend-portfolio-forward-v1` | `config/universal_trend_portfolio_forward_v1.json` | 2026-09-28 | 365 calendar days | **2027-09-28** | `COLLECTING` | 4 |
 
 No verdict of any kind before a watch's earliest review date; the frozen workflow computes it.
 
