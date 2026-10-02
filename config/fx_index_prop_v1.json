@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "protocol_id": "fx-index-prop-v1",
+  "status": "DECLARED_BEFORE_EVALUATION",
+  "question": "Do FX and stock-index strategies (traded as FTMO-style CFDs) earn a premium after costs and financing, and are they a better fit than the crypto blend for maximizing prop-firm value?",
+  "registration_note": "Declared 2026-10-03 before any strategy result on these instruments (daily prices were downloaded first to check availability; no strategy was run). The repository already showed fast crypto-style trend rules fail on traditional assets (ETF holdout, FX t -2.6), so only slow, literature-standard rules are used, one parameter set each. Time split: development 2006-01-01 to 2015-12-31, confirmation 2016-01-01 to 2026-09-12 (evaluated once, same run).",
+  "data": "Yahoo daily OHLC (split-adjusted), 2005-01 to 2026-09; 00:00 UTC stamps; a signal uses closes up to day d-1 and trades at day d's close-to-close return (one-day lag)",
+  "universe": {
+    "fx": ["EURUSD=X", "GBPUSD=X", "USDJPY=X", "AUDUSD=X", "USDCAD=X", "USDCHF=X", "NZDUSD=X", "EURJPY=X", "EURGBP=X", "GBPJPY=X"],
+    "indices": ["^GSPC", "^NDX", "^DJI", "^GDAXI", "^FTSE", "^N225", "^STOXX50E", "^AXJO", "^FCHI", "^HSI"]
+  },
+  "costs": {"fx_round_trip_bps": 3, "index_round_trip_bps": 4, "index_long_financing_per_year": 0.05, "fx_swap": "not modelled (no historical rate data); FX carry therefore not tested"},
+  "strategies": {
+    "X1_tsmom_fx": "FX time-series momentum: signal = mean of sign(1, 3, 6, 12-month return), each instrument scaled to 10% annual vol (60-day), rebalanced weekly, equal weight across instruments",
+    "X1_tsmom_index": "same on indices",
+    "X2_index_long_voltarget": "equal-weight long indices, each scaled to 10% annual vol (60-day), weekly rebalance, minus long financing",
+    "X3_index_rsi2_dips": "long an index when its 2-day RSI < 10 and it is above its 200-day average; exit when RSI(2) > 70; 1x per index at 10% vol sizing, equal weight",
+    "X4_fx_xs_momentum": "FX cross-sectional: rank pairs by 3-month return, long top 3 short bottom 3, vol-scaled to 10% each, monthly (every 21 trading days)",
+    "X5_fx_index_blend": "equal-risk blend (inverse 90-day vol, weekly) of X1_tsmom_fx, X1_tsmom_index, X2, X3, X4"
+  },
+  "pass_rules": {
+    "standalone": "development mean > 0 and NW t >= 2, AND confirmation Sharpe > 0 and NW t >= 1.5",
+    "prop_comparison": "career simulation as prop-firm-v7 (24 months, re-buy after failures, on-demand +1% withdrawals) at FTMO 2-step and FTMO 1-step rules for X5 and any passing standalone book, funded scales [0.5, 0.75, 1, 1.25, 1.5] with headroom scaling and challenge scales [1, 2, 3] with headroom scaling and vol guard; compared with the crypto blend's FTMO results in prop-firm-v7"
+  },
+  "claims": {"strategy_promotion_authorized": false, "live_trading_authorized": false, "purchase_advice": false}
+}
