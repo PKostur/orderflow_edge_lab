@@ -31,6 +31,7 @@ WATCHES = [
     ("cross-asset-trend-invvol-forward-v1.yml", "report.json", "Cross-asset trend, inverse-vol", "Cross-asset", "combined", 180),
     ("multi-premia-blend-v1.yml", "zoo_mirror_report.json", "Zoo mirrors (BTC shock reversal, lottery momentum)", "Forward-only candidates", "M4_lottery_momentum", 180),
     ("news-sentiment-v1.yml", "forward_report.json", "News sentiment (news momentum, attention, tone, panic pause)", "Forward-only candidates", "N1_news_momentum", 180),
+    ("multi-premia-blend-v1.yml", "prop_paper_report.json", "Paper prop career (HyroTrader 1-step rules)", "Forward-only candidates", None, 365),
     ("canonical-v3-forward-companion-v1.yml", "report.json", "Canonical v3 companion", "Accounting", None, None),
 ]
 
