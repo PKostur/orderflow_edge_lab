@@ -1,0 +1,12 @@
+# Ownership metadata. Enforcement depends on branch protection or a ruleset.
+* @PKostur
+
+# Research definitions and evidence records require explicit owner visibility.
+/config/** @PKostur
+/research/** @PKostur
+
+# Automation and dependency/security controls require explicit owner visibility.
+/.github/workflows/** @PKostur
+/.github/dependabot.yml @PKostur
+/pyproject.toml @PKostur
+/requirements/** @PKostur
