@@ -120,6 +120,8 @@ class PayoffGeometryForwardTests(unittest.TestCase):
         row = report["reports"][0]
         self.assertEqual(row["summary"]["completed_trade_count"], 0)
         self.assertEqual(row["sample_progress"]["open_terminal_snapshot_count"], 1)
+        for snapshot in row["open_terminal_snapshots_not_scored"]:
+            self.assertFalse(any(str(key).startswith("_") for key in snapshot))
         self.assertFalse(row["sample_progress"]["ready_for_review"])
         self.assertEqual(row["formal_verdict"], "WITHHELD")
 
