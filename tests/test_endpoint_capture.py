@@ -39,6 +39,8 @@ class EndpointCaptureTests(unittest.TestCase):
         self.assertTrue(result["candidate_is_unambiguous"])
         self.assertEqual(result["candidate"]["remote_address"], "203.0.113.10")
         self.assertGreaterEqual(result["candidate"]["score"], 100)
+        self.assertTrue(result["candidate"]["provider_candidate_eligible"])
+        self.assertEqual(result["candidate"]["network_scope"], "public")
         self.assertFalse(result["external_api_authorized"])
         self.assertFalse(result["safe_for_independent_connection"])
         self.assertIn("entitlement", result["next_gate"])
@@ -68,6 +70,66 @@ class EndpointCaptureTests(unittest.TestCase):
         result = analyze_capture(report)
         self.assertIsNone(result["candidate"])
         self.assertFalse(result["candidate_is_unambiguous"])
+
+    def test_repeated_generic_tls_still_is_not_promoted(self):
+        report = self.base_report()
+        row = report["observations"][0]
+        row.update({
+            "reverse_dns": "ec2-203-0-113-10.compute.amazonaws.com",
+            "confidence": "low",
+            "evidence": ["tls_port_443"],
+            "samples_seen": 50,
+        })
+        result = analyze_capture(report)
+        self.assertIsNone(result["candidate"])
+        self.assertFalse(result["candidate_is_unambiguous"])
+        self.assertIn("repeated_observation", result["ranked_endpoints"][0]["reasons"])
+        self.assertFalse(result["ranked_endpoints"][0]["provider_candidate_eligible"])
+
+    def test_loopback_native_port_never_becomes_provider_candidate(self):
+        report = self.base_report()
+        row = report["observations"][0]
+        row.update({
+            "remote_address": "::1",
+            "remote_port": 7300,
+            "reverse_dns": "localhost",
+            "confidence": "medium",
+            "evidence": ["remote_port_7300"],
+        })
+        result = analyze_capture(report)
+        self.assertIsNone(result["candidate"])
+        self.assertFalse(result["candidate_is_unambiguous"])
+        self.assertTrue(result["local_bridge_observed"])
+        self.assertEqual(result["local_bridge_ports"], [7300])
+        ranked = result["ranked_endpoints"][0]
+        self.assertEqual(ranked["network_scope"], "loopback")
+        self.assertFalse(ranked["provider_candidate_eligible"])
+        self.assertIn("local_loopback_peer", ranked["reasons"])
+        self.assertIn("supported DeepCharts export", result["next_gate"])
+
+    def test_loopback_bridge_ports_are_reported_separately(self):
+        report = self.base_report()
+        report["observations"] = []
+        for port in (20024, 20025, 20026, 20027):
+            row = deepcopy(self.base_report()["observations"][0])
+            row.update({
+                "process_name": "Deepchart",
+                "remote_address": "::1",
+                "remote_port": port,
+                "reverse_dns": "desktop-local",
+                "confidence": "unclassified",
+                "evidence": [],
+                "samples_seen": 5,
+            })
+            report["observations"].append(row)
+        report["endpoint_count"] = 4
+        result = analyze_capture(report)
+        self.assertTrue(result["local_bridge_observed"])
+        self.assertEqual(result["local_bridge_ports"], [20024, 20025, 20026, 20027])
+        self.assertEqual(result["public_endpoint_count"], 0)
+        self.assertEqual(result["nonpublic_endpoint_count"], 4)
+        self.assertIsNone(result["candidate"])
+        self.assertFalse(result["safe_for_independent_connection"])
 
     def test_tied_high_signal_candidates_fail_closed(self):
         report = self.base_report()
