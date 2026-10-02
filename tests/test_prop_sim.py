@@ -6,7 +6,7 @@ import unittest
 
 import numpy as np
 
-from orderflow_edge_lab.prop_sim import evaluate, evaluate_survival, run_challenge, run_funded, run_phase
+from orderflow_edge_lab.prop_sim import evaluate, evaluate_policy, evaluate_survival, headroom_multiplier, run_challenge, run_funded, run_phase
 
 FTMO2 = {"phases": [0.10, 0.05], "daily_loss": 0.05, "max_loss": 0.10, "max_loss_type": "static", "min_days": 4,
          "best_day_rule": 0.5, "split": 0.8, "fee_pct": 0.0054}
@@ -63,6 +63,16 @@ class PropSimTests(unittest.TestCase):
         crash = np.zeros(900)
         crash[::50] = -0.06
         self.assertEqual(evaluate_survival(crash, FTMO2)["breach_rate"], 1.0)
+
+    def test_policy_baseline_matches_v2_and_guards_reduce_breaches(self):
+        rng = np.random.default_rng(0)
+        r = rng.normal(0.0008, 0.012, 1500)
+        base = {"challenge_scale": 0.5, "funded_scale": 0.5}
+        self.assertEqual(evaluate_policy(r, FTMO2, base)["pass_rate"], evaluate_survival(r * 0.5, FTMO2)["pass_rate"])
+        loud = {"challenge_scale": 3.0, "funded_scale": 3.0}
+        guarded = dict(loud, headroom=True, vol_guard=True)
+        self.assertLess(evaluate_policy(r, FTMO2, guarded)["breach_rate"], evaluate_policy(r, FTMO2, loud)["breach_rate"])
+        self.assertEqual([headroom_multiplier(h) for h in (0.05, 0.03, 0.01)], [1.0, 0.5, 0.25])
 
 
 if __name__ == "__main__":

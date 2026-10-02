@@ -159,3 +159,109 @@ def evaluate_survival(r: np.ndarray, firm: Mapping[str, Any], *, every: int = 7,
         "mean_payout_12m_pct": 100 * mean_paid,
         "ev_per_fee": (p_pass * mean_paid - firm["fee_pct"]) / firm["fee_pct"],
     }
+
+
+# ---- prop-firm-v3: risk-management policies -------------------------------------------------------------
+
+def headroom_multiplier(h: float) -> float:
+    return 1.0 if h > 0.04 else (0.5 if h > 0.02 else 0.25)
+
+
+def policy_scale(base: float, i: int, eq: float, floor: float, sigma: np.ndarray, firm: Mapping[str, Any],
+                 policy: Mapping[str, Any]) -> float:
+    s = base
+    if policy.get("headroom"):
+        s *= headroom_multiplier(eq - floor)
+    if policy.get("vol_guard") and np.isfinite(sigma[i]) and sigma[i] > 0:
+        s = min(s, 0.7 * firm["daily_loss"] / (2.33 * sigma[i]))
+    return s
+
+
+def trailing_sigma(r: np.ndarray, window: int = 30) -> np.ndarray:
+    out = np.full(len(r), np.nan)
+    for i in range(window, len(r)):
+        out[i] = np.std(r[i - window:i], ddof=1)  # prior days only
+    return out
+
+
+def _floor(firm, peak, max_lim):
+    return (peak if firm["max_loss_type"] == "trailing_eod" else 1.0) - max_lim
+
+
+def run_phase_policy(r, sigma, start, target, firm, policy, *, cap_days=365, buffer=BUFFER) -> PhaseResult:
+    eq, peak, best, pos_sum = 1.0, 1.0, 0.0, 0.0
+    daily_lim, max_lim = buffer * firm["daily_loss"], buffer * firm["max_loss"]
+    for k in range(cap_days):
+        i = start + k
+        if i >= len(r):
+            return PhaseResult(False, k, i - 1, "data_end")
+        s = policy_scale(policy["challenge_scale"], i, eq, _floor(firm, peak, max_lim), sigma, firm, policy)
+        pnl = eq * s * r[i]
+        if -pnl > daily_lim:
+            return PhaseResult(False, k + 1, i, "breach")
+        eq += pnl
+        if eq < _floor(firm, peak, max_lim):
+            return PhaseResult(False, k + 1, i, "breach")
+        peak = max(peak, eq)
+        if pnl > 0:
+            pos_sum += pnl
+            best = max(best, pnl)
+        if eq >= 1.0 + target and k + 1 >= firm.get("min_days", 0):
+            rule = firm.get("best_day_rule")
+            if rule is None or pos_sum <= 0 or best <= rule * pos_sum:
+                return PhaseResult(True, k + 1, i, "pass")
+    return PhaseResult(False, cap_days, start + cap_days - 1, "stuck")
+
+
+def run_funded_policy(r, sigma, start, firm, policy, *, days=365, cash_every=30, buffer=BUFFER) -> dict[str, Any]:
+    eq, peak, paid, first_paid = 1.0, 1.0, 0.0, None
+    daily_lim, max_lim = buffer * firm["daily_loss"], buffer * firm["max_loss"]
+    cushion = float(policy.get("cushion", 0.0))
+    for k in range(days):
+        i = start + k
+        if i >= len(r):
+            return {"complete": False, "survived": True, "paid": paid, "first_paid_day": first_paid}
+        s = policy_scale(policy["funded_scale"], i, eq, _floor(firm, peak, max_lim), sigma, firm, policy)
+        pnl = eq * s * r[i]
+        eq += pnl
+        if -pnl > daily_lim or eq < _floor(firm, peak, max_lim):
+            return {"complete": True, "survived": False, "paid": paid, "first_paid_day": first_paid}
+        peak = max(peak, eq)
+        if (k + 1) % cash_every == 0 and eq > 1.0 + cushion:
+            paid += firm["split"] * (eq - 1.0 - cushion)
+            first_paid = first_paid or k + 1
+            eq = 1.0 + cushion
+            peak = max(1.0, eq) if firm["max_loss_type"] != "trailing_eod" else eq
+    return {"complete": True, "survived": True, "paid": paid, "first_paid_day": first_paid}
+
+
+def evaluate_policy(r: np.ndarray, firm: Mapping[str, Any], policy: Mapping[str, Any], *, every: int = 7) -> dict[str, Any]:
+    r = np.nan_to_num(np.asarray(r, dtype=float))
+    sigma = trailing_sigma(r)
+    outcomes, days, funded = [], [], []
+    for s0 in range(0, len(r) - 400, every):
+        i, total, why = s0, 0, "pass"
+        for target in firm["phases"]:
+            res = run_phase_policy(r, sigma, i, target, firm, policy)
+            total += res.days
+            if not res.passed:
+                why = res.reason
+                break
+            i = res.end + 1
+        if why == "data_end":
+            continue
+        outcomes.append(why)
+        if why == "pass":
+            days.append(total)
+            f = run_funded_policy(r, sigma, i, firm, policy)
+            if f["complete"]:
+                funded.append(f)
+    n, nf = len(outcomes), len(funded)
+    p_pass = outcomes.count("pass") / n if n else 0.0
+    mean_paid = float(np.mean([f["paid"] for f in funded])) if nf else 0.0
+    return {"attempts": n, "pass_rate": p_pass, "breach_rate": outcomes.count("breach") / n if n else 0.0,
+            "stuck_rate": outcomes.count("stuck") / n if n else 0.0,
+            "median_days_to_pass": float(np.median(days)) if days else None, "funded_samples": nf,
+            "funded_survival_12m": sum(f["survived"] for f in funded) / nf if nf else 0.0,
+            "p_paid_by_3m": sum(1 for f in funded if f["first_paid_day"] and f["first_paid_day"] <= 90) / nf if nf else 0.0,
+            "mean_payout_12m_pct": 100 * mean_paid, "ev_per_fee": (p_pass * mean_paid - firm["fee_pct"]) / firm["fee_pct"]}
