@@ -47,6 +47,7 @@
 - Custom + sentiment (`research/custom_sentiment`, Fear & Greed): all 5 fail; near misses O2 momentum pause after panic (dev +0.11 Sharpe, conf −0.002), F2 sentiment-following (bull beta), C1 forced-flow-with-trend (conf t 2.76, dev t 0.70).
 - Zoo mirrors M2 BTC-shock reversal + M4 lottery momentum: forward-only watch from 2026-10-03 (blend workflow, `zoo_mirror_report.json`).
 - News sentiment v1 (`config/news_sentiment_v1.json`): 10 news RSS + Reddit RSS, frozen word-list scoring, ledger carried as artifact `news-sentiment-ledger-v1`; collecting since 2026-09-30 23:19Z (327 items after run 2), scheduled 00:35/08:35/16:35 UTC via main (PR #125 merged). Strategies N1–N4 score forward from 2026-11-01; no historical backtest possible.
+- Kronos foundation model, zero-shot (`research/kronos`, post-June-2024 window, 130 coins): FAIL — rank IC ≈ 0, K1 Sharpe −1.33 pooled, anti-momentum (corr −0.76), vol forecast worse than trailing vol. No forward watch.
 - Human execution: CET 09/15/21 timing costs little; market > limit; tuning grids are noise.
 - Canonical accounting: v2 frozen; v3 (fixed quantity) and v3.1 (+funding) for new work.
 - Trend bot (`trend_bot.py`, paper only): parked by user.
