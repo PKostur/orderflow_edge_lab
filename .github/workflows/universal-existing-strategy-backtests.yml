@@ -23,10 +23,8 @@ jobs:
         run: |
           mkdir -p artifacts/data/8h
           orderflow-strategy-tournament-data \
-            --symbols BTCUSDT ETHUSDT SOLUSDT XRPUSDT DOGEUSDT BNBUSDT ADAUSDT LINKUSDT SUIUSDT ENAUSDT \
+            --config config/universal_existing_strategy_backtests_v1.json \
             --interval 8h \
-            --start 2024-01-01 \
-            --end 2026-09-13 \
             --output-dir artifacts/data/8h
       - name: Universal DON8
         run: |
