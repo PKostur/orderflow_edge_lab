@@ -1,0 +1,32 @@
+{
+ "G1_implementation": {
+  "replay_start": "2026-04-05T00:00:00+00:00",
+  "as_of": "2026-10-03T21:57:39.930979+00:00",
+  "coins": 70,
+  "days": 180,
+  "paper_vs_v_all_correlation": 0.9991859086581762,
+  "mean_daily_diff": -1.124967551881521e-05,
+  "te_annualized": 0.0033950104796830476,
+  "paper_total_return": -0.018049770407545407,
+  "v_all_total_return": -0.016097735270619862,
+  "fees_total": 61.63,
+  "funding_total": 96.14,
+  "sd_rolling_30d_sum": 0.0009304878048139876,
+  "sd_rolling_60d_sum": 0.0011654231453695017
+ },
+ "G2_breakage_alarm": {
+  "dev_days": 2168,
+  "dev_daily_sd": 0.007152193322784924,
+  "dev_sharpe_raw": 2.0879142038430487,
+  "target_sharpe": 1.39,
+  "paths": 20000,
+  "horizon_days": 180,
+  "mean_block_days": 20.0,
+  "seed": 20261004,
+  "max_drawdown_p025": -0.13678261614303497,
+  "max_drawdown_p50": -0.06315026545053093,
+  "min_rolling_60d_p025": -0.105520532703517,
+  "min_rolling_60d_p50": -0.0447414939886121,
+  "either_rule_false_alarm": 0.03635
+ }
+}

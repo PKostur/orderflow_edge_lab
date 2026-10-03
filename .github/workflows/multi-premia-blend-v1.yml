@@ -16,6 +16,9 @@ on:
       - "config/prop_paper_forward_v1.json"
       - "src/orderflow_edge_lab/paper_account.py"
       - "config/paper_account_blend_v1.json"
+      - "src/orderflow_edge_lab/fast_gates.py"
+      - "config/fast_gates_v1.json"
+      - "research/fast_gates/venue_replication.json"
       - ".github/workflows/multi-premia-blend-v1.yml"
 
 permissions:
@@ -37,7 +40,7 @@ jobs:
       - name: Install
         run: python -m pip install -e ".[research]"
       - name: Tests
-        run: python -m unittest tests.test_xs_premia tests.test_multi_premia_forward tests.test_multi_premia_human_forward tests.test_zoo_mirror_forward tests.test_prop_paper_forward tests.test_paper_account -v
+        run: python -m unittest tests.test_xs_premia tests.test_multi_premia_forward tests.test_multi_premia_human_forward tests.test_zoo_mirror_forward tests.test_prop_paper_forward tests.test_paper_account tests.test_fast_gates -v
       - name: Run forward watch
         run: python -m orderflow_edge_lab.multi_premia_forward --output artifacts/multi_premia_blend/report.json
       - name: Run human-constrained forward watch (multi-premia-human-v1)
@@ -48,11 +51,13 @@ jobs:
         run: python -m orderflow_edge_lab.prop_paper_forward --output artifacts/multi_premia_blend/prop_paper_report.json
       - name: Replay the paper account (paper-account-blend-v1, paper only)
         run: python -m orderflow_edge_lab.paper_account --output artifacts/multi_premia_blend/paper_account_report.json
+      - name: Evaluate fast decision gates (fast-gates-v1)
+        run: python -m orderflow_edge_lab.fast_gates --output artifacts/multi_premia_blend/fast_gates_report.json
       - name: Enforce frozen boundary
         run: |
           python - <<'PY'
           import json
-          starts={"report.json":"2026-09-29T00:00:00+00:00","human_report.json":"2026-09-29T00:00:00+00:00","zoo_mirror_report.json":"2026-10-03T00:00:00+00:00","prop_paper_report.json":"2026-10-05T00:00:00+00:00","paper_account_report.json":"2026-10-05T00:00:00+00:00"}
+          starts={"report.json":"2026-09-29T00:00:00+00:00","human_report.json":"2026-09-29T00:00:00+00:00","zoo_mirror_report.json":"2026-10-03T00:00:00+00:00","prop_paper_report.json":"2026-10-05T00:00:00+00:00","paper_account_report.json":"2026-10-05T00:00:00+00:00","fast_gates_report.json":"2026-10-05T00:00:00+00:00"}
           for name, start in starts.items():
             r=json.load(open("artifacts/multi_premia_blend/"+name,encoding="utf-8"))
             if r["prospective_start_utc"] != start:
@@ -76,4 +81,5 @@ jobs:
             artifacts/multi_premia_blend/zoo_mirror_report.json
             artifacts/multi_premia_blend/prop_paper_report.json
             artifacts/multi_premia_blend/paper_account_report.json
+            artifacts/multi_premia_blend/fast_gates_report.json
           if-no-files-found: error

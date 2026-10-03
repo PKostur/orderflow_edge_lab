@@ -261,6 +261,20 @@
         "config/paper_account_blend_v1.json"
       ],
       "forward_workflow": "multi-premia-blend-v1.yml"
+    },
+    {
+      "watch_id": "fast-gates-v1",
+      "priority": 16,
+      "family": "fast_decision_gates",
+      "prospective_start_utc": "2026-10-05T00:00:00Z",
+      "review_gate": {
+        "type": "calendar_days",
+        "minimum_days": 60
+      },
+      "canonical_artifacts": [
+        "config/fast_gates_v1.json"
+      ],
+      "forward_workflow": "multi-premia-blend-v1.yml"
     }
   ]
 }
