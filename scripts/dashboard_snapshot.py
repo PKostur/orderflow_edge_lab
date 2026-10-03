@@ -32,6 +32,7 @@ WATCHES = [
     ("multi-premia-blend-v1.yml", "zoo_mirror_report.json", "Zoo mirrors (BTC shock reversal, lottery momentum)", "Forward-only candidates", "M4_lottery_momentum", 180),
     ("news-sentiment-v1.yml", "forward_report.json", "News sentiment (news momentum, attention, tone, panic pause)", "Forward-only candidates", "N1_news_momentum", 180),
     ("multi-premia-blend-v1.yml", "prop_paper_report.json", "Paper prop career (HyroTrader 1-step rules)", "Forward-only candidates", None, 365),
+    ("multi-premia-blend-v1.yml", "paper_account_report.json", "Paper account: 70-coin blend, 10,000 USDT", "Lead candidate", "paper", 180),
     ("canonical-v3-forward-companion-v1.yml", "report.json", "Canonical v3 companion", "Accounting", None, None),
 ]
 

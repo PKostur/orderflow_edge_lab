@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "watch_id": "paper-account-blend-v1",
+  "status": "FROZEN_BEFORE_PROSPECTIVE_START",
+  "question": "How does the 70-coin multi-premia blend perform as a realistic paper account (lot rounding, minimum orders, fees, slippage, real funding) from a fixed start date?",
+  "registration_note": "Registered 2026-10-03 at the user's request (paper trading first; full 70-coin blend). Paper only: no exchange account, no API keys, no orders. Strategy rules are the frozen multi-premia-blend-v1 legs and weights, executed as the aggregated per-coin target (V_ALL of multi-premia-human-v1) once a day at the 08:00 UTC open.",
+  "prospective_start_utc": "2026-10-05T00:00:00Z",
+  "account": {"currency": "USDT", "initial_equity": 10000.0},
+  "execution": {
+    "decision": "per-coin target weights decided with data up to 00:00 UTC of day d (multi_premia_human_forward.coin_targets)",
+    "fill_price": "the open of the 08:00 UTC 8h bar of day d",
+    "quantity": "round(target_weight x equity / (price x contractSize)) contracts, using MEXC contract specs fetched at run time (snapshot stored in the report); targets below minVol become 0",
+    "cost_per_side": "max(listed taker fee, 0.0002) + 0.0005 slippage, on traded notional",
+    "funding": "MEXC realized funding rates for settlements in (d 08:00, d+1 08:00], paid by longs when positive, received by shorts",
+    "mark": "positions marked at the next day's 08:00 UTC open"
+  },
+  "outputs": ["equity curve and daily returns", "positions held now with contracts and notional", "the latest day's trades", "fees, slippage and funding totals", "the theoretical V_ALL return series at 20 bps for comparison (tracking difference)"],
+  "reporting": {"review_after_days": 180, "before_review": "descriptive only"},
+  "claims": {"strategy_promotion_authorized": false, "paper_trading_authorized": true, "live_trading_authorized": false, "orders_sent": false}
+}
