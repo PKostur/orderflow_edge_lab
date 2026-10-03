@@ -156,11 +156,17 @@ touch strategy definitions.
 | Futures price transfer + replications | `cross_market_futures_v1` | Falsified; order-flow lane blocked only on data entitlement | `research/cross_market_etf_v1/FINAL_WRAP_2026_09_21.md` |
 | Discovery-v1 short-horizon strategy family | 332-epoch self-improvement sequence | Negative median gross expectancy before costs; rescue attempts exhausted | `research/self_improvement/CONTINUOUS_SELF_IMPROVEMENT_REPORT_V1.md` |
 
+## Closed / not established lanes
+
+| Lane | Research ID | Terminal state | Canonical record |
+|---|---|---|---|
+| Volatility-state D4 transfer replication | `volatility-state-transfer-forward-v1` | **NOT REPLICATED directionally** at Formal Review 1: 11/11 prospective clusters negative, median cluster Spearman −0.178. The collector's formal verdict remains WITHHELD by design; no reversed-sign rescue is permitted on the same sample. | `research/volatility_state_d4/FORMAL_REVIEW_1.md`, `research/volatility_state_d4/STATUS.md` |
+
 ## Positive-but-not-yet-executable findings
 
 | Finding | Evidence strength | Boundary |
 |---|---|---|
-| 60s volatility-expansion state prediction transfers across symbols (median Spearman +0.352, 6/6 symbols positive) | Transfer evidence from one new dependence cluster only — **not** six independent clusters | Not converted into positive executable expectancy; see self-improvement report |
+| Historical 60s volatility-expansion state prediction transferred across symbols (median Spearman +0.352, 6/6 symbols positive) | Development/transfer evidence only; the later frozen D4 prospective replication was negative in all 11 clusters | Not an executable edge and not a strategy foundation; see `research/volatility_state_d4/FORMAL_REVIEW_1.md` |
 | DON8 session-conditioned development record | Positive in every development year, positive fold majority, positive symbol breadth, both sides | Development-only; prospective DON8 watch above is the sole path to an OOS claim |
 
 ## Where things live

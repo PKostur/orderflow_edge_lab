@@ -1,0 +1,21 @@
+name: News Sentiment Scheduler
+
+# Scheduled triggers fire only from the default branch; this dispatches the collector on the research branch.
+on:
+  schedule:
+    - cron: "35 0,8,16 * * *"
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Dispatch news-sentiment-v1 on the research branch
+        run: gh workflow run news-sentiment-v1.yml --repo "${GITHUB_REPOSITORY}" --ref research/payoff-geometry-v1-1

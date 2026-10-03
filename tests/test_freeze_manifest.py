@@ -171,7 +171,7 @@ class RealManifestTests(unittest.TestCase):
         manifest = load_manifest(REPO_ROOT / "config" / "frozen_manifest_v1.json")
         report = verify_frozen_manifest(manifest, repo_root=REPO_ROOT)
         self.assertTrue(report["verified"], msg=json.dumps(report["findings"], indent=2))
-        self.assertEqual(report["files_total"], 12)
+        self.assertEqual(report["files_total"], 14)  # 12 + the two LSK freeze files
         self.assertEqual(report["files_changed"], 0)
         self.assertEqual(report["files_missing"], 0)
 
