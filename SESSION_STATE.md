@@ -48,6 +48,7 @@
 - Kronos foundation model, zero-shot (`research/kronos`, post-June-2024 window, 130 coins): FAIL — rank IC ≈ 0, K1 Sharpe −1.33 pooled, anti-momentum (corr −0.76), vol forecast worse than trailing vol. No forward watch.
 - Prop firms (`research/prop_firm/RESULT*.md`, v1–v7): best = HyroTrader 1-step, constant-vol blend challenge, funded 1.25x with headroom scaling, on-demand +1% withdrawals (24-month net +36%/+18% of account dev/untouched). Paper career forward watch `prop-paper-career-v1` from 2026-10-05 (blend workflow, `prop_paper_report.json`), paper only.
 - Paper account `paper-account-blend-v1` (user chose paper first, full 70-coin blend, 10,000 USDT): daily 08:00 UTC fills, MEXC lot sizes/min orders, max(taker,2bp)+5bp slippage, real funding; replayed from 2026-10-05 in the blend workflow (`paper_account_report.json`). No keys, no orders.
+- **fast-gates-v1** (`config/fast_gates_v1.json`, `research/fast_gates/RESULT.md`): G3 venue replication run once = **MIXED**. Binance S4 1.05 (t 2.31) vs MEXC 2.09 on the same coins and the same Binance funding; trend leg replicates (1.22), XS momentum (0.03) and carry (0.52 vs 1.62) do not. Bybit 0.41 (58 coins, 12 failed downloads). Suspected cause: development runs paired MEXC prices with Binance funding (forward uses MEXC funding, unaffected). G1 paper-vs-V_ALL (day 30/60) and G2 breakage alarm (S4 DD < −13.7% or rolling 60d < −10.6%) run daily from 10-05.
 - Human execution: CET 09/15/21 timing costs little; market > limit; tuning grids are noise.
 - Canonical accounting: v2 frozen; v3 (fixed quantity) and v3.1 (+funding) for new work.
 - Trend bot (`trend_bot.py`, paper only): parked by user.
@@ -58,5 +59,5 @@
 - Evidence-rate rule: no new per-trade/regime diagnostics or trend variants on the old 10 coins; new work adds breadth or shortens time-to-answer.
 
 ## Next action candidates
-- `collect_evidence`: first forward days from the ~06:45–08:30 UTC runs on 09-29/09-30.
-- Optional: no further premium candidates with free data; wait for forward evidence.
+- `inspect_data` (dominant uncertainty after G3): rebuild the development blend with MEXC prices + MEXC funding history (consistent venue) to test the funding-mismatch explanation. Not started; needs the user's go-ahead.
+- `collect_evidence`: G1 day-30 checkpoint ~11-06, day-60 verdict ~12-06; G2 alarm daily.
