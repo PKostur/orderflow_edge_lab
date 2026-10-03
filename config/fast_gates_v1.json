@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "watch_id": "fast-gates-v1",
+  "status": "FROZEN_BEFORE_PROSPECTIVE_START",
+  "question": "Can three narrower questions about the 70-coin multi-premia blend be answered well before the 180-day review: is it implementable as modeled, is it clearly broken, and is the edge a MEXC data artifact?",
+  "registration_note": "Declared 2026-10-04, before the paper account's first day (2026-10-05) and before any venue-replication run. Thresholds come from a fixed calibration procedure (below) that uses only data before 2026-10-05: the development sample (2020-06-01 to 2026-09-12) and a pre-start paper replay. Forward blend days already seen (09-29 to 10-03) are not used and are not scored here. Gates count from 2026-10-05. They add new questions; they do not shorten or replace the 180-day reviews in config/forward_formal_reviews_v*.json.",
+  "prospective_start_utc": "2026-10-05T00:00:00Z",
+  "gates": {
+    "G1_implementation": {
+      "question": "Does the paper account (lots, minimum orders, fees, slippage, MEXC funding) track the theoretical V_ALL book?",
+      "inputs": "paper_account_report.json daily_returns.paper vs human_report.json daily_returns.V_ALL, matched by UTC date (both cover d-1 08:00 to d 08:00); difference = paper - V_ALL; the first paper day (2026-10-06 stamp, building the book from cash) is excluded, as in the calibration; days are counted from 2026-10-07",
+      "calibration": "replay the paper account from 2026-04-05 to 2026-10-04 with current MEXC contract specs; m = mean daily difference, s_N = std of rolling N-day sums of the difference, te = annualized std of the daily difference",
+      "checkpoints_days": [
+        30,
+        60
+      ],
+      "rules": {
+        "data": "scored days >= calendar days elapsed - 2 and coins_with_data >= 63",
+        "band": "cumulative difference over the scored days within m*N +/- 3*s_N",
+        "tracking_error": "annualized std of the daily difference <= 2 * te"
+      },
+      "verdict": "day 30: ON_TRACK / OFF_TRACK (descriptive); day 60: PASS if all three rules hold, else FAIL"
+    },
+    "G2_breakage_alarm": {
+      "question": "Is the blend clearly broken, judged against its own history?",
+      "inputs": "report.json daily_returns.S4_blend, days stamped after 2026-10-05",
+      "calibration": "S4 development series (2020-06-01 to 2026-09-12, MEXC prices, Binance funding, the frozen rules); demean and add back a mean giving annualized Sharpe 1.39 (the untouched-coins holdout estimate); stationary block bootstrap, mean block 20 days, 20000 paths of 180 days, seed 20261004",
+      "rules": {
+        "drawdown": "ALARM if the max drawdown since 2026-10-05 is worse than the 2.5th percentile of the 180-day max drawdown",
+        "rolling_60d": "ALARM if any 60-day cumulative return (from day 60) is below the 2.5th percentile of the minimum rolling 60-day return over 180 days"
+      },
+      "false_alarm_rate": "<= 5% over the 180 days if the true Sharpe is 1.39 (each rule 2.5%, whole window, not per look)",
+      "window_days": 180,
+      "verdict": "OK or ALARM (sticky); ALARM means the formal 180-day review is expected to fail, it does not stop the watch"
+    },
+    "G3_venue_replication": {
+      "question": "Does the blend survive on other venues' prices and funding?",
+      "method": "rerun the frozen multi-premia-v1 rules unchanged (S1 trend core, S2 XS momentum, S3 XS carry, S4 equal-risk blend; 20 bps round trip) over the development window 2020-06-01 to 2026-09-12 on (a) Binance USDT-M 8h klines + Binance funding, (b) Bybit linear 4h klines resampled to 8h (00/08/16 UTC) + Bybit funding. Symbol map as the development run (FILECOIN->FIL, TRUMPOFFICIAL->TRUMP, PUMPFUN->PUMP, then a 1000-prefixed contract if the plain one is missing). The MEXC reference is recomputed on the same coins (development cache).",
+      "pass_rule_per_venue": "at least 40 of the 70 coins available, S4 annualized Sharpe >= 0.5 x the MEXC reference S4 Sharpe on the same coins, and S4 Newey-West t >= 2.0 (5 lags)",
+      "verdict": "PASS if both venues pass; MIXED if one; FAIL if neither. Run once."
+    }
+  },
+  "thresholds": {
+    "calibrated_utc": "2026-10-03T22:00:00Z",
+    "calibration_script": "scripts/fast_gates_calibrate_2026_10_04.py",
+    "G1_implementation": {
+      "mean_daily_diff": -1.125e-05,
+      "te_annualized": 0.003395,
+      "sd_rolling_sum": {
+        "30": 0.00093,
+        "60": 0.001165
+      },
+      "max_te_annualized": 0.00679,
+      "min_coins": 63,
+      "max_missing_days": 2,
+      "calibration_facts": {
+        "days": 180,
+        "correlation": 0.99919,
+        "paper_total_return": -0.01805,
+        "v_all_total_return": -0.0161
+      }
+    },
+    "G2_breakage_alarm": {
+      "max_drawdown_alarm": -0.13678,
+      "min_rolling_60d_alarm": -0.10552,
+      "either_rule_false_alarm": 0.0364,
+      "medians": {
+        "max_drawdown": -0.06315,
+        "min_rolling_60d": -0.04474
+      },
+      "dev_sharpe_raw": 2.0879,
+      "dev_daily_sd": 0.007152
+    }
+  },
+  "claims": {
+    "strategy_promotion_authorized": false,
+    "paper_trading_authorized": false,
+    "live_trading_authorized": false,
+    "leverage_authorized": false
+  },
+  "scope_note": "G1 compares two models run on the same price data in the same workflow run, so it tests the modeled frictions (lot rounding, minimum orders, fees, MEXC funding), not real fills. Real slippage can only be measured with real orders, which this repository does not place."
+}

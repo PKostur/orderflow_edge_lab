@@ -1,0 +1,2128 @@
+{
+ "development": {
+  "annual_vol": {
+   "S4_blend": 0.137,
+   "S1_trend": 0.118,
+   "S2_xs_momentum": 0.35,
+   "S3_carry": 0.325,
+   "H10_human": 0.176
+  },
+  "days": 2167,
+  "grid": {
+   "FTMO_2step|S4_blend|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.14492753623188406,
+    "median_days_to_pass": 95.0,
+    "mean_funded_payout_pct": 7.428505020952199,
+    "ev_per_100": 0.5365949305727825,
+    "ev_per_fee": 0.9936943158755231
+   },
+   "FTMO_2step|S4_blend|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.35144927536231885,
+    "median_days_to_pass": 89.0,
+    "mean_funded_payout_pct": 7.16177652194359,
+    "ev_per_100": 1.9770011689439426,
+    "ev_per_fee": 3.6611132758221157
+   },
+   "FTMO_2step|S4_blend|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.45652173913043476,
+    "median_days_to_pass": 75.0,
+    "mean_funded_payout_pct": 10.955143744850552,
+    "ev_per_100": 4.4612612748230775,
+    "ev_per_fee": 8.26159495337607
+   },
+   "FTMO_2step|S4_blend|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.47101449275362317,
+    "median_days_to_pass": 72.0,
+    "mean_funded_payout_pct": 16.245616931478853,
+    "ev_per_100": 7.111921018450184,
+    "ev_per_fee": 13.170224108241081
+   },
+   "FTMO_2step|S4_blend|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.463768115942029,
+    "median_days_to_pass": 57.0,
+    "mean_funded_payout_pct": 9.912886907627403,
+    "ev_per_100": 4.057280884696766,
+    "ev_per_fee": 7.513483119808827
+   },
+   "FTMO_2step|S1_trend|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.06159420289855073,
+    "median_days_to_pass": 80.0,
+    "mean_funded_payout_pct": 7.59982065505015,
+    "ev_per_100": -0.07189510458024433,
+    "ev_per_fee": -0.133139082556008
+   },
+   "FTMO_2step|S1_trend|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.16666666666666666,
+    "median_days_to_pass": 72.5,
+    "mean_funded_payout_pct": 2.6199198290383183,
+    "ev_per_100": -0.10334669516028037,
+    "ev_per_fee": -0.191382768815334
+   },
+   "FTMO_2step|S1_trend|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.11956521739130435,
+    "median_days_to_pass": 44.0,
+    "mean_funded_payout_pct": 0.279987782780601,
+    "ev_per_100": -0.5065231998849282,
+    "ev_per_fee": -0.9380059257128299
+   },
+   "FTMO_2step|S1_trend|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.23550724637681159,
+    "median_days_to_pass": 49.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.54,
+    "ev_per_fee": -1.0
+   },
+   "FTMO_2step|S1_trend|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.25,
+    "median_days_to_pass": 48.0,
+    "mean_funded_payout_pct": 0.10435616045324128,
+    "ev_per_100": -0.5139109598866898,
+    "ev_per_fee": -0.951686962753129
+   },
+   "FTMO_2step|S2_xs_momentum|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.2210144927536232,
+    "median_days_to_pass": 91.0,
+    "mean_funded_payout_pct": 5.693471457072855,
+    "ev_per_100": 0.718339706092189,
+    "ev_per_fee": 1.3302587149855352
+   },
+   "FTMO_2step|S2_xs_momentum|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.33695652173913043,
+    "median_days_to_pass": 64.0,
+    "mean_funded_payout_pct": 12.547165335264651,
+    "ev_per_100": 3.687849189056567,
+    "ev_per_fee": 6.829350350104753
+   },
+   "FTMO_2step|S2_xs_momentum|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.19202898550724637,
+    "median_days_to_pass": 55.0,
+    "mean_funded_payout_pct": 2.907037951324082,
+    "ev_per_100": 0.01823554862382731,
+    "ev_per_fee": 0.03376953448856909
+   },
+   "FTMO_2step|S2_xs_momentum|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.11594202898550725,
+    "median_days_to_pass": 30.0,
+    "mean_funded_payout_pct": 0.9810993440289785,
+    "ev_per_100": -0.4262493514169301,
+    "ev_per_fee": -0.7893506507720928
+   },
+   "FTMO_2step|S2_xs_momentum|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.07608695652173914,
+    "median_days_to_pass": 19.0,
+    "mean_funded_payout_pct": 1.4632758683172558,
+    "ev_per_100": -0.4286637926280349,
+    "ev_per_fee": -0.7938218382000646
+   },
+   "FTMO_2step|S3_carry|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.322463768115942,
+    "median_days_to_pass": 76.0,
+    "mean_funded_payout_pct": 13.191319982357658,
+    "ev_per_100": 3.713722747934172,
+    "ev_per_fee": 6.8772643480262445
+   },
+   "FTMO_2step|S3_carry|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.48188405797101447,
+    "median_days_to_pass": 72.0,
+    "mean_funded_payout_pct": 25.30318166299273,
+    "ev_per_100": 11.653199859340699,
+    "ev_per_fee": 21.57999973951981
+   },
+   "FTMO_2step|S3_carry|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.4601449275362319,
+    "median_days_to_pass": 48.0,
+    "mean_funded_payout_pct": 14.700846998615551,
+    "ev_per_100": 6.224520176899184,
+    "ev_per_fee": 11.52688921647997
+   },
+   "FTMO_2step|S3_carry|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.34782608695652173,
+    "median_days_to_pass": 35.5,
+    "mean_funded_payout_pct": 9.716626803117666,
+    "ev_per_100": 2.8396962793452745,
+    "ev_per_fee": 5.25869681360236
+   },
+   "FTMO_2step|S3_carry|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.23550724637681159,
+    "median_days_to_pass": 19.0,
+    "mean_funded_payout_pct": 0.5780665073432041,
+    "ev_per_100": -0.4038611486329411,
+    "ev_per_fee": -0.7478910159869279
+   },
+   "FTMO_2step|H10_human|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.14492753623188406,
+    "median_days_to_pass": 100.5,
+    "mean_funded_payout_pct": 4.588388181193433,
+    "ev_per_100": 0.12498379437585984,
+    "ev_per_fee": 0.2314514710664071
+   },
+   "FTMO_2step|H10_human|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.36231884057971014,
+    "median_days_to_pass": 75.5,
+    "mean_funded_payout_pct": 10.83546072731852,
+    "ev_per_100": 3.3858915678690282,
+    "ev_per_fee": 6.2701695701278295
+   },
+   "FTMO_2step|H10_human|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.3442028985507246,
+    "median_days_to_pass": 65.0,
+    "mean_funded_payout_pct": 7.721520678598129,
+    "ev_per_100": 2.1177697987928337,
+    "ev_per_fee": 3.921795923690433
+   },
+   "FTMO_2step|H10_human|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.2753623188405797,
+    "median_days_to_pass": 37.5,
+    "mean_funded_payout_pct": 1.9076318612481435,
+    "ev_per_100": -0.01471006719254023,
+    "ev_per_fee": -0.027240865171370796
+   },
+   "FTMO_2step|H10_human|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.19927536231884058,
+    "median_days_to_pass": 25.0,
+    "mean_funded_payout_pct": 3.236187433393979,
+    "ev_per_100": 0.1048924233212639,
+    "ev_per_fee": 0.1942452283727109
+   },
+   "FTMO_1step|S4_blend|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.2318840579710145,
+    "median_days_to_pass": 73.5,
+    "mean_funded_payout_pct": 8.14679245393268,
+    "ev_per_100": 1.3491112936655487,
+    "ev_per_fee": 2.498354247528794
+   },
+   "FTMO_1step|S4_blend|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.34782608695652173,
+    "median_days_to_pass": 54.0,
+    "mean_funded_payout_pct": 8.141218464538143,
+    "ev_per_100": 2.2917281615784844,
+    "ev_per_fee": 4.2439410399601565
+   },
+   "FTMO_1step|S4_blend|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.4782608695652174,
+    "median_days_to_pass": 49.5,
+    "mean_funded_payout_pct": 5.358066116470297,
+    "ev_per_100": 2.022553360051012,
+    "ev_per_fee": 3.745469185279651
+   },
+   "FTMO_1step|S4_blend|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.4963768115942029,
+    "median_days_to_pass": 43.0,
+    "mean_funded_payout_pct": 4.061079585401063,
+    "ev_per_100": 1.475825736231687,
+    "ev_per_fee": 2.733010622651272
+   },
+   "FTMO_1step|S4_blend|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.2572463768115942,
+    "median_days_to_pass": 21.0,
+    "mean_funded_payout_pct": 2.8984729994348313,
+    "ev_per_100": 0.20562167739084422,
+    "ev_per_fee": 0.3807808840571189
+   },
+   "FTMO_1step|S1_trend|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.13043478260869565,
+    "median_days_to_pass": 68.0,
+    "mean_funded_payout_pct": 6.3352825751154125,
+    "ev_per_100": 0.2863412054498363,
+    "ev_per_fee": 0.530261491573771
+   },
+   "FTMO_1step|S1_trend|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.14492753623188406,
+    "median_days_to_pass": 41.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.54,
+    "ev_per_fee": -1.0
+   },
+   "FTMO_1step|S1_trend|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.2753623188405797,
+    "median_days_to_pass": 48.5,
+    "mean_funded_payout_pct": 0.08748618314454365,
+    "ev_per_100": -0.5159096017428069,
+    "ev_per_fee": -0.9553881513755682
+   },
+   "FTMO_1step|S1_trend|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.286231884057971,
+    "median_days_to_pass": 36.0,
+    "mean_funded_payout_pct": 0.022667782074487323,
+    "ev_per_100": -0.5335117580294041,
+    "ev_per_fee": -0.9879847370914889
+   },
+   "FTMO_1step|S1_trend|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.18115942028985507,
+    "median_days_to_pass": 23.5,
+    "mean_funded_payout_pct": 0.028954764892904453,
+    "ev_per_100": -0.5347545715773724,
+    "ev_per_fee": -0.9902862436618006
+   },
+   "FTMO_1step|S2_xs_momentum|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.34057971014492755,
+    "median_days_to_pass": 54.0,
+    "mean_funded_payout_pct": 6.6167890502100395,
+    "ev_per_100": 1.7135440968106659,
+    "ev_per_fee": 3.1732298089086406
+   },
+   "FTMO_1step|S2_xs_momentum|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.21739130434782608,
+    "median_days_to_pass": 33.0,
+    "mean_funded_payout_pct": 0.9558548639355843,
+    "ev_per_100": -0.3322054643618295,
+    "ev_per_fee": -0.6151953043737584
+   },
+   "FTMO_1step|S2_xs_momentum|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.15579710144927536,
+    "median_days_to_pass": 10.0,
+    "mean_funded_payout_pct": 0.32256976082748556,
+    "ev_per_100": -0.48974456624789175,
+    "ev_per_fee": -0.9069343819405402
+   },
+   "FTMO_1step|S2_xs_momentum|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.16304347826086957,
+    "median_days_to_pass": 7.0,
+    "mean_funded_payout_pct": 0.21402144900876824,
+    "ev_per_100": -0.5051051985311792,
+    "ev_per_fee": -0.9353799972799614
+   },
+   "FTMO_1step|S2_xs_momentum|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.16304347826086957,
+    "median_days_to_pass": 6.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.54,
+    "ev_per_fee": -1.0
+   },
+   "FTMO_1step|S3_carry|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.40942028985507245,
+    "median_days_to_pass": 52.0,
+    "mean_funded_payout_pct": 11.895073616349594,
+    "ev_per_100": 4.330084487853275,
+    "ev_per_fee": 8.018674977506064
+   },
+   "FTMO_1step|S3_carry|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.5,
+    "median_days_to_pass": 39.5,
+    "mean_funded_payout_pct": 8.93364442401221,
+    "ev_per_100": 3.9268222120061043,
+    "ev_per_fee": 7.271892985196489
+   },
+   "FTMO_1step|S3_carry|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.427536231884058,
+    "median_days_to_pass": 23.5,
+    "mean_funded_payout_pct": 4.184744606458027,
+    "ev_per_100": 1.2491299404421998,
+    "ev_per_fee": 2.313203593411481
+   },
+   "FTMO_1step|S3_carry|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.3007246376811594,
+    "median_days_to_pass": 14.0,
+    "mean_funded_payout_pct": 0.59005163738109,
+    "ev_per_100": -0.3625569351353969,
+    "ev_per_fee": -0.6714017317322164
+   },
+   "FTMO_1step|S3_carry|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.21739130434782608,
+    "median_days_to_pass": 6.5,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.54,
+    "ev_per_fee": -1.0
+   },
+   "FTMO_1step|H10_human|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.25,
+    "median_days_to_pass": 66.0,
+    "mean_funded_payout_pct": 5.796909884234202,
+    "ev_per_100": 0.9092274710585504,
+    "ev_per_fee": 1.6837545760343526
+   },
+   "FTMO_1step|H10_human|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.34057971014492755,
+    "median_days_to_pass": 43.5,
+    "mean_funded_payout_pct": 4.528461593899285,
+    "ev_per_100": 1.0023021370526553,
+    "ev_per_fee": 1.8561150686160282
+   },
+   "FTMO_1step|H10_human|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.2971014492753623,
+    "median_days_to_pass": 24.5,
+    "mean_funded_payout_pct": 1.553247079644631,
+    "ev_per_100": -0.0785280415548561,
+    "ev_per_fee": -0.14542229917565944
+   },
+   "FTMO_1step|H10_human|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.27898550724637683,
+    "median_days_to_pass": 19.0,
+    "mean_funded_payout_pct": 0.785934353569741,
+    "ev_per_100": -0.32073570570699256,
+    "ev_per_fee": -0.5939550105685047
+   },
+   "FTMO_1step|H10_human|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.2210144927536232,
+    "median_days_to_pass": 11.0,
+    "mean_funded_payout_pct": 1.2098312874701993,
+    "ev_per_100": -0.27260975168231105,
+    "ev_per_fee": -0.5048328734857612
+   },
+   "HyroTrader_1step|S4_blend|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.2318840579710145,
+    "median_days_to_pass": 73.5,
+    "mean_funded_payout_pct": 8.073395446966273,
+    "ev_per_100": 1.293091697847252,
+    "ev_per_fee": 2.233318994554839
+   },
+   "HyroTrader_1step|S4_blend|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.40942028985507245,
+    "median_days_to_pass": 59.0,
+    "mean_funded_payout_pct": 8.642670824540868,
+    "ev_per_100": 2.9594847941055002,
+    "ev_per_fee": 5.111372701391192
+   },
+   "HyroTrader_1step|S4_blend|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.5,
+    "median_days_to_pass": 48.5,
+    "mean_funded_payout_pct": 13.237201665598228,
+    "ev_per_100": 6.039600832799113,
+    "ev_per_fee": 10.431089521241992
+   },
+   "HyroTrader_1step|S4_blend|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.5471014492753623,
+    "median_days_to_pass": 40.0,
+    "mean_funded_payout_pct": 7.071403355930587,
+    "ev_per_100": 3.289775024440285,
+    "ev_per_fee": 5.681822149292374
+   },
+   "HyroTrader_1step|S4_blend|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.42028985507246375,
+    "median_days_to_pass": 25.5,
+    "mean_funded_payout_pct": 2.7396340757658355,
+    "ev_per_100": 0.5724404086552062,
+    "ev_per_fee": 0.9886708266929294
+   },
+   "HyroTrader_1step|S1_trend|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.13043478260869565,
+    "median_days_to_pass": 68.0,
+    "mean_funded_payout_pct": 6.403831501179617,
+    "ev_per_100": 0.2562823697190806,
+    "ev_per_fee": 0.4426293086685329
+   },
+   "HyroTrader_1step|S1_trend|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.21739130434782608,
+    "median_days_to_pass": 47.5,
+    "mean_funded_payout_pct": 3.602092771878424,
+    "ev_per_100": 0.20406364606052693,
+    "ev_per_fee": 0.35244153032906206
+   },
+   "HyroTrader_1step|S1_trend|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.2753623188405797,
+    "median_days_to_pass": 46.5,
+    "mean_funded_payout_pct": 0.08748618314454365,
+    "ev_per_100": -0.5549096017428068,
+    "ev_per_fee": -0.958393094547162
+   },
+   "HyroTrader_1step|S1_trend|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.322463768115942,
+    "median_days_to_pass": 36.0,
+    "mean_funded_payout_pct": 0.22828797781066715,
+    "ev_per_100": -0.5053853984596037,
+    "ev_per_fee": -0.8728590646970703
+   },
+   "HyroTrader_1step|S1_trend|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.27898550724637683,
+    "median_days_to_pass": 29.0,
+    "mean_funded_payout_pct": 0.1944160108034463,
+    "ev_per_100": -0.5247607506091835,
+    "ev_per_fee": -0.906322539912234
+   },
+   "HyroTrader_1step|S2_xs_momentum|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.34782608695652173,
+    "median_days_to_pass": 54.5,
+    "mean_funded_payout_pct": 6.847091950232443,
+    "ev_per_100": 1.8025972000808492,
+    "ev_per_fee": 3.1132939552346275
+   },
+   "HyroTrader_1step|S2_xs_momentum|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.40217391304347827,
+    "median_days_to_pass": 37.0,
+    "mean_funded_payout_pct": 2.744918662544644,
+    "ev_per_100": 0.5249346795016503,
+    "ev_per_fee": 0.9066229352360108
+   },
+   "HyroTrader_1step|S2_xs_momentum|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.25,
+    "median_days_to_pass": 16.0,
+    "mean_funded_payout_pct": 0.4834821265029316,
+    "ev_per_100": -0.45812946837426716,
+    "ev_per_fee": -0.7912426051369036
+   },
+   "HyroTrader_1step|S2_xs_momentum|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.2246376811594203,
+    "median_days_to_pass": 10.0,
+    "mean_funded_payout_pct": 0.35736260764155925,
+    "ev_per_100": -0.4987228924863164,
+    "ev_per_fee": -0.861352145917645
+   },
+   "HyroTrader_1step|S2_xs_momentum|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.22826086956521738,
+    "median_days_to_pass": 7.0,
+    "mean_funded_payout_pct": 0.14981897881583306,
+    "ev_per_100": -0.5448021896181251,
+    "ev_per_fee": -0.9409364242109242
+   },
+   "HyroTrader_1step|S3_carry|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.4492753623188406,
+    "median_days_to_pass": 47.5,
+    "mean_funded_payout_pct": 11.906848378088469,
+    "ev_per_100": 4.770453619141196,
+    "ev_per_fee": 8.239125421660097
+   },
+   "HyroTrader_1step|S3_carry|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.5217391304347826,
+    "median_days_to_pass": 37.0,
+    "mean_funded_payout_pct": 14.402148930309327,
+    "ev_per_100": 6.935164659291823,
+    "ev_per_fee": 11.977831881333028
+   },
+   "HyroTrader_1step|S3_carry|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.4927536231884058,
+    "median_days_to_pass": 24.0,
+    "mean_funded_payout_pct": 6.114620945071223,
+    "ev_per_100": 2.434001625107559,
+    "ev_per_fee": 4.2038024613256635
+   },
+   "HyroTrader_1step|S3_carry|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.4528985507246377,
+    "median_days_to_pass": 17.0,
+    "mean_funded_payout_pct": 3.6773044876963574,
+    "ev_per_100": 1.0864458730508866,
+    "ev_per_fee": 1.8764177427476452
+   },
+   "HyroTrader_1step|S3_carry|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.32971014492753625,
+    "median_days_to_pass": 8.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.579,
+    "ev_per_fee": -1.0
+   },
+   "HyroTrader_1step|H10_human|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.25,
+    "median_days_to_pass": 66.0,
+    "mean_funded_payout_pct": 5.79010378569586,
+    "ev_per_100": 0.868525946423965,
+    "ev_per_fee": 1.5000448124766232
+   },
+   "HyroTrader_1step|H10_human|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.40942028985507245,
+    "median_days_to_pass": 49.0,
+    "mean_funded_payout_pct": 7.638054348027544,
+    "ev_per_100": 2.5481744250982334,
+    "ev_per_fee": 4.400992098615257
+   },
+   "HyroTrader_1step|H10_human|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.37681159420289856,
+    "median_days_to_pass": 26.0,
+    "mean_funded_payout_pct": 2.5548718148701393,
+    "ev_per_100": 0.38370532154526993,
+    "ev_per_fee": 0.6627034914426078
+   },
+   "HyroTrader_1step|H10_human|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.32971014492753625,
+    "median_days_to_pass": 17.0,
+    "mean_funded_payout_pct": 2.1217179995974793,
+    "ev_per_100": 0.12055194914264727,
+    "ev_per_fee": 0.20820716604947717
+   },
+   "HyroTrader_1step|H10_human|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.286231884057971,
+    "median_days_to_pass": 10.0,
+    "mean_funded_payout_pct": 0.8553919911482895,
+    "ev_per_100": -0.33415953876552584,
+    "ev_per_fee": -0.5771321913048806
+   },
+   "HyroTrader_2step|S4_blend|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.14492753623188406,
+    "median_days_to_pass": 95.0,
+    "mean_funded_payout_pct": 7.314361740537673,
+    "ev_per_100": 0.48105242616488014,
+    "ev_per_fee": 0.8308332058115374
+   },
+   "HyroTrader_2step|S4_blend|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.3333333333333333,
+    "median_days_to_pass": 84.0,
+    "mean_funded_payout_pct": 6.500357846315176,
+    "ev_per_100": 1.5877859487717254,
+    "ev_per_fee": 2.742290066963256
+   },
+   "HyroTrader_2step|S4_blend|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.38405797101449274,
+    "median_days_to_pass": 79.0,
+    "mean_funded_payout_pct": 11.70383544271293,
+    "ev_per_100": 3.9159512932158345,
+    "ev_per_fee": 6.7633010245523915
+   },
+   "HyroTrader_2step|S4_blend|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.42391304347826086,
+    "median_days_to_pass": 67.0,
+    "mean_funded_payout_pct": 5.070612502636642,
+    "ev_per_100": 1.57049877829162,
+    "ev_per_fee": 2.7124331231288776
+   },
+   "HyroTrader_2step|S4_blend|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.29347826086956524,
+    "median_days_to_pass": 46.0,
+    "mean_funded_payout_pct": 1.459427533103152,
+    "ev_per_100": -0.15068974571972707,
+    "ev_per_fee": -0.2602586281860571
+   },
+   "HyroTrader_2step|S1_trend|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.06159420289855073,
+    "median_days_to_pass": 80.0,
+    "mean_funded_payout_pct": 7.59982065505015,
+    "ev_per_100": -0.11089510458024429,
+    "ev_per_fee": -0.19152867803151
+   },
+   "HyroTrader_2step|S1_trend|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.10869565217391304,
+    "median_days_to_pass": 77.5,
+    "mean_funded_payout_pct": 4.017210404525421,
+    "ev_per_100": -0.14234669516028034,
+    "ev_per_fee": -0.24584921443917157
+   },
+   "HyroTrader_2step|S1_trend|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.08695652173913043,
+    "median_days_to_pass": 46.5,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.579,
+    "ev_per_fee": -1.0
+   },
+   "HyroTrader_2step|S1_trend|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.17028985507246377,
+    "median_days_to_pass": 51.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.579,
+    "ev_per_fee": -1.0
+   },
+   "HyroTrader_2step|S1_trend|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.13768115942028986,
+    "median_days_to_pass": 39.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.579,
+    "ev_per_fee": -1.0
+   },
+   "HyroTrader_2step|S2_xs_momentum|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.21014492753623187,
+    "median_days_to_pass": 90.0,
+    "mean_funded_payout_pct": 5.66083609558536,
+    "ev_per_100": 0.6105959911012713,
+    "ev_per_fee": 1.0545699328173943
+   },
+   "HyroTrader_2step|S2_xs_momentum|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.19927536231884058,
+    "median_days_to_pass": 68.0,
+    "mean_funded_payout_pct": 2.8780529814157725,
+    "ev_per_100": -0.005474949355552521,
+    "ev_per_fee": -0.009455871080401591
+   },
+   "HyroTrader_2step|S2_xs_momentum|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.05434782608695652,
+    "median_days_to_pass": 45.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.579,
+    "ev_per_fee": -1.0
+   },
+   "HyroTrader_2step|S2_xs_momentum|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.050724637681159424,
+    "median_days_to_pass": 15.5,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.579,
+    "ev_per_fee": -1.0
+   },
+   "HyroTrader_2step|S2_xs_momentum|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.04710144927536232,
+    "median_days_to_pass": 13.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.579,
+    "ev_per_fee": -1.0
+   },
+   "HyroTrader_2step|S3_carry|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.2971014492753623,
+    "median_days_to_pass": 71.0,
+    "mean_funded_payout_pct": 13.037953848925207,
+    "ev_per_100": 3.2945949841009665,
+    "ev_per_fee": 5.690146777376453
+   },
+   "HyroTrader_2step|S3_carry|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.37681159420289856,
+    "median_days_to_pass": 53.5,
+    "mean_funded_payout_pct": 18.166257563720862,
+    "ev_per_100": 6.266256473286122,
+    "ev_per_fee": 10.822550040217827
+   },
+   "HyroTrader_2step|S3_carry|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.34782608695652173,
+    "median_days_to_pass": 40.0,
+    "mean_funded_payout_pct": 4.734207360996557,
+    "ev_per_100": 1.0676808212161932,
+    "ev_per_fee": 1.8440083267982614
+   },
+   "HyroTrader_2step|S3_carry|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.2826086956521739,
+    "median_days_to_pass": 29.0,
+    "mean_funded_payout_pct": 3.883099740456479,
+    "ev_per_100": 0.5183977527377006,
+    "ev_per_fee": 0.8953329062827299
+   },
+   "HyroTrader_2step|S3_carry|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.15942028985507245,
+    "median_days_to_pass": 15.5,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.579,
+    "ev_per_fee": -1.0
+   },
+   "HyroTrader_2step|H10_human|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.14492753623188406,
+    "median_days_to_pass": 100.5,
+    "mean_funded_payout_pct": 4.469667278027739,
+    "ev_per_100": 0.06877786638083182,
+    "ev_per_fee": 0.11878733399107395
+   },
+   "HyroTrader_2step|H10_human|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.2572463768115942,
+    "median_days_to_pass": 60.0,
+    "mean_funded_payout_pct": 7.333696916548737,
+    "ev_per_100": 1.307566960416523,
+    "ev_per_fee": 2.258319448042354
+   },
+   "HyroTrader_2step|H10_human|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.18478260869565216,
+    "median_days_to_pass": 33.0,
+    "mean_funded_payout_pct": 0.7609532313207337,
+    "ev_per_100": -0.43838907682116873,
+    "ev_per_fee": -0.7571486646306886
+   },
+   "HyroTrader_2step|H10_human|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.2028985507246377,
+    "median_days_to_pass": 31.0,
+    "mean_funded_payout_pct": 2.307863182136722,
+    "ev_per_100": -0.11073790507370859,
+    "ev_per_fee": -0.19125717629310637
+   },
+   "HyroTrader_2step|H10_human|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.15942028985507245,
+    "median_days_to_pass": 23.5,
+    "mean_funded_payout_pct": 1.898807866324187,
+    "ev_per_100": -0.27629149957150645,
+    "ev_per_fee": -0.47718739131520976
+   },
+   "Breakout_classic_1step|S4_blend|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.2318840579710145,
+    "median_days_to_pass": 73.5,
+    "mean_funded_payout_pct": 8.073395446966273,
+    "ev_per_100": 1.3720916978472517,
+    "ev_per_fee": 2.7441833956945034
+   },
+   "Breakout_classic_1step|S4_blend|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.34782608695652173,
+    "median_days_to_pass": 53.5,
+    "mean_funded_payout_pct": 8.141218464538143,
+    "ev_per_100": 2.3317281615784844,
+    "ev_per_fee": 4.663456323156968
+   },
+   "Breakout_classic_1step|S4_blend|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.4927536231884058,
+    "median_days_to_pass": 48.5,
+    "mean_funded_payout_pct": 4.977077035989613,
+    "ev_per_100": 1.9524727423716932,
+    "ev_per_fee": 3.9049454847433864
+   },
+   "Breakout_classic_1step|S4_blend|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.48188405797101447,
+    "median_days_to_pass": 40.0,
+    "mean_funded_payout_pct": 4.14197830222026,
+    "ev_per_100": 1.4959533123017918,
+    "ev_per_fee": 2.9919066246035837
+   },
+   "Breakout_classic_1step|S4_blend|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.2717391304347826,
+    "median_days_to_pass": 19.0,
+    "mean_funded_payout_pct": 2.46632644616553,
+    "ev_per_100": 0.1701974038493287,
+    "ev_per_fee": 0.3403948076986574
+   },
+   "Breakout_classic_1step|S1_trend|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.13043478260869565,
+    "median_days_to_pass": 68.0,
+    "mean_funded_payout_pct": 6.3352825751154125,
+    "ev_per_100": 0.32634120544983636,
+    "ev_per_fee": 0.6526824108996727
+   },
+   "Breakout_classic_1step|S1_trend|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.13768115942028986,
+    "median_days_to_pass": 38.5,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.5,
+    "ev_per_fee": -1.0
+   },
+   "Breakout_classic_1step|S1_trend|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.2644927536231884,
+    "median_days_to_pass": 47.0,
+    "mean_funded_payout_pct": 0.09108150573952489,
+    "ev_per_100": -0.47590960174280683,
+    "ev_per_fee": -0.9518192034856137
+   },
+   "Breakout_classic_1step|S1_trend|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.2753623188405797,
+    "median_days_to_pass": 35.0,
+    "mean_funded_payout_pct": 0.023562562945848665,
+    "ev_per_100": -0.49351175802940406,
+    "ev_per_fee": -0.9870235160588081
+   },
+   "Breakout_classic_1step|S1_trend|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.18840579710144928,
+    "median_days_to_pass": 24.5,
+    "mean_funded_payout_pct": 0.03982658306688049,
+    "ev_per_100": -0.4924964408714573,
+    "ev_per_fee": -0.9849928817429146
+   },
+   "Breakout_classic_1step|S2_xs_momentum|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.34057971014492755,
+    "median_days_to_pass": 54.0,
+    "mean_funded_payout_pct": 6.411215860906519,
+    "ev_per_100": 1.6835300395841042,
+    "ev_per_fee": 3.3670600791682084
+   },
+   "Breakout_classic_1step|S2_xs_momentum|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.2318840579710145,
+    "median_days_to_pass": 30.5,
+    "mean_funded_payout_pct": 0.8961139349396102,
+    "ev_per_100": -0.29220546436182954,
+    "ev_per_fee": -0.5844109287236591
+   },
+   "Breakout_classic_1step|S2_xs_momentum|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.18478260869565216,
+    "median_days_to_pass": 10.0,
+    "mean_funded_payout_pct": 0.27197058265846824,
+    "ev_per_100": -0.4497445662478917,
+    "ev_per_fee": -0.8994891324957834
+   },
+   "Breakout_classic_1step|S2_xs_momentum|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.19202898550724637,
+    "median_days_to_pass": 6.0,
+    "mean_funded_payout_pct": 0.18171632463008625,
+    "ev_per_100": -0.4651051985311791,
+    "ev_per_fee": -0.9302103970623582
+   },
+   "Breakout_classic_1step|S2_xs_momentum|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.2246376811594203,
+    "median_days_to_pass": 4.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.5,
+    "ev_per_fee": -1.0
+   },
+   "Breakout_classic_1step|S3_carry|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.4166666666666667,
+    "median_days_to_pass": 51.0,
+    "mean_funded_payout_pct": 11.655035249311018,
+    "ev_per_100": 4.356264687212924,
+    "ev_per_fee": 8.712529374425849
+   },
+   "Breakout_classic_1step|S3_carry|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.5144927536231884,
+    "median_days_to_pass": 36.0,
+    "mean_funded_payout_pct": 8.05299717088435,
+    "ev_per_100": 3.6432086893680355,
+    "ev_per_fee": 7.286417378736071
+   },
+   "Breakout_classic_1step|S3_carry|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.4492753623188406,
+    "median_days_to_pass": 20.0,
+    "mean_funded_payout_pct": 2.484691986832224,
+    "ev_per_100": 0.6163108926347673,
+    "ev_per_fee": 1.2326217852695347
+   },
+   "Breakout_classic_1step|S3_carry|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.34057971014492755,
+    "median_days_to_pass": 10.5,
+    "mean_funded_payout_pct": 0.8186292841646231,
+    "ev_per_100": -0.22119147568306313,
+    "ev_per_fee": -0.44238295136612626
+   },
+   "Breakout_classic_1step|S3_carry|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.2971014492753623,
+    "median_days_to_pass": 5.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.5,
+    "ev_per_fee": -1.0
+   },
+   "Breakout_classic_1step|H10_human|0.5": {
+    "attempts": 276,
+    "pass_rate": 0.25,
+    "median_days_to_pass": 66.0,
+    "mean_funded_payout_pct": 5.79010378569586,
+    "ev_per_100": 0.947525946423965,
+    "ev_per_fee": 1.8950518928479299
+   },
+   "Breakout_classic_1step|H10_human|1.0": {
+    "attempts": 276,
+    "pass_rate": 0.32608695652173914,
+    "median_days_to_pass": 41.5,
+    "mean_funded_payout_pct": 3.656418947757943,
+    "ev_per_100": 0.6923105264428074,
+    "ev_per_fee": 1.3846210528856149
+   },
+   "Breakout_classic_1step|H10_human|1.5": {
+    "attempts": 276,
+    "pass_rate": 0.2971014492753623,
+    "median_days_to_pass": 24.0,
+    "mean_funded_payout_pct": 1.553247079644631,
+    "ev_per_100": -0.038528041554856084,
+    "ev_per_fee": -0.07705608310971217
+   },
+   "Breakout_classic_1step|H10_human|2.0": {
+    "attempts": 276,
+    "pass_rate": 0.2971014492753623,
+    "median_days_to_pass": 14.0,
+    "mean_funded_payout_pct": 0.7392711238811088,
+    "ev_per_100": -0.28036147768749664,
+    "ev_per_fee": -0.5607229553749933
+   },
+   "Breakout_classic_1step|H10_human|3.0": {
+    "attempts": 276,
+    "pass_rate": 0.26811594202898553,
+    "median_days_to_pass": 9.5,
+    "mean_funded_payout_pct": 0.8706222663762462,
+    "ev_per_100": -0.2665722908991224,
+    "ev_per_fee": -0.5331445817982448
+   }
+  }
+ },
+ "confirmation": {
+  "annual_vol": {
+   "S4_blend": 0.118,
+   "S1_trend": 0.105,
+   "S2_xs_momentum": 0.346,
+   "S3_carry": 0.284,
+   "H10_human": 0.181
+  },
+  "days": 2048,
+  "grid": {
+   "FTMO_2step|S4_blend|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.019305019305019305,
+    "median_days_to_pass": 208.0,
+    "mean_funded_payout_pct": 1.8726188788189546,
+    "ev_per_100": -0.5038490563934566,
+    "ev_per_fee": -0.9330538081360306
+   },
+   "FTMO_2step|S4_blend|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.1776061776061776,
+    "median_days_to_pass": 95.5,
+    "mean_funded_payout_pct": 9.999525968281192,
+    "ev_per_100": 1.2359775851001344,
+    "ev_per_fee": 2.2888473798150635
+   },
+   "FTMO_2step|S4_blend|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.3552123552123552,
+    "median_days_to_pass": 66.5,
+    "mean_funded_payout_pct": 10.094464654975777,
+    "ev_per_100": 3.04567856470182,
+    "ev_per_fee": 5.640145490188556
+   },
+   "FTMO_2step|S4_blend|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.37065637065637064,
+    "median_days_to_pass": 73.0,
+    "mean_funded_payout_pct": 5.850841642491403,
+    "ev_per_100": 1.628651728491022,
+    "ev_per_fee": 3.0160217194278185
+   },
+   "FTMO_2step|S4_blend|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.2548262548262548,
+    "median_days_to_pass": 45.0,
+    "mean_funded_payout_pct": 0.3350468855518093,
+    "ev_per_100": -0.45462125696363165,
+    "ev_per_fee": -0.8418912165993178
+   },
+   "FTMO_2step|S1_trend|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.04247104247104247,
+    "median_days_to_pass": 174.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.54,
+    "ev_per_fee": -1.0
+   },
+   "FTMO_2step|S1_trend|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.10424710424710425,
+    "median_days_to_pass": 72.0,
+    "mean_funded_payout_pct": 6.632995804542492,
+    "ev_per_100": 0.1514706051067463,
+    "ev_per_fee": 0.28050112056804866
+   },
+   "FTMO_2step|S1_trend|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.13127413127413126,
+    "median_days_to_pass": 45.5,
+    "mean_funded_payout_pct": 1.5918690648319818,
+    "ev_per_100": -0.3310287714120179,
+    "ev_per_fee": -0.6130162433555887
+   },
+   "FTMO_2step|S1_trend|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.1776061776061776,
+    "median_days_to_pass": 50.0,
+    "mean_funded_payout_pct": 0.41308949834292896,
+    "ev_per_100": -0.466632753190059,
+    "ev_per_fee": -0.8641347281297389
+   },
+   "FTMO_2step|S1_trend|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.2084942084942085,
+    "median_days_to_pass": 52.0,
+    "mean_funded_payout_pct": 0.056635087830857515,
+    "ev_per_100": -0.5281919121897054,
+    "ev_per_fee": -0.9781331707216767
+   },
+   "FTMO_2step|S2_xs_momentum|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.18532818532818532,
+    "median_days_to_pass": 105.5,
+    "mean_funded_payout_pct": 7.350551564304266,
+    "ev_per_100": 0.8222643825737634,
+    "ev_per_fee": 1.5227118195810434
+   },
+   "FTMO_2step|S2_xs_momentum|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.15444015444015444,
+    "median_days_to_pass": 56.0,
+    "mean_funded_payout_pct": 0.09038157970591555,
+    "ev_per_100": -0.5260414548716733,
+    "ev_per_fee": -0.9741508423549505
+   },
+   "FTMO_2step|S2_xs_momentum|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.13513513513513514,
+    "median_days_to_pass": 41.0,
+    "mean_funded_payout_pct": 0.5861289721382461,
+    "ev_per_100": -0.46079338214348026,
+    "ev_per_fee": -0.853321078043482
+   },
+   "FTMO_2step|S2_xs_momentum|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.07722007722007722,
+    "median_days_to_pass": 28.0,
+    "mean_funded_payout_pct": 0.4593530373122681,
+    "ev_per_100": -0.5045287229874696,
+    "ev_per_fee": -0.9343124499767956
+   },
+   "FTMO_2step|S2_xs_momentum|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.04247104247104247,
+    "median_days_to_pass": 18.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.54,
+    "ev_per_fee": -1.0
+   },
+   "FTMO_2step|S3_carry|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.11583011583011583,
+    "median_days_to_pass": 75.5,
+    "mean_funded_payout_pct": 2.170264028284434,
+    "ev_per_100": -0.28861806622188024,
+    "ev_per_fee": -0.5344779004108894
+   },
+   "FTMO_2step|S3_carry|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.3745173745173745,
+    "median_days_to_pass": 70.0,
+    "mean_funded_payout_pct": 3.72433582721291,
+    "ev_per_100": 0.8548284758287731,
+    "ev_per_fee": 1.5830156959792094
+   },
+   "FTMO_2step|S3_carry|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.33976833976833976,
+    "median_days_to_pass": 47.0,
+    "mean_funded_payout_pct": 7.247987934718823,
+    "ev_per_100": 1.9226368272403724,
+    "ev_per_fee": 3.5604385689636526
+   },
+   "FTMO_2step|S3_carry|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.16988416988416988,
+    "median_days_to_pass": 27.5,
+    "mean_funded_payout_pct": 2.9432581147636507,
+    "ev_per_100": -0.039987038418530435,
+    "ev_per_fee": -0.07405007114542672
+   },
+   "FTMO_2step|S3_carry|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.09652509652509653,
+    "median_days_to_pass": 21.0,
+    "mean_funded_payout_pct": 9.905081875077824,
+    "ev_per_100": 0.416088984080871,
+    "ev_per_fee": 0.7705351557053166
+   },
+   "FTMO_2step|H10_human|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.0694980694980695,
+    "median_days_to_pass": 87.5,
+    "mean_funded_payout_pct": 3.683116248241822,
+    "ev_per_100": -0.2840305310102209,
+    "ev_per_fee": -0.5259824648337424
+   },
+   "FTMO_2step|H10_human|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.22393822393822393,
+    "median_days_to_pass": 93.0,
+    "mean_funded_payout_pct": 8.874615479886415,
+    "ev_per_100": 1.4473656287004326,
+    "ev_per_fee": 2.680306719815616
+   },
+   "FTMO_2step|H10_human|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.2702702702702703,
+    "median_days_to_pass": 62.0,
+    "mean_funded_payout_pct": 8.18209150121377,
+    "ev_per_100": 1.6713760814091274,
+    "ev_per_fee": 3.0951408914983842
+   },
+   "FTMO_2step|H10_human|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.23166023166023167,
+    "median_days_to_pass": 44.5,
+    "mean_funded_payout_pct": 1.7664743368558444,
+    "ev_per_100": -0.130778145902121,
+    "ev_per_fee": -0.24218175167059441
+   },
+   "FTMO_2step|H10_human|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.1583011583011583,
+    "median_days_to_pass": 29.0,
+    "mean_funded_payout_pct": 0.7208485565374775,
+    "ev_per_100": -0.4258888385403994,
+    "ev_per_fee": -0.7886830343340729
+   },
+   "FTMO_1step|S4_blend|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.0694980694980695,
+    "median_days_to_pass": 85.5,
+    "mean_funded_payout_pct": 3.7957795874607028,
+    "ev_per_100": -0.27620064643130254,
+    "ev_per_fee": -0.5114826785764862
+   },
+   "FTMO_1step|S4_blend|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.2857142857142857,
+    "median_days_to_pass": 48.0,
+    "mean_funded_payout_pct": 5.654478774457083,
+    "ev_per_100": 1.075565364130595,
+    "ev_per_fee": 1.9917877113529532
+   },
+   "FTMO_1step|S4_blend|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.3204633204633205,
+    "median_days_to_pass": 49.0,
+    "mean_funded_payout_pct": 0.9507046579718723,
+    "ev_per_100": -0.23533402852638843,
+    "ev_per_fee": -0.4358037565303489
+   },
+   "FTMO_1step|S4_blend|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.277992277992278,
+    "median_days_to_pass": 28.5,
+    "mean_funded_payout_pct": 0.12632034439928075,
+    "ev_per_100": -0.504883919703675,
+    "ev_per_fee": -0.934970221673472
+   },
+   "FTMO_1step|S4_blend|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.22007722007722008,
+    "median_days_to_pass": 18.0,
+    "mean_funded_payout_pct": 1.3045514590042835,
+    "ev_per_100": -0.2528979414546558,
+    "ev_per_fee": -0.4683295212123255
+   },
+   "FTMO_1step|S1_trend|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.07335907335907337,
+    "median_days_to_pass": 75.0,
+    "mean_funded_payout_pct": 2.3313350180506722,
+    "ev_per_100": -0.3689754233862442,
+    "ev_per_fee": -0.6832878210856372
+   },
+   "FTMO_1step|S1_trend|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.16216216216216217,
+    "median_days_to_pass": 49.0,
+    "mean_funded_payout_pct": 0.481030817212397,
+    "ev_per_100": -0.46199500261420595,
+    "ev_per_fee": -0.8555463011374184
+   },
+   "FTMO_1step|S1_trend|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.1969111969111969,
+    "median_days_to_pass": 43.0,
+    "mean_funded_payout_pct": 0.051446585487457605,
+    "ev_per_100": -0.5298695912746706,
+    "ev_per_fee": -0.9812399838419824
+   },
+   "FTMO_1step|S1_trend|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.20463320463320464,
+    "median_days_to_pass": 38.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.54,
+    "ev_per_fee": -1.0
+   },
+   "FTMO_1step|S1_trend|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.1891891891891892,
+    "median_days_to_pass": 36.0,
+    "mean_funded_payout_pct": 0.13845214185214033,
+    "ev_per_100": -0.513806351541487,
+    "ev_per_fee": -0.9514932435953461
+   },
+   "FTMO_1step|S2_xs_momentum|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.17374517374517376,
+    "median_days_to_pass": 48.0,
+    "mean_funded_payout_pct": 0.003758222228413723,
+    "ev_per_100": -0.5393470270259513,
+    "ev_per_fee": -0.9987907907887986
+   },
+   "FTMO_1step|S2_xs_momentum|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.14671814671814673,
+    "median_days_to_pass": 25.0,
+    "mean_funded_payout_pct": 0.18831061154741083,
+    "ev_per_100": -0.512371416066403,
+    "ev_per_fee": -0.9488359556785241
+   },
+   "FTMO_1step|S2_xs_momentum|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.13127413127413126,
+    "median_days_to_pass": 11.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.54,
+    "ev_per_fee": -1.0
+   },
+   "FTMO_1step|S2_xs_momentum|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.11969111969111969,
+    "median_days_to_pass": 9.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.54,
+    "ev_per_fee": -1.0
+   },
+   "FTMO_1step|S2_xs_momentum|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.10038610038610038,
+    "median_days_to_pass": 5.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.54,
+    "ev_per_fee": -1.0
+   },
+   "FTMO_1step|S3_carry|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.26640926640926643,
+    "median_days_to_pass": 75.0,
+    "mean_funded_payout_pct": 2.143459909888826,
+    "ev_per_100": 0.031037582171154418,
+    "ev_per_fee": 0.05747700402065633
+   },
+   "FTMO_1step|S3_carry|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.3088803088803089,
+    "median_days_to_pass": 34.5,
+    "mean_funded_payout_pct": 3.381230712911497,
+    "ev_per_100": 0.50439558699969,
+    "ev_per_fee": 0.9340659018512778
+   },
+   "FTMO_1step|S3_carry|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.2084942084942085,
+    "median_days_to_pass": 19.5,
+    "mean_funded_payout_pct": 2.653993561857382,
+    "ev_per_100": 0.013342287028179998,
+    "ev_per_fee": 0.024707938941074068
+   },
+   "FTMO_1step|S3_carry|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.14671814671814673,
+    "median_days_to_pass": 12.0,
+    "mean_funded_payout_pct": 5.074779029240399,
+    "ev_per_100": 0.2045621741742671,
+    "ev_per_fee": 0.37881884106345753
+   },
+   "FTMO_1step|S3_carry|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.12355212355212356,
+    "median_days_to_pass": 9.5,
+    "mean_funded_payout_pct": 0.46993469173947316,
+    "ev_per_100": -0.48193857090477554,
+    "ev_per_fee": -0.8924788350088435
+   },
+   "FTMO_1step|H10_human|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.11583011583011583,
+    "median_days_to_pass": 69.5,
+    "mean_funded_payout_pct": 3.7622392371748177,
+    "ev_per_100": -0.1042193933774342,
+    "ev_per_fee": -0.19299887662487814
+   },
+   "FTMO_1step|H10_human|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.3088803088803089,
+    "median_days_to_pass": 53.0,
+    "mean_funded_payout_pct": 4.951889787584521,
+    "ev_per_100": 0.9895412471303539,
+    "ev_per_fee": 1.8324837909821368
+   },
+   "FTMO_1step|H10_human|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.24324324324324326,
+    "median_days_to_pass": 32.0,
+    "mean_funded_payout_pct": 0.8167934510318433,
+    "ev_per_100": -0.34132051191117324,
+    "ev_per_fee": -0.6320750220577283
+   },
+   "FTMO_1step|H10_human|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.2277992277992278,
+    "median_days_to_pass": 23.0,
+    "mean_funded_payout_pct": 0.10450129068166115,
+    "ev_per_100": -0.5161946866786951,
+    "ev_per_fee": -0.9559160864420277
+   },
+   "FTMO_1step|H10_human|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.1583011583011583,
+    "median_days_to_pass": 12.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.54,
+    "ev_per_fee": -1.0
+   },
+   "HyroTrader_1step|S4_blend|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.0694980694980695,
+    "median_days_to_pass": 85.5,
+    "mean_funded_payout_pct": 3.6331732833535497,
+    "ev_per_100": -0.32650147065496565,
+    "ev_per_fee": -0.563905821511167
+   },
+   "HyroTrader_1step|S4_blend|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.3127413127413127,
+    "median_days_to_pass": 52.0,
+    "mean_funded_payout_pct": 7.435403464220726,
+    "ev_per_100": 1.7463578401616942,
+    "ev_per_fee": 3.0161620728181244
+   },
+   "HyroTrader_1step|S4_blend|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.4015444015444015,
+    "median_days_to_pass": 54.0,
+    "mean_funded_payout_pct": 4.034785270616514,
+    "ev_per_100": 1.0411454368498743,
+    "ev_per_fee": 1.7981786474091093
+   },
+   "HyroTrader_1step|S4_blend|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.3783783783783784,
+    "median_days_to_pass": 36.0,
+    "mean_funded_payout_pct": 1.5250097369023936,
+    "ev_per_100": -0.0019692887396348217,
+    "ev_per_fee": -0.0034011895330480512
+   },
+   "HyroTrader_1step|S4_blend|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.28957528957528955,
+    "median_days_to_pass": 17.0,
+    "mean_funded_payout_pct": 1.090233743749065,
+    "ev_per_100": -0.26329524794911247,
+    "ev_per_fee": -0.4547413608792962
+   },
+   "HyroTrader_1step|S1_trend|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.07335907335907337,
+    "median_days_to_pass": 75.0,
+    "mean_funded_payout_pct": 2.3313350180506722,
+    "ev_per_100": -0.40797542338624415,
+    "ev_per_fee": -0.7046207657793508
+   },
+   "HyroTrader_1step|S1_trend|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.16602316602316602,
+    "median_days_to_pass": 42.0,
+    "mean_funded_payout_pct": 4.297365708539163,
+    "ev_per_100": 0.1344622604910581,
+    "ev_per_fee": 0.23223188340424541
+   },
+   "HyroTrader_1step|S1_trend|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.2548262548262548,
+    "median_days_to_pass": 44.5,
+    "mean_funded_payout_pct": 0.48992950658415463,
+    "ev_per_100": -0.45415309870828496,
+    "ev_per_fee": -0.7843749545911658
+   },
+   "HyroTrader_1step|S1_trend|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.277992277992278,
+    "median_days_to_pass": 40.0,
+    "mean_funded_payout_pct": 0.054849139408121375,
+    "ev_per_100": -0.5637523627900204,
+    "ev_per_fee": -0.973665566131296
+   },
+   "HyroTrader_1step|S1_trend|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.2548262548262548,
+    "median_days_to_pass": 32.5,
+    "mean_funded_payout_pct": 0.21393617056520053,
+    "ev_per_100": -0.5244834468829991,
+    "ev_per_fee": -0.9058436042884267
+   },
+   "HyroTrader_1step|S2_xs_momentum|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.23166023166023167,
+    "median_days_to_pass": 41.0,
+    "mean_funded_payout_pct": 3.9480018249927538,
+    "ev_per_100": 0.33559501737283876,
+    "ev_per_fee": 0.5796114289686334
+   },
+   "HyroTrader_1step|S2_xs_momentum|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.2471042471042471,
+    "median_days_to_pass": 28.5,
+    "mean_funded_payout_pct": 0.897073716625405,
+    "ev_per_100": -0.35732927465627057,
+    "ev_per_fee": -0.6171490063148024
+   },
+   "HyroTrader_1step|S2_xs_momentum|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.22393822393822393,
+    "median_days_to_pass": 11.5,
+    "mean_funded_payout_pct": 0.20845936568801077,
+    "ev_per_100": -0.5323179798845381,
+    "ev_per_fee": -0.919374749368805
+   },
+   "HyroTrader_1step|S2_xs_momentum|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.21235521235521235,
+    "median_days_to_pass": 9.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.579,
+    "ev_per_fee": -1.0
+   },
+   "HyroTrader_1step|S2_xs_momentum|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.18146718146718147,
+    "median_days_to_pass": 5.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.579,
+    "ev_per_fee": -1.0
+   },
+   "HyroTrader_1step|S3_carry|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.277992277992278,
+    "median_days_to_pass": 79.0,
+    "mean_funded_payout_pct": 3.252798452496306,
+    "ev_per_100": 0.3252528516592048,
+    "ev_per_fee": 0.561749312019352
+   },
+   "HyroTrader_1step|S3_carry|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.41312741312741313,
+    "median_days_to_pass": 38.0,
+    "mean_funded_payout_pct": 4.249850392524374,
+    "ev_per_100": 1.176729698842116,
+    "ev_per_fee": 2.0323483572402696
+   },
+   "HyroTrader_1step|S3_carry|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.29343629343629346,
+    "median_days_to_pass": 19.0,
+    "mean_funded_payout_pct": 2.1444600096899995,
+    "ev_per_100": 0.05026239666579141,
+    "ev_per_fee": 0.08680897524316306
+   },
+   "HyroTrader_1step|S3_carry|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.2471042471042471,
+    "median_days_to_pass": 12.0,
+    "mean_funded_payout_pct": 3.496259572548431,
+    "ev_per_100": 0.2849405893555968,
+    "ev_per_fee": 0.4921253702169202
+   },
+   "HyroTrader_1step|S3_carry|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.19305019305019305,
+    "median_days_to_pass": 9.0,
+    "mean_funded_payout_pct": 2.140999276649816,
+    "ev_per_100": -0.1656796763224293,
+    "ev_per_fee": -0.28614797292302124
+   },
+   "HyroTrader_1step|H10_human|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.11583011583011583,
+    "median_days_to_pass": 69.5,
+    "mean_funded_payout_pct": 3.7622392371748177,
+    "ev_per_100": -0.14321939337743417,
+    "ev_per_fee": -0.2473564652460003
+   },
+   "HyroTrader_1step|H10_human|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.3552123552123552,
+    "median_days_to_pass": 54.0,
+    "mean_funded_payout_pct": 4.6379605014112455,
+    "ev_per_100": 1.0684608730881644,
+    "ev_per_fee": 1.8453555666462254
+   },
+   "HyroTrader_1step|H10_human|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.32432432432432434,
+    "median_days_to_pass": 31.5,
+    "mean_funded_payout_pct": 1.553361217345085,
+    "ev_per_100": -0.07520717275294542,
+    "ev_per_fee": -0.12989149007417172
+   },
+   "HyroTrader_1step|H10_human|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.32432432432432434,
+    "median_days_to_pass": 19.5,
+    "mean_funded_payout_pct": 1.2865518541764538,
+    "ev_per_100": -0.16173993918601495,
+    "ev_per_fee": -0.2793435909948445
+   },
+   "HyroTrader_1step|H10_human|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.26640926640926643,
+    "median_days_to_pass": 12.0,
+    "mean_funded_payout_pct": 0.257302040314177,
+    "ev_per_100": -0.5104523521942926,
+    "ev_per_fee": -0.8816102801283119
+   },
+   "HyroTrader_2step|S4_blend|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.019305019305019305,
+    "median_days_to_pass": 208.0,
+    "mean_funded_payout_pct": 1.8726188788189546,
+    "ev_per_100": -0.5428490563934565,
+    "ev_per_fee": -0.9375631371216865
+   },
+   "HyroTrader_2step|S4_blend|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.1776061776061776,
+    "median_days_to_pass": 94.0,
+    "mean_funded_payout_pct": 8.00285234237483,
+    "ev_per_100": 0.8423560144758384,
+    "ev_per_fee": 1.454846311702657
+   },
+   "HyroTrader_2step|S4_blend|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.2548262548262548,
+    "median_days_to_pass": 58.0,
+    "mean_funded_payout_pct": 6.013909665367531,
+    "ev_per_100": 0.9535020768890232,
+    "ev_per_fee": 1.6468084229516808
+   },
+   "HyroTrader_2step|S4_blend|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.20463320463320464,
+    "median_days_to_pass": 74.0,
+    "mean_funded_payout_pct": 1.7165711229998932,
+    "ev_per_100": -0.22773255011971297,
+    "ev_per_fee": -0.3933204665280016
+   },
+   "HyroTrader_2step|S4_blend|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.09266409266409266,
+    "median_days_to_pass": 29.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.579,
+    "ev_per_fee": -1.0
+   },
+   "HyroTrader_2step|S1_trend|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.04247104247104247,
+    "median_days_to_pass": 174.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.579,
+    "ev_per_fee": -1.0
+   },
+   "HyroTrader_2step|S1_trend|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.0888030888030888,
+    "median_days_to_pass": 65.0,
+    "mean_funded_payout_pct": 0.6110949639739609,
+    "ev_per_100": -0.5247328796471,
+    "ev_per_fee": -0.9062744035355786
+   },
+   "HyroTrader_2step|S1_trend|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.11196911196911197,
+    "median_days_to_pass": 49.0,
+    "mean_funded_payout_pct": 0.321709133032644,
+    "ev_per_100": -0.5429785140619819,
+    "ev_per_fee": -0.937786725495651
+   },
+   "HyroTrader_2step|S1_trend|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.12355212355212356,
+    "median_days_to_pass": 41.5,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.579,
+    "ev_per_fee": -1.0
+   },
+   "HyroTrader_2step|S1_trend|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.18146718146718147,
+    "median_days_to_pass": 48.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.579,
+    "ev_per_fee": -1.0
+   },
+   "HyroTrader_2step|S2_xs_momentum|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.11969111969111969,
+    "median_days_to_pass": 55.0,
+    "mean_funded_payout_pct": 3.015386011897613,
+    "ev_per_100": -0.21808507193503474,
+    "ev_per_fee": -0.37665815532821195
+   },
+   "HyroTrader_2step|S2_xs_momentum|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.0888030888030888,
+    "median_days_to_pass": 78.0,
+    "mean_funded_payout_pct": 0.1571853560102879,
+    "ev_per_100": -0.5650414548716733,
+    "ev_per_fee": -0.9758919773258606
+   },
+   "HyroTrader_2step|S2_xs_momentum|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.06563706563706563,
+    "median_days_to_pass": 29.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.579,
+    "ev_per_fee": -1.0
+   },
+   "HyroTrader_2step|S2_xs_momentum|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.04633204633204633,
+    "median_days_to_pass": 19.5,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.579,
+    "ev_per_fee": -1.0
+   },
+   "HyroTrader_2step|S2_xs_momentum|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.02702702702702703,
+    "median_days_to_pass": 17.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.579,
+    "ev_per_fee": -1.0
+   },
+   "HyroTrader_2step|S3_carry|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.11196911196911197,
+    "median_days_to_pass": 78.0,
+    "mean_funded_payout_pct": 2.108889491576963,
+    "ev_per_100": -0.3428695163871354,
+    "ev_per_fee": -0.5921753305477295
+   },
+   "HyroTrader_2step|S3_carry|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.277992277992278,
+    "median_days_to_pass": 61.0,
+    "mean_funded_payout_pct": 2.3630294051441387,
+    "ev_per_100": 0.07790392729875661,
+    "ev_per_fee": 0.1345490972344674
+   },
+   "HyroTrader_2step|S3_carry|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.15057915057915058,
+    "median_days_to_pass": 37.0,
+    "mean_funded_payout_pct": 2.491029298567423,
+    "ev_per_100": -0.20390292415394018,
+    "ev_per_fee": -0.35216394499816955
+   },
+   "HyroTrader_2step|S3_carry|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.12355212355212356,
+    "median_days_to_pass": 27.5,
+    "mean_funded_payout_pct": 3.362402112263389,
+    "ev_per_100": -0.1635680787937125,
+    "ev_per_fee": -0.2825009996437176
+   },
+   "HyroTrader_2step|S3_carry|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.08108108108108109,
+    "median_days_to_pass": 20.0,
+    "mean_funded_payout_pct": 6.430902895153452,
+    "ev_per_100": -0.05757544093350385,
+    "ev_per_fee": -0.0994394489352398
+   },
+   "HyroTrader_2step|H10_human|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.0694980694980695,
+    "median_days_to_pass": 87.5,
+    "mean_funded_payout_pct": 0.77921972699554,
+    "ev_per_100": -0.5248457332589973,
+    "ev_per_fee": -0.9064693147823787
+   },
+   "HyroTrader_2step|H10_human|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.1969111969111969,
+    "median_days_to_pass": 88.0,
+    "mean_funded_payout_pct": 5.456797357782332,
+    "ev_per_100": 0.4955044990227756,
+    "ev_per_fee": 0.8557936079840684
+   },
+   "HyroTrader_2step|H10_human|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.16216216216216217,
+    "median_days_to_pass": 51.0,
+    "mean_funded_payout_pct": 1.2045183070656214,
+    "ev_per_100": -0.38367270696233163,
+    "ev_per_fee": -0.6626471622838198
+   },
+   "HyroTrader_2step|H10_human|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.16216216216216217,
+    "median_days_to_pass": 43.0,
+    "mean_funded_payout_pct": 0.7842510436628758,
+    "ev_per_100": -0.4518241550816958,
+    "ev_per_fee": -0.7803525994502518
+   },
+   "HyroTrader_2step|H10_human|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.10038610038610038,
+    "median_days_to_pass": 26.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.579,
+    "ev_per_fee": -1.0
+   },
+   "Breakout_classic_1step|S4_blend|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.0694980694980695,
+    "median_days_to_pass": 85.5,
+    "mean_funded_payout_pct": 3.6331732833535497,
+    "ev_per_100": -0.24750147065496567,
+    "ev_per_fee": -0.49500294130993133
+   },
+   "Breakout_classic_1step|S4_blend|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.277992277992278,
+    "median_days_to_pass": 47.5,
+    "mean_funded_payout_pct": 5.716342154186823,
+    "ev_per_100": 1.0890989772256807,
+    "ev_per_fee": 2.1781979544513614
+   },
+   "Breakout_classic_1step|S4_blend|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.2972972972972973,
+    "median_days_to_pass": 41.0,
+    "mean_funded_payout_pct": 1.024785540411239,
+    "ev_per_100": -0.19533402852638843,
+    "ev_per_fee": -0.3906680570527768
+   },
+   "Breakout_classic_1step|S4_blend|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.2857142857142857,
+    "median_days_to_pass": 27.0,
+    "mean_funded_payout_pct": 0.08369132336724593,
+    "ev_per_100": -0.476088193323644,
+    "ev_per_fee": -0.952176386647288
+   },
+   "Breakout_classic_1step|S4_blend|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.23552123552123552,
+    "median_days_to_pass": 15.0,
+    "mean_funded_payout_pct": 1.2190071010367893,
+    "ev_per_100": -0.21289794145465576,
+    "ev_per_fee": -0.42579588290931153
+   },
+   "Breakout_classic_1step|S1_trend|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.07335907335907337,
+    "median_days_to_pass": 75.0,
+    "mean_funded_payout_pct": 2.3313350180506722,
+    "ev_per_100": -0.32897542338624414,
+    "ev_per_fee": -0.6579508467724883
+   },
+   "Breakout_classic_1step|S1_trend|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.14671814671814673,
+    "median_days_to_pass": 46.0,
+    "mean_funded_payout_pct": 0.5297069062899138,
+    "ev_per_100": -0.4222823844053408,
+    "ev_per_fee": -0.8445647688106817
+   },
+   "Breakout_classic_1step|S1_trend|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.18532818532818532,
+    "median_days_to_pass": 39.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.5,
+    "ev_per_fee": -1.0
+   },
+   "Breakout_classic_1step|S1_trend|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.2084942084942085,
+    "median_days_to_pass": 36.5,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.5,
+    "ev_per_fee": -1.0
+   },
+   "Breakout_classic_1step|S1_trend|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.1891891891891892,
+    "median_days_to_pass": 31.0,
+    "mean_funded_payout_pct": 0.10105111251177358,
+    "ev_per_100": -0.480882221957232,
+    "ev_per_fee": -0.961764443914464
+   },
+   "Breakout_classic_1step|S2_xs_momentum|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.16988416988416988,
+    "median_days_to_pass": 43.0,
+    "mean_funded_payout_pct": 0.00384363636996858,
+    "ev_per_100": -0.49934702702595124,
+    "ev_per_fee": -0.9986940540519025
+   },
+   "Breakout_classic_1step|S2_xs_momentum|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.16216216216216217,
+    "median_days_to_pass": 19.0,
+    "mean_funded_payout_pct": 0.17037626759051455,
+    "ev_per_100": -0.47237141606640304,
+    "ev_per_fee": -0.9447428321328061
+   },
+   "Breakout_classic_1step|S2_xs_momentum|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.16216216216216217,
+    "median_days_to_pass": 8.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.5,
+    "ev_per_fee": -1.0
+   },
+   "Breakout_classic_1step|S2_xs_momentum|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.18146718146718147,
+    "median_days_to_pass": 5.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.5,
+    "ev_per_fee": -1.0
+   },
+   "Breakout_classic_1step|S2_xs_momentum|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.16602316602316602,
+    "median_days_to_pass": 4.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.5,
+    "ev_per_fee": -1.0
+   },
+   "Breakout_classic_1step|S3_carry|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.26640926640926643,
+    "median_days_to_pass": 75.0,
+    "mean_funded_payout_pct": 2.1238128042378026,
+    "ev_per_100": 0.06580341116760001,
+    "ev_per_fee": 0.13160682233520002
+   },
+   "Breakout_classic_1step|S3_carry|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.3127413127413127,
+    "median_days_to_pass": 32.0,
+    "mean_funded_payout_pct": 2.950845851526822,
+    "ev_per_100": 0.4228514053037552,
+    "ev_per_fee": 0.8457028106075104
+   },
+   "Breakout_classic_1step|S3_carry|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.24324324324324326,
+    "median_days_to_pass": 17.0,
+    "mean_funded_payout_pct": 2.2767480923674497,
+    "ev_per_100": 0.053803590035325644,
+    "ev_per_fee": 0.10760718007065129
+   },
+   "Breakout_classic_1step|S3_carry|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.1969111969111969,
+    "median_days_to_pass": 9.0,
+    "mean_funded_payout_pct": 3.461047282192208,
+    "ev_per_100": 0.18151896290271283,
+    "ev_per_fee": 0.3630379258054256
+   },
+   "Breakout_classic_1step|S3_carry|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.1969111969111969,
+    "median_days_to_pass": 5.0,
+    "mean_funded_payout_pct": 0.2948609830522185,
+    "ev_per_100": -0.4419385709047755,
+    "ev_per_fee": -0.883877141809551
+   },
+   "Breakout_classic_1step|H10_human|0.5": {
+    "attempts": 259,
+    "pass_rate": 0.11583011583011583,
+    "median_days_to_pass": 69.5,
+    "mean_funded_payout_pct": 3.7622392371748177,
+    "ev_per_100": -0.06421939337743418,
+    "ev_per_fee": -0.12843878675486836
+   },
+   "Breakout_classic_1step|H10_human|1.0": {
+    "attempts": 259,
+    "pass_rate": 0.3088803088803089,
+    "median_days_to_pass": 52.0,
+    "mean_funded_payout_pct": 4.799971232019497,
+    "ev_per_100": 0.9826165967627788,
+    "ev_per_fee": 1.9652331935255576
+   },
+   "Breakout_classic_1step|H10_human|1.5": {
+    "attempts": 259,
+    "pass_rate": 0.2471042471042471,
+    "median_days_to_pass": 28.0,
+    "mean_funded_payout_pct": 0.7804366481616518,
+    "ev_per_100": -0.3071507896434528,
+    "ev_per_fee": -0.6143015792869057
+   },
+   "Breakout_classic_1step|H10_human|2.0": {
+    "attempts": 259,
+    "pass_rate": 0.2625482625482625,
+    "median_days_to_pass": 19.0,
+    "mean_funded_payout_pct": 0.090670237503206,
+    "ev_per_100": -0.47619468667869497,
+    "ev_per_fee": -0.9523893733573899
+   },
+   "Breakout_classic_1step|H10_human|3.0": {
+    "attempts": 259,
+    "pass_rate": 0.2084942084942085,
+    "median_days_to_pass": 9.0,
+    "mean_funded_payout_pct": 0.0,
+    "ev_per_100": -0.5,
+    "ev_per_fee": -1.0
+   }
+  }
+ },
+ "best_by_firm": {
+  "FTMO_2step": {
+   "choice": "FTMO_2step|S3_carry|1.0",
+   "dev": {
+    "attempts": 276,
+    "pass_rate": 0.48188405797101447,
+    "median_days_to_pass": 72.0,
+    "mean_funded_payout_pct": 25.30318166299273,
+    "ev_per_100": 11.653199859340699,
+    "ev_per_fee": 21.57999973951981
+   },
+   "conf": {
+    "attempts": 259,
+    "pass_rate": 0.3745173745173745,
+    "median_days_to_pass": 70.0,
+    "mean_funded_payout_pct": 3.72433582721291,
+    "ev_per_100": 0.8548284758287731,
+    "ev_per_fee": 1.5830156959792094
+   },
+   "recommended": true
+  },
+  "FTMO_1step": {
+   "choice": "FTMO_1step|S3_carry|0.5",
+   "dev": {
+    "attempts": 276,
+    "pass_rate": 0.40942028985507245,
+    "median_days_to_pass": 52.0,
+    "mean_funded_payout_pct": 11.895073616349594,
+    "ev_per_100": 4.330084487853275,
+    "ev_per_fee": 8.018674977506064
+   },
+   "conf": {
+    "attempts": 259,
+    "pass_rate": 0.26640926640926643,
+    "median_days_to_pass": 75.0,
+    "mean_funded_payout_pct": 2.143459909888826,
+    "ev_per_100": 0.031037582171154418,
+    "ev_per_fee": 0.05747700402065633
+   },
+   "recommended": true
+  },
+  "HyroTrader_1step": {
+   "choice": "HyroTrader_1step|S3_carry|1.0",
+   "dev": {
+    "attempts": 276,
+    "pass_rate": 0.5217391304347826,
+    "median_days_to_pass": 37.0,
+    "mean_funded_payout_pct": 14.402148930309327,
+    "ev_per_100": 6.935164659291823,
+    "ev_per_fee": 11.977831881333028
+   },
+   "conf": {
+    "attempts": 259,
+    "pass_rate": 0.41312741312741313,
+    "median_days_to_pass": 38.0,
+    "mean_funded_payout_pct": 4.249850392524374,
+    "ev_per_100": 1.176729698842116,
+    "ev_per_fee": 2.0323483572402696
+   },
+   "recommended": true
+  },
+  "HyroTrader_2step": {
+   "choice": "HyroTrader_2step|S3_carry|1.0",
+   "dev": {
+    "attempts": 276,
+    "pass_rate": 0.37681159420289856,
+    "median_days_to_pass": 53.5,
+    "mean_funded_payout_pct": 18.166257563720862,
+    "ev_per_100": 6.266256473286122,
+    "ev_per_fee": 10.822550040217827
+   },
+   "conf": {
+    "attempts": 259,
+    "pass_rate": 0.277992277992278,
+    "median_days_to_pass": 61.0,
+    "mean_funded_payout_pct": 2.3630294051441387,
+    "ev_per_100": 0.07790392729875661,
+    "ev_per_fee": 0.1345490972344674
+   },
+   "recommended": true
+  },
+  "Breakout_classic_1step": {
+   "choice": "Breakout_classic_1step|S3_carry|0.5",
+   "dev": {
+    "attempts": 276,
+    "pass_rate": 0.4166666666666667,
+    "median_days_to_pass": 51.0,
+    "mean_funded_payout_pct": 11.655035249311018,
+    "ev_per_100": 4.356264687212924,
+    "ev_per_fee": 8.712529374425849
+   },
+   "conf": {
+    "attempts": 259,
+    "pass_rate": 0.26640926640926643,
+    "median_days_to_pass": 75.0,
+    "mean_funded_payout_pct": 2.1238128042378026,
+    "ev_per_100": 0.06580341116760001,
+    "ev_per_fee": 0.13160682233520002
+   },
+   "recommended": true
+  }
+ }
+}

@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "protocol_id": "prop-firm-v4",
+  "status": "DECLARED_BEFORE_EVALUATION",
+  "question": "Fast pass, slow fund: what challenge-phase risk gets a funded account fastest and cheapest (counting retries), within every rule, and does our edge beat a no-edge gamble?",
+  "registration_note": "Declared 2026-10-03 before any v4 simulation. Rule-breaking schemes (cross-account or cross-firm opposite positions, reverse copy trading) are excluded: they are banned and void payouts. Same rule snapshot, universes, buffer, caps and simulator as v3; the funded phase always uses the best v3 funded policy (0.5x with headroom scaling). Historical seen data: descriptive; both samples must agree.",
+  "firms": ["HyroTrader_1step", "Breakout_classic_1step", "FTMO_2step"],
+  "challenge_policies": {
+    "blend_hr": "multi-premia blend on the firm universe, challenge scale in [1.0, 1.5, 2.0, 3.0], headroom scaling and daily vol guard on",
+    "gamble_btc": "no-edge reference: long BTC at challenge scale in [1.0, 2.0, 3.0], headroom scaling and vol guard on; funded phase not evaluated (a gamble has no funded edge)"
+  },
+  "retry_model": "attempts are bought one after another until a pass; with pass probability p and mean attempt length D (passes and failures), expected fees to a funded account = fee / p and expected days = D / p",
+  "metrics": ["pass_rate", "breach_rate", "mean_attempt_days", "expected_fees_per_funded (in % of account)", "expected_days_to_funded", "funded_survival_12m", "mean_payout_12m_pct", "net_value_12m = mean_payout_12m - expected_fees_per_funded (blend only)"],
+  "choice_rule": "per firm, the blend challenge scale with the lowest expected_days_to_funded among those whose net_value_12m is positive on both samples and whose funded_survival_12m >= 0.7 on both; ties by net value",
+  "claims": {"strategy_promotion_authorized": false, "live_trading_authorized": false, "purchase_advice": false}
+}
