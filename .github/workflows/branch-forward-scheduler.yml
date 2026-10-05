@@ -18,6 +18,11 @@ on:
     - cron: "55 16 * * *"
     - cron: "0 3 13 3,6,9,12 *"
     - cron: "5 17 * * *"
+    # catch-up: GitHub drops or delays scheduled events under load (2026-10-05: the
+    # 16:15-17:05 triggers never fired). The forward watches replay deterministically,
+    # so a second dispatch after the scoring bar closed is harmless.
+    - cron: "40 20 * * *"
+    - cron: "40 23 * * *"
   workflow_dispatch:
     inputs:
       workflow:
@@ -62,6 +67,8 @@ jobs:
             "55 16 * * *") targets="crypto-trend-core-voltarget-v1.yml" ;;
             "0 3 13 3,6,9,12 *") targets="new-listing-holdout-v1.yml" ;;
             "5 17 * * *") targets="multi-premia-blend-v1.yml" ;;
+            "40 20 * * *"|"40 23 * * *")
+              targets="trend-portfolio-forward-v1.yml cross-asset-trend-forward-v1.yml cross-asset-trend-invvol-forward-v1.yml crypto-trend-core-v1.yml crypto-trend-core-voltarget-v1.yml multi-premia-blend-v1.yml" ;;
             manual)
               if [ "${REQUESTED:-all}" = "all" ]; then targets="${!REF[*]}"; else targets="$REQUESTED"; fi ;;
             *) echo "unmapped schedule: $SCHEDULE"; exit 1 ;;
