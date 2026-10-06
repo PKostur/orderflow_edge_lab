@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "protocol_name": "strategy-discovery-v2.1-low-turnover",
+  "frozen_at_intent": "2026-09-14",
+  "status": "development_screening",
+  "supersedes": null,
+  "purpose": "Explore unrelated lower-turnover and relative-value mechanisms after strategy-discovery-v2 showed that 15-300 second gross payoff was smaller than realistic target-venue friction.",
+  "data": {
+    "source": "MEXC public futures klines",
+    "target_execution_venue": "MEXC Futures",
+    "start": "2026-03-01",
+    "end_exclusive": "2026-09-12",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "intervals": ["15m", "1h"],
+    "context_symbol": "BTC_USDT",
+    "universe_selection_uses_strategy_pnl": false
+  },
+  "dependence_and_trials": {
+    "calendar_fold_days": 21,
+    "minimum_folds": 6,
+    "minimum_symbols": 8,
+    "minimum_total_trades": 60,
+    "minimum_positive_fold_fraction": 0.60,
+    "minimum_positive_symbol_fraction": 0.60,
+    "trial_unit": "family x interval x frozen parameter variant x cost case",
+    "calendar_time_fold_is_dependence_cluster": true,
+    "all_trials_retained": true,
+    "no_best_cell_auto_promotion": true
+  },
+  "economics": {
+    "round_trip_cost_bps": [12.0, 16.0, 20.0],
+    "primary_cost_bps": 16.0,
+    "zero_cost_results_cannot_promote": true
+  },
+  "causality": {
+    "signal_uses_completed_bar_t": true,
+    "entry": "next bar open t+1",
+    "exit": "open after frozen hold_bars",
+    "rolling_statistics_use_past_and_current_completed_bars_only": true,
+    "no_same_bar_fill": true,
+    "one_active_trade_per_symbol": true
+  },
+  "state_screen": {
+    "first_stage_before_pnl": true,
+    "metric": "calendar-fold Spearman of continuous signed score versus causal forward return for the strategy hold horizon",
+    "median_spearman_gt": 0.0,
+    "minimum_positive_fold_fraction": 0.60,
+    "strategy_pnl_not_used_for_state_selection": true
+  },
+  "families": {
+    "session_vwap_reversion": {
+      "tier": "simple",
+      "pods": ["mean_reversion", "session_time"],
+      "hypothesis": "large deviation from UTC-session cumulative VWAP reverts on minutes-to-hours horizons",
+      "grid": {"threshold": [1.0, 1.5], "hold_bars": [4, 8]}
+    },
+    "session_vwap_trend": {
+      "tier": "simple",
+      "pods": ["trend_structure", "session_time"],
+      "hypothesis": "large deviation from session VWAP can represent trend acceptance rather than reversion",
+      "grid": {"threshold": [1.0, 1.5], "hold_bars": [4, 8]}
+    },
+    "opening_range_breakout": {
+      "tier": "simple",
+      "pods": ["trend_structure", "session_time"],
+      "hypothesis": "breakout beyond a frozen UTC opening range can persist",
+      "grid": {"opening_bars": [2, 4], "threshold_atr": [0.0, 0.25], "hold_bars": [4, 8]}
+    },
+    "opening_range_reversal": {
+      "tier": "simple",
+      "pods": ["mean_reversion", "session_time"],
+      "hypothesis": "failed expansion beyond a UTC opening range can revert",
+      "grid": {"opening_bars": [2, 4], "threshold_atr": [0.0, 0.25], "hold_bars": [4, 8]}
+    },
+    "volume_shock_continuation": {
+      "tier": "structural",
+      "pods": ["trend_structure", "volatility_regime"],
+      "hypothesis": "large standardized price move accompanied by exceptional volume continues",
+      "grid": {"return_lookback": [1, 4], "volume_z": [1.5, 2.0], "hold_bars": [4, 8]}
+    },
+    "volume_shock_reversal": {
+      "tier": "structural",
+      "pods": ["mean_reversion", "volatility_regime"],
+      "hypothesis": "large high-volume impulse exhausts and reverses",
+      "grid": {"return_lookback": [1, 4], "volume_z": [1.5, 2.0], "hold_bars": [4, 8]}
+    },
+    "range_expansion_follow": {
+      "tier": "structural",
+      "pods": ["trend_structure", "volatility_regime"],
+      "hypothesis": "direction of an unusually large true-range bar persists",
+      "grid": {"range_z": [1.0, 1.5], "hold_bars": [4, 8]}
+    },
+    "range_expansion_fade": {
+      "tier": "structural",
+      "pods": ["mean_reversion", "volatility_regime"],
+      "hypothesis": "direction of an unusually large true-range bar mean-reverts",
+      "grid": {"range_z": [1.0, 1.5], "hold_bars": [4, 8]}
+    },
+    "btc_relative_strength_momentum": {
+      "tier": "cross_asset",
+      "pods": ["btc_cross_asset_context", "trend_structure"],
+      "hypothesis": "asset return in excess of BTC continues",
+      "grid": {"lookback": [4, 12], "threshold_z": [1.0, 1.5], "hold_bars": [4, 8]}
+    },
+    "btc_relative_strength_reversion": {
+      "tier": "cross_asset",
+      "pods": ["btc_cross_asset_context", "mean_reversion"],
+      "hypothesis": "asset return in excess of BTC converges back toward BTC",
+      "grid": {"lookback": [4, 12], "threshold_z": [1.0, 1.5], "hold_bars": [4, 8]}
+    },
+    "beta_residual_momentum": {
+      "tier": "institutionally_inspired_relative_value",
+      "pods": ["btc_cross_asset_context", "trend_structure", "research_validity_statistics"],
+      "hypothesis": "rolling-beta-neutral return residual persists after removing contemporaneous BTC exposure",
+      "grid": {"beta_window": [96, 192], "residual_lookback": [4, 12], "threshold_z": [1.0, 1.5], "hold_bars": [4, 8]}
+    },
+    "beta_residual_reversion": {
+      "tier": "institutionally_inspired_relative_value",
+      "pods": ["btc_cross_asset_context", "mean_reversion", "research_validity_statistics"],
+      "hypothesis": "rolling-beta-neutral return residual mean-reverts after removing BTC exposure",
+      "grid": {"beta_window": [96, 192], "residual_lookback": [4, 12], "threshold_z": [1.0, 1.5], "hold_bars": [4, 8]}
+    },
+    "rolling_beta_spread_reversion": {
+      "tier": "institutionally_inspired_relative_value",
+      "pods": ["btc_cross_asset_context", "mean_reversion", "research_validity_statistics"],
+      "hypothesis": "rolling OLS log-price residual versus BTC reverts; this is a relative-value proxy and not a cointegration claim",
+      "grid": {"regression_window": [96, 192], "threshold_z": [1.5, 2.0], "hold_bars": [4, 8]}
+    },
+    "rolling_beta_spread_momentum": {
+      "tier": "institutionally_inspired_relative_value",
+      "pods": ["btc_cross_asset_context", "trend_structure", "research_validity_statistics"],
+      "hypothesis": "rolling OLS log-price residual versus BTC can trend after a structural repricing; not a cointegration claim",
+      "grid": {"regression_window": [96, 192], "threshold_z": [1.5, 2.0], "hold_bars": [4, 8]}
+    }
+  },
+  "screening_gate": {
+    "state_screen_required_first": true,
+    "primary_cost_case_bps": 16.0,
+    "median_fold_net_expectancy_bps_gt": 0.0,
+    "median_fold_profit_factor_gt": 1.0,
+    "minimum_positive_fold_fraction": 0.60,
+    "minimum_positive_symbol_fraction": 0.60,
+    "minimum_total_trades": 60,
+    "must_beat_reversed_direction_control": true,
+    "requires_parameter_neighborhood_stability": true,
+    "requires_future_after_freeze_forward_validation": true
+  },
+  "risk_path": {
+    "mae_mfe_required_before_promotion": true,
+    "stop_rr_grid_only_after_economic_screen": true,
+    "no_stop_optimization_to_rescue_negative_gross_edge": true
+  },
+  "institutional_label_boundary": {
+    "wording": "institutionally inspired public-data relative-value proxies",
+    "not_claimed": ["proprietary institutional alpha", "true statistical arbitrage without stationarity validation", "cointegration unless separately tested", "hidden liquidity or MBO inference"]
+  },
+  "claims": {"development_screening_only":true,"verified_out_of_sample_evidence":false,"profitable_edge_established":false,"live_order_transmission_supported":false}
+}

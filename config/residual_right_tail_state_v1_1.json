@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "protocol_name": "residual-right-tail-state-v1.1",
+  "supersedes": "residual-right-tail-state-v1 for future state-discrimination work",
+  "parent_result": "research/strategy_discovery_v2/RESIDUAL_RIGHT_TAIL_STATE_V1_REPORT.md",
+  "status": "post-selection-state-discovery",
+  "source_strategy": {
+    "family": "rolling_beta_spread_momentum",
+    "interval": "1h",
+    "regression_window": 192,
+    "threshold_z": 1.5,
+    "hold_bars": 8,
+    "source_trade_count": 1616
+  },
+  "reason_for_version": "v1 binary AUC survived its feature-search-locked folds but failed the frozen within-symbol x fold permutation gate because the null itself had median AUC near 0.60. v1.1 makes within-symbol discrimination and chronological walk-forward testing primary so symbol/fold event prevalence cannot create the main score.",
+  "data": {
+    "source": "exact archived MEXC public futures 1h klines from strategy-discovery-v2.1.3",
+    "symbols": ["ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "context_symbol": "BTC_USDT",
+    "calendar_fold_days": 21
+  },
+  "targets": {
+    "continuous": "signed 8h beta-neutral residual continuation as in v1",
+    "binary": "for each outer split and symbol, event = signed residual continuation exceeds that symbol's training-only 80th percentile",
+    "strategy_pnl_used": false
+  },
+  "validation": {
+    "mode": "chronological expanding walk-forward",
+    "initial_training_folds": [0,1,2,3],
+    "test_folds": [4,5,6,7,8,9],
+    "for_test_fold_k": "train only on folds < k; never train on a future fold",
+    "primary_continuous_metric": "within each test fold compute Spearman separately for every symbol with at least 8 observations; fold score = median symbol Spearman; primary score = median of the six fold scores",
+    "primary_binary_metric": "within each test fold compute ROC AUC separately for every symbol with both classes; fold score = median symbol AUC; primary score = median of the six fold scores",
+    "minimum_symbol_cells_per_fold": 6,
+    "no_globally_locked_fold_remains": true,
+    "reason": "All original ten folds have now been inspected in prior strategy or v1 state analysis. v1.1 can improve validity but cannot create untouched evidence from them."
+  },
+  "feature_families": {
+    "residual_geometry": ["residual_z","abs_residual_z","residual_sign","residual_slope_1h","residual_slope_4h","residual_slope_12h","residual_accel_4h","residual_vol_12h","residual_vol_24h","beta","beta_change_24h"],
+    "btc_regime": ["btc_ret_4h","btc_ret_12h","btc_ret_24h","btc_rv_12h","btc_rv_24h","btc_rv_48h","btc_range_z_24h","btc_volume_z_24h"],
+    "asset_regime": ["asset_ret_4h","asset_ret_12h","asset_ret_24h","asset_rv_12h","asset_rv_24h","asset_range_z_24h","asset_volume_z_24h","session_vwap_distance_atr"],
+    "relative_regime": ["excess_ret_4h","excess_ret_12h","excess_ret_24h","residual_rank_cross_section","residual_abs_rank_cross_section"],
+    "cross_section": ["cs_return_dispersion_4h","cs_return_dispersion_12h","cs_return_dispersion_24h","cs_residual_dispersion","cs_positive_return_share_4h"],
+    "session": ["hour_sin","hour_cos","weekday_sin","weekday_cos"]
+  },
+  "feature_sets": {
+    "R": ["residual_geometry"],
+    "R_B": ["residual_geometry","btc_regime"],
+    "R_A": ["residual_geometry","asset_regime"],
+    "R_X": ["residual_geometry","relative_regime","cross_section"],
+    "R_B_X": ["residual_geometry","btc_regime","relative_regime","cross_section"],
+    "CORE": ["residual_geometry","btc_regime","asset_regime","relative_regime","cross_section","session"]
+  },
+  "model_grid": {
+    "continuous": {
+      "ridge": [{"alpha":0.1},{"alpha":1.0},{"alpha":10.0},{"alpha":100.0}],
+      "elastic_net": [{"alpha":0.0001,"l1_ratio":0.1},{"alpha":0.001,"l1_ratio":0.25},{"alpha":0.01,"l1_ratio":0.5},{"alpha":0.05,"l1_ratio":0.75}],
+      "hist_gradient_boosting": [{"max_iter":80,"max_leaf_nodes":7,"learning_rate":0.05},{"max_iter":120,"max_leaf_nodes":15,"learning_rate":0.05},{"max_iter":160,"max_leaf_nodes":15,"learning_rate":0.03},{"max_iter":120,"max_leaf_nodes":31,"learning_rate":0.03}]
+    },
+    "binary": {
+      "logistic": [{"C":0.1},{"C":0.5},{"C":1.0},{"C":5.0}],
+      "random_forest": [{"n_estimators":120,"max_depth":3,"min_samples_leaf":20},{"n_estimators":160,"max_depth":5,"min_samples_leaf":20},{"n_estimators":160,"max_depth":7,"min_samples_leaf":10},{"n_estimators":200,"max_depth":5,"min_samples_leaf":10}],
+      "hist_gradient_boosting": [{"max_iter":80,"max_leaf_nodes":7,"learning_rate":0.05},{"max_iter":120,"max_leaf_nodes":15,"learning_rate":0.05},{"max_iter":160,"max_leaf_nodes":15,"learning_rate":0.03},{"max_iter":120,"max_leaf_nodes":31,"learning_rate":0.03}]
+    }
+  },
+  "epoch_accounting": {
+    "core_epochs": 144,
+    "winner_permutation_epochs": 20000,
+    "all_epochs_retained": true
+  },
+  "selection": {
+    "continuous_gate": {"median_walk_forward_fold_score_gt":0.05,"positive_test_fold_fraction_gte":0.667},
+    "binary_gate": {"median_walk_forward_fold_auc_gt":0.55,"auc_above_half_test_fold_fraction_gte":0.667},
+    "winner_rule": "one per target by primary metric; if within 0.01 choose lower model complexity then fewer features",
+    "adversarial_gate": {"permutation_p_lt":0.01,"permutation_unit":"shuffle outcomes within symbol x test fold and evaluate the same within-symbol macro metric"}
+  },
+  "translation": {
+    "strategy_pnl_translation_allowed": false,
+    "reason": "No untouched state holdout remains after v1.1. A state model may be retained only as a forward hypothesis for genuinely new captures."
+  },
+  "claims": {
+    "post_selection_development_only": true,
+    "verified_oos": false,
+    "profitable_edge_established": false,
+    "live_enabled": false
+  }
+}

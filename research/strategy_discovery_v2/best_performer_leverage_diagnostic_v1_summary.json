@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "protocol_name": "strategy-discovery-v2.1.3-best-performer-leverage-diagnostic-v1",
+  "status": "post_selection_diagnostic",
+  "source_workflow_run_id": 34856870642,
+  "source_head_sha": "036b83d5a050b919e7a0046168edf3a2dbf9ab8b",
+  "diagnostic_workflow_run_id": 34860252045,
+  "diagnostic_artifact_sha256": "26f500e9203ad1f8cd880b9c0b950786fe824a87be4dc0230704f35cbf3eae69",
+  "bootstrap_epochs_per_candidate_leverage_path_view": 100000,
+  "source_trade_reproduction_verified": true,
+  "top_candidate": {
+    "family": "rolling_beta_spread_momentum",
+    "interval": "1h",
+    "params": {"regression_window": 192, "threshold_z": 1.5, "hold_bars": 8},
+    "trades": 1616,
+    "mean_net_bps": 4.613299275902529,
+    "median_trade_net_bps": -14.345759740682738,
+    "median_fold_net_bps": 1.0978712588488597,
+    "profit_factor": 1.0610393207974174,
+    "positive_fold_fraction": 0.5,
+    "positive_symbol_fraction": 0.7777777777777778,
+    "trimmed_1pct_each_tail_mean_net_bps": -0.9398130303630254,
+    "best_symbol": "ENA_USDT",
+    "best_symbol_mean_net_bps": 47.3512254694724,
+    "leave_out_ENA_mean_net_bps": -0.7438223918151415,
+    "best_fold": 8,
+    "best_fold_mean_net_bps": 60.17137008864273,
+    "leave_out_best_fold_mean_net_bps": -2.61313510953081,
+    "long_mean_net_bps": 16.465353923409662,
+    "short_mean_net_bps": -10.818008342076842,
+    "top_1pct_pnl_share": 2.7469115303030223
+  },
+  "requested_leverage_results_top_candidate": {
+    "2x": {
+      "exact_terminal_equity_multiple": 1.183765661365168,
+      "exit_marked_max_drawdown": -0.2535186351361104,
+      "mae_bound_breach_trades": 0,
+      "bootstrap_median_terminal": 1.250906230105077,
+      "bootstrap_p05_terminal": 0.6599347967768597,
+      "bootstrap_probability_below_start": 0.29538,
+      "bootstrap_probability_below_half": 0.00583
+    },
+    "5x": {
+      "exact_terminal_equity_multiple": 0.8180762291366255,
+      "exit_marked_max_drawdown": -0.544508659030376,
+      "mae_bound_breach_trades": 0,
+      "bootstrap_median_terminal": 1.2240624310138928,
+      "bootstrap_p05_terminal": 0.2851295556670696,
+      "bootstrap_probability_below_start": 0.42382,
+      "bootstrap_probability_below_half": 0.17717
+    },
+    "10x": {
+      "exact_terminal_equity_multiple": 0.1421569887455431,
+      "exit_marked_max_drawdown": -0.9076460147098162,
+      "mae_bound_breach_trades": 3,
+      "bootstrap_median_terminal": 0.40424923265044665,
+      "bootstrap_p05_terminal": 0.04112337684055792,
+      "bootstrap_probability_below_start": 0.68635,
+      "bootstrap_probability_below_half": 0.54924
+    }
+  },
+  "interpretation": {
+    "top_candidate_tail_dependent": true,
+    "top_candidate_symbol_dependent": true,
+    "top_candidate_fold_dependent": true,
+    "top_candidate_long_biased": true,
+    "leverage_creates_edge": false,
+    "best_requested_historical_risk_tradeoff": "2x",
+    "candidate_frozen": false
+  },
+  "claims": {
+    "development_diagnostic_only": true,
+    "verified_oos": false,
+    "profitable_edge_established": false,
+    "live_enabled": false,
+    "automatic_promotion": false
+  }
+}

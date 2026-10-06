@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "protocol_name": "strategy-discovery-v2.1.1-low-turnover",
+  "supersedes": "strategy-discovery-v2.1-low-turnover",
+  "base_config": "config/strategy_discovery_v2_1.json",
+  "frozen_at_intent": "2026-09-14",
+  "reason": "Pre-outcome reliability correction discovered during implementation review.",
+  "changes_only": [
+    "exclude signals whose causal exit falls outside the signal's 21-day dependence cluster",
+    "advance non-overlap cooldown through the actual exit bar rather than one bar early",
+    "serialize all-win profit-factor folds as a finite sentinel so strict JSON output cannot fail"
+  ],
+  "unchanged": [
+    "all strategy families",
+    "all parameter grids",
+    "all symbols and date ranges",
+    "15m and 1h intervals",
+    "state-before-PnL ordering",
+    "12/16/20 bps cost cases",
+    "economic screening gates",
+    "reversed-direction control",
+    "future-after-freeze requirement",
+    "live-execution prohibition"
+  ],
+  "outcomes_inspected_before_amendment": false,
+  "claims": {"development_screening_only": true, "profitable_edge_established": false, "verified_oos": false, "live_enabled": false}
+}

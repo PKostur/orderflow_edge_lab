@@ -1,0 +1,31 @@
+{
+  "protocol": "strategy-discovery-v2",
+  "development_batches": 12,
+  "families": 16,
+  "state_trials": 64,
+  "state_pass_count": 28,
+  "translation_rows": 168,
+  "economic_pass_count_16bps": 0,
+  "best_state": [
+    {"family":"flow_price_disagreement_reversal","horizon_s":300,"median_spearman":0.140768,"positive_clusters":"11/12"},
+    {"family":"sweep_exhaustion_reversal","horizon_s":300,"median_spearman":0.136247,"positive_clusters":"10/12"},
+    {"family":"sweep_exhaustion_reversal","horizon_s":60,"median_spearman":0.134592,"positive_clusters":"9/12"},
+    {"family":"simple_local_reversal","horizon_s":300,"median_spearman":0.121148,"positive_clusters":"9/12"},
+    {"family":"btc_divergence_convergence","horizon_s":60,"median_spearman":0.119173,"positive_clusters":"9/12"},
+    {"family":"book_pressure_follow","horizon_s":60,"median_spearman":0.101548,"positive_clusters":"10/12"}
+  ],
+  "best_16bps": {
+    "family":"simple_local_reversal",
+    "horizon_s":60,
+    "entry_quantile":0.85,
+    "total_trades":65,
+    "median_cluster_gross_bps":6.696101,
+    "median_cluster_net_bps":-9.303899,
+    "positive_net_clusters":"0/12",
+    "median_hit_rate":0.80,
+    "original_beats_reversed":true
+  },
+  "best_12bps_net_bps": -5.303899,
+  "conclusion": "Several unrelated mechanisms predict short-horizon direction, but gross payoff remains below realistic MEXC round-trip friction. No candidate is frozen or promoted.",
+  "claims": {"profitable_edge_established":false,"verified_oos":false,"live_enabled":false}
+}

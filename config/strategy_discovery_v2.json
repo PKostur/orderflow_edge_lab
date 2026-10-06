@@ -1,0 +1,189 @@
+{
+  "schema_version": 1,
+  "protocol_name": "strategy-discovery-v2",
+  "frozen_at_intent": "2026-09-14",
+  "status": "development_screening",
+  "purpose": "Explore genuinely different short-horizon mechanisms not already covered by discovery-v1, price-strategy-tournament-v1.1, evidence-backed-strategies-v2, Fibonacci, basis-convergence, cross-sectional momentum, gamma, or the existing ENA mean-reversion work.",
+  "research_order": [
+    "state/direction prediction first",
+    "discrete strategy translation second",
+    "execution economics and risk-path controls third",
+    "future independent forward evidence only after freeze"
+  ],
+  "data": {
+    "development_source": "existing causal MEXC order-flow market_state observation ledgers",
+    "development_dependence_unit": "independent capture batch",
+    "development_symbol": "ENA_USDT",
+    "context_symbol": "BTC_USDT",
+    "sample_seconds": 5,
+    "future_horizons_seconds": [15, 30, 60, 300],
+    "existing_batches_are_development_only": true,
+    "same-window cross-symbol captures_count_as_one_dependence_cluster": true,
+    "future_forward_data_must_start_after_candidate_freeze": true
+  },
+  "economics": {
+    "round_trip_cost_bps": [12.0, 16.0, 20.0],
+    "screening_cost_bps": 16.0,
+    "stress_cost_bps": 20.0,
+    "notes": "12/16/20 bps are the repo's conservative current MEXC futures round-trip cases; no strategy is promoted from zero-cost results."
+  },
+  "signal_construction": {
+    "threshold_quantiles": [0.70, 0.85],
+    "thresholds_fit_on_training_clusters_only": true,
+    "robust_standardization_fit_on_training_clusters_only": true,
+    "one_active_trade_per_symbol": true,
+    "cooldown_equals_holding_horizon": true,
+    "long_short_symmetric_unless_family_definition_states_otherwise": true
+  },
+  "state_screen": {
+    "primary_metric": "median leave-one-capture-batch-out Spearman between continuous signal score and future signed return",
+    "minimum_positive_cluster_fraction": 0.60,
+    "median_spearman_must_be_gt": 0.0,
+    "strategy_pnl_not_used_to_pass_state_screen": true
+  },
+  "families": {
+    "simple_local_momentum": {
+      "tier": "simple",
+      "pods": ["trend_structure", "research_validity_statistics"],
+      "score": "local_return_15s_bps",
+      "hypothesis": "very short horizon local momentum can persist beyond the observation window"
+    },
+    "simple_local_reversal": {
+      "tier": "simple",
+      "pods": ["mean_reversion", "research_validity_statistics"],
+      "score": "-local_return_15s_bps",
+      "hypothesis": "very short horizon local moves can overreact and mean-revert"
+    },
+    "btc_lead_follow": {
+      "tier": "simple_cross_asset",
+      "pods": ["btc_cross_asset_context", "trend_structure"],
+      "score": "btc_return_15s_bps",
+      "hypothesis": "BTC short-horizon movement can lead altcoin direction"
+    },
+    "btc_divergence_convergence": {
+      "tier": "cross_asset",
+      "pods": ["btc_cross_asset_context", "mean_reversion"],
+      "score": "btc_return_15s_bps - local_return_15s_bps",
+      "hypothesis": "large short-horizon ENA/BTC divergence can converge toward BTC direction"
+    },
+    "book_pressure_follow": {
+      "tier": "microstructure",
+      "pods": ["liquidity_microstructure"],
+      "score": "book_imbalance_10",
+      "hypothesis": "top-book imbalance predicts short-horizon directional pressure"
+    },
+    "microprice_pressure_follow": {
+      "tier": "microstructure",
+      "pods": ["liquidity_microstructure"],
+      "score": "microprice_edge_spread_units",
+      "hypothesis": "microprice displacement relative to mid predicts near-term direction"
+    },
+    "aggressive_flow_follow": {
+      "tier": "microstructure",
+      "pods": ["aggressive_flow"],
+      "score": "flow_ratio_10s",
+      "hypothesis": "aggressive trade imbalance predicts continuation"
+    },
+    "depth_flow_follow": {
+      "tier": "microstructure",
+      "pods": ["aggressive_flow", "liquidity_microstructure"],
+      "score": "depth_flow_imbalance",
+      "hypothesis": "depth change imbalance predicts short-horizon direction"
+    },
+    "pressure_consensus": {
+      "tier": "institutionally_inspired",
+      "pods": ["liquidity_microstructure", "aggressive_flow", "indicator_orthogonality"],
+      "score": "robust_z(book_imbalance_10)+robust_z(microprice_edge_spread_units)+robust_z(flow_ratio_10s)",
+      "hypothesis": "aligned independent order-book and aggressive-flow pressure is more informative than any single pressure measure"
+    },
+    "queue_flow_consensus": {
+      "tier": "institutionally_inspired",
+      "pods": ["liquidity_microstructure", "aggressive_flow", "indicator_orthogonality"],
+      "score": "robust_z(book_imbalance_10)+robust_z(depth_flow_imbalance)+robust_z(microprice_edge_spread_units)",
+      "hypothesis": "static queue pressure plus dynamic depth flow plus microprice displacement identifies informed pressure"
+    },
+    "flow_price_disagreement_reversal": {
+      "tier": "institutionally_inspired",
+      "pods": ["aggressive_flow", "mean_reversion"],
+      "score": "robust_z(flow_ratio_10s)-robust_z(local_return_15s_bps)",
+      "hypothesis": "aggressive flow that is not reflected in price can indicate absorption and subsequent movement toward the latent pressure"
+    },
+    "absorption_fade": {
+      "tier": "institutionally_inspired",
+      "pods": ["aggressive_flow", "liquidity_microstructure", "mean_reversion"],
+      "score": "-sign(flow_ratio_10s) * absorption_strength",
+      "absorption_strength": "abs_robust_z(flow_ratio_10s)-abs_robust_z(local_return_15s_bps)",
+      "hypothesis": "extreme aggressive flow with muted price response can indicate absorption and favor fading the aggressor"
+    },
+    "sweep_continuation": {
+      "tier": "institutionally_inspired",
+      "pods": ["trend_structure", "aggressive_flow", "volatility_regime"],
+      "score": "sign(local_return_15s_bps) * sweep_strength",
+      "sweep_strength": "abs_robust_z(local_return_15s_bps)+abs_robust_z(flow_ratio_10s)+robust_z(local_range_to_spread_15s)",
+      "hypothesis": "large price displacement with aligned aggressive flow and local range expansion can continue after a liquidity sweep"
+    },
+    "sweep_exhaustion_reversal": {
+      "tier": "institutionally_inspired",
+      "pods": ["mean_reversion", "aggressive_flow", "liquidity_microstructure"],
+      "score": "-sign(local_return_15s_bps) * exhaustion_strength",
+      "exhaustion_strength": "abs_robust_z(local_return_15s_bps)+abs_robust_z(flow_ratio_10s)-robust_z(microprice_edge_spread_units*sign(local_return_15s_bps))",
+      "hypothesis": "large price/flow impulse with microprice failing to confirm can mark sweep exhaustion and reversal"
+    },
+    "activity_flow_breakout": {
+      "tier": "execution_aware",
+      "pods": ["aggressive_flow", "volatility_regime", "execution_economics"],
+      "score": "robust_z(flow_ratio_10s) * positive_activity_gate",
+      "positive_activity_gate": "rolling_trade_count_10s and local_range_to_spread_15s above training medians",
+      "hypothesis": "flow imbalance is more actionable when activity and local range are elevated"
+    },
+    "liquidity_filtered_pressure": {
+      "tier": "execution_aware",
+      "pods": ["liquidity_microstructure", "execution_economics", "aggressive_flow"],
+      "score": "pressure_consensus_score * executable_liquidity_gate",
+      "executable_liquidity_gate": "spread_bps below training median and top_depth_notional above training median",
+      "hypothesis": "microstructure pressure should be traded only when spread/depth support realistic execution"
+    }
+  },
+  "strategy_translation": {
+    "evaluate_only_state_screen_passers": true,
+    "entry_thresholds": "absolute continuous score above the predeclared training-only 70th or 85th percentile",
+    "holding_horizons_seconds": [15, 30, 60, 300],
+    "report": [
+      "gross expectancy bps/trade",
+      "net expectancy after 12/16/20 bps",
+      "profit factor",
+      "hit rate",
+      "trade count",
+      "positive dependence-cluster fraction",
+      "original-vs-reversed direction control"
+    ],
+    "no_best_cell_auto_promotion": true
+  },
+  "screening_gate": {
+    "primary_cost_case_bps": 16.0,
+    "median_cluster_net_expectancy_bps_gt": 0.0,
+    "median_cluster_profit_factor_gt": 1.0,
+    "minimum_positive_cluster_fraction": 0.60,
+    "minimum_total_nonoverlapping_trades": 40,
+    "must_survive_reversed_direction_control": true,
+    "requires_parameter_stability_review": true,
+    "requires_future_independent_forward_batch_after_freeze": true
+  },
+  "institutional_label_boundary": {
+    "wording": "institutionally inspired microstructure proxies only",
+    "not_claimed": [
+      "proprietary institutional strategy",
+      "full queue-position model",
+      "hidden-liquidity detection",
+      "true market-impact model",
+      "order-ID level MBO inference"
+    ],
+    "missing_fields_are_never_invented": true
+  },
+  "claims": {
+    "development_screening_only": true,
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  }
+}
