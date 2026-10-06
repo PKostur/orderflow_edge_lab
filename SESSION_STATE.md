@@ -40,7 +40,7 @@
 - Trend core (DON8+EMA8, invvol, v3.1): pre-window holdout PASS (t 3.13); untouched 7 coins narrow FAIL (t 1.87); untouched 53 coins PASS (t 2.00); ETFs FAIL (rules are crypto-specific).
 - Rejected refinements: regime switch, channel exit, funding overlay, chop-regime search, horizon ensemble, Markowitz, XS low-vol leg, strategy zoos v1+v2 (12 families incl. pairs, session, 8h reversal, high-vol breakout, vol-managed momentum; all fail, `research/strategy_zoo`). Vol target adopted as candidate.
 - Multi-premia blend (trend + XS momentum + funding carry, equal risk): dev Sharpe 2.09 (t 4.48), robust to neighbours (1.6–2.2), costs (1.80 at 60 bps), crises.
-- **Untouched-coins holdout (60 unused coins, run once): blend PASS, Sharpe 1.39, t 3.16, DD −11%, halves 1.41/1.37.** Carry alone fails (t 0.9).
+- Untouched-coins holdout (60 unused coins, run once): blend PASS, Sharpe 1.39, t 3.16 — **downgraded to not decision-grade by funding-source-check-v1 (2026-10-06)**: built with MEXC prices + Binance funding; with MEXC funding (2025-06..2026-09) untouched carry 1.69→−0.18, blend 1.60→0.67 (MATERIAL). Development coins NOT_MATERIAL (blend weak either way in that window). Trend leg robust. Forward watches already use MEXC funding.
 - Human-constrained (≤5 coins, daily 08 UTC): dev H5 PASS (1.19, DD −31%) but holdout H5 0.60 (t 1.40). Concentration is the weak link; ≥10 coins keeps more (dev 1.40).
 - Custom + sentiment (`research/custom_sentiment`, Fear & Greed): all 5 fail; near misses O2 momentum pause after panic (dev +0.11 Sharpe, conf −0.002), F2 sentiment-following (bull beta), C1 forced-flow-with-trend (conf t 2.76, dev t 0.70).
 - Zoo mirrors M2 BTC-shock reversal + M4 lottery momentum: forward-only watch from 2026-10-03 (blend workflow, `zoo_mirror_report.json`).
@@ -59,5 +59,5 @@
 - Evidence-rate rule: no new per-trade/regime diagnostics or trend variants on the old 10 coins; new work adds breadth or shortens time-to-answer.
 
 ## Next action candidates
-- `inspect_data` (dominant uncertainty after G3): rebuild the development blend with MEXC prices + MEXC funding history (consistent venue) to test the funding-mismatch explanation. Not started; needs the user's go-ahead.
+- Done: funding-source-check-v1 (see evidence). Blend's historical case rests on development data only; the forward watches (MEXC-consistent) are now the deciding evidence.
 - `collect_evidence`: G1 day-30 checkpoint ~11-06, day-60 verdict ~12-06; G2 alarm daily.

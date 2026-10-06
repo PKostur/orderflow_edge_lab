@@ -38,7 +38,9 @@ WATCHES = [
 ]
 
 LEDGER = [
-    {"name": "Multi-premia blend, 60 untouched coins", "kind": "holdout", "verdict": "pass", "sharpe": 1.39, "t": 3.16, "note": "DD −11%, halves 1.41 / 1.37"},
+    {"name": "Multi-premia blend, 60 untouched coins", "kind": "holdout", "verdict": "pass", "sharpe": 1.39, "t": 3.16, "note": "not decision-grade: Binance funding on MEXC prices (funding-source-check-v1)"},
+    {"name": "Blend on Binance prices + funding (fast-gates G3)", "kind": "venue replication", "verdict": "mixed", "sharpe": 1.05, "t": 2.31, "note": "trend replicates, XS legs do not; Bybit 0.41"},
+    {"name": "Untouched blend with MEXC funding, 2025-06..2026-09", "kind": "integrity check", "verdict": "fail", "sharpe": 0.67, "t": None, "note": "carry 1.69 → −0.18 (MATERIAL)"},
     {"name": "Multi-premia blend, development (70 coins)", "kind": "development", "verdict": "pass", "sharpe": 2.09, "t": 4.48, "note": "robust to neighbours 1.6–2.2"},
     {"name": "5-coin human book, 60 untouched coins", "kind": "holdout", "verdict": "fail", "sharpe": 0.60, "t": 1.40, "note": "concentration is the weak link"},
     {"name": "Trend core, pre-window 2020–23", "kind": "holdout", "verdict": "pass", "sharpe": 1.76, "t": 3.13, "note": "2021-heavy"},
