@@ -35,6 +35,7 @@ jobs:
         id: audit
         run: |
           set -o pipefail
+          mkdir -p artifacts  # tee opens its file before the CLI creates the directory
           orderflow-research-hygiene \
             --repo-root . \
             --output artifacts/hygiene.json \
