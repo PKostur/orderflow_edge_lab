@@ -22,3 +22,19 @@ Reading (descriptive):
 ## G1, G2
 
 Start 2026-10-05; evaluated daily in `multi-premia-blend-v1.yml` (`fast_gates_report.json`). Pre-start calibration: paper vs V_ALL correlation 0.999, TE 0.34%/yr; both books −1.6% to −1.8% over 2026-04-05 to 2026-10-03.
+
+## funding-source-check-v1 (declared `ffd8628`, run once 2026-10-06)
+
+Same MEXC prices, two funding series: A = Binance (how the development and holdout runs were built), B = MEXC (how the forward watches run). MEXC funding history only starts 2025-04-15, so the window is 2025-06-01 to 2026-09-12 (~15 months). Annualized Sharpe ratios:
+
+| Sample | S1 trend A→B | S2 mom A→B | S3 carry A→B | S4 blend A→B | S4 return A→B | B−A t | Reading |
+|---|---|---|---|---|---|---:|---|
+| Development, 70 coins | 0.42→0.40 | 0.07→0.04 | −0.50→−0.56 | 0.26→0.19 | 2.2%→1.6% | −0.41 | NOT_MATERIAL |
+| Untouched, 60 coins | 0.65→0.56 | 0.99→0.97 | **1.69→−0.18** | **1.60→0.67** | 14.9%→5.9% | −2.20 | **MATERIAL** |
+
+MEXC vs Binance funding correlation per coin (median): 0.83 development, 0.76 untouched. Only the crash guard for 3 untouched coins without Binance funding (CRO, BP, MNT) was fixed between the two runs; the development numbers were identical in both.
+
+Reading (descriptive):
+- On the untouched coins, carry that paid in the Binance-funding construction (34%/yr) is gone with the venue's own funding (−4%/yr), and the blend loses about 60% of its return. The holdout PASS (Sharpe 1.39) leaned on that construction and is **not decision-grade**.
+- On the development coins, the blend was weak in this window under either funding (Sharpe 0.2–0.3), so the funding swap changes little there; the G3 gap on those coins comes from price paths.
+- Trend (S1) is robust to both checks. The forward watches already use MEXC prices with MEXC funding, so they are the clean test and continue unchanged.
