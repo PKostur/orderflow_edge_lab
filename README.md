@@ -7,7 +7,7 @@ Research-first infrastructure for short-horizon order-flow strategy research and
 
 ## Safety boundary
 
-This repository does not contain live broker or exchange order transmission. The execution layer is limited to paper and explicit approval workflows. No strategy is considered to have a profitable edge unless it survives genuine out-of-sample validation after realistic costs on data that was not used for discovery or tuning.
+This repository does not contain live broker or exchange order transmission. It supports legacy manual paper approval workflows and finite autonomous offline simulations. No strategy is considered to have a profitable edge unless it survives genuine out-of-sample validation after realistic costs on data that was not used for discovery or tuning.
 
 ## Continuous multi-agent hardening
 
@@ -117,6 +117,21 @@ signal -> TradeIntent -> data/risk checks -> approval queue -> paper fill -> pap
 
 The manual submission interface blocks failed data-quality or risk checks.
 Direct PaperEngine callers must supply upstream data/signal validation.
+
+## Autonomous offline progression v3
+
+The new finite replay runner makes **simulated decisions without per-decision human approval**, applies a prior decision only on a later valid quote, checks declared risk budgets, and produces restart checkpoints and immutable local artifacts. It is not a running market-data service or a live trading bot.
+
+```bash
+orderflow-v2 paper-bot-v3 --synthetic-demo --output artifacts/paper_demo_v3.json
+orderflow-v2 paper-bot-v3 --verify --output artifacts/paper_demo_v3.json
+orderflow-v2 bot-readiness-v3 --help
+orderflow-v2 development-strategy-candidates-v1 --help
+```
+
+See [paper replay engineering](docs/PAPER_BOT_V3.md), the [staged bot roadmap](docs/AUTONOMOUS_BOT_ROADMAP_V3.md), and the [development-only candidate harness](docs/DEVELOPMENT_STRATEGY_CANDIDATES_V1.md). A cadence-checked midpoint-momentum comparison control is available through `orderflow_edge_lab.paper_signal_controls_v3.make_midpoint_momentum_control`; it is a development baseline, not a promoted alpha strategy.
+
+Existing frozen watches retain their rules and review calendars. The two additional microstructure hypotheses have no market-performance or out-of-sample evidence. Illustrative simulator costs, quantities, and loss budgets are not venue calibration or recommended account settings; funding, borrow, and venue execution effects remain unmodeled.
 
 ## Live trading
 
