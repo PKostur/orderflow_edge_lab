@@ -51,6 +51,14 @@
       "deprecated": false
     },
     {
+      "name": "orderflow-bot-readiness-v3",
+      "target": "orderflow_edge_lab.cli.bot_readiness_v3:main",
+      "module": "orderflow_edge_lab.cli.bot_readiness_v3",
+      "exposure": "dispatcher",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
       "name": "orderflow-candidate-freeze",
       "target": "orderflow_edge_lab.cli.candidate_freeze:main",
       "module": "orderflow_edge_lab.cli.candidate_freeze",
@@ -190,6 +198,14 @@
       "name": "orderflow-descriptive-regime-marginal-pairwise-v1",
       "target": "orderflow_edge_lab.cli.descriptive_regime_marginal_pairwise_v1:main",
       "module": "orderflow_edge_lab.cli.descriptive_regime_marginal_pairwise_v1",
+      "exposure": "dispatcher",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-development-strategy-candidates-v1",
+      "target": "orderflow_edge_lab.cli.development_strategy_candidates_v1:main",
+      "module": "orderflow_edge_lab.cli.development_strategy_candidates_v1",
       "exposure": "dispatcher",
       "safe_probe": "--help",
       "deprecated": false
@@ -567,6 +583,14 @@
       "target": "orderflow_edge_lab.cli.paper_audit:main",
       "module": "orderflow_edge_lab.cli.paper_audit",
       "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-paper-bot-v3",
+      "target": "orderflow_edge_lab.cli.paper_bot_v3:main",
+      "module": "orderflow_edge_lab.cli.paper_bot_v3",
+      "exposure": "dispatcher",
       "safe_probe": "--help",
       "deprecated": false
     },
