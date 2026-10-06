@@ -97,10 +97,10 @@ python -m orderflow_edge_lab.development_strategy_candidates_v1 \
   --output /tmp/development_strategy_candidates_v1.report.json
 
 # 3. Engineering-only tests and lint.
-PYTHONPATH=src:tests python -m unittest tests.test_development_strategy_candidates_v1
+PYTHONPATH=src:tests python -m unittest tests.test_v3_development_strategy_candidates
 /home/ubuntu/orderflow-implementation/venv/bin/ruff check \
   src/orderflow_edge_lab/development_strategy_candidates_v1.py \
-  tests/test_development_strategy_candidates_v1.py
+  tests/test_v3_development_strategy_candidates.py
 ```
 
 `--freeze-output` creates only the rule-definition manifest and exits; it does not need or read market data. Evaluation mode requires every listed input, freeze, ledger, timestamp, and output path.

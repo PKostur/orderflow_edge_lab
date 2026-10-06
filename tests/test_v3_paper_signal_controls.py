@@ -44,7 +44,7 @@ class PaperSignalControlTests(unittest.TestCase):
 
     def test_paper_engine_fills_only_after_control_decision(self):
         control = self.control()
-        policy = {'schema': POLICY_SCHEMA, 'signal_id': control.signal_id,
+        policy = {'schema': POLICY_SCHEMA, 'signal_id': control.signal_id, 'signal_fingerprint': control.signal_id.rsplit('-', 1)[-1],
                   'instrument': {'symbol': 'SYNTH-USD', 'contract_multiplier': 1,
                                  'instrument_type': 'synthetic_linear', 'funding_treatment': 'not_modeled'},
                   'initial_cash': 10000, 'fee_rate': 0.0005, 'slippage_bps': 2,
