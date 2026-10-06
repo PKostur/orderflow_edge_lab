@@ -73,9 +73,8 @@ jobs:
           set -euo pipefail
           mkdir -p artifacts
           set +e
-          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?per_page=100" --paginate \
-            --jq '.artifacts[] | {name, id, created_at, expires_at, size_in_bytes, expired}' \
-            > artifacts/artifact_inventory.jsonl 2> artifacts/inventory_acquisition.stderr
+          gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?per_page=100" --paginate --slurp \
+            > artifacts/artifact_inventory.pages.json 2> artifacts/inventory_acquisition.stderr
           ACQUISITION_RC=$?
           set -e
           python - "$ACQUISITION_RC" <<'PY'
@@ -87,9 +86,29 @@ jobs:
           rc = int(sys.argv[1])
           error_path = Path("artifacts/inventory_acquisition.stderr")
           error = error_path.read_text(encoding="utf-8").strip() if error_path.exists() else ""
+          pages = []
+          items = []
+          if rc == 0:
+              try:
+                  pages = json.loads(Path("artifacts/artifact_inventory.pages.json").read_text(encoding="utf-8"))
+                  if not isinstance(pages, list) or not pages:
+                      raise ValueError("expected at least one artifact response page")
+                  for page in pages:
+                      if not isinstance(page, dict) or not isinstance(page.get("artifacts"), list):
+                          raise ValueError("invalid artifact response page")
+                      if not all(isinstance(item, dict) for item in page["artifacts"]):
+                          raise ValueError("invalid artifact metadata item")
+                      items.extend(page["artifacts"])
+              except (ValueError, OSError) as exc:
+                  rc = 65
+                  error = f"invalid inventory response: {exc}"
+                  pages = []
+                  items = []
+          Path("artifacts/artifact_inventory.jsonl").write_text(
+              "".join(json.dumps(item, sort_keys=True) + "\n" for item in items), encoding="utf-8")
           payload = {
               "status": "ACQUIRED" if rc == 0 else "FAILED",
-              "pages_fetched": 1 if rc == 0 else 0,
+              "pages_fetched": len(pages),
               "retrieved_at_utc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
               "error": None if rc == 0 else (error or f"gh api exited {rc}"),
           }
@@ -125,24 +144,24 @@ jobs:
           ARTIFACT_ID="$(python -c 'import json; x=json.load(open("artifacts/ledger_candidate.json")); print(x.get("id", "") if x else "")')"
           if [[ -z "${ARTIFACT_ID}" ]]; then
             python - <<'PY'
-            import json
-            from pathlib import Path
-            acquisition=json.loads(Path("artifacts/inventory_acquisition.json").read_text())
-            payload={"status":"FAILED" if acquisition["status"] == "FAILED" else "NOT_FOUND", "artifact_id":None, "artifact_created_at_utc":None, "retrieved_at_utc":acquisition["retrieved_at_utc"], "error":acquisition["error"]}
-            Path("artifacts/ledger_retrieval.json").write_text(json.dumps(payload, sort_keys=True)+"\n")
-            PY
+          import json
+          from pathlib import Path
+          acquisition=json.loads(Path("artifacts/inventory_acquisition.json").read_text())
+          payload={"status":"FAILED" if acquisition["status"] == "FAILED" else "NOT_FOUND", "artifact_id":None, "artifact_created_at_utc":None, "retrieved_at_utc":acquisition["retrieved_at_utc"], "error":acquisition["error"]}
+          Path("artifacts/ledger_retrieval.json").write_text(json.dumps(payload, sort_keys=True)+"\n")
+          PY
             echo "ledger_manifest=" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           if ! gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" > /tmp/discovery_ledger.zip; then
             python - "$ARTIFACT_ID" <<'PY'
-            import json, sys
-            from datetime import datetime, timezone
-            from pathlib import Path
-            candidate=json.loads(Path("artifacts/ledger_candidate.json").read_text())
-            payload={"status":"FAILED", "artifact_id":sys.argv[1], "artifact_created_at_utc":candidate.get("created_at"), "retrieved_at_utc":datetime.now(timezone.utc).isoformat().replace("+00:00","Z"), "error":"ledger artifact download failed"}
-            Path("artifacts/ledger_retrieval.json").write_text(json.dumps(payload, sort_keys=True)+"\n")
-            PY
+          import json, sys
+          from datetime import datetime, timezone
+          from pathlib import Path
+          candidate=json.loads(Path("artifacts/ledger_candidate.json").read_text())
+          payload={"status":"FAILED", "artifact_id":sys.argv[1], "artifact_created_at_utc":candidate.get("created_at"), "retrieved_at_utc":datetime.now(timezone.utc).isoformat().replace("+00:00","Z"), "error":"ledger artifact download failed"}
+          Path("artifacts/ledger_retrieval.json").write_text(json.dumps(payload, sort_keys=True)+"\n")
+          PY
             echo "ledger_manifest=" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -241,6 +260,7 @@ jobs:
             artifacts/coverage.md
             artifacts/inventory_acquisition.json
             artifacts/inventory_acquisition.stderr
+            artifacts/artifact_inventory.pages.json
             artifacts/artifact_inventory.partial.jsonl
             artifacts/ledger_retrieval.json
           if-no-files-found: error
@@ -261,3 +281,4 @@ jobs:
                       print(f"[error] {alert.get('code')}: {alert.get('detail')}")
               raise SystemExit('operational-health failure: inventory/coverage/heartbeat/capture error')
           print('operational health passed; warnings remain attention-only')
+          PY
