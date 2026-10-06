@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from http.client import IncompleteRead
 import json
 import math
+import time
 from statistics import median
 from typing import Any, Mapping, Sequence
+from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
@@ -30,13 +33,34 @@ def _utc(value: str | pd.Timestamp) -> pd.Timestamp:
     return ts.tz_localize("UTC") if ts.tzinfo is None else ts.tz_convert("UTC")
 
 
-def _get_json(url: str, timeout: float = 20.0) -> Any:
+def _get_json(url: str, timeout: float = 20.0, *, attempts: int = 4) -> Any:
+    """Fetch a public JSON endpoint with bounded retries for transient transport failures.
+
+    The retry policy changes transport reliability only; it never substitutes data,
+    changes timestamps, or relaxes any research/economic gate.
+    """
+    if attempts < 1:
+        raise BasisConvergenceError("attempts must be at least 1")
     request = Request(url, headers={"Accept": "application/json", "User-Agent": "orderflow-edge-lab/1.0"})
-    with urlopen(request, timeout=timeout) as response:
-        if response.status != 200:
-            raise BasisConvergenceError(f"public REST returned HTTP {response.status}")
-        raw = response.read(16_000_000)
-    return json.loads(raw.decode("utf-8"))
+    last_error: Exception | None = None
+    for attempt in range(attempts):
+        try:
+            with urlopen(request, timeout=timeout) as response:
+                if response.status != 200:
+                    raise BasisConvergenceError(f"public REST returned HTTP {response.status}")
+                raw = response.read(16_000_000)
+            return json.loads(raw.decode("utf-8"))
+        except HTTPError as exc:
+            last_error = exc
+            retriable = exc.code == 429 or 500 <= exc.code < 600
+            if not retriable or attempt + 1 >= attempts:
+                raise BasisConvergenceError(f"public REST returned HTTP {exc.code}") from exc
+        except (IncompleteRead, TimeoutError, URLError, ConnectionError, json.JSONDecodeError, UnicodeDecodeError) as exc:
+            last_error = exc
+            if attempt + 1 >= attempts:
+                break
+        time.sleep(0.5 * (2 ** attempt))
+    raise BasisConvergenceError(f"public REST failed after {attempts} attempts: {last_error}") from last_error
 
 
 def fetch_mexc_spot_klines(symbol: str, start: str, end: str, *, interval: str = "60m") -> pd.DataFrame:
