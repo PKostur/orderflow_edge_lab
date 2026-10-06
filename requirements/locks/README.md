@@ -1,34 +1,38 @@
 # Prospective dependency locks
 
-These are **engineering/CI successor artifacts**. They do not rewrite frozen research-environment records or claim binary identity across platforms.
+These are **engineering/CI successor artifacts**. They do not rewrite frozen research environments, establish provider rights, activate prospective watches, or claim binary identity across platforms.
 
-## Available reviewed artifact lock
+## Reviewed target closures
 
-`py312-manylinux-x86_64-research.txt` is hash-locked from local wheel artifact bytes available during this implementation. It covers the runtime dependency plus `.[research]` transitives for **CPython 3.12 / Linux x86_64**.
+The runtime/research and build-tool closures are separately pinned for each supported target. `artifacts.json` records the authentic distribution URLs, byte hashes, sizes, Python requirements, dependency metadata and target identity used to generate the locks. Hashes were checked against downloaded distribution bytes, not guessed from installed files.
 
-| Package class | Recorded artifact tags |
-| --- | --- |
-| numpy, scipy, scikit-learn | `cp312-cp312-manylinux_2_27_x86_64`, `manylinux_2_28_x86_64` |
-| pandas | `cp312-cp312-manylinux_2_24_x86_64`, `manylinux_2_28_x86_64` |
-| websockets | `cp312-cp312-manylinux_2_5_x86_64`, `manylinux1_x86_64`, `manylinux_2_17_x86_64`, `manylinux2014_x86_64` |
-| pure Python transitives | `py2/py3-none-any` or `py3-none-any` as recorded in wheel metadata |
+| Target | Build lock | Runtime/research lock | Native execution evidence |
+|---|---|---|---|
+| Linux x86_64 / CPython 3.10 | `py310-manylinux-x86_64-build.txt` | `py310-manylinux-x86_64-research.txt` | Clean wheel and sdist installations exercised locally |
+| Linux x86_64 / CPython 3.11 | `py311-manylinux-x86_64-build.txt` | `py311-manylinux-x86_64-research.txt` | Clean wheel and sdist installations exercised locally |
+| Linux x86_64 / CPython 3.12 | `py312-manylinux-x86_64-build.txt` | `py312-manylinux-x86_64-research.txt` | Clean wheel and sdist installations exercised locally |
+| Windows amd64 / CPython 3.12 | `py312-win-amd64-build.txt` | `py312-win-amd64-research.txt` | Artifact bytes/metadata verified; native CI must pass before claiming Windows execution proof |
 
-The requirement hashes are SHA-256 values computed over those exact local wheel bytes. They are not guessed from installed files and are not a claim of a provider signature, durable artifact store, or cross-platform equivalence.
+`build-ci.txt` and `research-ci.txt` select the appropriate target with environment markers. Authentic package identity is not a signature, external attestation or durable-storage guarantee.
 
-## Intended reproducible artifact verification
+## Reproducible wheel AND sdist verification
 
-Once reviewed artifact retrieval is available to the integration/release owner, use a fresh target-matching virtual environment:
+Run this command with the **native supported interpreter** and a new work directory:
 
 ```bash
-python -m pip install --require-hashes -r requirements/locks/py312-manylinux-x86_64-research.txt dist/orderflow_edge_lab-*.whl
-python -m pip check
-python scripts/package_smoke.py dist/orderflow_edge_lab-*.whl
+python scripts/verify_packaging.py --work-dir artifacts/packaging-proof
 ```
 
-Repeat with the built sdist. `scripts/package_smoke.py` compares the installed wheel metadata to `command_registry_v2.json` and performs only `--help` safe probes (with an explicit metadata-only GUI exception); it does not request market data or create orders.
+For a previously retrieved exact target artifact directory, add `--artifact-dir /path/to/target-artifacts`. The verifier creates a fresh builder and separate wheel/sdist environments without system site-packages. It installs hash-locked build inputs, builds both project formats, calculates each actual project artifact hash, and performs dependency-enabled `--require-hashes` installations using the full target closure. It then executes `pip check`, installed-command probes outside the checkout, and research dependency imports.
 
-## Explicit coverage blocker
+No `PYTHONPATH` fallback or project `--no-deps` installation is used as full artifact proof. The quicker governance wheel smoke remains explicitly **package isolation with a shared dependency runtime**, a separate and narrower check.
 
-No authentic CPython 3.10, CPython 3.11, or Windows artifact set was locally available, and this stage was not authorized to download or install fresh dependencies. Therefore those supported CI targets are **not yet hash-locked or artifact-install-verified**. The integrator/release owner must resolve and review target-specific wheel/sdist artifacts, record their exact hashes and resolver/Python/platform provenance, then run clean wheel and sdist installs with `pip check` before activating a full artifact-release gate. Do not reuse the Linux CPython 3.12 wheel hashes for other targets.
+The CI matrix repeats native proof for all four targets and retains actual command logs, packaging identities and proof JSON. A lock alone cannot supply proof that a particular source snapshot installed successfully; use the retained evidence from that snapshot.
 
-Lock refresh is a reviewed dependency-maintenance change: regenerate a target-specific lock from resolved artifacts, inspect the diff, run the relevant clean artifact installation and full safe command registry smoke, then commit the lock and evidence together.
+## Optional independent calibration environment
+
+`independent-calibration-py312-linux.txt` pins the exact authentic NautilusTrader wheel used by the bounded synthetic calibration adapter. It is intentionally not part of the default package dependency closure. The dedicated `independent-calibration-v2.yml` job requires the engine and fails, rather than skipping, if it is unavailable. See [the calibration scope note](../../docs/PROCESS_V2_13_INDEPENDENT_CALIBRATION.md) for the genuine tested mechanisms and remaining unsupported semantics.
+
+## Lock updates
+
+Use `scripts/refresh_packaging_locks.py` to obtain and validate target artifacts, review the generated identities and dependency diffs, then repeat clean artifact verification and the complete regression suite. Preserve old environment records; future locks must not recertify historical research under a new dependency set.

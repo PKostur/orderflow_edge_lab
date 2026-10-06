@@ -12,7 +12,7 @@ This is an **additive, opt-in successor** to the legacy multi-agent and research
 | Governance profile | `orderflow-governance-v2 release-profile` ; `build_release_profile_v2` | Local deterministic checks with evidence digests. `advisory` is deliberately `not_release_eligible`; `release` can be `reviewable` only with every required check once, no required skip/failure, and no declared-policy blocker. |
 | Control plane | `orderflow-governance-v2 control-plane-status`; `build_control_plane_status_v2` | Contract-bound successor status that validates exact input analysis IDs, false authority fields, and operational non-evidence claim, then records four canonical input digests, contract digest, and self-hash. It retains the v1 stage calculation without changing v1. |
 | Governance map | `orderflow-governance-v2 governance-map` | Generates `docs/governance_map_v2.json` and `docs/GOVERNANCE_MAP_V2.md` from the validated policy. DeerFlow/Ruflo are logical coordination only, never deterministic evidence. |
-| Command registry | `src/orderflow_edge_lab/command_registry_v2.json` | Single package-owned command declaration for targets, flat/dispatcher/gui/internal exposure, safe probe, and alias deprecation state. The dispatcher no longer implicitly discovers unclassified CLI modules. |
+| Command registry | `src/orderflow_edge_lab/command_registry_v2.json`; `orderflow-v2` | Single package-owned command declaration for targets, flat/dispatcher/gui/internal exposure, safe probe, and alias deprecation state. The opt-in v2 dispatcher uses this registry; the legacy dispatcher is preserved byte-for-byte. |
 
 ## Required release evidence
 
@@ -37,7 +37,9 @@ New research, scientific, risk, freshness, retention, or eligibility parameters 
 
 ## Hash-locked dependency artifacts
 
-`requirements/locks/py312-manylinux-x86_64-research.txt` has authentic hashes for locally available CPython 3.12 Linux x86_64 wheel bytes. It is prospective artifact-install input, not a claim that fresh wheel/sdist installs have occurred. CPython 3.10, CPython 3.11, and Windows locks/install proof are presently **blocked**: target artifacts were not locally available and this stage was not authorized to download or install fresh dependencies. See [requirements/locks/README.md](../requirements/locks/README.md) for exact provenance and the required integrator/release-owner procedure.
+Reviewed, authentic dependency and build closures now cover Linux CPython 3.10/3.11/3.12 and Windows CPython 3.12. Clean wheel AND sdist installations were executed on all three Linux targets using full hash-locked dependency resolution, fresh environments, `pip check`, installed command smoke and research imports. Windows distribution bytes and metadata were verified, but native Windows execution must pass its CI gate before four-target runtime proof is claimed. The verifier is `scripts/verify_packaging.py`; see [the lock documentation](../requirements/locks/README.md) for provenance, commands and evidence scope.
+
+The mandatory release suite also includes foundational `test_contracts_v2.py`, not only stage tests. Required offline build tooling is explicitly installed by the read-only governance workflow. Its lightweight wheel smoke remains a narrower shared-dependency-runtime check, distinct from clean full-dependency artifact proof.
 
 ## Integration obligations
 
