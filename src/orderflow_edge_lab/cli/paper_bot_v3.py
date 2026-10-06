@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
+import inspect
 import json
 from pathlib import Path
 from typing import Any, Callable, Mapping, Sequence
@@ -61,11 +63,34 @@ def _close_momentum(history: tuple[Mapping[str, Any], ...]) -> float:
     return 0.25 if float(history[-1]["close"]) > float(history[-2]["close"]) else -0.25
 
 
+def _signal_definition(name: str) -> tuple[Callable[[tuple[Mapping[str, Any], ...]], float], dict[str, Any]]:
+    """Return a built-in signal and its explicit, non-secret parameter map."""
+
+    return {
+        "flat": (_flat, {}),
+        "close-momentum": (_close_momentum, {}),
+    }[name]
+
+
 def _signal(name: str) -> Callable[[tuple[Mapping[str, Any], ...]], float]:
-    return {"flat": _flat, "close-momentum": _close_momentum}[name]
+    return _signal_definition(name)[0]
 
 
-def _demo() -> tuple[list[dict[str, Any]], dict[str, Any]]:
+def _signal_fingerprint(name: str) -> str:
+    """Hash the selected built-in implementation and its declared parameters."""
+
+    signal, parameters = _signal_definition(name)
+    source = inspect.getsource(signal).encode("utf-8")
+    definition = {
+        "schema": "orderflow_edge_lab.paper_bot_cli_signal_definition.v1",
+        "signal_name": name,
+        "parameters": parameters,
+        "source_sha256": hashlib.sha256(source).hexdigest(),
+    }
+    return hashlib.sha256(json.dumps(definition, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
+
+
+def _demo(signal_name: str) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     base = 1_700_000_000_000_000_000
     frames = [
         {
@@ -82,7 +107,8 @@ def _demo() -> tuple[list[dict[str, Any]], dict[str, Any]]:
     ]
     policy = {
         "schema": POLICY_SCHEMA,
-        "signal_id": "synthetic-demo-close-momentum-v1",
+        "signal_id": f"synthetic-demo-{signal_name}-v1",
+        "signal_fingerprint": _signal_fingerprint(signal_name),
         "instrument": {
             "symbol": "SYNTH-USD",
             "contract_multiplier": 1.0,
@@ -107,7 +133,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     source.add_argument("--recording", help="pre-acquired finite JSONL quote recording")
     source.add_argument("--synthetic-demo", action="store_true", help="run only the clearly marked synthetic demo")
     parser.add_argument("--policy", help="caller-declared v3 policy JSON; required with --recording")
-    parser.add_argument("--signal", choices=("flat", "close-momentum"), default="close-momentum")
+    parser.add_argument(
+        "--signal",
+        choices=("flat", "close-momentum"),
+        default="close-momentum",
+        help="built-in signal; policy.signal_fingerprint must match its source and declared parameters",
+    )
     parser.add_argument("--checkpoint", help="saved checkpoint JSON from a prior partial local replay")
     parser.add_argument("--max-events", type=int, help="stop after this many events and emit a restart checkpoint")
     parser.add_argument("--mode", default="offline", help="only 'offline' is accepted; live is rejected")
@@ -123,7 +154,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         if not args.synthetic_demo and not args.recording:
             raise PaperBotV3Error("choose exactly one of --recording or --synthetic-demo")
         if args.synthetic_demo:
-            frames, policy = _demo()
+            frames, policy = _demo(args.signal)
             if args.policy:
                 policy = _load_json_object(args.policy)
             synthetic_demo = True
@@ -131,6 +162,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             if not args.policy:
                 raise PaperBotV3Error("--policy is required with --recording")
             frames, policy, synthetic_demo = _load_jsonl(args.recording), _load_json_object(args.policy), False
+        expected_fingerprint = _signal_fingerprint(args.signal)
+        if not isinstance(policy.get("signal_fingerprint"), str) or policy["signal_fingerprint"].lower() != expected_fingerprint:
+            raise PaperBotV3Error("policy.signal_fingerprint does not match selected --signal source and parameters")
         checkpoint = _load_json_object(args.checkpoint) if args.checkpoint else None
         artifact = run_paper_bot_v3(
             frames,

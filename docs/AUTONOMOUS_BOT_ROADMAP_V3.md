@@ -10,6 +10,8 @@ This roadmap answers how Orderflow Edge Lab can progress from its **current rese
 
 The added `bot_readiness_v3` reporter is an offline, deterministic JSON assessor. It hashes and self-validates caller-declared provenance objects, fails closed on unknown/missing/stale evidence, and keeps every authority claim false. It does not contact a venue or storage service, run a daemon, place an order, or decide a frozen study.
 
+Unattended **read-only** feeds, analysis, reporting, and services over recorded or public data are not categorically forbidden by this roadmap; they are simply not implemented or deployed in this repository now. This is distinct from a persistent order-generating bot, including one that automatically generates paper-execution actions: that remains outside the boundary. Actual transaction-automation code remains prohibited by the finance-execution safety boundary, and all actual-live flags remain false.
+
 ## Current repository position
 
 The repository is **not ready for live trading**, and it has no promoted strategy:
@@ -59,8 +61,8 @@ The stages are cumulative controls, not escalating permissions. The v3 tool can 
 | Stage | Scope | Required gates (in addition to earlier stages) | Explicitly excluded |
 |---|---|---|---|
 | **S0 — Research** | Reproducible research and strategy-change evaluation. | Frozen governance and trial ledger; executable versioned causal rules; candidate freeze before new evidence; point-in-time-qualified data; benchmark/no-trade controls; non-zero friction and funding convention; purged chronological regime cross-validation; portfolio limits and loss budget. | Claims of established edge, a DON8/W3 verdict, a W1/W2/D4 rescue, paper/live activation. |
-| **S1 — Finite autonomous paper replay** | A bounded, offline **simulated** replay may make simulated decisions without a person approving each simulated decision. | Fixed start/end interval; no order routing; restart/replay exactly-once recovery rehearsal; stale-source rejection; fail-closed unattended fault controls; loss-budget halt and human escalation; detached storage/recovery/clock evidence. | Persistent service, schedule, credentials, deployment, broker API, transaction payload, live/paper order transmission, alpha claim. |
-| **S2 — User-operated read-only analysis / qualified recording** | A person deliberately runs read-only market analysis and records data under declared qualifications. | Explicit read-only/no-submission capability; point-in-time-qualified recording; retained provenance and freshness checks. | Automatic collection schedule, unattended venue session, order entry, account action, promotion. |
+| **S1 — Finite autonomous paper replay** | The implemented `paper_bot_v3` is a bounded, offline **simulated** replay that may make simulated decisions without a person approving each simulated decision. | Fixed start/end interval; no order routing; restart/replay exactly-once recovery rehearsal; stale-source rejection; fail-closed unattended fault controls; loss-budget halt and human escalation; detached storage/recovery/clock evidence. | Persistent order-generating/paper-execution service, schedule, credentials, deployment, broker API, transaction payload, live/paper order transmission, alpha claim. |
+| **S2 — User-operated read-only analysis / qualified recording** | The current readiness-assessor contract covers a person deliberately running read-only market analysis and recording data under declared qualifications. | Explicit read-only/no-submission capability; point-in-time-qualified recording; retained provenance and freshness checks. | Order entry, account action, promotion. This assessor contract does not prohibit a separately designed future unattended read-only analysis or service. |
 | **S3 — Independent review** | Separate promotion, operational, risk, and security review inputs are assembled. | Independent review record; operational/risk/security review; broker/venue integration and conformance **design** with `design_only=true`, `executable_transmission=false`, and no transaction payloads. | A review record becoming a promotion, implementation of a transmitter, credentials, deployment, or live orders. |
 | **Outside this skill — user-controlled live-platform programme** | If the user later elects to explore a live platform, it is a separate engineering/governance programme under the user's control. | The user must independently choose the platform, authorization process, compliance/legal review, account/risk ownership, implementation team, conformance testing, rollback, monitoring, and final go/no-go. | Any claim that this repository, this roadmap, or `bot_readiness_v3` built or authorized live capability. |
 
@@ -92,9 +94,9 @@ An S1 evidence object must substantively bind:
 
 A finite replay can demonstrate replay-engineering behavior. It cannot establish live fill realism, venue authenticity, durable external storage, profitable edge, promotion, or live order capability.
 
-### S2: user-operated read-only market analysis and recording
+### S2: current user-operated read-only market analysis and recording contract
 
-S2 deliberately puts a user back in control of when a read-only analysis or recording occurs. Its evidence must say both:
+S2 currently records a user-operated read-only analysis or recording contract. Its evidence must say both:
 
 ```json
 {
@@ -105,7 +107,7 @@ S2 deliberately puts a user back in control of when a read-only analysis or reco
 }
 ```
 
-This does not create an unattended collector or scheduler. A recorded data source still needs provenance, source self-hash, explicit observation time, freshness evaluation, and point-in-time qualification before it can be considered by a later research study.
+This does not create an unattended collector or scheduler **in the present implementation**. It is not a policy prohibition on a separately designed future unattended read-only collector, analysis, reporting service, or monitoring service over recorded/public data. Such work must remain read-only and cannot generate paper-execution actions or transaction automation. A recorded data source still needs provenance, source self-hash, explicit observation time, freshness evaluation, and point-in-time qualification before it can be considered by a later research study.
 
 ### S3: independent review gate
 
@@ -209,8 +211,8 @@ The output includes `stage_state`, per-check states, `gaps`, `next_steps`, stati
 | Topic | Implemented now in this repository change | Future user-facing roadmap only |
 |---|---|---|
 | Research governance | Hash-bound readiness reporting of declared source facts, strict no-authority claims, documentation of current frozen-study boundaries. | Freeze a new candidate/protocol before new evidence and run the existing research workflows. |
-| Finite paper replay | S1 readiness criteria only; no replay engine changes, no service. | A separately reviewed, finite simulated replay with sealed inputs and fault-injection evidence. |
-| Read-only analysis | S2 readiness criteria only; no collector, polling loop, or schedule. | A user deliberately starts a read-only analysis/recording under a qualified data policy. |
+| Finite paper replay | `paper_bot_v3` implements a finite offline simulated replay with checkpoint/replay validation and no service. | A separately reviewed replay with sealed inputs and additional fault-injection/operational evidence. |
+| Read-only analysis | S2 readiness criteria only; no collector, polling loop, scheduler, or unattended read-only service is implemented or deployed. | User-operated qualified recording, or a separately designed future unattended read-only analysis/reporting/monitoring service with no paper-execution or transaction automation. |
 | Independent review | S3 readiness criteria only. | Independent promotion, operational, risk, and security review records evaluated under their own governance. |
 | Broker/venue integration | Design-only conformance prerequisite flag requiring no executable transmission. | A separately user-controlled live-platform engineering programme, outside this skill and after independent decisions. |
 | Live orders | **Nothing.** | **Nothing is promised or authorized by this roadmap.** |

@@ -7,7 +7,8 @@
   "data_boundary": {
     "accepted_partition": "development_only",
     "ordering_clock": "observed_at_ns",
-    "execution": "decision at an observed event; enter at the first strictly later quote after declared latency; exit at the first quote at or after the declared horizon; no same-event/same-close fill"
+    "execution": "decision at an observed event; enter at the first strictly later quote after declared latency; exit at the first quote at or after the declared horizon; no same-event/same-close fill",
+    "max_quote_age_ms": 2000
   },
   "orthogonality_bucket_ms": 1000,
   "max_signal_jaccard_before_progression": 0.35,

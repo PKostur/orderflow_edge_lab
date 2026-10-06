@@ -167,7 +167,8 @@ class DevelopmentStrategyCandidateTests(unittest.TestCase):
             )
             self.assertTrue(verify_development_trial_ledger(ledger))
             self.assertEqual([trial["trial_number"] for trial in ledger["trials"]], [1, 2])
-            self.assertAlmostEqual(ledger["trials"][1]["bonferroni_alpha"], 0.025)
+            self.assertAlmostEqual(ledger["trials"][1]["allocated_alpha"], 0.05 / (2 * 3))
+            self.assertNotIn("bonferroni_alpha", ledger["trials"][1])
             with self.assertRaisesRegex(DevelopmentCandidateError, "already counted"):
                 append_development_trials(
                     ledger,

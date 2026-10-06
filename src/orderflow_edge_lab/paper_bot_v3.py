@@ -29,12 +29,16 @@ _LIMITATIONS = (
     "Only one caller-declared synthetic linear instrument is supported; quantities are fractional model units.",
     "Funding, borrow charges, interest, liquidation, margin rules, taxes, partial fills, queue position, market impact, and venue outages are not modeled.",
     "Bid/ask and declared slippage/fees are modeled assumptions, not executable prices or a record of any transaction.",
+    "Summary midpoint NAV is a model mark only. Risk budgets use a conservative bid/ask mark plus declared slippage, but neither mark guarantees liquidatability or microsecond execution reality.",
+    "Local hashes and semantic replay establish only internal consistency; they do not authenticate a source or make an artifact tamper-proof.",
+    "Immutable artifact publication requires local POSIX link-and-fsync semantics; Windows publication is rejected rather than silently claiming an atomic guarantee.",
 )
 _REQUIRED_FRAME_FIELDS = frozenset({"ts_ns", "received_ns", "symbol", "bid", "ask", "close", "source_id", "batch_id"})
 _POLICY_FIELDS = frozenset(
     {
         "schema",
         "signal_id",
+        "signal_fingerprint",
         "instrument",
         "initial_cash",
         "fee_rate",
@@ -137,6 +141,12 @@ def _positive_int(value: Any, field: str) -> int:
     return value
 
 
+def _sha256_hex(value: Any, field: str) -> str:
+    if not isinstance(value, str) or len(value) != 64 or any(character not in "0123456789abcdef" for character in value.lower()):
+        raise PaperBotV3Error(f"{field} must be an explicit 64-character SHA-256 fingerprint")
+    return value.lower()
+
+
 def _normalise_policy(policy: Mapping[str, Any]) -> dict[str, Any]:
     if not isinstance(policy, Mapping) or set(policy) != _POLICY_FIELDS:
         raise PaperBotV3Error("policy has unsupported shape")
@@ -145,6 +155,7 @@ def _normalise_policy(policy: Mapping[str, Any]) -> dict[str, Any]:
     signal_id = policy.get("signal_id")
     if not isinstance(signal_id, str) or not signal_id.strip():
         raise PaperBotV3Error("policy.signal_id must be a nonempty stable caller identifier")
+    signal_fingerprint = _sha256_hex(policy.get("signal_fingerprint"), "policy.signal_fingerprint")
     instrument = policy.get("instrument")
     if not isinstance(instrument, Mapping) or set(instrument) != _INSTRUMENT_FIELDS:
         raise PaperBotV3Error("policy.instrument has unsupported shape")
@@ -171,6 +182,7 @@ def _normalise_policy(policy: Mapping[str, Any]) -> dict[str, Any]:
     return {
         "schema": POLICY_SCHEMA,
         "signal_id": signal_id,
+        "signal_fingerprint": signal_fingerprint,
         "instrument": {
             "symbol": symbol,
             "contract_multiplier": _finite_number(
@@ -213,6 +225,8 @@ def _initial_state(policy: Mapping[str, Any]) -> dict[str, Any]:
         "cash": float(policy["initial_cash"]),
         "quantity": 0.0,
         "last_mid": None,
+        "last_bid": None,
+        "last_ask": None,
         "peak_equity": float(policy["initial_cash"]),
         "halted": False,
         "halt_reason": None,
@@ -229,7 +243,7 @@ def _initial_state(policy: Mapping[str, Any]) -> dict[str, Any]:
 
 def _validate_state(state: Any) -> dict[str, Any]:
     expected = {
-        "cash", "quantity", "last_mid", "peak_equity", "halted", "halt_reason", "pending", "history", "seen_frame_ids",
+        "cash", "quantity", "last_mid", "last_bid", "last_ask", "peak_equity", "halted", "halt_reason", "pending", "history", "seen_frame_ids",
         "last_ts_ns", "last_received_ns", "fees_paid", "traded_notional", "fill_count",
     }
     if not isinstance(state, Mapping) or set(state) != expected:
@@ -239,6 +253,11 @@ def _validate_state(state: Any) -> dict[str, Any]:
         _finite_number(result[field], f"checkpoint.state.{field}")
     if result["last_mid"] is not None:
         _finite_number(result["last_mid"], "checkpoint.state.last_mid", positive=True)
+    for field in ("last_bid", "last_ask"):
+        if result[field] is not None:
+            _finite_number(result[field], f"checkpoint.state.{field}", positive=True)
+    if (result["last_bid"] is None) != (result["last_ask"] is None):
+        raise PaperBotV3Error("checkpoint last bid/ask state is inconsistent")
     if type(result["halted"]) is not bool or (result["halt_reason"] is not None and not isinstance(result["halt_reason"], str)):
         raise PaperBotV3Error("checkpoint halt state is invalid")
     if result["halted"] != (result["halt_reason"] is not None):
@@ -268,25 +287,52 @@ def _validate_state(state: Any) -> dict[str, Any]:
 
 
 def _equity(state: Mapping[str, Any], mid: float, multiplier: float) -> float:
+    """Return midpoint NAV, never the conservative risk-budget mark."""
+
     return float(state["cash"]) + float(state["quantity"]) * mid * multiplier
 
 
-def _risk_reason(state: Mapping[str, Any], policy: Mapping[str, Any], mid: float) -> str | None:
+def _risk_mark_price(quantity: float, bid: float, ask: float, policy: Mapping[str, Any]) -> float:
+    """Model an immediate conservative close with the declared slippage burden."""
+
+    slip = float(policy["slippage_bps"]) / 10_000.0
+    if quantity > 0.0:
+        return bid * (1.0 - slip)
+    if quantity < 0.0:
+        return ask * (1.0 + slip)
+    return (bid + ask) / 2.0
+
+
+def _risk_equity(cash: float, quantity: float, bid: float, ask: float, policy: Mapping[str, Any]) -> tuple[float, float]:
     multiplier = float(policy["instrument"]["contract_multiplier"])
-    equity = _equity(state, mid, multiplier)
-    peak = max(float(state["peak_equity"]), equity)
-    state["peak_equity"] = peak
-    if equity <= 0.0:
+    mark = _risk_mark_price(quantity, bid, ask, policy)
+    return cash + quantity * mark * multiplier, mark
+
+
+def _risk_reason_from_values(
+    state: Mapping[str, Any], policy: Mapping[str, Any], risk_equity: float, risk_notional: float
+) -> str | None:
+    peak = max(float(state["peak_equity"]), risk_equity)
+    if risk_equity <= 0.0:
         return "equity_nonpositive"
     initial = float(policy["initial_cash"])
-    if (initial - equity) / initial >= float(policy["max_loss_fraction"]):
+    if (initial - risk_equity) / initial >= float(policy["max_loss_fraction"]):
         return "max_loss_budget_breached"
-    if (peak - equity) / peak >= float(policy["max_drawdown_fraction"]):
+    if (peak - risk_equity) / peak >= float(policy["max_drawdown_fraction"]):
         return "max_drawdown_budget_breached"
-    gross = abs(float(state["quantity"])) * mid * multiplier
-    if gross > equity * float(policy["max_gross_exposure_fraction"]) + 1e-8:
+    if risk_notional > risk_equity * float(policy["max_position_fraction"]) + 1e-8:
+        return "position_limit_breached"
+    if risk_notional > risk_equity * float(policy["max_gross_exposure_fraction"]) + 1e-8:
         return "gross_exposure_limit_breached"
     return None
+
+
+def _risk_reason(state: Mapping[str, Any], policy: Mapping[str, Any], bid: float, ask: float) -> str | None:
+    multiplier = float(policy["instrument"]["contract_multiplier"])
+    equity, mark = _risk_equity(float(state["cash"]), float(state["quantity"]), bid, ask, policy)
+    peak = max(float(state["peak_equity"]), equity)
+    state["peak_equity"] = peak
+    return _risk_reason_from_values(state, policy, equity, abs(float(state["quantity"])) * mark * multiplier)
 
 
 def _project_trade(
@@ -314,11 +360,12 @@ def _project_trade(
 def _is_safe_quantity(
     state: Mapping[str, Any], policy: Mapping[str, Any], mid: float, bid: float, ask: float, quantity: float
 ) -> bool:
-    cash, equity, _, _, _ = _project_trade(state, policy, mid, bid, ask, quantity)
-    if cash < -1e-9 or equity <= 0.0:
+    cash, _, _, _, _ = _project_trade(state, policy, mid, bid, ask, quantity)
+    risk_equity, risk_mark = _risk_equity(cash, quantity, bid, ask, policy)
+    if cash < -1e-9 or risk_equity <= 0.0:
         return False
-    gross = abs(quantity) * mid * float(policy["instrument"]["contract_multiplier"])
-    return gross <= equity * float(policy["max_gross_exposure_fraction"]) + 1e-9
+    risk_notional = abs(quantity) * risk_mark * float(policy["instrument"]["contract_multiplier"])
+    return _risk_reason_from_values(state, policy, risk_equity, risk_notional) is None
 
 
 def _execute_pending(
@@ -341,7 +388,8 @@ def _execute_pending(
     if not _is_safe_quantity(state, policy, mid, bid, ask, chosen_quantity):
         # Existing exposure was already checked before this point.  A bisection
         # between it and the requested target therefore finds the largest safe
-        # model quantity without borrowing cash or exceeding gross exposure.
+        # model quantity without borrowing cash, breaching exposure, or spending
+        # a known loss/drawdown budget on the modeled fill.
         low, high = 0.0, 1.0
         for _ in range(70):
             trial_fraction = (low + high) / 2.0
@@ -355,6 +403,7 @@ def _execute_pending(
     cash, equity_after, fee, execution_price, traded_notional = _project_trade(
         state, policy, mid, bid, ask, chosen_quantity
     )
+    risk_equity_after, risk_mark_after = _risk_equity(cash, chosen_quantity, bid, ask, policy)
     delta = chosen_quantity - old_quantity
     executed = abs(delta) > 1e-12
     state["cash"] = cash
@@ -383,6 +432,10 @@ def _execute_pending(
         "traded_notional": traded_notional,
         "cash_after": cash,
         "equity_after": equity_after,
+        "risk_equity_after": risk_equity_after,
+        "risk_mark_after": risk_mark_after,
+        "post_cost_position_fraction": 0.0 if risk_equity_after <= 0.0 else abs(chosen_quantity) * risk_mark_after * multiplier / risk_equity_after,
+        "post_cost_gross_exposure_fraction": 0.0 if risk_equity_after <= 0.0 else abs(chosen_quantity) * risk_mark_after * multiplier / risk_equity_after,
         "capped_by_cash_or_exposure": capped_by_limits,
     }
 
@@ -494,11 +547,20 @@ def _validate_checkpoint(
     state = _validate_state(candidate["state"])
     if candidate.get("state_sha256") != _sha256(state):
         raise PaperBotV3Error("checkpoint state hash mismatch")
+    if candidate.get("status") not in {"PARTIAL", "COMPLETE", "HALTED"}:
+        raise PaperBotV3Error("checkpoint status is invalid")
+    replayed = _replay_checkpoint_semantics(
+        policy=policy, frames=frames, events=events, next_index=next_index
+    )
+    if _canonical_bytes(state) != _canonical_bytes(replayed["state"]):
+        raise PaperBotV3Error("checkpoint state does not match semantic replay")
+    if candidate["status"] != replayed["status"]:
+        raise PaperBotV3Error("checkpoint status does not match semantic replay")
+    if events and candidate["state_sha256"] != events[-1]["state_sha256"]:
+        raise PaperBotV3Error("checkpoint state is not bound to the final event state")
     unsigned = {key: candidate[key] for key in candidate if key != "checkpoint_sha256"}
     if candidate.get("checkpoint_sha256") != _sha256(unsigned):
         raise PaperBotV3Error("checkpoint hash mismatch")
-    if candidate.get("status") not in {"PARTIAL", "COMPLETE", "HALTED"}:
-        raise PaperBotV3Error("checkpoint status is invalid")
     return state, events, next_index
 
 
@@ -524,26 +586,162 @@ def _quote_problem(state: Mapping[str, Any], policy: Mapping[str, Any], frame: M
     return None
 
 
+def _stored_signal_pending(
+    signal: Any, *, frame_id: str, policy: Mapping[str, Any]
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Validate a recorded signal target without invoking untrusted callback code.
+
+    Artifact verification cannot reproduce a caller's callback from a string ID.
+    It can, however, replay every accounting transition from the target recorded
+    on the causal signal event.  The explicit fingerprint is policy-bound, but
+    remains provenance rather than source authentication.
+    """
+
+    expected_keys = {
+        "signal_event_id",
+        "target_fraction",
+        "effective_target_fraction",
+        "capped_by_exposure_policy",
+    }
+    if not isinstance(signal, Mapping) or set(signal) != expected_keys:
+        raise PaperBotV3Error("event signal has unsupported shape")
+    if signal.get("signal_event_id") != frame_id:
+        raise PaperBotV3Error("event signal is not bound to its quote")
+    target = _finite_number(signal.get("target_fraction"), "event.signal.target_fraction")
+    effective = _finite_number(signal.get("effective_target_fraction"), "event.signal.effective_target_fraction")
+    if not -1.0 <= target <= 1.0:
+        raise PaperBotV3Error("event signal target is outside [-1, 1]")
+    cap = min(float(policy["max_position_fraction"]), float(policy["max_gross_exposure_fraction"]))
+    expected_effective = max(-cap, min(cap, target))
+    if effective != expected_effective or signal.get("capped_by_exposure_policy") is not (effective != target):
+        raise PaperBotV3Error("event signal exposure cap is inconsistent")
+    pending = {
+        "signal_event_id": frame_id,
+        "target_fraction": target,
+        "effective_target_fraction": effective,
+    }
+    normalized_signal = {**pending, "capped_by_exposure_policy": effective != target}
+    return pending, normalized_signal
+
+
+def _is_recorded_signal_halt(reason: Any) -> bool:
+    return reason == "invalid_signal_target" or (
+        isinstance(reason, str) and reason.startswith("signal_fn_error:") and len(reason) > len("signal_fn_error:")
+    )
+
+
+def _replay_checkpoint_semantics(
+    *, policy: Mapping[str, Any], frames: list[Any], events: list[dict[str, Any]], next_index: int
+) -> dict[str, Any]:
+    """Replay stored causal targets and verify every recorded post-event state.
+
+    This is deliberately narrower than callback-source verification: no callback
+    is executed during validation.  It does prove that accepted quote history,
+    pending-target causality, conservative fill accounting, risk halts, and the
+    final checkpoint state all follow from the frozen input/event prefix.
+    """
+
+    state = _initial_state(policy)
+    if len(events) != next_index:
+        raise PaperBotV3Error("checkpoint event count does not match next_index")
+    for index, event in enumerate(events):
+        if state["halted"]:
+            raise PaperBotV3Error("checkpoint contains an event after a latched halt")
+        raw = frames[index]
+        frame_id = _frame_id(raw)
+        if event["frame_id"] != frame_id:
+            raise PaperBotV3Error("checkpoint event is not bound to its input frame")
+        try:
+            frame = _normalise_frame(raw)
+        except PaperBotV3Error:
+            _halt(state, "malformed_quote")
+            expected_type, expected_reason, expected_execution, expected_signal = "quote_rejected_halt", "malformed_quote", None, None
+        else:
+            problem = _quote_problem(state, policy, frame, frame_id)
+            if problem is not None:
+                _halt(state, problem)
+                expected_type, expected_reason, expected_execution, expected_signal = "quote_rejected_halt", problem, None, None
+            else:
+                state["history"].append(frame)
+                state["seen_frame_ids"].append(frame_id)
+                state["last_ts_ns"] = int(frame["ts_ns"])
+                state["last_received_ns"] = int(frame["received_ns"])
+                mid = (float(frame["bid"]) + float(frame["ask"])) / 2.0
+                state["last_mid"] = mid
+                state["last_bid"] = float(frame["bid"])
+                state["last_ask"] = float(frame["ask"])
+                reason = _risk_reason(state, policy, float(frame["bid"]), float(frame["ask"]))
+                expected_execution: dict[str, Any] | None = None
+                expected_signal: dict[str, Any] | None = None
+                expected_type = "quote_accepted"
+                if reason is not None:
+                    _halt(state, reason)
+                    expected_type = "risk_budget_halt"
+                else:
+                    if state["pending"] is not None:
+                        expected_execution = _execute_pending(state, policy, frame, frame_id)
+                        reason = _risk_reason(state, policy, float(frame["bid"]), float(frame["ask"]))
+                        if reason is not None:
+                            _halt(state, reason)
+                            expected_type = "risk_budget_halt"
+                    if not state["halted"]:
+                        if event["event_type"] == "signal_halt":
+                            if not _is_recorded_signal_halt(event["reason"]):
+                                raise PaperBotV3Error("event signal halt reason is unsupported")
+                            _halt(state, str(event["reason"]))
+                            expected_type, reason = "signal_halt", str(event["reason"])
+                        elif event["event_type"] == "quote_accepted":
+                            pending, expected_signal = _stored_signal_pending(
+                                event["signal"], frame_id=frame_id, policy=policy
+                            )
+                            state["pending"] = pending
+                        else:
+                            raise PaperBotV3Error("accepted quote has an invalid event type")
+                expected_reason = reason
+        if (
+            event["event_type"] != expected_type
+            or event["reason"] != expected_reason
+            or event["execution"] != expected_execution
+            or event["signal"] != expected_signal
+        ):
+            raise PaperBotV3Error("checkpoint event does not match semantic replay")
+        if event["state_sha256"] != _sha256(state):
+            raise PaperBotV3Error("checkpoint event state hash does not match semantic replay")
+    expected_status = "HALTED" if state["halted"] else ("PARTIAL" if next_index < len(frames) else "COMPLETE")
+    return {"state": state, "status": expected_status}
+
+
 def _summary(state: Mapping[str, Any], policy: Mapping[str, Any]) -> dict[str, Any]:
     multiplier = float(policy["instrument"]["contract_multiplier"])
-    mark = state["last_mid"]
-    equity = float(policy["initial_cash"]) if mark is None else _equity(state, float(mark), multiplier)
-    gross = 0.0 if mark is None else abs(float(state["quantity"])) * float(mark) * multiplier
+    midpoint_mark = state["last_mid"]
+    midpoint_equity = float(policy["initial_cash"]) if midpoint_mark is None else _equity(state, float(midpoint_mark), multiplier)
+    risk_mark = None
+    risk_equity = float(policy["initial_cash"])
+    if state["last_bid"] is not None and state["last_ask"] is not None:
+        risk_equity, risk_mark = _risk_equity(
+            float(state["cash"]), float(state["quantity"]), float(state["last_bid"]), float(state["last_ask"]), policy
+        )
+    midpoint_gross = 0.0 if midpoint_mark is None else abs(float(state["quantity"])) * float(midpoint_mark) * multiplier
+    risk_gross = 0.0 if risk_mark is None else abs(float(state["quantity"])) * float(risk_mark) * multiplier
     return {
         "cash": float(state["cash"]),
         "quantity": float(state["quantity"]),
-        "last_mid": mark,
-        "equity": equity,
-        "gross_exposure": gross,
-        "gross_exposure_fraction": 0.0 if equity <= 0.0 else gross / equity,
+        "last_mid": midpoint_mark,
+        "last_risk_mark": risk_mark,
+        "midpoint_equity": midpoint_equity,
+        "equity": midpoint_equity,
+        "risk_equity": risk_equity,
+        "midpoint_gross_exposure": midpoint_gross,
+        "gross_exposure": risk_gross,
+        "gross_exposure_fraction": 0.0 if risk_equity <= 0.0 else risk_gross / risk_equity,
         "fees_paid": float(state["fees_paid"]),
         "traded_notional": float(state["traded_notional"]),
         "fill_count": int(state["fill_count"]),
         "peak_equity": float(state["peak_equity"]),
-        "loss_fraction": max(0.0, (float(policy["initial_cash"]) - equity) / float(policy["initial_cash"])),
+        "loss_fraction": max(0.0, (float(policy["initial_cash"]) - risk_equity) / float(policy["initial_cash"])),
         "drawdown_fraction": 0.0
         if float(state["peak_equity"]) <= 0.0
-        else max(0.0, (float(state["peak_equity"]) - equity) / float(state["peak_equity"])),
+        else max(0.0, (float(state["peak_equity"]) - risk_equity) / float(state["peak_equity"])),
         "pending_target": _canonical_copy(state["pending"]) if state["pending"] is not None else None,
         "halt_reason": state["halt_reason"],
     }
@@ -617,7 +815,9 @@ def run_paper_bot_v3(
             state["last_received_ns"] = int(frame["received_ns"])
             mid = (float(frame["bid"]) + float(frame["ask"])) / 2.0
             state["last_mid"] = mid
-            reason = _risk_reason(state, normalized_policy, mid)
+            state["last_bid"] = float(frame["bid"])
+            state["last_ask"] = float(frame["ask"])
+            reason = _risk_reason(state, normalized_policy, float(frame["bid"]), float(frame["ask"]))
             execution: dict[str, Any] | None = None
             signal: dict[str, Any] | None = None
             event_type = "quote_accepted"
@@ -627,7 +827,7 @@ def run_paper_bot_v3(
             else:
                 if state["pending"] is not None:
                     execution = _execute_pending(state, normalized_policy, frame, frame_id)
-                    reason = _risk_reason(state, normalized_policy, mid)
+                    reason = _risk_reason(state, normalized_policy, float(frame["bid"]), float(frame["ask"]))
                     if reason is not None:
                         _halt(state, reason)
                         event_type = "risk_budget_halt"
@@ -725,6 +925,8 @@ def validate_paper_bot_artifact_v3(artifact: Mapping[str, Any]) -> dict[str, Any
         raise PaperBotV3Error("halted artifact has an unlatched state")
     if candidate["status"] != "HALTED" and state["halted"]:
         raise PaperBotV3Error("unhalted artifact has a latched state")
+    if _canonical_bytes(candidate["summary"]) != _canonical_bytes(_summary(state, policy)):
+        raise PaperBotV3Error("artifact summary does not match semantic replay state")
     unsigned = {key: candidate[key] for key in candidate if key != "artifact_sha256"}
     if candidate.get("artifact_sha256") != _sha256(unsigned):
         raise PaperBotV3Error("artifact hash mismatch")
@@ -741,9 +943,15 @@ def _sync_parent(path: Path) -> None:
 
 
 def write_paper_bot_artifact_v3(path: str | Path, artifact: Mapping[str, Any]) -> dict[str, Any]:
-    """Atomically publish one verified local artifact without overwriting an existing path."""
+    """Publish once with POSIX link-and-fsync semantics; existing paths are immutable.
+
+    Windows has different link/directory-durability guarantees, so it is rejected
+    instead of silently making an unsupported atomic-write claim.
+    """
 
     normalized = validate_paper_bot_artifact_v3(artifact)
+    if os.name != "posix":
+        raise PaperBotV3Error("immutable atomic artifact publication requires POSIX local filesystem semantics")
     target = Path(path)
     target.parent.mkdir(parents=True, exist_ok=True)
     payload = _canonical_bytes(normalized) + b"\n"
@@ -786,5 +994,5 @@ def verify_paper_bot_artifact_file_v3(path: str | Path) -> dict[str, Any]:
         "path": str(target),
         "artifact_sha256": artifact["artifact_sha256"],
         "replay_status": artifact["status"],
-        "verification_scope": "local_frozen_bytes_hash_chain_checkpoint_and_offline_replay_identity_only",
+        "verification_scope": "local_frozen_bytes_hash_chain_semantic_checkpoint_replay_only_no_source_authentication_or_tamper_proof",
     }

@@ -53,6 +53,8 @@ A separate JSON input manifest is mandatory:
 
 `source_kind` may be `synthetic_test` only for causality and accounting tests. Such a report is explicitly marked **not market evidence**. A mismatched hash, missing point-in-time declaration, wrong partition, invalid/crossed quote, ambiguous time, missing quote stream, or unfinished next-event fill causes an error or an `INCOMPLETE_MISSING_NEXT_EVENT_FILL` result. Partial completed fills are deliberately discarded when any generated signal lacks its required future quote.
 
+For `source_kind: "real_market"`, the manifest must additionally contain a caller-frozen `real_market_cost_policy`: a hash-bound policy ID, venue, known-venue calibration hash, and strictly positive fee/slippage values for **every** catalog candidate. The evaluator verifies the policy's local integrity and uses those calibrated values; it does not verify calibration realism and will not substitute catalog demonstration costs for real-market data.
+
 ## Causality and friction
 
 For both candidates:
@@ -60,8 +62,14 @@ For both candidates:
 1. Feature windows end at the decision event’s `observed_at_ns`.
 2. The decision is not filled on that event. Entry is the **first quote strictly later** than the decision plus one millisecond, crossing the ask for a long and bid for a short.
 3. Exit is the first quote at or after entry plus the five-second horizon, crossing the bid for a long and ask for a short.
-4. Reported gross return therefore includes the observed BBO crossing. Reported net return additionally deducts **2.0 bps round-trip fees and 1.0 bp round-trip slippage** for every fill. Neither cost component may be zero.
+4. Reported gross return therefore includes the observed BBO crossing. For a `synthetic_test`, reported net return additionally deducts the catalog's **2.0 bps round-trip fees and 1.0 bp round-trip slippage**. For `real_market`, it deducts the matching caller-frozen calibrated policy values. Neither cost component may be zero.
 5. There is no same-close fill, hindsight reordering, aggregation by exchange timestamp, sizing, leverage, order code, or performance-based selection.
+
+The catalog's `data_boundary.max_quote_age_ms` is the **maximum quote gap** (currently 2,000 ms). A baseline, continuous prototype window, entry, or exit whose required quote is older than this bound is rejected; an unfinished generated signal yields `INCOMPLETE_MISSING_NEXT_EVENT_FILL` rather than a partial performance result.
+
+### Prototype window helper API
+
+`generate_signals(candidate, events, quotes, *, max_quote_age_ns=...)` is a deterministic development helper for causal feature windows. It accepts only caller-supplied validated `MarketEvent` and `Quote` sequences and returns in-memory `Signal` objects. It does not open files, read environment variables or user secrets, contact a network source, collect data, or submit an order. File reading is confined to the explicitly named local JSONL/catalog/manifest loader APIs.
 
 ## Commands
 
@@ -101,7 +109,8 @@ PYTHONPATH=src:tests python -m unittest tests.test_development_strategy_candidat
 
 - The candidate-specification freeze pins the exact catalog bytes plus each candidate’s canonical specification hash. It is **not** a research-freeze or holdout audit.
 - The evaluator refuses a freeze that does not reproduce the exact catalog bytes or cover exactly the evaluated candidates.
-- The ledger is append-only in logical content: a candidate/spec/input-byte triple cannot be counted twice. Each successive candidate run gets a sequential trial number and `family_alpha / trial_number` Bonferroni label. A changed source file is a new source hash and a separately counted trial.
+- The ledger is append-only in logical content: a candidate/spec/input-byte triple cannot be counted twice. Each successive candidate run gets a sequential allocation `family_alpha / (trial_number * (trial_number + 1))`. This is a summable alpha-spending reservation whose infinite total is `family_alpha`; it is **not** a Bonferroni label.
+- The evaluator and ledger compute no p-value, DSR, CSCV/PBO, Reality Check, or statistical-significance result. Alpha spending is recorded only for a separately specified future inferential procedure and cannot convert development output into market evidence.
 - Candidate output contains `COMPLETED_DEVELOPMENT_ONLY` only when all signals have next-event entry and exit quotes. It never denotes a pass, profitability, OOS evidence, paper readiness, or promotion.
 - Any future validation needs its own audited source bytes, `research_freeze`, candidate-boundary/holdout audit, and the repository’s existing holdout trial ledger. Do not relabel development output as holdout evidence.
 

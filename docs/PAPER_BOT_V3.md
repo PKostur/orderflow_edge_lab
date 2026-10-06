@@ -21,6 +21,8 @@ It does **not** model funding, borrow charges, interest, liquidation, margin rul
 
 `funding_treatment: "not_modeled"` is mandatory, rather than silently treating funding as zero. Results are therefore **not funding-inclusive** and must not be used as an execution or profitability claim.
 
+Midpoint equity is a summary mark only. Risk budgets instead use a conservative modeled immediate-close mark: bid less declared slippage for a long, ask plus declared slippage for a short, and the same declared transaction costs on modeled fills. This remains an assumption, not a guarantee of fillability, liquidation value, or microsecond execution reality.
+
 ## Python API
 
 ```python
@@ -65,7 +67,7 @@ def signal_fn(history):
     return 0.25 if history[-1]["close"] > history[-2]["close"] else -0.25
 ```
 
-The policy’s `signal_id` is a caller-declared stable identity for the deterministic signal implementation. It binds checkpoints to the intended signal definition. Signals must be deterministic to obtain restart equivalence.
+The policy’s `signal_id` is a caller-declared stable identity for the deterministic signal implementation. `signal_fingerprint` is a required 64-character SHA-256 provenance fingerprint. The CLI derives its expected fingerprint from the selected built-in signal's source code and its explicit parameter map, then rejects a policy whose fingerprint does not match; it does not accept a merely well-formed hard-coded label. Python API callers must provide an explicit fingerprint for their own deterministic implementation. Neither form authenticates a producer or prevents a user from forging an entire local history. Signals must be deterministic to obtain restart equivalence.
 
 A signal is recorded as a pending model target **after** its own quote is accepted. It can only be simulated on the next valid quote. The modeled fill crosses the next quote’s `ask × (1 + slippage_bps / 10,000)` for positive quantity changes and `bid × (1 - slippage_bps / 10,000)` for negative changes. Therefore, a signal can never fill on the same event that produced it.
 
@@ -77,6 +79,7 @@ The policy has this exact schema; it rejects missing and extra fields to make ri
 {
   "schema": "orderflow_edge_lab.paper_bot_policy.v3",
   "signal_id": "my-frozen-signal-v1",
+  "signal_fingerprint": "<64-character SHA-256 provenance fingerprint>",
   "instrument": {
     "symbol": "EXAMPLE-USD",
     "contract_multiplier": 1.0,
@@ -102,17 +105,17 @@ Each accepted or rejected input gets a hash-chained event identity. The result c
 
 - an ordered `event_chain` ending at `event_chain_head`;
 - a hash of each state after that event;
-- policy hash, signal identity, and exact raw-frame identity prefix;
+- policy hash, signal identity/fingerprint, and exact raw-frame identity prefix;
 - a checkpoint hash over all of the above.
 
-A checkpoint passed to `run_paper_bot_v3(..., checkpoint=...)` must match the same `run_id`, policy, signal identity, and full recording prefix. Corrupted state/event hashes, changed policy, or changed/reordered prefix frames fail closed. Restart with the same full recording and deterministic signal function is equivalent to uninterrupted processing:
+A checkpoint passed to `run_paper_bot_v3(..., checkpoint=...)` must match the same `run_id`, policy, signal identity, and full recording prefix. Validation performs a **semantic replay** of the stored causal signal targets without executing callback code: it checks accepted quotes, pending-target causality, conservative fill accounting, risk halts, each post-event state, and status. Corrupted state/event hashes, a rehashed forged state, changed policy, or changed/reordered prefix frames fail closed. Restart with the same full recording and deterministic signal function is equivalent to uninterrupted processing:
 
 ```python
 first = run_paper_bot_v3(frames, signal_fn, policy, run_id="r", max_events=100)
 resumed = run_paper_bot_v3(frames, signal_fn, policy, run_id="r", checkpoint=first["checkpoint"])
 ```
 
-The hashes provide local mutation/replay detection and deterministic identity; they are not a signature, custody record, or external attestation.
+The hashes and semantic replay provide local consistency and deterministic identity; they are not a signature, custody record, source authentication, or external attestation. A party able to forge the complete inputs and consistent causal event history can also forge its local hashes.
 
 ## Offline CLI
 
@@ -127,7 +130,7 @@ PYTHONPATH=src /home/ubuntu/orderflow-implementation/venv/bin/python \
   --output /path/new-simulated-artifact.json
 ```
 
-Each nonblank recording line is one standardized frame JSON object. Built-in signals are deliberately small and local: `flat` and `close-momentum`. The CLI has no provider collection path.
+Each nonblank recording line is one standardized frame JSON object. Built-in signals are deliberately small and local: `flat` and `close-momentum`. The CLI has no provider collection path and does not read credentials, environment secrets, or user-secret files; its fingerprint calculation reads only the selected built-in package function source and its explicit parameter map.
 
 For a visibly non-market fixture only:
 
@@ -137,4 +140,4 @@ PYTHONPATH=src /home/ubuntu/orderflow-implementation/venv/bin/python \
   --synthetic-demo --output /path/new-synthetic-demo.json
 ```
 
-Synthetic-demo output includes `synthetic_demo: true`; it is not observational evidence. Output is validated, written to a temporary local file, `fsync`ed, and atomically linked into a previously absent path. Existing output paths are never overwritten. `--verify` performs a read-only local identity check of `--output`.
+Synthetic-demo output includes `synthetic_demo: true`; it is not observational evidence. On **POSIX** local filesystems, output is validated, written to a temporary local file, `fsync`ed, and atomically linked into a previously absent path. Existing output paths are never overwritten. The immutable atomic writer is explicitly unsupported on Windows because it does not claim equivalent link-and-directory-durability semantics there; finite offline computations and in-memory artifact validation remain supported. `--verify` performs a read-only local identity check of `--output`.
