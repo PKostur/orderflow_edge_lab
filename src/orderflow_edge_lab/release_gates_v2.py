@@ -60,6 +60,7 @@ def protected_inventory_parity(root: Path) -> tuple[bool, dict[str, Any]]:
 
 
 def generated_map_parity(root: Path, config: Mapping[str, Any]) -> tuple[bool, dict[str, Any]]:
+    root = root.resolve()
     from orderflow_edge_lab.governance_v2 import (
         build_governance_map_v2, load_policy_config, render_governance_map_markdown, validate_policy_config,
     )
@@ -94,6 +95,7 @@ def _command(command: list[str], *, cwd: Path, env: dict[str, str], timeout: int
 
 def complete_v2_suite(root: Path) -> tuple[bool, dict[str, Any]]:
     """Discover every authored v2 test AND the mandatory foundational contract."""
+    root = root.resolve()
     paths = sorted((root / "tests").glob("test_v2_*.py"))
     foundation = root / "tests/test_contracts_v2.py"
     foundation_present = foundation.is_file()
@@ -115,6 +117,7 @@ def complete_v2_suite(root: Path) -> tuple[bool, dict[str, Any]]:
 
 def isolated_install_console_smoke(root: Path) -> tuple[bool, dict[str, Any]]:
     """Build/install without indexes and probe actual installed console scripts."""
+    root = root.resolve()
     required = [root / name for name in ("pyproject.toml", "src/orderflow_edge_lab", "scripts/package_smoke.py")]
     if any(not path.exists() or not path.resolve().is_relative_to(root) for path in required):
         return False, {"error": "packaging_inputs_missing_or_unsafe"}
