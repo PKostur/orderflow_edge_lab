@@ -1,19 +1,20 @@
 {
   "code_implementation_counts": {
     "findings_without_local_path": 0,
-    "fully_implemented_local_successors": 52,
-    "partial_local_successors_with_external_prerequisites": 5,
+    "fully_implemented_local_successors": 53,
+    "partial_local_successors_with_external_prerequisites": 4,
     "runnable_local_successor_or_control_paths": 57
   },
   "coverage_proof": {
     "all_required_ids_enumerated_once": true,
     "every_id_has_allowed_disposition": true,
-    "full_unittest_gate": "1030 tests passed in 57.462s; see results/release-gates/09-final-full-unittest.log",
+    "full_unittest_gate": "1054 tests passed; one optional native-class skip in the dependency-light suite; separate required-native job passed with no native skips.",
     "installed_cli_smoke": "108 installed console scripts and 15 v2 module help probes passed outside the checkout; see results/release-gates/06-package-cli-smoke.log",
-    "strict_release_profile": "release profile status reviewable, 70 required checks, zero required skips; see results/release-gates/07-governance-release-profile.json",
-    "final_integrated_checks": "final-gates/checks.json; core optional engine class skipped, dedicated required native tests passed separately.",
+    "strict_release_profile": "delivery-release-profile.json: reviewable, zero skipped required checks, offline code-review scope only.",
+    "final_integrated_checks": "Verified code revision 312179f113367d99fc5bb11a7e5ce71e404e09a7; 17 hosted checks passed, nine research/bootstrap jobs deliberately skipped, one genuine stale-heartbeat operational check failed.",
     "publication_boundary": "Nine engineering-branch-only PR guards prevent live research observations and optional bootstrap; schedule/manual/scientific workflow bytes unchanged except declared 7-to-14-day replay retention.",
-    "linux_packaging": "Three native target proofs, each with clean wheel AND sdist full hash-locked dependency installation, pip check and installed-command smoke."
+    "linux_packaging": "Three native target proofs, each with clean wheel AND sdist full hash-locked dependency installation, pip check and installed-command smoke.",
+    "windows_packaging": "Hosted CI 37511970199: native clean Windows CPython3.12 wheel AND sdist dependency-enabled hash-locked install; pip check and installed command/research smoke passed; downloaded artifact byte hashes reverified."
   },
   "finding_count": 57,
   "findings": [
@@ -574,7 +575,7 @@
       "finding_id": "09-forward-operations-F6",
       "implementation_evidence": "src/orderflow_edge_lab/forward_operations_v2.py; src/orderflow_edge_lab/ops_digest_v2.py",
       "integrated_evidence": "tests/test_v2_11_integration.py; tests/test_v2_12_release_repairs.py; fresh installed-wheel console-script smoke",
-      "remaining_external_or_activation_blocker": "Producers/adapters have not persisted actual raw-source identities/sidecars and durable copies, and no separately frozen revision-use policy authorizes changed historical values.",
+      "remaining_external_or_activation_blocker": "Producers/adapters have not persisted actual raw-source identities/sidecars and durable copies, and no separately frozen revision-use policy authorizes changed historical values. Hosted health evidence additionally reports ledger_heartbeat_stale: 4.004h age exceeds the declared 1.5h cadence-plus-grace limit. The underlying producer health must be investigated/restored; no limit was relaxed or collector dispatched.",
       "status": "partial",
       "title": "Add append-only source checkpoints and gap/revision provenance"
     },
@@ -612,14 +613,14 @@
       "title": "Establish tested command registry"
     },
     {
-      "adversarial_test_evidence": "tests/test_v2_10_engineering_governance.py; tests/test_v2_11_integration.py; tests/test_v2_12_release_repairs.py; tests/test_v2_14_packaging_proof.py",
-      "disposition_basis": "Authentic full research/build closures for all four supported targets; six clean native wheel/sdist installations passed on Linux Python3.10/3.11/3.12. Windows has authentic artifacts and a required native CI proof, but no native Windows result has been recorded locally.",
+      "adversarial_test_evidence": "tests/test_v2_10_engineering_governance.py; tests/test_v2_11_integration.py; tests/test_v2_12_release_repairs.py; tests/test_v2_14_packaging_proof.py; tests/test_v2_16_workflow_execution.py; tests/test_v2_17_platform_roots.py",
+      "disposition_basis": "Full authentic hash-locked build/research closures and native clean wheel AND sdist proof passed for all four supported targets: Linux CPython3.10/3.11/3.12 and Windows CPython3.12. Windows project artifact byte hashes were reverified after download.",
       "executable_surface": "orderflow-governance-v2; orderflow-v2",
       "finding_id": "10-engineering-governance-F4",
       "implementation_evidence": "scripts/verify_packaging.py; scripts/refresh_packaging_locks.py; requirements/locks/artifacts.json; requirements/locks/build-ci.txt; requirements/locks/research-ci.txt; .github/workflows/ci.yml",
-      "integrated_evidence": "tests/test_v2_11_integration.py; tests/test_v2_12_release_repairs.py; fresh installed-wheel console-script smoke",
-      "remaining_external_or_activation_blocker": "Native Windows CPython3.12 wheel AND sdist full-dependency installation proof must pass in CI; its genuine distribution hashes/metadata and gate are implemented. No claim of local Windows execution.",
-      "status": "partial",
+      "integrated_evidence": "Native GitHub CI run 37511970199; four platform matrix jobs; downloaded Windows packaging-proof.json and wheel/sdist bytes; tests/test_v2_14_packaging_proof.py; tests/test_v2_16_workflow_execution.py; tests/test_v2_17_platform_roots.py",
+      "remaining_external_or_activation_blocker": "None for supported-target native packaging proof. This does not activate scientific methods or supply durable external research storage.",
+      "status": "implemented",
       "title": "Prove reproducible artifact-level dependency installation"
     },
     {
@@ -645,12 +646,12 @@
       "title": "Remove governance role-count documentation drift"
     }
   ],
-  "release_commit": "d644c2a659bf2bca020c688899417fa0e57b6c7c",
+  "release_commit": "312179f113367d99fc5bb11a7e5ce71e404e09a7",
   "schema": "orderflow_edge_lab.finding_coverage.v1",
   "source_baseline": "cc2582f5f9385b2bad4c7b5450b6e7257889ee6e",
   "status_counts": {
-    "implemented": 52,
-    "partial": 5,
+    "implemented": 53,
+    "partial": 4,
     "blocked_external": 0,
     "not_applicable_with_evidence": 0
   }

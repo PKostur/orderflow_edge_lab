@@ -110,7 +110,7 @@ PYTHONPATH=src .venv-native/bin/python -m orderflow_edge_lab.independent_calibra
 
 It is compatible with `run_pinned_external_engine_calibration_v2`'s appended `--fixture`/`--output`. That harness strips the environment intentionally; an installed package or a bootstrap setting the explicit local `src` path is needed when invoking through it. The focused tests execute the real subprocess runner as well as the CLI.
 
-**Unavailable handling**: missing engine, missing/tampered wheel, incompatible Python/platform or native runtime failure produces `NOT_CALIBRATED_ENGINE_UNAVAILABLE`; invalid inputs produce `INVALID`/validation errors. Ordinary dependency-light jobs skip optional native tests, but still test unavailable/invalid behavior and the reference ledger. Set the required-engine env flag in the separate dedicated job to prevent a false green based on skips. No pyproject, registry, CI file, or shared venv was changed by this worker.
+**Unavailable handling**: missing engine, missing/tampered wheel, incompatible Python/platform or native runtime failure produces `NOT_CALIBRATED_ENGINE_UNAVAILABLE`; invalid inputs produce `INVALID`/validation errors. Ordinary dependency-light jobs skip optional native tests, but still test unavailable/invalid behavior and the reference ledger. The integrated `.github/workflows/independent-calibration-v2.yml` job installs the optional exact hash-locked engine and requires all native tests; missing runtime evidence fails rather than skips. The engine is not a base dependency, and the shared dependency-light test environment remains separate.
 
 ## Exact claims and remaining blockers
 
@@ -121,6 +121,6 @@ Still **NOT independently calibrated**:
 1. The original v2 envelope's **proportional-bps adverse slippage** and **displayed-depth-linear market impact**. A custom copy of our formula injected into the engine would not constitute independent verification; that fallback was not used.
 2. **Frozen canonical_v3 fee, funding, resize and compounding semantics**: diagnostics execute the model but demonstrate different numerical economics, not parity. A separately frozen successor integration or independent native equivalent of those semantics is required before any broader calibration claim.
 3. Realistic latency, depth consumption, probabilistic partial fills, insolvency and real-venue funding/source completeness are outside these bounded synthetic fixtures; no real-execution claim is made.
-4. Dedicated packaging/CI wiring is handed to the integration owner: optional exact engine pin and Linux x86_64 CPython3.12 required-engine job above. Other Python/platform distributions require their own authentic hash pins and execution evidence.
+4. Dedicated Linux x86_64 / CPython3.12 native CI wiring and the optional exact hash pin are implemented and verified. Other Python/platform native-engine distributions require their own authentic hash pins and execution evidence; native Windows package-install proof does not imply Windows engine calibration.
 
 Installing the engine is **no longer a blocker**. Broader scientific/external authority remains deliberately unverified.

@@ -37,13 +37,13 @@ New research, scientific, risk, freshness, retention, or eligibility parameters 
 
 ## Hash-locked dependency artifacts
 
-Reviewed, authentic dependency and build closures now cover Linux CPython 3.10/3.11/3.12 and Windows CPython 3.12. Clean wheel AND sdist installations were executed on all three Linux targets using full hash-locked dependency resolution, fresh environments, `pip check`, installed command smoke and research imports. Windows distribution bytes and metadata were verified, but native Windows execution must pass its CI gate before four-target runtime proof is claimed. The verifier is `scripts/verify_packaging.py`; see [the lock documentation](../requirements/locks/README.md) for provenance, commands and evidence scope.
+Reviewed, authentic dependency and build closures cover Linux CPython 3.10/3.11/3.12 and Windows CPython 3.12. Native clean wheel AND sdist installation proof passed on all four supported targets using full hash-locked dependency resolution, fresh environments, `pip check`, installed command smoke and research imports. The successful Windows proof and project artifact bytes were downloaded from CI run 37511970199 and their SHA-256 values checked again. Checkout tests use a separate virtual environment to avoid unrelated hosted-runner packages; exact LF checkout and canonical root resolution preserve platform-correct identity/safety checks. The verifier is `scripts/verify_packaging.py`; see [the lock documentation](../requirements/locks/README.md) for provenance, commands and evidence scope.
 
 The mandatory release suite also includes foundational `test_contracts_v2.py`, not only stage tests. Required offline build tooling is explicitly installed by the read-only governance workflow. Its lightweight wheel smoke remains a narrower shared-dependency-runtime check, distinct from clean full-dependency artifact proof.
 
 ## Integration obligations
 
 1. Run the full suite, compile/lint, build wheel and sdist, and run clean target-matching artifact installs with `pip check`.
-2. Add reviewed target-specific authentic hash locks for all declared CI platforms before treating artifact reproducibility as release evidence.
+2. Maintain reviewed target-specific authentic hash locks and repeat native artifact proof for changed release source/dependencies; a prior passing snapshot cannot certify a future one.
 3. Keep all v1 commands and reports readable; do not use a v2 profile to recertify frozen evidence.
 4. When other stages expose v2 CLIs, the integrator must add explicit command-registry entries and flat metadata exposure decisions, then update registry parity tests and safe probes.

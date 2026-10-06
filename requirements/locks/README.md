@@ -11,7 +11,7 @@ The runtime/research and build-tool closures are separately pinned for each supp
 | Linux x86_64 / CPython 3.10 | `py310-manylinux-x86_64-build.txt` | `py310-manylinux-x86_64-research.txt` | Clean wheel and sdist installations exercised locally |
 | Linux x86_64 / CPython 3.11 | `py311-manylinux-x86_64-build.txt` | `py311-manylinux-x86_64-research.txt` | Clean wheel and sdist installations exercised locally |
 | Linux x86_64 / CPython 3.12 | `py312-manylinux-x86_64-build.txt` | `py312-manylinux-x86_64-research.txt` | Clean wheel and sdist installations exercised locally |
-| Windows amd64 / CPython 3.12 | `py312-win-amd64-build.txt` | `py312-win-amd64-research.txt` | Artifact bytes/metadata verified; native CI must pass before claiming Windows execution proof |
+| Windows amd64 / CPython 3.12 | `py312-win-amd64-build.txt` | `py312-win-amd64-research.txt` | Native clean wheel and sdist proof passed in [CI 37511970199](https://github.com/PKostur/orderflow_edge_lab/actions/runs/37511970199); downloaded project artifact hashes reverified |
 
 `build-ci.txt` and `research-ci.txt` select the appropriate target with environment markers. Authentic package identity is not a signature, external attestation or durable-storage guarantee.
 
