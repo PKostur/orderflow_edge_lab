@@ -1,0 +1,180 @@
+{
+  "claims": {
+    "backfills_market_intervals": false,
+    "computes_strategy_verdicts": false,
+    "dispatches_workflows": false,
+    "inspects_strategy_pnl": false,
+    "live_order_transmission_supported": false
+  },
+  "protocol_name": "forward-operations-registry-v2",
+  "purpose": "No-PnL report/artifact heartbeat mapping. Existing reports may not yet emit the required v2 envelope, so runtime activation remains blocked until each producer adopts it.",
+  "schema": "orderflow_edge_lab.forward_operations_registry_template.v2",
+  "status": "caller_declared_inert_template",
+  "watches": [
+    {
+      "artifact_name": "evidence-v2-cross-strategy-session-forward",
+      "boundary_seconds": 28800,
+      "cadence_seconds": 28800,
+      "dispatcher": "branch-forward-scheduler.yml",
+      "grace_seconds": 7200,
+      "producer_ref": "fix/universal-existing-validation",
+      "producer_workflow": ".github/workflows/evidence-v2-session-forward.yml",
+      "report_parser": "forward-report-envelope-v2-required",
+      "watch_id": "evidence_v2_cross_strategy_session_forward_v1"
+    },
+    {
+      "artifact_name": "orderflow-discovery-ledger-v1",
+      "boundary_seconds": 3600,
+      "cadence_seconds": 3600,
+      "dispatcher": "orderflow-continuous-discovery.yml",
+      "grace_seconds": 1800,
+      "producer_ref": "default-branch",
+      "producer_workflow": ".github/workflows/orderflow-continuous-discovery.yml",
+      "report_parser": "forward-report-envelope-v2-required",
+      "watch_id": "SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST"
+    },
+    {
+      "artifact_name": "multi-premia-blend-v1",
+      "boundary_seconds": 86400,
+      "cadence_seconds": 86400,
+      "dispatcher": "branch-forward-scheduler.yml",
+      "grace_seconds": 7200,
+      "producer_ref": "research/payoff-geometry-v1-1",
+      "producer_workflow": ".github/workflows/multi-premia-blend-v1.yml",
+      "report_parser": "forward-report-envelope-v2-required",
+      "watch_id": "multi-premia-blend-v1"
+    },
+    {
+      "artifact_name": "multi-premia-blend-v1",
+      "boundary_seconds": 86400,
+      "cadence_seconds": 86400,
+      "dispatcher": "branch-forward-scheduler.yml",
+      "grace_seconds": 7200,
+      "producer_ref": "research/payoff-geometry-v1-1",
+      "producer_workflow": ".github/workflows/multi-premia-blend-v1.yml",
+      "report_parser": "forward-report-envelope-v2-required",
+      "watch_id": "multi-premia-human-v1-forward"
+    },
+    {
+      "artifact_name": "crypto-trend-core-v1",
+      "boundary_seconds": 86400,
+      "cadence_seconds": 86400,
+      "dispatcher": "branch-forward-scheduler.yml",
+      "grace_seconds": 7200,
+      "producer_ref": "research/payoff-geometry-v1-1",
+      "producer_workflow": ".github/workflows/crypto-trend-core-v1.yml",
+      "report_parser": "forward-report-envelope-v2-required",
+      "watch_id": "crypto-trend-core-v1"
+    },
+    {
+      "artifact_name": "crypto-trend-core-voltarget-v1",
+      "boundary_seconds": 86400,
+      "cadence_seconds": 86400,
+      "dispatcher": "branch-forward-scheduler.yml",
+      "grace_seconds": 7200,
+      "producer_ref": "research/payoff-geometry-v1-1",
+      "producer_workflow": ".github/workflows/crypto-trend-core-voltarget-v1.yml",
+      "report_parser": "forward-report-envelope-v2-required",
+      "watch_id": "crypto-trend-core-voltarget-v1"
+    },
+    {
+      "artifact_name": "trend-portfolio-forward-v1",
+      "boundary_seconds": 86400,
+      "cadence_seconds": 86400,
+      "dispatcher": "branch-forward-scheduler.yml",
+      "grace_seconds": 7200,
+      "producer_ref": "research/payoff-geometry-v1-1",
+      "producer_workflow": ".github/workflows/trend-portfolio-forward-v1.yml",
+      "report_parser": "forward-report-envelope-v2-required",
+      "watch_id": "universal-trend-portfolio-forward-v1"
+    },
+    {
+      "artifact_name": "cross-asset-trend-forward-v1",
+      "boundary_seconds": 86400,
+      "cadence_seconds": 86400,
+      "dispatcher": "branch-forward-scheduler.yml",
+      "grace_seconds": 7200,
+      "producer_ref": "research/payoff-geometry-v1-1",
+      "producer_workflow": ".github/workflows/cross-asset-trend-forward-v1.yml",
+      "report_parser": "forward-report-envelope-v2-required",
+      "watch_id": "universal-cross-asset-trend-forward-v1"
+    },
+    {
+      "artifact_name": "cross-asset-trend-invvol-forward-v1",
+      "boundary_seconds": 86400,
+      "cadence_seconds": 86400,
+      "dispatcher": "branch-forward-scheduler.yml",
+      "grace_seconds": 7200,
+      "producer_ref": "research/payoff-geometry-v1-1",
+      "producer_workflow": ".github/workflows/cross-asset-trend-invvol-forward-v1.yml",
+      "report_parser": "forward-report-envelope-v2-required",
+      "watch_id": "universal-cross-asset-trend-invvol-forward-v1"
+    },
+    {
+      "artifact_name": "canonical-v3-forward-companion-v1",
+      "boundary_seconds": 86400,
+      "cadence_seconds": 86400,
+      "dispatcher": "branch-forward-scheduler.yml",
+      "grace_seconds": 7200,
+      "producer_ref": "research/payoff-geometry-v1-1",
+      "producer_workflow": ".github/workflows/canonical-v3-forward-companion-v1.yml",
+      "report_parser": "forward-report-envelope-v2-required",
+      "watch_id": "universal-canonical-v3-forward-companion-v1"
+    },
+    {
+      "artifact_name": "multi-premia-blend-v1",
+      "boundary_seconds": 86400,
+      "cadence_seconds": 86400,
+      "dispatcher": "branch-forward-scheduler.yml",
+      "grace_seconds": 7200,
+      "producer_ref": "research/payoff-geometry-v1-1",
+      "producer_workflow": ".github/workflows/multi-premia-blend-v1.yml",
+      "report_parser": "forward-report-envelope-v2-required",
+      "watch_id": "zoo-mirror-forward-v1"
+    },
+    {
+      "artifact_name": "news-sentiment-ledger-v1",
+      "boundary_seconds": 86400,
+      "cadence_seconds": 86400,
+      "dispatcher": "branch-forward-scheduler.yml",
+      "grace_seconds": 7200,
+      "producer_ref": "research/payoff-geometry-v1-1",
+      "producer_workflow": ".github/workflows/news-sentiment-v1.yml",
+      "report_parser": "forward-report-envelope-v2-required",
+      "watch_id": "news-sentiment-v1-forward"
+    },
+    {
+      "artifact_name": "multi-premia-blend-v1",
+      "boundary_seconds": 86400,
+      "cadence_seconds": 86400,
+      "dispatcher": "branch-forward-scheduler.yml",
+      "grace_seconds": 7200,
+      "producer_ref": "research/payoff-geometry-v1-1",
+      "producer_workflow": ".github/workflows/multi-premia-blend-v1.yml",
+      "report_parser": "forward-report-envelope-v2-required",
+      "watch_id": "prop-paper-career-v1"
+    },
+    {
+      "artifact_name": "multi-premia-blend-v1",
+      "boundary_seconds": 86400,
+      "cadence_seconds": 86400,
+      "dispatcher": "branch-forward-scheduler.yml",
+      "grace_seconds": 7200,
+      "producer_ref": "research/payoff-geometry-v1-1",
+      "producer_workflow": ".github/workflows/multi-premia-blend-v1.yml",
+      "report_parser": "forward-report-envelope-v2-required",
+      "watch_id": "paper-account-blend-v1"
+    },
+    {
+      "artifact_name": "multi-premia-blend-v1",
+      "boundary_seconds": 86400,
+      "cadence_seconds": 86400,
+      "dispatcher": "branch-forward-scheduler.yml",
+      "grace_seconds": 7200,
+      "producer_ref": "research/payoff-geometry-v1-1",
+      "producer_workflow": ".github/workflows/multi-premia-blend-v1.yml",
+      "report_parser": "forward-report-envelope-v2-required",
+      "watch_id": "fast-gates-v1"
+    }
+  ]
+}

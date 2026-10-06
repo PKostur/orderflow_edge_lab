@@ -7,12 +7,17 @@ on:
   pull_request:
     paths:
       - "src/orderflow_edge_lab/ops_digest.py"
+      - "src/orderflow_edge_lab/forward_operations_v2.py"
       - "src/orderflow_edge_lab/artifact_coverage.py"
+      - "src/orderflow_edge_lab/cli/forward_operations_v2.py"
       - "src/orderflow_edge_lab/review_packet.py"
       - "config/evidence_retention_requirements_v1.json"
+      - "config/forward_retention_overlay_v2.json"
+      - "config/forward_operations_registry_template_v2.json"
       - "config/prospective_review_clock_v1.json"
       - "tests/test_ops_digest.py"
       - "tests/test_artifact_coverage.py"
+      - "tests/test_v2_09_forward_operations.py"
       - "tests/test_review_packet.py"
       - ".github/workflows/wait-window-ops-digest-v1.yml"
 
@@ -59,17 +64,108 @@ jobs:
           else
             echo "capture_dir=" >> "$GITHUB_OUTPUT"
           fi
-      - name: Inventory retained CI artifacts
+      - name: Inventory retained CI artifacts with explicit acquisition outcome
+        id: inventory
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p artifacts
+          set +e
           gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?per_page=100" --paginate \
             --jq '.artifacts[] | {name, id, created_at, expires_at, size_in_bytes, expired}' \
-            > artifacts/artifact_inventory.jsonl || true
+            > artifacts/artifact_inventory.jsonl 2> artifacts/inventory_acquisition.stderr
+          ACQUISITION_RC=$?
+          set -e
+          python - "$ACQUISITION_RC" <<'PY'
+          import json
+          import sys
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          rc = int(sys.argv[1])
+          error_path = Path("artifacts/inventory_acquisition.stderr")
+          error = error_path.read_text(encoding="utf-8").strip() if error_path.exists() else ""
+          payload = {
+              "status": "ACQUIRED" if rc == 0 else "FAILED",
+              "pages_fetched": 1 if rc == 0 else 0,
+              "retrieved_at_utc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+              "error": None if rc == 0 else (error or f"gh api exited {rc}"),
+          }
+          Path("artifacts/inventory_acquisition.json").write_text(json.dumps(payload, sort_keys=True) + "\n", encoding="utf-8")
+          if rc != 0:
+              # A partial/error body is diagnostic only and must not masquerade as a complete empty inventory.
+              Path("artifacts/artifact_inventory.partial.jsonl").write_bytes(Path("artifacts/artifact_inventory.jsonl").read_bytes())
+              Path("artifacts/artifact_inventory.jsonl").write_text("", encoding="utf-8")
+          PY
           wc -l artifacts/artifact_inventory.jsonl
+      - name: Retrieve newest discovery ledger artifact metadata
+        id: ledger
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/current_ledger
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          acquisition = json.loads(Path("artifacts/inventory_acquisition.json").read_text(encoding="utf-8"))
+          candidates = []
+          if acquisition["status"] == "ACQUIRED":
+              for line in Path("artifacts/artifact_inventory.jsonl").read_text(encoding="utf-8").splitlines():
+                  item = json.loads(line)
+                  if item.get("name") == "orderflow-discovery-ledger-v1" and item.get("expired") is False:
+                      candidates.append(item)
+          selected = max(candidates, key=lambda item: item.get("created_at", ""), default=None)
+          Path("artifacts/ledger_candidate.json").write_text(json.dumps(selected) + "\n", encoding="utf-8")
+          PY
+          ARTIFACT_ID="$(python -c 'import json; x=json.load(open("artifacts/ledger_candidate.json")); print(x.get("id", "") if x else "")')"
+          if [[ -z "${ARTIFACT_ID}" ]]; then
+            python - <<'PY'
+            import json
+            from pathlib import Path
+            acquisition=json.loads(Path("artifacts/inventory_acquisition.json").read_text())
+            payload={"status":"FAILED" if acquisition["status"] == "FAILED" else "NOT_FOUND", "artifact_id":None, "artifact_created_at_utc":None, "retrieved_at_utc":acquisition["retrieved_at_utc"], "error":acquisition["error"]}
+            Path("artifacts/ledger_retrieval.json").write_text(json.dumps(payload, sort_keys=True)+"\n")
+            PY
+            echo "ledger_manifest=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if ! gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" > /tmp/discovery_ledger.zip; then
+            python - "$ARTIFACT_ID" <<'PY'
+            import json, sys
+            from datetime import datetime, timezone
+            from pathlib import Path
+            candidate=json.loads(Path("artifacts/ledger_candidate.json").read_text())
+            payload={"status":"FAILED", "artifact_id":sys.argv[1], "artifact_created_at_utc":candidate.get("created_at"), "retrieved_at_utc":datetime.now(timezone.utc).isoformat().replace("+00:00","Z"), "error":"ledger artifact download failed"}
+            Path("artifacts/ledger_retrieval.json").write_text(json.dumps(payload, sort_keys=True)+"\n")
+            PY
+            echo "ledger_manifest=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if ! unzip -q /tmp/discovery_ledger.zip -d artifacts/current_ledger; then
+            echo '{"status":"FAILED","artifact_id":null,"artifact_created_at_utc":null,"retrieved_at_utc":null,"error":"ledger artifact unzip failed"}' > artifacts/ledger_retrieval.json
+            echo "ledger_manifest=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          LEDGER_MANIFEST="$(find artifacts/current_ledger -type f -name discovery_ledger_manifest.json -print -quit)"
+          if [[ -z "${LEDGER_MANIFEST}" ]]; then
+            echo '{"status":"FAILED","artifact_id":null,"artifact_created_at_utc":null,"retrieved_at_utc":null,"error":"ledger artifact contained no manifest"}' > artifacts/ledger_retrieval.json
+            echo "ledger_manifest=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          python - "$ARTIFACT_ID" <<'PY'
+          import json, sys
+          from datetime import datetime, timezone
+          from pathlib import Path
+          candidate=json.loads(Path("artifacts/ledger_candidate.json").read_text())
+          payload={"status":"ACQUIRED", "artifact_id":sys.argv[1], "artifact_created_at_utc":candidate.get("created_at"), "retrieved_at_utc":datetime.now(timezone.utc).isoformat().replace("+00:00","Z"), "error":None}
+          Path("artifacts/ledger_retrieval.json").write_text(json.dumps(payload, sort_keys=True)+"\n")
+          PY
+          echo "ledger_manifest=${LEDGER_MANIFEST}" >> "$GITHUB_OUTPUT"
       - name: Audit retention coverage
         run: |
           orderflow-artifact-coverage \
@@ -81,6 +177,7 @@ jobs:
       - name: Build the daily digest
         env:
           CAPTURE_DIR: ${{ steps.fetch.outputs.capture_dir }}
+          LEDGER_MANIFEST: ${{ steps.ledger.outputs.ledger_manifest }}
         shell: bash
         run: |
           set -euo pipefail
@@ -89,11 +186,21 @@ jobs:
           else
             DATA_DIR="${GITHUB_WORKSPACE}/artifacts/no_capture_sample"
           fi
+          LEDGER_ARGS=()
+          if [[ -n "${LEDGER_MANIFEST}" ]]; then
+            LEDGER_ARGS+=(--ledger-manifest "${LEDGER_MANIFEST}")
+          else
+            LEDGER_ARGS+=(--ledger-manifest "")
+          fi
           orderflow-ops-digest \
             --clock-config config/prospective_review_clock_v1.json \
             --data-dir "${DATA_DIR}" \
-            --ledger-manifest research/DISCOVERY_LEDGER_MANIFEST_2026_09_29.json \
+            "${LEDGER_ARGS[@]}" \
             --coverage-report artifacts/coverage.json \
+            --inventory-acquisition artifacts/inventory_acquisition.json \
+            --ledger-retrieval artifacts/ledger_retrieval.json \
+            --ledger-heartbeat-cadence-hours 1 \
+            --ledger-heartbeat-grace-hours 0.5 \
             --output artifacts/ops_digest.json \
             --markdown artifacts/ops_digest.md
       - name: Assert the digest stays reporting-only
@@ -107,7 +214,9 @@ jobs:
           assert claims['counts_prospective_batches'] is False
           assert claims['promotes_any_strategy'] is False
           assert claims['live_order_transmission_supported'] is False
+          assert digest['inventory_acquisition']['status'] in {'ACQUIRED', 'FAILED'}
           print('digest_status:', digest['digest_status'])
+          print('operational_check_conclusion:', digest['operational_check_conclusion'])
           print('highest_alert_severity:', digest['highest_alert_severity'])
           for alert in digest['alerts']:
               print(f"[{alert['severity']}] {alert['code']}: {alert['detail']}")
@@ -130,5 +239,25 @@ jobs:
             artifacts/ops_digest.md
             artifacts/coverage.json
             artifacts/coverage.md
+            artifacts/inventory_acquisition.json
+            artifacts/inventory_acquisition.stderr
+            artifacts/artifact_inventory.partial.jsonl
+            artifacts/ledger_retrieval.json
           if-no-files-found: error
           retention-days: 90
+      - name: Fail confirmed operational health errors after diagnostics upload
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('artifacts/ops_digest.json')
+          if not path.is_file():
+              raise SystemExit('ops digest was not produced; diagnostics were uploaded before this gate')
+          digest = json.loads(path.read_text(encoding='utf-8'))
+          if digest.get('operational_check_conclusion') != 'PASS':
+              for alert in digest.get('alerts', []):
+                  if alert.get('severity') == 'error':
+                      print(f"[error] {alert.get('code')}: {alert.get('detail')}")
+              raise SystemExit('operational-health failure: inventory/coverage/heartbeat/capture error')
+          print('operational health passed; warnings remain attention-only')
