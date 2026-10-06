@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 import json
+import os
 from pathlib import Path
 import tempfile
 import unittest
@@ -215,6 +216,11 @@ class PaperBotV3Tests(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory) / "simulated.json"
+            if os.name != "posix":
+                with self.assertRaisesRegex(PaperBotV3Error, "requires POSIX"):
+                    write_paper_bot_artifact_v3(output, left)
+                self.assertFalse(output.exists())
+                return
             with patch("orderflow_edge_lab.paper_bot_v3.os.link", side_effect=OSError("injected link failure")):
                 with self.assertRaises(OSError):
                     write_paper_bot_artifact_v3(output, left)
@@ -230,11 +236,15 @@ class PaperBotV3Tests(unittest.TestCase):
     def test_cli_synthetic_only_and_live_rejection(self):
         with tempfile.TemporaryDirectory() as directory:
             output = str(Path(directory) / "demo.json")
-            self.assertEqual(cli_main(["--synthetic-demo", "--output", output]), 0)
+            expected = 0 if os.name == "posix" else 2
+            self.assertEqual(cli_main(["--synthetic-demo", "--output", output]), expected)
             self.assertEqual(cli_main(["--synthetic-demo", "--output", output]), 2)
             flat_output = Path(directory) / "flat.json"
-            self.assertEqual(cli_main(["--synthetic-demo", "--signal", "flat", "--output", str(flat_output)]), 0)
-            self.assertEqual(json.loads(flat_output.read_text(encoding="utf-8"))["policy"]["signal_fingerprint"], _signal_fingerprint("flat"))
+            self.assertEqual(cli_main(["--synthetic-demo", "--signal", "flat", "--output", str(flat_output)]), expected)
+            if os.name == "posix":
+                self.assertEqual(json.loads(flat_output.read_text(encoding="utf-8"))["policy"]["signal_fingerprint"], _signal_fingerprint("flat"))
+            else:
+                self.assertFalse(flat_output.exists())
             mismatched_policy = Path(directory) / "mismatched-policy.json"
             mismatched_policy.write_text(json.dumps(policy()), encoding="utf-8")
             self.assertEqual(
