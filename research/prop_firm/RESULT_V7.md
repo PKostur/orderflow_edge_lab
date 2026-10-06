@@ -29,3 +29,12 @@ policy, withdraw per the rule, buy again after any funded breach. Net = all payo
   firm allocation caps apply. HyroTrader also caps each payout at 5% of the balance (modelled).
 - Historical, seen data; 120 policies per firm, so the top is optimistic (the BTC rows share one BTC path). Not purchase
   advice; verify rules, payout terms and fees before buying.
+
+## Post-result integrity note (2026-10-06; no recomputation)
+The blend-based rows above inherit the historical multi-premia data construction used by these one-shot studies. The later
+pre-registered `fast-gates-v1` venue replication found only MIXED cross-venue support and identified a material venue/funding
+mismatch risk in the historical blend evidence: the development/untouched blend paired MEXC price paths with Binance funding,
+whereas the prospective watches use MEXC funding with MEXC prices. The historical payout numbers above are therefore scenario
+outputs, not validated expected returns, and must not be used to justify leverage, buying a prop-firm challenge, promotion, or
+live trading. The separately frozen `prop-paper-career-v1` watch (start 2026-10-05) is the relevant future paper test and remains
+descriptive until its registered review gate.
