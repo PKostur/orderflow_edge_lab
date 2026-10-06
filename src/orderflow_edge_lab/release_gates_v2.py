@@ -94,9 +94,12 @@ def _command(command: list[str], *, cwd: Path, env: dict[str, str], timeout: int
 
 
 def complete_v2_suite(root: Path) -> tuple[bool, dict[str, Any]]:
-    """Discover every authored v2 test AND the mandatory foundational contract."""
+    """Discover every authored v2/v3 test AND the foundational contract.
+
+    The historical gate name stays stable, but successors cannot escape it.
+    """
     root = root.resolve()
-    paths = sorted((root / "tests").glob("test_v2_*.py"))
+    paths = sorted([*(root / "tests").glob("test_v2_*.py"), *(root / "tests").glob("test_v3_*.py")])
     foundation = root / "tests/test_contracts_v2.py"
     foundation_present = foundation.is_file()
     if foundation_present:
@@ -110,7 +113,7 @@ def complete_v2_suite(root: Path) -> tuple[bool, dict[str, Any]]:
     command = [sys.executable, "-m", "unittest", "-v", *["tests."+path.stem for path in paths]]
     passed, evidence = _command(command, cwd=root, env=env, timeout=300)
     return passed and evidence["tests_run"] > 0 and foundation_present, {**evidence,
-                                                "discovery_pattern": "test_v2_*.py + test_contracts_v2.py",
+                                                "discovery_pattern": "test_v2_*.py + test_v3_*.py + test_contracts_v2.py",
                                                 "foundational_contract_tests_present": foundation_present,
                                                 "test_identities": [build_file_identity(path, logical_name=path.relative_to(root).as_posix()) for path in paths]}
 
