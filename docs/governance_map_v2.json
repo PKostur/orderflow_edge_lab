@@ -1,0 +1,123 @@
+{
+  "analysis": "governance_map_v2",
+  "config_id": "orderflow-multi-agent-policy-v2",
+  "config_sha256": "06c43cccd9ff9ec558f838513882eecbe65f5da234a3984746860c39038b7126",
+  "deterministic_agent_count": 18,
+  "deterministic_agents": [
+    {
+      "agent_id": "data_integrity",
+      "deterministic_repository_evidence": true,
+      "focus": "Market-data adapters, DeepCharts/dxFeed and MEXC ingestion, sequence integrity, timestamps, provenance, and causal feature eligibility",
+      "logical_role": "DeerFlow data integrity; Ruflo market-data reviewer"
+    },
+    {
+      "agent_id": "trend_structure",
+      "deterministic_repository_evidence": true,
+      "focus": "Trend/range state, completed-candle EMA and slope behavior, ADX/Donchian/directional-efficiency research, and multi-timeframe agreement without look-ahead",
+      "logical_role": "DeerFlow strategy/backtest validation; Ruflo strategy reviewer"
+    },
+    {
+      "agent_id": "volatility_regime",
+      "deterministic_repository_evidence": true,
+      "focus": "ATR/Bollinger-width/realized-volatility state, expansion-contraction behavior, volatility-of-volatility, and movement relative to execution friction",
+      "logical_role": "DeerFlow strategy/backtest validation; Ruflo strategy reviewer"
+    },
+    {
+      "agent_id": "liquidity_microstructure",
+      "deterministic_repository_evidence": true,
+      "focus": "Spread, displayed depth, microprice, book imbalance, depth-flow, liquidity add/pull, quote intensity, stale/crossed-book quality, and microstructure state",
+      "logical_role": "DeerFlow data integrity; Ruflo market-data reviewer"
+    },
+    {
+      "agent_id": "aggressive_flow",
+      "deterministic_repository_evidence": true,
+      "focus": "CVD, signed aggressive volume, trade intensity, flow acceleration, large-trade share, price-flow divergence, continuation and exhaustion",
+      "logical_role": "DeerFlow strategy/backtest validation; Ruflo strategy reviewer"
+    },
+    {
+      "agent_id": "mean_reversion",
+      "deterministic_repository_evidence": true,
+      "focus": "Bollinger/VWAP displacement, RSI/return z-score hypotheses, failed breakouts, exhaustion and continuation-versus-reversion state",
+      "logical_role": "DeerFlow strategy/backtest validation; Ruflo strategy reviewer"
+    },
+    {
+      "agent_id": "cross_asset_context",
+      "deterministic_repository_evidence": true,
+      "focus": "BTC returns, volatility, order-flow agreement, rolling beta/correlation, lead-lag, and idiosyncratic versus BTC-driven altcoin behavior",
+      "logical_role": "DeerFlow strategy/backtest validation; Ruflo strategy reviewer"
+    },
+    {
+      "agent_id": "news_event_context",
+      "deterministic_repository_evidence": true,
+      "focus": "Public coin-news event timing, conservative symbol attribution, source provenance, and post-event coin/BTC behavior without causal overclaiming or strategy retuning",
+      "logical_role": "DeerFlow market context; optional observational coordination"
+    },
+    {
+      "agent_id": "sentiment_context",
+      "deterministic_repository_evidence": true,
+      "focus": "Deterministic public-headline sentiment scoring, source/time provenance, PnL-independent state testing before strategy conditioning, and strict separation between observation and any later veto-only backtest",
+      "logical_role": "DeerFlow market context; optional observational coordination"
+    },
+    {
+      "agent_id": "derivatives_positioning",
+      "deterministic_repository_evidence": true,
+      "focus": "Funding, open-interest, mark premium/basis and liquidation context only when legitimately available at zero additional cost; missing fields must not be invented",
+      "logical_role": "DeerFlow market context; Ruflo strategy reviewer"
+    },
+    {
+      "agent_id": "execution_economics",
+      "deterministic_repository_evidence": true,
+      "focus": "Spread, fees, slippage, latency/staleness, signal half-life, expected move after friction, and whether statistical predictability is economically tradeable",
+      "logical_role": "DeerFlow strategy/backtest validation; Ruflo strategy reviewer"
+    },
+    {
+      "agent_id": "risk_path",
+      "deterministic_repository_evidence": true,
+      "focus": "MAE/MFE, stop and target path, RR, requested equity risk, exposure caps, drawdown and risk-of-ruin diagnostics",
+      "logical_role": "DeerFlow execution safety/risk; Ruflo security architect"
+    },
+    {
+      "agent_id": "indicator_orthogonality",
+      "deterministic_repository_evidence": true,
+      "focus": "Detect redundant indicators, require incremental market-state information, challenge correlated indicator stacking, and justify interactions before combination",
+      "logical_role": "DeerFlow research validity/statistics; Ruflo researcher"
+    },
+    {
+      "agent_id": "research_validity",
+      "deterministic_repository_evidence": true,
+      "focus": "Discovery/validation/holdout separation, frozen protocols, dependence clustering, candidate freezing, trial accounting, multiple testing, causal audits and promotion evidence",
+      "logical_role": "DeerFlow research validity/statistics; Ruflo researcher"
+    },
+    {
+      "agent_id": "transfer_generalization",
+      "deterministic_repository_evidence": true,
+      "focus": "Independent-batch stability, regime stability and PnL-independent cross-pair transfer without relabeling transfer evidence as untouched OOS",
+      "logical_role": "DeerFlow strategy/backtest validation; Ruflo strategy reviewer"
+    },
+    {
+      "agent_id": "execution_safety",
+      "deterministic_repository_evidence": true,
+      "focus": "Approval-bound paper execution, stale-market rejection, state ownership, journal integrity, kill switches, reconciliation and prevention of accidental live transmission",
+      "logical_role": "DeerFlow execution safety/risk; Ruflo security architect"
+    },
+    {
+      "agent_id": "reliability_observability",
+      "deterministic_repository_evidence": true,
+      "focus": "Compilation, tests, packaging, Linux/Windows CI, workflow failures, hashes, manifests, runtime identity, operator diagnostics and reproducibility",
+      "logical_role": "DeerFlow reliability/CI and observability; Ruflo tester/reviewer"
+    },
+    {
+      "agent_id": "adversarial_reviewer",
+      "deterministic_repository_evidence": true,
+      "focus": "Challenge specialist conclusions, detect indicator mining/redundancy, unsupported edge claims, hidden holdout reuse, threshold tuning, unsafe live-execution creep and fail-open behavior",
+      "logical_role": "Lead adversarial synthesis and release manager"
+    }
+  ],
+  "lead_release_manager": "Adversarial synthesis and release manager; repository evidence, not coordination voting, governs release.",
+  "map_sha256": "f9fb1201d2e3259d2be05a201b2a78621187c65e65aaf7e38909cf47fb06a1ed",
+  "optional_coordination": {
+    "deerflow": "Logical role grouping only; it is not deterministic repository evidence.",
+    "ruflo": "Optional coordination only; it is not deterministic repository evidence."
+  },
+  "schema": "orderflow_edge_lab.governance_map.v2"
+}

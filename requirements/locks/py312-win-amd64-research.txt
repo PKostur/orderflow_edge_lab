@@ -1,0 +1,16 @@
+# Authentic PyPI artifact bytes; reviewed exact pins. See artifacts.json.
+# Target: CPython 3.12 / win32 / AMD64.
+# Source builds require the matching build lock and --no-build-isolation.
+cloudpickle==3.1.2; python_version == "3.12" and sys_platform == "win32" and platform_machine == "AMD64" and platform_python_implementation == "CPython" --hash=sha256:9acb47f6afd73f60dc1df93bb801b472f05ff42fa6c84167d25cb206be1fbf4a
+joblib==1.6.0; python_version == "3.12" and sys_platform == "win32" and platform_machine == "AMD64" and platform_python_implementation == "CPython" --hash=sha256:3dbbf9f6e4b592a2357b854608e980fe6390d131d7a82f011a377ef2ebef7aba
+narwhals==2.26.0; python_version == "3.12" and sys_platform == "win32" and platform_machine == "AMD64" and platform_python_implementation == "CPython" --hash=sha256:29326d74f107c347fd1009bd58e38d9f7c7c5b51e6de97bc93dbc325d9038b54
+numpy==2.4.6; python_version == "3.12" and sys_platform == "win32" and platform_machine == "AMD64" and platform_python_implementation == "CPython" --hash=sha256:d8e8286dd7cea7895157318d1b91cdacac64c479f3cbc8dce548331728484751
+pandas==2.3.3; python_version == "3.12" and sys_platform == "win32" and platform_machine == "AMD64" and platform_python_implementation == "CPython" --hash=sha256:a16dcec078a01eeef8ee61bf64074b4e524a2a3f4b3be9326420cabe59c4778b
+python-dateutil==2.9.0.post0; python_version == "3.12" and sys_platform == "win32" and platform_machine == "AMD64" and platform_python_implementation == "CPython" --hash=sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427
+pytz==2026.4; python_version == "3.12" and sys_platform == "win32" and platform_machine == "AMD64" and platform_python_implementation == "CPython" --hash=sha256:9d514388fbc89ca0833203464272ac485b8828568ab73532f5020f17e892a0ff
+scikit-learn==1.9.1; python_version == "3.12" and sys_platform == "win32" and platform_machine == "AMD64" and platform_python_implementation == "CPython" --hash=sha256:4b59abb30618121cc46b45972d6bf53a7128b4df4cd346c6ca6f4d5f9031e49c
+scipy==1.17.1; python_version == "3.12" and sys_platform == "win32" and platform_machine == "AMD64" and platform_python_implementation == "CPython" --hash=sha256:41b71f4a3a4cab9d366cd9065b288efc4d4f3c0b37a91a8e0947fb5bd7f31d87
+six==1.17.0; python_version == "3.12" and sys_platform == "win32" and platform_machine == "AMD64" and platform_python_implementation == "CPython" --hash=sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274
+threadpoolctl==3.7.0; python_version == "3.12" and sys_platform == "win32" and platform_machine == "AMD64" and platform_python_implementation == "CPython" --hash=sha256:cd8b60b5641b45c67bbf73c64c843235fc2d8a480c87389f52f5dbee893b86be
+tzdata==2026.4; python_version == "3.12" and sys_platform == "win32" and platform_machine == "AMD64" and platform_python_implementation == "CPython" --hash=sha256:c2169a8b0a7a5e9674da5a135ccdfb2b3e671b333ed9fed17b41f73c34476e81
+websockets==15.0.1; python_version == "3.12" and sys_platform == "win32" and platform_machine == "AMD64" and platform_python_implementation == "CPython" --hash=sha256:fcd5cf9e305d7b8338754470cf69cf81f420459dbae8a3b40cee57417f4614a7

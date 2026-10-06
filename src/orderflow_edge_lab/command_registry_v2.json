@@ -1,0 +1,990 @@
+{
+  "schema": "orderflow_edge_lab.command_registry.v2",
+  "version": 2,
+  "commands": [
+    {
+      "name": "orderflow",
+      "target": "orderflow_edge_lab.cli.main:main",
+      "module": "orderflow_edge_lab.cli.main",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-analyze-endpoint",
+      "target": "orderflow_edge_lab.cli.analyze_endpoint:main",
+      "module": "orderflow_edge_lab.cli.analyze_endpoint",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-artifact-coverage",
+      "target": "orderflow_edge_lab.cli.artifact_coverage:main",
+      "module": "orderflow_edge_lab.cli.artifact_coverage",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-audit-causality",
+      "target": "orderflow_edge_lab.cli.audit_causality:main",
+      "module": "orderflow_edge_lab.cli.audit_causality",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-backtest",
+      "target": "orderflow_edge_lab.cli.orderflow_backtest:main",
+      "module": "orderflow_edge_lab.cli.orderflow_backtest",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-basis-convergence",
+      "target": "orderflow_edge_lab.cli.basis_convergence:main",
+      "module": "orderflow_edge_lab.cli.basis_convergence",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-bot-readiness-v3",
+      "target": "orderflow_edge_lab.cli.bot_readiness_v3:main",
+      "module": "orderflow_edge_lab.cli.bot_readiness_v3",
+      "exposure": "dispatcher",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-candidate-freeze",
+      "target": "orderflow_edge_lab.cli.candidate_freeze:main",
+      "module": "orderflow_edge_lab.cli.candidate_freeze",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-capture-health",
+      "target": "orderflow_edge_lab.cli.capture_health:main",
+      "module": "orderflow_edge_lab.cli.capture_health",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-condition-aggregate",
+      "target": "orderflow_edge_lab.cli.condition_aggregate:main",
+      "module": "orderflow_edge_lab.cli.condition_aggregate",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-conditioned-experiment-v1",
+      "target": "orderflow_edge_lab.cli.conditioned_experiment_v1:main",
+      "module": "orderflow_edge_lab.cli.conditioned_experiment_v1",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-conditioned-result-aggregate-v1",
+      "target": "orderflow_edge_lab.cli.conditioned_result_aggregate_v1:main",
+      "module": "orderflow_edge_lab.cli.conditioned_result_aggregate_v1",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-contracts-v2",
+      "target": "orderflow_edge_lab.cli.contracts_v2:main",
+      "module": "orderflow_edge_lab.cli.contracts_v2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-correlation-panel",
+      "target": "orderflow_edge_lab.cli.correlation_panel:main",
+      "module": "orderflow_edge_lab.cli.correlation_panel",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-cross-pair",
+      "target": "orderflow_edge_lab.cli.cross_pair:main",
+      "module": "orderflow_edge_lab.cli.cross_pair",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-cross-sectional-forward-shadow",
+      "target": "orderflow_edge_lab.cli.cross_sectional_forward_shadow:main",
+      "module": "orderflow_edge_lab.cli.cross_sectional_forward_shadow",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-cross-sectional-momentum",
+      "target": "orderflow_edge_lab.cli.cross_sectional_momentum:main",
+      "module": "orderflow_edge_lab.cli.cross_sectional_momentum",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-cross-sectional-okx-archive-funding-coverage",
+      "target": "orderflow_edge_lab.cli.cross_sectional_okx_archive_funding_coverage:main",
+      "module": "orderflow_edge_lab.cli.cross_sectional_okx_archive_funding_coverage",
+      "exposure": "dispatcher",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-cross-sectional-okx-funding-audit",
+      "target": "orderflow_edge_lab.cli.cross_sectional_okx_funding_audit:main",
+      "module": "orderflow_edge_lab.cli.cross_sectional_okx_funding_audit",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-cross-sectional-okx-replication",
+      "target": "orderflow_edge_lab.cli.cross_sectional_okx_replication:main",
+      "module": "orderflow_edge_lab.cli.cross_sectional_okx_replication",
+      "exposure": "dispatcher",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-cross-sectional-venue-replication",
+      "target": "orderflow_edge_lab.cli.cross_sectional_venue_replication:main",
+      "module": "orderflow_edge_lab.cli.cross_sectional_venue_replication",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-data-integrity-v2",
+      "target": "orderflow_edge_lab.cli.data_integrity_v2:main",
+      "module": "orderflow_edge_lab.cli.data_integrity_v2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-descriptive-regime-labels-v1",
+      "target": "orderflow_edge_lab.cli.descriptive_regime_labels_v1:main",
+      "module": "orderflow_edge_lab.cli.descriptive_regime_labels_v1",
+      "exposure": "dispatcher",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-descriptive-regime-labels-v1-1",
+      "target": "orderflow_edge_lab.cli.descriptive_regime_labels_v1_1:main",
+      "module": "orderflow_edge_lab.cli.descriptive_regime_labels_v1_1",
+      "exposure": "dispatcher",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-descriptive-regime-marginal-pairwise-v1",
+      "target": "orderflow_edge_lab.cli.descriptive_regime_marginal_pairwise_v1:main",
+      "module": "orderflow_edge_lab.cli.descriptive_regime_marginal_pairwise_v1",
+      "exposure": "dispatcher",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-development-strategy-candidates-v1",
+      "target": "orderflow_edge_lab.cli.development_strategy_candidates_v1:main",
+      "module": "orderflow_edge_lab.cli.development_strategy_candidates_v1",
+      "exposure": "dispatcher",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-direction-pair",
+      "target": "orderflow_edge_lab.cli.direction_pair:main",
+      "module": "orderflow_edge_lab.cli.direction_pair",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-discover-endpoint",
+      "target": "orderflow_edge_lab.cli.discover_endpoint:main",
+      "module": "orderflow_edge_lab.cli.discover_endpoint",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-discovery-aggregate",
+      "target": "orderflow_edge_lab.cli.discovery_aggregate:main",
+      "module": "orderflow_edge_lab.cli.discovery_aggregate",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-discovery-governance-v2",
+      "target": "orderflow_edge_lab.cli.discovery_governance_v2:main",
+      "module": "orderflow_edge_lab.cli.discovery_governance_v2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-discovery-screen",
+      "target": "orderflow_edge_lab.cli.discovery_screen:main",
+      "module": "orderflow_edge_lab.cli.discovery_screen",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-discovery-v2-calibration",
+      "target": "orderflow_edge_lab.cli.discovery_v2_calibration:main",
+      "module": "orderflow_edge_lab.cli.discovery_v2_calibration",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-dxfeed-login",
+      "target": "orderflow_edge_lab.cli.login:main",
+      "module": "orderflow_edge_lab.cli.login",
+      "exposure": "gui",
+      "safe_probe": "metadata_only_gui_exception",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-economics-v2",
+      "target": "orderflow_edge_lab.cli.economics_v2:main",
+      "module": "orderflow_edge_lab.cli.economics_v2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-ema15m-hypothesis",
+      "target": "orderflow_edge_lab.cli.ema15m_hypothesis:main",
+      "module": "orderflow_edge_lab.cli.ema15m_hypothesis",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-ena-forward-shadow",
+      "target": "orderflow_edge_lab.cli.ena_forward_shadow:main",
+      "module": "orderflow_edge_lab.cli.ena_forward_shadow",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-ena-mean-reversion-risk",
+      "target": "orderflow_edge_lab.cli.ena_mean_reversion_risk:main",
+      "module": "orderflow_edge_lab.cli.ena_mean_reversion_risk",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-evidence-v2-session-audit",
+      "target": "orderflow_edge_lab.cli.evidence_v2_session_audit:main",
+      "module": "orderflow_edge_lab.cli.evidence_v2_session_audit",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-evidence-v2-session-forward",
+      "target": "orderflow_edge_lab.cli.evidence_v2_session_forward:main",
+      "module": "orderflow_edge_lab.cli.evidence_v2_session_forward",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-export-audit",
+      "target": "orderflow_edge_lab.cli.export_audit:main",
+      "module": "orderflow_edge_lab.cli.export_audit",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-export-bundle",
+      "target": "orderflow_edge_lab.cli.export_bundle:main",
+      "module": "orderflow_edge_lab.cli.export_bundle",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-features-v2",
+      "target": "orderflow_edge_lab.cli.features_v2:main",
+      "module": "orderflow_edge_lab.cli.features_v2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-forward-operations-v2",
+      "target": "orderflow_edge_lab.cli.forward_operations_v2:main",
+      "module": "orderflow_edge_lab.cli.forward_operations_v2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-governance-v2",
+      "target": "orderflow_edge_lab.cli.governance_v2:main",
+      "module": "orderflow_edge_lab.cli.governance_v2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-holdout-audit",
+      "target": "orderflow_edge_lab.cli.holdout_audit:main",
+      "module": "orderflow_edge_lab.cli.holdout_audit",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-htf-fibonacci-forward-shadow",
+      "target": "orderflow_edge_lab.cli.htf_fibonacci_forward_shadow:main",
+      "module": "orderflow_edge_lab.cli.htf_fibonacci_forward_shadow",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-htf-fibonacci-paired-forward",
+      "target": "orderflow_edge_lab.cli.htf_fibonacci_paired_forward:main",
+      "module": "orderflow_edge_lab.cli.htf_fibonacci_paired_forward",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-htf-trend-forward-shadow",
+      "target": "orderflow_edge_lab.cli.htf_trend_forward_shadow:main",
+      "module": "orderflow_edge_lab.cli.htf_trend_forward_shadow",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-ingestion-v2",
+      "target": "orderflow_edge_lab.cli.ingestion_v2:main",
+      "module": "orderflow_edge_lab.cli.ingestion_v2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-jev-research-action",
+      "target": "orderflow_edge_lab.cli.jev_research_action:main",
+      "module": "orderflow_edge_lab.cli.jev_research_action",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-jev-research-decision",
+      "target": "orderflow_edge_lab.cli.jev_research_decision:main",
+      "module": "orderflow_edge_lab.cli.jev_research_decision",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-lsk-conditional",
+      "target": "orderflow_edge_lab.lsk_conditional_regime:main",
+      "module": "orderflow_edge_lab.lsk_conditional_regime",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-market-conditions",
+      "target": "orderflow_edge_lab.cli.market_conditions:main",
+      "module": "orderflow_edge_lab.cli.market_conditions",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-market-state-aggregate",
+      "target": "orderflow_edge_lab.cli.market_state_aggregate:main",
+      "module": "orderflow_edge_lab.cli.market_state_aggregate",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": true
+    },
+    {
+      "name": "orderflow-market-state-aggregate-v1-1",
+      "target": "orderflow_edge_lab.cli.market_state_aggregate_v1_1:main",
+      "module": "orderflow_edge_lab.cli.market_state_aggregate_v1_1",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-market-state-aggregate-v1-2",
+      "target": "orderflow_edge_lab.cli.market_state_aggregate_v1_2:main",
+      "module": "orderflow_edge_lab.cli.market_state_aggregate_v1_2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-market-state-scan",
+      "target": "orderflow_edge_lab.cli.market_state_scan:main",
+      "module": "orderflow_edge_lab.cli.market_state_scan",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-markov-ev-shadow",
+      "target": "orderflow_edge_lab.cli.markov_ev_shadow:main",
+      "module": "orderflow_edge_lab.cli.markov_ev_shadow",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-markov-price-diagnostics",
+      "target": "orderflow_edge_lab.cli.markov_price_diagnostics:main",
+      "module": "orderflow_edge_lab.cli.markov_price_diagnostics",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-mexc-capture-quality",
+      "target": "orderflow_edge_lab.cli.mexc_capture_quality:main",
+      "module": "orderflow_edge_lab.cli.mexc_capture_quality",
+      "exposure": "dispatcher",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-mexc-record",
+      "target": "orderflow_edge_lab.cli.mexc_record:main",
+      "module": "orderflow_edge_lab.cli.mexc_record",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-mexc-replay",
+      "target": "orderflow_edge_lab.cli.mexc_replay:main",
+      "module": "orderflow_edge_lab.cli.mexc_replay",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-mexc-session-research",
+      "target": "orderflow_edge_lab.cli.mexc_session_research:main",
+      "module": "orderflow_edge_lab.cli.mexc_session_research",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-multi-agent",
+      "target": "orderflow_edge_lab.cli.multi_agent:main",
+      "module": "orderflow_edge_lab.cli.multi_agent",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-news-monitor",
+      "target": "orderflow_edge_lab.cli.news_monitor:main",
+      "module": "orderflow_edge_lab.cli.news_monitor",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-okx-funding-archive-schema-probe",
+      "target": "orderflow_edge_lab.cli.okx_funding_archive_schema_probe:main",
+      "module": "orderflow_edge_lab.cli.okx_funding_archive_schema_probe",
+      "exposure": "dispatcher",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-okx-historical-funding-source-probe",
+      "target": "orderflow_edge_lab.cli.okx_historical_funding_source_probe:main",
+      "module": "orderflow_edge_lab.cli.okx_historical_funding_source_probe",
+      "exposure": "dispatcher",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-ops-digest",
+      "target": "orderflow_edge_lab.cli.ops_digest:main",
+      "module": "orderflow_edge_lab.cli.ops_digest",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-ops-digest-v2",
+      "target": "orderflow_edge_lab.cli.ops_digest_v2:main",
+      "module": "orderflow_edge_lab.cli.ops_digest_v2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-orthogonality",
+      "target": "orderflow_edge_lab.cli.orthogonality:main",
+      "module": "orderflow_edge_lab.cli.orthogonality",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-pair-screen",
+      "target": "orderflow_edge_lab.cli.pair_screen:main",
+      "module": "orderflow_edge_lab.cli.pair_screen",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-paper",
+      "target": "orderflow_edge_lab.cli.paper:main",
+      "module": "orderflow_edge_lab.cli.paper",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-paper-audit",
+      "target": "orderflow_edge_lab.cli.paper_audit:main",
+      "module": "orderflow_edge_lab.cli.paper_audit",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-paper-bot-v3",
+      "target": "orderflow_edge_lab.cli.paper_bot_v3:main",
+      "module": "orderflow_edge_lab.cli.paper_bot_v3",
+      "exposure": "dispatcher",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-paper-execution-v2",
+      "target": "orderflow_edge_lab.cli.paper_execution_v2:main",
+      "module": "orderflow_edge_lab.cli.paper_execution_v2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-paper-replay-v2",
+      "target": "orderflow_edge_lab.cli.paper_replay_v2:main",
+      "module": "orderflow_edge_lab.cli.paper_replay_v2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-payoff-geometry",
+      "target": "orderflow_edge_lab.cli.payoff_geometry:main",
+      "module": "orderflow_edge_lab.cli.payoff_geometry",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-payoff-geometry-forward",
+      "target": "orderflow_edge_lab.cli.payoff_geometry_forward:main",
+      "module": "orderflow_edge_lab.cli.payoff_geometry_forward",
+      "exposure": "dispatcher",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-payoff-geometry-v1-1",
+      "target": "orderflow_edge_lab.cli.payoff_geometry_v1_1:main",
+      "module": "orderflow_edge_lab.cli.payoff_geometry_v1_1",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-pipeline-v2",
+      "module": "orderflow_edge_lab.cli.pipeline_v2",
+      "target": "orderflow_edge_lab.cli.pipeline_v2:main",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-portfolio-risk-v2",
+      "target": "orderflow_edge_lab.cli.portfolio_risk_v2:main",
+      "module": "orderflow_edge_lab.cli.portfolio_risk_v2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-portfolio-session-report",
+      "target": "orderflow_edge_lab.cli.portfolio_session_report:main",
+      "module": "orderflow_edge_lab.cli.portfolio_session_report",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-probe",
+      "target": "orderflow_edge_lab.cli.probe:main",
+      "module": "orderflow_edge_lab.cli.probe",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-promotion-check",
+      "target": "orderflow_edge_lab.cli.promote:main",
+      "module": "orderflow_edge_lab.cli.promote",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-readiness",
+      "target": "orderflow_edge_lab.cli.readiness:main",
+      "module": "orderflow_edge_lab.cli.readiness",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-regime-marginal-pairwise-shadow-v1",
+      "target": "orderflow_edge_lab.cli.regime_marginal_pairwise_shadow_v1:main",
+      "module": "orderflow_edge_lab.cli.regime_marginal_pairwise_shadow_v1",
+      "exposure": "dispatcher",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-research-control-plane",
+      "target": "orderflow_edge_lab.cli.research_control_plane:main",
+      "module": "orderflow_edge_lab.cli.research_control_plane",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-research-freeze",
+      "target": "orderflow_edge_lab.cli.research_freeze:main",
+      "module": "orderflow_edge_lab.cli.research_freeze",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-research-hygiene",
+      "target": "orderflow_edge_lab.cli.research_hygiene:main",
+      "module": "orderflow_edge_lab.cli.research_hygiene",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-review-clock",
+      "target": "orderflow_edge_lab.cli.review_clock:main",
+      "module": "orderflow_edge_lab.cli.review_clock",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-review-packet",
+      "target": "orderflow_edge_lab.cli.review_packet:main",
+      "module": "orderflow_edge_lab.cli.review_packet",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-risk-ladder",
+      "target": "orderflow_edge_lab.cli.risk_ladder:main",
+      "module": "orderflow_edge_lab.cli.risk_ladder",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-robustness",
+      "target": "orderflow_edge_lab.cli.robustness:main",
+      "module": "orderflow_edge_lab.cli.robustness",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-runtime-snapshot",
+      "target": "orderflow_edge_lab.cli.runtime_snapshot:main",
+      "module": "orderflow_edge_lab.cli.runtime_snapshot",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-sentiment-monitor",
+      "target": "orderflow_edge_lab.cli.sentiment_monitor:main",
+      "module": "orderflow_edge_lab.cli.sentiment_monitor",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": true
+    },
+    {
+      "name": "orderflow-sentiment-monitor-v1-1",
+      "target": "orderflow_edge_lab.cli.sentiment_monitor_v1_1:main",
+      "module": "orderflow_edge_lab.cli.sentiment_monitor_v1_1",
+      "exposure": "dispatcher",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-session-audit",
+      "target": "orderflow_edge_lab.cli.session_audit:main",
+      "module": "orderflow_edge_lab.cli.session_audit",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-session-excursion-aggregate",
+      "target": "orderflow_edge_lab.cli.session_excursion_aggregate:main",
+      "module": "orderflow_edge_lab.cli.session_excursion_aggregate",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-session-metrics",
+      "target": "orderflow_edge_lab.cli.session_metrics:main",
+      "module": "orderflow_edge_lab.cli.session_metrics",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-session-strategy-report",
+      "target": "orderflow_edge_lab.cli.session_strategy_report:main",
+      "module": "orderflow_edge_lab.cli.session_strategy_report",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-session-watch",
+      "target": "orderflow_edge_lab.cli.session_watch:main",
+      "module": "orderflow_edge_lab.cli.session_watch",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-state-candidate-registry-v1",
+      "target": "orderflow_edge_lab.cli.state_candidate_registry_v1:main",
+      "module": "orderflow_edge_lab.cli.state_candidate_registry_v1",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-state-promotion-report",
+      "target": "orderflow_edge_lab.cli.state_promotion_report:main",
+      "module": "orderflow_edge_lab.cli.state_promotion_report",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": true
+    },
+    {
+      "name": "orderflow-state-promotion-report-v1-2",
+      "target": "orderflow_edge_lab.cli.state_promotion_report_v1_2:main",
+      "module": "orderflow_edge_lab.cli.state_promotion_report_v1_2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-state-threshold-freeze-v1",
+      "target": "orderflow_edge_lab.cli.state_threshold_freeze_v1:main",
+      "module": "orderflow_edge_lab.cli.state_threshold_freeze_v1",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-stop-risk",
+      "target": "orderflow_edge_lab.cli.stop_risk:main",
+      "module": "orderflow_edge_lab.cli.stop_risk",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-strategy-conditioning-freeze",
+      "target": "orderflow_edge_lab.cli.strategy_conditioning_freeze:main",
+      "module": "orderflow_edge_lab.cli.strategy_conditioning_freeze",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": true
+    },
+    {
+      "name": "orderflow-strategy-conditioning-freeze-v1-1",
+      "target": "orderflow_edge_lab.cli.strategy_conditioning_freeze_v1_1:main",
+      "module": "orderflow_edge_lab.cli.strategy_conditioning_freeze_v1_1",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-strategy-conditioning-registry-binding-v1",
+      "target": "orderflow_edge_lab.cli.strategy_conditioning_registry_binding_v1:main",
+      "module": "orderflow_edge_lab.cli.strategy_conditioning_registry_binding_v1",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-strategy-state-mapping-v1",
+      "target": "orderflow_edge_lab.cli.strategy_state_mapping_v1:main",
+      "module": "orderflow_edge_lab.cli.strategy_state_mapping_v1",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-strategy-tournament",
+      "target": "orderflow_edge_lab.cli.strategy_tournament:main",
+      "module": "orderflow_edge_lab.cli.strategy_tournament",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-strategy-tournament-aggregate",
+      "target": "orderflow_edge_lab.cli.strategy_tournament_aggregate:main",
+      "module": "orderflow_edge_lab.cli.strategy_tournament_aggregate",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-strategy-tournament-data",
+      "target": "orderflow_edge_lab.cli.strategy_tournament_data:main",
+      "module": "orderflow_edge_lab.cli.strategy_tournament_data",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-trial-ledger",
+      "target": "orderflow_edge_lab.cli.trial_ledger:main",
+      "module": "orderflow_edge_lab.cli.trial_ledger",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-universal-backtest",
+      "target": "orderflow_edge_lab.cli.universal_backtest:main",
+      "module": "orderflow_edge_lab.cli.universal_backtest",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-universal-existing-validation",
+      "target": "orderflow_edge_lab.cli.universal_existing_validation:main",
+      "module": "orderflow_edge_lab.cli.universal_existing_validation",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-universal-session-shadow",
+      "target": "orderflow_edge_lab.cli.universal_session_alignment_shadow:main",
+      "module": "orderflow_edge_lab.cli.universal_session_alignment_shadow",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-universal-shadow-monitor",
+      "target": "orderflow_edge_lab.cli.universal_shadow_operational_monitor:main",
+      "module": "orderflow_edge_lab.cli.universal_shadow_operational_monitor",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-v2",
+      "target": "orderflow_edge_lab.cli.main_v2:main",
+      "module": "orderflow_edge_lab.cli.main_v2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-validate",
+      "target": "orderflow_edge_lab.cli.validate:main",
+      "module": "orderflow_edge_lab.cli.validate",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-validation-binding-v2",
+      "target": "orderflow_edge_lab.cli.validation_binding_v2:main",
+      "module": "orderflow_edge_lab.cli.validation_binding_v2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-vol8-payoff-amplitude-forward",
+      "target": "orderflow_edge_lab.cli.vol8_payoff_amplitude_forward:main",
+      "module": "orderflow_edge_lab.cli.vol8_payoff_amplitude_forward",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-volatility-state-forward",
+      "target": "orderflow_edge_lab.cli.volatility_state_forward:main",
+      "module": "orderflow_edge_lab.cli.volatility_state_forward",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    }
+  ]
+}

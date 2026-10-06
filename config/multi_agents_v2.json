@@ -1,0 +1,902 @@
+{
+  "schema_version": 2,
+  "analysis": "orderflow_edge_lab.multi_agent_policy.v2",
+  "config_id": "orderflow-multi-agent-policy-v2",
+  "agents": [
+    {
+      "id": "data_integrity",
+      "focus": "Market-data adapters, DeepCharts/dxFeed and MEXC ingestion, sequence integrity, timestamps, provenance, and causal feature eligibility",
+      "logical_role": "DeerFlow data integrity; Ruflo market-data reviewer",
+      "required_paths": [
+        "src/orderflow_edge_lab/adapters.py",
+        "src/orderflow_edge_lab/data_lineage.py",
+        "src/orderflow_edge_lab/dxfeed_bbo.py",
+        "src/orderflow_edge_lab/mexc_orderflow.py"
+      ],
+      "forbidden_claims": [],
+      "checks": [
+        {
+          "id": "required_paths",
+          "kind": "path_exists",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "src/orderflow_edge_lab/adapters.py",
+            "src/orderflow_edge_lab/data_lineage.py",
+            "src/orderflow_edge_lab/dxfeed_bbo.py",
+            "src/orderflow_edge_lab/mexc_orderflow.py"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_01_ingestion.TerminalAndReceiverTests.test_silent_open_feed_and_exception_cannot_be_complete"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "trend_structure",
+      "focus": "Trend/range state, completed-candle EMA and slope behavior, ADX/Donchian/directional-efficiency research, and multi-timeframe agreement without look-ahead",
+      "logical_role": "DeerFlow strategy/backtest validation; Ruflo strategy reviewer",
+      "required_paths": [
+        "config/regime_research_v1.json",
+        "docs/REGIME_RESEARCH.md",
+        "src/orderflow_edge_lab/ema15m_hypothesis.py"
+      ],
+      "forbidden_claims": [
+        "best indicator",
+        "proven trend predictor"
+      ],
+      "checks": [
+        {
+          "id": "required_paths",
+          "kind": "path_exists",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "config/regime_research_v1.json",
+            "docs/REGIME_RESEARCH.md",
+            "src/orderflow_edge_lab/ema15m_hypothesis.py"
+          ]
+        },
+        {
+          "id": "protocol_non_authority",
+          "kind": "json_false_claims",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "config/regime_research_v1.json"
+          ],
+          "claims": [
+            "profitable_edge_established",
+            "verified_out_of_sample_evidence"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_03_features.QuoteAndTargetV2Tests"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "volatility_regime",
+      "focus": "ATR/Bollinger-width/realized-volatility state, expansion-contraction behavior, volatility-of-volatility, and movement relative to execution friction",
+      "logical_role": "DeerFlow strategy/backtest validation; Ruflo strategy reviewer",
+      "required_paths": [
+        "config/regime_research_v1.json",
+        "src/orderflow_edge_lab/market_conditions.py"
+      ],
+      "forbidden_claims": [
+        "guaranteed volatility edge"
+      ],
+      "checks": [
+        {
+          "id": "required_paths",
+          "kind": "path_exists",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "config/regime_research_v1.json",
+            "src/orderflow_edge_lab/market_conditions.py"
+          ]
+        },
+        {
+          "id": "protocol_non_authority",
+          "kind": "json_false_claims",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "config/regime_research_v1.json"
+          ],
+          "claims": [
+            "profitable_edge_established",
+            "verified_out_of_sample_evidence"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_03_features.QuoteAndTargetV2Tests"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "liquidity_microstructure",
+      "focus": "Spread, displayed depth, microprice, book imbalance, depth-flow, liquidity add/pull, quote intensity, stale/crossed-book quality, and microstructure state",
+      "logical_role": "DeerFlow data integrity; Ruflo market-data reviewer",
+      "required_paths": [
+        "config/regime_research_v1.json",
+        "src/orderflow_edge_lab/mexc_orderflow.py",
+        "src/orderflow_edge_lab/market_conditions.py",
+        "src/orderflow_edge_lab/orderflow_backtest.py"
+      ],
+      "forbidden_claims": [
+        "guaranteed order flow edge"
+      ],
+      "checks": [
+        {
+          "id": "required_paths",
+          "kind": "path_exists",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "config/regime_research_v1.json",
+            "src/orderflow_edge_lab/mexc_orderflow.py",
+            "src/orderflow_edge_lab/market_conditions.py",
+            "src/orderflow_edge_lab/orderflow_backtest.py"
+          ]
+        },
+        {
+          "id": "protocol_non_authority",
+          "kind": "json_false_claims",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "config/regime_research_v1.json"
+          ],
+          "claims": [
+            "profitable_edge_established",
+            "verified_out_of_sample_evidence"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_03_features.QuoteAndTargetV2Tests"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aggressive_flow",
+      "focus": "CVD, signed aggressive volume, trade intensity, flow acceleration, large-trade share, price-flow divergence, continuation and exhaustion",
+      "logical_role": "DeerFlow strategy/backtest validation; Ruflo strategy reviewer",
+      "required_paths": [
+        "config/regime_research_v1.json",
+        "src/orderflow_edge_lab/mexc_orderflow.py",
+        "src/orderflow_edge_lab/orderflow_backtest.py"
+      ],
+      "forbidden_claims": [],
+      "checks": [
+        {
+          "id": "required_paths",
+          "kind": "path_exists",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "config/regime_research_v1.json",
+            "src/orderflow_edge_lab/mexc_orderflow.py",
+            "src/orderflow_edge_lab/orderflow_backtest.py"
+          ]
+        },
+        {
+          "id": "protocol_non_authority",
+          "kind": "json_false_claims",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "config/regime_research_v1.json"
+          ],
+          "claims": [
+            "profitable_edge_established",
+            "verified_out_of_sample_evidence"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_03_features.QuoteAndTargetV2Tests"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mean_reversion",
+      "focus": "Bollinger/VWAP displacement, RSI/return z-score hypotheses, failed breakouts, exhaustion and continuation-versus-reversion state",
+      "logical_role": "DeerFlow strategy/backtest validation; Ruflo strategy reviewer",
+      "required_paths": [
+        "config/regime_research_v1.json",
+        "docs/REGIME_RESEARCH.md"
+      ],
+      "forbidden_claims": [
+        "guaranteed mean reversion"
+      ],
+      "checks": [
+        {
+          "id": "required_paths",
+          "kind": "path_exists",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "config/regime_research_v1.json",
+            "docs/REGIME_RESEARCH.md"
+          ]
+        },
+        {
+          "id": "protocol_non_authority",
+          "kind": "json_false_claims",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "config/regime_research_v1.json"
+          ],
+          "claims": [
+            "profitable_edge_established",
+            "verified_out_of_sample_evidence"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_03_features.QuoteAndTargetV2Tests"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cross_asset_context",
+      "focus": "BTC returns, volatility, order-flow agreement, rolling beta/correlation, lead-lag, and idiosyncratic versus BTC-driven altcoin behavior",
+      "logical_role": "DeerFlow strategy/backtest validation; Ruflo strategy reviewer",
+      "required_paths": [
+        "config/regime_research_v1.json",
+        "src/orderflow_edge_lab/cross_pair.py",
+        "src/orderflow_edge_lab/btc_correlation.py",
+        "src/orderflow_edge_lab/orderflow_backtest.py"
+      ],
+      "forbidden_claims": [],
+      "checks": [
+        {
+          "id": "required_paths",
+          "kind": "path_exists",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "config/regime_research_v1.json",
+            "src/orderflow_edge_lab/cross_pair.py",
+            "src/orderflow_edge_lab/btc_correlation.py",
+            "src/orderflow_edge_lab/orderflow_backtest.py"
+          ]
+        },
+        {
+          "id": "protocol_non_authority",
+          "kind": "json_false_claims",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "config/regime_research_v1.json"
+          ],
+          "claims": [
+            "profitable_edge_established",
+            "verified_out_of_sample_evidence"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_03_features.QuoteAndTargetV2Tests"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "news_event_context",
+      "focus": "Public coin-news event timing, conservative symbol attribution, source provenance, and post-event coin/BTC behavior without causal overclaiming or strategy retuning",
+      "logical_role": "DeerFlow market context; optional observational coordination",
+      "required_paths": [
+        "config/news_monitor_v1.json",
+        "src/orderflow_edge_lab/news_monitor.py",
+        ".github/workflows/news-context.yml"
+      ],
+      "forbidden_claims": [
+        "news guarantees",
+        "news proves causality"
+      ],
+      "checks": [
+        {
+          "id": "required_paths",
+          "kind": "path_exists",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "config/news_monitor_v1.json",
+            "src/orderflow_edge_lab/news_monitor.py",
+            ".github/workflows/news-context.yml"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_03_features.QuoteAndTargetV2Tests"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sentiment_context",
+      "focus": "Deterministic public-headline sentiment scoring, source/time provenance, PnL-independent state testing before strategy conditioning, and strict separation between observation and any later veto-only backtest",
+      "logical_role": "DeerFlow market context; optional observational coordination",
+      "required_paths": [
+        "config/sentiment_monitor_v1.json",
+        "config/sentiment_conditioning_v1.json",
+        "src/orderflow_edge_lab/sentiment_monitor.py",
+        ".github/workflows/sentiment-context-v1.yml"
+      ],
+      "forbidden_claims": [
+        "sentiment guarantees",
+        "sentiment proves causality",
+        "sentiment edge proven"
+      ],
+      "checks": [
+        {
+          "id": "required_paths",
+          "kind": "path_exists",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "config/sentiment_monitor_v1.json",
+            "config/sentiment_conditioning_v1.json",
+            "src/orderflow_edge_lab/sentiment_monitor.py",
+            ".github/workflows/sentiment-context-v1.yml"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_03_features.QuoteAndTargetV2Tests"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "derivatives_positioning",
+      "focus": "Funding, open-interest, mark premium/basis and liquidation context only when legitimately available at zero additional cost; missing fields must not be invented",
+      "logical_role": "DeerFlow market context; Ruflo strategy reviewer",
+      "required_paths": [
+        "config/regime_research_v1.json",
+        "docs/REGIME_RESEARCH.md"
+      ],
+      "forbidden_claims": [
+        "funding guarantees",
+        "open interest guarantees"
+      ],
+      "checks": [
+        {
+          "id": "required_paths",
+          "kind": "path_exists",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "config/regime_research_v1.json",
+            "docs/REGIME_RESEARCH.md"
+          ]
+        },
+        {
+          "id": "protocol_non_authority",
+          "kind": "json_false_claims",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "config/regime_research_v1.json"
+          ],
+          "claims": [
+            "profitable_edge_established",
+            "verified_out_of_sample_evidence"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_03_features.QuoteAndTargetV2Tests"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "execution_economics",
+      "focus": "Spread, fees, slippage, latency/staleness, signal half-life, expected move after friction, and whether statistical predictability is economically tradeable",
+      "logical_role": "DeerFlow strategy/backtest validation; Ruflo strategy reviewer",
+      "required_paths": [
+        "config/regime_research_v1.json",
+        "src/orderflow_edge_lab/economics.py",
+        "src/orderflow_edge_lab/market_conditions.py"
+      ],
+      "forbidden_claims": [
+        "zero cost execution",
+        "frictionless"
+      ],
+      "checks": [
+        {
+          "id": "required_paths",
+          "kind": "path_exists",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "config/regime_research_v1.json",
+            "src/orderflow_edge_lab/economics.py",
+            "src/orderflow_edge_lab/market_conditions.py"
+          ]
+        },
+        {
+          "id": "protocol_non_authority",
+          "kind": "json_false_claims",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "config/regime_research_v1.json"
+          ],
+          "claims": [
+            "profitable_edge_established",
+            "verified_out_of_sample_evidence"
+          ]
+        },
+        {
+          "id": "friction_terms",
+          "kind": "path_contains",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "src/orderflow_edge_lab/economics.py"
+          ],
+          "tokens": [
+            "fee",
+            "slippage",
+            "spread"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_05_backtesting.ExecutionValidationTests"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "risk_path",
+      "focus": "MAE/MFE, stop and target path, RR, requested equity risk, exposure caps, drawdown and risk-of-ruin diagnostics",
+      "logical_role": "DeerFlow execution safety/risk; Ruflo security architect",
+      "required_paths": [
+        "src/orderflow_edge_lab/stop_risk.py",
+        "src/orderflow_edge_lab/risk_ladder.py"
+      ],
+      "forbidden_claims": [
+        "risk free"
+      ],
+      "checks": [
+        {
+          "id": "required_paths",
+          "kind": "path_exists",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "src/orderflow_edge_lab/stop_risk.py",
+            "src/orderflow_edge_lab/risk_ladder.py"
+          ]
+        },
+        {
+          "id": "path_risk_terms",
+          "kind": "path_contains",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "src/orderflow_edge_lab/stop_risk.py"
+          ],
+          "tokens": [
+            "mae",
+            "mfe",
+            "max_exposure"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_03_features.QuoteAndTargetV2Tests"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "indicator_orthogonality",
+      "focus": "Detect redundant indicators, require incremental market-state information, challenge correlated indicator stacking, and justify interactions before combination",
+      "logical_role": "DeerFlow research validity/statistics; Ruflo researcher",
+      "required_paths": [
+        "config/regime_research_v1.json",
+        "docs/REGIME_RESEARCH.md"
+      ],
+      "forbidden_claims": [
+        "more indicators always improve"
+      ],
+      "checks": [
+        {
+          "id": "required_paths",
+          "kind": "path_exists",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "config/regime_research_v1.json",
+            "docs/REGIME_RESEARCH.md"
+          ]
+        },
+        {
+          "id": "protocol_non_authority",
+          "kind": "json_false_claims",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "config/regime_research_v1.json"
+          ],
+          "claims": [
+            "profitable_edge_established",
+            "verified_out_of_sample_evidence"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_03_features.QuoteAndTargetV2Tests"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "research_validity",
+      "focus": "Discovery/validation/holdout separation, frozen protocols, dependence clustering, candidate freezing, trial accounting, multiple testing, causal audits and promotion evidence",
+      "logical_role": "DeerFlow research validity/statistics; Ruflo researcher",
+      "required_paths": [
+        "config/orderflow_discovery_v1.json",
+        "config/regime_research_v1.json",
+        "src/orderflow_edge_lab/discovery_aggregate.py",
+        "src/orderflow_edge_lab/research_protocol.py",
+        "src/orderflow_edge_lab/candidate_freeze.py",
+        "src/orderflow_edge_lab/holdout_audit.py",
+        "src/orderflow_edge_lab/trial_ledger.py",
+        "src/orderflow_edge_lab/promotion.py"
+      ],
+      "forbidden_claims": [
+        "guaranteed profitable",
+        "proven profitable edge"
+      ],
+      "checks": [
+        {
+          "id": "required_paths",
+          "kind": "path_exists",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "config/orderflow_discovery_v1.json",
+            "config/regime_research_v1.json",
+            "src/orderflow_edge_lab/discovery_aggregate.py",
+            "src/orderflow_edge_lab/research_protocol.py",
+            "src/orderflow_edge_lab/candidate_freeze.py",
+            "src/orderflow_edge_lab/holdout_audit.py",
+            "src/orderflow_edge_lab/trial_ledger.py",
+            "src/orderflow_edge_lab/promotion.py"
+          ]
+        },
+        {
+          "id": "holdout_binding",
+          "kind": "path_contains",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "src/orderflow_edge_lab/promotion_binding.py"
+          ],
+          "tokens": [
+            "holdout",
+            "trial_ledger"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_04_discovery_governance.ClusterBenchmarkGraduationTests"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "transfer_generalization",
+      "focus": "Independent-batch stability, regime stability and PnL-independent cross-pair transfer without relabeling transfer evidence as untouched OOS",
+      "logical_role": "DeerFlow strategy/backtest validation; Ruflo strategy reviewer",
+      "required_paths": [
+        "src/orderflow_edge_lab/cross_pair.py",
+        "src/orderflow_edge_lab/condition_aggregate.py",
+        "src/orderflow_edge_lab/market_conditions.py",
+        "src/orderflow_edge_lab/btc_correlation.py"
+      ],
+      "forbidden_claims": [
+        "generalizes to all coins"
+      ],
+      "checks": [
+        {
+          "id": "required_paths",
+          "kind": "path_exists",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "src/orderflow_edge_lab/cross_pair.py",
+            "src/orderflow_edge_lab/condition_aggregate.py",
+            "src/orderflow_edge_lab/market_conditions.py",
+            "src/orderflow_edge_lab/btc_correlation.py"
+          ]
+        },
+        {
+          "id": "protocol_non_authority",
+          "kind": "json_false_claims",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "config/regime_research_v1.json"
+          ],
+          "claims": [
+            "profitable_edge_established",
+            "verified_out_of_sample_evidence"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_03_features.QuoteAndTargetV2Tests"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "execution_safety",
+      "focus": "Approval-bound paper execution, stale-market rejection, state ownership, journal integrity, kill switches, reconciliation and prevention of accidental live transmission",
+      "logical_role": "DeerFlow execution safety/risk; Ruflo security architect",
+      "required_paths": [
+        "src/orderflow_edge_lab/approval.py",
+        "src/orderflow_edge_lab/execution.py",
+        "src/orderflow_edge_lab/runtime_snapshot.py",
+        "src/orderflow_edge_lab/session_audit.py"
+      ],
+      "forbidden_claims": [],
+      "checks": [
+        {
+          "id": "required_paths",
+          "kind": "path_exists",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "src/orderflow_edge_lab/approval.py",
+            "src/orderflow_edge_lab/execution.py",
+            "src/orderflow_edge_lab/runtime_snapshot.py",
+            "src/orderflow_edge_lab/session_audit.py"
+          ]
+        },
+        {
+          "id": "no_live_broker_dependency",
+          "kind": "dependency_absent",
+          "severity": "critical",
+          "release_only": false,
+          "dependencies": [
+            "ccxt",
+            "metatrader5",
+            "ib_insync",
+            "alpaca-py"
+          ]
+        },
+        {
+          "id": "approval_boundary",
+          "kind": "path_contains",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "src/orderflow_edge_lab/execution.py"
+          ],
+          "tokens": [
+            "approval"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_08_paper_execution.PaperReplayV2Tests"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "reliability_observability",
+      "focus": "Compilation, tests, packaging, Linux/Windows CI, workflow failures, hashes, manifests, runtime identity, operator diagnostics and reproducibility",
+      "logical_role": "DeerFlow reliability/CI and observability; Ruflo tester/reviewer",
+      "required_paths": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/orderflow-continuous-discovery.yml",
+        ".github/workflows/cross-pair-transfer.yml",
+        ".github/workflows/news-context.yml",
+        ".github/workflows/sentiment-context-v1.yml",
+        "scripts/deployment_check.py",
+        "scripts/package_smoke.py",
+        "src/orderflow_edge_lab/runtime_identity.py"
+      ],
+      "forbidden_claims": [],
+      "checks": [
+        {
+          "id": "required_paths",
+          "kind": "path_exists",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            ".github/workflows/ci.yml",
+            ".github/workflows/orderflow-continuous-discovery.yml",
+            ".github/workflows/cross-pair-transfer.yml",
+            ".github/workflows/news-context.yml",
+            ".github/workflows/sentiment-context-v1.yml",
+            "scripts/deployment_check.py",
+            "scripts/package_smoke.py",
+            "src/orderflow_edge_lab/runtime_identity.py"
+          ]
+        },
+        {
+          "id": "targeted_governance_tests",
+          "kind": "path_exists",
+          "severity": "error",
+          "release_only": true,
+          "paths": [
+            "tests/test_v2_10_engineering_governance.py"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_11_integration.RegistryIntegrationTests"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "adversarial_reviewer",
+      "focus": "Challenge specialist conclusions, detect indicator mining/redundancy, unsupported edge claims, hidden holdout reuse, threshold tuning, unsafe live-execution creep and fail-open behavior",
+      "logical_role": "Lead adversarial synthesis and release manager",
+      "required_paths": [
+        "README.md",
+        "AGENTS.md",
+        "config/regime_research_v1.json"
+      ],
+      "forbidden_claims": [
+        "guaranteed profitable",
+        "risk free",
+        "certain profit",
+        "proven profitable edge"
+      ],
+      "checks": [
+        {
+          "id": "required_paths",
+          "kind": "path_exists",
+          "severity": "error",
+          "release_only": false,
+          "paths": [
+            "README.md",
+            "AGENTS.md",
+            "config/regime_research_v1.json"
+          ]
+        },
+        {
+          "id": "no_unsupported_claims",
+          "kind": "text_absent",
+          "severity": "warning",
+          "release_only": false,
+          "paths": [
+            "README.md"
+          ],
+          "tokens": [
+            "guaranteed profitable",
+            "certain profit"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_11_integration.CrossStageIntegrationTests"
+          ]
+        }
+      ]
+    }
+  ],
+  "release_manager": {
+    "block_on": [
+      "critical",
+      "error"
+    ],
+    "require_agents": [
+      "data_integrity",
+      "trend_structure",
+      "volatility_regime",
+      "liquidity_microstructure",
+      "aggressive_flow",
+      "mean_reversion",
+      "cross_asset_context",
+      "news_event_context",
+      "sentiment_context",
+      "derivatives_positioning",
+      "execution_economics",
+      "risk_path",
+      "indicator_orthogonality",
+      "research_validity",
+      "transfer_generalization",
+      "execution_safety",
+      "reliability_observability",
+      "adversarial_reviewer"
+    ]
+  }
+}

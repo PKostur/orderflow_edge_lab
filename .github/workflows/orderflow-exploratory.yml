@@ -10,6 +10,8 @@ permissions:
 
 jobs:
   fresh-mexc-sample:
+    # Engineering-only successor PRs must not create research observations.
+    if: ${{ github.event_name != 'pull_request' || !startsWith(github.head_ref, 'improvement/process-integrity-v2-') }}
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:

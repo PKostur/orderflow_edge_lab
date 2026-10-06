@@ -1,0 +1,647 @@
+{
+  "claims": {
+    "changes_frozen_watches": false,
+    "computes_strategy_verdicts": false,
+    "counts_prospective_batches": false,
+    "external_storage_verified": false,
+    "live_order_transmission_supported": false,
+    "promotes_any_strategy": false
+  },
+  "protocol_name": "forward-retention-overlay-v2",
+  "purpose": "Operational mapping only. It derives no research verdict and does not confirm Actions retention or external immutable storage.",
+  "requested_actions_retention_days_note": "400 is a caller-declared requested upload value, not a claim that repository/account policy permits it. A provider-confirmed durable immutable copy and retrieval rehearsal remain activation blockers.",
+  "schema": "orderflow_edge_lab.forward_retention_overlay.v2",
+  "status": "caller_declared_inert_template",
+  "watches": [
+    {
+      "artifacts": [
+        {
+          "artifact_name": "evidence-v2-cross-strategy-session-forward",
+          "artifact_path": "artifacts/evidence_v2_session_forward/report.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/evidence-v2-session-forward.yml",
+          "requested_retention_days": 400,
+          "role": "REPORT"
+        },
+        {
+          "artifact_name": "evidence_v2_cross_strategy_session_forward_v1-source-checkpoint-v2",
+          "artifact_path": "artifacts/forward_operations_v2/evidence_v2_cross_strategy_session_forward_v1/source_checkpoint_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/evidence-v2-session-forward.yml",
+          "requested_retention_days": 400,
+          "role": "SOURCE_CHECKPOINT"
+        },
+        {
+          "artifact_name": "evidence_v2_cross_strategy_session_forward_v1-retention-manifest-v2",
+          "artifact_path": "artifacts/forward_operations_v2/evidence_v2_cross_strategy_session_forward_v1/retention_manifest_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/evidence-v2-session-forward.yml",
+          "requested_retention_days": 400,
+          "role": "HASH_MANIFEST"
+        }
+      ],
+      "operational_margin_days": 30,
+      "watch_id": "evidence_v2_cross_strategy_session_forward_v1"
+    },
+    {
+      "artifacts": [
+        {
+          "artifact_name": "orderflow-discovery-ledger-v1",
+          "artifact_path": "artifacts/orderflow/discovery_ledger_manifest.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/orderflow-continuous-discovery.yml",
+          "requested_retention_days": 400,
+          "role": "REPORT"
+        },
+        {
+          "artifact_name": "SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST-source-checkpoint-v2",
+          "artifact_path": "artifacts/forward_operations_v2/SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST/source_checkpoint_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/orderflow-continuous-discovery.yml",
+          "requested_retention_days": 400,
+          "role": "SOURCE_CHECKPOINT"
+        },
+        {
+          "artifact_name": "SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST-retention-manifest-v2",
+          "artifact_path": "artifacts/forward_operations_v2/SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST/retention_manifest_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/orderflow-continuous-discovery.yml",
+          "requested_retention_days": 400,
+          "role": "HASH_MANIFEST"
+        }
+      ],
+      "operational_margin_days": 30,
+      "watch_id": "SESSION_W3_CVD_LNY_WIDE_RANGE_BTC_AGAINST"
+    },
+    {
+      "artifacts": [
+        {
+          "artifact_name": "multi-premia-blend-v1",
+          "artifact_path": "artifacts/multi_premia_blend/report.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/multi-premia-blend-v1.yml",
+          "requested_retention_days": 400,
+          "role": "REPORT"
+        },
+        {
+          "artifact_name": "multi-premia-blend-v1-source-checkpoint-v2",
+          "artifact_path": "artifacts/forward_operations_v2/multi-premia-blend-v1/source_checkpoint_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/multi-premia-blend-v1.yml",
+          "requested_retention_days": 400,
+          "role": "SOURCE_CHECKPOINT"
+        },
+        {
+          "artifact_name": "multi-premia-blend-v1-retention-manifest-v2",
+          "artifact_path": "artifacts/forward_operations_v2/multi-premia-blend-v1/retention_manifest_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/multi-premia-blend-v1.yml",
+          "requested_retention_days": 400,
+          "role": "HASH_MANIFEST"
+        }
+      ],
+      "operational_margin_days": 30,
+      "watch_id": "multi-premia-blend-v1"
+    },
+    {
+      "artifacts": [
+        {
+          "artifact_name": "multi-premia-blend-v1",
+          "artifact_path": "artifacts/multi_premia_blend/human_report.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/multi-premia-blend-v1.yml",
+          "requested_retention_days": 400,
+          "role": "REPORT"
+        },
+        {
+          "artifact_name": "multi-premia-human-v1-forward-source-checkpoint-v2",
+          "artifact_path": "artifacts/forward_operations_v2/multi-premia-human-v1-forward/source_checkpoint_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/multi-premia-blend-v1.yml",
+          "requested_retention_days": 400,
+          "role": "SOURCE_CHECKPOINT"
+        },
+        {
+          "artifact_name": "multi-premia-human-v1-forward-retention-manifest-v2",
+          "artifact_path": "artifacts/forward_operations_v2/multi-premia-human-v1-forward/retention_manifest_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/multi-premia-blend-v1.yml",
+          "requested_retention_days": 400,
+          "role": "HASH_MANIFEST"
+        }
+      ],
+      "operational_margin_days": 30,
+      "watch_id": "multi-premia-human-v1-forward"
+    },
+    {
+      "artifacts": [
+        {
+          "artifact_name": "crypto-trend-core-v1",
+          "artifact_path": "artifacts/crypto_trend_core/report.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/crypto-trend-core-v1.yml",
+          "requested_retention_days": 400,
+          "role": "REPORT"
+        },
+        {
+          "artifact_name": "crypto-trend-core-v1-source-checkpoint-v2",
+          "artifact_path": "artifacts/forward_operations_v2/crypto-trend-core-v1/source_checkpoint_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/crypto-trend-core-v1.yml",
+          "requested_retention_days": 400,
+          "role": "SOURCE_CHECKPOINT"
+        },
+        {
+          "artifact_name": "crypto-trend-core-v1-retention-manifest-v2",
+          "artifact_path": "artifacts/forward_operations_v2/crypto-trend-core-v1/retention_manifest_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/crypto-trend-core-v1.yml",
+          "requested_retention_days": 400,
+          "role": "HASH_MANIFEST"
+        }
+      ],
+      "operational_margin_days": 30,
+      "watch_id": "crypto-trend-core-v1"
+    },
+    {
+      "artifacts": [
+        {
+          "artifact_name": "crypto-trend-core-voltarget-v1",
+          "artifact_path": "artifacts/crypto_trend_core_voltarget/report.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/crypto-trend-core-voltarget-v1.yml",
+          "requested_retention_days": 400,
+          "role": "REPORT"
+        },
+        {
+          "artifact_name": "crypto-trend-core-voltarget-v1-source-checkpoint-v2",
+          "artifact_path": "artifacts/forward_operations_v2/crypto-trend-core-voltarget-v1/source_checkpoint_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/crypto-trend-core-voltarget-v1.yml",
+          "requested_retention_days": 400,
+          "role": "SOURCE_CHECKPOINT"
+        },
+        {
+          "artifact_name": "crypto-trend-core-voltarget-v1-retention-manifest-v2",
+          "artifact_path": "artifacts/forward_operations_v2/crypto-trend-core-voltarget-v1/retention_manifest_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/crypto-trend-core-voltarget-v1.yml",
+          "requested_retention_days": 400,
+          "role": "HASH_MANIFEST"
+        }
+      ],
+      "operational_margin_days": 30,
+      "watch_id": "crypto-trend-core-voltarget-v1"
+    },
+    {
+      "artifacts": [
+        {
+          "artifact_name": "trend-portfolio-forward-v1",
+          "artifact_path": "artifacts/trend_portfolio_forward/report.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/trend-portfolio-forward-v1.yml",
+          "requested_retention_days": 400,
+          "role": "REPORT"
+        },
+        {
+          "artifact_name": "universal-trend-portfolio-forward-v1-source-checkpoint-v2",
+          "artifact_path": "artifacts/forward_operations_v2/universal-trend-portfolio-forward-v1/source_checkpoint_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/trend-portfolio-forward-v1.yml",
+          "requested_retention_days": 400,
+          "role": "SOURCE_CHECKPOINT"
+        },
+        {
+          "artifact_name": "universal-trend-portfolio-forward-v1-retention-manifest-v2",
+          "artifact_path": "artifacts/forward_operations_v2/universal-trend-portfolio-forward-v1/retention_manifest_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/trend-portfolio-forward-v1.yml",
+          "requested_retention_days": 400,
+          "role": "HASH_MANIFEST"
+        }
+      ],
+      "operational_margin_days": 30,
+      "watch_id": "universal-trend-portfolio-forward-v1"
+    },
+    {
+      "artifacts": [
+        {
+          "artifact_name": "cross-asset-trend-forward-v1",
+          "artifact_path": "artifacts/cross_asset_trend_forward/report.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/cross-asset-trend-forward-v1.yml",
+          "requested_retention_days": 400,
+          "role": "REPORT"
+        },
+        {
+          "artifact_name": "universal-cross-asset-trend-forward-v1-source-checkpoint-v2",
+          "artifact_path": "artifacts/forward_operations_v2/universal-cross-asset-trend-forward-v1/source_checkpoint_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/cross-asset-trend-forward-v1.yml",
+          "requested_retention_days": 400,
+          "role": "SOURCE_CHECKPOINT"
+        },
+        {
+          "artifact_name": "universal-cross-asset-trend-forward-v1-retention-manifest-v2",
+          "artifact_path": "artifacts/forward_operations_v2/universal-cross-asset-trend-forward-v1/retention_manifest_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/cross-asset-trend-forward-v1.yml",
+          "requested_retention_days": 400,
+          "role": "HASH_MANIFEST"
+        }
+      ],
+      "operational_margin_days": 30,
+      "watch_id": "universal-cross-asset-trend-forward-v1"
+    },
+    {
+      "artifacts": [
+        {
+          "artifact_name": "cross-asset-trend-invvol-forward-v1",
+          "artifact_path": "artifacts/cross_asset_trend_invvol_forward/report.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/cross-asset-trend-invvol-forward-v1.yml",
+          "requested_retention_days": 400,
+          "role": "REPORT"
+        },
+        {
+          "artifact_name": "universal-cross-asset-trend-invvol-forward-v1-source-checkpoint-v2",
+          "artifact_path": "artifacts/forward_operations_v2/universal-cross-asset-trend-invvol-forward-v1/source_checkpoint_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/cross-asset-trend-invvol-forward-v1.yml",
+          "requested_retention_days": 400,
+          "role": "SOURCE_CHECKPOINT"
+        },
+        {
+          "artifact_name": "universal-cross-asset-trend-invvol-forward-v1-retention-manifest-v2",
+          "artifact_path": "artifacts/forward_operations_v2/universal-cross-asset-trend-invvol-forward-v1/retention_manifest_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/cross-asset-trend-invvol-forward-v1.yml",
+          "requested_retention_days": 400,
+          "role": "HASH_MANIFEST"
+        }
+      ],
+      "operational_margin_days": 30,
+      "watch_id": "universal-cross-asset-trend-invvol-forward-v1"
+    },
+    {
+      "artifacts": [
+        {
+          "artifact_name": "canonical-v3-forward-companion-v1",
+          "artifact_path": "artifacts/canonical_v3_forward_companion/report.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/canonical-v3-forward-companion-v1.yml",
+          "requested_retention_days": 400,
+          "role": "REPORT"
+        },
+        {
+          "artifact_name": "universal-canonical-v3-forward-companion-v1-source-checkpoint-v2",
+          "artifact_path": "artifacts/forward_operations_v2/universal-canonical-v3-forward-companion-v1/source_checkpoint_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/canonical-v3-forward-companion-v1.yml",
+          "requested_retention_days": 400,
+          "role": "SOURCE_CHECKPOINT"
+        },
+        {
+          "artifact_name": "universal-canonical-v3-forward-companion-v1-retention-manifest-v2",
+          "artifact_path": "artifacts/forward_operations_v2/universal-canonical-v3-forward-companion-v1/retention_manifest_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/canonical-v3-forward-companion-v1.yml",
+          "requested_retention_days": 400,
+          "role": "HASH_MANIFEST"
+        }
+      ],
+      "operational_margin_days": 30,
+      "watch_id": "universal-canonical-v3-forward-companion-v1"
+    },
+    {
+      "artifacts": [
+        {
+          "artifact_name": "multi-premia-blend-v1",
+          "artifact_path": "artifacts/multi_premia_blend/zoo_mirror_report.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/multi-premia-blend-v1.yml",
+          "requested_retention_days": 400,
+          "role": "REPORT"
+        },
+        {
+          "artifact_name": "zoo-mirror-forward-v1-source-checkpoint-v2",
+          "artifact_path": "artifacts/forward_operations_v2/zoo-mirror-forward-v1/source_checkpoint_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/multi-premia-blend-v1.yml",
+          "requested_retention_days": 400,
+          "role": "SOURCE_CHECKPOINT"
+        },
+        {
+          "artifact_name": "zoo-mirror-forward-v1-retention-manifest-v2",
+          "artifact_path": "artifacts/forward_operations_v2/zoo-mirror-forward-v1/retention_manifest_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/multi-premia-blend-v1.yml",
+          "requested_retention_days": 400,
+          "role": "HASH_MANIFEST"
+        }
+      ],
+      "operational_margin_days": 30,
+      "watch_id": "zoo-mirror-forward-v1"
+    },
+    {
+      "artifacts": [
+        {
+          "artifact_name": "news-sentiment-ledger-v1",
+          "artifact_path": "artifacts/news_sentiment/current/forward_report.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/news-sentiment-v1.yml",
+          "requested_retention_days": 400,
+          "role": "REPORT"
+        },
+        {
+          "artifact_name": "news-sentiment-v1-forward-source-checkpoint-v2",
+          "artifact_path": "artifacts/forward_operations_v2/news-sentiment-v1-forward/source_checkpoint_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/news-sentiment-v1.yml",
+          "requested_retention_days": 400,
+          "role": "SOURCE_CHECKPOINT"
+        },
+        {
+          "artifact_name": "news-sentiment-v1-forward-retention-manifest-v2",
+          "artifact_path": "artifacts/forward_operations_v2/news-sentiment-v1-forward/retention_manifest_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/news-sentiment-v1.yml",
+          "requested_retention_days": 400,
+          "role": "HASH_MANIFEST"
+        }
+      ],
+      "operational_margin_days": 30,
+      "watch_id": "news-sentiment-v1-forward"
+    },
+    {
+      "artifacts": [
+        {
+          "artifact_name": "multi-premia-blend-v1",
+          "artifact_path": "artifacts/multi_premia_blend/prop_paper_report.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/multi-premia-blend-v1.yml",
+          "requested_retention_days": 400,
+          "role": "REPORT"
+        },
+        {
+          "artifact_name": "prop-paper-career-v1-source-checkpoint-v2",
+          "artifact_path": "artifacts/forward_operations_v2/prop-paper-career-v1/source_checkpoint_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/multi-premia-blend-v1.yml",
+          "requested_retention_days": 400,
+          "role": "SOURCE_CHECKPOINT"
+        },
+        {
+          "artifact_name": "prop-paper-career-v1-retention-manifest-v2",
+          "artifact_path": "artifacts/forward_operations_v2/prop-paper-career-v1/retention_manifest_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/multi-premia-blend-v1.yml",
+          "requested_retention_days": 400,
+          "role": "HASH_MANIFEST"
+        }
+      ],
+      "operational_margin_days": 30,
+      "watch_id": "prop-paper-career-v1"
+    },
+    {
+      "artifacts": [
+        {
+          "artifact_name": "multi-premia-blend-v1",
+          "artifact_path": "artifacts/multi_premia_blend/paper_account_report.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/multi-premia-blend-v1.yml",
+          "requested_retention_days": 400,
+          "role": "REPORT"
+        },
+        {
+          "artifact_name": "paper-account-blend-v1-source-checkpoint-v2",
+          "artifact_path": "artifacts/forward_operations_v2/paper-account-blend-v1/source_checkpoint_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/multi-premia-blend-v1.yml",
+          "requested_retention_days": 400,
+          "role": "SOURCE_CHECKPOINT"
+        },
+        {
+          "artifact_name": "paper-account-blend-v1-retention-manifest-v2",
+          "artifact_path": "artifacts/forward_operations_v2/paper-account-blend-v1/retention_manifest_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/multi-premia-blend-v1.yml",
+          "requested_retention_days": 400,
+          "role": "HASH_MANIFEST"
+        }
+      ],
+      "operational_margin_days": 30,
+      "watch_id": "paper-account-blend-v1"
+    },
+    {
+      "artifacts": [
+        {
+          "artifact_name": "multi-premia-blend-v1",
+          "artifact_path": "artifacts/multi_premia_blend/fast_gates_report.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/multi-premia-blend-v1.yml",
+          "requested_retention_days": 400,
+          "role": "REPORT"
+        },
+        {
+          "artifact_name": "fast-gates-v1-source-checkpoint-v2",
+          "artifact_path": "artifacts/forward_operations_v2/fast-gates-v1/source_checkpoint_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/multi-premia-blend-v1.yml",
+          "requested_retention_days": 400,
+          "role": "SOURCE_CHECKPOINT"
+        },
+        {
+          "artifact_name": "fast-gates-v1-retention-manifest-v2",
+          "artifact_path": "artifacts/forward_operations_v2/fast-gates-v1/retention_manifest_v2.json",
+          "external_immutable_copy": {
+            "reference": null,
+            "required": true,
+            "status": "UNVERIFIED_EXTERNAL"
+          },
+          "producer_workflow": ".github/workflows/multi-premia-blend-v1.yml",
+          "requested_retention_days": 400,
+          "role": "HASH_MANIFEST"
+        }
+      ],
+      "operational_margin_days": 30,
+      "watch_id": "fast-gates-v1"
+    }
+  ]
+}

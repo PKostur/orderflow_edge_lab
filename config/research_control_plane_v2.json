@@ -1,0 +1,30 @@
+{
+  "schema_version": 2,
+  "analysis": "orderflow_edge_lab.research_control_plane_contract.v2",
+  "contract_id": "research-control-plane-status-v2",
+  "input_analysis": {
+    "shadow": "universal_session_alignment_prospective_shadow",
+    "decision": "jev_research_decision_layer_v1",
+    "action": "jev_research_action_v1",
+    "operational": "universal_shadow_operational_monitor_v1"
+  },
+  "stage_order": [
+    "PRE_START",
+    "WAITING_FOR_FIRST_POST_START_CHANGE",
+    "WAITING_FOR_COMPLETIONS",
+    "ACCUMULATING_COMPLETED_EVIDENCE",
+    "READY_FOR_REVIEW",
+    "HALTED_PROTOCOL_BREACH"
+  ],
+  "required_authority_false": [
+    "changes_frozen_shadow",
+    "changes_strategy_rules",
+    "changes_positions",
+    "transmits_orders",
+    "authorizes_promotion",
+    "authorizes_leverage"
+  ],
+  "required_operational_claims": [
+    "not_prospective_evidence"
+  ]
+}

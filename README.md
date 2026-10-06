@@ -7,17 +7,17 @@ Research-first infrastructure for short-horizon order-flow strategy research and
 
 ## Safety boundary
 
-This repository does not contain live broker or exchange order transmission. The execution layer is limited to paper and explicit approval workflows. No strategy is considered to have a profitable edge unless it survives genuine out-of-sample validation after realistic costs on data that was not used for discovery or tuning.
+This repository does not contain live broker or exchange order transmission. It supports legacy manual paper approval workflows and finite autonomous offline simulations. No strategy is considered to have a profitable edge unless it survives genuine out-of-sample validation after realistic costs on data that was not used for discovery or tuning.
 
 ## Continuous multi-agent hardening
 
-The repository now includes a zero-additional-cost multi-agent control plane. Seven specialist agents independently review data integrity, research validity, strategy validation, execution safety, reliability/CI, observability/deployment, and adversarial safety. A release manager aggregates their findings into a hashed report.
+The repository includes a zero-additional-cost multi-agent control plane. The current deterministic checker IDs, count, compatibility groupings, and lead/release-manager responsibility are in the generated [Governance Map v2](docs/GOVERNANCE_MAP_V2.md). DeerFlow and Ruflo groupings are optional coordination labels; they do not equal the deterministic checker count or substitute for repository evidence.
 
 ```bash
 orderflow-multi-agent --output artifacts/multi_agent_report.json
 ```
 
-The same control plane runs hourly in GitHub Actions with read-only repository permissions. It does not place trades or promote a strategy. See [multi-agent hardening](docs/MULTI_AGENT.md).
+The legacy control plane remains historical evidence. Prospective v2 profiles distinguish an advisory/static report from a release profile: only a complete release profile may be `reviewable`. Both paths are read-only and do not place trades or promote a strategy. See [multi-agent hardening](docs/MULTI_AGENT.md) and [engineering governance v2](docs/PROCESS_V2_10_ENGINEERING_GOVERNANCE.md).
 
 ## Current priorities
 
@@ -36,7 +36,7 @@ The same control plane runs hourly in GitHub Actions with read-only repository p
 
 ## Commands
 
-Every installed command is available as a flat script (for example `orderflow-multi-agent`) and through a single dispatcher:
+The versioned command registry declares whether each command is a flat script, dispatcher-only command, GUI exception, or internal surface. Flat scripts (for example `orderflow-multi-agent`) remain canonical; dispatcher-visible commands are available through a single dispatcher:
 
 ```bash
 orderflow --list          # grouped command table
@@ -117,6 +117,21 @@ signal -> TradeIntent -> data/risk checks -> approval queue -> paper fill -> pap
 
 The manual submission interface blocks failed data-quality or risk checks.
 Direct PaperEngine callers must supply upstream data/signal validation.
+
+## Autonomous offline progression v3
+
+The new finite replay runner makes **simulated decisions without per-decision human approval**, applies a prior decision only on a later valid quote, checks declared risk budgets, and produces restart checkpoints and immutable local artifacts. It is not a running market-data service or a live trading bot.
+
+```bash
+orderflow-v2 paper-bot-v3 --synthetic-demo --output artifacts/paper_demo_v3.json
+orderflow-v2 paper-bot-v3 --verify --output artifacts/paper_demo_v3.json
+orderflow-v2 bot-readiness-v3 --help
+orderflow-v2 development-strategy-candidates-v1 --help
+```
+
+See [paper replay engineering](docs/PAPER_BOT_V3.md), the [staged bot roadmap](docs/AUTONOMOUS_BOT_ROADMAP_V3.md), and the [development-only candidate harness](docs/DEVELOPMENT_STRATEGY_CANDIDATES_V1.md). A cadence-checked midpoint-momentum comparison control is available through `orderflow_edge_lab.paper_signal_controls_v3.make_midpoint_momentum_control`; it is a development baseline, not a promoted alpha strategy.
+
+Existing frozen watches retain their rules and review calendars. The two additional microstructure hypotheses have no market-performance or out-of-sample evidence. Illustrative simulator costs, quantities, and loss budgets are not venue calibration or recommended account settings; funding, borrow, and venue execution effects remain unmodeled.
 
 ## Live trading
 

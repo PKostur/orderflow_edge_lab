@@ -27,6 +27,8 @@ concurrency:
 
 jobs:
   capture:
+    # Engineering-only successor PRs must not create research observations.
+    if: ${{ github.event_name != 'pull_request' || !startsWith(github.head_ref, 'improvement/process-integrity-v2-') }}
     runs-on: ubuntu-latest
     timeout-minutes: 29
     env:
@@ -257,5 +259,5 @@ jobs:
           path: |
             artifacts/high_cadence/*_mexc_raw.jsonl*
             artifacts/high_cadence/*_mexc_features.jsonl*
-          retention-days: 7
+          retention-days: 14
           if-no-files-found: error

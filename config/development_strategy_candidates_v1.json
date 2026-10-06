@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "protocol_id": "development-strategy-candidates-v1",
+  "status": "DECLARED_DEVELOPMENT_ONLY_BEFORE_EVALUATION",
+  "trial_family": "development-strategy-candidates-v1 (two predeclared dynamic microstructure mechanisms)",
+  "purpose": "Cheap falsification of two new, separately named event-level mechanisms using only locally supplied point-in-time records. This catalog neither changes frozen strategy-zoo-v2 nor reopens W1/W2 session watches or D4 volatility-state transfer.",
+  "data_boundary": {
+    "accepted_partition": "development_only",
+    "ordering_clock": "observed_at_ns",
+    "execution": "decision at an observed event; enter at the first strictly later quote after declared latency; exit at the first quote at or after the declared horizon; no same-event/same-close fill",
+    "max_quote_age_ms": 2000
+  },
+  "orthogonality_bucket_ms": 1000,
+  "max_signal_jaccard_before_progression": 0.35,
+  "candidates": [
+    {
+      "candidate_id": "DEVQ-IMPACT-ABSORPTION-001",
+      "state": "DEVELOPMENT_ONLY",
+      "mechanism": "impact_absorption_reversal",
+      "hypothesis": "When one-second signed aggressive trade size is strongly one-sided but the contemporaneously observable midpoint has not travelled by even one quarter of the earlier quoted spread in that direction, passive liquidity has absorbed the impulse; the next short-horizon move should be opposite the aggressor side.",
+      "economic_rationale": "This tests flow-price impact divergence, not a static CVD, session, BTC-alignment, or volatility-state filter. It is a reversal mechanism that requires a measurable failure of aggressive flow to move the quote.",
+      "required_inputs": ["observed_at_ns", "symbol", "event_type", "trade price", "trade size", "aggressor side or causal BBO", "causal valid bid", "causal valid ask"],
+      "parameters": {
+        "lookback_ms": 1000,
+        "min_classified_trade_count": 5,
+        "min_signed_size_ratio": 0.8,
+        "max_signed_mid_impact_spreads": 0.25,
+        "cooldown_ms": 2000
+      },
+      "execution": {
+        "decision_latency_ms": 1,
+        "outcome_horizon_ms": 5000,
+        "round_trip_fee_bps": 2.0,
+        "round_trip_slippage_bps": 1.0
+      },
+      "controls": {
+        "null_or_sign_control": "same timestamps with signal sign reversed; analyse only as a named diagnostic in a later independently specified run",
+        "redundancy_guard": "Must report overlap with DEVQ-SPREAD-RESOLUTION-001; signal Jaccard above catalog limit blocks progression absent separately specified incremental evidence.",
+        "expected_failure_regimes": ["thin or stale quotes", "unclassified trade flow", "one-sided news jumps where quotes lag", "quoted depth that withdraws instead of absorbs"]
+      },
+      "claims": {
+        "profitable_edge_established": false,
+        "live_order_transmission_supported": false
+      }
+    },
+    {
+      "candidate_id": "DEVQ-SPREAD-RESOLUTION-001",
+      "state": "DEVELOPMENT_ONLY",
+      "mechanism": "spread_shock_resolution_continuation",
+      "hypothesis": "After a brief BBO spread shock, a return of the spread to near baseline while the midpoint remains displaced by at least three quarters of the baseline spread reflects a resolved liquidity shock; the next short-horizon move should continue in the resolved midpoint direction.",
+      "economic_rationale": "This tests quote-resilience and price discovery from BBO dynamics alone. It deliberately uses neither trade-flow imbalance nor UTC-session, BTC, funding, or volatility-transfer filters, so it is not a retune of W1/W2 or D4.",
+      "required_inputs": ["observed_at_ns", "symbol", "event_type=quote", "valid bid", "valid ask"],
+      "parameters": {
+        "baseline_lookback_ms": 4000,
+        "shock_window_ms": 1000,
+        "min_widening_ratio": 1.8,
+        "max_current_spread_ratio": 1.1,
+        "min_mid_displacement_spreads": 0.75,
+        "cooldown_ms": 2000
+      },
+      "execution": {
+        "decision_latency_ms": 1,
+        "outcome_horizon_ms": 5000,
+        "round_trip_fee_bps": 2.0,
+        "round_trip_slippage_bps": 1.0
+      },
+      "controls": {
+        "null_or_sign_control": "same timestamps with signal sign reversed; analyse only as a named diagnostic in a later independently specified run",
+        "redundancy_guard": "Must report overlap with DEVQ-IMPACT-ABSORPTION-001; signal Jaccard above catalog limit blocks progression absent separately specified incremental evidence.",
+        "expected_failure_regimes": ["persistent spread widening", "crossed or locked BBO", "quote-feed gaps", "mean-reverting shock resolution"]
+      },
+      "claims": {
+        "profitable_edge_established": false,
+        "live_order_transmission_supported": false
+      }
+    }
+  ],
+  "global_claims": {
+    "development_only": true,
+    "synthetic_tests_are_not_market_evidence": true,
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "strategy_promotion_authorized": false,
+    "live_order_transmission_supported": false
+  }
+}
