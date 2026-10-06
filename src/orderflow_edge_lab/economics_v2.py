@@ -1124,8 +1124,10 @@ def _ledger_differences(expected: object, observed: object, tolerance: Mapping[s
     if isinstance(expected, bool) or isinstance(observed, bool):
         return [] if expected is observed else [{"path": path, "expected": expected, "observed": observed, "kind": "value"}]
     if isinstance(expected, (int, float)) and isinstance(observed, (int, float)):
-        left = _number(expected, f"{path}.expected")
-        right = _number(observed, f"{path}.observed")
+        _number(expected, f"{path}.expected")
+        _number(observed, f"{path}.observed")
+        # Preserve integer nanosecond differences above float's 2**53 limit.
+        left, right = expected, observed
         return [] if _numeric_close(left, right, absolute=tolerance["absolute"], relative=tolerance["relative"]) else [
             {"path": path, "expected": left, "observed": right, "kind": "numeric"}
         ]
@@ -1150,7 +1152,8 @@ def _ledger_differences(expected: object, observed: object, tolerance: Mapping[s
 
 def _validate_engine_output(engine_output: Mapping[str, Any], expected_engine: Mapping[str, Any]) -> dict[str, Any]:
     raw = _mapping(engine_output, "engine_output")
-    _exact_keys(raw, {"engine_identity", "ledger"}, "engine_output")
+    if set(raw) - {"engine_identity", "ledger", "runtime_evidence"} or not {"engine_identity", "ledger"}.issubset(raw):
+        raise EconomicsV2Error("engine_output has unsupported shape")
     identity = _validate_engine_spec(raw["engine_identity"])
     if identity != expected_engine:
         raise EconomicsV2Error("engine_output.engine_identity does not match pinned engine_spec")
@@ -1280,6 +1283,72 @@ def run_pinned_external_engine_calibration_v2(
         except (OSError, json.JSONDecodeError) as exc:
             return build_not_calibrated_external_engine_report_v2(fixture, engine_spec, reason=f"runner_invalid_output:{type(exc).__name__}")
     return compare_external_engine_calibration_v2(fixture, engine_spec, output)
+
+
+def run_nautilus_economic_calibration_v2(
+    fixture: Mapping[str, Any], *, wheel_path: str | Path,
+) -> dict[str, Any]:
+    """Run real local pinned native-engine evidence, not a supplied-ledger claim.
+
+    Explicitly calibrates the additive fixed-contract quote ledger only. Frozen
+    v3 compounding, v2 proportional-bps slippage, depth impact and realistic
+    liquidity/latency are NOT declared calibrated by this synthetic protocol.
+    """
+    from orderflow_edge_lab.independent_calibration_v2 import (
+        ENGINE_SPEC, TOLERANCE, IndependentCalibrationUnavailable,
+        canonical_quote_ledger_v2, run_fixture,
+    )
+
+    normalized = build_economic_calibration_fixture_v2(fixture)
+    if normalized["comparison_tolerance"] != TOLERANCE:
+        raise EconomicsV2Error("native quote protocol freezes tolerance at absolute=1e-7, relative=0")
+    case = normalized["assumptions"].get("quote_case")
+    if not isinstance(case, Mapping):
+        raise EconomicsV2Error("native quote protocol requires assumptions.quote_case")
+    case_bytes = canonical_json_bytes(case)
+    if not any(source["sha256"] == canonical_json_sha256(case) and source["size_bytes"] == len(case_bytes)
+               for source in normalized["source_set"]["sources"]):
+        raise EconomicsV2Error("native quote_case must match a hash-bound synthetic source record")
+    canonical = canonical_quote_ledger_v2(case)
+    canonical_differences = _ledger_differences(normalized["expected_ledger"], canonical, TOLERANCE)
+    try:
+        output = run_fixture(normalized, wheel_path)
+    except (IndependentCalibrationUnavailable, ImportError, RuntimeError) as exc:
+        return build_not_calibrated_external_engine_report_v2(
+            fixture, ENGINE_SPEC, reason=f"native_runtime_unavailable:{type(exc).__name__}:{exc}",
+        )
+    comparison = compare_external_engine_calibration_v2(fixture, ENGINE_SPEC, output)
+    passed = comparison["ledger_match"] and not canonical_differences
+    audit = output["runtime_evidence"]["audit"]
+    reconciled = abs(audit["native_pnl_cash_residual"]) <= TOLERANCE["absolute"] and audit["open_positions"] == 0
+    passed = bool(passed and reconciled)
+    targets = [step["target"] for step in case["steps"]]
+    resize = any(left * right > 0 and left != right for left, right in zip(targets, targets[1:]))
+    reversal = any(left * right < 0 for left, right in zip(targets, targets[1:]))
+    unsigned = {key: value for key, value in comparison.items() if key != "calibration_sha256"}
+    unsigned.update({
+        "status": "LOCAL_INDEPENDENT_CALIBRATION_PASSED_PARTIAL_MECHANISMS" if passed else "ENGINE_LEDGER_MISMATCH",
+        "local_independent_calibration_evidence": passed,
+        "canonical_model": "canonical_quote_fixed_contract_v2_not_frozen_v3",
+        "canonical_ledger": canonical,
+        "canonical_fixture_differences": canonical_differences,
+        "engine_ledger": output["ledger"],
+        "native_pnl_cash_reconciled": reconciled,
+        "runtime_evidence": output["runtime_evidence"],
+        "coverage_disposition": {
+            "bid_ask": "NATIVE_L1_SYNTHETIC_BBO",
+            "fees": "NATIVE_TAKER_PERCENT_OF_EXECUTED_NOTIONAL" if case["taker_fee"] else "ZERO_FEE_CASE",
+            "slippage": "NATIVE_RC5_ONE_TICK_MODEL_OBSERVED_TWO_TICK_DISPLACEMENT" if case["slippage_ticks"] else "ZERO_ADDITIONAL_SLIPPAGE_CASE",
+            "funding": "NATIVE_FUNDING_RATE_UPDATE_SETTLEMENT_AND_POSITION_ADJUSTED_AUDITED" if audit["native_funding_adjustments"] else "NOT_EXERCISED_NO_HELD_POSITION_SETTLEMENT",
+            "resize": "NATIVE_NETTING_WEIGHTED_AVERAGE_COST" if resize else "NOT_EXERCISED",
+            "reversal": "NATIVE_NETTING_CLOSE_AND_REOPEN_EVENTS" if reversal else "NOT_EXERCISED",
+            "terminal_liquidation": "EXPLICIT_NATIVE_FINAL_MARKET_FILL_AND_ZERO_OPEN_POSITIONS",
+            "proportional_bps_slippage": "NOT_CALIBRATED_UNSUPPORTED_BY_THIS_NATIVE_MODEL",
+            "displayed_depth_linear_impact": "NOT_CALIBRATED_UNSUPPORTED_BY_THIS_NATIVE_MODEL",
+            "frozen_canonical_v3": "NOT_CALIBRATED_DIFFERENT_WEIGHT_COMPOUNDING_AND_COST_SEMANTICS",
+        },
+    })
+    return _self_hash(unsigned, "calibration_sha256")
 
 
 def _normalize_availability_record(item: Mapping[str, Any], frozen: set[str]) -> dict[str, Any]:
@@ -1475,6 +1544,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         ("settlement-coverage", "build OPEN_CLOSED settlement coverage from expected settlements"),
         ("availability", "build a frozen-universe availability sidecar"),
         ("calibrate", "compare a pinned external-engine ledger or record an unavailable engine"),
+        ("calibrate-nautilus", "execute authentic pinned Nautilus on offline synthetic quote fixtures"),
     ):
         sub = subcommands.add_parser(name, help=help_text)
         sub.add_argument("input", help="JSON request object")
@@ -1504,6 +1574,9 @@ def main(argv: Sequence[str] | None = None) -> int:
                 request["frozen_universe"], request["records"], source_set=request["source_set"],
                 policy_sha256=request["policy_sha256"], minimum_names_by_leg=request.get("minimum_names_by_leg"),
             )
+        elif args.command == "calibrate-nautilus":
+            _exact_keys(request, {"fixture", "wheel_path"}, "calibrate-nautilus request")
+            result = run_nautilus_economic_calibration_v2(request["fixture"], wheel_path=request["wheel_path"])
         else:
             allowed = {"fixture", "engine_spec", "engine_output"}
             if set(request) - allowed or not {"fixture", "engine_spec"}.issubset(request):

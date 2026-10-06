@@ -1,0 +1,1093 @@
+{
+  "protocol": {
+    "protocol_id": "offline-native-quote-v2-13",
+    "cash_model": "fixed_contract_weighted_average_cost_USDT_precision_8",
+    "funding": "scheduled_boundary_old_position_previous_midpoint_before_next_quote_plus_1ns",
+    "terminal": "explicit_final_quote_market_liquidation",
+    "slippage": "rc5 OneTickSlippageFillModel prob=1 seed=42 empirically produces 2 ticks; not bps or depth impact",
+    "tolerance": {
+      "absolute": 1e-07,
+      "relative": 0.0
+    }
+  },
+  "engine_spec": {
+    "engine_name": "NautilusTrader",
+    "engine_version": "2.0.0rc5",
+    "distribution_sha256": "eab45fafd2312deda1236554c49a9798bfc76bc8465af864878e2f70189ebebe",
+    "runner_protocol_version": "orderflow-external-ledger-v1"
+  },
+  "fixtures": [
+    {
+      "schema": "orderflow_edge_lab.economic_calibration_fixture.v2",
+      "fixture_id": "long_bbo_fee",
+      "protocol_sha256": "c5b92e6c2e1cc51ce7221aa81a2148417dbc814048c9ec6f24311eed8aff0484",
+      "source_set": {
+        "schema": "orderflow_edge_lab.canonical_source_set.v2",
+        "sources": [
+          {
+            "source_id": "synthetic_quote_case:long_bbo_fee",
+            "size_bytes": 266,
+            "sha256": "760c26774a0439d20532e81dda100a25e353da055fb152381e9173f219bcfc98"
+          }
+        ],
+        "source_set_sha256": "611e00c1431588024b4e5584fcb0be896bcad198e27adf3cf159e93265223402"
+      },
+      "assumptions": {
+        "bid_ask": "native L1 BBO",
+        "fees": "taker executed notional percentage USDT 8 decimals",
+        "slippage": "rc5 OneTickSlippageFillModel prob=1 seed=42 empirically produces 2 ticks; not bps or depth impact",
+        "funding": "scheduled_boundary_old_position_previous_midpoint_before_next_quote_plus_1ns",
+        "terminal_liquidation": "explicit_final_quote_market_liquidation",
+        "quote_case": {
+          "case_id": "long_bbo_fee",
+          "initial_cash": 10000.0,
+          "taker_fee": 0.001,
+          "slippage_ticks": 0,
+          "steps": [
+            {
+              "bid": 99.0,
+              "ask": 101.0,
+              "target": 2,
+              "funding_rate": null
+            },
+            {
+              "bid": 100.0,
+              "ask": 102.0,
+              "target": 2,
+              "funding_rate": null
+            },
+            {
+              "bid": 101.0,
+              "ask": 103.0,
+              "target": 0,
+              "funding_rate": null
+            }
+          ]
+        }
+      },
+      "expected_ledger": {
+        "event_order": [
+          "fill:0",
+          "fill:1"
+        ],
+        "fills": [
+          {
+            "timestamp_ns": 1700000000000000001,
+            "side": "BUY",
+            "quantity": 2,
+            "price": 101.0,
+            "commission": 0.202,
+            "terminal": false
+          },
+          {
+            "timestamp_ns": 1700000020000000001,
+            "side": "SELL",
+            "quantity": 2,
+            "price": 101.0,
+            "commission": 0.202,
+            "terminal": true
+          }
+        ],
+        "cash_flows": [],
+        "trades": [
+          {
+            "entry_timestamp_ns": 1700000000000000001,
+            "exit_timestamp_ns": 1700000020000000001,
+            "net_pnl": -0.404
+          }
+        ],
+        "cash_series": [
+          {
+            "timestamp_ns": 1700000000000000001,
+            "cash": 9999.798
+          },
+          {
+            "timestamp_ns": 1700000020000000001,
+            "cash": 9999.596
+          }
+        ],
+        "turnover_units": 4,
+        "terminal_equity": 9999.596,
+        "final_position": 0
+      },
+      "comparison_tolerance": {
+        "absolute": 1e-07,
+        "relative": 0.0
+      }
+    },
+    {
+      "schema": "orderflow_edge_lab.economic_calibration_fixture.v2",
+      "fixture_id": "short_bbo_fee",
+      "protocol_sha256": "c5b92e6c2e1cc51ce7221aa81a2148417dbc814048c9ec6f24311eed8aff0484",
+      "source_set": {
+        "schema": "orderflow_edge_lab.canonical_source_set.v2",
+        "sources": [
+          {
+            "source_id": "synthetic_quote_case:short_bbo_fee",
+            "size_bytes": 269,
+            "sha256": "6ca99c7f70fe7bc2b3836e4df38fa5bfc25895680f11e7f6e9116eb5e89f5a2a"
+          }
+        ],
+        "source_set_sha256": "dc9be4e199ad5480b5434ce5ecd1d73083ec0f17aa9811d9316d425610a125b4"
+      },
+      "assumptions": {
+        "bid_ask": "native L1 BBO",
+        "fees": "taker executed notional percentage USDT 8 decimals",
+        "slippage": "rc5 OneTickSlippageFillModel prob=1 seed=42 empirically produces 2 ticks; not bps or depth impact",
+        "funding": "scheduled_boundary_old_position_previous_midpoint_before_next_quote_plus_1ns",
+        "terminal_liquidation": "explicit_final_quote_market_liquidation",
+        "quote_case": {
+          "case_id": "short_bbo_fee",
+          "initial_cash": 10000.0,
+          "taker_fee": 0.001,
+          "slippage_ticks": 0,
+          "steps": [
+            {
+              "bid": 99.0,
+              "ask": 101.0,
+              "target": -2,
+              "funding_rate": null
+            },
+            {
+              "bid": 100.0,
+              "ask": 102.0,
+              "target": -2,
+              "funding_rate": null
+            },
+            {
+              "bid": 101.0,
+              "ask": 103.0,
+              "target": 0,
+              "funding_rate": null
+            }
+          ]
+        }
+      },
+      "expected_ledger": {
+        "event_order": [
+          "fill:0",
+          "fill:1"
+        ],
+        "fills": [
+          {
+            "timestamp_ns": 1700000000000000001,
+            "side": "SELL",
+            "quantity": 2,
+            "price": 99.0,
+            "commission": 0.198,
+            "terminal": false
+          },
+          {
+            "timestamp_ns": 1700000020000000001,
+            "side": "BUY",
+            "quantity": 2,
+            "price": 103.0,
+            "commission": 0.206,
+            "terminal": true
+          }
+        ],
+        "cash_flows": [],
+        "trades": [
+          {
+            "entry_timestamp_ns": 1700000000000000001,
+            "exit_timestamp_ns": 1700000020000000001,
+            "net_pnl": -8.404
+          }
+        ],
+        "cash_series": [
+          {
+            "timestamp_ns": 1700000000000000001,
+            "cash": 9999.802
+          },
+          {
+            "timestamp_ns": 1700000020000000001,
+            "cash": 9991.596
+          }
+        ],
+        "turnover_units": 4,
+        "terminal_equity": 9991.596,
+        "final_position": 0
+      },
+      "comparison_tolerance": {
+        "absolute": 1e-07,
+        "relative": 0.0
+      }
+    },
+    {
+      "schema": "orderflow_edge_lab.economic_calibration_fixture.v2",
+      "fixture_id": "resize_reversal",
+      "protocol_sha256": "c5b92e6c2e1cc51ce7221aa81a2148417dbc814048c9ec6f24311eed8aff0484",
+      "source_set": {
+        "schema": "orderflow_edge_lab.canonical_source_set.v2",
+        "sources": [
+          {
+            "source_id": "synthetic_quote_case:resize_reversal",
+            "size_bytes": 384,
+            "sha256": "d077f5845322b220157e85ac01e96cf218ccaa1f9d929c293f19fde9b846e7df"
+          }
+        ],
+        "source_set_sha256": "34b52590cbcb6dc9af87e57ee04c968a917000eab8dbdc7345c4331d5d56cc07"
+      },
+      "assumptions": {
+        "bid_ask": "native L1 BBO",
+        "fees": "taker executed notional percentage USDT 8 decimals",
+        "slippage": "rc5 OneTickSlippageFillModel prob=1 seed=42 empirically produces 2 ticks; not bps or depth impact",
+        "funding": "scheduled_boundary_old_position_previous_midpoint_before_next_quote_plus_1ns",
+        "terminal_liquidation": "explicit_final_quote_market_liquidation",
+        "quote_case": {
+          "case_id": "resize_reversal",
+          "initial_cash": 10000.0,
+          "taker_fee": 0.001,
+          "slippage_ticks": 0,
+          "steps": [
+            {
+              "bid": 99.0,
+              "ask": 101.0,
+              "target": 2,
+              "funding_rate": null
+            },
+            {
+              "bid": 100.0,
+              "ask": 102.0,
+              "target": 3,
+              "funding_rate": null
+            },
+            {
+              "bid": 101.0,
+              "ask": 103.0,
+              "target": 1,
+              "funding_rate": null
+            },
+            {
+              "bid": 102.0,
+              "ask": 104.0,
+              "target": -2,
+              "funding_rate": null
+            },
+            {
+              "bid": 103.0,
+              "ask": 105.0,
+              "target": 0,
+              "funding_rate": null
+            }
+          ]
+        }
+      },
+      "expected_ledger": {
+        "event_order": [
+          "fill:0",
+          "fill:1",
+          "fill:2",
+          "fill:3",
+          "fill:4"
+        ],
+        "fills": [
+          {
+            "timestamp_ns": 1700000000000000001,
+            "side": "BUY",
+            "quantity": 2,
+            "price": 101.0,
+            "commission": 0.202,
+            "terminal": false
+          },
+          {
+            "timestamp_ns": 1700000010000000001,
+            "side": "BUY",
+            "quantity": 1,
+            "price": 102.0,
+            "commission": 0.102,
+            "terminal": false
+          },
+          {
+            "timestamp_ns": 1700000020000000001,
+            "side": "SELL",
+            "quantity": 2,
+            "price": 101.0,
+            "commission": 0.202,
+            "terminal": false
+          },
+          {
+            "timestamp_ns": 1700000030000000001,
+            "side": "SELL",
+            "quantity": 3,
+            "price": 102.0,
+            "commission": 0.306,
+            "terminal": false
+          },
+          {
+            "timestamp_ns": 1700000040000000001,
+            "side": "BUY",
+            "quantity": 2,
+            "price": 105.0,
+            "commission": 0.21,
+            "terminal": true
+          }
+        ],
+        "cash_flows": [],
+        "trades": [
+          {
+            "entry_timestamp_ns": 1700000000000000001,
+            "exit_timestamp_ns": 1700000030000000001,
+            "net_pnl": -0.608
+          },
+          {
+            "entry_timestamp_ns": 1700000030000000001,
+            "exit_timestamp_ns": 1700000040000000001,
+            "net_pnl": -6.414
+          }
+        ],
+        "cash_series": [
+          {
+            "timestamp_ns": 1700000000000000001,
+            "cash": 9999.798
+          },
+          {
+            "timestamp_ns": 1700000010000000001,
+            "cash": 9999.696
+          },
+          {
+            "timestamp_ns": 1700000020000000001,
+            "cash": 9998.82733333
+          },
+          {
+            "timestamp_ns": 1700000030000000001,
+            "cash": 9999.188
+          },
+          {
+            "timestamp_ns": 1700000040000000001,
+            "cash": 9992.978
+          }
+        ],
+        "turnover_units": 10,
+        "terminal_equity": 9992.978,
+        "final_position": 0
+      },
+      "comparison_tolerance": {
+        "absolute": 1e-07,
+        "relative": 0.0
+      }
+    },
+    {
+      "schema": "orderflow_edge_lab.economic_calibration_fixture.v2",
+      "fixture_id": "native_slippage",
+      "protocol_sha256": "c5b92e6c2e1cc51ce7221aa81a2148417dbc814048c9ec6f24311eed8aff0484",
+      "source_set": {
+        "schema": "orderflow_edge_lab.canonical_source_set.v2",
+        "sources": [
+          {
+            "source_id": "synthetic_quote_case:native_slippage",
+            "size_bytes": 384,
+            "sha256": "af8fdbfb1fa9b71ce747f70520424713bf6516fb103efb5f5cc785e6a4dd78ce"
+          }
+        ],
+        "source_set_sha256": "19e5773178f4c281226f6a1974ad4a023d32a2bb8c495a7d028adbd00be095f9"
+      },
+      "assumptions": {
+        "bid_ask": "native L1 BBO",
+        "fees": "taker executed notional percentage USDT 8 decimals",
+        "slippage": "rc5 OneTickSlippageFillModel prob=1 seed=42 empirically produces 2 ticks; not bps or depth impact",
+        "funding": "scheduled_boundary_old_position_previous_midpoint_before_next_quote_plus_1ns",
+        "terminal_liquidation": "explicit_final_quote_market_liquidation",
+        "quote_case": {
+          "case_id": "native_slippage",
+          "initial_cash": 10000.0,
+          "taker_fee": 0.001,
+          "slippage_ticks": 2,
+          "steps": [
+            {
+              "bid": 99.0,
+              "ask": 101.0,
+              "target": 2,
+              "funding_rate": null
+            },
+            {
+              "bid": 100.0,
+              "ask": 102.0,
+              "target": 3,
+              "funding_rate": null
+            },
+            {
+              "bid": 101.0,
+              "ask": 103.0,
+              "target": 1,
+              "funding_rate": null
+            },
+            {
+              "bid": 102.0,
+              "ask": 104.0,
+              "target": -2,
+              "funding_rate": null
+            },
+            {
+              "bid": 103.0,
+              "ask": 105.0,
+              "target": 0,
+              "funding_rate": null
+            }
+          ]
+        }
+      },
+      "expected_ledger": {
+        "event_order": [
+          "fill:0",
+          "fill:1",
+          "fill:2",
+          "fill:3",
+          "fill:4"
+        ],
+        "fills": [
+          {
+            "timestamp_ns": 1700000000000000001,
+            "side": "BUY",
+            "quantity": 2,
+            "price": 101.02,
+            "commission": 0.20204,
+            "terminal": false
+          },
+          {
+            "timestamp_ns": 1700000010000000001,
+            "side": "BUY",
+            "quantity": 1,
+            "price": 102.02,
+            "commission": 0.10202,
+            "terminal": false
+          },
+          {
+            "timestamp_ns": 1700000020000000001,
+            "side": "SELL",
+            "quantity": 2,
+            "price": 100.98,
+            "commission": 0.20196,
+            "terminal": false
+          },
+          {
+            "timestamp_ns": 1700000030000000001,
+            "side": "SELL",
+            "quantity": 3,
+            "price": 101.98,
+            "commission": 0.30594,
+            "terminal": false
+          },
+          {
+            "timestamp_ns": 1700000040000000001,
+            "side": "BUY",
+            "quantity": 2,
+            "price": 105.02,
+            "commission": 0.21004,
+            "terminal": true
+          }
+        ],
+        "cash_flows": [],
+        "trades": [
+          {
+            "entry_timestamp_ns": 1700000000000000001,
+            "exit_timestamp_ns": 1700000030000000001,
+            "net_pnl": -0.728
+          },
+          {
+            "entry_timestamp_ns": 1700000030000000001,
+            "exit_timestamp_ns": 1700000040000000001,
+            "net_pnl": -6.494
+          }
+        ],
+        "cash_series": [
+          {
+            "timestamp_ns": 1700000000000000001,
+            "cash": 9999.79796
+          },
+          {
+            "timestamp_ns": 1700000010000000001,
+            "cash": 9999.69594
+          },
+          {
+            "timestamp_ns": 1700000020000000001,
+            "cash": 9998.74731333
+          },
+          {
+            "timestamp_ns": 1700000030000000001,
+            "cash": 9999.06804
+          },
+          {
+            "timestamp_ns": 1700000040000000001,
+            "cash": 9992.778
+          }
+        ],
+        "turnover_units": 10,
+        "terminal_equity": 9992.778,
+        "final_position": 0
+      },
+      "comparison_tolerance": {
+        "absolute": 1e-07,
+        "relative": 0.0
+      }
+    },
+    {
+      "schema": "orderflow_edge_lab.economic_calibration_fixture.v2",
+      "fixture_id": "funding_long_terminal",
+      "protocol_sha256": "c5b92e6c2e1cc51ce7221aa81a2148417dbc814048c9ec6f24311eed8aff0484",
+      "source_set": {
+        "schema": "orderflow_edge_lab.canonical_source_set.v2",
+        "sources": [
+          {
+            "source_id": "synthetic_quote_case:funding_long_terminal",
+            "size_bytes": 277,
+            "sha256": "91eefa8e461fc0c5be906e335fc9978c209502e97cfcedbcc4b07579de0e71ff"
+          }
+        ],
+        "source_set_sha256": "2051d668235bc5a66c38e9627c5cf0566f88a5b6031397526b1870c11be0b2b2"
+      },
+      "assumptions": {
+        "bid_ask": "native L1 BBO",
+        "fees": "taker executed notional percentage USDT 8 decimals",
+        "slippage": "rc5 OneTickSlippageFillModel prob=1 seed=42 empirically produces 2 ticks; not bps or depth impact",
+        "funding": "scheduled_boundary_old_position_previous_midpoint_before_next_quote_plus_1ns",
+        "terminal_liquidation": "explicit_final_quote_market_liquidation",
+        "quote_case": {
+          "case_id": "funding_long_terminal",
+          "initial_cash": 10000.0,
+          "taker_fee": 0.001,
+          "slippage_ticks": 0,
+          "steps": [
+            {
+              "bid": 99.0,
+              "ask": 101.0,
+              "target": 2,
+              "funding_rate": null
+            },
+            {
+              "bid": 100.0,
+              "ask": 102.0,
+              "target": 2,
+              "funding_rate": 0.001
+            },
+            {
+              "bid": 101.0,
+              "ask": 103.0,
+              "target": 0,
+              "funding_rate": 0.002
+            }
+          ]
+        }
+      },
+      "expected_ledger": {
+        "event_order": [
+          "fill:0",
+          "funding:0",
+          "funding:1",
+          "fill:1"
+        ],
+        "fills": [
+          {
+            "timestamp_ns": 1700000000000000001,
+            "side": "BUY",
+            "quantity": 2,
+            "price": 101.0,
+            "commission": 0.202,
+            "terminal": false
+          },
+          {
+            "timestamp_ns": 1700000020000000001,
+            "side": "SELL",
+            "quantity": 2,
+            "price": 101.0,
+            "commission": 0.202,
+            "terminal": true
+          }
+        ],
+        "cash_flows": [
+          {
+            "kind": "funding",
+            "timestamp_ns": 1700000010000000000,
+            "amount": -0.2
+          },
+          {
+            "kind": "funding",
+            "timestamp_ns": 1700000020000000000,
+            "amount": -0.404
+          }
+        ],
+        "trades": [
+          {
+            "entry_timestamp_ns": 1700000000000000001,
+            "exit_timestamp_ns": 1700000020000000001,
+            "net_pnl": -1.008
+          }
+        ],
+        "cash_series": [
+          {
+            "timestamp_ns": 1700000000000000001,
+            "cash": 9999.798
+          },
+          {
+            "timestamp_ns": 1700000010000000000,
+            "cash": 9999.598
+          },
+          {
+            "timestamp_ns": 1700000020000000000,
+            "cash": 9999.194
+          },
+          {
+            "timestamp_ns": 1700000020000000001,
+            "cash": 9998.992
+          }
+        ],
+        "turnover_units": 4,
+        "terminal_equity": 9998.992,
+        "final_position": 0
+      },
+      "comparison_tolerance": {
+        "absolute": 1e-07,
+        "relative": 0.0
+      }
+    },
+    {
+      "schema": "orderflow_edge_lab.economic_calibration_fixture.v2",
+      "fixture_id": "funding_short_negative",
+      "protocol_sha256": "c5b92e6c2e1cc51ce7221aa81a2148417dbc814048c9ec6f24311eed8aff0484",
+      "source_set": {
+        "schema": "orderflow_edge_lab.canonical_source_set.v2",
+        "sources": [
+          {
+            "source_id": "synthetic_quote_case:funding_short_negative",
+            "size_bytes": 281,
+            "sha256": "22538b783476de27cbbc358b2582b44ab1447cb418913c2f75f2c2efd083e785"
+          }
+        ],
+        "source_set_sha256": "24481025002b3ef692eacb43cf4c69fbd76d89d8f16b7b7f59166cccdfa20e99"
+      },
+      "assumptions": {
+        "bid_ask": "native L1 BBO",
+        "fees": "taker executed notional percentage USDT 8 decimals",
+        "slippage": "rc5 OneTickSlippageFillModel prob=1 seed=42 empirically produces 2 ticks; not bps or depth impact",
+        "funding": "scheduled_boundary_old_position_previous_midpoint_before_next_quote_plus_1ns",
+        "terminal_liquidation": "explicit_final_quote_market_liquidation",
+        "quote_case": {
+          "case_id": "funding_short_negative",
+          "initial_cash": 10000.0,
+          "taker_fee": 0.001,
+          "slippage_ticks": 0,
+          "steps": [
+            {
+              "bid": 99.0,
+              "ask": 101.0,
+              "target": -2,
+              "funding_rate": null
+            },
+            {
+              "bid": 100.0,
+              "ask": 102.0,
+              "target": -2,
+              "funding_rate": 0.001
+            },
+            {
+              "bid": 101.0,
+              "ask": 103.0,
+              "target": 0,
+              "funding_rate": -0.002
+            }
+          ]
+        }
+      },
+      "expected_ledger": {
+        "event_order": [
+          "fill:0",
+          "funding:0",
+          "funding:1",
+          "fill:1"
+        ],
+        "fills": [
+          {
+            "timestamp_ns": 1700000000000000001,
+            "side": "SELL",
+            "quantity": 2,
+            "price": 99.0,
+            "commission": 0.198,
+            "terminal": false
+          },
+          {
+            "timestamp_ns": 1700000020000000001,
+            "side": "BUY",
+            "quantity": 2,
+            "price": 103.0,
+            "commission": 0.206,
+            "terminal": true
+          }
+        ],
+        "cash_flows": [
+          {
+            "kind": "funding",
+            "timestamp_ns": 1700000010000000000,
+            "amount": 0.2
+          },
+          {
+            "kind": "funding",
+            "timestamp_ns": 1700000020000000000,
+            "amount": -0.404
+          }
+        ],
+        "trades": [
+          {
+            "entry_timestamp_ns": 1700000000000000001,
+            "exit_timestamp_ns": 1700000020000000001,
+            "net_pnl": -8.608
+          }
+        ],
+        "cash_series": [
+          {
+            "timestamp_ns": 1700000000000000001,
+            "cash": 9999.802
+          },
+          {
+            "timestamp_ns": 1700000010000000000,
+            "cash": 10000.002
+          },
+          {
+            "timestamp_ns": 1700000020000000000,
+            "cash": 9999.598
+          },
+          {
+            "timestamp_ns": 1700000020000000001,
+            "cash": 9991.392
+          }
+        ],
+        "turnover_units": 4,
+        "terminal_equity": 9991.392,
+        "final_position": 0
+      },
+      "comparison_tolerance": {
+        "absolute": 1e-07,
+        "relative": 0.0
+      }
+    },
+    {
+      "schema": "orderflow_edge_lab.economic_calibration_fixture.v2",
+      "fixture_id": "funding_zero_resize_reversal",
+      "protocol_sha256": "c5b92e6c2e1cc51ce7221aa81a2148417dbc814048c9ec6f24311eed8aff0484",
+      "source_set": {
+        "schema": "orderflow_edge_lab.canonical_source_set.v2",
+        "sources": [
+          {
+            "source_id": "synthetic_quote_case:funding_zero_resize_reversal",
+            "size_bytes": 400,
+            "sha256": "acae7ad224b7b4351fe9f785cf3341765b17c3331437adb8edc3a51e90afc4c5"
+          }
+        ],
+        "source_set_sha256": "c10d8502b0bc35c7c803c8e24e261734ba7ae72bfd445c71e80bf57f70ed652c"
+      },
+      "assumptions": {
+        "bid_ask": "native L1 BBO",
+        "fees": "taker executed notional percentage USDT 8 decimals",
+        "slippage": "rc5 OneTickSlippageFillModel prob=1 seed=42 empirically produces 2 ticks; not bps or depth impact",
+        "funding": "scheduled_boundary_old_position_previous_midpoint_before_next_quote_plus_1ns",
+        "terminal_liquidation": "explicit_final_quote_market_liquidation",
+        "quote_case": {
+          "case_id": "funding_zero_resize_reversal",
+          "initial_cash": 10000.0,
+          "taker_fee": 0.001,
+          "slippage_ticks": 0,
+          "steps": [
+            {
+              "bid": 99.0,
+              "ask": 101.0,
+              "target": 2,
+              "funding_rate": null
+            },
+            {
+              "bid": 100.0,
+              "ask": 102.0,
+              "target": 3,
+              "funding_rate": 0.0
+            },
+            {
+              "bid": 101.0,
+              "ask": 103.0,
+              "target": 1,
+              "funding_rate": 0.001
+            },
+            {
+              "bid": 102.0,
+              "ask": 104.0,
+              "target": -2,
+              "funding_rate": -0.002
+            },
+            {
+              "bid": 103.0,
+              "ask": 105.0,
+              "target": 0,
+              "funding_rate": 0.001
+            }
+          ]
+        }
+      },
+      "expected_ledger": {
+        "event_order": [
+          "fill:0",
+          "funding:0",
+          "fill:1",
+          "funding:1",
+          "fill:2",
+          "funding:2",
+          "fill:3",
+          "funding:3",
+          "fill:4"
+        ],
+        "fills": [
+          {
+            "timestamp_ns": 1700000000000000001,
+            "side": "BUY",
+            "quantity": 2,
+            "price": 101.0,
+            "commission": 0.202,
+            "terminal": false
+          },
+          {
+            "timestamp_ns": 1700000010000000001,
+            "side": "BUY",
+            "quantity": 1,
+            "price": 102.0,
+            "commission": 0.102,
+            "terminal": false
+          },
+          {
+            "timestamp_ns": 1700000020000000001,
+            "side": "SELL",
+            "quantity": 2,
+            "price": 101.0,
+            "commission": 0.202,
+            "terminal": false
+          },
+          {
+            "timestamp_ns": 1700000030000000001,
+            "side": "SELL",
+            "quantity": 3,
+            "price": 102.0,
+            "commission": 0.306,
+            "terminal": false
+          },
+          {
+            "timestamp_ns": 1700000040000000001,
+            "side": "BUY",
+            "quantity": 2,
+            "price": 105.0,
+            "commission": 0.21,
+            "terminal": true
+          }
+        ],
+        "cash_flows": [
+          {
+            "kind": "funding",
+            "timestamp_ns": 1700000010000000000,
+            "amount": -0.0
+          },
+          {
+            "kind": "funding",
+            "timestamp_ns": 1700000020000000000,
+            "amount": -0.303
+          },
+          {
+            "kind": "funding",
+            "timestamp_ns": 1700000030000000000,
+            "amount": 0.204
+          },
+          {
+            "kind": "funding",
+            "timestamp_ns": 1700000040000000000,
+            "amount": 0.206
+          }
+        ],
+        "trades": [
+          {
+            "entry_timestamp_ns": 1700000000000000001,
+            "exit_timestamp_ns": 1700000030000000001,
+            "net_pnl": -0.707
+          },
+          {
+            "entry_timestamp_ns": 1700000030000000001,
+            "exit_timestamp_ns": 1700000040000000001,
+            "net_pnl": -6.208
+          }
+        ],
+        "cash_series": [
+          {
+            "timestamp_ns": 1700000000000000001,
+            "cash": 9999.798
+          },
+          {
+            "timestamp_ns": 1700000010000000000,
+            "cash": 9999.798
+          },
+          {
+            "timestamp_ns": 1700000010000000001,
+            "cash": 9999.696
+          },
+          {
+            "timestamp_ns": 1700000020000000000,
+            "cash": 9999.393
+          },
+          {
+            "timestamp_ns": 1700000020000000001,
+            "cash": 9998.52433333
+          },
+          {
+            "timestamp_ns": 1700000030000000000,
+            "cash": 9998.72833333
+          },
+          {
+            "timestamp_ns": 1700000030000000001,
+            "cash": 9999.089
+          },
+          {
+            "timestamp_ns": 1700000040000000000,
+            "cash": 9999.295
+          },
+          {
+            "timestamp_ns": 1700000040000000001,
+            "cash": 9993.085
+          }
+        ],
+        "turnover_units": 10,
+        "terminal_equity": 9993.085,
+        "final_position": 0
+      },
+      "comparison_tolerance": {
+        "absolute": 1e-07,
+        "relative": 0.0
+      }
+    },
+    {
+      "schema": "orderflow_edge_lab.economic_calibration_fixture.v2",
+      "fixture_id": "reentry",
+      "protocol_sha256": "c5b92e6c2e1cc51ce7221aa81a2148417dbc814048c9ec6f24311eed8aff0484",
+      "source_set": {
+        "schema": "orderflow_edge_lab.canonical_source_set.v2",
+        "sources": [
+          {
+            "source_id": "synthetic_quote_case:reentry",
+            "size_bytes": 319,
+            "sha256": "eae80fab62b414b638c76536e99850f784430acc35209053f491073b88a8c3aa"
+          }
+        ],
+        "source_set_sha256": "f18ca46d233308ed2275d51b56e2157baf8b6d794d4844bf3886d12347f9972b"
+      },
+      "assumptions": {
+        "bid_ask": "native L1 BBO",
+        "fees": "taker executed notional percentage USDT 8 decimals",
+        "slippage": "rc5 OneTickSlippageFillModel prob=1 seed=42 empirically produces 2 ticks; not bps or depth impact",
+        "funding": "scheduled_boundary_old_position_previous_midpoint_before_next_quote_plus_1ns",
+        "terminal_liquidation": "explicit_final_quote_market_liquidation",
+        "quote_case": {
+          "case_id": "reentry",
+          "initial_cash": 10000.0,
+          "taker_fee": 0.001,
+          "slippage_ticks": 0,
+          "steps": [
+            {
+              "bid": 99.0,
+              "ask": 101.0,
+              "target": 1,
+              "funding_rate": null
+            },
+            {
+              "bid": 100.0,
+              "ask": 102.0,
+              "target": 0,
+              "funding_rate": null
+            },
+            {
+              "bid": 101.0,
+              "ask": 103.0,
+              "target": -1,
+              "funding_rate": null
+            },
+            {
+              "bid": 102.0,
+              "ask": 104.0,
+              "target": 0,
+              "funding_rate": null
+            }
+          ]
+        }
+      },
+      "expected_ledger": {
+        "event_order": [
+          "fill:0",
+          "fill:1",
+          "fill:2",
+          "fill:3"
+        ],
+        "fills": [
+          {
+            "timestamp_ns": 1700000000000000001,
+            "side": "BUY",
+            "quantity": 1,
+            "price": 101.0,
+            "commission": 0.101,
+            "terminal": false
+          },
+          {
+            "timestamp_ns": 1700000010000000001,
+            "side": "SELL",
+            "quantity": 1,
+            "price": 100.0,
+            "commission": 0.1,
+            "terminal": false
+          },
+          {
+            "timestamp_ns": 1700000020000000001,
+            "side": "SELL",
+            "quantity": 1,
+            "price": 101.0,
+            "commission": 0.101,
+            "terminal": false
+          },
+          {
+            "timestamp_ns": 1700000030000000001,
+            "side": "BUY",
+            "quantity": 1,
+            "price": 104.0,
+            "commission": 0.104,
+            "terminal": true
+          }
+        ],
+        "cash_flows": [],
+        "trades": [
+          {
+            "entry_timestamp_ns": 1700000000000000001,
+            "exit_timestamp_ns": 1700000010000000001,
+            "net_pnl": -1.201
+          },
+          {
+            "entry_timestamp_ns": 1700000020000000001,
+            "exit_timestamp_ns": 1700000030000000001,
+            "net_pnl": -3.205
+          }
+        ],
+        "cash_series": [
+          {
+            "timestamp_ns": 1700000000000000001,
+            "cash": 9999.899
+          },
+          {
+            "timestamp_ns": 1700000010000000001,
+            "cash": 9998.799
+          },
+          {
+            "timestamp_ns": 1700000020000000001,
+            "cash": 9998.698
+          },
+          {
+            "timestamp_ns": 1700000030000000001,
+            "cash": 9995.594
+          }
+        ],
+        "turnover_units": 4,
+        "terminal_equity": 9995.594,
+        "final_position": 0
+      },
+      "comparison_tolerance": {
+        "absolute": 1e-07,
+        "relative": 0.0
+      }
+    }
+  ]
+}
