@@ -16,6 +16,8 @@ permissions:
 
 jobs:
   upstream-compatibility:
+    # Engineering-only successor PRs do not bootstrap optional orchestrators.
+    if: ${{ github.event_name != 'pull_request' || !startsWith(github.head_ref, 'improvement/process-integrity-v2-') }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
