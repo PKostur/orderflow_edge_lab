@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "protocol_id": "prop-firm-v5",
+  "status": "DECLARED_BEFORE_EVALUATION",
+  "question": "Across many different rule-legal approaches to the challenge and to the funded account, which reach a funded account fastest and cheapest and then keep paying?",
+  "registration_note": "Declared 2026-10-03 before any v5 simulation. 15 challenge approaches x 4 funded approaches, each with one a-priori parameter set; nothing tuned. Same rule snapshot, universes, 0.8 buffer, 365-day caps, retry model and metrics as prop-firm-v4. Banned schemes excluded. Historical seen data, so descriptive; both samples must agree.",
+  "firms": ["HyroTrader_1step", "Breakout_classic_1step", "FTMO_2step"],
+  "challenge_approaches": {
+    "C01_blend_2x_headroom": "v4 reference: blend, 2x, headroom scaling, vol guard",
+    "C02_blend_cppi": "blend, scale = 4 x (equity - max-loss floor) / (annual vol of the book), capped at 4 (risk proportional to headroom, constant-proportion portfolio insurance)",
+    "C03_two_speed": "blend 3x until half the target is reached, then 1x (protect the gain)",
+    "C04_catch_up": "blend, scale 1x + 0.02x per elapsed day, capped at 4x, with headroom scaling (risk rises if slow)",
+    "C05_constant_vol_25": "blend scaled daily to 25% annual vol (30-day trailing estimate), cap 5x, headroom scaling",
+    "C06_equity_curve_filter": "blend 2x only while the book's own 20-day cumulative return is positive, else 0.5x; headroom scaling",
+    "C07_regime_trend_bull": "blend 2.5x when the market regime is TREND or BULL (strategy_zoo labels), else 1x; headroom scaling",
+    "C08_momentum_leg_1x": "XS momentum leg alone, 1x, headroom scaling, vol guard",
+    "C09_trend_leg_3x": "trend leg alone, 3x, headroom scaling, vol guard",
+    "C10_carry_leg_1x": "funding-carry leg alone, 1x, headroom scaling, vol guard",
+    "C11_trend_plus_momentum": "equal-risk mix of trend and momentum legs only (no carry), 2x, headroom scaling",
+    "C12_blend_3x_daily_stop": "blend 3x, but after a day losing more than 1.5% of the account the next 2 days run at 0.5x (cool-down)",
+    "C13_blend_3x_profit_lock": "blend 3x; once equity is +6%, the max-loss floor is treated as +2% for headroom scaling (lock in)",
+    "C14_btc_gamble": "no-edge reference: long BTC 2x, headroom scaling, vol guard",
+    "C15_btc_trend": "BTC-only trend (sign of 20-day return), 3x, headroom scaling, vol guard"
+  },
+  "funded_approaches": {
+    "F1_half_headroom": "v3/v4 reference: blend 0.5x, headroom scaling",
+    "F2_cppi": "blend, scale = 2 x (equity - floor) / annual vol, cap 1.5",
+    "F3_equity_curve": "blend 0.75x while its 20-day return is positive, else 0.25x, headroom scaling",
+    "F4_three_quarter_headroom": "blend 0.75x, headroom scaling"
+  },
+  "choice_rule": "an approach pair WORKS if, on both samples, funded 12-month survival >= 0.7 and 12-month net value (payout - expected fees per funded account) > 0. Report every working pair; the recommended pair per firm is the one with the lowest worst-case (over samples) expected days to a funded account, ties by net value.",
+  "claims": {"strategy_promotion_authorized": false, "live_trading_authorized": false, "purchase_advice": false}
+}

@@ -1,0 +1,24 @@
+# fast-gates-v1: result so far (2026-10-03)
+
+Config: `config/fast_gates_v1.json` (declared `868fdcc`, thresholds frozen `7a07d46`, both before 2026-10-05).
+
+## G3 venue replication (run once): MIXED
+
+Frozen multi-premia-v1 rules, 2020-06-01 to 2026-09-12, 20 bps round trip. MEXC reference recomputed on the same coins.
+
+| Venue | Coins | S1 trend | S2 XS mom | S3 XS carry | S4 blend | S4 t | MEXC S4 (same coins) | Daily corr | Pass |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
+| Binance (prices + funding) | 70 | 1.22 | 0.03 | 0.52 | **1.05** | 2.31 | 2.09 | 0.79 | yes (just: needs ≥ 1.045) |
+| Bybit (prices + funding) | 58 | 0.68 | −0.18 | 0.09 | **0.41** | 0.83 | 1.76 | 0.68 | no |
+
+Sharpe ratios, annualized. MEXC reference legs on the Binance coin set: S1 1.17, S2 0.89, S3 1.62.
+
+Reading (descriptive):
+- The trend leg replicates on Binance prices (1.22 vs 1.17). The two cross-sectional legs do not: S2 momentum goes from 0.89 to 0.03, S3 carry from 1.62 to 0.52 (annual return 53% to 15%).
+- The Binance run and the MEXC reference use the **same Binance funding series**; only prices differ. So the missing carry/momentum return comes from MEXC price paths.
+- Likely mechanism (unverified): the development backtest paired MEXC prices with Binance funding. MEXC perp prices drift with MEXC's own basis and funding, so a long-low-funding/short-high-funding book on MEXC prices may collect MEXC basis drift without paying MEXC funding. The forward watches use MEXC funding with MEXC prices, so they are not affected; the development Sharpe 2.09 and the untouched-coins holdout (1.39), built the same way, may be overstated.
+- Bybit coverage defect: 12 large coins (incl. XRP, BCH, ETC, UNI) failed to download (transient errors swallowed), so Bybit ran on 58 coins and a shorter window. The registered verdict stands; the Binance row is the cleaner test.
+
+## G1, G2
+
+Start 2026-10-05; evaluated daily in `multi-premia-blend-v1.yml` (`fast_gates_report.json`). Pre-start calibration: paper vs V_ALL correlation 0.999, TE 0.34%/yr; both books −1.6% to −1.8% over 2026-04-05 to 2026-10-03.

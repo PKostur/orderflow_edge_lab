@@ -1,0 +1,288 @@
+{
+ "gate": "G3_venue_replication",
+ "window": [
+  "2020-06-01",
+  "2026-09-12"
+ ],
+ "pass_rule_per_venue": "at least 40 of the 70 coins available, S4 annualized Sharpe >= 0.5 x the MEXC reference S4 Sharpe on the same coins, and S4 Newey-West t >= 2.0 (5 lags)",
+ "venues": {
+  "binance": {
+   "coins": 70,
+   "missing": [],
+   "contracts": {
+    "AAVE_USDT": "AAVEUSDT",
+    "ADA_USDT": "ADAUSDT",
+    "AERO_USDT": "AEROUSDT",
+    "AKE_USDT": "AKEUSDT",
+    "APT_USDT": "APTUSDT",
+    "AR_USDT": "ARUSDT",
+    "ATOM_USDT": "ATOMUSDT",
+    "AVAX_USDT": "AVAXUSDT",
+    "BCH_USDT": "BCHUSDT",
+    "BNB_USDT": "BNBUSDT",
+    "BR_USDT": "BRUSDT",
+    "BTC_USDT": "BTCUSDT",
+    "CFX_USDT": "CFXUSDT",
+    "CRV_USDT": "CRVUSDT",
+    "DASH_USDT": "DASHUSDT",
+    "DOGE_USDT": "DOGEUSDT",
+    "DOT_USDT": "DOTUSDT",
+    "EIGEN_USDT": "EIGENUSDT",
+    "ENA_USDT": "ENAUSDT",
+    "ETC_USDT": "ETCUSDT",
+    "ETHFI_USDT": "ETHFIUSDT",
+    "ETH_USDT": "ETHUSDT",
+    "FARTCOIN_USDT": "FARTCOINUSDT",
+    "FET_USDT": "FETUSDT",
+    "GALA_USDT": "GALAUSDT",
+    "GRASS_USDT": "GRASSUSDT",
+    "HBAR_USDT": "HBARUSDT",
+    "HYPE_USDT": "HYPEUSDT",
+    "ICP_USDT": "ICPUSDT",
+    "INJ_USDT": "INJUSDT",
+    "JTO_USDT": "JTOUSDT",
+    "JUP_USDT": "JUPUSDT",
+    "KAS_USDT": "KASUSDT",
+    "LDO_USDT": "LDOUSDT",
+    "LINK_USDT": "LINKUSDT",
+    "LSK_USDT": "LSKUSDT",
+    "LTC_USDT": "LTCUSDT",
+    "NIL_USDT": "NILUSDT",
+    "ONDO_USDT": "ONDOUSDT",
+    "OP_USDT": "OPUSDT",
+    "ORDI_USDT": "ORDIUSDT",
+    "PENGU_USDT": "PENGUUSDT",
+    "PEPE_USDT": "1000PEPEUSDT",
+    "PHA_USDT": "PHAUSDT",
+    "POL_USDT": "POLUSDT",
+    "PUMPFUN_USDT": "PUMPUSDT",
+    "PYTH_USDT": "PYTHUSDT",
+    "QNT_USDT": "QNTUSDT",
+    "RARE_USDT": "RAREUSDT",
+    "RENDER_USDT": "RENDERUSDT",
+    "RUNE_USDT": "RUNEUSDT",
+    "SEI_USDT": "SEIUSDT",
+    "SHIB_USDT": "1000SHIBUSDT",
+    "SOL_USDT": "SOLUSDT",
+    "SUI_USDT": "SUIUSDT",
+    "TAO_USDT": "TAOUSDT",
+    "TIA_USDT": "TIAUSDT",
+    "TRUMPOFFICIAL_USDT": "TRUMPUSDT",
+    "UNI_USDT": "UNIUSDT",
+    "VIRTUAL_USDT": "VIRTUALUSDT",
+    "WIF_USDT": "WIFUSDT",
+    "WLD_USDT": "WLDUSDT",
+    "WLFI_USDT": "WLFIUSDT",
+    "XLM_USDT": "XLMUSDT",
+    "XMR_USDT": "XMRUSDT",
+    "XPL_USDT": "XPLUSDT",
+    "XRP_USDT": "XRPUSDT",
+    "ZEC_USDT": "ZECUSDT",
+    "ZEN_USDT": "ZENUSDT",
+    "ZRO_USDT": "ZROUSDT"
+   },
+   "venue": {
+    "S1": {
+     "sharpe": 1.217246527046608,
+     "t": 2.9270064506194586,
+     "max_drawdown": -0.10505948629440243,
+     "days": 2233,
+     "annual_return": 0.15829644265525467
+    },
+    "S2": {
+     "sharpe": 0.03222102037012013,
+     "t": 0.07355158391945735,
+     "max_drawdown": -0.551812376064406,
+     "days": 2233,
+     "annual_return": 0.010421592602530255
+    },
+    "S3": {
+     "sharpe": 0.5232077250967283,
+     "t": 1.18142394777152,
+     "max_drawdown": -0.5182227004688378,
+     "days": 2233,
+     "annual_return": 0.1463613537170839
+    },
+    "S4": {
+     "sharpe": 1.0527346510318532,
+     "t": 2.3116085090031415,
+     "max_drawdown": -0.1608828199525405,
+     "days": 2168,
+     "annual_return": 0.14113549960383215
+    }
+   },
+   "mexc_reference": {
+    "S1": {
+     "sharpe": 1.1737977892838414,
+     "t": 2.781700250943473,
+     "max_drawdown": -0.10196244761352591,
+     "days": 2229,
+     "annual_return": 0.1382360501844509
+    },
+    "S2": {
+     "sharpe": 0.8870939469572159,
+     "t": 2.2005733522757263,
+     "max_drawdown": -0.4349005494929965,
+     "days": 2229,
+     "annual_return": 0.3094557905796158
+    },
+    "S3": {
+     "sharpe": 1.6186189427394215,
+     "t": 3.5002190506235067,
+     "max_drawdown": -0.46157391233788736,
+     "days": 2229,
+     "annual_return": 0.5265351349804203
+    },
+    "S4": {
+     "sharpe": 2.0899035401840425,
+     "t": 4.4738958126798325,
+     "max_drawdown": -0.13177309084172661,
+     "days": 2168,
+     "annual_return": 0.28493551481135027
+    }
+   },
+   "s4_daily_correlation": 0.7944479933960273,
+   "passes": true
+  },
+  "bybit": {
+   "coins": 58,
+   "missing": [
+    "BCH_USDT",
+    "DASH_USDT",
+    "ETC_USDT",
+    "FET_USDT",
+    "PEPE_USDT",
+    "PUMPFUN_USDT",
+    "QNT_USDT",
+    "SHIB_USDT",
+    "TAO_USDT",
+    "UNI_USDT",
+    "XRP_USDT",
+    "ZEC_USDT"
+   ],
+   "contracts": {
+    "AAVE_USDT": "AAVEUSDT",
+    "ADA_USDT": "ADAUSDT",
+    "AERO_USDT": "AEROUSDT",
+    "AKE_USDT": "AKEUSDT",
+    "APT_USDT": "APTUSDT",
+    "AR_USDT": "ARUSDT",
+    "ATOM_USDT": "ATOMUSDT",
+    "AVAX_USDT": "AVAXUSDT",
+    "BNB_USDT": "BNBUSDT",
+    "BR_USDT": "BRUSDT",
+    "BTC_USDT": "BTCUSDT",
+    "CFX_USDT": "CFXUSDT",
+    "CRV_USDT": "CRVUSDT",
+    "DOGE_USDT": "DOGEUSDT",
+    "DOT_USDT": "DOTUSDT",
+    "EIGEN_USDT": "EIGENUSDT",
+    "ENA_USDT": "ENAUSDT",
+    "ETHFI_USDT": "ETHFIUSDT",
+    "ETH_USDT": "ETHUSDT",
+    "FARTCOIN_USDT": "FARTCOINUSDT",
+    "GALA_USDT": "GALAUSDT",
+    "GRASS_USDT": "GRASSUSDT",
+    "HBAR_USDT": "HBARUSDT",
+    "HYPE_USDT": "HYPEUSDT",
+    "ICP_USDT": "ICPUSDT",
+    "INJ_USDT": "INJUSDT",
+    "JTO_USDT": "JTOUSDT",
+    "JUP_USDT": "JUPUSDT",
+    "KAS_USDT": "KASUSDT",
+    "LDO_USDT": "LDOUSDT",
+    "LINK_USDT": "LINKUSDT",
+    "LSK_USDT": "LSKUSDT",
+    "LTC_USDT": "LTCUSDT",
+    "NIL_USDT": "NILUSDT",
+    "ONDO_USDT": "ONDOUSDT",
+    "OP_USDT": "OPUSDT",
+    "ORDI_USDT": "ORDIUSDT",
+    "PENGU_USDT": "PENGUUSDT",
+    "PHA_USDT": "PHAUSDT",
+    "POL_USDT": "POLUSDT",
+    "PYTH_USDT": "PYTHUSDT",
+    "RARE_USDT": "RAREUSDT",
+    "RENDER_USDT": "RENDERUSDT",
+    "RUNE_USDT": "RUNEUSDT",
+    "SEI_USDT": "SEIUSDT",
+    "SOL_USDT": "SOLUSDT",
+    "SUI_USDT": "SUIUSDT",
+    "TIA_USDT": "TIAUSDT",
+    "TRUMPOFFICIAL_USDT": "TRUMPUSDT",
+    "VIRTUAL_USDT": "VIRTUALUSDT",
+    "WIF_USDT": "WIFUSDT",
+    "WLD_USDT": "WLDUSDT",
+    "WLFI_USDT": "WLFIUSDT",
+    "XLM_USDT": "XLMUSDT",
+    "XMR_USDT": "XMRUSDT",
+    "XPL_USDT": "XPLUSDT",
+    "ZEN_USDT": "ZENUSDT",
+    "ZRO_USDT": "ZROUSDT"
+   },
+   "venue": {
+    "S1": {
+     "sharpe": 0.6804522733945207,
+     "t": 1.631704677409605,
+     "max_drawdown": -0.0973044302694619,
+     "days": 1894,
+     "annual_return": 0.06466176543564008
+    },
+    "S2": {
+     "sharpe": -0.1762516158576098,
+     "t": -0.36787042125777103,
+     "max_drawdown": -0.5443620793130786,
+     "days": 1894,
+     "annual_return": -0.04866649463635528
+    },
+    "S3": {
+     "sharpe": 0.08554661268610839,
+     "t": 0.16876310779160514,
+     "max_drawdown": -0.40739205394780575,
+     "days": 1894,
+     "annual_return": 0.023402621618977527
+    },
+    "S4": {
+     "sharpe": 0.4139319772774999,
+     "t": 0.8313790054887986,
+     "max_drawdown": -0.1616740993067841,
+     "days": 1832,
+     "annual_return": 0.043990417334077436
+    }
+   },
+   "mexc_reference": {
+    "S1": {
+     "sharpe": 1.2927191716430548,
+     "t": 2.9480769927814148,
+     "max_drawdown": -0.10970661862903608,
+     "days": 2149,
+     "annual_return": 0.16309849826086795
+    },
+    "S2": {
+     "sharpe": 0.4872738850776647,
+     "t": 1.2167509839326518,
+     "max_drawdown": -0.6410018965806432,
+     "days": 2149,
+     "annual_return": 0.1908277749459598
+    },
+    "S3": {
+     "sharpe": 1.3932579487733037,
+     "t": 3.2063865592774534,
+     "max_drawdown": -0.406673867920765,
+     "days": 2149,
+     "annual_return": 0.49864842874165344
+    },
+    "S4": {
+     "sharpe": 1.7602453748867646,
+     "t": 3.9371825588991975,
+     "max_drawdown": -0.14108670604264906,
+     "days": 2084,
+     "annual_return": 0.25815866618210526
+    }
+   },
+   "s4_daily_correlation": 0.6827174610394376,
+   "passes": false
+  }
+ },
+ "verdict": "MIXED"
+}

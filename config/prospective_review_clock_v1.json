@@ -232,6 +232,49 @@
         "config/news_sentiment_v1.json"
       ],
       "forward_workflow": "news-sentiment-v1.yml"
+    },
+    {
+      "watch_id": "prop-paper-career-v1",
+      "priority": 14,
+      "family": "prop_firm_paper_career",
+      "prospective_start_utc": "2026-10-05T00:00:00Z",
+      "review_gate": {
+        "type": "calendar_days",
+        "minimum_days": 365
+      },
+      "canonical_artifacts": [
+        "config/prop_paper_forward_v1.json",
+        "research/prop_firm/RESULT_V7.md"
+      ],
+      "forward_workflow": "multi-premia-blend-v1.yml"
+    },
+    {
+      "watch_id": "paper-account-blend-v1",
+      "priority": 15,
+      "family": "paper_account",
+      "prospective_start_utc": "2026-10-05T00:00:00Z",
+      "review_gate": {
+        "type": "calendar_days",
+        "minimum_days": 180
+      },
+      "canonical_artifacts": [
+        "config/paper_account_blend_v1.json"
+      ],
+      "forward_workflow": "multi-premia-blend-v1.yml"
+    },
+    {
+      "watch_id": "fast-gates-v1",
+      "priority": 16,
+      "family": "fast_decision_gates",
+      "prospective_start_utc": "2026-10-05T00:00:00Z",
+      "review_gate": {
+        "type": "calendar_days",
+        "minimum_days": 60
+      },
+      "canonical_artifacts": [
+        "config/fast_gates_v1.json"
+      ],
+      "forward_workflow": "multi-premia-blend-v1.yml"
     }
   ]
 }

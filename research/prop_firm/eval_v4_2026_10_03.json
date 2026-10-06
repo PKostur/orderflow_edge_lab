@@ -1,0 +1,359 @@
+{
+ "development": {
+  "HyroTrader_1step": {
+   "blend_hr|1.0": {
+    "attempts": 253,
+    "pass_rate": 0.932806324110672,
+    "breach_rate": 0.003952569169960474,
+    "mean_attempt_days": 152.2490118577075,
+    "expected_fees_per_funded_pct": 0.620707627118644,
+    "expected_days_to_funded": 163.21610169491524,
+    "funded_survival_12m": 1.0,
+    "mean_payout_12m_pct": 11.175279051224962,
+    "net_value_12m_pct": 10.554571424106317
+   },
+   "blend_hr|1.5": {
+    "attempts": 253,
+    "pass_rate": 0.9130434782608695,
+    "breach_rate": 0.06719367588932806,
+    "mean_attempt_days": 110.09486166007905,
+    "expected_fees_per_funded_pct": 0.6341428571428571,
+    "expected_days_to_funded": 120.58008658008659,
+    "funded_survival_12m": 1.0,
+    "mean_payout_12m_pct": 11.247839018033629,
+    "net_value_12m_pct": 10.613696160890772
+   },
+   "blend_hr|2.0": {
+    "attempts": 253,
+    "pass_rate": 0.8023715415019763,
+    "breach_rate": 0.15810276679841898,
+    "mean_attempt_days": 95.1699604743083,
+    "expected_fees_per_funded_pct": 0.7216108374384236,
+    "expected_days_to_funded": 118.61083743842363,
+    "funded_survival_12m": 1.0,
+    "mean_payout_12m_pct": 11.47501473709384,
+    "net_value_12m_pct": 10.753403899655417
+   },
+   "blend_hr|3.0": {
+    "attempts": 253,
+    "pass_rate": 0.6086956521739131,
+    "breach_rate": 0.391304347826087,
+    "mean_attempt_days": 52.3201581027668,
+    "expected_fees_per_funded_pct": 0.9512142857142856,
+    "expected_days_to_funded": 85.95454545454545,
+    "funded_survival_12m": 1.0,
+    "mean_payout_12m_pct": 10.7086411204494,
+    "net_value_12m_pct": 9.757426834735114
+   },
+   "gamble_btc|1.0": {
+    "attempts": 270,
+    "pass_rate": 0.37777777777777777,
+    "breach_rate": 0.6222222222222222,
+    "mean_attempt_days": 31.833333333333332,
+    "expected_fees_per_funded_pct": 1.5326470588235293,
+    "expected_days_to_funded": 84.26470588235294
+   },
+   "gamble_btc|2.0": {
+    "attempts": 270,
+    "pass_rate": 0.37777777777777777,
+    "breach_rate": 0.6222222222222222,
+    "mean_attempt_days": 29.996296296296297,
+    "expected_fees_per_funded_pct": 1.5326470588235293,
+    "expected_days_to_funded": 79.40196078431373
+   },
+   "gamble_btc|3.0": {
+    "attempts": 270,
+    "pass_rate": 0.37407407407407406,
+    "breach_rate": 0.6259259259259259,
+    "mean_attempt_days": 29.451851851851853,
+    "expected_fees_per_funded_pct": 1.5478217821782179,
+    "expected_days_to_funded": 78.73267326732673
+   }
+  },
+  "Breakout_classic_1step": {
+   "blend_hr|1.0": {
+    "attempts": 253,
+    "pass_rate": 0.6679841897233202,
+    "breach_rate": 0.09486166007905138,
+    "mean_attempt_days": 195.12648221343875,
+    "expected_fees_per_funded_pct": 0.7485207100591715,
+    "expected_days_to_funded": 292.11242603550295,
+    "funded_survival_12m": 1.0,
+    "mean_payout_12m_pct": 6.259050299351422,
+    "net_value_12m_pct": 5.510529589292251
+   },
+   "blend_hr|1.5": {
+    "attempts": 253,
+    "pass_rate": 0.4743083003952569,
+    "breach_rate": 0.4505928853754941,
+    "mean_attempt_days": 138.7312252964427,
+    "expected_fees_per_funded_pct": 1.0541666666666667,
+    "expected_days_to_funded": 292.4916666666667,
+    "funded_survival_12m": 1.0,
+    "mean_payout_12m_pct": 6.987816255504983,
+    "net_value_12m_pct": 5.933649588838316
+   },
+   "blend_hr|2.0": {
+    "attempts": 253,
+    "pass_rate": 0.4189723320158103,
+    "breach_rate": 0.5810276679841897,
+    "mean_attempt_days": 74.58102766798419,
+    "expected_fees_per_funded_pct": 1.1933962264150944,
+    "expected_days_to_funded": 178.00943396226413,
+    "funded_survival_12m": 1.0,
+    "mean_payout_12m_pct": 7.493939144122846,
+    "net_value_12m_pct": 6.300542917707752
+   },
+   "blend_hr|3.0": {
+    "attempts": 253,
+    "pass_rate": 0.35968379446640314,
+    "breach_rate": 0.6403162055335968,
+    "mean_attempt_days": 48.90909090909091,
+    "expected_fees_per_funded_pct": 1.3901098901098903,
+    "expected_days_to_funded": 135.97802197802199,
+    "funded_survival_12m": 1.0,
+    "mean_payout_12m_pct": 7.610498276513766,
+    "net_value_12m_pct": 6.220388386403876
+   },
+   "gamble_btc|1.0": {
+    "attempts": 270,
+    "pass_rate": 0.34814814814814815,
+    "breach_rate": 0.6518518518518519,
+    "mean_attempt_days": 37.17407407407408,
+    "expected_fees_per_funded_pct": 1.4361702127659575,
+    "expected_days_to_funded": 106.77659574468086
+   },
+   "gamble_btc|2.0": {
+    "attempts": 270,
+    "pass_rate": 0.34814814814814815,
+    "breach_rate": 0.6518518518518519,
+    "mean_attempt_days": 36.077777777777776,
+    "expected_fees_per_funded_pct": 1.4361702127659575,
+    "expected_days_to_funded": 103.62765957446808
+   },
+   "gamble_btc|3.0": {
+    "attempts": 270,
+    "pass_rate": 0.34444444444444444,
+    "breach_rate": 0.6555555555555556,
+    "mean_attempt_days": 35.922222222222224,
+    "expected_fees_per_funded_pct": 1.4516129032258065,
+    "expected_days_to_funded": 104.29032258064517
+   }
+  },
+  "FTMO_2step": {
+   "blend_hr|1.0": {
+    "attempts": 208,
+    "pass_rate": 0.28846153846153844,
+    "breach_rate": 0.1778846153846154,
+    "mean_attempt_days": 336.75,
+    "expected_fees_per_funded_pct": 1.8720000000000003,
+    "expected_days_to_funded": 1167.4,
+    "funded_survival_12m": 1.0,
+    "mean_payout_12m_pct": 5.57654712848806,
+    "net_value_12m_pct": 3.7045471284880596
+   },
+   "blend_hr|1.5": {
+    "attempts": 208,
+    "pass_rate": 0.14423076923076922,
+    "breach_rate": 0.6490384615384616,
+    "mean_attempt_days": 237.23076923076923,
+    "expected_fees_per_funded_pct": 3.7440000000000007,
+    "expected_days_to_funded": 1644.8000000000002,
+    "funded_survival_12m": 1.0,
+    "mean_payout_12m_pct": 3.850422562747936,
+    "net_value_12m_pct": 0.10642256274793516
+   },
+   "blend_hr|2.0": {
+    "attempts": 208,
+    "pass_rate": 0.15384615384615385,
+    "breach_rate": 0.8076923076923077,
+    "mean_attempt_days": 136.125,
+    "expected_fees_per_funded_pct": 3.5100000000000002,
+    "expected_days_to_funded": 884.8125,
+    "funded_survival_12m": 1.0,
+    "mean_payout_12m_pct": 3.8886404230503144,
+    "net_value_12m_pct": 0.3786404230503142
+   },
+   "blend_hr|3.0": {
+    "attempts": 208,
+    "pass_rate": 0.1778846153846154,
+    "breach_rate": 0.8221153846153846,
+    "mean_attempt_days": 58.04326923076923,
+    "expected_fees_per_funded_pct": 3.0356756756756758,
+    "expected_days_to_funded": 326.2972972972973,
+    "funded_survival_12m": 1.0,
+    "mean_payout_12m_pct": 3.8969706777525275,
+    "net_value_12m_pct": 0.8612950020768517
+   },
+   "gamble_btc|1.0": {
+    "attempts": 270,
+    "pass_rate": 0.3148148148148148,
+    "breach_rate": 0.6851851851851852,
+    "mean_attempt_days": 39.522222222222226,
+    "expected_fees_per_funded_pct": 1.7152941176470589,
+    "expected_days_to_funded": 125.54117647058824
+   },
+   "gamble_btc|2.0": {
+    "attempts": 270,
+    "pass_rate": 0.32222222222222224,
+    "breach_rate": 0.6777777777777778,
+    "mean_attempt_days": 37.15555555555556,
+    "expected_fees_per_funded_pct": 1.6758620689655173,
+    "expected_days_to_funded": 115.3103448275862
+   },
+   "gamble_btc|3.0": {
+    "attempts": 270,
+    "pass_rate": 0.32222222222222224,
+    "breach_rate": 0.6777777777777778,
+    "mean_attempt_days": 36.94814814814815,
+    "expected_fees_per_funded_pct": 1.6758620689655173,
+    "expected_days_to_funded": 114.66666666666666
+   }
+  }
+ },
+ "confirmation": {
+  "HyroTrader_1step": {
+   "blend_hr|1.0": {
+    "attempts": 236,
+    "pass_rate": 0.5466101694915254,
+    "breach_rate": 0.0,
+    "mean_attempt_days": 239.91949152542372,
+    "expected_fees_per_funded_pct": 1.0592558139534882,
+    "expected_days_to_funded": 438.92248062015506,
+    "funded_survival_12m": 1.0,
+    "mean_payout_12m_pct": 3.85497799080231,
+    "net_value_12m_pct": 2.7957221768488214
+   },
+   "blend_hr|1.5": {
+    "attempts": 236,
+    "pass_rate": 0.5635593220338984,
+    "breach_rate": 0.3135593220338983,
+    "mean_attempt_days": 171.99576271186442,
+    "expected_fees_per_funded_pct": 1.0273984962406013,
+    "expected_days_to_funded": 305.1954887218045,
+    "funded_survival_12m": 1.0,
+    "mean_payout_12m_pct": 4.474877900852105,
+    "net_value_12m_pct": 3.447479404611504
+   },
+   "blend_hr|2.0": {
+    "attempts": 236,
+    "pass_rate": 0.4957627118644068,
+    "breach_rate": 0.4788135593220339,
+    "mean_attempt_days": 101.5677966101695,
+    "expected_fees_per_funded_pct": 1.1678974358974359,
+    "expected_days_to_funded": 204.87179487179486,
+    "funded_survival_12m": 1.0,
+    "mean_payout_12m_pct": 4.801505804914208,
+    "net_value_12m_pct": 3.633608369016772
+   },
+   "blend_hr|3.0": {
+    "attempts": 236,
+    "pass_rate": 0.3644067796610169,
+    "breach_rate": 0.635593220338983,
+    "mean_attempt_days": 46.84322033898305,
+    "expected_fees_per_funded_pct": 1.5888837209302327,
+    "expected_days_to_funded": 128.546511627907,
+    "funded_survival_12m": 1.0,
+    "mean_payout_12m_pct": 4.889234957961983,
+    "net_value_12m_pct": 3.30035123703175
+   }
+  },
+  "Breakout_classic_1step": {
+   "blend_hr|1.0": {
+    "attempts": 228,
+    "pass_rate": 0.4824561403508772,
+    "breach_rate": 0.2631578947368421,
+    "mean_attempt_days": 228.55701754385964,
+    "expected_fees_per_funded_pct": 1.0363636363636364,
+    "expected_days_to_funded": 473.73636363636365,
+    "funded_survival_12m": 0.6666666666666666,
+    "mean_payout_12m_pct": 2.965476210876558,
+    "net_value_12m_pct": 1.9291125745129218
+   },
+   "blend_hr|1.5": {
+    "attempts": 228,
+    "pass_rate": 0.42543859649122806,
+    "breach_rate": 0.5657894736842105,
+    "mean_attempt_days": 127.16666666666667,
+    "expected_fees_per_funded_pct": 1.175257731958763,
+    "expected_days_to_funded": 298.9072164948454,
+    "funded_survival_12m": 0.9466666666666667,
+    "mean_payout_12m_pct": 4.094251658562959,
+    "net_value_12m_pct": 2.9189939266041955
+   },
+   "blend_hr|2.0": {
+    "attempts": 228,
+    "pass_rate": 0.2982456140350877,
+    "breach_rate": 0.6973684210526315,
+    "mean_attempt_days": 83.66666666666667,
+    "expected_fees_per_funded_pct": 1.6764705882352942,
+    "expected_days_to_funded": 280.5294117647059,
+    "funded_survival_12m": 0.9454545454545454,
+    "mean_payout_12m_pct": 5.0223225662681745,
+    "net_value_12m_pct": 3.34585197803288
+   },
+   "blend_hr|3.0": {
+    "attempts": 228,
+    "pass_rate": 0.27631578947368424,
+    "breach_rate": 0.7236842105263158,
+    "mean_attempt_days": 53.89035087719298,
+    "expected_fees_per_funded_pct": 1.8095238095238093,
+    "expected_days_to_funded": 195.031746031746,
+    "funded_survival_12m": 0.9811320754716981,
+    "mean_payout_12m_pct": 5.345423133303464,
+    "net_value_12m_pct": 3.5358993237796543
+   }
+  },
+  "FTMO_2step": {
+   "blend_hr|1.0": {
+    "attempts": 140,
+    "pass_rate": 0.32857142857142857,
+    "breach_rate": 0.07857142857142857,
+    "mean_attempt_days": 272.55,
+    "expected_fees_per_funded_pct": 1.6434782608695653,
+    "expected_days_to_funded": 829.5,
+    "funded_survival_12m": 1.0,
+    "mean_payout_12m_pct": 5.947333904771898,
+    "net_value_12m_pct": 4.303855643902333
+   },
+   "blend_hr|1.5": {
+    "attempts": 139,
+    "pass_rate": 0.2733812949640288,
+    "breach_rate": 0.5971223021582733,
+    "mean_attempt_days": 181.02877697841726,
+    "expected_fees_per_funded_pct": 1.9752631578947368,
+    "expected_days_to_funded": 662.1842105263157,
+    "funded_survival_12m": 1.0,
+    "mean_payout_12m_pct": 8.982093037267264,
+    "net_value_12m_pct": 7.0068298793725265
+   },
+   "blend_hr|2.0": {
+    "attempts": 140,
+    "pass_rate": 0.15714285714285714,
+    "breach_rate": 0.8071428571428572,
+    "mean_attempt_days": 110.75,
+    "expected_fees_per_funded_pct": 3.4363636363636365,
+    "expected_days_to_funded": 704.7727272727273,
+    "funded_survival_12m": 1.0,
+    "mean_payout_12m_pct": 8.605709750259765,
+    "net_value_12m_pct": 5.169346113896128
+   },
+   "blend_hr|3.0": {
+    "attempts": 140,
+    "pass_rate": 0.11428571428571428,
+    "breach_rate": 0.8857142857142857,
+    "mean_attempt_days": 57.957142857142856,
+    "expected_fees_per_funded_pct": 4.7250000000000005,
+    "expected_days_to_funded": 507.125,
+    "funded_survival_12m": 1.0,
+    "mean_payout_12m_pct": 8.75007726856676,
+    "net_value_12m_pct": 4.025077268566759
+   }
+  }
+ },
+ "choice": {
+  "HyroTrader_1step": "blend_hr|3.0",
+  "Breakout_classic_1step": "blend_hr|3.0",
+  "FTMO_2step": "blend_hr|3.0"
+ }
+}

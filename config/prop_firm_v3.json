@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "protocol_id": "prop-firm-v3",
+  "status": "DECLARED_BEFORE_EVALUATION",
+  "question": "Do risk-management policies (phase-aware risk, headroom scaling, daily vol guard, cushion withdrawals) let the multi-premia blend pass prop challenges faster and more often while keeping funded accounts alive?",
+  "registration_note": "Declared 2026-10-03 before any v3 simulation. Same rule snapshot, universes (liquidity proxies), buffer, 365-day phase cap and 365 funded days as prop-firm-v2. A fixed grid of policy settings, no search beyond it. Baseline = the only v2 configuration that worked (HyroTrader 1-step, blend, constant 0.5x). Historical seen data: descriptive; both samples must agree.",
+  "firms": ["HyroTrader_1step", "Breakout_classic_1step", "FTMO_2step"],
+  "book": "S4_blend on the firm's universe (as in v2)",
+  "policies": {
+    "challenge_scale": [0.75, 1.0],
+    "funded_scale": 0.5,
+    "headroom": "on/off. Multiplier on the scale from the distance h between equity and the max-loss floor (fraction of the initial account): h > 4%: 1.0; 2% < h <= 4%: 0.5; h <= 2%: 0.25",
+    "vol_guard": "on/off. Scale capped at 0.7 x daily_loss / (2.33 x sigma), sigma = stdev of the book's daily return over the prior 30 days (only lowers risk)",
+    "cushion": "0 or 0.03. Funded withdrawals every 30 days only of equity above 1 + cushion",
+    "grid": "2 challenge scales x headroom (2) x vol_guard (2) x cushion (2) = 16 policies per firm, plus the v2 baseline (0.5 constant, no extras)"
+  },
+  "works_rule": "same as prop-firm-v2 on both samples (breach <= 25%, funded 12-month survival >= 70%, paid within 3 months >= 50%, EV per fee > 0)",
+  "improvement_rule": "a working policy IMPROVES on the baseline if, on both samples, its pass rate is higher and its funded 12-month survival is no more than 5 points lower",
+  "claims": {"strategy_promotion_authorized": false, "live_trading_authorized": false, "purchase_advice": false}
+}

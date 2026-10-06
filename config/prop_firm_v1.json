@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "protocol_id": "prop-firm-v1",
+  "status": "DECLARED_BEFORE_EVALUATION",
+  "question": "Which of our existing strategy books, at which risk scale, has the best chance of passing the evaluations of prominent crypto-capable prop firms, and which firm/book/scale has the best expected value per challenge fee?",
+  "registration_note": "Declared 2026-10-02 before any simulation. Rules are a snapshot taken 2026-10-02 from the firms' own pages where available (ftmo.com/en/trading-objectives, hyrotrader.com) and from kraken.com/learn/breakout-vs-hyrotrader for Breakout (Kraken owns Breakout); items marked 'assumed' were not on those pages and must be verified before buying a challenge. Return series are the historical daily net books already computed in this repository (all seen data), so results are descriptive; the development/confirmation split guards the choice of book and scale.",
+  "firms": {
+    "FTMO_2step": {"phases": [0.10, 0.05], "daily_loss": 0.05, "max_loss": 0.10, "max_loss_type": "static", "min_days": 4, "best_day_rule": 0.5, "split": 0.80, "fee_pct": 0.0054, "notes": "daily loss on equity, 00:00 CET reset; split and fee (EUR 540 / 100k) assumed from prior FTMO pricing"},
+    "FTMO_1step": {"phases": [0.10], "daily_loss": 0.03, "max_loss": 0.10, "max_loss_type": "trailing_eod", "min_days": 0, "best_day_rule": 0.5, "split": 0.80, "fee_pct": 0.0054, "notes": "trailing max loss recalculated daily; split and fee assumed"},
+    "HyroTrader_1step": {"phases": [0.10], "daily_loss": 0.04, "max_loss": 0.06, "max_loss_type": "static", "min_days": 5, "best_day_rule": null, "split": 0.80, "fee_pct": 0.00579, "notes": "USD 579 / 100k from hyrotrader.com; Bybit perps, 700+ pairs"},
+    "HyroTrader_2step": {"phases": [0.10, 0.05], "daily_loss": 0.04, "max_loss": 0.06, "max_loss_type": "static", "min_days": 5, "best_day_rule": null, "split": 0.80, "fee_pct": 0.00579, "notes": "same price as 1-step"},
+    "Breakout_classic_1step": {"phases": [0.10], "daily_loss": 0.03, "max_loss": 0.06, "max_loss_type": "static", "min_days": 0, "best_day_rule": null, "split": 0.80, "fee_pct": 0.005, "max_gross_leverage": 2.0, "notes": "62 pairs on Kraken; leverage 5:1 BTC/ETH, 2:1 alts; fee assumed 0.5% of account"}
+  },
+  "simulation": {
+    "returns": "daily net returns of each book (20 bps costs, funding proxy) times a risk scale L",
+    "intraday_buffer": "daily equity is only observed at day ends, so a day counts as breaching the daily loss if its return is below -0.8 x the limit (20% buffer for intraday excursions); the max-loss checks use the same 0.8 buffer",
+    "starts": "a challenge starts on every 7th day of the series (overlapping), phases run back to back, each phase capped at 120 days (unfinished = fail)",
+    "best_day_rule": "when the target is hit, the best single day must be <= 50% of the sum of positive days in that phase, otherwise the phase continues",
+    "min_days": "calendar days in the phase >= min_days (our books hold positions every day)",
+    "funded": "after passing, simulate 180 funded days with the same daily/max-loss rules; payout = split x max(0, profit at day 180 or at breach-free cash-outs every 30 days)",
+    "ev": "expected value per 100 USD of account = P(pass) x E[funded payout] - fee; reported per firm, book and scale"
+  },
+  "books": {
+    "S4_blend": "multi-premia equal-risk blend (trend + XS momentum + funding carry)",
+    "S1_trend": "trend leg alone",
+    "S2_xs_momentum": "cross-sectional momentum leg alone",
+    "S3_carry": "funding-carry leg alone",
+    "H10_human": "multi-premia blend held as the 10 largest coins at a daily 08:00 UTC check-in"
+  },
+  "scales": [0.5, 1.0, 1.5, 2.0, 3.0],
+  "selection_rule": "the best (book, scale) per firm is chosen on the development sample by EV per fee; it is reported on the confirmation sample unchanged; a firm/book/scale is 'recommended' only if its confirmation pass rate is >= 0.6 x its development pass rate and its confirmation EV is positive",
+  "claims": {"strategy_promotion_authorized": false, "live_trading_authorized": false, "purchase_advice": false}
+}
