@@ -25,8 +25,13 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      - name: Install
-        run: python -m pip install -e .[research]
+      - name: Install pinned hash-locked build tooling and research closure
+        run: >-
+          python -m pip install --require-hashes
+          -r requirements/locks/py312-manylinux-x86_64-build.txt
+          -r requirements/locks/py312-manylinux-x86_64-research.txt
+      - name: Install editable project without undeclared build downloads
+        run: python -m pip install --no-deps --no-build-isolation -e ".[research]"
       - name: Run read-only prospective deterministic release profile
         run: >-
           orderflow-governance-v2 release-profile

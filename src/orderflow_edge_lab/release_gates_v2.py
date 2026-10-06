@@ -93,8 +93,12 @@ def _command(command: list[str], *, cwd: Path, env: dict[str, str], timeout: int
 
 
 def complete_v2_suite(root: Path) -> tuple[bool, dict[str, Any]]:
-    """Discover every authored v2 test; selectors cannot omit future modules."""
+    """Discover every authored v2 test AND the mandatory foundational contract."""
     paths = sorted((root / "tests").glob("test_v2_*.py"))
+    foundation = root / "tests/test_contracts_v2.py"
+    foundation_present = foundation.is_file()
+    if foundation_present:
+        paths = sorted([*paths, foundation])
     if not paths or any(not path.resolve().is_relative_to(root) for path in paths):
         return False, {"error": "v2_tests_missing_or_unsafe", "tests_run": 0}
     env = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1", "PYTHONPATH": os.pathsep.join([str(root / "src"), str(root)])}
@@ -103,8 +107,10 @@ def complete_v2_suite(root: Path) -> tuple[bool, dict[str, Any]]:
     # caller-selected classes, which could omit authored regression modules.
     command = [sys.executable, "-m", "unittest", "-v", *["tests."+path.stem for path in paths]]
     passed, evidence = _command(command, cwd=root, env=env, timeout=300)
-    return passed and evidence["tests_run"] > 0, {**evidence, "discovery_pattern": "test_v2_*.py",
-                                                "test_identities": [build_file_identity(path) for path in paths]}
+    return passed and evidence["tests_run"] > 0 and foundation_present, {**evidence,
+                                                "discovery_pattern": "test_v2_*.py + test_contracts_v2.py",
+                                                "foundational_contract_tests_present": foundation_present,
+                                                "test_identities": [build_file_identity(path, logical_name=path.relative_to(root).as_posix()) for path in paths]}
 
 
 def isolated_install_console_smoke(root: Path) -> tuple[bool, dict[str, Any]]:

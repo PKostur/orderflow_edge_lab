@@ -86,7 +86,10 @@ class RegistryIntegrationTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, (name, result.stderr.decode()))
 
     def test_metadata_matches_exact_registry(self):
-        import tomllib
+        try:
+            import tomllib
+        except ModuleNotFoundError:  # CPython 3.10; reviewed build lock includes tomli.
+            import tomli as tomllib
         project = tomllib.loads((ROOT / "pyproject.toml").read_text())["project"]
         modules = {path.stem for path in (ROOT / "src/orderflow_edge_lab/cli").glob("*.py") if path.stem != "__init__"}
         validate_command_metadata(project["scripts"], project.get("gui-scripts", {}), modules)

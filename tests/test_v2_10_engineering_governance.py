@@ -4,9 +4,13 @@ import copy
 import json
 from pathlib import Path
 import tempfile
-import tomllib
 import unittest
 from unittest.mock import patch
+
+try:
+    import tomllib
+except ModuleNotFoundError:  # CPython 3.10; pinned in its reviewed build lock.
+    import tomli as tomllib
 
 from orderflow_edge_lab.command_registry_v2 import CommandRegistryError, load_command_registry, validate_command_metadata
 from orderflow_edge_lab.governance_v2 import (

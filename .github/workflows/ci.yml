@@ -25,15 +25,30 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install
-        run: python -m pip install -c requirements/constraints.txt -e .[research]
+      - name: Install reviewed hash-locked build and research dependency closure
+        run: >-
+          python -m pip install --require-hashes
+          -r requirements/locks/build-ci.txt -r requirements/locks/research-ci.txt
+      - name: Install editable project for checkout tests (not artifact proof)
+        run: python -m pip install --no-deps --no-build-isolation -e ".[research]"
+      - name: Check checkout dependency consistency
+        run: python -m pip check
       - name: Compile
         run: python -m compileall -q src scripts tests
       - name: Unit and integration tests
         run: python -m unittest discover -s tests -v
       - name: Deployment diagnostics
         run: python scripts/deployment_check.py
-      - name: Build installable release
-        run: python -m pip wheel --no-deps . --wheel-dir dist
-      - name: Verify installed commands outside checkout
-        run: python scripts/package_smoke.py dist/orderflow_edge_lab-1.0.0-py3-none-any.whl
+      - name: Native clean wheel AND sdist full hash-locked dependency proof
+        run: python scripts/verify_packaging.py --work-dir artifacts/packaging-proof
+      - name: Upload native artifact installation evidence
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: packaging-proof-${{ matrix.os }}-py${{ matrix.python-version }}
+          path: |
+            artifacts/packaging-proof/packaging-proof.json
+            artifacts/packaging-proof/logs/*.log
+            artifacts/packaging-proof/dist/*
+          if-no-files-found: error
+          retention-days: 14
