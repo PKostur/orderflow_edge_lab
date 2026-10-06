@@ -11,13 +11,13 @@ This repository does not contain live broker or exchange order transmission. The
 
 ## Continuous multi-agent hardening
 
-The repository now includes a zero-additional-cost multi-agent control plane. Seven specialist agents independently review data integrity, research validity, strategy validation, execution safety, reliability/CI, observability/deployment, and adversarial safety. A release manager aggregates their findings into a hashed report.
+The repository includes a zero-additional-cost multi-agent control plane. The current deterministic checker IDs, count, compatibility groupings, and lead/release-manager responsibility are in the generated [Governance Map v2](docs/GOVERNANCE_MAP_V2.md). DeerFlow and Ruflo groupings are optional coordination labels; they do not equal the deterministic checker count or substitute for repository evidence.
 
 ```bash
 orderflow-multi-agent --output artifacts/multi_agent_report.json
 ```
 
-The same control plane runs hourly in GitHub Actions with read-only repository permissions. It does not place trades or promote a strategy. See [multi-agent hardening](docs/MULTI_AGENT.md).
+The legacy control plane remains historical evidence. Prospective v2 profiles distinguish an advisory/static report from a release profile: only a complete release profile may be `reviewable`. Both paths are read-only and do not place trades or promote a strategy. See [multi-agent hardening](docs/MULTI_AGENT.md) and [engineering governance v2](docs/PROCESS_V2_10_ENGINEERING_GOVERNANCE.md).
 
 ## Current priorities
 
@@ -36,7 +36,7 @@ The same control plane runs hourly in GitHub Actions with read-only repository p
 
 ## Commands
 
-Every installed command is available as a flat script (for example `orderflow-multi-agent`) and through a single dispatcher:
+The versioned command registry declares whether each command is a flat script, dispatcher-only command, GUI exception, or internal surface. Flat scripts (for example `orderflow-multi-agent`) remain canonical; dispatcher-visible commands are available through a single dispatcher:
 
 ```bash
 orderflow --list          # grouped command table

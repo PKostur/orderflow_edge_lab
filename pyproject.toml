@@ -132,6 +132,9 @@ orderflow-cross-sectional-forward-shadow = "orderflow_edge_lab.cli.cross_section
 orderflow-cross-sectional-venue-replication = "orderflow_edge_lab.cli.cross_sectional_venue_replication:main"
 orderflow-cross-sectional-okx-funding-audit = "orderflow_edge_lab.cli.cross_sectional_okx_funding_audit:main"
 orderflow-markov-ev-shadow = "orderflow_edge_lab.cli.markov_ev_shadow:main"
+orderflow-markov-price-diagnostics = "orderflow_edge_lab.cli.markov_price_diagnostics:main"
+orderflow-discovery-v2-calibration = "orderflow_edge_lab.cli.discovery_v2_calibration:main"
+orderflow-governance-v2 = "orderflow_edge_lab.cli.governance_v2:main"
 
 orderflow = "orderflow_edge_lab.cli.main:main"
 
@@ -140,3 +143,6 @@ orderflow-dxfeed-login = "orderflow_edge_lab.cli.login:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+orderflow_edge_lab = ["command_registry_v2.json"]

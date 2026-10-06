@@ -61,7 +61,7 @@ For substantial regime/indicator research, use bounded specialist tasks. Run onl
 
 ## Compatibility role mapping
 
-The expanded pods preserve the original six specialist responsibilities expected by the migration layer:
+The expanded pods preserve the original six specialist responsibilities expected by the migration layer. The executable deterministic IDs, checker count, and compatibility decisions are generated in the repository's [Governance Map v2](../../../../../docs/GOVERNANCE_MAP_V2.md); these six labels are logical coordination groupings only, not a claim about the deterministic checker count.
 
 - **Data integrity** maps to the data-integrity and liquidity/microstructure specialists.
 - **Research validity and statistics** maps to research-validity and indicator-orthogonality specialists.

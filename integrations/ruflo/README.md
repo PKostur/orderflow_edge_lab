@@ -39,7 +39,7 @@ It does not create exchange credentials or enable live order transmission.
 
 ## Swarm model
 
-Use a hierarchical specialized swarm with these conceptual roles:
+Use a hierarchical specialized swarm with these conceptual roles. They are optional coordination labels, not a deterministic checker count; the repository's executable IDs and compatibility decisions are in [Governance Map v2](../../docs/GOVERNANCE_MAP_V2.md).
 
 1. coordinator: lead adversarial/release manager
 2. researcher: research validity/statistics

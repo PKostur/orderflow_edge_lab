@@ -1,4 +1,10 @@
-"""Verify the built wheel's installed commands outside the source checkout."""
+"""Verify installed-wheel command metadata against the versioned command registry.
+
+This is a read-only safe-probe test: every flat entry point is invoked with its
+registry-declared help probe, except the explicit GUI metadata-only exception.
+"""
+from __future__ import annotations
+
 import argparse
 import os
 from pathlib import Path
@@ -7,7 +13,7 @@ import sys
 import tempfile
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("wheel")
     args = parser.parse_args()
@@ -17,41 +23,41 @@ def main():
         packages = root / "packages"
         subprocess.run([sys.executable, "-m", "pip", "install", "--no-index", "--no-deps", "--target", str(packages), str(wheel)], check=True)
         env = {**os.environ, "PYTHONPATH": str(packages)}
-        code = """import importlib.metadata, pathlib, sys
-import orderflow_edge_lab
-assert orderflow_edge_lab.__version__ == '1.0.0'
-assert pathlib.Path(orderflow_edge_lab.__file__).is_relative_to(pathlib.Path(sys.path[1]))
-entries = {e.name: e for e in importlib.metadata.distribution('orderflow-edge-lab').entry_points}
-assert {'orderflow-paper', 'orderflow-probe', 'orderflow-validate', 'orderflow-readiness', 'orderflow-runtime-snapshot', 'orderflow-session-audit', 'orderflow-discover-endpoint', 'orderflow-analyze-endpoint', 'orderflow-audit-causality', 'orderflow-promotion-check', 'orderflow-trial-ledger', 'orderflow-multi-agent', 'orderflow-backtest', 'orderflow-direction-pair', 'orderflow-risk-ladder', 'orderflow-stop-risk', 'orderflow-ema15m-hypothesis', 'orderflow-market-conditions', 'orderflow-condition-aggregate', 'orderflow-pair-screen', 'orderflow-cross-pair', 'orderflow-discovery-aggregate', 'orderflow-dxfeed-login'} <= entries.keys()
-assert callable(entries['orderflow-dxfeed-login'].load())
-name = sys.argv.pop(1)
-sys.argv[0] = name
-raise SystemExit(entries[name].load()())
-"""
-        for command in (["orderflow-paper", "init"], ["orderflow-paper", "status"],
-                        ["orderflow-paper", "kill"], ["orderflow-paper", "release"],
-                        ["orderflow-paper", "expire"], ["orderflow-probe", "--help"],
-                        ["orderflow-validate", "--help"], ["orderflow-readiness", "--help"],
-                        ["orderflow-runtime-snapshot", "--help"],
-                        ["orderflow-session-audit", "--help"],
-                        ["orderflow-discover-endpoint", "--help"],
-                        ["orderflow-analyze-endpoint", "--help"],
-                        ["orderflow-audit-causality", "--help"],
-                        ["orderflow-promotion-check", "--help"],
-                        ["orderflow-trial-ledger", "--help"],
-                        ["orderflow-multi-agent", "--help"],
-                        ["orderflow-backtest", "--help"],
-                        ["orderflow-direction-pair", "--help"],
-                        ["orderflow-risk-ladder", "--help"],
-                        ["orderflow-stop-risk", "--help"],
-                        ["orderflow-ema15m-hypothesis", "--help"],
-                        ["orderflow-market-conditions", "--help"],
-                        ["orderflow-condition-aggregate", "--help"],
-                        ["orderflow-pair-screen", "--help"],
-                        ["orderflow-cross-pair", "--help"],
-                        ["orderflow-discovery-aggregate", "--help"]):
-            subprocess.run([sys.executable, "-c", code, *command], env=env, cwd=root, check=True, timeout=30)
-    print("Installed wheel smoke checks passed; no network data or orders requested.")
+        check = r'''
+import importlib.metadata
+import json
+from pathlib import Path
+from orderflow_edge_lab.command_registry_v2 import flat_entry_points, gui_entry_points, load_command_registry
+
+registry = load_command_registry()
+dist = importlib.metadata.distribution("orderflow-edge-lab")
+entries = {entry.name: entry.value for entry in dist.entry_points}
+assert {name: entries.get(name) for name in flat_entry_points()} == flat_entry_points(), "flat wheel metadata drift"
+assert {name: entries.get(name) for name in gui_entry_points()} == gui_entry_points(), "GUI wheel metadata drift"
+assert sorted(registry["commands"], key=lambda item: item["name"]) == registry["commands"], "registry ordering drift"
+print(json.dumps({"flat": len(flat_entry_points()), "gui": len(gui_entry_points())}, sort_keys=True))
+'''
+        subprocess.run([sys.executable, "-c", check], env=env, cwd=root, check=True, timeout=30)
+        probes = r'''
+import importlib.metadata
+import sys
+from orderflow_edge_lab.command_registry_v2 import load_command_registry
+entries = {entry.name: entry for entry in importlib.metadata.distribution("orderflow-edge-lab").entry_points}
+for item in load_command_registry()["commands"]:
+    if item["exposure"] != "flat":
+        continue
+    entry = entries[item["name"]]
+    if item["safe_probe"] == "metadata_only_gui_exception":
+        continue
+    assert item["safe_probe"] == "--help", item
+    sys.argv = [item["name"], "--help"]
+    try:
+        entry.load()()
+    except SystemExit as exc:
+        assert exc.code in (0, None), (item["name"], exc.code)
+'''
+        subprocess.run([sys.executable, "-c", probes], env=env, cwd=root, check=True, timeout=120)
+    print("Installed wheel command-registry smoke checks passed; no network data or orders requested.")
 
 
 if __name__ == "__main__":

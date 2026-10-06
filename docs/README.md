@@ -31,6 +31,7 @@ engineering tests do not need it.
 ## Reliability and operations
 
 - [MULTI_AGENT](MULTI_AGENT.md) — the deterministic hardening control plane and its report semantics.
+- [GOVERNANCE_MAP_V2](GOVERNANCE_MAP_V2.md) / [PROCESS_V2_10_ENGINEERING_GOVERNANCE](PROCESS_V2_10_ENGINEERING_GOVERNANCE.md) — prospective release-profile, command-registry, lock, and control-plane governance.
 - [SESSION_AUDIT](SESSION_AUDIT.md) / [SESSION_METRICS](SESSION_METRICS.md) — session audit and metrics.
 - [DEADLINE_RELEASE_RUNBOOK](DEADLINE_RELEASE_RUNBOOK.md) — standalone install/run/release without external services.
 - [DON8_REVIEW_RUNBOOK](DON8_REVIEW_RUNBOOK.md) — operational steps for the 2026-10-23 DON8 review (packet generation, robustness context, coverage audit, record and archive).

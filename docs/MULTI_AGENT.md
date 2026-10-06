@@ -1,57 +1,36 @@
 # Multi-Agent Hardening Control Plane
 
-The project includes a local, zero-additional-cost multi-agent control plane for continuous refinement and hardening. It does not require an external LLM API. Specialist agents execute deterministic repository checks in parallel and a release manager aggregates their evidence into a tamper-evident JSON report.
+The repository has a local, zero-additional-cost deterministic governance plane. It performs repository-local checks only; it does **not** invoke an external LLM, collect market data, access credentials, start services/schedules, mutate research evidence, transmit orders, or promote a strategy.
 
-## Roles
+## Versioned evidence semantics
 
-| Agent | Responsibility |
-| --- | --- |
-| `data_integrity` | DeepCharts/dxFeed and MEXC adapters, timestamps, sequences, data provenance, causal eligibility |
-| `research_validity` | Discovery/validation/holdout separation, freezes, holdout evidence, trial accounting, promotion binding |
-| `strategy_validation` | Costs, fills, backtest assumptions, OOS evidence, overfitting controls |
-| `execution_safety` | Approval-bound paper execution, risk checks, state/journal integrity, kill switches |
-| `reliability_ci` | Compilation, tests, deployment diagnostics, packaging readiness |
-| `observability_deployment` | Logs, hashes, runtime identity, manifests, operator diagnostics and documentation |
-| `adversarial_reviewer` | Cross-checks unsupported edge claims, hidden holdout reuse, fail-open behavior and live-execution creep |
-| release manager | Aggregates evidence, blocks on errors, preserves safety claims and prioritizes next actions |
+- **v1:** `orderflow-multi-agent` and `config/multi_agents.json` are retained unchanged as historical engineering evidence.
+- **v2:** `orderflow-governance-v2 release-profile` consumes the prospective `config/multi_agents_v2.json`. Its `advisory` profile is valid and hash-verifiable but is **not release eligible**. Its `release` profile is `reviewable` only when every required deterministic check executes exactly once, no required check is skipped, no required check fails, and the declared `block_on` severity policy has no matching finding.
+
+The source-of-truth deterministic checker IDs, current count, logical compatibility roles, and lead responsibility are generated in [Governance Map v2](GOVERNANCE_MAP_V2.md). Do not copy counts or role lists into operational documents.
 
 ## Run locally
 
 ```bash
-python -m pip install -e .
+# Legacy compatibility surface; its semantics are unchanged.
 orderflow-multi-agent --output artifacts/multi_agent_report.json
+
+# Prospective, read-only v2 evidence profile.
+orderflow-governance-v2 release-profile \
+  --profile release \
+  --output artifacts/governance_release_profile_v2.json \
+  --strict
+
+# Cheap local triage. This intentionally cannot return `reviewable`.
+orderflow-governance-v2 release-profile \
+  --profile advisory \
+  --output artifacts/governance_advisory_profile_v2.json
 ```
 
-For a fast static pass that skips compile, unit-test and deployment subprocesses:
+`--strict` returns nonzero unless the v2 release profile is `reviewable`. Each v2 report contains named required/executed/skipped checks, deterministic evidence digests, a normalized policy hash, a report hash, and mandatory false non-authority claims.
 
-```bash
-orderflow-multi-agent --skip-heavy --output artifacts/multi_agent_report.json
-```
+## Release boundaries and blockers
 
-`--strict` returns a nonzero exit code when the release manager is blocked by a specialist error.
+A successful local governance profile is engineering evidence only. It does not prove durable external storage, provider completeness, independent engine calibration, profitability, promotion authorization, or live-order capability. Activation still requires separately approved durable-storage evidence and caller-declared/frozen research and risk policies; v2 does not invent defaults.
 
-## Continuous execution
-
-`.github/workflows/multi-agent-hardening.yml` runs the control plane hourly, on relevant pull requests, and on manual dispatch. The report is uploaded as a GitHub Actions artifact for 14 days.
-
-The scheduled run has read-only repository permissions. It cannot place trades, mutate the repository, access private trading credentials, or silently promote a strategy.
-
-## Evidence semantics
-
-A successful report means the configured engineering and safety checks passed. It does not mean a strategy has a profitable edge. Every report explicitly preserves:
-
-```text
-live_order_transmission_supported = false
-profitable_edge_established = false
-verified_out_of_sample_evidence = false
-```
-
-Those fields are also covered by the report manifest hash. Modifying them after generation invalidates verification.
-
-## Human/ChatGPT refinement loop
-
-The deterministic agents are the continuous sensing layer. The higher-level refinement automation can read the latest repository state and agent findings, select the highest-value non-blocked improvement, implement it in a branch, run CI, and merge only after the required checks pass. Work that depends on user-only inputs, such as a genuine DeepCharts/dxFeed export or legitimate entitlement details, should be reported as a single minimal blocking action while unrelated hardening continues.
-
-## Safety boundary
-
-The multi-agent system is intentionally limited to research, validation, software reliability, paper/approval execution and deployment readiness. Automatic live broker or exchange order transmission remains outside the current release boundary.
+The workflow is read-only (`contents: read`). Optional DeerFlow/Ruflo coordination must never substitute for repository tests, command-contract checks, or this deterministic profile.

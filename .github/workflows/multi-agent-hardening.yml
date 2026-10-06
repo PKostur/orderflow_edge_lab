@@ -2,8 +2,7 @@ name: Multi-Agent Hardening
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "17 * * * *"
+  push:
   pull_request:
     paths:
       - "src/**"
@@ -18,7 +17,7 @@ permissions:
   contents: read
 
 jobs:
-  specialist-review:
+  specialist-release-profile:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -28,23 +27,28 @@ jobs:
           python-version: "3.12"
       - name: Install
         run: python -m pip install -e .[research]
-      - name: Run specialist agents and release manager
-        run: orderflow-multi-agent --output artifacts/multi_agent_report.json
-      - name: Verify report manifest and release gate
+      - name: Run read-only prospective deterministic release profile
+        run: >-
+          orderflow-governance-v2 release-profile
+          --profile release
+          --output artifacts/governance_release_profile_v2.json
+          --strict
+      - name: Verify report hash and release-profile completeness
         run: |
           python - <<'PY'
           import json
-          from orderflow_edge_lab.multi_agent import verify_report
-          report = json.load(open('artifacts/multi_agent_report.json', encoding='utf-8'))
-          assert verify_report(report), 'multi-agent manifest verification failed'
-          status = report['release_manager']['status']
-          assert status != 'blocked', f'multi-agent release manager blocked the change: {report["release_manager"]["next_actions"]}'
+          from orderflow_edge_lab.governance_v2 import verify_release_profile_v2
+          report = json.load(open('artifacts/governance_release_profile_v2.json', encoding='utf-8'))
+          assert verify_release_profile_v2(report), 'governance v2 report verification failed'
+          assert report['execution_profile'] == 'release', 'advisory profile is not a release gate'
+          assert report['checks_skipped_required'] == 0, 'release profile skipped a required check'
+          assert report['release_manager']['status'] == 'reviewable', report['release_manager']
           PY
       - name: Upload evidence
         if: always()
         uses: actions/upload-artifact@v6
         with:
-          name: multi-agent-hardening-report
-          path: artifacts/multi_agent_report.json
+          name: governance-release-profile-v2
+          path: artifacts/governance_release_profile_v2.json
           if-no-files-found: error
           retention-days: 14
