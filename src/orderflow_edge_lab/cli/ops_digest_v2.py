@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 from orderflow_edge_lab.capture_health import DEFAULT_DATA_DIR
-from orderflow_edge_lab.ops_digest import (
+from orderflow_edge_lab.ops_digest_v2 import (
     DEFAULT_LEDGER_MANIFEST,
     OpsDigestError,
     build_ops_digest,
@@ -42,10 +42,28 @@ def build_parser() -> argparse.ArgumentParser:
         help="Optional artifact coverage report JSON to fold into the digest.",
     )
     parser.add_argument(
+        "--inventory-acquisition",
+        help="Explicit CI artifact inventory acquisition JSON; FAILED is an operational error, never an empty inventory.",
+    )
+    parser.add_argument(
+        "--ledger-retrieval",
+        help="Optional newest-ledger artifact retrieval metadata JSON.",
+    )
+    parser.add_argument(
         "--stale-after-hours",
         type=float,
         default=26.0,
         help="Capture staleness threshold used for the digest alerts (default: 26).",
+    )
+    parser.add_argument(
+        "--ledger-heartbeat-cadence-hours",
+        type=float,
+        help="Caller-declared ledger heartbeat cadence; provide with --ledger-heartbeat-grace-hours.",
+    )
+    parser.add_argument(
+        "--ledger-heartbeat-grace-hours",
+        type=float,
+        help="Caller-declared ledger heartbeat grace; provide with --ledger-heartbeat-cadence-hours.",
     )
     parser.add_argument("--output", help="Optional path for an exclusive-create JSON digest.")
     parser.add_argument("--markdown", help="Optional path for a human-readable digest.")
@@ -67,12 +85,22 @@ def main(argv: list[str] | None = None) -> int:
             coverage_path = Path(args.coverage_report)
             if coverage_path.is_file():
                 coverage = json.loads(coverage_path.read_text(encoding="utf-8"))
+        inventory_acquisition = None
+        if args.inventory_acquisition:
+            inventory_acquisition = json.loads(Path(args.inventory_acquisition).read_text(encoding="utf-8"))
+        ledger_retrieval = None
+        if args.ledger_retrieval:
+            ledger_retrieval = json.loads(Path(args.ledger_retrieval).read_text(encoding="utf-8"))
         digest = build_ops_digest(
             clock_config=Path(args.clock_config),
             data_dir=Path(args.data_dir),
             ledger_manifest=Path(args.ledger_manifest) if args.ledger_manifest else None,
             coverage_report=coverage,
+            inventory_acquisition=inventory_acquisition,
+            ledger_retrieval=ledger_retrieval,
             stale_after_hours=float(args.stale_after_hours),
+            ledger_heartbeat_cadence_hours=args.ledger_heartbeat_cadence_hours,
+            ledger_heartbeat_grace_hours=args.ledger_heartbeat_grace_hours,
         )
         if args.output:
             _write_exclusive(

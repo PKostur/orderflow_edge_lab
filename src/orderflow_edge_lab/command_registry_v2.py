@@ -46,6 +46,8 @@ def load_command_registry() -> dict[str, Any]:
             raise CommandRegistryError(f"invalid module for {item['name']}")
         if item["exposure"] not in {"flat", "dispatcher", "gui", "internal"}:
             raise CommandRegistryError(f"invalid exposure for {item['name']}")
+        if item["target"] != item["module"] + ":main":
+            raise CommandRegistryError(f"module/target mismatch for {item['name']}")
         if not isinstance(item["safe_probe"], str) or not isinstance(item["deprecated"], bool):
             raise CommandRegistryError(f"invalid probe/deprecation fields for {item['name']}")
         if item["module"].startswith("orderflow_edge_lab.cli."):
@@ -62,7 +64,7 @@ def dispatcher_commands() -> dict[str, str]:
     return {item["name"]: item["module"].rsplit(".", 1)[1] for item in load_command_registry()["commands"]
             if item["exposure"] in {"flat", "dispatcher", "gui"}
             and item["module"].startswith("orderflow_edge_lab.cli.")
-            and item["module"] != "orderflow_edge_lab.cli.main"}
+            and item["module"] not in {"orderflow_edge_lab.cli.main", "orderflow_edge_lab.cli.main_v2"}}
 
 
 def flat_entry_points() -> dict[str, str]:

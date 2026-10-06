@@ -192,7 +192,7 @@ jobs:
           else
             LEDGER_ARGS+=(--ledger-manifest "")
           fi
-          orderflow-ops-digest \
+          orderflow-ops-digest-v2 \
             --clock-config config/prospective_review_clock_v1.json \
             --data-dir "${DATA_DIR}" \
             "${LEDGER_ARGS[@]}" \

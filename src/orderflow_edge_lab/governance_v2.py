@@ -13,9 +13,13 @@ from pathlib import Path
 from typing import Any
 import json
 import re
+import os
+import subprocess
+import sys
 
 from orderflow_edge_lab.contracts_v2 import (
     ContractValidationError,
+    build_file_identity,
     canonical_json_sha256,
     non_authority_claims,
     validate_non_authority_claims,
@@ -24,6 +28,7 @@ from orderflow_edge_lab.research_control_plane import (
     ResearchControlPlaneError,
     build_control_plane_status,
 )
+from orderflow_edge_lab.release_gates_v2 import MANDATORY_RELEASE_GATES, run_mandatory_release_gate
 
 CONFIG_SCHEMA = "orderflow_edge_lab.multi_agent_policy.v2"
 PROFILE_SCHEMA = "orderflow_edge_lab.release_profile.v2"
@@ -32,7 +37,7 @@ CONTROL_STATUS_SCHEMA = "orderflow_edge_lab.research_control_plane_status.v2"
 MAP_SCHEMA = "orderflow_edge_lab.governance_map.v2"
 SEVERITIES = frozenset({"info", "warning", "error", "critical"})
 PROFILES = frozenset({"advisory", "release"})
-CHECK_KINDS = frozenset({"path_exists", "path_contains", "json_false_claims", "dependency_absent", "text_absent"})
+CHECK_KINDS = frozenset({"path_exists", "path_contains", "json_false_claims", "dependency_absent", "text_absent", "unittest_suite"})
 _IDENTIFIER = re.compile(r"^[a-z][a-z0-9_\-]*$")
 
 
@@ -90,7 +95,7 @@ def _canonical_copy(value: Mapping[str, Any]) -> dict[str, Any]:
 
 def _validate_check(raw: object, field: str) -> dict[str, Any]:
     item = _object(raw, field)
-    allowed = {"id", "kind", "severity", "release_only", "paths", "tokens", "claims", "dependencies"}
+    allowed = {"id", "kind", "severity", "release_only", "paths", "tokens", "claims", "dependencies", "tests"}
     unknown = sorted(set(item) - allowed)
     if unknown:
         _fail("unknown_check_field", f"{field} has unknown fields: {','.join(unknown)}")
@@ -127,6 +132,11 @@ def _validate_check(raw: object, field: str) -> dict[str, Any]:
         if not dependencies:
             _fail("missing_check_dependencies", f"{field}.dependencies must be nonempty")
         normalized["dependencies"] = [item.lower() for item in dependencies]
+    if kind == "unittest_suite":
+        tests = _string_list(item.get("tests"), f"{field}.tests", unique=True)
+        if not tests or any(not re.fullmatch(r"test_[A-Za-z0-9_]+(?:\.[A-Za-z][A-Za-z0-9_]*){0,2}", test) for test in tests):
+            _fail("invalid_test_target", "runtime checks must name local unittest modules/classes/methods")
+        normalized["tests"] = tests
     return normalized
 
 
@@ -239,6 +249,28 @@ def _safe_text(path: Path) -> str:
 def _check(root: Path, check: Mapping[str, Any]) -> tuple[bool, dict[str, Any]]:
     kind = check["kind"]
     paths = [root / item for item in check.get("paths", [])]
+    if any(not path.resolve().is_relative_to(root) for path in paths):
+        return False, {"error": "symlink_path_escape"}
+    if kind == "unittest_suite":
+        targets = check["tests"]
+        test_paths = [root / "tests" / (name.split(".")[0] + ".py") for name in targets]
+        if any(not path.is_file() or not path.resolve().is_relative_to(root) for path in test_paths):
+            return False, {"error": "runtime_test_missing_or_unsafe", "tests": targets}
+        env = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1",
+               "PYTHONPATH": os.pathsep.join([str(root / "tests"), str(root / "src")])}
+        command = [sys.executable, "-m", "unittest", "-v", *targets]
+        try:
+            result = subprocess.run(command, cwd=root, env=env, capture_output=True, text=True, timeout=120)
+            text = result.stdout + result.stderr
+            match = re.search(r"Ran (\d+) tests?", text)
+            count = int(match.group(1)) if match else 0
+            passed = result.returncode == 0 and count > 0
+            return passed, {"tests": targets, "tests_run": count, "exit_code": result.returncode,
+                            "test_identities": [build_file_identity(path) for path in test_paths],
+                            "output_sha256": canonical_json_sha256(re.sub(r"Ran (\d+) tests? in [0-9.]+s", r"Ran \1 tests", text)),
+                            "failure_tail": None if passed else text[-4000:]}
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            return False, {"tests": targets, "error": type(exc).__name__, "tests_run": 0}
     if kind == "path_exists":
         observed = {str(path.relative_to(root)): path.exists() for path in paths}
         return all(observed.values()), {"paths": observed}
@@ -289,6 +321,24 @@ def build_release_profile_v2(
     executions: list[dict[str, Any]] = []
     findings: list[dict[str, Any]] = []
     required_checks: list[str] = []
+    # These cannot be removed, demoted, or skipped by a caller-edited registry.
+    # Unit tests of profile aggregation mock runners, not this gate inventory;
+    # the full-suite runner really discovers every authored v2 module.
+    for gate in MANDATORY_RELEASE_GATES:
+        full_id = f"mandatory_release:{gate}"
+        required_checks.append(full_id)
+        if profile == "advisory":
+            executions.append({"check_id": full_id, "agent_id": "mandatory_release", "status": "SKIPPED",
+                               "reason": "advisory_profile", "evidence": None, "evidence_sha256": None})
+            continue
+        passed, evidence = run_mandatory_release_gate(root_path, gate, normalized)
+        evidence_sha256 = canonical_json_sha256(evidence)
+        executions.append({"check_id": full_id, "agent_id": "mandatory_release", "status": "PASSED" if passed else "FAILED",
+                           "reason": None, "evidence": evidence, "evidence_sha256": evidence_sha256})
+        if not passed:
+            findings.append({"severity": "error", "code": "mandatory_release_gate_failed", "agent_id": "mandatory_release",
+                             "check_id": full_id, "message": f"non-optional release gate failed: {gate}",
+                             "evidence_sha256": evidence_sha256})
     for agent in normalized["agents"]:
         for check in agent["checks"]:
             full_id = f"{agent['id']}:{check['id']}"
@@ -315,7 +365,7 @@ def build_release_profile_v2(
                         if phrase.lower() in text:
                             scan[phrase].append(str(candidate.relative_to(root_path)))
             scan = {key: sorted(value) for key, value in scan.items()}
-            evidence_sha256 = canonical_json_sha256(scan)
+            evidence_sha256 = canonical_json_sha256({"matches": scan})
             full_id = f"{agent['id']}:forbidden_claim_scan"
             required_checks.append(full_id)
             passed = not any(scan.values())
@@ -342,11 +392,13 @@ def build_release_profile_v2(
         "release_manager": {"status": "reviewable" if release_eligible else ("not_release_eligible" if profile == "advisory" else "blocked"),
                             "block_on": policy["block_on"], "blocking_findings": policy["blocking_findings"],
                             "failed_required_checks": failed, "missing_required_checks": sorted(set(required_checks) - set(executed) - set(skipped)),
-                            "release_eligible": release_eligible},
+                            "release_eligible": release_eligible,
+                            "eligibility_scope": "offline_code_review_only", "activation_eligible": False,
+                            "activation_status": "BLOCKED_EXTERNAL_AND_CALLER_POLICY"},
         "non_authority_claims": non_authority_claims(),
-        "activation_blockers": ["Durable external storage is not verified by local governance checks.",
-                                "Independent engine calibration is not verified by local governance checks.",
-                                "Risk and scientific policy parameters require caller-declared frozen successor policies."],
+        "activation_blockers": ["Durable external append storage needs atomic compare-and-swap/exclusive append, immutable anchoring, retention and retrieval-rehearsal evidence; local hash chains can fork.",
+                                "Independent engine availability and execution/accounting calibration evidence are not supplied or verified by local checks.",
+                                "Risk/scientific parameters require caller-declared frozen successor policies, approved provider scope and producer provenance before activation."],
     }
     return {**unsigned, "report_sha256": canonical_json_sha256(unsigned)}
 
@@ -362,8 +414,31 @@ def verify_release_profile_v2(report: Mapping[str, Any]) -> bool:
         if raw.get("schema") != PROFILE_SCHEMA or raw.get("analysis") != "multi_agent_release_profile_v2":
             return False
         validate_non_authority_claims(raw.get("non_authority_claims"))
+        manager = raw.get("release_manager", {})
+        if manager.get("activation_eligible") is not False or manager.get("eligibility_scope") != "offline_code_review_only":
+            return False
+        mandatory = {f"mandatory_release:{gate}" for gate in MANDATORY_RELEASE_GATES}
+        required = raw.get("required_checks", [])
+        checks = raw.get("checks", [])
+        if not mandatory <= set(required) or len(required) != len(set(required)):
+            return False
+        ids = [item["check_id"] for item in checks]
+        if set(ids) != set(required) or len(ids) != len(set(ids)):
+            return False
+        if manager.get("release_eligible") is True:
+            if (raw.get("execution_profile") != "release" or manager.get("status") != "reviewable"
+                    or raw.get("checks_skipped_required") != 0 or raw.get("checks_skipped")
+                    or set(raw.get("checks_executed", [])) != set(required)
+                    or manager.get("failed_required_checks") or manager.get("missing_required_checks")
+                    or any(item.get("status") != "PASSED" or not item.get("evidence_sha256") for item in checks)):
+                return False
+        for item in checks:
+            if item.get("status") not in {"PASSED", "FAILED", "SKIPPED"}:
+                return False
+            if item.get("status") != "SKIPPED" and item.get("evidence_sha256") != canonical_json_sha256(item.get("evidence")):
+                return False
         return stored == canonical_json_sha256(unsigned)
-    except (GovernanceV2Error, ContractValidationError, TypeError, ValueError):
+    except (GovernanceV2Error, ContractValidationError, TypeError, ValueError, KeyError, AttributeError):
         return False
 
 

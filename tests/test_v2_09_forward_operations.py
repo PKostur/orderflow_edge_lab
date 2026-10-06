@@ -25,7 +25,7 @@ from orderflow_edge_lab.forward_operations_v2 import (
     build_universe_availability_ledger_v2,
     locate_checkpoint_by_report_sha256_v2,
 )
-from orderflow_edge_lab.ops_digest import build_ops_digest
+from orderflow_edge_lab.ops_digest_v2 import build_ops_digest
 
 ROOT = Path(__file__).resolve().parents[1]
 CLOCK_PATH = ROOT / "config/prospective_review_clock_v1.json"

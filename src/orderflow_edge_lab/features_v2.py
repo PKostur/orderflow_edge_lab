@@ -78,7 +78,7 @@ def _exact_keys(value: Mapping[str, Any], keys: set[str], name: str) -> None:
             parts.append('missing=' + ','.join(missing))
         if extra:
             parts.append('extra=' + ','.join(extra))
-        raise FeatureV2Error(f'{name} has unsupported shape ({'; '.join(parts)})')
+        raise FeatureV2Error(f"{name} has unsupported shape ({'; '.join(parts)})")
 
 
 def _text(value: object, name: str) -> str:

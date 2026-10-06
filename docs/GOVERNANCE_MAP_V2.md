@@ -3,8 +3,8 @@
 This generated prospective map is sourced from `config/multi_agents_v2.json`. It does not alter historical v1 reports or research evidence.
 
 - **Deterministic checker count:** 18
-- **Registry SHA-256:** `f45d0cda8743c48317400e9581741f2a75ae539deb36c3112d552d4db48feab2`
-- **Map SHA-256:** `e74bf04c942c02607cddda0517819db4317c259353b1e072328cc68e8fdca31b`
+- **Registry SHA-256:** `06c43cccd9ff9ec558f838513882eecbe65f5da234a3984746860c39038b7126`
+- **Map SHA-256:** `f9fb1201d2e3259d2be05a201b2a78621187c65e65aaf7e38909cf47fb06a1ed`
 
 | Deterministic agent ID | Logical compatibility role | Repository evidence |
 | --- | --- | --- |

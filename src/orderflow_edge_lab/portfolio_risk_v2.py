@@ -53,7 +53,7 @@ def _exact_keys(value: Mapping[str, Any], expected: set[str], field: str) -> Non
             bits.append(f'missing={missing}')
         if extra:
             bits.append(f'extra={extra}')
-        raise PortfolioRiskV2Error(f'{field} has unsupported shape ({'; '.join(bits)})')
+        raise PortfolioRiskV2Error(f"{field} has unsupported shape ({'; '.join(bits)})")
 
 
 def _string(value: object, field: str) -> str:

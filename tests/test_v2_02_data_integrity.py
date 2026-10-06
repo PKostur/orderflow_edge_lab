@@ -8,6 +8,7 @@ import tempfile
 import unittest
 
 from orderflow_edge_lab.contracts_v2 import build_file_identity, build_utc_interval
+from tests.v2_fixture_support import complete_terminal
 from orderflow_edge_lab.data_integrity_v2 import (
     CapturePairWriterV2,
     DataIntegrityV2Error,
@@ -39,7 +40,7 @@ class DataIntegrityV2Tests(unittest.TestCase):
 
     def sessions(self, capture_id: str, *, feature_schema: int = 3):
         raw = {
-            "record_type": "session", "schema_version": 2, "capture_id": capture_id,
+            "record_type": "session", "schema_version": 3, "capture_id": capture_id,
             "symbols": ["BTC_USDT"], "started_at_ns": 1,
         }
         features = {
@@ -51,7 +52,7 @@ class DataIntegrityV2Tests(unittest.TestCase):
     def policy(self):
         return build_capture_eligibility_policy_v2(
             policy_id="fixture-policy", declared_at_utc="2026-09-30T00:00:00Z",
-            accepted_raw_session_schema_versions=[2], accepted_feature_session_schema_versions=[3],
+            accepted_raw_session_schema_versions=[3], accepted_feature_session_schema_versions=[3],
             expected_symbols=["BTC_USDT"], allowed_raw_record_types=["ws_message"],
             allowed_feature_record_types=["feature"], require_monotonic_feature_received_at_ns=True,
             require_quality_report=False, accepted_quality_analyses=["mexc_capture_quality_v1"],
@@ -67,9 +68,10 @@ class DataIntegrityV2Tests(unittest.TestCase):
         ) as writer:
             for record in feature_records or []:
                 writer.write_feature(record)
+            terminal = complete_terminal(self.root, self.interval, ["BTC_USDT"])
             manifest = writer.finalize(
-                {"record_type": "session_summary", "capture_id": capture_id, "ended_at_ns": 2},
-                {"record_type": "session_summary", "capture_id": capture_id, "ended_at_ns": 2},
+                {"record_type": "session_summary", "capture_id": capture_id, "ended_at_ns": 2, "session_terminal_v2": terminal},
+                {"record_type": "session_summary", "capture_id": capture_id, "ended_at_ns": 2, "session_terminal_v2": terminal},
             )
         return (
             self.root / f"{capture_id}_raw_v2.jsonl",

@@ -28,7 +28,6 @@ from urllib.parse import parse_qsl, urlparse
 
 from orderflow_edge_lab.contracts_v2 import (
     CLOSED_OPEN,
-    OPEN_CLOSED,
     ContractValidationError,
     build_canonical_source_set,
     build_coverage_result,
@@ -37,11 +36,9 @@ from orderflow_edge_lab.contracts_v2 import (
     build_source_record,
     build_utc_interval,
     canonical_json_sha256,
-    interval_contains,
     missing_value,
     non_authority_claims,
     observed_value,
-    validate_canonical_source_set,
     validate_coverage_result,
     validate_file_identity,
     validate_manifest_result,
@@ -634,6 +631,8 @@ def validate_session_terminal_v2(terminal: Mapping[str, Any]) -> dict[str, Any]:
     terminal_time = _parse_utc(attrs["terminal_at_utc"], "terminal_at_utc")
     terminal_mono = _nonnegative_int(attrs["terminal_monotonic_ns"], "terminal_monotonic_ns")
     _sha256(attrs["readiness_manifest_sha256"], "readiness_manifest_sha256")
+    if terminal_time < _parse_utc(interval["end_utc"], "requested_interval.end_utc"):
+        raise IngestionV2Error("terminal_at_utc precedes the requested interval end")
     states = _list(attrs["symbol_states"], "symbol_states")
     normalized_states: list[dict[str, Any]] = []
     for state in states:
@@ -664,6 +663,18 @@ def validate_session_terminal_v2(terminal: Mapping[str, Any]) -> dict[str, Any]:
     if normalized_states != sorted(normalized_states, key=lambda item: item["symbol"]):
         raise IngestionV2Error("terminal symbol_states must be sorted")
     telemetry = _mapping(attrs["telemetry"], "telemetry")
+    symbols = [state["symbol"] for state in normalized_states]
+    if not symbols or len(symbols) != len(set(symbols)):
+        raise IngestionV2Error("terminal symbol_states must be nonempty and unique")
+    expected_coverage = build_coverage_result(
+        "ingestion.capture_terminal", interval,
+        [{"observation_id": f"{state['symbol']}:{kind}",
+          "observation": observed_value(1.0) if state[kind] else missing_value("symbol_capture_contract_not_satisfied")}
+         for state in normalized_states
+         for kind in ("subscription_ack", "snapshot", "depth", "trade", "liveness")],
+    )
+    if normalized["coverage"] != expected_coverage:
+        raise IngestionV2Error("terminal coverage does not recompute from symbol liveness/readiness")
     overflow = _nonnegative_int(telemetry.get("overflow_count"), "telemetry.overflow_count")
     open_barriers = _nonnegative_int(telemetry.get("open_recovery_barrier_count", 0), "telemetry.open_recovery_barrier_count")
     coverage = validate_coverage_result(normalized["coverage"])
@@ -1218,11 +1229,24 @@ class BoundedOrderedCaptureV2:
         should_stop: Callable[[], bool],
         utc_clock: Callable[[], str],
         monotonic_clock_ns: Callable[[], int] = time.monotonic_ns,
+        max_receive_wait_seconds: float | None = None,
+        max_symbol_idle_seconds: float | None = None,
     ) -> None:
         """Asynchronous receiver loop for a caller-owned offline/live transport adapter."""
 
+        if (max_receive_wait_seconds is None) != (max_symbol_idle_seconds is None):
+            raise IngestionV2Error("bounded receive wait and liveness policy must be supplied together")
+        if max_receive_wait_seconds is not None:
+            _finite_number(max_receive_wait_seconds, "max_receive_wait_seconds", positive=True)
+            _finite_number(max_symbol_idle_seconds, "max_symbol_idle_seconds", positive=True)
         while not should_stop():
-            payload = await receive()
+            try:
+                payload = await receive() if max_receive_wait_seconds is None else await asyncio.wait_for(receive(), timeout=max_receive_wait_seconds)
+            except asyncio.TimeoutError:
+                if max_receive_wait_seconds is None:
+                    raise
+                self.check_liveness(now_monotonic_ns=monotonic_clock_ns(), max_symbol_idle_seconds=max_symbol_idle_seconds)
+                continue
             self.receive(payload, received_at_utc=utc_clock(), received_monotonic_ns=monotonic_clock_ns())
 
 

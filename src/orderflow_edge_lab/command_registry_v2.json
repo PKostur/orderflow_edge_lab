@@ -91,6 +91,14 @@
       "deprecated": false
     },
     {
+      "name": "orderflow-contracts-v2",
+      "target": "orderflow_edge_lab.cli.contracts_v2:main",
+      "module": "orderflow_edge_lab.cli.contracts_v2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
       "name": "orderflow-correlation-panel",
       "target": "orderflow_edge_lab.cli.correlation_panel:main",
       "module": "orderflow_edge_lab.cli.correlation_panel",
@@ -155,6 +163,14 @@
       "deprecated": false
     },
     {
+      "name": "orderflow-data-integrity-v2",
+      "target": "orderflow_edge_lab.cli.data_integrity_v2:main",
+      "module": "orderflow_edge_lab.cli.data_integrity_v2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
       "name": "orderflow-descriptive-regime-labels-v1",
       "target": "orderflow_edge_lab.cli.descriptive_regime_labels_v1:main",
       "module": "orderflow_edge_lab.cli.descriptive_regime_labels_v1",
@@ -203,6 +219,14 @@
       "deprecated": false
     },
     {
+      "name": "orderflow-discovery-governance-v2",
+      "target": "orderflow_edge_lab.cli.discovery_governance_v2:main",
+      "module": "orderflow_edge_lab.cli.discovery_governance_v2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
       "name": "orderflow-discovery-screen",
       "target": "orderflow_edge_lab.cli.discovery_screen:main",
       "module": "orderflow_edge_lab.cli.discovery_screen",
@@ -224,6 +248,14 @@
       "module": "orderflow_edge_lab.cli.login",
       "exposure": "gui",
       "safe_probe": "metadata_only_gui_exception",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-economics-v2",
+      "target": "orderflow_edge_lab.cli.economics_v2:main",
+      "module": "orderflow_edge_lab.cli.economics_v2",
+      "exposure": "flat",
+      "safe_probe": "--help",
       "deprecated": false
     },
     {
@@ -283,6 +315,22 @@
       "deprecated": false
     },
     {
+      "name": "orderflow-features-v2",
+      "target": "orderflow_edge_lab.cli.features_v2:main",
+      "module": "orderflow_edge_lab.cli.features_v2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-forward-operations-v2",
+      "target": "orderflow_edge_lab.cli.forward_operations_v2:main",
+      "module": "orderflow_edge_lab.cli.forward_operations_v2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
       "name": "orderflow-governance-v2",
       "target": "orderflow_edge_lab.cli.governance_v2:main",
       "module": "orderflow_edge_lab.cli.governance_v2",
@@ -318,6 +366,14 @@
       "name": "orderflow-htf-trend-forward-shadow",
       "target": "orderflow_edge_lab.cli.htf_trend_forward_shadow:main",
       "module": "orderflow_edge_lab.cli.htf_trend_forward_shadow",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-ingestion-v2",
+      "target": "orderflow_edge_lab.cli.ingestion_v2:main",
+      "module": "orderflow_edge_lab.cli.ingestion_v2",
       "exposure": "flat",
       "safe_probe": "--help",
       "deprecated": false
@@ -475,6 +531,14 @@
       "deprecated": false
     },
     {
+      "name": "orderflow-ops-digest-v2",
+      "target": "orderflow_edge_lab.cli.ops_digest_v2:main",
+      "module": "orderflow_edge_lab.cli.ops_digest_v2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
       "name": "orderflow-orthogonality",
       "target": "orderflow_edge_lab.cli.orthogonality:main",
       "module": "orderflow_edge_lab.cli.orthogonality",
@@ -507,6 +571,22 @@
       "deprecated": false
     },
     {
+      "name": "orderflow-paper-execution-v2",
+      "target": "orderflow_edge_lab.cli.paper_execution_v2:main",
+      "module": "orderflow_edge_lab.cli.paper_execution_v2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-paper-replay-v2",
+      "target": "orderflow_edge_lab.cli.paper_replay_v2:main",
+      "module": "orderflow_edge_lab.cli.paper_replay_v2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
       "name": "orderflow-payoff-geometry",
       "target": "orderflow_edge_lab.cli.payoff_geometry:main",
       "module": "orderflow_edge_lab.cli.payoff_geometry",
@@ -526,6 +606,22 @@
       "name": "orderflow-payoff-geometry-v1-1",
       "target": "orderflow_edge_lab.cli.payoff_geometry_v1_1:main",
       "module": "orderflow_edge_lab.cli.payoff_geometry_v1_1",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-pipeline-v2",
+      "module": "orderflow_edge_lab.cli.pipeline_v2",
+      "target": "orderflow_edge_lab.cli.pipeline_v2:main",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-portfolio-risk-v2",
+      "target": "orderflow_edge_lab.cli.portfolio_risk_v2:main",
+      "module": "orderflow_edge_lab.cli.portfolio_risk_v2",
       "exposure": "flat",
       "safe_probe": "--help",
       "deprecated": false
@@ -827,9 +923,25 @@
       "deprecated": false
     },
     {
+      "name": "orderflow-v2",
+      "target": "orderflow_edge_lab.cli.main_v2:main",
+      "module": "orderflow_edge_lab.cli.main_v2",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
       "name": "orderflow-validate",
       "target": "orderflow_edge_lab.cli.validate:main",
       "module": "orderflow_edge_lab.cli.validate",
+      "exposure": "flat",
+      "safe_probe": "--help",
+      "deprecated": false
+    },
+    {
+      "name": "orderflow-validation-binding-v2",
+      "target": "orderflow_edge_lab.cli.validation_binding_v2:main",
+      "module": "orderflow_edge_lab.cli.validation_binding_v2",
       "exposure": "flat",
       "safe_probe": "--help",
       "deprecated": false

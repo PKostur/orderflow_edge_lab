@@ -26,6 +26,15 @@
             "src/orderflow_edge_lab/dxfeed_bbo.py",
             "src/orderflow_edge_lab/mexc_orderflow.py"
           ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_01_ingestion.TerminalAndReceiverTests.test_silent_open_feed_and_exception_cannot_be_complete"
+          ]
         }
       ]
     },
@@ -66,6 +75,15 @@
             "profitable_edge_established",
             "verified_out_of_sample_evidence"
           ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_03_features.QuoteAndTargetV2Tests"
+          ]
         }
       ]
     },
@@ -102,6 +120,15 @@
           "claims": [
             "profitable_edge_established",
             "verified_out_of_sample_evidence"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_03_features.QuoteAndTargetV2Tests"
           ]
         }
       ]
@@ -144,6 +171,15 @@
             "profitable_edge_established",
             "verified_out_of_sample_evidence"
           ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_03_features.QuoteAndTargetV2Tests"
+          ]
         }
       ]
     },
@@ -181,6 +217,15 @@
             "profitable_edge_established",
             "verified_out_of_sample_evidence"
           ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_03_features.QuoteAndTargetV2Tests"
+          ]
         }
       ]
     },
@@ -217,6 +262,15 @@
           "claims": [
             "profitable_edge_established",
             "verified_out_of_sample_evidence"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_03_features.QuoteAndTargetV2Tests"
           ]
         }
       ]
@@ -257,6 +311,15 @@
             "profitable_edge_established",
             "verified_out_of_sample_evidence"
           ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_03_features.QuoteAndTargetV2Tests"
+          ]
         }
       ]
     },
@@ -283,6 +346,15 @@
             "config/news_monitor_v1.json",
             "src/orderflow_edge_lab/news_monitor.py",
             ".github/workflows/news-context.yml"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_03_features.QuoteAndTargetV2Tests"
           ]
         }
       ]
@@ -313,6 +385,15 @@
             "config/sentiment_conditioning_v1.json",
             "src/orderflow_edge_lab/sentiment_monitor.py",
             ".github/workflows/sentiment-context-v1.yml"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_03_features.QuoteAndTargetV2Tests"
           ]
         }
       ]
@@ -351,6 +432,15 @@
           "claims": [
             "profitable_edge_established",
             "verified_out_of_sample_evidence"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_03_features.QuoteAndTargetV2Tests"
           ]
         }
       ]
@@ -406,6 +496,15 @@
             "slippage",
             "spread"
           ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_05_backtesting.ExecutionValidationTests"
+          ]
         }
       ]
     },
@@ -444,6 +543,15 @@
             "mfe",
             "max_exposure"
           ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_03_features.QuoteAndTargetV2Tests"
+          ]
         }
       ]
     },
@@ -480,6 +588,15 @@
           "claims": [
             "profitable_edge_established",
             "verified_out_of_sample_evidence"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_03_features.QuoteAndTargetV2Tests"
           ]
         }
       ]
@@ -531,6 +648,15 @@
             "holdout",
             "trial_ledger"
           ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_04_discovery_governance.ClusterBenchmarkGraduationTests"
+          ]
         }
       ]
     },
@@ -571,6 +697,15 @@
           "claims": [
             "profitable_edge_established",
             "verified_out_of_sample_evidence"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_03_features.QuoteAndTargetV2Tests"
           ]
         }
       ]
@@ -622,6 +757,15 @@
           "tokens": [
             "approval"
           ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_08_paper_execution.PaperReplayV2Tests"
+          ]
         }
       ]
     },
@@ -665,6 +809,15 @@
           "paths": [
             "tests/test_v2_10_engineering_governance.py"
           ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_11_integration.RegistryIntegrationTests"
+          ]
         }
       ]
     },
@@ -706,6 +859,15 @@
           "tokens": [
             "guaranteed profitable",
             "certain profit"
+          ]
+        },
+        {
+          "id": "offline_adversarial_runtime",
+          "kind": "unittest_suite",
+          "severity": "error",
+          "release_only": true,
+          "tests": [
+            "test_v2_11_integration.CrossStageIntegrationTests"
           ]
         }
       ]

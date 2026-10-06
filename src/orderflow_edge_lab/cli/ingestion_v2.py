@@ -13,7 +13,7 @@ import argparse
 import json
 from pathlib import Path
 import sys
-from typing import Any, Callable, Mapping, Sequence
+from typing import Any, Mapping, Sequence
 
 from orderflow_edge_lab.ingestion_v2 import (
     IngestionV2Error,

@@ -247,3 +247,16 @@ if __name__ == "__main__":
         with tempfile.TemporaryDirectory(prefix="orderflow-v2-validation-") as directory:
             function(Path(directory))
         print(f"PASS {function.__name__}")
+
+
+def load_tests(loader, tests, pattern):
+    """Expose every dependency-free validation function to standard unittest CI."""
+    import unittest
+    suite = unittest.TestSuite()
+    for name, function in sorted(globals().items()):
+        if name.startswith("test_") and callable(function):
+            def run_test(function=function):
+                with tempfile.TemporaryDirectory(prefix="orderflow-v2-validation-") as directory:
+                    function(Path(directory))
+            suite.addTest(unittest.FunctionTestCase(run_test, description=name))
+    return suite

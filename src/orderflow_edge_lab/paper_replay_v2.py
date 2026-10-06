@@ -330,6 +330,14 @@ def _coverage_parts(inputs: Mapping[str, Any]) -> tuple[dict[str, Any], dict[str
         previously_targeted = target_symbols
 
     # A malformed duplicate target must have a coverage-visible missing observation.
+    if previously_targeted and times[-1] < normalized["config"]["as_of_utc"]:
+        for symbol in sorted(previously_targeted):
+            observations.append({
+                "observation_id": f"terminal_held_interval:{symbol}:{times[-1]}:{normalized['config']['as_of_utc']}",
+                "observation": missing_value("explicit_terminal_target_and_held_interval_coverage_required"),
+            })
+    if not observations and not issues:
+        observations.append({"observation_id": "no_held_market_exposure", "observation": observed_value(1)})
     for issue in issues:
         observations.append({"observation_id": f"input_issue:{issue}", "observation": missing_value(issue)})
     interval = build_utc_interval(

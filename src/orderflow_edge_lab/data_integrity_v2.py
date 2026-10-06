@@ -477,6 +477,8 @@ class CapturePairWriterV2:
         self.capture_id = _string(capture_id, "capture_id")
         self.capture_interval = _normal_json(capture_interval, "capture_interval")
         self.policy_sha256 = _sha256(policy_sha256, "policy_sha256") if policy_sha256 is not None else None
+        if Path(self.capture_id).name != self.capture_id or self.capture_id in {".", ".."}:
+            raise DataIntegrityV2Error("capture_id must be a safe basename")
         root = Path(output_dir)
         raw_name, feature_name = _string(raw_file_name, "raw_file_name"), _string(feature_file_name, "feature_file_name")
         if Path(raw_name).name != raw_name or Path(feature_name).name != feature_name or raw_name == feature_name:
@@ -684,6 +686,23 @@ def _structural_eligibility_reasons(
         ("raw", _capture_records(raw_path), policy["allowed_raw_record_types"]),
         ("feature", _capture_records(feature_path), policy["allowed_feature_record_types"]),
     ):
+        if pair["raw"]["session_schema_version"] < 3:
+            reasons.append("unknown_legacy_terminal")
+        terminal = records[-1].get("session_terminal_v2")
+        if terminal is None:
+            reasons.append(f"missing_{kind}_ingestion_terminal_v2")
+        else:
+            from orderflow_edge_lab.ingestion_v2 import validate_session_terminal_v2
+            try:
+                validated = validate_session_terminal_v2(terminal)
+                if validated["outcome"] != "COMPLETE":
+                    reasons.append(f"incomplete_{kind}_ingestion_terminal_v2")
+                if validated["attributes"]["requested_interval"] != pair["capture_interval"]:
+                    reasons.append(f"{kind}_terminal_capture_interval_mismatch")
+                if sorted(state["symbol"] for state in validated["attributes"]["symbol_states"]) != sorted(expected):
+                    reasons.append(f"{kind}_terminal_symbols_mismatch")
+            except ValueError:
+                reasons.append(f"invalid_{kind}_ingestion_terminal_v2")
         previous_received: int | None = None
         for index, record in enumerate(records):
             is_session = index == 0
@@ -703,6 +722,10 @@ def _structural_eligibility_reasons(
                     if previous_received is not None and received < previous_received:
                         reasons.append("feature_received_at_ns_regression")
                     previous_received = received
+    raw_terminal = _capture_records(raw_path)[-1].get("session_terminal_v2")
+    feature_terminal = _capture_records(feature_path)[-1].get("session_terminal_v2")
+    if raw_terminal != feature_terminal:
+        reasons.append("pair_ingestion_terminals_mismatch")
     return reasons
 
 
@@ -840,6 +863,20 @@ def validate_replay_eligibility_v2(value: Mapping[str, Any]) -> dict[str, Any]:
     expected_hash = canonical_json_sha256(normalized)
     if _sha256(raw.get("eligibility_sha256"), "eligibility_sha256") != expected_hash:
         raise DataIntegrityV2Error("eligibility self-hash does not match")
+    expected_sources = [
+        build_source_record("capture_raw", normalized["raw_identity"]),
+        build_source_record("capture_features", normalized["feature_identity"]),
+    ]
+    if normalized["quality_identity"] is not None:
+        expected_sources.append(build_source_record("capture_quality", normalized["quality_identity"]))
+    if source_set != build_canonical_source_set(expected_sources) or manifest_result["source_set"] != source_set:
+        raise DataIntegrityV2Error("eligibility source_set does not bind exact artifact identities")
+    if (manifest_result["policy_sha256"] != normalized["policy_sha256"]
+            or manifest_result["outcome"] != ("COMPLETE" if eligible else "DIAGNOSTIC_ONLY")
+            or manifest_result["attributes"] != {
+                "capture_id": normalized["capture_id"], "eligible": eligible,
+                "pair_manifest_sha256": normalized["pair_manifest_sha256"]}):
+        raise DataIntegrityV2Error("eligibility manifest does not bind decision/policy/pair")
     return {**normalized, "eligibility_sha256": expected_hash}
 
 
@@ -1091,10 +1128,24 @@ def strict_replay_v2(
         raise DataIntegrityV2Error(f"refusing to overwrite existing output: {target}")
     raw_target = Path(raw_path)
     work_path = target.with_name(target.name + ".strict-replay-work.partial")
-    emitted, legacy_records = _run_legacy_replay_to_partial(
-        raw_target, work_path,
-        trade_window_seconds=trade_window_seconds, imbalance_levels=imbalance_levels,
-    )
+    if pair["raw"]["session_schema_version"] >= 3:
+        normalized_events = [
+            {**record["payload"], "record_type": "feature"}
+            for record in _capture_records(raw_target)
+            if record.get("record_type") == "raw_frame_received"
+            and isinstance(record.get("payload"), Mapping)
+            and record["payload"].get("event_type") in {"snapshot", "depth", "trade"}
+        ]
+        captured_events = [record for record in _capture_records(Path(feature_path)) if record.get("record_type") == "feature"]
+        if normalized_events != captured_events:
+            raise DataIntegrityV2Error("v3 raw receipt reconstruction does not match captured features")
+        emitted = len(normalized_events)
+        legacy_records = [{"record_type": "replay_session", "feature_schema_version": 3}, *normalized_events]
+    else:
+        emitted, legacy_records = _run_legacy_replay_to_partial(
+            raw_target, work_path,
+            trade_window_seconds=trade_window_seconds, imbalance_levels=imbalance_levels,
+        )
     if not legacy_records or legacy_records[0].get("record_type") != "replay_session":
         raise DataIntegrityV2Error("legacy replay did not produce a replay_session")
     session = {
@@ -1138,10 +1189,29 @@ def legacy_inspect_replay_v2(
         raise DataIntegrityV2Error(f"refusing to overwrite existing output: {target}")
     raw_target = Path(raw_path)
     work_path = target.with_name(target.name + ".legacy-inspect-work.partial")
-    emitted, legacy_records = _run_legacy_replay_to_partial(
-        raw_target, work_path,
-        trade_window_seconds=trade_window_seconds, imbalance_levels=imbalance_levels,
-    )
+    raw_records = _capture_records(raw_target)
+    if not raw_records or raw_records[0].get("record_type") != "session":
+        raise DataIntegrityV2Error("inspection input must begin with a session")
+    source_schema = raw_records[0].get("schema_version", 1)
+    if type(source_schema) is not int or source_schema not in {1, 2, 3}:
+        raise DataIntegrityV2Error("unsupported inspection source schema")
+    if source_schema == 3:
+        # These are caller-supplied normalized receipt payloads, not verified
+        # reconstructed market data.  No pair/terminal eligibility is inferred.
+        inspection_records = [
+            {**record["payload"], "record_type": "feature"}
+            for record in raw_records[1:]
+            if record.get("record_type") == "raw_frame_received"
+            and isinstance(record.get("payload"), Mapping)
+            and record["payload"].get("event_type") in {"snapshot", "depth", "trade"}
+        ]
+        emitted = len(inspection_records)
+        legacy_records = [{"record_type": "replay_session", "feature_schema_version": 3}, *inspection_records]
+    else:
+        emitted, legacy_records = _run_legacy_replay_to_partial(
+            raw_target, work_path,
+            trade_window_seconds=trade_window_seconds, imbalance_levels=imbalance_levels,
+        )
     if not legacy_records or legacy_records[0].get("record_type") != "replay_session":
         raise DataIntegrityV2Error("legacy replay did not produce a replay_session")
     session = {
@@ -1152,6 +1222,8 @@ def legacy_inspect_replay_v2(
         "prospective_aggregation_eligible": False,
         "source_file": raw_target.name,
         "source_local_identity": build_file_identity(raw_target, logical_name=raw_target.name),
+        "source_session_schema_version": source_schema,
+        "inspection_adapter": "unverified_v3_receipt_payloads" if source_schema == 3 else "legacy_replay_engine",
         "trade_window_seconds": trade_window_seconds,
         "imbalance_levels": imbalance_levels,
         "verification_scope": "legacy_inspection_only",

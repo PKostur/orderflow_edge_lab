@@ -6,6 +6,7 @@ from pathlib import Path
 import tempfile
 import tomllib
 import unittest
+from unittest.mock import patch
 
 from orderflow_edge_lab.command_registry_v2 import CommandRegistryError, load_command_registry, validate_command_metadata
 from orderflow_edge_lab.governance_v2 import (
@@ -50,7 +51,14 @@ class GovernanceProfileTests(unittest.TestCase):
         self.config = load_policy_config(ROOT / "config/multi_agents_v2.json")
 
     def test_release_has_every_required_check_once_and_is_verifiable(self):
-        report = build_release_profile_v2(ROOT, self.config, profile="release")
+        # This is an aggregation unit test, not release evidence. The real
+        # outer profile runs this module as part of complete_v2_suite; mocking
+        # its runner here prevents recursively spawning another entire suite.
+        with patch("orderflow_edge_lab.governance_v2.run_mandatory_release_gate", return_value=(True, {"fixture": "aggregation_only"})) as runner:
+            report = build_release_profile_v2(ROOT, self.config, profile="release")
+        self.assertEqual(runner.call_count, 4)
+        self.assertTrue({"mandatory_release:protected_inventory_parity", "mandatory_release:generated_map_parity",
+                         "mandatory_release:complete_v2_suite", "mandatory_release:isolated_install_console_smoke"} <= set(report["checks_executed"]))
         self.assertTrue(verify_release_profile_v2(report))
         self.assertEqual(report["release_manager"]["status"], "reviewable")
         self.assertEqual(set(report["required_checks"]), set(report["checks_executed"]))

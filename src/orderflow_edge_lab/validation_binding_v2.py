@@ -20,7 +20,7 @@ import math
 from pathlib import Path
 import statistics
 import sys
-from typing import Any, Iterable, Mapping, Sequence
+from typing import Any, Mapping, Sequence
 
 from .contracts_v2 import (
     CLOSED_OPEN,
@@ -30,15 +30,12 @@ from .contracts_v2 import (
     build_coverage_result,
     build_manifest_result,
     build_source_record,
-    build_utc_interval,
     canonical_json_bytes,
     canonical_json_sha256,
     missing_value,
     non_authority_claims,
-    observed_value,
     source_sets_equal,
     validate_canonical_source_set,
-    validate_coverage_result,
     validate_file_identity,
     validate_manifest_result,
     validate_observation_value,

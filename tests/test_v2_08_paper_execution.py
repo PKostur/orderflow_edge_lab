@@ -50,7 +50,7 @@ def replay_inputs(*, funding_rate=0.0, collection_failures=None):
         "config": {
             "initial_equity": 10000.0,
             "start_utc": "2026-10-01T00:00:00Z",
-            "as_of_utc": "2026-10-04T00:00:00Z",
+            "as_of_utc": t2,
             "slippage": 0.0,
             "min_fee": 0.0,
             "collection_failures": collection_failures or [],
