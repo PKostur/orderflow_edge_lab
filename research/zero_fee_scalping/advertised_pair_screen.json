@@ -1,0 +1,44 @@
+{
+  "experiment": "advertised_zero_fee_pair_screen",
+  "passing_count": 25,
+  "selected": [
+    {
+      "account_promotion_verified": false,
+      "advertised_maker_bps": 0.0,
+      "advertised_taker_bps": 0.0,
+      "api_promotion_verified": false,
+      "spread_bps": 0.5887461179547493,
+      "symbol": "ZEC_USDT",
+      "turnover_usdt_24h": 1307444334.545
+    },
+    {
+      "account_promotion_verified": false,
+      "advertised_maker_bps": 0.0,
+      "advertised_taker_bps": 0.0,
+      "api_promotion_verified": false,
+      "spread_bps": 1.5598190609875067,
+      "symbol": "QNT_USDT",
+      "turnover_usdt_24h": 165308467.3581
+    },
+    {
+      "account_promotion_verified": false,
+      "advertised_maker_bps": 0.0,
+      "advertised_taker_bps": 0.0,
+      "api_promotion_verified": false,
+      "spread_bps": 1.9706375012323063,
+      "symbol": "NEAR_USDT",
+      "turnover_usdt_24h": 154247786.204
+    }
+  ],
+  "selection_rule": {
+    "max_spread_bps": 3,
+    "min_turnover_usdt_24h": 10000000,
+    "ranking": "descending turnover, symbol tie-break",
+    "strategy_pnl_used": false
+  },
+  "source_hashes": {
+    "contracts": "dea4934388e83cf855f8499fb5a31ae48e1b08a081bdb9e55bea9650599b52f2",
+    "tickers": "b203eea62fa1d1078b969e0fbc781defbcf3aa9b99ee27a1761df07be18b18a2"
+  },
+  "status": "advertised_only"
+}
