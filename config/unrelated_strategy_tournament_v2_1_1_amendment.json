@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "protocol_name": "unrelated-strategy-tournament-v2.1.1-state-first",
+  "amends": "unrelated-strategy-tournament-v2.1-state-first",
+  "frozen_at_intent": "2026-09-14",
+  "outcomes_inspected_before_amendment": false,
+  "reason": "Outcome-blind implementation correction after code audit found that the first executable runner omitted frozen 5m and 15m intervals, ignored several frozen entry thresholds and grid values, used fixed exits instead of predeclared dynamic exits, and exposed the UTC opening range before it was fully completed. The failed run had stopped before market evidence because numpy was missing, and no subsequent tournament output was inspected before this amendment.",
+  "research_definitions_changed": false,
+  "frozen_family_grids_unchanged": true,
+  "frozen_universe_unchanged": true,
+  "frozen_dates_unchanged": true,
+  "frozen_intervals_unchanged": true,
+  "frozen_cost_cases_unchanged": true,
+  "state_and_economic_gates_unchanged": true,
+  "required_implementation_corrections": [
+    "run all frozen intervals: 5m, 15m, 1h",
+    "enumerate every frozen family grid value from unrelated_strategy_tournament_v2.json",
+    "apply the frozen entry threshold for Williams %R, Keltner, volume shock and CMO families",
+    "apply the frozen dynamic exit semantics from unrelated_strategy_tournament_v2_1_execution.json",
+    "make opening-range values unavailable until the complete frozen UTC opening range has closed",
+    "use the first causal breakout close per UTC day for opening-range entry",
+    "enforce one active trade per symbol-family-variant and next-bar-open execution",
+    "require entry and exit to stay inside the same 21-day dependence fold",
+    "retain all state and economic trials and all 12/16/20 bps cost cases"
+  ],
+  "randomized_control": {
+    "iterations": 2000,
+    "unit": "within symbol x 21-day fold",
+    "method": "permute observed trade directions within each dependence cluster while preserving raw trade returns and cluster trade counts",
+    "seed": "deterministic SHA256 of interval, family, frozen params and hold horizon",
+    "selection_use": "diagnostic control only; it cannot rescue a failed economic gate"
+  },
+  "parameter_neighborhood": {
+    "required_for_final_economic_pass": true,
+    "definition": "at least one other primary-cost row in the same interval and family must independently satisfy every base economic gate and differ in exactly one frozen parameter axis",
+    "no_best_cell_auto_promotion": true
+  },
+  "orthogonality_diagnostic": {
+    "combine_features": false,
+    "representative_selection": "lexicographically first frozen parameter variant per family, fixed before outcome inspection",
+    "association": "median across symbols of Spearman association between representative continuous scores",
+    "high_redundancy_boundary_absolute_spearman": 0.80,
+    "purpose": "report redundancy only; no feature combination is permitted in v2.1.1"
+  },
+  "profit_factor_definition": "compute profit factor separately inside each 21-day fold and use the median fold profit factor for the frozen economic gate",
+  "superseded_evidence_rule": "Any v2.1 output produced by a runner that does not satisfy these implementation corrections is inadmissible and must not be used for research conclusions.",
+  "claims": {
+    "development_screening_only": true,
+    "profitable_edge_established": false,
+    "verified_out_of_sample_evidence": false,
+    "live_order_transmission_supported": false
+  }
+}

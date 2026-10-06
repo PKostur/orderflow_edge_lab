@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "protocol_name": "unrelated-strategy-tournament-v2.1-state-first",
+  "amends": "unrelated-strategy-tournament-v2",
+  "frozen_at_intent": "2026-09-14",
+  "outcomes_inspected_before_amendment": false,
+  "reason": "Bring the already-predeclared unrelated family tournament under the specialized regime-research state-first validity architecture before any tournament implementation or outcome inspection.",
+  "frozen_family_grids_unchanged": true,
+  "frozen_universe_unchanged": true,
+  "frozen_dates_unchanged": true,
+  "frozen_cost_cases_unchanged": true,
+  "state_layer": {
+    "required_before_strategy_pnl": true,
+    "primary_target": "signed causal forward return over the family hold horizon",
+    "secondary_targets": ["absolute forward return as volatility expansion proxy"],
+    "metric": "median calendar-fold Spearman between continuous family score and causal forward target",
+    "minimum_positive_fold_fraction": 0.60,
+    "minimum_folds": 6,
+    "minimum_symbols": 8,
+    "strategy_pnl_not_used_for_state_selection": true,
+    "future_target_must_remain_inside_dependence_fold": true
+  },
+  "controls": {
+    "reversed_direction_required": true,
+    "within_symbol_fold_randomized_direction_required": true,
+    "permutations": 2000,
+    "parameter_neighborhood_review_required": true,
+    "all_trials_retained": true,
+    "no_best_cell_auto_promotion": true
+  },
+  "orthogonality": {
+    "measure_feature_association": true,
+    "absolute_spearman_high_redundancy": 0.80,
+    "combine_features_in_v2_1": false,
+    "rule": "Retain one representative from highly redundant clusters unless a later separately frozen protocol specifies an incremental-information or interaction test."
+  },
+  "economic_translation": {
+    "allowed_only_after_state_pass": true,
+    "same_frozen_costs_bps": [12.0, 16.0, 20.0],
+    "primary_cost_bps": 16.0,
+    "minimum_total_trades": 80,
+    "minimum_positive_fold_fraction": 0.60,
+    "minimum_positive_symbol_fraction": 0.60,
+    "median_fold_net_expectancy_gt_bps": 0.0,
+    "median_fold_profit_factor_gt": 1.0,
+    "must_beat_reversed_control": true,
+    "no_stop_or_rr_rescue_of_negative_gross_edge": true
+  },
+  "institutional_lane": {
+    "unchanged": true,
+    "run_only_with_legitimately_present_source_fields": true,
+    "never_invent_missing_derivatives_or_orderbook_fields": true
+  },
+  "promotion": {
+    "candidate_freeze_only_after_economic_screen": true,
+    "mae_mfe_only_after_candidate_freeze": true,
+    "future_after_freeze_validation_required": true,
+    "cross_pair_transfer_is_not_untouched_oos": true,
+    "paper_shadow_requires_separate_promotion": true,
+    "automatic_live_transmission": false
+  },
+  "claims": {
+    "development_screening_only": true,
+    "profitable_edge_established": false,
+    "verified_out_of_sample_evidence": false,
+    "live_order_transmission_supported": false
+  }
+}

@@ -1,0 +1,41 @@
+name: Unrelated Strategy Tournament V2.2 Data Eligibility
+
+on:
+  pull_request:
+    paths:
+      - 'config/unrelated_strategy_tournament_v2_2_data_eligibility.json'
+      - 'scripts/audit_institutional_data_eligibility_v2.py'
+      - '.github/workflows/unrelated-strategy-tournament-v2-2-data-eligibility.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile audit
+        run: python -m py_compile scripts/audit_institutional_data_eligibility_v2.py
+      - name: Validate frozen eligibility protocol
+        run: |
+          python - <<'PY'
+          import json
+          c=json.load(open('config/unrelated_strategy_tournament_v2_2_data_eligibility.json'))
+          assert c['outcomes_inspected_before_freeze'] is False
+          assert c['claims']['strategy_pnl_permitted'] is False
+          assert len(c['families']) == 7
+          assert c['families']['funding_oi_crowding_reversal']['current_open_interest_is_not_a_substitute'] is True
+          assert c['sources']['existing_orderflow_capture_batches']['independent_capture_batches_are_dependence_clusters'] is True
+          PY
+      - name: Audit legitimate public data availability
+        run: python scripts/audit_institutional_data_eligibility_v2.py --out research/unrelated_strategy_tournament_v2_2_data_eligibility
+      - name: Upload eligibility evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: unrelated-strategy-tournament-v2-2-data-eligibility
+          path: research/unrelated_strategy_tournament_v2_2_data_eligibility/

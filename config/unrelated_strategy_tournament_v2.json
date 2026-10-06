@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "protocol_name": "unrelated-strategy-tournament-v2",
+  "frozen_at_intent": "2026-09-14",
+  "status": "development_screening",
+  "purpose": "Test unrelated strategy families not present in price-strategy-tournament-v1.1 without modifying discovery-v1 or regime-research-v1.",
+  "data": {
+    "source": "MEXC public futures klines",
+    "start": "2026-03-01",
+    "end_exclusive": "2026-09-14",
+    "symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT", "XRP_USDT", "DOGE_USDT", "BNB_USDT", "ADA_USDT", "LINK_USDT", "SUI_USDT", "ENA_USDT"],
+    "intervals": ["5m", "15m", "1h"],
+    "universe_selection_uses_strategy_pnl": false
+  },
+  "dependence_and_trials": {
+    "fold_days": 21,
+    "minimum_fold_observations": 6,
+    "minimum_total_trades": 80,
+    "minimum_positive_fold_fraction": 0.60,
+    "calendar_time_fold_is_dependence_cluster": true,
+    "all_trials_retained": true,
+    "screening_is_not_promotion": true
+  },
+  "economics": {
+    "round_trip_cost_bps": [12.0, 16.0, 20.0],
+    "next_bar_open_execution": true,
+    "no_same_bar_signal_fill": true
+  },
+  "families": {
+    "sma_crossover": {"pod": ["trend_structure"], "grid": {"fast": [10,20,40], "slow": [50,100,200]}},
+    "keltner_breakout": {"pod": ["trend_structure","volatility_regime"], "grid": {"ema": [20,40], "atr": [14], "mult": [1.5,2.0,2.5], "max_hold": [20,40]}},
+    "williams_reversal": {"pod": ["mean_reversion"], "grid": {"period": [14,28], "oversold": [-90,-80], "overbought": [-20,-10], "max_hold": [6,12]}},
+    "macd_impulse": {"pod": ["trend_structure"], "grid": {"fast": [8,12], "slow": [21,26], "signal": [5,9], "max_hold": [20,40]}},
+    "volume_shock_continuation": {"pod": ["aggressive_flow","trend_structure"], "grid": {"volume_window": [48,96], "volume_z": [1.5,2.0], "return_lookback": [1,3], "max_hold": [6,12]}},
+    "opening_range_breakout": {"pod": ["session_time","trend_structure"], "grid": {"range_hours": [1,2,4], "max_hold_hours": [4,8,12]}},
+    "cmo_reversal": {"pod": ["mean_reversion"], "grid": {"period": [14,28], "threshold": [40,50,60], "max_hold": [6,12]}},
+    "atr_expansion_breakout": {"pod": ["volatility_regime","trend_structure"], "grid": {"breakout": [20,40], "atr_period": [14], "atr_window": [96], "atr_quantile": [0.60,0.75], "max_hold": [20,40]}}
+  },
+  "institutional_lane": {
+    "status": "separate_data_eligibility_lane",
+    "candidate_families": [
+      "microprice_imbalance_continuation",
+      "depth_pull_absorption_reversal",
+      "cvd_price_divergence",
+      "large_trade_flow_acceleration",
+      "funding_oi_crowding_reversal",
+      "basis_convergence",
+      "btc_lead_lag_residual_momentum"
+    ],
+    "rule": "Run only when required source fields are legitimately present. Never synthesize or infer unavailable order-book, OI, funding, liquidation, or basis data."
+  },
+  "screening_gate": {
+    "median_expectancy_after_cost_bps_gt": 0.0,
+    "median_profit_factor_gt": 1.0,
+    "minimum_positive_fold_fraction": 0.60,
+    "minimum_total_trades": 80,
+    "requires_symbol_breadth": true,
+    "requires_parameter_neighborhood_review": true,
+    "requires_trial_accounting": true
+  },
+  "claims": {
+    "profitable_edge_established": false,
+    "untouched_oos": false,
+    "live_order_transmission_supported": false
+  }
+}
