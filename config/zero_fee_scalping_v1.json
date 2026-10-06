@@ -1,0 +1,32 @@
+{
+  "protocol_name": "zero-fee-scalping-v1",
+  "status": "development_only",
+  "venue": "mexc_futures",
+  "execution_channel": "api",
+  "horizons_seconds": [5, 15, 30, 60, 120],
+  "latency_ms": 250,
+  "slippage_bps_per_leg": 1.0,
+  "max_quote_age_ms": 500,
+  "max_spread_bps": 3.0,
+  "target_notional_usdt": 100.0,
+  "max_top_depth_fraction": 0.05,
+  "min_trade_count": 5,
+  "min_flow_ratio": 0.25,
+  "min_book_imbalance": 0.25,
+  "min_microprice_edge": 0.20,
+  "warmup_seconds": 10,
+  "cooldown_ms": 2000,
+  "stop_loss_bps": 10.0,
+  "take_profit_bps": 10.0,
+  "funding_guard_seconds": 180,
+  "stress_cases": [
+    {"name": "base", "latency_ms": 250, "slippage_bps_per_leg": 1.0},
+    {"name": "slow", "latency_ms": 1000, "slippage_bps_per_leg": 1.0},
+    {"name": "slippage", "latency_ms": 250, "slippage_bps_per_leg": 3.0}
+  ],
+  "claims": {
+    "verified_out_of_sample_evidence": false,
+    "profitable_edge_established": false,
+    "live_order_transmission_supported": false
+  }
+}

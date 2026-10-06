@@ -43,6 +43,7 @@ For the single-page operational view (next decision dates, stop rules), see
 
 | Area | Contents |
 |---|---|
+| Zero-fee scalping v1 | `zero_fee_scalping/RESULT.md`, `config/zero_fee_scalping_v1.json`; incomplete execution pilot, no verified API-eligible promotion or profitable edge |
 | Session research | `SESSION_STRATEGY_EVIDENCE_2026_09_22.md`, `SESSION_DIAGNOSTIC_ENA_BTC_2026_09_22.md`, `MEXC_SESSION_STRATEGY_AUDIT_2026_09_22.md`, `CROSS_STRATEGY_SESSION_EVIDENCE_2026_09_22.md`, `config/trading_session_research_v1.json` |
 | Cross-market regime atlas (plan) | `CROSS_MARKET_REGIME_ATLAS_PLAN_2026_09_23.md`, `config/cross_market_regime_atlas_v1.json` |
 | Markov EV overlay + price diagnostics | `MARKOV_EV_OVERLAY_V1_INITIAL.md`, `MARKOV_PRICE_DIAGNOSTICS_V1_INITIAL.md`, `config/markov_ev_shadow_v1.json`, `config/markov_price_diagnostics_v1.json` |
