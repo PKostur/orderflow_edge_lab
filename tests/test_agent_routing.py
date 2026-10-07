@@ -133,6 +133,23 @@ class VerdictTests(unittest.TestCase):
         self.assertEqual([r["gate"] for r in rows], ["pass", "fail"])
         self.assertEqual(rows[1]["exit_code"], 3)
 
+    def test_relative_gate_executable_resolves_from_repo_root(self):
+        rel = Path(os.path.relpath(sys.executable, ROOT)).as_posix()  # like .venv/Scripts/python
+        with tempfile.TemporaryDirectory() as d:
+            ledger = Path(d) / "runs.jsonl"
+            r = subprocess.run([sys.executable, str(ROOT / "scripts" / "ledger_verdict.py"), "--ledger", str(ledger),
+                                "a1", "c", "T2", "--", rel, "-c", "pass"], cwd=d)
+            self.assertEqual(r.returncode, 0)
+            self.assertEqual(json.loads(ledger.read_text(encoding="utf-8"))["gate"], "pass")
+
+    def test_gate_that_cannot_start_records_no_verdict(self):
+        with tempfile.TemporaryDirectory() as d:
+            ledger = Path(d) / "runs.jsonl"
+            r = subprocess.run([sys.executable, str(ROOT / "scripts" / "ledger_verdict.py"), "--ledger", str(ledger),
+                                "a1", "c", "T2", "--", "no-such-gate-binary-xyz"], capture_output=True)
+            self.assertEqual(r.returncode, 127)
+            self.assertFalse(ledger.exists())  # a tooling error is not evidence about the agent
+
     def test_bad_tier_rejected(self):
         r = subprocess.run([sys.executable, str(ROOT / "scripts" / "ledger_verdict.py"), "a", "c", "T9", "--", "x"],
                            capture_output=True)

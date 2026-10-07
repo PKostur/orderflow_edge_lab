@@ -10,6 +10,7 @@ from __future__ import annotations
 import datetime
 import json
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 
@@ -26,11 +27,17 @@ def main(argv: list[str]) -> int:
         return 2
     agent_id, task_class, tier = argv[:3]
     cmd = argv[4:]
+    # Windows resolves a relative executable against the caller's directory and ignores "/" paths without .exe,
+    # so resolve gate executables such as .venv/Scripts/python against the repo root first
+    exe = shutil.which(str(ROOT / cmd[0])) or shutil.which(cmd[0])
+    if exe is None:
+        print(f"gate could not start: {cmd[0]} not found; no verdict recorded", file=sys.stderr)
+        return 127
     try:
-        rc = subprocess.run(cmd, cwd=ROOT).returncode
-    except OSError as exc:
-        print(f"gate could not start: {exc}", file=sys.stderr)
-        rc = 127
+        rc = subprocess.run([exe, *cmd[1:]], cwd=ROOT).returncode
+    except OSError as exc:  # a tooling error is not evidence about the agent
+        print(f"gate could not start: {exc}; no verdict recorded", file=sys.stderr)
+        return 127
     rec = {"kind": "verdict", "ts": datetime.datetime.now(datetime.timezone.utc).isoformat(), "agent_id": agent_id,
            "task_class": task_class, "tier": tier, "gate_cmd": " ".join(cmd), "exit_code": rc, "gate": "pass" if rc == 0 else "fail"}
     ledger.parent.mkdir(parents=True, exist_ok=True)
