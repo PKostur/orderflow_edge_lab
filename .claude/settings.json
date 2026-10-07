@@ -1,0 +1,83 @@
+{
+  "model": "claude-opus-5-5",
+  "modelSettings": {
+    "claude-opus-5-5": {
+      "effortLevel": "high"
+    },
+    "claude-sonnet-5-5": {
+      "effortLevel": "medium"
+    }
+  },
+  "env": {
+    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-sonnet-5-5",
+    "CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH": "1"
+  },
+  "permissions": {
+    "deny": [
+      "Agent(general-purpose)",
+      "Agent(fork)",
+      "Edit(/config/crypto_trend_core_v1.json)",
+      "Edit(/config/crypto_trend_core_voltarget_v1.json)",
+      "Edit(/config/discovery_process_v2.json)",
+      "Edit(/config/discovery_v2_sprint13_payoff_meta_v1.json)",
+      "Edit(/config/dv2_payoff_meta_trend_accel_shadow_v1.json)",
+      "Edit(/config/ena_mean_reversion_candidate_v1.json)",
+      "Edit(/config/evidence_v2_session_audit_v1.json)",
+      "Edit(/config/evidence_v2_session_forward_watch_v1.json)",
+      "Edit(/config/fast_gates_v1.json)",
+      "Edit(/config/forward_formal_reviews_v1.json)",
+      "Edit(/config/forward_formal_reviews_v2.json)",
+      "Edit(/config/lsk_conditional_regime_v1.freeze.json)",
+      "Edit(/config/lsk_conditional_regime_v1.json)",
+      "Edit(/config/multi_premia_blend_v1.json)",
+      "Edit(/config/multi_premia_untouched_holdout_v1.json)",
+      "Edit(/config/new_listing_holdout_v1.json)",
+      "Edit(/config/news_sentiment_v1.json)",
+      "Edit(/config/orderflow_discovery_v1.json)",
+      "Edit(/config/paper_account_blend_v1.json)",
+      "Edit(/config/payoff_geometry_forward_v1.json)",
+      "Edit(/config/prop_paper_forward_v1.json)",
+      "Edit(/config/regime_research_v1.json)",
+      "Edit(/config/regime_research_v1_1.json)",
+      "Edit(/config/regime_research_v1_2.json)",
+      "Edit(/config/regime_research_v1_3.json)",
+      "Edit(/config/sentiment_conditioning_v1.json)",
+      "Edit(/config/sentiment_conditioning_v1_1.json)",
+      "Edit(/config/session_development_watch_v1.json)",
+      "Edit(/config/session_watch_cvd_lny_v1.json)",
+      "Edit(/config/state_threshold_freeze_v1.json)",
+      "Edit(/config/strategy_conditioning_v1.json)",
+      "Edit(/config/strategy_conditioning_v1_1.json)",
+      "Edit(/config/universal_canonical_v3_forward_companion_v1.json)",
+      "Edit(/config/universal_cross_asset_trend_forward_v1.json)",
+      "Edit(/config/universal_cross_asset_trend_invvol_forward_v1.json)",
+      "Edit(/config/universal_etf_long_history_holdout_v1.json)",
+      "Edit(/config/universal_existing_strategy_backtests_v1.json)",
+      "Edit(/config/universal_pre_window_crypto_holdout_v1.json)",
+      "Edit(/config/universal_regime_marginal_pairwise_shadow_v1.json)",
+      "Edit(/config/universal_session_alignment_shadow_v1.json)",
+      "Edit(/config/universal_trend_portfolio_forward_v1.json)",
+      "Edit(/config/universal_untouched_coins_holdout_v1.json)",
+      "Edit(/config/untouched_coins_holdout_v2.json)",
+      "Edit(/config/vol8_payoff_amplitude_forward_v1.json)",
+      "Edit(/config/volatility_state_transfer_forward_v1.json)",
+      "Edit(/config/zoo_mirror_forward_v1.json)",
+      "Edit(/src/orderflow_edge_lab/universal_backtest.py)"
+    ]
+  },
+  "hooks": {
+    "SubagentStop": [
+      {
+        "matcher": "Explore|worker-low|worker|worker-high|opus-worker|reviewer-opus",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR/.venv/Scripts/python.exe\" \"$CLAUDE_PROJECT_DIR/.claude/hooks/ledger_subagent_stop.py\"",
+            "async": true,
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
