@@ -24,9 +24,7 @@ FIELDS = {"name", "description", "tools", "disallowedTools", "model", "permissio
 
 
 def frontmatter(path: Path) -> dict[str, str]:
-    text = path.read_text(encoding="utf-8").replace("
-", "
-")  # CRLF checkouts on Windows
+    text = path.read_text(encoding="utf-8").replace("\r\n", "\n")  # CRLF checkouts on Windows
     assert text.startswith("---\n"), path
     head = text.split("---\n", 2)[1]
     out = {}
