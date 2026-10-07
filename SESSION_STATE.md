@@ -53,6 +53,8 @@
 - Canonical accounting: v2 frozen; v3 (fixed quantity) and v3.1 (+funding) for new work.
 - Trend bot (`trend_bot.py`, paper only): parked by user.
 
+- Agent routing (2026-10-08, `4447734`): Opus 5.5 high orchestrator, tier agents in `.claude/agents/`, ledger `.claude/ledger/runs.jsonl` (hook + `scripts/ledger_verdict.py`, report `scripts/ledger_report.py`), Edit deny on 47 frozen paths (`scripts/sync_frozen_deny_rules.py`). Needs an app restart for the env vars.
+
 ## Rules in force
 - Automatic live order transmission disabled; no promotion, leverage, filters, live trading; outputs descriptive.
 - Pre-register before evaluation; holdouts run once; never edit frozen configs/modules or canonical v2.
