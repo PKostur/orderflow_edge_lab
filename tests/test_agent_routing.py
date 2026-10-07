@@ -134,7 +134,10 @@ class VerdictTests(unittest.TestCase):
         self.assertEqual(rows[1]["exit_code"], 3)
 
     def test_relative_gate_executable_resolves_from_repo_root(self):
-        rel = Path(os.path.relpath(sys.executable, ROOT)).as_posix()  # like .venv/Scripts/python
+        try:
+            rel = Path(os.path.relpath(sys.executable, ROOT)).as_posix()  # like .venv/Scripts/python
+        except ValueError:  # interpreter on another drive (GitHub's Windows runners): no relative path exists
+            self.skipTest("interpreter and repo on different drives")
         with tempfile.TemporaryDirectory() as d:
             ledger = Path(d) / "runs.jsonl"
             r = subprocess.run([sys.executable, str(ROOT / "scripts" / "ledger_verdict.py"), "--ledger", str(ledger),
