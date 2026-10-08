@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "watch_id": "liquidation-flow-v1",
+  "status": "DECLARED_BEFORE_COLLECTION",
+  "question": "Does forced liquidation flow on perpetual swaps carry information about the next day's return beyond what the same day's price move already contains?",
+  "registration_note": "Declared 2026-10-09 before any liquidation data was collected for this study. New, non-price data source (independent breadth under the evidence-rate rule). No free historical archive exists, so this is forward-only: the public OKX endpoint keeps roughly the last 18-24 hours, polled three times a day with overlap. Prompted by the 2026-10-09 review of an external video; no paid or third-party data.",
+  "prospective_start_utc": "2026-10-12T00:00:00Z",
+  "data": {
+    "liquidations": "OKX GET /api/v5/public/liquidation-orders, instType SWAP, instFamily <BASE>-USDT, state filled, paginated with `after` until empty; deduplicated on (instFamily, ts, side, posSide, sz, bkPx)",
+    "notional_usd": "sz x ctVal (OKX instruments snapshot, stored with the ledger) x bkPx",
+    "symbols": "the 70 multi-premia-blend-v1 symbols that have an OKX <BASE>-USDT swap, fixed at the first run (the universe was set before any liquidation data was seen)",
+    "prices": "OKX swap daily candles (1Dutc), close to close",
+    "day": "UTC calendar day; long liquidations = posSide long (side sell), short liquidations = posSide short (side buy)",
+    "completeness": "a coin-day is scored only if consecutive successful polls covering it are never more than 16 hours apart"
+  },
+  "variables": {
+    "LI": "(long_liq_usd - short_liq_usd) / trailing 30-day mean of (long_liq_usd + short_liq_usd), trailing window ending the previous day, at least 20 days of history",
+    "Z": "(total_liq_usd - trailing 30-day mean) / trailing 30-day std, same window rules",
+    "r_same": "close(d) / close(d-1) - 1",
+    "r_next": "close(d+1) / close(d) - 1"
+  },
+  "hypotheses": {
+    "H1_panel": "pooled coin-day regression r_next ~ a + b*LI + c*r_same; standard errors clustered by day; informative if |t(b)| >= 3.0 (sign reported, either direction)",
+    "H2_events": "coin-days with Z >= 3: mean r_next for long-dominated (LI > 0) minus short-dominated (LI < 0) events, day-clustered t; informative if |t| >= 2.5 with at least 30 events of each kind"
+  },
+  "reporting": {
+    "review_after_days": 180,
+    "before_review": "collection counts, completeness and descriptive aggregates only; no hypothesis statistics are reported before the review date"
+  },
+  "claims": {
+    "strategy_promotion_authorized": false,
+    "paper_trading_authorized": false,
+    "live_trading_authorized": false
+  }
+}
