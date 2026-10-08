@@ -57,9 +57,10 @@ jobs:
             [crypto-trend-core-voltarget-v1.yml]=research/payoff-geometry-v1-1
             [new-listing-holdout-v1.yml]=research/payoff-geometry-v1-1
             [multi-premia-blend-v1.yml]=research/payoff-geometry-v1-1
+            [liquidation-flow-v1.yml]=research/payoff-geometry-v1-1
           )
           case "${SCHEDULE:-manual}" in
-            "50 0,8,16 * * *") targets="canonical-v3-forward-companion-v1.yml" ;;
+            "50 0,8,16 * * *") targets="canonical-v3-forward-companion-v1.yml liquidation-flow-v1.yml" ;;
             "15 16 * * *") targets="trend-portfolio-forward-v1.yml" ;;
             "25 16 * * *") targets="cross-asset-trend-forward-v1.yml" ;;
             "35 16 * * *") targets="cross-asset-trend-invvol-forward-v1.yml" ;;
