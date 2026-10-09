@@ -11,7 +11,7 @@ import json
 import os
 import sys
 
-TIERS = {"Explore": "T0", "worker-low": "T1", "worker": "T2", "worker-high": "T3", "opus-worker": "T4", "reviewer-opus": "T5"}
+TIERS = {"Explore": "T0", "worker-low": "T1", "worker": "T2", "worker-high": "T3", "opus-worker": "T4", "reviewer-opus": "T5", "researcher": "R1"}
 KEYS = ["input_tokens", "output_tokens", "cache_read_input_tokens", "cache_creation_input_tokens"]
 
 

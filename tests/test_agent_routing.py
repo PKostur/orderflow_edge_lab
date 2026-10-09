@@ -17,7 +17,7 @@ import ledger_report  # noqa: E402
 import sync_frozen_deny_rules  # noqa: E402
 
 AGENTS = ROOT / ".claude" / "agents"
-TIERS = {"Explore": "T0", "worker-low": "T1", "worker": "T2", "worker-high": "T3", "opus-worker": "T4", "reviewer-opus": "T5"}
+TIERS = {"Explore": "T0", "worker-low": "T1", "worker": "T2", "worker-high": "T3", "opus-worker": "T4", "reviewer-opus": "T5", "researcher": "R1"}
 EFFORTS = {"low", "medium", "high", "xhigh", "max"}
 FIELDS = {"name", "description", "tools", "disallowedTools", "model", "permissionMode", "maxTurns", "skills", "mcpServers",
           "hooks", "memory", "background", "omitClaudeMd", "effort", "isolation", "color", "initialPrompt", "experimental"}
@@ -47,6 +47,9 @@ class AgentFilesTests(unittest.TestCase):
                 self.assertNotIn("Edit", fm["tools"])
             else:
                 self.assertIn(fm["effort"], EFFORTS - {"xhigh", "max"})
+            if name == "researcher":
+                self.assertNotIn("Edit", fm["tools"])
+                self.assertNotIn("Bash", fm["tools"])
 
     def test_reviewer_is_read_only(self):
         fm = frontmatter(AGENTS / "reviewer-opus.md")

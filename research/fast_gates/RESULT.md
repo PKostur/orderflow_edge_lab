@@ -38,3 +38,16 @@ Reading (descriptive):
 - On the untouched coins, carry that paid in the Binance-funding construction (34%/yr) is gone with the venue's own funding (−4%/yr), and the blend loses about 60% of its return. The holdout PASS (Sharpe 1.39) leaned on that construction and is **not decision-grade**.
 - On the development coins, the blend was weak in this window under either funding (Sharpe 0.2–0.3), so the funding swap changes little there; the G3 gap on those coins comes from price paths.
 - Trend (S1) is robust to both checks. The forward watches already use MEXC prices with MEXC funding, so they are the clean test and continue unchanged.
+
+## hyperliquid-venue-check-v1 (declared `4169095`, run once 2026-10-09): FAIL
+
+Frozen blend rules on Hyperliquid prices + Hyperliquid funding (64 of 70 coins), vs the development construction (MEXC prices + Binance funding) on the same coins.
+
+| | S1 trend | S2 XS mom | S3 XS carry | S4 blend | S4 t | S4 return/yr |
+|---|---:|---:|---:|---:|---:|---:|
+| Hyperliquid (consistent venue) | 0.65 | 0.76 | **−0.19** | **1.09** | 1.94 | 9.6% |
+| Reference (MEXC + Binance funding) | 1.19 | 0.98 | 1.82 | 2.25 | 4.78 | 30.5% |
+
+Annualized Sharpe ratios over each source's full period. On the 1,097 common days (2023-09-11 to 2026-09-11) the S4 figures are Hyperliquid 1.09 (t 1.94) and reference 2.27 (t 3.67). The pass rule needed Sharpe ≥ 0.5 × 2.27 = 1.13 and t ≥ 2.0, and the result missed both narrowly. Daily S4 correlation is 0.81.
+
+Reading (descriptive): third consistent-venue test, same pattern. Carry disappears whenever prices and funding come from the same venue (Binance 0.52, MEXC-funding check −0.18 on untouched coins, Hyperliquid −0.19). What remains, mostly trend plus some momentum, is a Sharpe of about 1, not 2. The blend's historical 2.09 is not supported.
