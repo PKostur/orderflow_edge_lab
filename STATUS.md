@@ -66,12 +66,12 @@ terminal: no retuning, re-siding, or re-phasing under the same IDs.
 
 <!-- BEGIN GENERATED: forward-watches (scripts/generate_status.py) -->
 
-_Generated 2026-10-08T22:32:31Z from `config/prospective_review_clock_v1.json` and the latest dashboard snapshot. Do not edit by hand._
+_Generated 2026-10-09T06:32:32Z from `config/prospective_review_clock_v1.json` and the latest dashboard snapshot. Do not edit by hand._
 
 | Watch | Config | Start | Review gate | Earliest review | Status | Scored days |
 |---|---|---|---|---|---|---|
 | `evidence_v2_cross_strategy_session_forward_v1` | – | 2026-09-23 | 30 calendar days | **2026-10-23** | `see workflow` | – |
-| `fast-gates-v1` | `config/fast_gates_v1.json` | 2026-10-05 | 60 calendar days | **2026-12-04** | `COLLECTING` | 3 |
+| `fast-gates-v1` | `config/fast_gates_v1.json` | 2026-10-05 | 60 calendar days | **2026-12-04** | `COLLECTING` | 4 |
 | `universal-canonical-v3-forward-companion-v1` | `config/universal_canonical_v3_forward_companion_v1.json` | 2026-09-27 | 90 calendar days | **2026-12-26** | `COLLECTING` | 11 |
 | `crypto-trend-core-v1` | `config/crypto_trend_core_v1.json` | 2026-09-29 | 180 calendar days | **2027-03-28** | `COLLECTING` | 9 |
 | `crypto-trend-core-voltarget-v1` | `config/crypto_trend_core_voltarget_v1.json` | 2026-09-29 | 180 calendar days | **2027-03-28** | `COLLECTING` | 9 |
