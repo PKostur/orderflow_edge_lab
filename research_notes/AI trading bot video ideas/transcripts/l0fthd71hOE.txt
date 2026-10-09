@@ -1,0 +1,400 @@
+# Andrej Karpathy’s AI Trading Loop On Secret Data (Nobody Is Talking About It)
+# channel: Moon Dev
+# url: https://www.youtube.com/watch?v=l0fthd71hOE
+
+[0:00:00] The Carpathy loop is live and running.
+[0:00:02] You can see it looping through here. I'm
+[0:00:03] going to show you everything here in
+[0:00:05] this short video, exactly how to set it
+[0:00:06] all up and all that good stuff. It loops
+[0:00:08] and finds new profitable trading bots
+[0:00:10] for me 24/7.
+[0:00:12] The founder of OpenAI, Andrew Carpathy,
+[0:00:14] or the co-founder, he created this loop
+[0:00:17] that essentially you're able to have
+[0:00:18] your AI loop 24/7, 365,
+[0:00:22] and build whatever you want. Now, I'm an
+[0:00:24] algorithmic trader, so I applied it to
+[0:00:26] trading. My name is Mundav. If you don't
+[0:00:27] know me, I've helped thousands of people
+[0:00:29] automate their trading. But you can see
+[0:00:31] here 87,000% return. It's actually
+[0:00:33] rejected, but we kept this one 81,000%
+[0:00:36] return. So I applied it to try trading
+[0:00:38] and back testing. You can see 1.76
+[0:00:40] sharp, 93,000% return, but it was
+[0:00:42] rejected. So some of them are rejected,
+[0:00:44] some are not rejected, but essentially
+[0:00:46] the way the loop goes that Andre
+[0:00:47] Carpathy uh built is it it goes ahead
+[0:00:50] and uses one file system here and it
+[0:00:52] says hey okay if it goes ahead and beats
+[0:00:55] it whatever it is in my case it's like
+[0:00:58] ROI and sharp ratio you can see the
+[0:01:00] driver it runs the loop then runs one
+[0:01:02] back test and scores it that's how I'm
+[0:01:04] applying it I'm taking his loop and
+[0:01:06] applying it to trading so then this is
+[0:01:08] the strategy file but today what I want
+[0:01:10] to do is I want to take this to the next
+[0:01:11] level essentially I have this liquid
+[0:01:13] liquidation data. It's showing where
+[0:01:14] everybody gets liquidated. You actually
+[0:01:16] saw those green things pop up down up
+[0:01:17] here at the top just a second ago. Well,
+[0:01:20] that was somebody getting liquidated.
+[0:01:21] Liquidated is when somebody loses all
+[0:01:23] their money essentially. They take too
+[0:01:24] much leverage out and the exchange is
+[0:01:27] like, "Nah, the game's over. You lost
+[0:01:29] all your money. It went down too much."
+[0:01:31] If you have 10x leverage, price moves
+[0:01:32] 10%. Well, you're going to get
+[0:01:34] liquidated. Okay, that's liquidation
+[0:01:35] data. I've been collecting it for 2
+[0:01:37] years. So, it is a bit of an edge that
+[0:01:39] nobody else can really have unless
+[0:01:40] you've been collecting that data as
+[0:01:42] well. So, I'm going to go ahead and
+[0:01:44] apply Carpathy's loop to that. Can you
+[0:01:46] go ahead and I don't know. I think we
+[0:01:48] might need to make a new folder for
+[0:01:50] this. Maybe a subfolder, but I want to
+[0:01:51] do the Carpathy loop using that
+[0:01:53] liquidation data. So, she's going to go
+[0:01:55] ahead and back test using that new
+[0:01:57] liquidation data we have that's all
+[0:01:59] corrected and she's going to go in the
+[0:02:00] Carpathy loop until she's done. So, go
+[0:02:03] ahead and build that out into a new
+[0:02:04] folder so we can have it cleanly. Um,
+[0:02:07] and then we're going to go ahead and
+[0:02:08] start running it. So, just send me the
+[0:02:10] path that it is when it is finished.
+[0:02:12] Thank you. So, I think this is pretty
+[0:02:14] interesting
+[0:02:15] because the carb happy loop, you can see
+[0:02:17] that it's already had great results. Um,
+[0:02:20] maybe a little overfit, 82,353.
+[0:02:22] I think that's the like obvious thing
+[0:02:24] here is that, okay, if you're just
+[0:02:26] making your system, you're a looping and
+[0:02:28] you're making it better and better. You
+[0:02:30] will be prone to overfitting. But that's
+[0:02:33] kind of why I follow this process in
+[0:02:35] algorithmic trading. If you go here, if
+[0:02:37] you're in the Zoom, you have access to
+[0:02:38] this already. Moonab.com/roadmap.
+[0:02:41] And this is the process I follow to kind
+[0:02:43] of avoid overfitting. Okay, I understand
+[0:02:46] if you're just going to keep optimizing,
+[0:02:47] optimizing, optimizing, you can find a
+[0:02:49] back test that does really well. So, I
+[0:02:52] instead follow this process because I
+[0:02:54] know back tests don't always match up to
+[0:02:55] the future. So, the process for me that
+[0:02:58] I use and follow is the RBI system.
+[0:03:02] First, I come up with a bunch of ideas.
+[0:03:03] This is just another idea today. Okay, I
+[0:03:05] have liquidation data. Let me apply it
+[0:03:06] to the carpathy loop. Boom. Then back
+[0:03:08] test those ideas to see if they actually
+[0:03:10] work in the past. Okay, that's actually
+[0:03:12] what we're doing here over and over
+[0:03:13] again with the carpathy loop. So back
+[0:03:16] testing, researching and then back
+[0:03:17] testing. Boom. And then if it works in
+[0:03:19] the past, it might work in the future.
+[0:03:20] So I incubate it with small size. You
+[0:03:23] don't want to be like me, you know, I
+[0:03:24] thought just cuz I learned how to code
+[0:03:25] I'd be a billionaire based off of
+[0:03:27] building a trading bot. No, you actually
+[0:03:28] have to have great ideas. You have to
+[0:03:30] make sure those great ideas work in the
+[0:03:31] past and then you have to build them
+[0:03:33] into bots in the future and use small
+[0:03:36] size and scale up accordingly. I went
+[0:03:38] ahead and just dropped 10K on my first
+[0:03:39] bot and I didn't do any of the back
+[0:03:41] testing or the research. So, you know,
+[0:03:43] out of my failures, I can hopefully help
+[0:03:45] some other people see that, hey, this is
+[0:03:47] actually harder than just knowing how to
+[0:03:48] code. And now, you know, I believe code
+[0:03:51] is a great equalizer, but everybody
+[0:03:52] knows how to code now because we have
+[0:03:54] AI, which is awesome, but still slow
+[0:03:57] down a little bit. Make sure it works in
+[0:03:59] the past. Make sure it actually works
+[0:04:01] with a bot in the future. I had some guy
+[0:04:03] come to me the other day saying his bot
+[0:04:05] is not working. And he's but he's going
+[0:04:07] to just he's just going to keep trying
+[0:04:09] it. Like he has a strategy that doesn't
+[0:04:11] work and he's just going to keep trying.
+[0:04:13] He's going to keep adding money to it
+[0:04:14] because his friend was making like a
+[0:04:16] bunch of money with bots and it's like
+[0:04:18] no that actually doesn't work. Just
+[0:04:19] because you add more money to it does
+[0:04:21] not make it work. So instead, I
+[0:04:23] recommended that he goes back and starts
+[0:04:25] researching new ideas, back testing
+[0:04:27] those ideas, and then incubating them.
+[0:04:29] Now, I'm going to have Carpathies Loop
+[0:04:30] do the back testing for me, which I
+[0:04:32] think is going to be very interesting.
+[0:04:33] But don't worry, I'm not going to just
+[0:04:34] run a bot that did well in the past um
+[0:04:37] with full size. I'm going to still
+[0:04:39] incubate it. So, I think this third step
+[0:04:40] is very important here to always follow
+[0:04:43] for me at least. Again, none of this is
+[0:04:45] financial advice. I'm not a financial
+[0:04:46] adviser. I'm just a guy that was
+[0:04:48] struggling with emotions and trading and
+[0:04:50] I needed to find a way to automate it.
+[0:04:52] So I just started sharing it all on
+[0:04:54] YouTube and yeah, now we're here. I
+[0:04:57] believe codes great equalizer because I
+[0:04:58] see what doors it opened up for me. So
+[0:05:01] you can see here uniformly positive. Let
+[0:05:03] me check and redo the actual with the
+[0:05:06] rolling. Okay, signal is there. Let me
+[0:05:08] tune the seed here. Okay, the in sample
+[0:05:10] window only. Now I have the full
+[0:05:12] picture. Let me prototype the seed
+[0:05:14] before building the folder. Okay, so
+[0:05:17] she's going ahead and getting this all
+[0:05:19] set up. Essentially, I'm taking that
+[0:05:20] carpathy loop that I do I have had
+[0:05:23] running and you saw the results of it. I
+[0:05:25] actually don't have it running right now
+[0:05:26] because I'm actually more interested in
+[0:05:27] this. If I'm showing you guys
+[0:05:29] everything, well, everybody here has
+[0:05:31] access to open high low close volume
+[0:05:32] data. So, technically, since I gave you
+[0:05:34] all the code in one of my last Carpathy
+[0:05:36] loop videos, everybody could be doing
+[0:05:38] the exact same thing as me. I don't
+[0:05:40] think everybody has this liquidation
+[0:05:42] data because I've been here for two
+[0:05:43] years collecting it by hand. Not by
+[0:05:45] hand, but you know, [laughter] uniformly
+[0:05:48] positive. Okay. Signal is healthy.
+[0:05:50] Median tracks at 60 to 70% hit rate.
+[0:05:53] Spread over 11 to 12 months. Building
+[0:05:55] the folder now. So, you can see the
+[0:05:56] agent never edits this file. It builds
+[0:05:59] the clean liquidation panel runs once.
+[0:06:01] So, you can see the harness. Is what
+[0:06:03] they never edit. And I think in the
+[0:06:05] meantime, what I should do is walk you
+[0:06:06] through some of this code because I
+[0:06:07] think it's very interesting to have the
+[0:06:09] carpathy loop in order to build whatever
+[0:06:12] you want. Anything that takes iteration.
+[0:06:14] you know, I just took his idea and
+[0:06:15] applied it to trading. So, let's go
+[0:06:17] ahead and try to find it here in the
+[0:06:19] GitHub because while she's working on
+[0:06:21] getting it all ready, I can scroll
+[0:06:23] through some of this code and you can
+[0:06:25] have access to it. So, let's go to back
+[0:06:27] test. I think it's under auto research.
+[0:06:28] Yep. And then you can see she's making
+[0:06:30] this new folder auto research lick here.
+[0:06:32] So, that should be far research here.
+[0:06:34] Let's go ahead and show off the harness
+[0:06:36] because I think this is important. I'm
+[0:06:37] going to show you the loop, the harness,
+[0:06:38] the morning, the program. Just quickly
+[0:06:40] though, you can see this is the harness
+[0:06:41] here. This is a frozen harness. So you
+[0:06:43] don't change anything here. Load in the
+[0:06:45] path. So it's going to read in the CSV.
+[0:06:47] Now this is for my version prior to the
+[0:06:49] liquidations. But I think if you have
+[0:06:52] the core components of this, then you're
+[0:06:53] able to build anything. You just
+[0:06:54] screenshot this, send this to your AI,
+[0:06:56] and this is back testing. So you know,
+[0:06:58] it's not like plugandplay, make a
+[0:07:00] bajillion dollars. So I I am not going
+[0:07:02] to say don't just run this. You can just
+[0:07:04] run this if you'd like. Usually if it's
+[0:07:06] I'm showing a bot, I'm saying, "Hey,
+[0:07:08] don't just run somebody else's bot
+[0:07:09] because you don't know how they're
+[0:07:10] hedging, what type of other bots they
+[0:07:12] have running." You know, they could have
+[0:07:13] a like, for example, I could show you a
+[0:07:15] trending bot, but I also have a mean
+[0:07:17] reversion bot running at the same time.
+[0:07:18] That's going to be totally different
+[0:07:20] data than or different results than you
+[0:07:22] would get. So never just run somebody
+[0:07:26] else's bot. Make sure that you
+[0:07:28] understand the system entirely. Make
+[0:07:29] sure you build your own ideas out. Fall
+[0:07:31] back to the research back test,
+[0:07:33] incubate. You can see this is the rest
+[0:07:35] of the loop here and she's over there
+[0:07:37] seating the baseline verifying the whole
+[0:07:39] loop. Okay, let's scroll over a little
+[0:07:41] bit more. I want you to see all the
+[0:07:42] code. This is using cloud code directly
+[0:07:44] which is pretty awesome. So I'm not
+[0:07:47] using any APIs or anything. If I did
+[0:07:50] have to use the API, I would use open
+[0:07:52] router. Open router lets you connect to
+[0:07:54] all the um AIS. Here's the morning. py.
+[0:07:58] So this is a few files, but there's
+[0:08:00] actually only one file that you edit.
+[0:08:01] And I'll show you that file that you
+[0:08:03] edit here once she's done with it. Can
+[0:08:04] you see this morning py? Okay, great.
+[0:08:06] You got all that code as well. Let's go
+[0:08:08] to program.md. You are one iteration of
+[0:08:10] an overnight uh research loop. You get
+[0:08:13] one try. Make one change of strategy py
+[0:08:16] describe it one line and stop. So these
+[0:08:18] are just rules for her. And this is cool
+[0:08:20] because everybody that's watching this
+[0:08:22] can have something different. Found a
+[0:08:23] real bug in the score. Okay, so she's
+[0:08:25] working through this. Two negatives
+[0:08:27] multiply to a positive. So a losing
+[0:08:29] strategy score is high. Okay, so we'll
+[0:08:31] get that all fixed here. Let's go ahead
+[0:08:32] and keep going through some of this code
+[0:08:34] here. py harness py loop py keepers. You
+[0:08:39] can see it adds all the keepers here. So
+[0:08:41] this this is Python code that it's
+[0:08:42] generating and it really generates back
+[0:08:45] testing code which is pretty phenomenal.
+[0:08:48] And I always use double the fees because
+[0:08:51] a lot of people don't account for fees
+[0:08:53] and that's just like a big L. Remember,
+[0:08:55] not everything works in the past is
+[0:08:56] going to work in the future, but it's
+[0:08:58] definitely not going to work if you're
+[0:08:59] not accounting for fees. Definitely not
+[0:09:02] going to work if you're not accounting
+[0:09:03] for fees. So, let's go ahead and scroll
+[0:09:06] up here and see if there's any other um
+[0:09:08] other files I want to show you here. So,
+[0:09:11] you got the harness. I've already shown
+[0:09:12] you the loop. I've shown you the harness
+[0:09:14] strategy. Let's go ahead and dive into
+[0:09:16] that one. Uh programm
+[0:09:18] and then read me. Read this first. Okay.
+[0:09:22] So, I'll show you the read me. You've
+[0:09:23] already seen the program.mmd. You've
+[0:09:25] seen the morning py. And I want to go
+[0:09:27] ahead and show you the um strategy. py.
+[0:09:31] So strategy. py here. It's actually a
+[0:09:33] lot of just uh notes and stuff. So this
+[0:09:36] is the one file the agent may edit. So
+[0:09:38] you can see here it's a lot of like
+[0:09:39] notes talking to itself. This is where
+[0:09:41] it actually changes the strategy. And
+[0:09:43] that programm is the rules that you can
+[0:09:45] create for the agent to follow. This is
+[0:09:47] essentially just a bunch of notes and a
+[0:09:49] few variables. Look how much notes there
+[0:09:51] are. for for for each variable. 777
+[0:09:55] Timmy, good to see you. Carl 777, how
+[0:09:57] are you? See how she's doing here. Okay,
+[0:09:59] Loop is running live in the background,
+[0:10:00] right into the readme while it works.
+[0:10:02] So, it looks like she's be building this
+[0:10:04] out already or she's already running it
+[0:10:05] for me. Um, let's see how this ends up
+[0:10:08] here. He asked what I'm doing. Uh, he
+[0:10:11] just arrived. Well, I'm using Carpathy,
+[0:10:13] the co-founder of OpenAI. I'm using his
+[0:10:15] loop in order to build out back tests
+[0:10:18] here. So, I'm just having it loop all
+[0:10:20] day. But essentially what I'm upgrading
+[0:10:23] is is I'm adding it liquidation data to
+[0:10:26] it. And liquidation data is something
+[0:10:28] hard to get. So essentially, I think
+[0:10:31] it's an edge. See, most traders are
+[0:10:32] going to just trade off of open, high,
+[0:10:33] low, close volume data. I've spent the
+[0:10:35] last two years collecting liquidation
+[0:10:37] data. This is where people get
+[0:10:38] liquidated and then I can build
+[0:10:41] different ideas off of that. And right
+[0:10:43] now I'm using the co-founder of OpenAI's
+[0:10:46] uh Andre Carpathy his loop in order to
+[0:10:49] add it to my liquidation data. So I'm
+[0:10:51] just getting that all done here and then
+[0:10:53] I'm going to run it. Thank you dude.
+[0:10:54] Thank you Carl. He says that the my data
+[0:10:57] is gold. I appreciate it. Data is
+[0:10:59] everything in trading and reality. I
+[0:11:01] mean everybody's looking at open high
+[0:11:02] low close volume data. I'm adding
+[0:11:04] liquidation data to this Carpathy loop.
+[0:11:06] Carpathy is the guy who uh founded
+[0:11:08] OpenAI with Sam and he has this loop and
+[0:11:11] I'm adding it to my trading systems and
+[0:11:14] essentially giving it liquidation data
+[0:11:16] which is very unique. Yeah, dude. That's
+[0:11:18] the key. No one has that data and that's
+[0:11:20] why I'm using it is because you're just
+[0:11:23] like trying to build more edges, more
+[0:11:24] edges. Okay, how can I do that? Well,
+[0:11:26] I've been collecting data for 2 years
+[0:11:27] while other people have not been
+[0:11:29] collecting that data, not even thinking
+[0:11:30] about liquidation data. Now I'm taking
+[0:11:32] that liquidation data and adding it to
+[0:11:34] the Carbathy loops. So, it should be
+[0:11:35] pretty cool. Let's go ahead and see what
+[0:11:37] she says. Okay, the loop is live. The
+[0:11:38] agent process is running the full grant
+[0:11:40] program. I would actually rather me run
+[0:11:43] the loop and you just show me the path.
+[0:11:45] The run. Thank you. Let me run the loop.
+[0:11:51] Kill it and send me the path. Okay. So,
+[0:11:54] I want to see what she said here. Two
+[0:11:57] things I found while back testing. The K
+[0:11:58] score loser is positive. A full sample
+[0:12:02] threshold is look ahead. the seed in the
+[0:12:04] honest starting line for sell arrival
+[0:12:06] long when the whole tapes long
+[0:12:08] liquidation notional crosses the top 3%
+[0:12:10] of its own 30 days by ETH next open so
+[0:12:14] in sample is plus 19% but out of samples
+[0:12:16] plus minus4 but this doesn't really
+[0:12:18] matter because the loop has to run for
+[0:12:20] hours you know okay killed it folder is
+[0:12:22] reset to a clean start c baseline frozen
+[0:12:26] at k= 0.193
+[0:12:29] okay path here okay run it here So I
+[0:12:33] just go ahead and grab it. This is the
+[0:12:36] full path here. So I go ahead and run
+[0:12:39] it. Do not pipe it and do not pipe it
+[0:12:41] through tail like I did. Okay. So let's
+[0:12:44] just go ahead and open it up here. So I
+[0:12:46] just showed you the old one, but it's
+[0:12:49] pretty much the same as the new one.
+[0:12:50] It's just different data. And yeah, it's
+[0:12:53] our auto research link. Run it here.
+[0:12:56] Loop py copy path here. So I'm going to
+[0:12:59] go ahead and run it here. Let's go ahead
+[0:13:01] and say cd up into there. I think I'm
+[0:13:04] already there actually. Python.
+[0:13:06] Python.
+[0:13:08] Run it. Okay. So, now we have Andre
+[0:13:10] Carpathy's loop going here and I'm going
+[0:13:14] to let it run through the day and then
+[0:13:15] just come back to it. See how it does.
+[0:13:17] So, at the end of the day, we have
+[0:13:19] successfully built all this out and
+[0:13:21] yeah, that's

@@ -1,0 +1,338 @@
+# I Let 114,000 Strangers Control My Polymarket 5 Min Bot (58% Win Rate)
+# channel: Moon Dev
+# url: https://www.youtube.com/watch?v=W-7EuAhY1q8
+
+[0:00:00] All right, I was just collecting $6, $6,
+[0:00:03] 602, 561, 543, 526. I just let chat
+[0:00:07] trade for me for a couple weeks and
+[0:00:09] essentially they just put up down in the
+[0:00:11] chat and then we got the results. I just
+[0:00:13] claimed everything and now I want to go
+[0:00:15] ahead and show you how it works. First
+[0:00:17] off, I want to get you all the code. I
+[0:00:18] want to show you yes, everything
+[0:00:20] essentially. So you can see here I have
+[0:00:23] this little bot right here and you just
+[0:00:24] have to type up or down in the chat and
+[0:00:25] I've been letting this run while I
+[0:00:27] stream. I think it's pretty interesting.
+[0:00:29] For example, if I were to type up into
+[0:00:31] the chat here, you can see
+[0:00:34] that there's a new vote here for up in
+[0:00:36] the chat and it will take that position
+[0:00:38] on the upside. You'll hear it in a
+[0:00:40] second, but I want to go through the
+[0:00:41] actual results here with you and get you
+[0:00:43] all the code. These are for the 5-minute
+[0:00:45] up down markets. So, you know, I think
+[0:00:47] this is an interesting like wisdom of
+[0:00:48] the crowd idea. That being said, if this
+[0:00:51] is also all of the building blocks you
+[0:00:53] need in order to build your own 5-minute
+[0:00:55] market bot. So there's going to be a
+[0:00:56] double whammy here and I'm going to go
+[0:00:57] through it all of it right here, right
+[0:00:59] now with you. Essentially chat added one
+[0:01:02] word to the chat and the bot spent real
+[0:01:04] money and there was 230 rounds.
+[0:01:08] 230 rounds. You can see it did not get
+[0:01:10] in here because nobody is offering that
+[0:01:13] up down, but
+[0:01:14] if you're here live, you can go ahead
+[0:01:16] and put up down in the chat every single
+[0:01:18] round. This one did not get in because
+[0:01:20] there's no offers. It was already
+[0:01:21] decided. Anyways, there was 230 rounds
+[0:01:25] and um
+[0:01:26] yeah, there's
+[0:01:28] there was pretty profitable for the
+[0:01:29] start. You can see that here we have the
+[0:01:32] actual people. 52 edit said up, tiny up,
+[0:01:36] Alex down, cheesy up. So if there was
+[0:01:39] three ups, it would pick up. If there
+[0:01:41] was three downs, it would pick down.
+[0:01:43] Trade number nine ended up with a $23
+[0:01:46] profit. So it's just $5 size here that's
+[0:01:48] traded, but I think it's pretty
+[0:01:50] interesting to get that wisdom of the
+[0:01:52] crowd and get you thinking about like
+[0:01:54] hey, how can you use other types ideas
+[0:01:56] when it comes to building bots. So, I'm
+[0:01:59] going to get you all the code for this.
+[0:02:00] Don't worry. Okay, so the way it works
+[0:02:02] is Polymarket opens a fresh 5-minute
+[0:02:04] market every 5 minutes, and it's pretty
+[0:02:06] interesting. If you go look at the
+[0:02:07] actual like
+[0:02:09] the leverage It's not There's no
+[0:02:10] leverage here, but since it trades so
+[0:02:12] often, the effective leverage is in the
+[0:02:15] thousand like 3,000 X effective leverage
+[0:02:18] if you go ask AI. But, essentially, the
+[0:02:21] voting will open up, and then we'll have
+[0:02:23] 2 minutes 3 minutes that the chat can go
+[0:02:25] ahead and decide up or down. And then if
+[0:02:28] there's three people that say up, one
+[0:02:29] person that says down, well,
+[0:02:31] it will go up or vice versa. If it's a
+[0:02:33] tie, it won't do anything. You can see
+[0:02:35] the leaderboard here. 52 edit,
+[0:02:38] he went ahead and had 45 wins
+[0:02:41] and 15 losses. Alex S. Gaber,
+[0:02:45] five wins two losses. So, you can see 52
+[0:02:47] edit got got down the most on this.
+[0:02:50] And I think it's an interesting idea I
+[0:02:51] want to keep going ahead and explaining
+[0:02:53] here.
+[0:02:54] They all hold to expiry. We tally up at
+[0:02:57] the 3-minute mark, and then we just hold
+[0:02:59] till expiry. So, it lets you vote for
+[0:03:01] the first 3 minutes, and then tally up.
+[0:03:04] >> type up or down in the chat to play
+[0:03:06] free.
+[0:03:06] >> And it goes ahead and takes a side. And
+[0:03:09] it holds till the expiration. There's no
+[0:03:11] exit. There's no stop loss, nothing like
+[0:03:12] that. That's why the one of those wins
+[0:03:14] was like 25 bucks because they bought
+[0:03:16] low and it went crazy. You heard her
+[0:03:18] just say type up or down, and I can go
+[0:03:20] here into the chat and type up or down,
+[0:03:23] and it will go ahead and log my my
+[0:03:25] trade. So, I'll type down in the chat.
+[0:03:27] You can see somebody just voted down.
+[0:03:29] That was me.
+[0:03:30] So, I just voted down, and it will
+[0:03:32] execute a down. Obviously, that is kind
+[0:03:34] of random. I'm not looking at the charts
+[0:03:35] right now, but let me go ahead and keep
+[0:03:36] explaining this and get you all the
+[0:03:37] code. Now, we put in a rule where you
+[0:03:40] can, you know, it doesn't matter if you
+[0:03:41] say up 100 times, it doesn't matter.
+[0:03:43] It's you get one chat one vote per
+[0:03:46] person, and it goes up. But, if you were
+[0:03:48] to say down, well, then you can flip
+[0:03:50] your analysis. And I saw some people do
+[0:03:52] that. They said up and they're like,
+[0:03:53] "Oh, snap. Well, the market's changing.
+[0:03:55] So, we put in this new rule where you
+[0:03:57] can put down and it flips your
+[0:03:59] analysis." So, you have 3 minutes to put
+[0:04:02] in the up or down. And then it will go
+[0:04:04] ahead and decide did he pick up or did
+[0:04:06] he pick down? Did he flip? Whatever. You
+[0:04:08] can see I just put down here. You can't
+[0:04:10] spam a side. There's no way to game
+[0:04:12] this, essentially. You can see there was
+[0:04:14] 230 rounds, but 146 of them didn't do
+[0:04:17] anything because nobody typed anything.
+[0:04:18] So, that's actually a good sign in my
+[0:04:21] mind. Like, you don't want to be betting
+[0:04:23] on every single market. And if we were,
+[0:04:27] it would be much worse results. But, you
+[0:04:29] can see 230 rounds of 5 minutes, 146
+[0:04:32] just died cuz nobody traded anything.
+[0:04:35] There were 11
+[0:04:36] 11 times there was an order error. There
+[0:04:38] was seven times there was a dead tie.
+[0:04:41] There's five times where we wanted to be
+[0:04:43] one side, but there was no ask. There's
+[0:04:46] three times there was no fills. And then
+[0:04:48] 58 total trades. Now, you can see this
+[0:04:51] is the hero trade, $23. This was at the
+[0:04:53] very start. So, we're like, "Oh, man.
+[0:04:55] We're on to something here."
+[0:04:56] Um but then it kind of started to turn
+[0:04:58] downwards. Trade 16, 17, 18, 19
+[0:05:02] heading down, down, down. Everything was
+[0:05:04] set with limit orders, so there were
+[0:05:06] less fees. So, fees aren't the thing
+[0:05:08] that killed this bot here. And you can
+[0:05:11] see down, down, down, down, down. It
+[0:05:13] says that $28 was never real. One line
+[0:05:16] scored a missing fill as free money. You
+[0:05:19] can hear that it just filled on the down
+[0:05:21] here. So, this is just a live example of
+[0:05:23] how this works.
+[0:05:24] Maybe it won't go down. Let's see here.
+[0:05:26] 76066. It has to be under 76066.
+[0:05:30] Yeah, I'm about to get cooked on this.
+[0:05:32] And this big win was a it was a risky
+[0:05:34] one. So, you know, a $23 win off of $5.
+[0:05:37] That's because chat picked up when it
+[0:05:40] was at 17 cents. It was looking for a
+[0:05:43] miracle and it hit it. So, trade number
+[0:05:46] nine, plus 23 off of $5. Every trade was
+[0:05:49] $5 size. Now, here's the thing. It
+[0:05:51] actually wins more than it loses. So, we
+[0:05:54] were winning, you can see 52 added was
+[0:05:56] 45 and 15. Alex was five and two. Cheesy
+[0:06:00] was two wins, zero losses. So, it wins
+[0:06:03] more than it loses, but the losses were
+[0:06:05] heavier than the wins. You can see the
+[0:06:07] average loss was 426.
+[0:06:10] And the average win is 361. Now, if you
+[0:06:12] look at slot machines, this is a
+[0:06:14] mechanism that slot machine has. You
+[0:06:17] know, you get a lot of little wins.
+[0:06:19] It makes you feel like you're winning.
+[0:06:21] But, at the end of the day, you're
+[0:06:23] losing.
+[0:06:24] So, it's a 58.3%
+[0:06:26] win rate, which is actually pretty good.
+[0:06:29] Now, this is where I saw the chat kind
+[0:06:31] of start to game it a little bit. You
+[0:06:33] know, they wanted to have their win-loss
+[0:06:36] record
+[0:06:37] high. And we saw a lot of entries come
+[0:06:41] in above 90 cents. So, the market's
+[0:06:44] almost determined, and the chat would
+[0:06:45] say, "Okay, up."
+[0:06:46] >> New Polymarket. Type up or down in the
+[0:06:49] chat to play free.
+[0:06:50] >> But, then the losses were bigger than
+[0:06:52] the wins. So, it's It's not easy, but
+[0:06:55] you know, if it's already determined at
+[0:06:56] 90 cents, okay, boom. Well, you can pick
+[0:06:59] that side, and it'll close and give you
+[0:07:01] a win. So, when there was a lot of wins
+[0:07:05] coming from just 10% wins, and the
+[0:07:07] losses were 100%, you can kind of see
+[0:07:10] where this is headed. 10 trades, seven
+[0:07:12] wins, three losses. Four losses off four
+[0:07:15] trades, one win, three losses. One win,
+[0:07:19] three losses. You can see this right
+[0:07:21] here is down $20, but this was up 64.
+[0:07:25] And let's be honest, the wisdom of the
+[0:07:26] crowd that I was testing was mostly just
+[0:07:28] one guy. That's 52 added. He casted 60
+[0:07:31] of the 116 votes. So, participation from
+[0:07:34] the chat was low. Is this a true wisdom
+[0:07:36] of the crowd test? I think you need a
+[0:07:38] thousand trades, to be honest. Did I
+[0:07:40] build it? Yes.
+[0:07:42] Is it here? Yes.
+[0:07:44] Can we keep going? Absolutely. Is it
+[0:07:46] showing good results? Yeah, it is. But,
+[0:07:48] 51.7%
+[0:07:51] of the trades were from one person. Now,
+[0:07:53] I have a cool version of this where
+[0:07:55] there's an AI veto. Now, if this starts
+[0:07:58] to pick up and we get a lot of people
+[0:08:01] saying up or down, we can have an AI sit
+[0:08:04] in between them.
+[0:08:06] And I can say AI enabled, sit in between
+[0:08:09] all of the trades and say, "Hey, well,
+[0:08:11] it looks like this 52 edit guy is better
+[0:08:14] at trading than this this franu guy."
+[0:08:18] So, let's give them more weight. And
+[0:08:20] this is just like a version two idea
+[0:08:22] that I have put in because I do have
+[0:08:25] moon-bot.com/ai.
+[0:08:26] That AI is trading for me. And I don't
+[0:08:29] really believe in, "Hey, AI, just go
+[0:08:31] trade for me." But, what if we had AI
+[0:08:33] kind of balance out the wisdom of the
+[0:08:35] crowd? That could be an interesting idea
+[0:08:37] that I might continue to explore. Just
+[0:08:39] let me know in the comments below if you
+[0:08:41] do want me to do that. Now, I want to go
+[0:08:43] ahead and get you all of the code
+[0:08:44] because I think the code is very
+[0:08:46] important. A lot of people ask me for my
+[0:08:48] 5-minute Polymarket bot code. And here,
+[0:08:51] I can actually just give you all of the
+[0:08:53] code. You'll have to screenshot, rewind,
+[0:08:55] do whatever you need to do, but I'm
+[0:08:57] going to get you all of the code super
+[0:08:58] quickly here and try to go over it
+[0:09:00] because then whatever idea you have,
+[0:09:03] maybe you don't build a chat trader bot,
+[0:09:05] but maybe you just build a 5-minute bot
+[0:09:06] with some ideas you have. You have all
+[0:09:08] of the code for it here in the next few
+[0:09:10] minutes. Here's all of the
+[0:09:12] doc the kind of explainers here. Here's
+[0:09:14] some of the imports here. You can see I
+[0:09:16] was using $5 size. Minimum votes was
+[0:09:19] one. Here's some more comments to
+[0:09:20] understand things here. Here are some of
+[0:09:23] the plumbing stuffs you need, CSV
+[0:09:25] headers, all that stuff. We're tracking
+[0:09:27] everything. Here's some of the initial
+[0:09:30] functions. A lot of the printing, I
+[0:09:33] think it's important to print. Make sure
+[0:09:34] you you everything that's going on
+[0:09:37] at all times. This goes ahead and gives
+[0:09:40] you some more of the actions, the up
+[0:09:43] down up down. This is for the chat. This
+[0:09:45] is for the scoreboard here so we can see
+[0:09:47] who's actually winning, who's losing,
+[0:09:50] what their win rate is.
+[0:09:52] You can see here some more code and some
+[0:09:54] more code. Here's the leaderboard and we
+[0:09:56] are going to get into the functionality
+[0:09:58] here soon about the actual buy sell and
+[0:10:00] I think that's going to be important for
+[0:10:01] anybody that wants to build a 5-minute
+[0:10:03] Polymarket bot. Now, of course, none of
+[0:10:05] this is financial advice. Nothing is
+[0:10:07] plug and play here. You can see this bot
+[0:10:08] actually lost money at the end of the
+[0:10:11] day. It did have a solid win rate
+[0:10:13] though. You can see this is how we
+[0:10:14] append to the CSV here. This is where we
+[0:10:16] ask the model. Now, I didn't turn this
+[0:10:19] on yet, but maybe I will in the future
+[0:10:22] if you want to see that. I think it
+[0:10:23] could be interesting to layer on an AI
+[0:10:25] on top of the wisdom of the crowd.
+[0:10:27] Here's building the brief. Everybody's
+[0:10:29] watching so we have the roll call. This
+[0:10:31] grades everybody's again everybody's
+[0:10:32] actual trade against the actual
+[0:10:35] resolution. So, did they get it right or
+[0:10:37] did they get it wrong? This writes down
+[0:10:38] the round, prints out the board.
+[0:10:42] >> New Polymarket. Type up or down in the
+[0:10:44] chat to play free.
+[0:10:46] >> This collects all the votes here. You
+[0:10:48] can see the rounds just keep going every
+[0:10:49] 5 minutes and that's what I was talking
+[0:10:51] about the effective leverage here is
+[0:10:53] really high because it turns over I
+[0:10:55] think 288 times per day. So, where we
+[0:10:57] collect the votes. This is where we
+[0:10:59] announce the close, some more
+[0:11:01] announcing. We have to see that they all
+[0:11:03] agree to buy, sell, up, down. You can
+[0:11:06] see this is where we place the actual
+[0:11:08] buy order so this is getting into the
+[0:11:10] stuff that maybe you'll use in a bot, an
+[0:11:11] idea that you have and I'm able to
+[0:11:13] freely share all of this because
+[0:11:15] nobody's going to have the same ideas.
+[0:11:17] If we were all running the same ideas,
+[0:11:19] it would go to zero. I think this is the
+[0:11:20] interesting one because I do have people
+[0:11:22] that can actually uh
+[0:11:24] vote in the chat.
+[0:11:26] This is runs the actual round here and
+[0:11:27] like I said, just rewind, pause if you
+[0:11:30] want all of this code. For those that
+[0:11:32] have the GitHub, it's already in the
+[0:11:33] GitHub. This determines the share size.
+[0:11:35] So, if you're building a 5-minute bot,
+[0:11:38] you'll have to determine the actual
+[0:11:40] share size yourself, and this is how you
+[0:11:42] do it. This says the rules out loud,
+[0:11:44] prints out the scoreboard. This loops at
+[0:11:46] all times, and with any 5-minute bot,
+[0:11:48] you're going to want to loop at all
+[0:11:50] times, go to the next market, and the
+[0:11:52] next market. And there it is. You've
+[0:11:54] just seen all of the code. This is how
+[0:11:56] you run it. You saw my experiment. I
+[0:11:58] thought it was fun. If you want to see
+[0:11:59] the AI version one, let me know below.
