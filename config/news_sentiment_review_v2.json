@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "review_id": "news-sentiment-review-v2",
+  "status": "FROZEN_BEFORE_PROSPECTIVE_START",
+  "applies_to": "config/news_sentiment_v1.json strategies N1-N4 (frozen; its own verdict rule is unchanged)",
+  "registration_note": "Registered 2026-10-09, before the N1-N4 prospective start (2026-11-01), so no N-strategy forward day exists. It adds the required review methods of docs/RESEARCH_PROTOCOL.md. It is strictly additional: a book that fails the v1 rule fails; a book that passes v1 must also pass this review to be reported as PASS.",
+  "review_date_utc": "2027-04-30T00:00:00Z",
+  "rules": {
+    "action_matched_null": {
+      "N1_news_momentum": "999 books with the same weekly long/short counts and gross on random coins among those eligible that week (>= 3 mentions), review_methods.matched_random_selection_returns, seed 20261101; p_null <= 0.05 on mean daily return",
+      "N2_attention_breakout": "999 books entering the same number of coins on the same days, chosen at random among coins with any mention in the prior 30 days, same 7-day hold and basket hedge; p_null <= 0.05",
+      "N3_market_tone_following": "999 sign sequences that keep the observed number of long and short days and their run-length distribution (block-shuffled by run), p_null <= 0.05",
+      "N4_news_panic_momentum_pause": "999 overlays pausing S2 on the same number of randomly placed days (blocks of the observed pause-spell lengths); the real overlay's blend Sharpe gain must exceed the 95th percentile"
+    },
+    "test_family": "{N1, N2, N3, N4}, Benjamini-Hochberg at q = 0.10 on the null p-values",
+    "single_look": "statistics computed once at the review date, guarded by review_methods.assert_single_look",
+    "verdict": "PASS only if the v1 rule passes, the null p <= 0.05 and the BH q-value <= 0.10; otherwise FAIL"
+  },
+  "claims": {
+    "strategy_promotion_authorized": false,
+    "live_trading_authorized": false
+  }
+}

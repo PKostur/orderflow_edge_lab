@@ -25,11 +25,25 @@
   },
   "reporting": {
     "review_after_days": 180,
-    "before_review": "collection counts, completeness and descriptive aggregates only; no hypothesis statistics are reported before the review date"
+    "before_review": "collection counts, completeness and descriptive aggregates only; no hypothesis statistics are reported before the review date",
+    "review_date_utc": "2027-04-10T00:00:00Z"
   },
   "claims": {
     "strategy_promotion_authorized": false,
     "paper_trading_authorized": false,
     "live_trading_authorized": false
-  }
+  },
+  "amendments": [
+    {
+      "date_utc": "2026-10-09",
+      "before": "prospective start 2026-10-12; a smoke collection exists but no H1/H2 statistic has been computed",
+      "change": "adds the required review methods of docs/RESEARCH_PROTOCOL.md (2026-10-09). The amendment only tightens the rules, and the original thresholds still apply.",
+      "rules": {
+        "action_matched_null": "H1: the t(b) statistic is also compared with 999 refits in which LI is permuted across coins within each day (seed 20261012); p_null <= 0.05 is required. H2: the long-minus-short event difference is compared with 999 draws of the same number of long-dominated and short-dominated pseudo-events per coin and calendar month at random coin-days (review_methods.random_event_null); p_null <= 0.05 is required.",
+        "test_family": "{H1_panel, H2_events}, Benjamini-Hochberg at q = 0.10 on the null p-values (review_methods.bh_family); a hypothesis is informative only if it passes its original threshold, its null test and BH",
+        "single_look": "hypothesis statistics are computed once, at the review date (prospective start + 180 days = 2027-04-10), guarded by review_methods.assert_single_look; the date does not move",
+        "anti_gaming": "no thresholds are tuned; if any robustness variant is reported, the concentration flag (top day > 50% of the effect) and the cost wall are reported with it"
+      }
+    }
+  ]
 }

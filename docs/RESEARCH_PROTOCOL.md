@@ -114,6 +114,37 @@ requires a new future-only evaluation boundary where appropriate.
 13. Treat paper/shadow execution evidence as separate from statistical edge
     evidence.
 
+## Required review methods (added 2026-10-09)
+
+Every pre-registration written from this date names, before its data exists, how
+items 9 and 10 above are carried out. The helpers live in
+`src/orderflow_edge_lab/review_methods.py`. Registrations made before this date
+keep their own rules unless a separate, stricter review is registered before
+their first forward day.
+
+1. **Action-matched null.** Compare the strategy with randomised books that make
+   the same decisions in kind: the same number of longs and shorts, the same
+   gross and the same dates, on randomly chosen available assets (or, for event
+   studies, the same number of events per coin and month at random times). Use at
+   least 999 draws and a fixed seed. Report the empirical p-value, not only the
+   t-statistic against zero.
+2. **One declared test family, Benjamini-Hochberg corrected.** List every
+   hypothesis test in the registration, and declare a q level (default 0.10). A
+   test counts only if it passes its own threshold and its BH q-value is at or
+   below q.
+3. **Masking for any LLM step.** Inputs to a language model have tickers, asset
+   names, dates, weekdays and years replaced by placeholders. Before the model's
+   output is used, a masked versus unmasked comparison on a held-back sample must
+   show no material difference.
+4. **Single look.** No hypothesis statistic is computed before the review date.
+   Code enforces this with `assert_single_look`, and the review date is not moved
+   after any data has been collected.
+5. **Anti-gaming checks on any optimised or selected rule.** Report whether the
+   improvement is only position size (scale invariance), whether one day
+   carries more than half the gain (concentration), whether a chosen parameter
+   sits on the edge of its grid (boundary), and the round-trip cost at which the
+   edge disappears (cost wall). Each flag is reported, never silently fixed.
+
 ## No profitability claim
 
 A positive in-sample result, a synthetic test, or one positive future window
