@@ -58,6 +58,10 @@ verdict, and promote nothing. The validation commands analyse an already-frozen 
 contract; they add no threshold to an open watch and label every number they produce as post-hoc.
 See [docs/README.md](docs/README.md) and [docs/VALIDATION_TOOLING.md](docs/VALIDATION_TOOLING.md).
 
+## Public strategy transfer (development only)
+
+The [25-implementation public source survey](docs/PUBLIC_STRATEGY_SOURCE_SURVEY_2026_10_10.md) and [three-family causal spot shadow protocol](docs/PUBLIC_STRATEGY_SHADOW_PROTOCOL_V1.md) provide an offline, no-order research evaluator (`orderflow-public-strategy-shadow`). Its candidate config is **draft, not frozen**; development outputs are spent data, and prospective mode refuses an unfrozen config. No existing frozen watch is changed.
+
 ## MEXC Futures order flow
 
 The repository can record public MEXC Futures `push.deal` and incremental `push.depth` streams for `ENA_USDT`, `BTC_USDT`, or other Futures symbols without API keys.
