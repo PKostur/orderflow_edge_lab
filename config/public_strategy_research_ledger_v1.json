@@ -46,6 +46,33 @@
     "disposition": "REJECT_COST_ROBUST_SURVIVAL_NO_PROMOTION",
     "next_step": "close candidate for promotion without retuning; new hypothesis requires new identifier"
   },
+  "public_research_extensions": {
+    "design_commit": "2d97c880ed34c46bf21a12204edbf43a0201fa3b",
+    "volume": {
+      "study_id": "PSR5-VOLUME-FUTURE-VOLATILITY",
+      "implementation_commit": "fee7520d856c483c3d36a7771a9051d25ff59beb",
+      "status": "REJECTED_AS_SPECIFIED",
+      "new_predictor_hypotheses": 1,
+      "retuning_permitted": false,
+      "data_spent": true
+    },
+    "minute": {
+      "study_id": "PSR6-MINUTE-BTC-LEADLAG-FEASIBILITY",
+      "implementation_commit": "18d1be2bd12ad292f6cc7b3bd900cd246d0ebdfb",
+      "status": "SOURCE_ACCESS_FEASIBLE_EXECUTION_AND_PREDICTION_UNCONFIRMED",
+      "new_feasibility_studies": 1,
+      "sampled_dates": 12,
+      "source_archives": 48,
+      "continuous_multi_year_history": false,
+      "sample_data_spent": true,
+      "paper_replication": false
+    },
+    "additional_trading_cells": 0,
+    "minimum_cumulative_signal_cells": 10,
+    "economics": "NOT_DESIGNED_NOT_RUN",
+    "prospective_start_utc": null,
+    "next_step": "close PSR5 without retuning; PSR6 passes access only and needs a distinct continuous-data/power/execution protocol before predictive or trading claims"
+  },
   "btc_relative_state": {
     "study_id": "PSR4-BTC-RELATIVE-STRENGTH",
     "candidate_id": "BRS1-30D-7D-SPOT",

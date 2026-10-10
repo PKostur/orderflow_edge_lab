@@ -19,6 +19,8 @@ The repository agents remain bounded to research and paper execution. Ruflo must
 
 Upstream Ruflo requires Node >=20 and supports Codex projects through `AGENTS.md`, `.agents/config.toml`, and `.agents/skills/`.
 
+The compatibility job uses Node 22. On October 10, 2026, Ruflo 3.56.3 memory search under Node 24.21.0 aborted twice with a native `better-sqlite3` statement cleanup assertion in `RemoveEnvironmentCleanupHook` (run 38068386404, attempts 1 and 2). Node's [cleanup-hook issue](https://github.com/nodejs/node/issues/65195) documents related native lifecycle failures; it does not establish the exact cause of this Ruflo crash. The runtime change retains every smoke command and additionally requires a separate memory retrieval to contain the exact stored value, rejecting silent persistence loss. A successful Node 22 check establishes compatibility for that runtime only; Node 24 remains unverified.
+
 ## Bootstrap
 
 Windows PowerShell:
