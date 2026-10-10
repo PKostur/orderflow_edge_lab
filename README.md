@@ -133,3 +133,5 @@ Live order transmission is deliberately absent. Any future live adapter should b
 Descriptive venue replication: [KuCoin failed-downside study](docs/PUBLIC_KUCOIN_REPLICATION_2026_10_10.md).
 
 Monthly momentum state study: [fixed-definition rejection](docs/PUBLIC_MONTHLY_MOMENTUM_STATE_2026_10_10.md).
+
+Public-strategy lane: [final development closure and completion audit](docs/PUBLIC_STRATEGY_FINAL_COMPLETION_2026_10_11.md). All three original candidates are rejected for promotion; the later eight-hour volume hypothesis also failed its declared gates. This report links every retained study, clarifies session clocks/overlaps and historical diagnostic limitations, and preserves all frozen protocols.
