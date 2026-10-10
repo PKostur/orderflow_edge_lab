@@ -1,12 +1,12 @@
-# Fresh public bot research: batches2,3 and4
+# Fresh public bot research: batches 2, 3 and 4
 
-Six new source-derived8h adaptations were tested without parameter optimization. **All six are rejected as adapted; no viable candidate has been established.** This does not reject the native upstream bots, whose original timeframes, stop/ROI and engine semantics were not reproduced.
+Six new source-derived eight-hour adaptations were tested without parameter optimization. **All six are rejected as adapted; no viable candidate has been established.** This does not reject the native upstream bots, whose original timeframes, stop/ROI and engine semantics were not reproduced.
 
 ## Pre-outcome registration and data
 
-Batch2 design commit `063e170590f117e1e771b8ecb9581aef3e69737e`; batch3 design commit `177dfca25d47bac5e07b958f632496336d01433a`; batch4 design commit `3e96f735717c3ea847ee4051f228342555a0c518`. Each committed config precedes its own first outcomes. Config hashes and every event are retained in the JSON artifacts.
+Batch 2 design commit `063e170590f117e1e771b8ecb9581aef3e69737e`; batch 3 design commit `177dfca25d47bac5e07b958f632496336d01433a`; batch 4 design commit `3e96f735717c3ea847ee4051f228342555a0c518`. Each committed config precedes its own first outcomes. Config hashes and every event are retained in the JSON artifacts.
 
-Binance Spot native8h ETHUSDT/SOLUSDT/LINKUSDT with matchedBTC,2020-08-11T00:00Z through2026-09-30T16:00Z,6726bars per symbol. This panel is already spent historical development data, not unseen confirmation. Source hashes match the retained audited manifest; no gap filling.200barwarmup, nextopen execution, indicator exits plus30barcap, one full cash long sleeve per coin, no leverage or shorts.40bps assumed roundtrip reference =10fee per side+20spread/slippage;80stress. Historical execution is not calibrated.
+Binance Spot native eight-hour ETHUSDT/SOLUSDT/LINKUSDT with matched BTC, 2020-08-11T00:00Z through 2026-09-30T16:00Z, 6,726 bars per symbol. This panel is already spent historical development data, not unseen confirmation. Source hashes match the retained audited manifest; no gap filling. 200-bar warmup, next-open execution, indicator exits plus a 30-bar cap, one full cash long sleeve per coin, no leverage or shorts. 40 bps assumed round-trip reference = 10 bps fee per side + 20 bps spread/slippage; 80 bps stress. Historical execution is not calibrated.
 
 ## Results
 
@@ -32,9 +32,9 @@ High development ROI is insufficient to pass failed drawdown, uncertainty, timin
 | CCICorrectionStrategy | 1620.1/-1074.1 | -100.0,814.1 | -115.1,596.0 | 0.928 |
 | ChandelierExit | 836.0/-549.3 | -120.2,145.1 | -88.5,117.9 | 0.998 |
 
-Intervals resample contiguous4calendarweek blocks including emptyweeks,2000fixedseed replicates, descriptive batch-width98.333%/97.5% for3/2cells. They do not correct the cumulative adaptive search and are not confirmation tests. Entry-week clusters are not assumed independent. Same-entry-week/symbol timing placebos preserve observed holding lengths, which are endogenous;500replicates permit overlap and are not causal counterfactuals. Shifted+7bar controls and matchedBTC are retained. MFE/MAE use OHLC bounds, not executable fills or known high/low order. Portfolio drawdown uses8hopen/finalclose marks and may understate intrabar risk. Compounded portfolio friction is multiplicative, whereas event means subtract fixedbps.
+Intervals resample contiguous four-calendar-week blocks including empty weeks, 2,000 fixed-seed replicates, descriptive batch widths 98.333%, 97.5%, and 95% for three, two, and one cells. They do not correct the cumulative adaptive search and are not confirmation tests. Entry-week clusters are not assumed independent. Same-entry-week/symbol timing placebos preserve observed holding lengths, which are endogenous; 500 replicates permit overlap and are not causal counterfactuals. Shifted +7-bar controls and matched BTC are retained. MFE/MAE use OHLC bounds, not executable fills or known high/low order. Portfolio drawdown uses eight-hour open/final-close marks and may understate intrabar risk. Compounded portfolio friction is multiplicative, whereas event means subtract fixed bps.
 
-JSON includes all years/symbols/months, UTC-hour and overlapping fixed-session clock counts, BTC30bar direction/29return volatility bins, leave-week/symbol robustness, beta sensitivity, signal-overlap redundancy and exit reasons. ASDTS/Awesome share MACD exposure. Fixed sessions Asia[00,09),London[07,16),NY[13,22) are descriptive UTC point conventions, not DST exchange hours or filters.
+JSON includes all years/symbols/months, UTC-hour and overlapping fixed-session clock counts, BTC 30-bar direction / 29-return volatility bins, leave-week/symbol robustness, beta sensitivity, signal-overlap redundancy and exit reasons. ASDTS/Awesome share MACD exposure. Fixed sessions Asia [00,09), London [07,16), NY [13,22) are descriptive UTC point conventions, not DST exchange hours or filters.
 
 ## Sources and adaptations
 
@@ -45,21 +45,22 @@ JSON includes all years/symbols/months, UTC-hour and overlapping fixed-session c
 - [CCICorrectionStrategy](https://github.com/ta4j/ta4j/blob/bc7157ed2100ff5567022c81eae5bc37c4d1640d/ta4j-examples/src/main/java/ta4jexamples/strategies/CCICorrectionStrategy.java); MIT; raw source SHA256 `36ebaf4428da06f8d3e9881df2e5c9793cebcee7d77c54af0e5b88361b86aa9f`.
 - [ChandelierExit](https://github.com/hasnocool/tradingview-pine-scripts/blob/69969aeaf271b2f7b5a7632a1bde43069a0cbe26/Chandelier%20Exit%20-%20Strategy.pine); MPL2 file;GPL3 mirrorroot; raw source SHA256 `955d9e09fb9f292affcfed5802633313ddd12041c42d413d8d996c9f3924fac3`.
 
-No upstream code copied. Independent EMA/Wilder initialization is specified; no TA-Lib/Jesse/ta4j/Freqtrade engine parity claim. ASDTS native5m and Awesome native1h and Cofi native5m differ from8h; upstream stops/ROI tables omitted explicitly in this separate hypothesis. RSI2/CCI sources do not impose bar timeframe; fullwarmup/cap/spotlong/cashsizing are adaptations. Published unusual CCI exit conjunction is preserved. TDSequential/optimizedAroon/resampling examples are source exclusions, not failed backtests; prohibited Bollinger examples excluded entirely.
+No upstream code copied. Independent EMA/Wilder initialization is specified; no TA-Lib/Jesse/ta4j/Freqtrade engine parity claim. ASDTS native 5m and Awesome native 1h and Cofi native 5m differ from 8h; upstream stops/ROI tables omitted explicitly in this separate hypothesis. RSI2/CCI sources do not impose bar timeframe; full warmup/cap/Spot-long/cash sizing are adaptations. Published unusual CCI exit conjunction is preserved. TDSequential/optimizedAroon/resampling examples are source exclusions, not failed backtests; prohibited Bollinger examples excluded entirely.
 
 ## Trial accounting and next step
 
-Six new trading cells, zero parameter-search cells; earlier minimum10 retainedcells implies minimum16 cumulative trading cells, plus the prior source/family selection history. Every failure is permanent under its current ID. Frozen DON8/EMA8/VOL8/DV2/D4, payoff geometry, session watches and prospective protocols are unchanged. No order path or future watch was enabled.
+Six new trading cells, zero parameter-search cells; earlier minimum 10 retained cells implies minimum 16 cumulative signal/model cells (at least 15 trading cells including the older exploratory variants), plus the prior source/family selection history. Every failure is permanent under its current ID. Frozen DON8/EMA8/VOL8/DV2/D4, payoff geometry, session watches and prospective protocols are unchanged. No order path or future watch was enabled.
 
-Chandelier uses ATR22x3 with22closeextrema and ratchetedbands. Source5%close-loss/20%high-gain/priorpeak10%with5ppdrop marketclose rules act only nextopen; losses may exceed5%. Source2019–2025datewindow andshorts are disabled, fullcashsleeves/30cap/costs are adaptations. FileMPL2 versus mirrorrootGPL3 provenance disclosed; no latestauthorversion/nativePine parity.
+Chandelier uses ATR22 × 3 with 22-bar close extrema and ratchetedbands. Source 5% close-loss / 20% high-gain / prior-peak 10% with 5pp drop market-close rules act only next-open; losses may exceed 5%. Source2019â€“2025datewindow andshorts are disabled, full cash sleeves / 30-bar cap / costs are adaptations. File MPL2 versus mirror root GPL3 provenance disclosed; no latest author version / native Pine parity.
 
-Continue source selection under new immutable designs. A historical screen survivor would require independent semantics, realistic historical execution, sufficient information and genuinely untouched postfreeze confirmation before calling it viable. Repeated online searching cannot guarantee that such a candidate exists. Current search remains open; these three batches are complete.
+Continue source selection under new immutable designs. A historical screen survivor would require independent semantics, realistic historical execution, sufficient information and genuinely untouched post-freeze confirmation before calling it viable. Repeated online searching cannot guarantee that such a candidate exists. Current search remains open; these three batches are complete.
 
 ## Reproduce
 
 ```text
-python -m orderflow_edge_lab.public_bot_batch2 --config config/public_bot_batch2_v1.json --output runs/new-batch2.json
-python -m orderflow_edge_lab.public_bot_batch2 --config config/public_bot_batch3_v1.json --output runs/new-batch3.json
+python -m orderflow_edge_lab.public_bot_batch2 --config config/public_bot_batch2_v1.json --output fresh-bot-batch2.json
+python -m orderflow_edge_lab.public_bot_batch2 --config config/public_bot_batch3_v1.json --output fresh-bot-batch3.json
+python -m orderflow_edge_lab.public_bot_batch2 --config config/public_bot_batch4_v1.json --output fresh-bot-batch4.json
 ```
 
-Batch4 uses config/public_bot_batch4_v1.json. Outputs refuse overwrite, changed definitions and mismatched sources. Nine tests cover prefix causality, handcalculated Wilder/RSI, nextopen exits, no same-decision reentry, timeout, pendingequity, mutatedfreeze refusal, priorpeak risk and adverse gap after a high-profittrigger. Fullrequiredsuite and release gates are recorded in engineering evidence.
+Batch 4 uses config/public_bot_batch4_v1.json. Outputs refuse overwrite, changed definitions and mismatched sources. Nine tests cover prefix causality, handcalculated Wilder/RSI, next-open exits, no same-decision reentry, timeout, pending equity, mutated freeze refusal, prior peak risk and adverse gap after a high-profit trigger. Full required suite and release gates are recorded in engineering evidence.
