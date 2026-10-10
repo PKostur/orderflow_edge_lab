@@ -159,7 +159,9 @@ class MinuteContinuityTests(unittest.TestCase):
         payload = ('<ListBucketResult><Prefix>' + prefix + '</Prefix><IsTruncated>false</IsTruncated></ListBucketResult>').encode()
         with tempfile.TemporaryDirectory() as folder:
             raw = Path(folder)
-            with patch.object(audit.urllib.request, 'urlopen', side_effect=lambda *a, **kw: Response(payload)):
+            with patch.object(audit.urllib.request, 'urlopen', side_effect=lambda *a, **kw: Response(payload)), patch.object(audit, 'datetime') as clock:
+                # Windows can report identical microsecond timestamps for consecutive calls.
+                clock.now.return_value = audit.utc('2026-10-10T00:00:00Z')
                 a = audit.execution_prefix_probe(raw, 'bookDepth', 'BTCUSDT', 'https://example.invalid')
                 b = audit.execution_prefix_probe(raw, 'bookDepth', 'BTCUSDT', 'https://example.invalid')
             self.assertEqual(a['status'], 'NO_OBJECTS_AT_PROBED_PREFIX')

@@ -1,6 +1,6 @@
 {
   "status": "PASS",
-  "verification_utc": "2026-10-10T20:50:21.926734+00:00",
+  "verification_utc": "2026-10-10T21:03:17.304486+00:00",
   "design_commit": "1f05a9c2e93d9f26b908ee9faeb00def487e8f52",
   "binding": {
     "study_id": "PSR7-MINUTE-CONTINUITY-POWER-EXECUTION",
@@ -9,13 +9,13 @@
   },
   "checksum_verified_archives": 276,
   "raw_root_label": "Minute-continuous-source-data",
-  "file_count": 1121,
-  "total_bytes": 524655058,
+  "file_count": 1129,
+  "total_bytes": 524657312,
   "initial_and_revalidated_daily_quality_byte_identical": true,
   "archive_bytes_checksums_and_receipts_unchanged": true,
   "artifact_sha256": {
-    "report.json": "ce1c699c32bf74985342a546a909252b5f591f6ded1cfdbe550939476cfd1fda",
-    "source_manifest.json": "a50802d2517b9b6400284d53d0fdd16de2ecaa48ee4e0071fdf0a20ddae16306",
+    "report.json": "d12223e5aafa24d13b52836355a8544f286a5daac1875eb99c4a087c71016c7e",
+    "source_manifest.json": "3fcadef5dea9086425111b12b74f9df84f86b2d0932ca918871fc47b66f7179b",
     "daily_quality.csv": "69403a31a4f7f5c234ebbca98e32ba9b2919253f453515c76da964f93e10ed29"
   },
   "inventory": [
@@ -30,12 +30,22 @@
       "sha256": "2322c880171ca642fc3e8b2989e51296acb5c7dcd089432552bac97c564aae44"
     },
     {
+      "path": "bookDepth-BTCUSDT-20261010T210211732903-f68cc893cf754a7a9869b58073c170ea-listing.bin",
+      "bytes": 281,
+      "sha256": "2322c880171ca642fc3e8b2989e51296acb5c7dcd089432552bac97c564aae44"
+    },
+    {
       "path": "bookDepth-ETHUSDT-20261010T204408488199-listing.bin",
       "bytes": 281,
       "sha256": "89cccff386d07aedaeff40467e78d57defc4cd340b132b3c503a3e32451c860b"
     },
     {
       "path": "bookDepth-ETHUSDT-20261010T204838253568-listing.bin",
+      "bytes": 281,
+      "sha256": "89cccff386d07aedaeff40467e78d57defc4cd340b132b3c503a3e32451c860b"
+    },
+    {
+      "path": "bookDepth-ETHUSDT-20261010T210224838810-deccba1482d14dc5ab5bda8aa18f3d65-listing.bin",
       "bytes": 281,
       "sha256": "89cccff386d07aedaeff40467e78d57defc4cd340b132b3c503a3e32451c860b"
     },
@@ -50,12 +60,22 @@
       "sha256": "4d0f096fa857eb1ecf15582e49405c254ebecd734b1fe77b9e603b17b6e85276"
     },
     {
+      "path": "bookDepth-LINKUSDT-20261010T210251130873-30ec187444d7436c97b65527a58730a9-listing.bin",
+      "bytes": 282,
+      "sha256": "4d0f096fa857eb1ecf15582e49405c254ebecd734b1fe77b9e603b17b6e85276"
+    },
+    {
       "path": "bookDepth-SOLUSDT-20261010T204421564508-listing.bin",
       "bytes": 281,
       "sha256": "32f8699460b94af9cf63d96498615b06913c40f1faf537870198bc8dd6abc68b"
     },
     {
       "path": "bookDepth-SOLUSDT-20261010T204851395602-listing.bin",
+      "bytes": 281,
+      "sha256": "32f8699460b94af9cf63d96498615b06913c40f1faf537870198bc8dd6abc68b"
+    },
+    {
+      "path": "bookDepth-SOLUSDT-20261010T210237972946-11f4e7de703e41a79dad4e96c13b446e-listing.bin",
       "bytes": 281,
       "sha256": "32f8699460b94af9cf63d96498615b06913c40f1faf537870198bc8dd6abc68b"
     },
@@ -70,12 +90,22 @@
       "sha256": "2381e0020ff1b6cf244f718dba7470e778738528bba75bf09a1ca726226bdbcc"
     },
     {
+      "path": "bookTicker-BTCUSDT-20261010T210119222082-8e999d685085400fb17f9541927a6e63-listing.bin",
+      "bytes": 282,
+      "sha256": "2381e0020ff1b6cf244f718dba7470e778738528bba75bf09a1ca726226bdbcc"
+    },
+    {
       "path": "bookTicker-ETHUSDT-20261010T204316066745-listing.bin",
       "bytes": 282,
       "sha256": "3c29c46c8460940ea3f19a29f41d17bebe2c3bdf47c6759ad512a8e7ecec4283"
     },
     {
       "path": "bookTicker-ETHUSDT-20261010T204745899406-listing.bin",
+      "bytes": 282,
+      "sha256": "3c29c46c8460940ea3f19a29f41d17bebe2c3bdf47c6759ad512a8e7ecec4283"
+    },
+    {
+      "path": "bookTicker-ETHUSDT-20261010T210132355044-c2b1c95860cb4ff29da03da9976e786c-listing.bin",
       "bytes": 282,
       "sha256": "3c29c46c8460940ea3f19a29f41d17bebe2c3bdf47c6759ad512a8e7ecec4283"
     },
@@ -90,12 +120,22 @@
       "sha256": "4931d821637f2db6483b22adffa4b4dde9a8d6d2fe7b135b908ea7acd08dbde9"
     },
     {
+      "path": "bookTicker-LINKUSDT-20261010T210158622374-2c2206c1f3e14ac79d33c770e1e3c760-listing.bin",
+      "bytes": 283,
+      "sha256": "4931d821637f2db6483b22adffa4b4dde9a8d6d2fe7b135b908ea7acd08dbde9"
+    },
+    {
       "path": "bookTicker-SOLUSDT-20261010T204329198430-listing.bin",
       "bytes": 282,
       "sha256": "ae295d8e871bf108acb3802109ee263503285f6b314345b95de46856a8042588"
     },
     {
       "path": "bookTicker-SOLUSDT-20261010T204758970064-listing.bin",
+      "bytes": 282,
+      "sha256": "ae295d8e871bf108acb3802109ee263503285f6b314345b95de46856a8042588"
+    },
+    {
+      "path": "bookTicker-SOLUSDT-20261010T210145412289-c21cab70c7bc499a8b13cc1db615d4d4-listing.bin",
       "bytes": 282,
       "sha256": "ae295d8e871bf108acb3802109ee263503285f6b314345b95de46856a8042588"
     },
