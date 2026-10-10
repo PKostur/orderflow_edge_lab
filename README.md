@@ -62,6 +62,8 @@ See [docs/README.md](docs/README.md) and [docs/VALIDATION_TOOLING.md](docs/VALID
 
 The [25-implementation public source survey](docs/PUBLIC_STRATEGY_SOURCE_SURVEY_2026_10_10.md) and [three-family causal spot shadow protocol](docs/PUBLIC_STRATEGY_SHADOW_PROTOCOL_V1.md) provide an offline, no-order research evaluator (`orderflow-public-strategy-shadow`). Its candidate config is **draft, not frozen**; development outputs are spent data, and prospective mode refuses an unfrozen config. No existing frozen watch is changed.
 
+The [Binance Spot 8h development review](docs/PUBLIC_STRATEGY_SPOT_8H_DEVELOPMENT_2026_10_10.md) reports the first exact v1 historical run, source hashes, path and control diagnostics, and decisions. No candidate was frozen for prospective observation.
+
 ## MEXC Futures order flow
 
 The repository can record public MEXC Futures `push.deal` and incremental `push.depth` streams for `ENA_USDT`, `BTC_USDT`, or other Futures symbols without API keys.

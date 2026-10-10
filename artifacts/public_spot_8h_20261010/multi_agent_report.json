@@ -1,0 +1,304 @@
+{
+  "agents": [
+    {
+      "agent_id": "adversarial_reviewer",
+      "checks_run": [
+        "required_path:README.md",
+        "required_path:AGENTS.md",
+        "required_path:config/regime_research_v1.json",
+        "unsupported_claim_scan",
+        "safety_boundary",
+        "dependency_challenge",
+        "fail_closed_language",
+        "indicator_mining_boundary"
+      ],
+      "findings": [],
+      "focus": "Challenge specialist conclusions, detect indicator mining/redundancy, unsupported edge claims, hidden holdout reuse, threshold tuning, unsafe live-execution creep and fail-open behavior",
+      "status": "passed"
+    },
+    {
+      "agent_id": "aggressive_flow",
+      "checks_run": [
+        "required_path:config/regime_research_v1.json",
+        "required_path:src/orderflow_edge_lab/mexc_orderflow.py",
+        "required_path:src/orderflow_edge_lab/orderflow_backtest.py",
+        "regime_research_protocol"
+      ],
+      "findings": [],
+      "focus": "CVD, signed aggressive volume, trade intensity, flow acceleration, large-trade share, price-flow divergence, continuation and exhaustion",
+      "status": "passed"
+    },
+    {
+      "agent_id": "cross_asset_context",
+      "checks_run": [
+        "required_path:config/regime_research_v1.json",
+        "required_path:src/orderflow_edge_lab/cross_pair.py",
+        "required_path:src/orderflow_edge_lab/btc_correlation.py",
+        "required_path:src/orderflow_edge_lab/orderflow_backtest.py",
+        "regime_research_protocol"
+      ],
+      "findings": [],
+      "focus": "BTC returns, volatility, order-flow agreement, rolling beta/correlation, lead-lag, and idiosyncratic versus BTC-driven altcoin behavior",
+      "status": "passed"
+    },
+    {
+      "agent_id": "data_integrity",
+      "checks_run": [
+        "required_path:src/orderflow_edge_lab/adapters.py",
+        "required_path:src/orderflow_edge_lab/data_lineage.py",
+        "required_path:src/orderflow_edge_lab/dxfeed_bbo.py",
+        "required_path:src/orderflow_edge_lab/mexc_orderflow.py",
+        "zero_cost_dxfeed_path",
+        "mexc_replay_path"
+      ],
+      "findings": [],
+      "focus": "Market-data adapters, DeepCharts/dxFeed and MEXC ingestion, sequence integrity, timestamps, provenance, and causal feature eligibility",
+      "status": "passed"
+    },
+    {
+      "agent_id": "derivatives_positioning",
+      "checks_run": [
+        "required_path:config/regime_research_v1.json",
+        "required_path:docs/REGIME_RESEARCH.md",
+        "unsupported_claim_scan",
+        "regime_research_protocol"
+      ],
+      "findings": [],
+      "focus": "Funding, open-interest, mark premium/basis and liquidation context only when legitimately available at zero additional cost; missing fields must not be invented",
+      "status": "passed"
+    },
+    {
+      "agent_id": "execution_economics",
+      "checks_run": [
+        "required_path:config/regime_research_v1.json",
+        "required_path:src/orderflow_edge_lab/economics.py",
+        "required_path:src/orderflow_edge_lab/market_conditions.py",
+        "unsupported_claim_scan",
+        "regime_research_protocol",
+        "cost_model_presence",
+        "friction_language_presence"
+      ],
+      "findings": [],
+      "focus": "Spread, fees, slippage, latency/staleness, signal half-life, expected move after friction, and whether statistical predictability is economically tradeable",
+      "status": "passed"
+    },
+    {
+      "agent_id": "execution_safety",
+      "checks_run": [
+        "required_path:src/orderflow_edge_lab/approval.py",
+        "required_path:src/orderflow_edge_lab/execution.py",
+        "required_path:src/orderflow_edge_lab/runtime_snapshot.py",
+        "required_path:src/orderflow_edge_lab/session_audit.py",
+        "live_dependency_scan",
+        "approval_boundary_presence"
+      ],
+      "findings": [],
+      "focus": "Approval-bound paper execution, stale-market rejection, state ownership, journal integrity, kill switches, reconciliation and prevention of accidental live transmission",
+      "status": "passed"
+    },
+    {
+      "agent_id": "indicator_orthogonality",
+      "checks_run": [
+        "required_path:config/regime_research_v1.json",
+        "required_path:docs/REGIME_RESEARCH.md",
+        "unsupported_claim_scan",
+        "regime_research_protocol"
+      ],
+      "findings": [],
+      "focus": "Detect redundant indicators, require incremental market-state information, challenge correlated indicator stacking, and justify interactions before combination",
+      "status": "passed"
+    },
+    {
+      "agent_id": "liquidity_microstructure",
+      "checks_run": [
+        "required_path:config/regime_research_v1.json",
+        "required_path:src/orderflow_edge_lab/mexc_orderflow.py",
+        "required_path:src/orderflow_edge_lab/market_conditions.py",
+        "required_path:src/orderflow_edge_lab/orderflow_backtest.py",
+        "unsupported_claim_scan",
+        "regime_research_protocol"
+      ],
+      "findings": [],
+      "focus": "Spread, displayed depth, microprice, book imbalance, depth-flow, liquidity add/pull, quote intensity, stale/crossed-book quality, and microstructure state",
+      "status": "passed"
+    },
+    {
+      "agent_id": "mean_reversion",
+      "checks_run": [
+        "required_path:config/regime_research_v1.json",
+        "required_path:docs/REGIME_RESEARCH.md",
+        "unsupported_claim_scan",
+        "regime_research_protocol"
+      ],
+      "findings": [],
+      "focus": "Bollinger/VWAP displacement, RSI/return z-score hypotheses, failed breakouts, exhaustion and continuation-versus-reversion state",
+      "status": "passed"
+    },
+    {
+      "agent_id": "news_event_context",
+      "checks_run": [
+        "required_path:config/news_monitor_v1.json",
+        "required_path:src/orderflow_edge_lab/news_monitor.py",
+        "required_path:.github/workflows/news-context.yml",
+        "unsupported_claim_scan"
+      ],
+      "findings": [],
+      "focus": "Public coin-news event timing, conservative symbol attribution, source provenance, and post-event coin/BTC behavior without causal overclaiming or strategy retuning",
+      "status": "passed"
+    },
+    {
+      "agent_id": "reliability_observability",
+      "checks_run": [
+        "required_path:.github/workflows/ci.yml",
+        "required_path:.github/workflows/orderflow-continuous-discovery.yml",
+        "required_path:.github/workflows/cross-pair-transfer.yml",
+        "required_path:.github/workflows/news-context.yml",
+        "required_path:.github/workflows/sentiment-context-v1.yml",
+        "required_path:scripts/deployment_check.py",
+        "required_path:scripts/package_smoke.py",
+        "required_path:src/orderflow_edge_lab/runtime_identity.py",
+        "ci_workflow_presence",
+        "runtime_identity",
+        "hash_evidence",
+        "compileall",
+        "unittest",
+        "deployment_check"
+      ],
+      "findings": [
+        {
+          "code": "command_passed",
+          "evidence": {
+            "output_tail": "",
+            "returncode": 0
+          },
+          "message": "Command passed: C:\\Users\\007pe\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m compileall -q src scripts tests",
+          "severity": "info"
+        },
+        {
+          "code": "command_passed",
+          "evidence": {
+            "output_tail": "_validation.UniversalExistingValidationTests.test_report_requires_complete_hashed_snapshot_and_passes_compatibility) ... ok\ntest_post_start_trades_are_labeled_without_gating (test_universal_session_alignment_shadow.UniversalSessionAlignmentShadowTests.test_post_start_trades_are_labeled_without_gating) ... ok\ntest_pre_start_has_no_scored_trades (test_universal_session_alignment_shadow.UniversalSessionAlignmentShadowTests.test_pre_start_has_no_scored_trades) ... ok\ntest_compounded_return_sessions_correct_direction_and_alignment (test_universal_session_diagnostics.UniversalSessionDiagnosticsTests.test_compounded_return_sessions_correct_direction_and_alignment) ... ok\ntest_empty_ledger_is_descriptive_and_zero_return (test_universal_session_diagnostics.UniversalSessionDiagnosticsTests.test_empty_ledger_is_descriptive_and_zero_return) ... ok\ntest_carried_pre_start_position_is_not_post_start_change (test_universal_shadow_operational_monitor.UniversalShadowOperationalMonitorTests.test_carried_pre_start_position_is_not_post_start_change) ... ok\ntest_post_start_target_change_is_reported (test_universal_shadow_operational_monitor.UniversalShadowOperationalMonitorTests.test_post_start_target_change_is_reported) ... ok\ntest_dependence_diagnostics_expose_overlapping_bursts_and_daily_clusters (test_validation.ValidationTests.test_dependence_diagnostics_expose_overlapping_bursts_and_daily_clusters) ... ok\ntest_duplicate_and_out_of_order_records_rejected (test_validation.ValidationTests.test_duplicate_and_out_of_order_records_rejected) ... ok\ntest_duplicate_json_keys_rejected (test_validation.ValidationTests.test_duplicate_json_keys_rejected) ... ok\ntest_duplicate_raw_source_record_is_rejected_even_with_new_observation_id (test_validation.ValidationTests.test_duplicate_raw_source_record_is_rejected_even_with_new_observation_id) ... ok\ntest_empty_input_preserves_empty_windows_without_evidence (test_validation.ValidationTests.test_empty_input_preserves_empty_windows_without_evidence) ... ok\ntest_future_coverage_and_duplicate_registry_ids_rejected (test_validation.ValidationTests.test_future_coverage_and_duplicate_registry_ids_rejected) ... ok\ntest_local_source_file_hash_is_verified_and_mismatch_rejected (test_validation.ValidationTests.test_local_source_file_hash_is_verified_and_mismatch_rejected) ... ok\ntest_modified_rules_invalid_costs_returns_sources_and_unfresh_events_rejected (test_validation.ValidationTests.test_modified_rules_invalid_costs_returns_sources_and_unfresh_events_rejected) ... ok\ntest_multiple_cost_models_for_one_candidate_are_rejected (test_validation.ValidationTests.test_multiple_cost_models_for_one_candidate_are_rejected) ... ok\ntest_report_hashes_inputs_recomputes_returns_deducts_costs_and_never_certifies_edge (test_validation.ValidationTests.test_report_hashes_inputs_recomputes_returns_deducts_costs_and_never_certifies_edge) ... ok\ntest_short_return_is_recomputed_directionally (test_validation.ValidationTests.test_short_return_is_recomputed_directionally) ... ok\ntest_window_summary_excludes_outcome_that_matures_after_window_close (test_validation.ValidationTests.test_window_summary_excludes_outcome_that_matures_after_window_close) ... ok\ntest_midrank_percentile_is_bounded (test_vol8_payoff_amplitude_forward.Vol8PayoffAmplitudeForwardTests.test_midrank_percentile_is_bounded) ... ok\ntest_pre_start_report_scores_zero_trades (test_vol8_payoff_amplitude_forward.Vol8PayoffAmplitudeForwardTests.test_pre_start_report_scores_zero_trades) ... ok\ntest_review_gate_requires_all_frozen_requirements (test_vol8_payoff_amplitude_forward.Vol8PayoffAmplitudeForwardTests.test_review_gate_requires_all_frozen_requirements) ... ok\ntest_spearman_recovers_monotonic_amplitude (test_vol8_payoff_amplitude_forward.Vol8PayoffAmplitudeForwardTests.test_spearman_recovers_monotonic_amplitude) ... ok\ntest_trade_partition_excludes_pre_start_and_terminal_snapshot (test_vol8_payoff_amplitude_forward.Vol8PayoffAmplitudeForwardTests.test_trade_partition_excludes_pre_start_and_terminal_snapshot) ... ok\ntest_volatility_percentile_is_causal (test_vol8_payoff_amplitude_forward.Vol8PayoffAmplitudeForwardTests.test_volatility_percentile_is_causal) ... ok\ntest_causal_size_uses_only_returns_up_to_the_signal_bar (test_vol_sizing.VolSizingTests.test_causal_size_uses_only_returns_up_to_the_signal_bar) ... ok\ntest_insufficient_history_means_no_position (test_vol_sizing.VolSizingTests.test_insufficient_history_means_no_position) ... ok\ntest_size_is_fixed_within_an_episode_and_reset_on_new_episode (test_vol_sizing.VolSizingTests.test_size_is_fixed_within_an_episode_and_reset_on_new_episode) ... ok\ntest_size_scales_inversely_with_vol_and_is_capped (test_vol_sizing.VolSizingTests.test_size_scales_inversely_with_vol_and_is_capped) ... ok\ntest_wrapper_keeps_signal_direction (test_vol_sizing.VolSizingTests.test_wrapper_keeps_signal_direction) ... ok\ntest_aggregate_review_gate_uses_clusters_and_dates (test_volatility_state_forward.VolatilityStateForwardTests.test_aggregate_review_gate_uses_clusters_and_dates) ... ok\ntest_cluster_counts_simultaneous_symbols_once (test_volatility_state_forward.VolatilityStateForwardTests.test_cluster_counts_simultaneous_symbols_once) ... ok\ntest_restore_deduplicates_identical_artifact_copies (test_volatility_state_forward.VolatilityStateForwardTests.test_restore_deduplicates_identical_artifact_copies) ... ok\ntest_restore_rejects_conflicting_duplicate_cluster_id (test_volatility_state_forward.VolatilityStateForwardTests.test_restore_rejects_conflicting_duplicate_cluster_id) ... ok\ntest_consumer_without_producer_is_an_error (test_workflow_contract.AuditTests.test_consumer_without_producer_is_an_error) ... ok\ntest_declared_producer_must_actually_upload_the_artifact (test_workflow_contract.AuditTests.test_declared_producer_must_actually_upload_the_artifact) ... ok\ntest_markdown_renders_findings (test_workflow_contract.AuditTests.test_markdown_renders_findings) ... ok\ntest_satisfied_tree_reports_ok (test_workflow_contract.AuditTests.test_satisfied_tree_reports_ok) ... ok\ntest_capture_health_consumer_has_a_real_producer (test_workflow_contract.RealTreeTests.test_capture_health_consumer_has_a_real_producer) ... ok\ntest_contract_holds_on_the_repository (test_workflow_contract.RealTreeTests.test_contract_holds_on_the_repository) ... ok\ntest_every_retention_requirement_has_its_declared_producer (test_workflow_contract.RealTreeTests.test_every_retention_requirement_has_its_declared_producer) ... ok\ntest_the_digest_consumer_has_a_real_producer (test_workflow_contract.RealTreeTests.test_the_digest_consumer_has_a_real_producer) ... ok\ntest_normalization_and_matching (test_workflow_contract.ScanTests.test_normalization_and_matching) ... ok\ntest_scan_extracts_producers_consumers_and_schedule (test_workflow_contract.ScanTests.test_scan_extracts_producers_consumers_and_schedule) ... ok\ntest_scan_handles_uses_inline_with_the_step_dash (test_workflow_contract.ScanTests.test_scan_handles_uses_inline_with_the_step_dash) ... ok\ntest_workflow_paths_are_recorded_in_posix_form (test_workflow_contract.ScanTests.test_workflow_paths_are_recorded_in_posix_form) ... ok\ntest_carry_collects_funding_on_flat_prices (test_xs_premia.XsPremiaTests.test_carry_collects_funding_on_flat_prices) ... ok\ntest_momentum_pays_in_persistent_cross_section (test_xs_premia.XsPremiaTests.test_momentum_pays_in_persistent_cross_section) ... ok\ntest_quantile_weights_are_dollar_neutral (test_xs_premia.XsPremiaTests.test_quantile_weights_are_dollar_neutral) ... ok\ntest_score_is_causal (test_xs_premia.XsPremiaTests.test_score_is_causal) ... ok\ntest_pre_start_and_post_start_scoring (test_zoo_mirror_forward.ZooMirrorForwardTests.test_pre_start_and_post_start_scoring) ... ok\ntest_registered_before_start_and_authorizes_nothing (test_zoo_mirror_forward.ZooMirrorForwardTests.test_registered_before_start_and_authorizes_nothing) ... ok\n\n----------------------------------------------------------------------\nRan 917 tests in 41.240s\n\nOK\n\n",
+            "returncode": 0
+          },
+          "message": "Command passed: C:\\Users\\007pe\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe -m unittest discover -s tests -v",
+          "severity": "info"
+        },
+        {
+          "code": "command_passed",
+          "evidence": {
+            "output_tail": "{\n  \"python\": \"3.13.14\",\n  \"live_transmission_scan\": \"pass\",\n  \"candidate_count\": 7,\n  \"economics\": {\n    \"account_equity\": 10000.0,\n    \"monthly_fixed_cost\": 0.0,\n    \"monthly_cost_hurdle_fraction\": 0.0,\n    \"annualized_simple_cost_hurdle_fraction\": 0.0,\n    \"components\": {\n      \"data\": 0.0,\n      \"platform\": 0.0,\n      \"compute\": 0.0,\n      \"model\": 0.0,\n      \"other\": 0.0\n    },\n    \"note\": \"This is a fixed infrastructure hurdle only. Fees, spread, slippage, funding, taxes and capital drawdown are not included here.\"\n  },\n  \"paper_smoke\": \"pass\",\n  \"instruments\": {\n    \"NQ\": {\n      \"tick_size\": 0.25,\n      \"tick_value\": 5.0\n    },\n    \"MNQ\": {\n      \"tick_size\": 0.25,\n      \"tick_value\": 0.5\n    }\n  },\n  \"status\": \"pass\",\n  \"failures\": []\n}\n",
+            "returncode": 0
+          },
+          "message": "Command passed: C:\\Users\\007pe\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\python.exe scripts/deployment_check.py",
+          "severity": "info"
+        }
+      ],
+      "focus": "Compilation, tests, packaging, Linux/Windows CI, workflow failures, hashes, manifests, runtime identity, operator diagnostics and reproducibility",
+      "status": "passed"
+    },
+    {
+      "agent_id": "research_validity",
+      "checks_run": [
+        "required_path:config/orderflow_discovery_v1.json",
+        "required_path:config/regime_research_v1.json",
+        "required_path:src/orderflow_edge_lab/discovery_aggregate.py",
+        "required_path:src/orderflow_edge_lab/research_protocol.py",
+        "required_path:src/orderflow_edge_lab/candidate_freeze.py",
+        "required_path:src/orderflow_edge_lab/holdout_audit.py",
+        "required_path:src/orderflow_edge_lab/trial_ledger.py",
+        "required_path:src/orderflow_edge_lab/promotion.py",
+        "unsupported_claim_scan",
+        "trial_ledger_promotion_binding",
+        "holdout_binding",
+        "regime_protocol_binding"
+      ],
+      "findings": [],
+      "focus": "Discovery/validation/holdout separation, frozen protocols, dependence clustering, candidate freezing, trial accounting, multiple testing, causal audits and promotion evidence",
+      "status": "passed"
+    },
+    {
+      "agent_id": "risk_path",
+      "checks_run": [
+        "required_path:src/orderflow_edge_lab/stop_risk.py",
+        "required_path:src/orderflow_edge_lab/risk_ladder.py",
+        "unsupported_claim_scan",
+        "mae_mfe_path",
+        "exposure_cap_path"
+      ],
+      "findings": [],
+      "focus": "MAE/MFE, stop and target path, RR, requested equity risk, exposure caps, drawdown and risk-of-ruin diagnostics",
+      "status": "passed"
+    },
+    {
+      "agent_id": "sentiment_context",
+      "checks_run": [
+        "required_path:config/sentiment_monitor_v1.json",
+        "required_path:config/sentiment_conditioning_v1.json",
+        "required_path:src/orderflow_edge_lab/sentiment_monitor.py",
+        "required_path:.github/workflows/sentiment-context-v1.yml",
+        "unsupported_claim_scan"
+      ],
+      "findings": [],
+      "focus": "Deterministic public-headline sentiment scoring, source/time provenance, PnL-independent state testing before strategy conditioning, and strict separation between observation and any later veto-only backtest",
+      "status": "passed"
+    },
+    {
+      "agent_id": "transfer_generalization",
+      "checks_run": [
+        "required_path:src/orderflow_edge_lab/cross_pair.py",
+        "required_path:src/orderflow_edge_lab/condition_aggregate.py",
+        "required_path:src/orderflow_edge_lab/market_conditions.py",
+        "required_path:src/orderflow_edge_lab/btc_correlation.py",
+        "unsupported_claim_scan",
+        "regime_research_protocol"
+      ],
+      "findings": [],
+      "focus": "Independent-batch stability, regime stability and PnL-independent cross-pair transfer without relabeling transfer evidence as untouched OOS",
+      "status": "passed"
+    },
+    {
+      "agent_id": "trend_structure",
+      "checks_run": [
+        "required_path:config/regime_research_v1.json",
+        "required_path:docs/REGIME_RESEARCH.md",
+        "required_path:src/orderflow_edge_lab/ema15m_hypothesis.py",
+        "unsupported_claim_scan",
+        "regime_research_protocol"
+      ],
+      "findings": [],
+      "focus": "Trend/range state, completed-candle EMA and slope behavior, ADX/Donchian/directional-efficiency research, and multi-timeframe agreement without look-ahead",
+      "status": "passed"
+    },
+    {
+      "agent_id": "volatility_regime",
+      "checks_run": [
+        "required_path:config/regime_research_v1.json",
+        "required_path:src/orderflow_edge_lab/market_conditions.py",
+        "unsupported_claim_scan",
+        "regime_research_protocol"
+      ],
+      "findings": [],
+      "focus": "ATR/Bollinger-width/realized-volatility state, expansion-contraction behavior, volatility-of-volatility, and movement relative to execution friction",
+      "status": "passed"
+    }
+  ],
+  "config_sha256": "69b4e7af588817713913a0b014d039f38598ba8ef4a6d09a44650b73decb0b90",
+  "generated_at": "2026-10-10T08:37:28.432423+00:00",
+  "manifest_sha256": "8f9442df3bbf780e7a68b2da6988ce21fc6504b0c4b4dddb8418b3e2bb8e9adf",
+  "release_manager": {
+    "error_count": 0,
+    "live_order_transmission_supported": false,
+    "missing_agents": [],
+    "next_actions": [],
+    "profitable_edge_established": false,
+    "status": "reviewable",
+    "verified_out_of_sample_evidence": false,
+    "warning_count": 0
+  },
+  "runtime": {
+    "pid": 5016,
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.14"
+  },
+  "schema_version": 1
+}
