@@ -183,6 +183,19 @@ class BTCRelativeStateTests(unittest.TestCase):
             with self.assertRaises(FileExistsError):
                 study.write_json(path, {})
 
+    def test_recorded_artifact_integrity(self):
+        directory = ROOT / 'artifacts/public_btc_relative_state_20261010'
+        report = json.loads((directory / 'report.json').read_text())
+        for name, expected in report['output_sha256'].items():
+            self.assertEqual(study.sha256_file(directory / name), expected)
+        self.assertEqual(report['economics']['status'], 'NOT_RUN')
+        self.assertIsNone(report['trade_count'])
+        self.assertFalse((directory / 'trades.csv').exists())
+        self.assertFalse((directory / 'capital_curves.json').exists())
+        independent = json.loads((directory / 'independent_validation.json').read_text())
+        self.assertTrue(independent['independent_reconciliation_passed'])
+        self.assertEqual(independent['forecast_rows'], report['forecast_cohort']['rows'])
+
 
 if __name__ == '__main__':
     unittest.main()
