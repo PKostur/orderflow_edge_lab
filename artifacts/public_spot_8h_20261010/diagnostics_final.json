@@ -3669,6 +3669,22 @@
           "2026-W40": -565.8417616686562
         }
       },
+      "equal_symbol_sleeve_portfolio": {
+        "cost_split_bps_per_entry_and_exit": 10,
+        "initial_symbol_weights": {
+          "ETH_USDT": 0.3333333333333333,
+          "LINK_USDT": 0.3333333333333333,
+          "SOL_USDT": 0.3333333333333333
+        },
+        "max_drawdown_pct": -35.4299120786979,
+        "note": "Equal starting capital per symbol; each sleeve reinvests internally and holds cash between trades. No cross-symbol rebalancing.",
+        "sleeve_terminal_return_pct": {
+          "ETH_USDT": 31.187545959229702,
+          "LINK_USDT": -57.589323829246844,
+          "SOL_USDT": 29.746840608093073
+        },
+        "terminal_return_pct": 1.1150209126919775
+      },
       "exact_v1": true,
       "experiment_id": "PSV1-VOLUME-IMPULSE",
       "metrics": {
@@ -7382,6 +7398,22 @@
           "2026-W31": 23.380608861604713,
           "2026-W38": 134.41000205174578
         }
+      },
+      "equal_symbol_sleeve_portfolio": {
+        "cost_split_bps_per_entry_and_exit": 10,
+        "initial_symbol_weights": {
+          "ETH_USDT": 0.3333333333333333,
+          "LINK_USDT": 0.3333333333333333,
+          "SOL_USDT": 0.3333333333333333
+        },
+        "max_drawdown_pct": -26.03669611211116,
+        "note": "Equal starting capital per symbol; each sleeve reinvests internally and holds cash between trades. No cross-symbol rebalancing.",
+        "sleeve_terminal_return_pct": {
+          "ETH_USDT": 31.408499917878665,
+          "LINK_USDT": 3.193882467908127,
+          "SOL_USDT": 70.09372282924522
+        },
+        "terminal_return_pct": 34.898701738343995
       },
       "exact_v1": true,
       "experiment_id": "PSV1-FAILED-DOWNSIDE",
@@ -11627,6 +11659,22 @@
           "2026-W38": 110.28927151228876,
           "2026-W40": 10.206095090964372
         }
+      },
+      "equal_symbol_sleeve_portfolio": {
+        "cost_split_bps_per_entry_and_exit": 10,
+        "initial_symbol_weights": {
+          "ETH_USDT": 0.3333333333333333,
+          "LINK_USDT": 0.3333333333333333,
+          "SOL_USDT": 0.3333333333333333
+        },
+        "max_drawdown_pct": -86.47060967665203,
+        "note": "Equal starting capital per symbol; each sleeve reinvests internally and holds cash between trades. No cross-symbol rebalancing.",
+        "sleeve_terminal_return_pct": {
+          "ETH_USDT": -62.12033255696527,
+          "LINK_USDT": -86.6248654632717,
+          "SOL_USDT": -77.29343137733701
+        },
+        "terminal_return_pct": -75.34620979919133
       },
       "exact_v1": true,
       "experiment_id": "PSV1-VWAP-REVERSION",

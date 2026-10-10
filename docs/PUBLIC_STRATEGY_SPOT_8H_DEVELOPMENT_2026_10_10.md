@@ -17,13 +17,13 @@ The unchanged `config/public_strategy_shadow_v1.json` was run **before** the dia
 
 ## Exact v1 economics
 
-All figures use next-bar-open entry, fixed next-open exit after the specified hold, and 20 bps assumed round-trip costs. BTC is bought hypothetically over the identical entry/exit window and charged the same 20 bps; equal costs cancel in alt minus BTC excess. Signals include skipped overlaps; completed trades exclude them. Compounded return and drawdown serially multiply event returns in chronological order; simultaneous symbols make this **an event-series diagnostic, not a deployable portfolio equity curve**.
+All figures use next-bar-open entry, fixed next-open exit after the specified hold, and 20 bps assumed round-trip costs. BTC is bought hypothetically over the identical entry/exit window and charged the same 20 bps; equal costs cancel in alt minus BTC excess. Signals include skipped overlaps; completed trades exclude them. Portfolio return and drawdown use three equal **starting** cash sleeves, one per altcoin, with internal compounding, no cross-symbol rebalancing, cash between trades, next-open marks, and 10 bps cost at both entry and exit. This is a specified illustrative allocation, not an executable-fill result. The JSON also retains a separately labeled serial-event compounding diagnostic.
 
-| Candidate | Signals / overlap / completed | Weeks | Gross / net / BTC net / excess, bps mean | Win / median net / PF | Sequential compound / max DD | Worst / best net, bps |
+| Candidate | Signals / overlap / completed | Weeks | Gross / net / BTC net / excess, bps mean | Win / median net / PF | Equal-sleeve return / max DD | Worst / best net, bps |
 |---|---:|---:|---|---|---|---|
-| Volume impulse | 297 / 38 / 259 | 144 | 33.13 / 13.13 / -28.62 / +41.75 | 47.9% / -53.97 / 1.05 | -27.90% / -78.16% | -2077 / +3748 |
-| Failed downside | 255 / 2 / 253 | 120 | 67.09 / 47.09 / +13.05 / +34.03 | 54.2% / +26.40 / 1.30 | +131.06% / -61.36% | -2130 / +2439 |
-| VWAP reversion | 3519 / 945 / 2574 | 300 | 11.12 / -8.88 / -6.02 / -2.86 | 47.7% / -9.98 / 0.94 | -98.86% / -99.78% | -2490 / +4056 |
+| Volume impulse | 297 / 38 / 259 | 144 | 33.13 / 13.13 / -28.62 / +41.75 | 47.9% / -53.97 / 1.05 | +1.12% / -35.43% | -2077 / +3748 |
+| Failed downside | 255 / 2 / 253 | 120 | 67.09 / 47.09 / +13.05 / +34.03 | 54.2% / +26.40 / 1.30 | +34.90% / -26.04% | -2130 / +2439 |
+| VWAP reversion | 3519 / 945 / 2574 | 300 | 11.12 / -8.88 / -6.02 / -2.86 | 47.7% / -9.98 / 0.94 | -75.35% / -86.47% | -2490 / +4056 |
 
 All three represented ETH, SOL and LINK and exceeded the draft minimum 60 trades, 12 weeks and 3 symbols. Those are volume gates, **not a power result**. No pending trades occurred at the fixed data boundary.
 

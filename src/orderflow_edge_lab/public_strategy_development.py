@@ -44,6 +44,56 @@ def drawdown(returns_bps: list[float]) -> tuple[float, float]:
     return (equity - 1) * 100, max_dd * 100
 
 
+def portfolio_equity(events: list[dict], frames: dict[str, list[Bar]], symbols: list[str]) -> dict:
+    """Three equal starting cash sleeves, one per symbol, using next-open marks.
+
+    Each sleeve reinvests its own equity, holds cash between events and pays
+    10 bps on entry plus 10 bps on exit. Sleeves are not rebalanced.
+    """
+    starts = defaultdict(list)
+    ends = defaultdict(list)
+    index = {s: {iso(bar.timestamp): i for i, bar in enumerate(frames[s])} for s in symbols}
+    for event in events:
+        if event["status"] != "completed":
+            continue
+        symbol = event["symbol"]
+        starts[index[symbol][event["entry_time"]]].append(symbol)
+        ends[index[symbol][event["exit_time"]]].append(symbol)
+    balances = {symbol: 1.0 for symbol in symbols}
+    active = {symbol: False for symbol in symbols}
+    curve = [1.0]
+    for i in range(len(frames[symbols[0]])):
+        for symbol in ends[i]:
+            if not active[symbol]:
+                raise ValueError("portfolio exit without entry")
+            balances[symbol] *= 1 - 10 / 10_000
+            active[symbol] = False
+        for symbol in starts[i]:
+            if active[symbol]:
+                raise ValueError("portfolio overlapping entries")
+            balances[symbol] *= 1 - 10 / 10_000
+            active[symbol] = True
+        curve.append(mean(balances.values()))
+        if i + 1 < len(frames[symbols[0]]):
+            for symbol in symbols:
+                if active[symbol]:
+                    bars = frames[symbol]
+                    balances[symbol] *= bars[i + 1].open / bars[i].open
+    if any(active.values()):
+        raise ValueError("completed event set leaves portfolio position open")
+    peak = curve[0]
+    maximum_drawdown = 0.0
+    for value in curve:
+        peak = max(peak, value)
+        maximum_drawdown = min(maximum_drawdown, value / peak - 1)
+    return {"terminal_return_pct": (curve[-1] - 1) * 100,
+            "max_drawdown_pct": maximum_drawdown * 100,
+            "sleeve_terminal_return_pct": {s: (v - 1) * 100 for s, v in balances.items()},
+            "initial_symbol_weights": {s: 1 / len(symbols) for s in symbols},
+            "cost_split_bps_per_entry_and_exit": 10,
+            "note": "Equal starting capital per symbol; each sleeve reinvests internally and holds cash between trades. No cross-symbol rebalancing."}
+
+
 def path_metrics(bars: list[Bar], start: int, stop: int, entry: float, cost_bps: float) -> dict:
     """OHLC excursions; order of high and low within a candle is unknown."""
     held = bars[start:stop]
@@ -299,6 +349,7 @@ def analyze(spec: dict, exact: dict, data_dir: Path) -> dict:
         results.append({"experiment_id": experiment["id"], "exact_v1": True,
                         "signals": exact_result["signals_count"], "overlap_skipped": exact_result["overlap_skipped"],
                         "pending": exact_result["summary"]["pending"], "metrics": row_metrics(rows),
+                        "equal_symbol_sleeve_portfolio": portfolio_equity(exact_result["events"], frames, spec["symbols"]),
                         "cluster": clustered(rows), "beta_sensitivity": beta_sensitivity(rows),
                         "by_symbol": by_field(rows, "symbol"), "by_year": by_field(rows, "year"),
                         "by_month": by_field(rows, "month"), "by_entry_hour": by_field(rows, "entry_utc_hour"),

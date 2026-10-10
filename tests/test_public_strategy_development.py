@@ -8,7 +8,7 @@ import unittest
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from orderflow_edge_lab.public_strategy_development import drawdown, path_metrics, row_metrics
+from orderflow_edge_lab.public_strategy_development import drawdown, path_metrics, portfolio_equity, row_metrics
 from orderflow_edge_lab.public_strategy_shadow import Bar
 
 
@@ -51,6 +51,21 @@ class DevelopmentDiagnosticsTests(unittest.TestCase):
         row = lambda stamp: [stamp, "100", "110", "90", "105", "1"]
         result = module.validate([row(0), row(2 * step)], "TESTUSDT")
         self.assertEqual(len(result["gaps"]), 1)
+
+    def test_portfolio_uses_cash_sleeves_and_both_side_costs(self):
+        t = datetime(2026, 1, 1, tzinfo=timezone.utc)
+        stamps = [t + timedelta(hours=8 * i) for i in range(3)]
+        frames = {
+            "ETH_USDT": [Bar(stamps[i], opening, opening, opening, opening, 1)
+                         for i, opening in enumerate((100, 110, 110))],
+            "SOL_USDT": [Bar(stamps[i], 100, 100, 100, 100, 1) for i in range(3)],
+        }
+        events = [{"status": "completed", "symbol": "ETH_USDT",
+                   "entry_time": "2026-01-01T00:00:00Z", "exit_time": "2026-01-01T08:00:00Z"}]
+        result = portfolio_equity(events, frames, ["ETH_USDT", "SOL_USDT"])
+        expected = ((1.1 * 0.999 * 0.999 + 1) / 2 - 1) * 100
+        self.assertAlmostEqual(result["terminal_return_pct"], expected)
+        self.assertLess(result["max_drawdown_pct"], 0)
 
 
 if __name__ == "__main__":
