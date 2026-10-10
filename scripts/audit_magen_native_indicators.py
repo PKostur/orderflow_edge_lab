@@ -97,11 +97,14 @@ def fixture(kind,n):
 def check(actual,expected,name):
     actual=np.asarray(actual,dtype=float)
     expected=np.asarray(expected,dtype=float)
-    assert actual.shape==expected.shape,(name,actual.shape,expected.shape)
-    assert np.array_equal(np.isnan(actual),np.isnan(expected)),name+' NaN seed placement'
+    if actual.shape != expected.shape:
+        raise ValueError((name, actual.shape, expected.shape))
+    if not np.array_equal(np.isnan(actual), np.isnan(expected)):
+        raise ValueError(name + ' NaN seed placement')
     valid=np.isfinite(actual)
     error=float(np.max(np.abs(actual[valid]-expected[valid]))) if valid.any() else 0
-    assert error<1e-9,(name,error)
+    if not math.isfinite(error) or error >= 1e-9:
+        raise ValueError((name, error))
     return error
 
 checks=[]
@@ -124,8 +127,8 @@ for kind in ['oscillating','flat','gapped','declining']:
         window=candles[end-240:end]
         native_atr=native.atr_last(window,32)
         native_adx=native.adx(window,8)[-1]
-        assert abs(native_atr-atr(window,32)[-1])<1e-9
-        assert abs(native_adx-adx(window,8)[-1])<1e-9
+        check([native_atr], [atr(window,32)[-1]], 'rolling_atr')
+        check([native_adx], [adx(window,8)[-1]], 'rolling_adx')
         rolling.append({'fixture':kind,'end':end,'window':240,
                         'atr_abs_error':abs(float(native_atr-atr(window,32)[-1])),
                         'adx_abs_error':abs(float(native_adx-adx(window,8)[-1])),
