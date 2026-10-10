@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "ledger_id": "public-strategy-research-ledger-v1",
+  "recorded_date_utc": "2026-10-10",
+  "development_merge_commit": "18f2d15294949689c5c1165032867d284dd034c7",
+  "selection_history": {"public_sources_surveyed": 25, "hypothesis_families_inspected": 7, "distinct_threshold_cells_inspected": 9},
+  "entries": [
+    {"id": "PSV1-VOLUME-IMPULSE", "status": "REJECTED_AS_SPECIFIED", "data_spent": true, "retuning_under_same_id_permitted": false},
+    {"id": "PSV1-VWAP-REVERSION", "status": "REJECTED_AS_SPECIFIED", "data_spent": true, "retuning_under_same_id_permitted": false},
+    {"id": "PSV1-FAILED-DOWNSIDE", "status": "DEVELOPMENT_INTERESTING_NOT_READY", "data_spent": true, "retuning_under_same_id_permitted": false},
+    {"id": "PSR1-FAILED-DOWNSIDE-FEASIBILITY", "status": "PROSPECTIVE_FREEZE_NOT_JUSTIFIED", "config_path": "config/public_failed_downside_replication_design_v1.json", "candidate_frozen": false, "prospective_start_utc": null}
+  ],
+  "authorizes_orders": false,
+  "opens_existing_frozen_lanes": false
+}

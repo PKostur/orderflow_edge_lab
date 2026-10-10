@@ -1,0 +1,76 @@
+{
+  "active_week_clusters": 120,
+  "active_week_fraction": 0.3746654772524532,
+  "assumptions": [
+    "Normal approximation and stationarity are optimistic, not validated power.",
+    "Independent future weekly clusters and historical event rate are assumed.",
+    "Shared market history on another venue is venue robustness, not future OOS.",
+    "Additional source survey and hypotheses mean denominator 9 is a disclosed minimum, not complete calibrated selection correction."
+  ],
+  "blocking_gates": [
+    "historical cluster uncertainty is large relative to the +5 bps hurdle",
+    "independent venue source probe returned HTTP 403",
+    "venue/account fee tier and historic executable spread/slippage remain uncalibrated"
+  ],
+  "candidate_frozen": false,
+  "cluster_ratio_mean_standard_error_bps": 31.199307459891006,
+  "deployment_eligible": false,
+  "design_sha256": "3c9523e514425e47de573d1434e00b66707fee8bd4ea19b056d73f7bb96eae4a",
+  "economic_hurdle_bps": 5,
+  "family_alpha": 0.05,
+  "fixed_horizon_scenarios": [
+    {
+      "calendar_years": 1,
+      "expected_active_weeks_at_development_rate": 19.549509366636933,
+      "expected_trades_at_development_rate": 41.216882247992864,
+      "optimistic_80pct_detectable_true_excess_bps": 266.3291779477281
+    },
+    {
+      "calendar_years": 2,
+      "expected_active_weeks_at_development_rate": 39.099018733273866,
+      "expected_trades_at_development_rate": 82.43376449598573,
+      "optimistic_80pct_detectable_true_excess_bps": 189.78763384874452
+    },
+    {
+      "calendar_years": 5,
+      "expected_active_weeks_at_development_rate": 97.74754683318467,
+      "expected_trades_at_development_rate": 206.08441123996434,
+      "optimistic_80pct_detectable_true_excess_bps": 121.8699612790518
+    }
+  ],
+  "grid_calendar_weeks": 320.2857142857143,
+  "historical_mean_excess_bps": 34.03465816375974,
+  "multiplicity_denominator": 9,
+  "one_sided_alpha": 0.005555555555555556,
+  "power_scenarios": [
+    {
+      "distance_above_hurdle_bps": 5,
+      "required_active_weeks_optimistic": 53404,
+      "required_calendar_years_at_development_rate": 2731.7309605293176,
+      "true_mean_excess_bps": 10
+    },
+    {
+      "distance_above_hurdle_bps": 20,
+      "required_active_weeks_optimistic": 3338,
+      "required_calendar_years_at_development_rate": 170.74597307780058,
+      "true_mean_excess_bps": 25
+    },
+    {
+      "distance_above_hurdle_bps": 45,
+      "required_active_weeks_optimistic": 660,
+      "required_calendar_years_at_development_rate": 33.760438056125935,
+      "true_mean_excess_bps": 50
+    },
+    {
+      "distance_above_hurdle_bps": 95,
+      "required_active_weeks_optimistic": 148,
+      "required_calendar_years_at_development_rate": 7.570522473191876,
+      "true_mean_excess_bps": 100
+    }
+  ],
+  "prospective_start_utc": null,
+  "status": "PROSPECTIVE_FREEZE_NOT_JUSTIFIED",
+  "study_id": "PSR1-FAILED-DOWNSIDE-FEASIBILITY",
+  "target_power": 0.8,
+  "trades": 253
+}
