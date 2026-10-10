@@ -16,6 +16,7 @@ import subprocess
 import urllib.error
 import urllib.parse
 import urllib.request
+import uuid
 import xml.etree.ElementTree as ET
 import zipfile
 from concurrent.futures import ThreadPoolExecutor
@@ -239,7 +240,7 @@ def execution_prefix_probe(raw: Path, family: str, symbol: str, bucket: str) -> 
     url = bucket + '?' + urllib.parse.urlencode({'prefix': prefix, 'max-keys': 1000})
     requested = iso(datetime.now(timezone.utc))
     token = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%f')
-    path = raw / f'{family}-{symbol}-{token}-listing.bin'
+    path = raw / f'{family}-{symbol}-{token}-{uuid.uuid4().hex}-listing.bin'
     output = {'prefix': prefix, 'url': url, 'request_utc': requested, 'historical_execution_calibrated': False}
     try:
         with urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': 'orderflow-research-source-audit'}),
