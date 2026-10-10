@@ -138,4 +138,6 @@ Public-strategy lane: [final development closure and completion audit](docs/PUBL
 
 Fresh public bot research: [six new adaptations across batches 2–4](docs/PUBLIC_BOT_BATCH2_3_RESULTS_2026_10_11.md). All six fail their frozen screening gates. Source provenance, complete events, risk/cost controls and cumulative signal/model versus trading-cell counts are retained. This is spent historical development evidence; no viable candidate or native bot replication is claimed.
 
-Queued source preparation: [protective minute primitives and pinned indicator audit](docs/PROTECTIVE_MINUTE_ENGINEERING_V1.md). Synthetic execution checks only; no additional strategy outcome or trading cell. Full strategy simulation, historical screening and untouched future confirmation remain required.
+Protective simulator foundation: [minute primitives and pinned indicator audit](docs/PROTECTIVE_MINUTE_ENGINEERING_V1.md). Its original audit covers synthetic execution only; subsequent market screening is reported below. Untouched future confirmation remains required.
+
+Protective bot batch5: [MAGen and Ichimoku Spot adaptation results](docs/PUBLIC_PROTECTIVE_BATCH5_RESULTS_V1.md). Both fail their pre-outcome screening gates. The committed evaluator retains minute execution uncertainty, inventory cutoff marks, funded BTC bounds and full cost/control diagnostics. No viable candidate or untouched confirmation pass is claimed.
