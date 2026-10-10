@@ -46,6 +46,24 @@
     "disposition": "REJECT_COST_ROBUST_SURVIVAL_NO_PROMOTION",
     "next_step": "close candidate for promotion without retuning; new hypothesis requires new identifier"
   },
+  "btc_relative_state": {
+    "study_id": "PSR4-BTC-RELATIVE-STRENGTH",
+    "candidate_id": "BRS1-30D-7D-SPOT",
+    "design_commit": "a79816e74505a577a4f77ad51684dc430aff917f",
+    "implementation_commit": "34092f8b097f615ff12b8857416f125c7ff24f29",
+    "new_predictor_hypotheses": 1,
+    "model_definitions": ["baseline", "extended", "delayed_control"],
+    "placebo_controls": 500,
+    "additional_trading_cells_executed": 0,
+    "minimum_cumulative_signal_cells": 10,
+    "status": "REJECTED_AS_SPECIFIED",
+    "state_failed_checks": 5,
+    "economics": "NOT_RUN",
+    "data_spent": true,
+    "retuning_permitted": false,
+    "prospective_start_utc": null,
+    "next_step": "close this definition; review a distinct falsifiable question before any new identifier or data collection; no automatic watch"
+  },
   "monthly_momentum_state": {
     "study_id": "PSR3-MONTHLY-MOMENTUM-STATE",
     "candidate_id": "PSM1-12M-1M-SPOT",
