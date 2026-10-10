@@ -18,6 +18,7 @@ import urllib.error
 import urllib.request
 import zipfile
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -289,9 +290,7 @@ def minute_assessment(output: Path, spec: dict) -> dict:
     raw = output / 'raw'
     raw.mkdir()
     archives, diagnostics, failures, books = [], [], [], {}
-    for day in spec['minute']['dates']:
-        panel = {}
-        for s in ALL:
+    def download(s, day):
             symbol = s.replace('_', '')
             name = f'{symbol}-1m-{day}.zip'
             url = f'https://data.binance.vision/data/spot/daily/klines/{symbol}/1m/{name}'
@@ -304,14 +303,25 @@ def minute_assessment(output: Path, spec: dict) -> dict:
                 checksum_receipt = iso(datetime.now(timezone.utc))
                 (raw / (name + '.CHECKSUM')).write_bytes(checksum)
                 digest = validate_checksum(payload, checksum, name)
-                panel[s] = decode_archive(payload, day)
-                archives.append({'symbol': s, 'day': day, 'url': url, 'request_utc': requested, 'receipt_utc': receipt,
+                parsed = decode_archive(payload, day)
+                record = {'symbol': s, 'day': day, 'url': url, 'request_utc': requested, 'receipt_utc': receipt,
                                  'checksum_receipt_utc': checksum_receipt, 'sha256': digest,
                                  'checksum_sha256': hashlib.sha256(checksum).hexdigest(), 'bars': 1440,
-                                 'timestamp_unit': 'us' if day >= '2025-01-01' else 'ms'})
+                                 'timestamp_unit': 'us' if day >= '2025-01-01' else 'ms'}
+                return parsed, record, None
             except (OSError, ValueError, zipfile.BadZipFile, csv.Error) as exc:
-                failures.append({'symbol': s, 'day': day, 'url': url, 'error': str(exc),
-                                 'request_utc': requested, 'failure_observed_utc': iso(datetime.now(timezone.utc))})
+                return None, None, {'symbol': s, 'day': day, 'url': url, 'error': str(exc),
+                                   'request_utc': requested, 'failure_observed_utc': iso(datetime.now(timezone.utc))}
+    # Independent symbols have distinct raw paths; keep aggregation in fixed order.
+    with ThreadPoolExecutor(max_workers=4) as executor:
+      for day in spec['minute']['dates']:
+        panel = {}
+        for s, (parsed, record, failure) in zip(ALL, executor.map(lambda s: download(s, day), ALL)):
+            if failure:
+                failures.append(failure)
+            else:
+                panel[s] = parsed
+                archives.append(record)
         if len(panel) == 4:
             br = np.diff(np.log([r['close'] for r in panel['BTC_USDT']]))
             for s in SYMBOLS:
