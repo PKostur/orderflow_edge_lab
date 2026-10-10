@@ -1,0 +1,155 @@
+{
+  "verified_utc": "2026-10-10T22:09:52.882132+00:00",
+  "audited_main": "d88331845040049fd974a8eabe5cfbd042d07ed4",
+  "pr147_merge": "9a413d82b01d8aa7469e0f9ad7d9192bd1754cb1",
+  "sources": [
+    {
+      "symbol": "BTCUSDT",
+      "path": "raw/BTCUSDT-8h.jsonl",
+      "sha256": "4168f20e9aff20710847ac31a93e46d5f058efd8ea620c28b026d9ee6e8d821f"
+    },
+    {
+      "symbol": "BTCUSDT",
+      "path": "aligned_csv/BTC_USDT.csv",
+      "sha256": "96e25db1fd9882e6435d8b9a9bf23a716ccf0f004de46329f6db2bb47c054d82"
+    },
+    {
+      "symbol": "ETHUSDT",
+      "path": "raw/ETHUSDT-8h.jsonl",
+      "sha256": "edca258e5393ef7a7321d3e440fa4e83d3d0504792f153befe06a3d8f6b8924e"
+    },
+    {
+      "symbol": "ETHUSDT",
+      "path": "aligned_csv/ETH_USDT.csv",
+      "sha256": "ccbce670762e32b6cd04a80502399a500f34cff856f1794c8bca68bab8858712"
+    },
+    {
+      "symbol": "LINKUSDT",
+      "path": "raw/LINKUSDT-8h.jsonl",
+      "sha256": "df66f12043a3aac8be892de166002dee6acaff0c70ade9f3414c39df977e18ab"
+    },
+    {
+      "symbol": "LINKUSDT",
+      "path": "aligned_csv/LINK_USDT.csv",
+      "sha256": "d4bc5b454dec76812fd8358443c78ddf4d67eafc8e6d513d1d5267eb7599ddd2"
+    },
+    {
+      "symbol": "SOLUSDT",
+      "path": "raw/SOLUSDT-8h.jsonl",
+      "sha256": "f5a24e9e026e719742c2254983f8bfa2a24562c2b5d826688398f7e18d910a5b"
+    },
+    {
+      "symbol": "SOLUSDT",
+      "path": "aligned_csv/SOL_USDT.csv",
+      "sha256": "7b556ce71b1ae787c64baadc66f07aa3b6505f28ff4bad3d77cf7fd7024b7fc7"
+    }
+  ],
+  "unchanged_v1_definitions": [
+    {
+      "path": "config/public_strategy_shadow_v1.json",
+      "unchanged_from_pr147": true,
+      "working_copy_sha256": "73803e17810a318136605961900e7463714b0c9afcc6127f2a52327b04ff7630",
+      "baseline_git_blob_sha256": "73803e17810a318136605961900e7463714b0c9afcc6127f2a52327b04ff7630",
+      "comparison_note": "Git content and LF-normalized bytes; platform line endings are not a rule change"
+    },
+    {
+      "path": "src/orderflow_edge_lab/public_strategy_shadow.py",
+      "unchanged_from_pr147": true,
+      "working_copy_sha256": "ac28b4f2b4a270947afc7207c2027c9061855fcefaed20c2eb3e657192ff5ca9",
+      "baseline_git_blob_sha256": "df96e706189348104ae49e2c193a173ce5a7ba380693e1efcab2c8ec51701eb3",
+      "comparison_note": "Git content and LF-normalized bytes; platform line endings are not a rule change"
+    },
+    {
+      "path": "docs/PUBLIC_STRATEGY_SHADOW_PROTOCOL_V1.md",
+      "unchanged_from_pr147": true,
+      "working_copy_sha256": "41cd479dd719f6e684391f796525d93e02e9c803f1c519192b66d87e43d1d6d6",
+      "baseline_git_blob_sha256": "7c19d542e5a9ceeffc37d7b781bc0609e8acec7cd281852ba40f206c92f8acc6",
+      "comparison_note": "Git content and LF-normalized bytes; platform line endings are not a rule change"
+    }
+  ],
+  "unchanged_frozen_paths": [
+    {
+      "path": "config/orderflow_discovery_v1.json",
+      "sha256": "1813d40cdef3954e2f4a734fdb31d98cb173a6bb9a35d7eededb05a0832fca0c",
+      "byte_identical_to_pr147": true
+    },
+    {
+      "path": "config/discovery_process_v2.json",
+      "sha256": "81e8df69970c2bfcda38408405a534a68f40a5a7abf758df534c89bbfdc1ac1e",
+      "byte_identical_to_pr147": true
+    },
+    {
+      "path": "config/regime_research_v1.json",
+      "sha256": "b61495e3bfad95d42b7cb60dd707654d8ed6759e4f4efb3ef5e1a522f9af3c69",
+      "byte_identical_to_pr147": true
+    },
+    {
+      "path": "config/regime_research_v1_1.json",
+      "sha256": "64fb23c51504028c339d77027bcc13e5d5e5e954ad68a553c22518834d748880",
+      "byte_identical_to_pr147": true
+    },
+    {
+      "path": "config/regime_research_v1_2.json",
+      "sha256": "1c32a42b224217960c9fea1c77ade96e2b2f8d525455d7be24ed8a6acf0740a2",
+      "byte_identical_to_pr147": true
+    },
+    {
+      "path": "config/regime_research_v1_3.json",
+      "sha256": "eca555d507f7e8fba522c927c8eedad3be52fd87a654e145714ab30ffe775f01",
+      "byte_identical_to_pr147": true
+    },
+    {
+      "path": "config/state_threshold_freeze_v1.json",
+      "sha256": "c832b2e35c6e736df4c0ea7bb7f6ab10310b06bfe82bc56ca221d5792eaa7770",
+      "byte_identical_to_pr147": true
+    },
+    {
+      "path": "config/strategy_conditioning_v1.json",
+      "sha256": "4d09b745004e891e7c93a2f2bc6d3f11a7d9515c43e54dd9dc770eee899954f9",
+      "byte_identical_to_pr147": true
+    },
+    {
+      "path": "config/strategy_conditioning_v1_1.json",
+      "sha256": "2bd6e4c1605064456772f6e8743f34fe617ed2874290108c222efee3278b7baf",
+      "byte_identical_to_pr147": true
+    },
+    {
+      "path": "config/evidence_v2_session_forward_watch_v1.json",
+      "sha256": "fb6a6e823db421b0420dfa39ad7af78f7ea2c9e7d6441ceab5472a6da47e3958",
+      "byte_identical_to_pr147": true
+    },
+    {
+      "path": "config/session_development_watch_v1.json",
+      "sha256": "ce5899d36a4b5c6a86f8a1242247f532c559881d3b14f9c624e2590138aa6661",
+      "byte_identical_to_pr147": true
+    },
+    {
+      "path": "config/session_watch_cvd_lny_v1.json",
+      "sha256": "f19319521bf88d1aec6a31719d6420e5c1684913151126bae6334b9e6e00b250",
+      "byte_identical_to_pr147": true
+    },
+    {
+      "path": "config/lsk_conditional_regime_v1.json",
+      "sha256": "e5c9b231e3aa077fb974b979cb705bf560f88e222f898d6bee1b8d9f8f2ef796",
+      "byte_identical_to_pr147": true
+    },
+    {
+      "path": "config/lsk_conditional_regime_v1.freeze.json",
+      "sha256": "57984c5770a17cac1bc882152ff2005e597ea21a96c9b267c2fd799eb2c6a0ec",
+      "byte_identical_to_pr147": true
+    }
+  ],
+  "all_original_candidates_rejected_for_promotion": true,
+  "eight_hour_volume_hypothesis_rejected": true,
+  "no_final_candidate_or_prospective_activation_justified": true,
+  "optional_grid_preregistration": "IMMUTABLE_PRE_OUTCOME_REGISTRATION_NOT_PROVEN_EXPLORATORY_ONLY_NO_SELECTION",
+  "historical_volatility_split_returns": 29,
+  "independent_signal_semantics": "FAILED_DOWNSIDE_INTERNAL_ONLY_NO_EXTERNAL_ENGINE_PARITY_CLAIM",
+  "retained_artifact_sha256": {
+    "artifacts/public_spot_8h_20261010/manifest.json": "eb113554865b3e54f91e47cf555631f0a28a76cef009614e7d6cfde33b68da24",
+    "artifacts/public_spot_8h_20261010/exact_v1_report.json": "17d103c4df4fac2a4233da5f3763fff78c545c174c44b7300b48c0ff700d3fb2",
+    "artifacts/public_spot_8h_20261010/diagnostics_final.json": "6fc99130b331df82a81c9a18650ff27cbab7675c948a024af5fc85fd7f952de4",
+    "artifacts/public_strategy_completion_20261011/session_clocks.json": "64d49fbc72ea09c64eff024b1a5a252a4532da7943ce651ff0b208a716f8a842",
+    "config/public_strategy_research_ledger_v1.json": "557bcddc7c64883266fb4a541358a13fa804542426d9cd28204f595f7fae39b6"
+  }
+}
