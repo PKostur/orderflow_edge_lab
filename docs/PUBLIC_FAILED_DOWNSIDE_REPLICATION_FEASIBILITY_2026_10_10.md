@@ -10,6 +10,8 @@ Study ID: `PSR1-FAILED-DOWNSIDE-FEASIBILITY`. Parent: `PSV1-FAILED-DOWNSIDE`. De
 
 The exact reference ledger matches every field and all computed returns to 1e-9 bps against the committed Binance report. Source hashes must match before comparison. This is independent internal strategy/execution logic on **spent Binance data**, not external engine validation or new market evidence. Tests explicitly cover bearish recovery bars, strict prior-low breaches, causal prefix signals, same-opening exit/reentry, final pending events, and the inability of duplicated same-week trades to manufacture independent information.
 
+This audit also found that Git had normalized the aligned CSV line endings in the prior commit, while the recorded source hashes referred to the collector's original CRLF bytes. A scoped `.gitattributes` rule and restored original CSV bytes make the committed objects and Linux/Windows checkouts match the existing manifest. No candle value or historical result changed. A test checks all four raw source and aligned CSV hashes against both provenance records.
+
 ## Sample and power feasibility
 
 The primary endpoint remains per-trade altcoin excess over the identical BTC holding window, with the original +5 bps economic hurdle. The observed mean is +34.0347 bps from 253 trades across 120 active UTC ISO exit weeks in a 320.286-calendar-week grid. The weekly cluster ratio-of-sums standard error is **31.1993 bps**. The calculation is:

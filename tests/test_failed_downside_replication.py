@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import unittest
+import hashlib
+import json
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 
 from orderflow_edge_lab.failed_downside_replication import feasibility, replay
 from orderflow_edge_lab.public_strategy_shadow import Bar
@@ -22,6 +25,18 @@ def fixture():
 
 
 class IndependentFailedDownsideTests(unittest.TestCase):
+    def test_spent_source_bytes_match_audited_hashes_on_every_platform(self):
+        root = Path(__file__).resolve().parents[1]
+        folder = root / "artifacts/public_spot_8h_20261010"
+        manifest = json.loads((folder / "manifest.json").read_text(encoding="utf-8"))
+        exact = json.loads((folder / "exact_v1_report.json").read_text(encoding="utf-8"))
+        for symbol, source in manifest["symbols"].items():
+            raw = hashlib.sha256((folder / source["raw_file"]).read_bytes()).hexdigest()
+            aligned = hashlib.sha256((folder / source["aligned_csv"]).read_bytes()).hexdigest()
+            self.assertEqual(raw, source["raw_sha256"])
+            self.assertEqual(aligned, source["aligned_csv_sha256"])
+            self.assertEqual(aligned, exact["source_sha256"][symbol.replace("USDT", "_USDT")])
+
     def test_next_open_exit_reentry_and_terminal_pending(self):
         bars, btc = fixture()
         report = replay("ETH_USDT", bars, btc)

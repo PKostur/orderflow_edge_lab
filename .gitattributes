@@ -12,3 +12,6 @@ config/*.json -text
 
 # Hash-bound D4 formal-review snapshots must remain byte-identical.
 research/volatility_state_d4/review_snapshot_*.json -text
+
+# Audited public Spot CSV hashes bind the exact collector bytes, including EOLs.
+artifacts/public_spot_8h_20261010/aligned_csv/*.csv -text
