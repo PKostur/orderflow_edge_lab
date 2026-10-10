@@ -1,0 +1,10 @@
+{
+  "recorded_date_utc": "2026-10-10",
+  "source": "OKX public Spot market-history REST",
+  "url": "https://www.okx.com/api/v5/market/history-candles?instId=BTC-USDT&bar=8Hutc&limit=2&after=1790812800000",
+  "outcome": "urllib.error.HTTPError: HTTP Error 403: Forbidden",
+  "http_status": 403,
+  "successful_candle_response_received": false,
+  "raw_error_body_retained": false,
+  "note": "Access probe only; no independent venue price outcomes obtained. A future source design would require documented supported intervals and complete 1h-to-UTC-8h aggregation if native UTC 8h is unsupported."
+}

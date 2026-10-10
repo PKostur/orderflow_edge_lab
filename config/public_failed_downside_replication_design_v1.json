@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "study_id": "PSR1-FAILED-DOWNSIDE-FEASIBILITY",
+  "status": "DESIGN_FEASIBILITY_ONLY_NOT_PROSPECTIVE",
+  "parent_candidate": "PSV1-FAILED-DOWNSIDE",
+  "signal": {
+    "lookback_previous_bars": 30,
+    "low_strictly_below_previous_min": true,
+    "close_strictly_above_previous_min": true,
+    "min_close_location": 0.7,
+    "requires_bullish_candle": false,
+    "entry": "next 8h UTC bar open",
+    "hold_bars": 2,
+    "exit": "open after two held bars",
+    "overlap_rule": "one position per symbol; reentry at the same open as exit allowed"
+  },
+  "spent_source": "artifacts/public_spot_8h_20261010/aligned_csv",
+  "spent_grid_bars": 6726,
+  "symbols": ["ETH_USDT", "SOL_USDT", "LINK_USDT"],
+  "benchmark": "BTC_USDT same exact entry/exit window",
+  "economic_hurdle_excess_bps": 5,
+  "family_alpha": 0.05,
+  "multiplicity_denominator": 9,
+  "target_power": 0.8,
+  "true_mean_scenarios_bps": [10, 25, 50, 100],
+  "calendar_year_scenarios": [1, 2, 5],
+  "dependence_cluster": "UTC ISO exit week pooled across symbols",
+  "variance_estimator": "ratio-of-sums cluster score: sum(excess-mean) within week; finite-cluster adjustment",
+  "new_venue_source": {
+    "venue": "OKX Spot",
+    "requested_access_probe": "BTC-USDT public history endpoint; no successful candle response",
+    "probe_status": "HTTP_403",
+    "historical_outcomes_inspected": false,
+    "future_bar_construction_if_unblocked": "8h UTC from eight complete contiguous 1h Spot candles, never fill a gap",
+    "coverage_decision": "must be fixed and committed before successful history retrieval"
+  },
+  "cost_calibration_gates": [
+    "verify applicable regional/account taker fee rather than infer one from a generic example",
+    "timestamped spread/depth samples at intended order notional and candle boundaries",
+    "latency and market impact sensitivity for both entry and exit",
+    "historical calibration unavailable means no executable profitability claim",
+    "compare matched BTC with identical fee and execution model"
+  ],
+  "prospective_start_utc": null,
+  "freeze_commit": null,
+  "candidate_frozen": false,
+  "automatic_collection_enabled": false,
+  "order_transmission_supported": false,
+  "deployment_eligible": false,
+  "no_retuning": true
+}

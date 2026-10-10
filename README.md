@@ -64,6 +64,8 @@ The [25-implementation public source survey](docs/PUBLIC_STRATEGY_SOURCE_SURVEY_
 
 The [Binance Spot 8h development review](docs/PUBLIC_STRATEGY_SPOT_8H_DEVELOPMENT_2026_10_10.md) reports the first exact v1 historical run, source hashes, path and control diagnostics, and decisions. No candidate was frozen for prospective observation.
 
+The [failed-downside replication feasibility audit](docs/PUBLIC_FAILED_DOWNSIDE_REPLICATION_FEASIBILITY_2026_10_10.md) independently reproduces the spent-data ledger and quantifies the sample needed for the +5 bps hurdle. A future freeze remains unjustified because of precision, source-access and executable-cost gaps.
+
 ## MEXC Futures order flow
 
 The repository can record public MEXC Futures `push.deal` and incremental `push.depth` streams for `ENA_USDT`, `BTC_USDT`, or other Futures symbols without API keys.
