@@ -6,7 +6,9 @@ from unittest.mock import patch
 import json
 
 from orderflow_edge_lab.public_strategy_shadow import Bar
-from orderflow_edge_lab.public_bot_batch2 import indicators, extension_indicators, execute, portfolio, smooth, build
+from orderflow_edge_lab.public_bot_batch2 import (
+    indicators, extension_indicators, chandelier_indicators, chandelier_risk, execute, portfolio, smooth, build,
+)
 
 
 def candles(n=260):
@@ -47,6 +49,30 @@ class PublicBotBatch2Tests(TestCase):
         self.assertAlmostEqual(values[2], 100 * 1 / 1.5)
         self.assertAlmostEqual(values[3], 100 * .5 / 1.25)
         self.assertAlmostEqual(values[4], 100 * 2.25 / 2.625)
+
+    def test_chandelier_prefix_and_risk_uses_previous_peak(self):
+        bars = candles()
+        prefix = chandelier_indicators(bars[:220])
+        full = chandelier_indicators(bars)
+        for key in prefix:
+            self.assertEqual(prefix[key], full[key][:220], key)
+        # Current high sets a new peak; it cannot retrospectively create a trailing exit.
+        bar = Bar(bars[0].timestamp, 100, 119, 100, 105, 100)
+        self.assertFalse(chandelier_risk(bar, 100, 0)[0])
+        self.assertTrue(chandelier_risk(bar, 100, 30)[0])
+
+    def test_chandelier_high_profit_trigger_does_not_invent_intrabar_profit_fill(self):
+        bars = candles(5)
+        bars[2] = Bar(bars[2].timestamp, 100, 150, 99, 110, 100)
+        bars[3] = Bar(bars[3].timestamp, 90, 95, 85, 91, 100)
+        spec = {"warmup_bars": 1, "max_hold_bars": 30, "baseline_round_trip_bps": 40}
+        def decisions(name, source, features, i):
+            return i == 1, False
+        with patch("orderflow_edge_lab.public_bot_batch2.rules", side_effect=decisions):
+            result = execute("ChandelierExit", "A", bars, bars, {}, spec)
+        self.assertEqual(result["rows"][0]["exit_index"], 3)
+        self.assertAlmostEqual(result["rows"][0]["gross_bps"], -1000)
+        self.assertEqual(result["rows"][0]["exit_reason"], "published_completed_bar_risk")
 
     def test_entry_exit_next_open_and_no_same_decision_reentry(self):
         bars = candles(8)

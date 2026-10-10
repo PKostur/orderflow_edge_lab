@@ -20,6 +20,8 @@ CANDIDATES = ("ASDTSRockwellTrading", "AwesomeMacd", "CofiBitStrategy")
 EXTENSION_CANDIDATES = ("RSI2", "CCICorrectionStrategy")
 EXTENSION_DESIGN_COMMIT = "177dfca25d47bac5e07b958f632496336d01433a"
 EXTENSION_DESIGN_SHA256 = "a9bf180aaf8cbd7d053bdf49b9cd9b9a805bb23237cef239926091c8dfdfcf4a"
+RISK_DESIGN_COMMIT = "3e96f735717c3ea847ee4051f228342555a0c518"
+RISK_DESIGN_SHA256 = "de9cbbd32b1f142cf2f988cd9e2d1ea6ae6c269b37963a5b85aca204f68c76a2"
 
 
 def digest(value: dict) -> str:
@@ -106,13 +108,51 @@ def extension_indicators(bars: list[Bar]) -> dict[str, list]:
     return output
 
 
+def chandelier_indicators(bars: list[Bar]) -> dict[str, list]:
+    tr = [b.high - b.low if i == 0 else max(b.high - b.low, abs(b.high - bars[i - 1].close),
+                                         abs(b.low - bars[i - 1].close)) for i, b in enumerate(bars)]
+    atr = smooth(tr, 22, wilder=True)
+    longs, shorts, direction = [], [], []
+    state = 1
+    for i, bar in enumerate(bars):
+        if atr[i] is None:
+            longs.append(None)
+            shorts.append(None)
+            direction.append(state)
+            continue
+        window = bars[i - 21:i + 1]
+        long = max(b.close for b in window) - 3 * atr[i]
+        short = min(b.close for b in window) + 3 * atr[i]
+        prior_long = longs[i - 1] if i and longs[i - 1] is not None else long
+        prior_short = shorts[i - 1] if i and shorts[i - 1] is not None else short
+        if i and bars[i - 1].close > prior_long:
+            long = max(long, prior_long)
+        if i and bars[i - 1].close < prior_short:
+            short = min(short, prior_short)
+        state = 1 if bar.close > prior_short else -1 if bar.close < prior_long else state
+        longs.append(long)
+        shorts.append(short)
+        direction.append(state)
+    return {"atr": atr, "long_band": longs, "short_band": shorts, "direction": direction}
+
+
+def chandelier_risk(bar: Bar, entry_open: float, prior_peak_pct: float) -> tuple[bool, float]:
+    high_gain = (bar.high / entry_open - 1) * 100
+    close_gain = (bar.close / entry_open - 1) * 100
+    trigger = (close_gain < -5 or high_gain > 20 or
+               (prior_peak_pct > 10 and prior_peak_pct - high_gain > 5))
+    return trigger, max(prior_peak_pct, high_gain)
+
+
 def rules(name: str, bars: list[Bar], features: dict[str, list], i: int) -> tuple[bool, bool]:
-    if name not in (*CANDIDATES, *EXTENSION_CANDIDATES):
+    if name not in (*CANDIDATES, *EXTENSION_CANDIDATES, "ChandelierExit"):
         raise ValueError("unregistered candidate")
     if i < 1 or any(v[i] is None or v[i - 1] is None for v in features.values()):
         return False, False
     f = {k: v[i] for k, v in features.items()}
     p = {k: v[i - 1] for k, v in features.items()}
+    if name == "ChandelierExit":
+        return f["direction"] == 1 and p["direction"] == -1, f["direction"] == -1 and p["direction"] == 1
     if name == "RSI2":
         return bars[i].close > f["sma200"] and f["rsi2"] <= 10, bars[i].close > f["sma5"]
     if name == "CCICorrectionStrategy":
@@ -132,11 +172,16 @@ def execute(name: str, symbol: str, bars: list[Bar], btc: list[Bar], features: d
             spec: dict) -> dict:
     rows, signals, skipped = [], [], 0
     position = None
+    prior_peak = 0.0
     for i in range(spec["warmup_bars"], len(bars)):
         enter, leave = rules(name, bars, features, i)
         if enter:
             signals.append(iso(bars[i].timestamp))
         if position is not None:
+            risk = False
+            if name == "ChandelierExit":
+                risk, prior_peak = chandelier_risk(bars[i], bars[position].open, prior_peak)
+                leave = leave or risk
             if enter:
                 skipped += 1
             if (leave or i + 1 - position >= spec["max_hold_bars"]) and i + 1 < len(bars):
@@ -152,12 +197,14 @@ def execute(name: str, symbol: str, bars: list[Bar], btc: list[Bar], features: d
                              "hold_bars": j - position, "week": week(stamp), "year": stamp.year,
                              "month": stamp.strftime("%Y-%m"), "hour": stamp.hour,
                              "btc_regime": regime, "btc_volatility": volatility,
-                             "exit_reason": "indicator" if leave else "administrative_timeout",
+                             "exit_reason": "published_completed_bar_risk" if risk else "indicator" if leave else "administrative_timeout",
                              **path_metrics(bars, position, j, bars[position].open, spec["baseline_round_trip_bps"])})
                 position = None
+                prior_peak = 0.0
         elif enter:
             # Entry on final closed candle is pending next-open, not an invented fill.
             position = i + 1
+            prior_peak = 0.0
     pending = None if position is None else {"symbol": symbol, "entry_index": position,
         "status": "open_position" if position < len(bars) else "awaiting_next_open"}
     return {"rows": rows, "signal_origin_times": signals, "overlap_skipped": skipped, "pending": pending}
@@ -286,7 +333,8 @@ def portfolio(rows: list[dict], pending: list[dict], frames: dict, spec: dict, c
 def build(spec: dict, root: Path) -> dict:
     # Compare with the pre-outcome design, refusing silently changed trials.
     expected = {"PSR8-PUBLIC-BOT-BATCH2": (DESIGN_SHA256, DESIGN_COMMIT),
-                "PSR9-PUBLIC-BOT-BATCH3": (EXTENSION_DESIGN_SHA256, EXTENSION_DESIGN_COMMIT)}
+                "PSR9-PUBLIC-BOT-BATCH3": (EXTENSION_DESIGN_SHA256, EXTENSION_DESIGN_COMMIT),
+                "PSR10-PUBLIC-BOT-BATCH4": (RISK_DESIGN_SHA256, RISK_DESIGN_COMMIT)}
     if spec.get("study_id") not in expected or digest(spec) != expected[spec["study_id"]][0]:
         raise ValueError("config differs from immutable pre-outcome design")
     source = json.loads((root / spec["data_manifest"]).read_text(encoding="utf-8"))
@@ -299,7 +347,8 @@ def build(spec: dict, root: Path) -> dict:
     clocks = [b.timestamp for b in frames[names[0]]]
     if any([b.timestamp for b in frames[s]] != clocks for s in names):
         raise ValueError("unaligned source clocks")
-    indicator_function = indicators if spec["study_id"] == "PSR8-PUBLIC-BOT-BATCH2" else extension_indicators
+    indicator_function = {"PSR8-PUBLIC-BOT-BATCH2": indicators, "PSR9-PUBLIC-BOT-BATCH3": extension_indicators,
+                          "PSR10-PUBLIC-BOT-BATCH4": chandelier_indicators}[spec["study_id"]]
     features = {s: indicator_function(frames[s]) for s in spec["symbols"]}
     results, all_keys = [], {}
     for name in spec["candidates"]:
