@@ -1,5 +1,6 @@
 import io
 import hashlib
+import csv
 import json
 import tempfile
 import unittest
@@ -168,6 +169,46 @@ class MinuteContinuityTests(unittest.TestCase):
                 invalid = audit.execution_prefix_probe(raw, 'bookDepth', 'BTCUSDT', 'https://example.invalid')
             self.assertEqual(invalid['status'], 'PREFIX_ACCESS_UNCONFIRMED')
             self.assertEqual((raw / invalid['raw_relative_path']).read_bytes(), b'<html>unexpected</html>')
+
+    def test_retained_report_hashes_quality_totals_and_claim_boundaries(self):
+        folder = ROOT / 'artifacts/minute_continuity_20261010'
+        report = json.loads((folder / 'report.json').read_text())
+        for name, digest in report['output_sha256'].items():
+            self.assertEqual(hashlib.sha256((folder / name).read_bytes()).hexdigest(), digest)
+        self.assertEqual(report['spec_sha256'], hashlib.sha256((ROOT / 'config/minute_continuity_execution_v1.json').read_bytes()).hexdigest())
+        self.assertEqual(report['design_commit'], '1f05a9c2e93d9f26b908ee9faeb00def487e8f52')
+        self.assertEqual(report['implementation_sha256'], hashlib.sha256((ROOT / 'src/orderflow_edge_lab/minute_continuity_execution.py').read_bytes()).hexdigest())
+        records = json.loads((folder / 'source_manifest.json').read_text())
+        with (folder / 'daily_quality.csv').open(newline='', encoding='utf-8') as stream:
+            daily = list(csv.DictReader(stream))
+        for row in daily:
+            self.assertIn(row['complete_day'], ('True', 'False'))
+            row['complete_day'] = row['complete_day'] == 'True'
+            for key in ('observed_minutes', 'missing_minutes', 'zero_trade_minutes', 'zero_volume_minutes'):
+                row[key] = int(row[key]) if row[key] else None
+        derived = audit.final_assessment(records, daily, report['execution_prefix_probes'], SPEC)
+        for key, value in derived.items():
+            self.assertEqual(report[key], value, key)
+        observed, missing, unknown_slots = 0, 0, 0
+        for record in records:
+            if record['checksum_verified']:
+                self.assertLessEqual(utc(record['request_utc']), utc(record['receipt_utc']))
+                self.assertLessEqual(utc(record['receipt_utc']), utc(record['checksum_request_utc']))
+                self.assertLessEqual(utc(record['checksum_request_utc']), utc(record['checksum_receipt_utc']))
+            rows = [d for d in daily if d['symbol'] == record['symbol'] and d['day'].startswith(record['month'])]
+            if record['status'] == 'SOURCE_FAILED':
+                self.assertTrue(all(d['observed_minutes'] is None and not d['complete_day'] for d in rows))
+                unknown_slots += audit.month_bounds(record['month'])[1]
+            else:
+                self.assertEqual(sum(d['observed_minutes'] for d in rows), record['observed_minutes'])
+                self.assertEqual(sum(d['missing_minutes'] for d in rows), record['missing_minutes'])
+                observed += record['observed_minutes']
+                missing += record['missing_minutes']
+        self.assertEqual(observed + missing + unknown_slots, SPEC['expected_panel_candles'])
+        self.assertFalse(report['research_readiness'])
+        self.assertFalse(report['verified_out_of_sample_evidence'])
+        self.assertFalse(report['order_transmission_supported'])
+        self.assertIsNone(report['trade_count'])
 
 
 if __name__ == '__main__':
