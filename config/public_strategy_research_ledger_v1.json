@@ -102,5 +102,27 @@
     "retuning_permitted": false,
     "prospective_start_utc": null,
     "next_step": "incremental BTC-relative market-state information and capital-path economics; new identifier required"
+  },
+  "minute_continuity_execution": {
+    "study_id": "PSR7-MINUTE-CONTINUITY-POWER-EXECUTION",
+    "design_commit": "1f05a9c2e93d9f26b908ee9faeb00def487e8f52",
+    "implementation_commit": "5e357ce517053b8a1172688b138fa66cc223d9ad",
+    "status": "FEASIBILITY_STUDY_COMPLETE_RESEARCH_READINESS_BLOCKED",
+    "source_archives": 276,
+    "checksum_verified_archives": 276,
+    "fully_audited_candles": 11219639,
+    "known_missing_minutes_in_schema_valid_files": 841,
+    "unquantified_expected_slots_in_rejected_months": 869760,
+    "verified_shared_full_weeks": 271,
+    "new_feasibility_studies": 1,
+    "new_predictor_hypotheses": 0,
+    "additional_trading_cells": 0,
+    "minimum_cumulative_signal_cells": 10,
+    "research_readiness": false,
+    "retuning_permitted": false,
+    "data_spent": true,
+    "economics": "NOT_DESIGNED_NOT_RUN",
+    "prospective_start_utc": null,
+    "next_step": "close this feasibility study; any future predictive design requires a distinct preregistration, adequate independent loss evidence and historical execution inputs; no automatic watch"
   }
 }
