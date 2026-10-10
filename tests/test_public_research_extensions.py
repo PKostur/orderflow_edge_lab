@@ -131,12 +131,35 @@ class ResearchExtensionTests(unittest.TestCase):
         self.assertEqual(result['disposition'], 'REJECTED_AS_SPECIFIED')
         self.assertEqual(result['economics'], 'NOT_DESIGNED_NOT_RUN')
         self.assertIsNone(result['trade_count'])
+        for row in rows:
+            row['baseline'] = row['extended'] = row['delayed'] = row['target']
+        perfect = research.volume_analysis(rows)
+        self.assertIsNone(perfect['primary']['mse_reduction'])
+        self.assertIsNone(perfect['leave_week_mse_reduction_range'])
+        self.assertEqual(perfect['disposition'], 'REJECTED_AS_SPECIFIED')
 
     def test_committed_design_has_no_trading_cells(self):
         spec = json.loads((ROOT / 'config/public_research_extensions_v1.json').read_text())
         self.assertEqual(len(spec['minute']['dates']), 12)
         self.assertFalse(spec['order_transmission_supported'])
         self.assertEqual(spec['trial_accounting']['new_trading_cells'], 0)
+
+    def test_completed_artifacts_hashes_and_claim_boundaries(self):
+        base = ROOT / 'artifacts/public_research_extensions_20261010'
+        for lane in ('volume', 'minute'):
+            report = json.loads((base / lane / 'report.json').read_text())
+            for name, digest in report['output_sha256'].items():
+                self.assertEqual(research.sha256_file(base / lane / name), digest)
+            self.assertIsNone(report['trade_count'])
+            self.assertFalse(report['verified_out_of_sample_evidence'])
+            self.assertFalse(report['order_transmission_supported'])
+        minute = json.loads((base / 'minute/report.json').read_text())
+        self.assertEqual(len(minute['archives']), 48)
+        self.assertEqual(minute['bars_downloaded'], 69120)
+        self.assertTrue(minute['data_access_passed'])
+        self.assertFalse(minute['continuous_multi_year_history'])
+        self.assertFalse(minute['paper_replication'])
+        self.assertTrue(all(r['receipt_utc'] >= r['request_utc'] for r in minute['archives']))
 
 
 if __name__ == '__main__':

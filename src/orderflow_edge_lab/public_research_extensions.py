@@ -194,7 +194,8 @@ def volume_analysis(rows: list[dict]) -> dict:
     leave_week = [score([r for r in rows if r['week'] != w])['mse_reduction'] for w in keys]
     return {'primary': primary, 'shared_calendar_weeks': len(keys), 'by_symbol': symbols, 'by_year': years,
             'leave_year': leave_year, 'leave_symbol': {s: score([r for r in rows if r['symbol'] != s]) for s in SYMBOLS},
-            'leave_week_mse_reduction_range': [min(x for x in leave_week if x is not None), max(x for x in leave_week if x is not None)],
+            'leave_week_mse_reduction_range': [min(x for x in leave_week if x is not None), max(x for x in leave_week if x is not None)]
+            if any(x is not None for x in leave_week) else None,
             'descriptive_99pct_mse_reduction_interval': interval, 'bootstrap_replicates': 2000, 'bootstrap_valid': len(draws),
             'delayed': score([r for r in rows if r['delayed'] is not None], 'delayed'),
             'delayed_unavailable_rows': sum(r['delayed'] is None for r in rows),
