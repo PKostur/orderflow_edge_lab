@@ -174,7 +174,8 @@ def source_task(raw: Path, symbol: str, month: str) -> tuple[dict, list[dict]]:
     try:
         if meta.exists():
             saved = json.loads(meta.read_text(encoding='utf-8'))
-            if saved['url'] != url or not path.is_file() or sha256_file(path) != saved['sha256']:
+            if (saved['url'] != url or not path.is_file() or sha256_file(path) != saved['sha256']
+                    or saved['bytes'] != path.stat().st_size):
                 raise ValueError('invalid retained archive receipt/hash')
             record.update(saved)
         elif path.exists() or check.exists() or checksum_meta.exists():
@@ -249,7 +250,8 @@ def execution_prefix_probe(raw: Path, family: str, symbol: str, bucket: str) -> 
             stream.write(payload)
         output.update(http_status=status, receipt_utc=received, sha256=sha256_file(path), raw_relative_path=path.name)
         tree = ET.fromstring(payload)
-        if tree.tag.split('}')[-1] != 'ListBucketResult' or tree.findtext('{*}Prefix') != prefix:
+        if (tree.tag.split('}')[-1] != 'ListBucketResult' or tree.findtext('{*}Prefix') != prefix
+                or tree.findtext('{*}IsTruncated') not in ('true', 'false')):
             raise ValueError('unexpected bucket listing schema/prefix')
         keys = [node.findtext('{*}Key') for node in tree.findall('{*}Contents')]
         if any(not k or not k.startswith(prefix) for k in keys):
@@ -261,11 +263,13 @@ def execution_prefix_probe(raw: Path, family: str, symbol: str, bucket: str) -> 
     except (OSError, ValueError, ET.ParseError) as exc:
         if isinstance(exc, urllib.error.HTTPError):
             payload = exc.read()
+            received = iso(datetime.now(timezone.utc))
             with path.open('xb') as stream:
                 stream.write(payload)
-            output.update(http_status=exc.code, raw_relative_path=path.name, sha256=sha256_file(path))
-        output.update(status='PREFIX_ACCESS_UNCONFIRMED', error=str(exc),
-                      receipt_utc=iso(datetime.now(timezone.utc)))
+            output.update(http_status=exc.code, raw_relative_path=path.name, sha256=sha256_file(path), receipt_utc=received)
+        observed = iso(datetime.now(timezone.utc))
+        output.update(status='PREFIX_ACCESS_UNCONFIRMED', error=str(exc), failure_observed_utc=observed)
+        output.setdefault('receipt_utc', observed)
     return output
 
 
@@ -323,7 +327,8 @@ def main():
     args = parser.parse_args()
     root = Path.cwd().resolve()
     spec = verified_design(root, args.spec, args.design_commit)
-    if args.raw_dir.resolve() == args.output_dir.resolve():
+    raw_path, output_path = args.raw_dir.resolve(), args.output_dir.resolve()
+    if raw_path.is_relative_to(output_path) or output_path.is_relative_to(raw_path):
         raise ValueError('separate raw and report directories required')
     args.output_dir.mkdir(parents=True, exist_ok=False)
     args.raw_dir.mkdir(parents=True, exist_ok=True)

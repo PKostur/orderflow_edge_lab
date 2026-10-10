@@ -20,3 +20,6 @@ artifacts/public_kucoin_8h_20261010/aligned_csv/*.csv -text
 # PSR4 output manifest binds the exact generated CSV/JSON bytes across platforms.
 artifacts/public_btc_relative_state_20261010/* -text whitespace=cr-at-eol
 artifacts/public_research_extensions_20261010/** -text whitespace=cr-at-eol
+# PSR7 report and auditor fingerprints bind their exact bytes.
+artifacts/minute_continuity_20261010/** -text whitespace=cr-at-eol
+src/orderflow_edge_lab/minute_continuity_execution.py -text
