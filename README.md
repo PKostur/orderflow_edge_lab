@@ -129,3 +129,5 @@ Direct PaperEngine callers must supply upstream data/signal validation.
 ## Live trading
 
 Live order transmission is deliberately absent. Any future live adapter should be introduced only after sufficient fresh out-of-sample evidence, paper/shadow reliability evidence, and broker/exchange reconciliation testing exist.
+
+Descriptive venue replication: [KuCoin failed-downside study](docs/PUBLIC_KUCOIN_REPLICATION_2026_10_10.md).

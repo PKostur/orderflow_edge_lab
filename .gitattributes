@@ -15,3 +15,5 @@ research/volatility_state_d4/review_snapshot_*.json -text
 
 # Audited public Spot CSV hashes bind the exact collector bytes, including EOLs.
 artifacts/public_spot_8h_20261010/aligned_csv/*.csv -text whitespace=cr-at-eol
+artifacts/public_kucoin_8h_20261010/raw/*.json -text
+artifacts/public_kucoin_8h_20261010/aligned_csv/*.csv -text
