@@ -45,5 +45,17 @@
     "venue_history_is_future_oos": false,
     "disposition": "REJECT_COST_ROBUST_SURVIVAL_NO_PROMOTION",
     "next_step": "close candidate for promotion without retuning; new hypothesis requires new identifier"
+  },
+  "monthly_momentum_state": {
+    "study_id": "PSR3-MONTHLY-MOMENTUM-STATE",
+    "candidate_id": "PSM1-12M-1M-SPOT",
+    "design_commit": "6c2a37f0ba091f557d61efa19e61ed38c966f610",
+    "additional_signal_cells": 1,
+    "minimum_cumulative_cells": 10,
+    "status": "REJECTED_AS_SPECIFIED",
+    "data_spent": true,
+    "retuning_permitted": false,
+    "prospective_start_utc": null,
+    "next_step": "incremental BTC-relative market-state information and capital-path economics; new identifier required"
   }
 }
