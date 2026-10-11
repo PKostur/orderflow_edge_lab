@@ -1,0 +1,151 @@
+{
+  "study_id": "PSR14-PUBLIC-TREND-DEFAULT-BATCH8",
+  "version": 1,
+  "candidates": [
+    "SupertrendFlip8hDefaultIntent"
+  ],
+  "source_sha256": {
+    "SupertrendFlip8hDefaultIntent": "426e66ff4c7ac6b889ee0e449ad56a8cf962110efca401a3b373858d8a02236e"
+  },
+  "source_manifest": "artifacts/minute_continuity_20261010/source_manifest.json",
+  "source_manifest_sha256": "3fcadef5dea9086425111b12b74f9df84f86b2d0932ca918871fc47b66f7179b",
+  "quality_csv": "artifacts/minute_continuity_20261010/daily_quality.csv",
+  "quality_csv_sha256": "69403a31a4f7f5c234ebbca98e32ba9b2919253f453515c76da964f93e10ed29",
+  "source_policy": "Longest shared complete-day segment chosen solely by previously audited quality; no repairs, imputation or source replacement.",
+  "data_start": "2023-04-01T00:00:00Z",
+  "data_end_exclusive": "2026-10-01T00:00:00Z",
+  "signal_minutes": 480,
+  "execution_minutes": 1,
+  "warmup_bars": 240,
+  "symbols": [
+    "ETHUSDT",
+    "SOLUSDT",
+    "LINKUSDT"
+  ],
+  "benchmark": "BTCUSDT",
+  "episode_initial_cash_per_symbol": 10000,
+  "max_hold_bars": null,
+  "baseline_round_trip_bps": 40,
+  "cost_cases_bps": [
+    20,
+    40,
+    60,
+    80
+  ],
+  "cost_policy": "Each side charges half nominal roundtrip bps on actual modeled notional, including fee plus assumed spread/slippage; reserve in fixed signal-close quantity.",
+  "gap_target_models": [
+    "conservative_limit",
+    "opening_price_improvement"
+  ],
+  "touch_policy": "No protective price orders at source defaults; both registered gap models are intentionally identical, one history. Retain fail-closed history gates and no ambiguity pruning.",
+  "max_symbol_histories": 64,
+  "max_joint_histories": 4096,
+  "entry_policy": "floor8(cash*0.05/(signal_close*(1+sidecost))); fixed signal decision budget, next-open all-or-reject; explicitly differs from native opening-equity sizing; no resizing, borrowing, pyramiding or orders",
+  "clock_policy": "Completed8h direction flip inside inclusive source UTC-adapted date window decides next1m-open market action. Original bearish flip liquidates existinglong; held long flags countedignored before liquidation; no same-boundary re-entry. No active protective prices or invented timeout.",
+  "endpoint_policy": "Completed events use modeled exit reference; still-held events retain statusCENSORED_MTM and cutoff close mark with hypothetical liquidation burden, never a fictitious order or completed trade.",
+  "principal_return_estimand": "All admitted entry-to-exit-or-fixed-cutoff net reference returns; completed-only means separately descriptive. Per-unit return=(exit/entry)*(1-sidecost)/(1+sidecost)-1.",
+  "funded_btc_benchmark": "At each accepted alt entry allocate the same alt notional/preentry-cash fraction from a separate BTC cash account. Exact BTC open entry; open exit uses BTCopen, intraminute exit uses BTCminute low/high bounds; own costs and remaining inventory; cutoff uses known final close.",
+  "portfolio_policy": "Equal three10000USDT cash sleeves;5%source equity intent with commonfixedsignal-close quantity adapter. Shared8h liquidation-value NAV, fundedBTC owncashreference, all gates unchanged.",
+  "seed": 20261018,
+  "bootstrap_replicates": 2000,
+  "bootstrap_calendar_block_weeks": 4,
+  "bootstrap_policy": "Moving contiguous4calendar-week blocks incl zero-event weeks; retain fixed alpha0.025,97.5% two-sided intervals from prior comparator. One newly registered cell; conservative fixed carryover, not two cells or global repeated-search inference.",
+  "placebo_replicates": 500,
+  "placebo_policy": "500 weekly raw long-flip entry randomizations preserving eligiblecalendar entryweekflagcount; rerun same source originalbearish-flip exits, ownentries/quantities/durations/cash. Never preserve observed endogenous durations. Descriptive maxcontrol vsminbaseline cohortmean.",
+  "lag_control_bars": 7,
+  "lag_policy": "Shift raw longflip flags7bars after zeroingprewarmup; same originalbearishflip cash exit and causal engine.",
+  "gates": {
+    "min_completed_events": 100,
+    "min_entry_weeks": 52,
+    "min_all_admitted_net40_bps": 5,
+    "require_all_admitted_net80_positive": true,
+    "require_all_symbols_net40_positive": true,
+    "min_positive_year_fraction": 0.6666666666666666,
+    "max_portfolio_drawdown_pct": 30,
+    "require_leave_one_entry_week_out_net40_positive": true,
+    "require_net40_descriptive_lower_ci_positive": true,
+    "require_btc_excess40_descriptive_lower_ci_positive": true,
+    "max_placebo_at_least_observed_fraction": 0.05,
+    "require_no_history_overflow": true
+  },
+  "diagnostics": [
+    "completed/pending/unexecuted/overlap/invalid/cash rejection accounting",
+    "all-admission and completed-only returns/PF",
+    "gross MFE/MAE uncertainty",
+    "calendar entry weeks and4week bootstrap",
+    "fixed UTC sessions and overlap memberships",
+    "symbol/year/month/weekday/hour and causalBTC30bar state",
+    "leave-week and leave-symbol sensitivity",
+    "40/80 costs and20/60 cases",
+    "funded BTC wealth and same-exit reference bounds",
+    "full branch and gap-model sensitivity",
+    "500 randomized-entry controls and7bar lag control"
+  ],
+  "claim": "Spent historical hypothetical development only; SCREEN_SURVIVOR permits separate future preregistration, never viable/untouched/positive-edge/deployment claim.",
+  "future_confirmation": "User completion requires a separate immutable and adequately powered future-only protocol, calibrated costs/quotes/execution, controls and approval-bound paper reliability, frozen before observations start. No viable candidate until that confirmation passes.",
+  "bollinger_bands_excluded": true,
+  "frozen_lanes_modified": false,
+  "authorizes_orders": false,
+  "retuning_permitted": false,
+  "minimum_preexisting_trading_cells": 20,
+  "minimum_preexisting_signal_model_cells": 21,
+  "new_registered_trading_cells": 1,
+  "minimum_registered_trading_cells_after_freeze": 21,
+  "minimum_registered_signal_model_cells_after_freeze": 22,
+  "source_urls": {
+    "SupertrendFlip8hDefaultIntent": "https://github.com/rahulmr/Pinescript-SuperTrend-Trading-Strategy/blob/dfe2292e58583690271ddf515a991d84faa70563/supertrend.pinescript"
+  },
+  "runtime": {
+    "python": "3.13.14",
+    "numpy": "2.2.4",
+    "pandas": "2.2.3",
+    "platform": "win32",
+    "precision": "float64 scalar operation order"
+  },
+  "dependency_hash_policy": "Python dependency bytes normalize CRLF to LF solely for cross-platform checkout; all data/audit fingerprints remain exact bytes",
+  "dependency_source_sha256": {
+    "src/orderflow_edge_lab/public_protective_batch5.py": "ea1a2f5564a4261fe3c53e4d3f584b782913222f43228f0843c9d94917eab6d8",
+    "src/orderflow_edge_lab/protective_minute.py": "32345cbe229e734129f063e161f77989c3e2d0facb604dade40b469de31f03bf",
+    "src/orderflow_edge_lab/public_strategy_completion.py": "2a5327410bb5b7acef4dc6959d95b8ea309df0f0cf9f6e692c946b7500a1719a"
+  },
+  "source_mechanics_audit_sha256": {
+    "artifacts/public_trend_batch8_registration_20261011/Supertrend-conditional-source-readiness-audit.json": "6ec6b6f4428b1aa4da43d849b870362383d6f622006d87c97e3061baac22b407",
+    "artifacts/public_trend_batch8_registration_20261011/Supertrend-reference-mechanics-addendum.json": "ec6037b3a926d21e31d32a1f9e3168a0b39768d912b05939153bd7d25a8f8ec2"
+  },
+  "family_disclosure": "Original25 survey mentioned FreqtradeSupertrend as source-only; this pinned single-band previous-band flip source is a new registered adaptation, not a rerun or independentnewedge claim. Related ATR/trend families include ChandelierExit, MAGen, Ichimoku, SAR and MACD studies; retain all outcomes/trials.",
+  "native_runtime_status": "UNVERIFIED native Pine execution, arithmetic, fill and sizing parity; independently implemented declared mathematical port. This source has no strategy.exit call.",
+  "supertrend": {
+    "atr_period": 10,
+    "factor": 3,
+    "equity_fraction": 0.05,
+    "source_initial_capital_usd": 10000,
+    "use_stop_loss": false,
+    "unused_optional_stop_percent": 15,
+    "source_timeframe": null,
+    "initial_direction": 1,
+    "start_inclusive": "2019-01-01T00:00:00Z",
+    "finish_inclusive": "9999-01-01T23:59:00Z",
+    "calendar_timezone_adapter": "UTC for Binance Spot, source exchange timezone otherwise",
+    "atr": "TR0=high-low; later max(high-low,abs(high-priorclose),abs(low-priorclose)); first9ATR NaN; scalar left-to-right sum first10TR /10 seed; alpha=1/10,beta=1-alpha; two products then addition",
+    "midpoint": "(high+low)/2; basic_up=midpoint-factor*ATR; basic_down=midpoint+factor*ATR",
+    "bands": "up_t=max(basic_up_t,up_prev) if close_prev>up_prev else basic_up_t; down_t=min(basic_down_t,down_prev) if close_prev<down_prev else basic_down_t; undefined prior comparisons false",
+    "direction": "if close_t>down_prev choose1; elif close_t<up_prev choose-1; else previous direction, missingprevious becomes1; equality does not flip",
+    "long": "direction1 following-1 AND source calendar window",
+    "short": "direction-1 following1 AND source calendar window",
+    "source_default_exit": "Only opposite direction flip reverses; disabled optionalstop does not close. Spot bearishflip closesexistinglong to cash; no short opened",
+    "source_startup": "Initial fallbackbullish is not an entry; first computable bands are not an entry. No warmup restart.",
+    "quantity": "floor8(cash*0.05/(signal_close*(1+sidecost))); fixed signal decision budget, next-open all-or-reject; explicitly differs from native opening-equity sizing",
+    "disabled_state": "Source entry_price/sl_price/updated_entry_price assignments have no active default exit consequence and are not used as protective price orders",
+    "currency": "10000USD becomes10000USDT under declared1:1 research accounting; no native conversion parity"
+  },
+  "source_attribution": "Inspected publisherrahulmr; license2020TomRumpf and commit authortomcru. Originalpublicationunestablished; auditable pinnedpublicsource mathematicalport, no originalpublisher claim. MIT notice retained in audit; independent mathimplementation, no source code copied.",
+  "required_pre_outcome_review": {
+    "path": "artifacts/public_trend_batch8_registration_20261011/pre-outcome-review.json",
+    "required_status": "PASS_PRE_OUTCOME_INDEPENDENT_REVIEW_WITH_DECLARED_PARITY_LIMITS",
+    "must_bind": [
+      "evaluator_exact_sha256",
+      "canonical_config_sha256"
+    ],
+    "before_any_raw_market_load": true
+  }
+}
