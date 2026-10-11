@@ -1,0 +1,72 @@
+{
+  "kind": "POST_VORTEX_PRIMARY_SOURCE_READINESS",
+  "source_only": true,
+  "new_registered_trials": 0,
+  "market_outcomes_loaded": false,
+  "discovery_queries": [
+    "github cryptocurrency automated strategy KAMA crossover source strategy",
+    "github crypto trading bot Aroon strategy source code",
+    "site:github.com IStrategy aroonup minimal_roi",
+    "site:github.com IStrategy KAMA stoploss -Bollinger -bb_lowerband"
+  ],
+  "selection": "Primary source executable rules and readiness; advertised performance not selection evidence. Search snippets can expose claims; no result files or performance tables loaded.",
+  "receipts": [
+    {
+      "repository": "jimtin/python_trading_bot",
+      "commit": "778e98dbe9cc812481836887321c9e4fd709dfbc",
+      "path": "strategies/engulfing_candle_strategy.py",
+      "url": "https://raw.githubusercontent.com/jimtin/python_trading_bot/778e98dbe9cc812481836887321c9e4fd709dfbc/strategies/engulfing_candle_strategy.py",
+      "local_file": "C:\\Users\\007pe\\Documents\\Codex\\2026-10-10\\referenced-chatgpt-conversation-this-is-an\\work\\next_primary_source_survey\\jimtin_python_trading_bot_strategies_engulfing_candle_strategy.py",
+      "sha256": "6c14562ee75abd96a1c337888f09f46d26a8f283a501b08ae97f407d9f809ffe"
+    },
+    {
+      "repository": "mr-robot77/tradebot",
+      "commit": "88e4ac810b7326486e3551863f8242a49a30ec9c",
+      "path": "strategies/williams_r_strategy.py",
+      "url": "https://raw.githubusercontent.com/mr-robot77/tradebot/88e4ac810b7326486e3551863f8242a49a30ec9c/strategies/williams_r_strategy.py",
+      "local_file": "C:\\Users\\007pe\\Documents\\Codex\\2026-10-10\\referenced-chatgpt-conversation-this-is-an\\work\\next_primary_source_survey\\mr-robot77_tradebot_strategies_williams_r_strategy.py",
+      "sha256": "b5bbccf7bcb0b41a608d8b1cfbbddb65e7e565140283c04d122e7b718d09e7e2"
+    },
+    {
+      "repository": "mr-robot77/tradebot",
+      "commit": "88e4ac810b7326486e3551863f8242a49a30ec9c",
+      "path": "strategy.py",
+      "url": "https://raw.githubusercontent.com/mr-robot77/tradebot/88e4ac810b7326486e3551863f8242a49a30ec9c/strategy.py",
+      "local_file": "C:\\Users\\007pe\\Documents\\Codex\\2026-10-10\\referenced-chatgpt-conversation-this-is-an\\work\\next_primary_source_survey\\mr-robot77_tradebot_strategy.py",
+      "sha256": "9ad607331fafb1d066f7127010894733a86cb6775b5b25abf2009bdb98165e58"
+    }
+  ],
+  "findings": [
+    {
+      "repository": "jimtin/python_trading_bot",
+      "commit": "778e98dbe9cc812481836887321c9e4fd709dfbc",
+      "decision": "UNREADY_NOT_REGISTERED",
+      "reasons": [
+        "Pinned tree offers EMA crosses and engulfing alert response; search snippet Aroon reference is not an executable strategy in this tree.",
+        "Inspected engulfing function only prints a proposed BUY/SELL stop at high/low and one-range target. It does not place or track orders, define sizing, order expiry, fills or the input alert detector.",
+        "Permitted timeframes M15/M30/H1/D1 explicitly exclude eight hours. Exact eight-hour source execution would require a separately declared adaptation and resolved alert/order lifecycle.",
+        "No LICENSE path identified in pinned recursive tree; this is a bounded inventory finding, not a universal licensing conclusion."
+      ]
+    },
+    {
+      "repository": "mr-robot77/tradebot",
+      "commit": "88e4ac810b7326486e3551863f8242a49a30ec9c",
+      "decision": "REDUNDANT_AND_EXECUTION_UNREADY_NOT_REGISTERED",
+      "reasons": [
+        "WilliamsR source uses Tulip period14, BUY every value<-80 while flat, SELL every value>-20 while held; strict states, not threshold crossings.",
+        "Source is BTC/EUR Bitvavo two-hour OHLCV plus ticker bid, 25% portfolio BUY limit with precision4 and pending-order suppression. Exit delegates close_position to unpinned framework.",
+        "Limit fill, expiry, asynchronous pending state, framework version, cash sizing and exit behavior are not specified by the inspected strategy; eight-hour OHLCV cannot establish ticker bid/order queue fills.",
+        "For nonzero high-low range, WilliamsR=fast stochastic K-100. Prior batch6 source audit already recorded this redundancy. New family independence is not established.",
+        "No LICENSE path identified in pinned recursive tree; no code copied into repository.",
+        "Bollinger file named in source inventory was excluded and not opened."
+      ]
+    }
+  ],
+  "prior_trial_ledger": "public_vortex_batch10_20261011/trial_ledger.json",
+  "minimum_attempted_trading_cells": 23,
+  "minimum_attempted_signal_model_cells": 24,
+  "viable_candidates": [],
+  "future_confirmation_started": false,
+  "goal_complete": false,
+  "next": "Continue a bounded primary-source survey for materially new, fully specified bot rules. Resolve native feature and order semantics synthetically before preregistration or market loading. Do not invent repairs or retest closed versions."
+}
