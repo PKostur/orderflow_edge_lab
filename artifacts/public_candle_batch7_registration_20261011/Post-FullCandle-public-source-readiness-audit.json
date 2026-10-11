@@ -1,0 +1,115 @@
+{
+  "kind": "BOUNDED_SOURCE_ONLY_POST_FULLCANDLE_READINESS_AUDIT",
+  "inspection_date_utc": "2026-10-11",
+  "registered": false,
+  "new_trading_cells": 0,
+  "market_outcomes_inspected": false,
+  "market_backtests_run": false,
+  "native_runtime_executed": false,
+  "repository_edits": false,
+  "orders_supported": false,
+  "scope": "Three public source-discovery queries, two publisher repository inventories, one new full strategy implementation inspection. No performance-based selection and no exhaustive internet-search claim.",
+  "queries": [
+    "github jesse-ai example strategies candlestick engulfing stop_loss take_profit strategy",
+    "github freqtrade strategy candlestick Hammer strategy stoploss minimal_roi license",
+    "github original Pine strategy Engulfing MPL strategy.exit"
+  ],
+  "inspected_new_strategy": {
+    "name": "ENGULFING STRATEGY [XAUUSD,D]",
+    "publisher_account": "pinescripterr",
+    "file_author_notice": "pinescripter_maroc",
+    "gist": "9d402ab2925323e4eabfa44935f83ae3",
+    "immutable_revision": "465af8e7b280e8e9ea241a0fd06abcb209ff91db",
+    "immutable_url": "https://gist.github.com/pinescripterr/9d402ab2925323e4eabfa44935f83ae3/465af8e7b280e8e9ea241a0fd06abcb209ff91db",
+    "raw_url": "https://gist.githubusercontent.com/pinescripterr/9d402ab2925323e4eabfa44935f83ae3/raw/b7381993ed154b5ba35d0d53ee9695b516fcff35/engulfingstrat.txt",
+    "sha256": "a9a29211d846d59173ecde9ef799c6ee231502e6bdaed48c34c5eec55c972923",
+    "utf8_bytes": 6433,
+    "created_utc": "2023-12-20T20:53:30Z",
+    "license": "MPL-2.0 explicit file notice",
+    "provenance_status": "Original-facing publisher gist carries a author notice; independent identity match between account and named author not established. No mirror substituted as canonical source.",
+    "defaults": {
+      "pine_version": 5,
+      "initial_capital": 10000,
+      "currency": "USD",
+      "margin_long_percent": 1,
+      "margin_short_percent": 1,
+      "calc_on_order_fills": true,
+      "quantity_type": "percent_of_equity",
+      "quantity_value": 100,
+      "engulf_lookback": 3,
+      "atr_period": 14,
+      "atr_multiplier": 0,
+      "target1_risk_multiple": 1,
+      "target2_risk_multiple": 2,
+      "target1_quantity_percent": 25,
+      "target2_quantity_percent_requested": 100,
+      "ema_filter_period": 25,
+      "stochastic_period": 14,
+      "long_stochastic_threshold_strict": 70,
+      "short_stochastic_threshold_strict": 25,
+      "commission_or_slippage": "Not specified in declaration; cannot carry zero friction into acceptance accounting",
+      "timeframe": "Title identifies XAUUSD daily; code does not enforce timeframe",
+      "administrative_timeout": null
+    },
+    "exact_entry": {
+      "body": "abs(open-close)",
+      "bullish": "For each i=1,2,3: current body>body[i], close>close[i], open<=open[i]; counter resets on any failure, and must finish at3",
+      "bearish": "For each i=1,2,3: current body>body[i], close<close[i], open>=open[i]; counter resets on any failure, and must finish at3",
+      "long": "bullish AND close>EMA25 AND position_size==0 AND stoch(close,high,low,14)>70",
+      "short": "bearish AND close<EMA25 AND position_size==0 AND stoch(close,high,low,14)<25",
+      "order": "Market strategy.entry; both sides enabled. Entry call clears persistent stop, targets and entry reference to na.",
+      "distinctness": "Three-bar engulfing geometry is a distinct entry premise from FullCandle single-bar wick geometry; EMA and stochastic filters remain related to prior tested families and must be disclosed, not claimed independent."
+    },
+    "exact_exit_state": {
+      "long_stop_candidate": "low[1]-(ATR_MULTIP*ATR14)",
+      "short_stop_candidate": "high[1]+(ATR_MULTIP*ATR14)",
+      "initialization": "On a calculation observing an open side with stoploss na, capture that side's stop candidate; risk distance uses actual position_avg_price; targets1/2 use1R/2R; retain persistent state afterward.",
+      "source_exit_call_order": [
+        "1st exit,from_entry Long,qty_percent25,shared stop,target1",
+        "2nd exit,from_entry Long,qty_percent100,shared stop,target2",
+        "1st exit,from_entry Short,qty_percent25,shared stop,target1",
+        "2nd exit,from_entry Short,qty_percent100,shared stop,target2"
+      ],
+      "breakeven": "After all exit calls, if long and high>target1, set persistent stoploss to position_avg_price; if short and low<target1, same. A new price submission therefore depends on a later recalculation; this is not an immediate same-tick update proof.",
+      "partial_reservation": "Requested25% then100% requires framework order reservation semantics; not two independent full notional exits.",
+      "same_ids": "Both sides reuse1st exit and2nd exit IDs. The v5 reference says existing unfilled orders with matching IDs can be modified. Matching from_entry, side filtering and reservation interaction require native proof; do not silently rename IDs or drop source calls.",
+      "warmup": "ATR multiplier0 does not justify removing ATR computation or NaN propagation. Undefined ATR before sufficient history can leave stop candidates na.",
+      "gap_risk": "Source has no guard ensuring low[1] is below actual long fill or high[1] above actual short fill. Do not clamp invalid risk distances or rebase stops without declaring a different strategy."
+    },
+    "framework_limits": [
+      "calc_on_order_fills can perform additional historical bar calculations; current high/low, EMA and stochastic values at fill recalculation must not be treated as causal intrabar observations without an execution audit",
+      "Default ATR multiplier0 makes valid-history initial stop depend on prior bar low/high, but does not solve shared order-ID or breakeven update timing",
+      "Historical broker path and fill recalculation cannot be reproduced by simply replacing every source call with completed8h signals and next-open fills while claiming native parity",
+      "The source's1%margin settings permit leveraged native configurations; a Spot cash cap is a declared adaptation",
+      "100%available-equity sizing needs explicit fee reserve, precision, minimum size and rejected-order policy for Spot",
+      "No native runtime or fill fixtures executed here"
+    ],
+    "primary_framework_references": [
+      "https://www.tradingview.com/pine-script-docs/v5/concepts/strategies/",
+      "https://www.tradingview.com/pine-script-reference/v5/#fun_strategy.exit"
+    ],
+    "readiness": "NOT_READY_NOT_REGISTERED",
+    "necessary_before_any_registration": [
+      "Establish canonical author identity/provenance to requested standard",
+      "Prove or explicitly declare shared exit-ID behavior without silent source repairs",
+      "Freeze causal fill recalculation, partial exit, breakeven activation and gap policies",
+      "Declare long-only cash adaptation and8h departure from daily gold context",
+      "Preserve source numeric defaults, no invented timeout or protection"
+    ]
+  },
+  "inventory_exclusions": {
+    "jesse_ai_examples": {
+      "commit": "7c91e0a37bf62165790120d730442e4f6eb00364",
+      "url": "https://github.com/jesse-ai/example-strategies/tree/7c91e0a37bf62165790120d730442e4f6eb00364",
+      "reason": "Inventory offers prior MAGen/RSI/MA/stochastic/Bollinger/Donchian/Turtle families or Dual Thrust already in original25 survey. No result files opened and no duplicate registered."
+    },
+    "geraked_inventory": {
+      "commit": "49382943d461ccb6fa20c241c2824d8a41fd4b82",
+      "url": "https://github.com/geraked/tradingview/tree/49382943d461ccb6fa20c241c2824d8a41fd4b82/strategies",
+      "reason": "CP1 and3MAF already inspected; remaining names indicate prior SAR/Chandelier/AO/MACD/RSI or Bollinger families. No second clean new mechanics lead accepted from inventory."
+    },
+    "other_search_hits": "Mirrors, prior inspected engulfing sources, and Bollinger-containing files were not promoted. Publisher performance statements were not used as evidence."
+  },
+  "conclusion": "No additional mechanically ready source established within this bounded inspection. The engulfing source is retained as an audit lead, not a second future trading cell or a viable candidate.",
+  "preserved": ["FullCandle retained unchanged", "Bollinger entirely excluded", "No frozen lane or prospective protocol changes", "No protection/timeout invented", "Acceptance and future-confirmation gates unchanged"]
+}

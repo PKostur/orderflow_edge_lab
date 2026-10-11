@@ -1,0 +1,109 @@
+{
+  "kind": "SOURCE_ONLY_PRE_REGISTRATION_ARITHMETIC_PRECISION_CLARIFICATION",
+  "inspection_date_utc": "2026-10-11",
+  "registered": false,
+  "new_trading_cells": 0,
+  "market_tests_run": false,
+  "market_outcomes_inspected": false,
+  "native_pine_execution": false,
+  "native_fill_or_arithmetic_parity_claim": false,
+  "repository_edits": false,
+  "binding": {
+    "source_url": "https://raw.githubusercontent.com/Alorse/pinescript-strategies/8fb3837ddcd137f1450c3e82d654ff3df24d54d5/strategies/other/Full%20Candle.pine",
+    "source_commit": "8fb3837ddcd137f1450c3e82d654ff3df24d54d5",
+    "source_sha256_reverified": "8d6335c7752767090dfbfaeba0d878def0dac8171897dd431f9c2c0ca12036be",
+    "license": "MPL-2.0 source notice; copyright alorse",
+    "prior_mechanics_audit": "outputs/Next-public-bot-default-mechanics-audit.json",
+    "prior_mechanics_audit_sha256": "1870690d05eb21099fa5d113ec180e41cb40156b735c0ec1ce2cc4c90da52968",
+    "prior_framework_audit": "outputs/FullCandle-pre-registration-framework-audit.json",
+    "prior_framework_audit_sha256": "bdb0ce56d616dfec2caa24dfe66810de252b49095a12d68f4a1affb659ac6dca",
+    "retention": "Prior audits remain unchanged historical inspections. Their algebraically simplified threshold and EMA expressions are explanatory only and must not define exact port arithmetic. This clarification supplies the calculation order for future specification."
+  },
+  "exact_calculation_order": {
+    "long_threshold": "First multiply entry_price by0.002; then add that result to entry_price. Compare close strictly greater than this sum.",
+    "short_threshold": "First multiply position_avg_price by0.002; then subtract that result from position_avg_price. Compare close strictly less than this difference.",
+    "long_extra_predicate": "close>open",
+    "short_extra_predicate": "close<open",
+    "candle_range": "high-low",
+    "directional_shadow": "If close>open, high-close; otherwise close-low",
+    "shadow_percentage": "Multiply shadowSize by100 first, then divide by candleSize. Compare <=5; do not reorder division and multiplication.",
+    "ema_reference": "Official v5 ta.ema documented equivalent: alpha=2/(length+1), beta=1-alpha, initialize with first valid source, then add alpha*close and beta*previous EMA. For length10 retain the subtraction producing beta, rather than substituting9/11.",
+    "ema_operation_sequence": ["length+1", "2 divided by previous integer result", "1 minus computed alpha", "alpha times close", "beta times previous EMA", "sum the two products"],
+    "invalid_value_policy": "Keep absent entry reference and zero-range shadow undefined/na. Do not coerce to zero. Geometry predicates and causal state rules remain unchanged.",
+    "no_fused_rewrite": "The illustrative port uses separately rounded operations. Do not silently introduce fused multiply-add, reassociation, decimal rounding, rational coefficients, or algebraic threshold simplification. Native Pine arithmetic implementation remains unverified."
+  },
+  "primary_ema_reference": {
+    "url": "https://static.tradingview.com/static/bundles/91998.903fee1a7992e6653580.js",
+    "sha256": "7b73620f8186ae93af233b5b9d45c336787dc42f94bddcb4be1b80733f558c2d",
+    "locator": "ta.ema documented pine_ema equivalent example; reference loader and language asset binding retained in prior framework audit",
+    "limit": "Documentation supports this reference-equivalent recurrence, not a claim of bit-identical native runtime."
+  },
+  "synthetic_counterexample_method": {
+    "runtime": "Python3.13.14 binary64 float on Windows",
+    "synthetic_only": true,
+    "market_data_used": false,
+    "generation": "Fixed random seed20261011; search synthetic positive numbers and adjacent math.nextafter values. No strategy fitting or market thresholds changed.",
+    "scope": "These examples prove that mathematical equivalence does not guarantee the same binary64 predicate; they do not establish Pine engine rounding or actual market effect."
+  },
+  "synthetic_counterexamples": {
+    "long_exit": {
+      "entry_price": 67975.34048642045,
+      "source_sum_threshold": 68111.29116739328,
+      "rewritten_times1_002_threshold": 68111.2911673933,
+      "synthetic_close": 68111.2911673933,
+      "source_strict_greater": true,
+      "rewritten_strict_greater": false,
+      "threshold_hex": ["0x1.0a0f4a89f23fdp+16", "0x1.0a0f4a89f23fep+16"],
+      "nextafter_source_toward_positive_infinity_equals_rewritten": true,
+      "geometry_fixture": "Choose any synthetic open less than close to satisfy bullish predicate."
+    },
+    "short_exit": {
+      "position_avg_price": 67975.34048642045,
+      "source_difference_threshold": 67839.38980544762,
+      "rewritten_times0_998_threshold": 67839.3898054476,
+      "synthetic_close": 67839.3898054476,
+      "source_strict_less": true,
+      "rewritten_strict_less": false,
+      "threshold_hex": ["0x1.08ff63ca4a315p+16", "0x1.08ff63ca4a314p+16"],
+      "nextafter_source_toward_negative_infinity_equals_rewritten": true,
+      "geometry_fixture": "Choose any synthetic open greater than close to satisfy bearish predicate. Short comparison is source documentation, not permission to add Spot shorts."
+    },
+    "shadow_boundary": {
+      "synthetic_shadow_size": 491.85207895294286,
+      "synthetic_candle_size": 9837.041579058856,
+      "source_multiply_then_divide": 5.0,
+      "rewritten_divide_then_multiply": 5.000000000000001,
+      "source_lte5": true,
+      "rewritten_lte5": false,
+      "result_hex": ["0x1.4000000000000p+2", "0x1.4000000000001p+2"],
+      "nextafter_source_toward_positive_infinity_equals_rewritten": true,
+      "scope": "Fixture uses derived shadow/range inputs; full OHLC subtraction rounding is a separate fixture concern."
+    },
+    "ema_coefficient": {
+      "alpha": 0.18181818181818182,
+      "source_beta_1_minus_alpha": 0.8181818181818181,
+      "rewritten_beta9_div11": 0.8181818181818182,
+      "beta_hex": ["0x1.a2e8ba2e8ba2ep-1", "0x1.a2e8ba2e8ba2fp-1"],
+      "coefficients_equal": false
+    },
+    "ema_update": {
+      "synthetic_close": 54583.61331348621,
+      "synthetic_previous_ema": 48165.1810518321,
+      "source_reference_order_result": 49332.168735769206,
+      "rewritten_beta_result": 49332.16873576921,
+      "result_hex": ["0x1.8168566488e4dp+15", "0x1.8168566488e4ep+15"],
+      "nextafter_source_toward_positive_infinity_equals_rewritten": true
+    }
+  },
+  "unchanged_boundaries": [
+    "TP and SL remain disabled at published defaults",
+    "No invented protective parameters or timeout",
+    "Long-only Spot reversal remains an explicitly declared adaptation",
+    "Native all-na exit runtime remains unverified",
+    "No native fill or arithmetic parity claim",
+    "100-event,52-week,drawdown,controls,cost gates unchanged",
+    "Untouched future confirmation still required",
+    "No Bollinger or frozen lane/protocol changes"
+  ],
+  "readiness": "EXACT_OPERATION_ORDER_CLARIFIED_FOR_FUTURE_SPECIFICATION_NOT_REGISTERED_NO_OUTCOME"
+}
