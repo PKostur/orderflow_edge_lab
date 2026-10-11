@@ -1,0 +1,327 @@
+{
+  "audit_id": "PSR14-FINAL-INDEPENDENT-REVIEW",
+  "status": "PASS_REPRODUCTION_ACCOUNTING_REJECTION_CONFIRMED",
+  "results_exact_sha256": "abf9d32769b2937dfe104de8c9d7c10291ca8921e90ec1c510811e81b6371d6d",
+  "evaluator_exact_sha256": "a63f46239dabbc91e86db48c7099d48f45d0eba719f3d904c08a561b7def0141",
+  "evaluator_git_commit_in_results": "bfd451e81cea6c2deab10c05a2e6b740ba419f22",
+  "design_commit": "ea9efb2750bdcc639a494ba21e2baf47aea4cdeb",
+  "canonical_config_sha256": "9338cce9daab37e07cbd0eb28b804b0b5ab46f129ed10d7b510fefc9458dd247",
+  "source_evidence_canonical_match": true,
+  "pre_outcome_review_committed_guard": "PASS",
+  "source_sha256": {
+    "SupertrendFlip8hDefaultIntent": "426e66ff4c7ac6b889ee0e449ad56a8cf962110efca401a3b373858d8a02236e"
+  },
+  "baseline_comparisons": [
+    {
+      "case": "40:conservative_limit",
+      "canonical_case_sha256": "bf92568735fd24a0d4fc0c4ab2dd23107e2d2efe220cb87019e7605a9c81710d",
+      "matched": true,
+      "accounts": [
+        {
+          "symbol": "ETHUSDT",
+          "admitted": 38,
+          "completed": 37,
+          "censored": 1,
+          "account_errors": [
+            0.0,
+            0.0,
+            0.0,
+            9.094947017729282e-12
+          ]
+        },
+        {
+          "symbol": "SOLUSDT",
+          "admitted": 35,
+          "completed": 34,
+          "censored": 1,
+          "account_errors": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "symbol": "LINKUSDT",
+          "admitted": 45,
+          "completed": 44,
+          "censored": 1,
+          "account_errors": [
+            0.0,
+            0.0,
+            0.0,
+            3.637978807091713e-12
+          ]
+        }
+      ],
+      "summary": {
+        "admitted": 118,
+        "completed": 115,
+        "censored_mtm": 3,
+        "mean_net_bps": 418.0933347890223,
+        "median_net_bps": -203.14428237884874,
+        "mean_completed_only_net_bps": 376.4325206107953,
+        "per_unit_profit_factor": 1.9170605088825718,
+        "cash_profit_factor_with_cutoff_marks": 1.9059589949409894,
+        "completed_cash_profit_factor": 1.793048616172407,
+        "win_fraction": 0.4491525423728814,
+        "mean_gross_bps": 459.84921989839705,
+        "mean_btc_excess_lower_bps": 243.56729046025518,
+        "mean_btc_excess_upper_bps": 243.56729046025518,
+        "mean_mfe_lower_bps": 2049.922325150519,
+        "mean_mfe_upper_bps": 2049.922325150519,
+        "mean_mae_lower_bps": -723.3242571155428,
+        "mean_mae_upper_bps": -723.3242571155428
+      },
+      "portfolio_metrics": {
+        "roi_pct": 8.53519104877558,
+        "drawdown_pct": -3.2743557961932623,
+        "funded_btc_roi_lower_pct": 3.448593090420826,
+        "funded_btc_roi_upper_pct": 3.448593090420826,
+        "note": "8h-close hypothetical liquidation-value marks; drawdown is not an intrabar bound. Funded BTC intervals are reference bounds, not executed fills."
+      }
+    },
+    {
+      "case": "40:opening_price_improvement",
+      "canonical_case_sha256": "bf92568735fd24a0d4fc0c4ab2dd23107e2d2efe220cb87019e7605a9c81710d",
+      "matched": true,
+      "accounts": [
+        {
+          "symbol": "ETHUSDT",
+          "admitted": 38,
+          "completed": 37,
+          "censored": 1,
+          "account_errors": [
+            0.0,
+            0.0,
+            0.0,
+            9.094947017729282e-12
+          ]
+        },
+        {
+          "symbol": "SOLUSDT",
+          "admitted": 35,
+          "completed": 34,
+          "censored": 1,
+          "account_errors": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "symbol": "LINKUSDT",
+          "admitted": 45,
+          "completed": 44,
+          "censored": 1,
+          "account_errors": [
+            0.0,
+            0.0,
+            0.0,
+            3.637978807091713e-12
+          ]
+        }
+      ],
+      "summary": {
+        "admitted": 118,
+        "completed": 115,
+        "censored_mtm": 3,
+        "mean_net_bps": 418.0933347890223,
+        "median_net_bps": -203.14428237884874,
+        "mean_completed_only_net_bps": 376.4325206107953,
+        "per_unit_profit_factor": 1.9170605088825718,
+        "cash_profit_factor_with_cutoff_marks": 1.9059589949409894,
+        "completed_cash_profit_factor": 1.793048616172407,
+        "win_fraction": 0.4491525423728814,
+        "mean_gross_bps": 459.84921989839705,
+        "mean_btc_excess_lower_bps": 243.56729046025518,
+        "mean_btc_excess_upper_bps": 243.56729046025518,
+        "mean_mfe_lower_bps": 2049.922325150519,
+        "mean_mfe_upper_bps": 2049.922325150519,
+        "mean_mae_lower_bps": -723.3242571155428,
+        "mean_mae_upper_bps": -723.3242571155428
+      },
+      "portfolio_metrics": {
+        "roi_pct": 8.53519104877558,
+        "drawdown_pct": -3.2743557961932623,
+        "funded_btc_roi_lower_pct": 3.448593090420826,
+        "funded_btc_roi_upper_pct": 3.448593090420826,
+        "note": "8h-close hypothetical liquidation-value marks; drawdown is not an intrabar bound. Funded BTC intervals are reference bounds, not executed fills."
+      }
+    },
+    {
+      "case": "80:conservative_limit",
+      "canonical_case_sha256": "a41204c03ee7ee4e330cac50cbaab26af74611d92d3183526af2adbdcad91ec2",
+      "matched": true,
+      "accounts": [
+        {
+          "symbol": "ETHUSDT",
+          "admitted": 38,
+          "completed": 37,
+          "censored": 1,
+          "account_errors": [
+            0.0,
+            0.0,
+            0.0,
+            3.637978807091713e-12
+          ]
+        },
+        {
+          "symbol": "SOLUSDT",
+          "admitted": 35,
+          "completed": 34,
+          "censored": 1,
+          "account_errors": [
+            0.0,
+            0.0,
+            0.0,
+            1.8189894035458565e-12
+          ]
+        },
+        {
+          "symbol": "LINKUSDT",
+          "admitted": 45,
+          "completed": 44,
+          "censored": 1,
+          "account_errors": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "summary": {
+        "admitted": 118,
+        "completed": 115,
+        "censored_mtm": 3,
+        "mean_net_bps": 376.503807787653,
+        "median_net_bps": -242.25379909204037,
+        "mean_completed_only_net_bps": 335.00930557270794,
+        "per_unit_profit_factor": 1.7896292554857751,
+        "cash_profit_factor_with_cutoff_marks": 1.7806110761634506,
+        "completed_cash_profit_factor": 1.6756294358273804,
+        "win_fraction": 0.423728813559322,
+        "mean_gross_bps": 459.84921989839705,
+        "mean_btc_excess_lower_bps": 242.59495818430796,
+        "mean_btc_excess_upper_bps": 242.59495818430796,
+        "mean_mfe_lower_bps": 2049.922325150519,
+        "mean_mfe_upper_bps": 2049.922325150519,
+        "mean_mae_lower_bps": -723.3242571155428,
+        "mean_mae_upper_bps": -723.3242571155428
+      },
+      "portfolio_metrics": {
+        "roi_pct": 7.657621500196021,
+        "drawdown_pct": -3.369823344078804,
+        "funded_btc_roi_lower_pct": 2.6279048584365805,
+        "funded_btc_roi_upper_pct": 2.6279048584365805,
+        "note": "8h-close hypothetical liquidation-value marks; drawdown is not an intrabar bound. Funded BTC intervals are reference bounds, not executed fills."
+      }
+    },
+    {
+      "case": "80:opening_price_improvement",
+      "canonical_case_sha256": "a41204c03ee7ee4e330cac50cbaab26af74611d92d3183526af2adbdcad91ec2",
+      "matched": true,
+      "accounts": [
+        {
+          "symbol": "ETHUSDT",
+          "admitted": 38,
+          "completed": 37,
+          "censored": 1,
+          "account_errors": [
+            0.0,
+            0.0,
+            0.0,
+            3.637978807091713e-12
+          ]
+        },
+        {
+          "symbol": "SOLUSDT",
+          "admitted": 35,
+          "completed": 34,
+          "censored": 1,
+          "account_errors": [
+            0.0,
+            0.0,
+            0.0,
+            1.8189894035458565e-12
+          ]
+        },
+        {
+          "symbol": "LINKUSDT",
+          "admitted": 45,
+          "completed": 44,
+          "censored": 1,
+          "account_errors": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "summary": {
+        "admitted": 118,
+        "completed": 115,
+        "censored_mtm": 3,
+        "mean_net_bps": 376.503807787653,
+        "median_net_bps": -242.25379909204037,
+        "mean_completed_only_net_bps": 335.00930557270794,
+        "per_unit_profit_factor": 1.7896292554857751,
+        "cash_profit_factor_with_cutoff_marks": 1.7806110761634506,
+        "completed_cash_profit_factor": 1.6756294358273804,
+        "win_fraction": 0.423728813559322,
+        "mean_gross_bps": 459.84921989839705,
+        "mean_btc_excess_lower_bps": 242.59495818430796,
+        "mean_btc_excess_upper_bps": 242.59495818430796,
+        "mean_mfe_lower_bps": 2049.922325150519,
+        "mean_mfe_upper_bps": 2049.922325150519,
+        "mean_mae_lower_bps": -723.3242571155428,
+        "mean_mae_upper_bps": -723.3242571155428
+      },
+      "portfolio_metrics": {
+        "roi_pct": 7.657621500196021,
+        "drawdown_pct": -3.369823344078804,
+        "funded_btc_roi_lower_pct": 2.6279048584365805,
+        "funded_btc_roi_upper_pct": 2.6279048584365805,
+        "note": "8h-close hypothetical liquidation-value marks; drawdown is not an intrabar bound. Funded BTC intervals are reference bounds, not executed fills."
+      }
+    }
+  ],
+  "independent_events_checked": 472,
+  "independent_quantities_checked": 472,
+  "independent_source_raw_counts_checked": 12,
+  "max_absolute_account_residual": 9.094947017729282e-12,
+  "stored_control_audit": {
+    "replicates": 500,
+    "undefined": 0,
+    "tail_numerator": 500,
+    "tail_fraction": 1.0,
+    "matched": true,
+    "full500_reruns": false
+  },
+  "decision": {
+    "decision": "REJECTED_AS_ADAPTED",
+    "failed_gates": [
+      "excess_descriptive_ci",
+      "net_descriptive_ci",
+      "placebo_tail"
+    ],
+    "matched": true
+  },
+  "fixed_alpha": 0.025,
+  "blocking_findings": [],
+  "repository_changes": false,
+  "claim_limits": [
+    "Second execution of the same frozen strategy evaluator; independent chronological quantity/cash/BTC/excursion/source flip/censor reconstruction. Not independent native Pine engine execution.",
+    "500stored control means independently audited, not500full path reruns.",
+    "Native arithmetic/ATR startup/fill/sizing parity and original publisher provenance remain unestablished.",
+    "No optional15percent protection or invented timeout; source flips at completed8h close settle next open, gap models are identical.8hdrawdown is not an intrabar bound.",
+    "Previously inspected development data, not genuinely untouched confirmation. Rejected version starts no future confirmation; no viable candidate."
+  ],
+  "independent_all_bar_NAV_paths_checked": 12,
+  "independent_all_bar_NAV_marks_checked": 43176,
+  "independent_all_bar_NAV_max_residual": 0.0,
+  "independent_strict_previous_band_direction_checks": 11508
+}
