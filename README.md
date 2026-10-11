@@ -154,3 +154,7 @@ Frozen Supertrend default-intent research and its rejection are recorded in [res
 ### Public Dual Thrust batch 9
 
 [Frozen design](docs/PUBLIC_DUAL_THRUST_BATCH9_DESIGN_V1.md), [results](docs/PUBLIC_DUAL_THRUST_BATCH9_RESULTS_V1.md) and [conditional prospects](docs/PUBLIC_STRATEGY_CONDITIONAL_PROSPECTS_BATCH9_V1.md) retain the independently audited rejection. No viable candidate or future confirmation pass is claimed.
+
+## Public Vortex state research batch 10
+
+[Design](docs/PUBLIC_VORTEX_BATCH10_DESIGN_V1.md), [results](docs/PUBLIC_VORTEX_BATCH10_RESULTS_V1.md), and [conditional prospects](docs/PUBLIC_STRATEGY_CONDITIONAL_PROSPECTS_BATCH10_V1.md). The frozen Spot adaptation was rejected on seven gates: 509 completed trades plus one cutoff, negative 80 bps stress mean and 70.3798% drawdown. Full lossless evidence, trial ledger and independent accounting review are retained. No viable candidate or future confirmation; frozen lanes preserved.
