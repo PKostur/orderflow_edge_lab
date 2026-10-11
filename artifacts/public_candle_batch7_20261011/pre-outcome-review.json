@@ -1,0 +1,66 @@
+{
+  "audit_id": "PSR13-CANDLE-BATCH7-INDEPENDENT-PRE-OUTCOME-REVIEW",
+  "status": "PASS_WITH_DECLARED_CLAIM_LIMITS",
+  "reviewer": "batch2_validity_review",
+  "design_commit": "3441e9aede67548040e0ae1a0972ef9598078f89",
+  "canonical_config_sha256": "feef136ad9f57795a2ac457e39c66a2e85810dcebce03d708fe1915d2faf73b2",
+  "git_head_at_review": "3441e9aede67548040e0ae1a0972ef9598078f89",
+  "exact_file_sha256": {
+    "src/orderflow_edge_lab/public_candle_batch7.py": "baeb8d8e5d0775e9a567c81d17bd3d264ce2122883b4125bd8255c45057903fa",
+    "tests/test_public_candle_batch7.py": "11bf6981c09dcaee20f7fc46267d7d058b2926fc318fd8cf8fb3154b4ca7454c",
+    "config/public_candle_batch7_v1.json": "017a174c1c2449c13531add7e04a8bdcaf47fbf0d786341e4cc2346f397f7956",
+    "docs/PUBLIC_CANDLE_BATCH7_DESIGN_V1.md": "63d052b7169fb2caa5f65cf7d221c85ecec37ef4f227c5a3658973d2bf20aa35"
+  },
+  "pinned_source_sha256": {
+    "FullCandle8hDefaultIntent": "8d6335c7752767090dfbfaeba0d878def0dac8171897dd431f9c2c0ca12036be"
+  },
+  "source_mechanics_audits": {
+    "artifacts/public_candle_batch7_registration_20261011/Next-public-bot-source-survey-v2.json": "ef616dd982f43a4d5f029e467daae3fb6a07046ada164d1ce2599e4775c892c7",
+    "artifacts/public_candle_batch7_registration_20261011/Next-public-bot-default-mechanics-audit.json": "1870690d05eb21099fa5d113ec180e41cb40156b735c0ec1ce2cc4c90da52968",
+    "artifacts/public_candle_batch7_registration_20261011/FullCandle-pre-registration-framework-audit.json": "bdb0ce56d616dfec2caa24dfe66810de252b49095a12d68f4a1affb659ac6dca",
+    "artifacts/public_candle_batch7_registration_20261011/FullCandle-pre-registration-precision-audit.json": "706598720d10368694837ececc2cd5374c8a35a41bb3755c7e40350f25c7cad0",
+    "artifacts/public_candle_batch7_registration_20261011/TDSequential-source-readiness-audit.json": "fb11607080017260ecf748c10c7afcca6b238f21896b6647f908f18fd4bade3e",
+    "artifacts/public_candle_batch7_registration_20261011/Post-FullCandle-public-source-readiness-audit.json": "4740c7394b5a02ef54e6ff239f4ad04d0d185e87df7fbb6b5958d2e7cb590167"
+  },
+  "blocking_findings": [],
+  "no_market_outcome_access": true,
+  "no_market_strategy_execution": true,
+  "no_repository_changes_by_reviewer": true,
+  "verification": {
+    "registered_unit_tests": 13,
+    "unit_tests_result": "PASS",
+    "independent_scalar_position_oracle_cases": 80,
+    "oracle_seed": 7663,
+    "oracle_matches": "All exact event entry/endpoint indexes, prices, reasons, own fill-open references, quantities and statuses; all raw/held/rejected/zero/accepted/terminal categories matched. Independent cash and BTC open-fill/close-mark NAV paths agree to absolute1e-10.",
+    "oracle_fixture_design": "9 complete synthetic8h bars x480minutes; independent BTC OHLC; arbitrary control flags differ from original entries; mixed source shorts, own dynamic profit exits, extreme-gap admission rejection and all four registered cost cases. No price barriers.",
+    "maximum_cash_profit_to_nav_reconciliation_error": 4.547473508864641e-13,
+    "scalar_feature_arithmetic_exact_bars": 600,
+    "all_feature_prefix_checks": 8,
+    "future_mutation_prefix_bars": 300,
+    "real_git_backed_checked_spec": "PASS",
+    "fixed_alpha_per_candidate": 0.025,
+    "two_sided_interval_coverage": 0.975,
+    "bootstrap_quantiles": [
+      0.0125,
+      0.9875
+    ],
+    "alpha_binding": "Calls frozen shared PSR11 diagnostics with two bound shared candidates; new single-cell metadata does not change numeric quantiles."
+  },
+  "mechanics_review": {
+    "source_defaults": "EMA10 level, directional shadow<=5%, bullish long and bearish short; disabled optional TP/SL remain absent. MPL2 source attribution retained.",
+    "arithmetic": "EMA first-valid-close seed and separate alpha product/beta product/addition; beta1-computedalpha. Shadow multiplication100 then division by high-low. Profit threshold raw reference plus reference*.002, strict greater and bullish candle. Independent scalar calculations agree exactly; source precision counterexample strict-profit fixture passed.",
+    "capture_clock": "New accepted long uses fill-bar raw open. First decision using this reference is that bar completed close, with next8h/1m open liquidation. Stored known-at timestamp is fill open+8h. Flat stale close predicate does not cancel a new accepted entry.",
+    "priority_controls": "Previously held side is counted before liquidation; held qualifying long cannot reenter same boundary. Original short-to-cash remains active under replaced entry flags. Each accepted control entry owns its own raw-open reference and consequent durations. No observed exit series reused.",
+    "admission_accounting": "Signal-close floor8 cash*.1/(signalclose*(1+sidecost)); next-open all-or-reject. No resizing, borrowing, protective stop/target or timeout. Reconstructed separateBTC account uses same invested-notional/preentry-cash fraction and own costs.",
+    "cutoff": "Still-held endpoint is CENSORED_MTM with final close liquidation estimand; final qualifying exit remains pending without fabricated nextopen fill. Final flat entry is unexecuted and included in signal accounting.",
+    "binding": "Actual committed config identity, normalized reused Python dependency hashes and exact source-audit/data-receipt hashes verified. CLI refuses uncommitted evaluator and runtime mismatch before market run."
+  },
+  "claim_limits": [
+    "Independent synthetic oracle verifies declared numerical/position adaptation, not TradingView native runtime or fill parity. Native all-NaN strategy.exit behavior remains unverified.",
+    "10 percent source intention is adapted to signal-close fixed fee-reserved quantity and1000USDT research sleeves; native opening-equity sizing and USD parity are not established.",
+    "Synthetic outcomes are test fixtures only; no market outcomes inspected.",
+    "Source defaults do not imply viable risk protection; none is invented. Existing survival gates remain unchanged.",
+    "Data panel is previously inspected spent development history; any historical survivor requires separately preregistered genuinely untouched future confirmation.",
+    "Fixed97.5 percent descriptive intervals are conservative carryover for one new cell, not a correction for the whole repeated public-strategy search."
+  ]
+}

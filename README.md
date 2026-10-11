@@ -143,3 +143,5 @@ Protective simulator foundation: [minute primitives and pinned indicator audit](
 Protective bot batch5: [MAGen and Ichimoku Spot adaptation results](docs/PUBLIC_PROTECTIVE_BATCH5_RESULTS_V1.md). Both fail their pre-outcome screening gates. The committed evaluator retains minute execution uncertainty, inventory cutoff marks, funded BTC bounds and full cost/control diagnostics. No viable candidate or untouched confirmation pass is claimed.
 
 Protective bot batch6: [SAR and signed money-flow adaptation results](docs/PUBLIC_PROTECTIVE_BATCH6_RESULTS_V1.md). Both fail the frozen historical gates. Primary source/default audits, independent synthetic mechanics checks, minute-close ROI timing, full event ledgers and cost/control diagnostics are retained. Untouched future confirmation remains required for any eventual candidate.
+
+Public Candle batch7: [frozen design](docs/PUBLIC_CANDLE_BATCH7_DESIGN_V1.md), [results](docs/PUBLIC_CANDLE_BATCH7_RESULTS_V1.md), and [conditional research prospects](docs/PUBLIC_STRATEGY_CONDITIONAL_PROSPECTS_20261011.md). Historical screens do not establish viability; untouched future confirmation is required.

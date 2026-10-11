@@ -1,0 +1,32 @@
+{
+  "study_id": "PSR13-PUBLIC-CANDLE-DEFAULT-BATCH7",
+  "prior_ledger": "artifacts/public_protective_batch6_20261011/trial_ledger.json",
+  "minimum_preexisting_trading_cells": 19,
+  "minimum_preexisting_signal_model_cells": 20,
+  "new_registered_cells": [
+    "FullCandle8hDefaultIntent"
+  ],
+  "new_attempted_cells": 1,
+  "new_exhaustively_evaluated_cells": 1,
+  "minimum_attempted_trading_cells": 20,
+  "minimum_attempted_signal_model_cells": 21,
+  "decisions": [
+    {
+      "candidate": "FullCandle8hDefaultIntent",
+      "decision": "REJECTED_AS_ADAPTED",
+      "failed_gates": [
+        "all_symbols_positive",
+        "excess_descriptive_ci",
+        "net80_positive",
+        "net_descriptive_ci",
+        "placebo_tail",
+        "positive_year_fraction"
+      ]
+    }
+  ],
+  "all_prior_source_and_forecast_history_retained": true,
+  "global_search_adjusted_inference": false,
+  "controls_are_related_versions_not_independent_trials": true,
+  "viable_candidates": [],
+  "future_confirmation_started": false
+}

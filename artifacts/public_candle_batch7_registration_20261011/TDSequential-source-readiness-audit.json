@@ -1,0 +1,96 @@
+{
+  "kind": "BOUNDED_SOURCE_ONLY_TD_SEQUENCE_READINESS_AUDIT",
+  "inspection_date_utc": "2026-10-11",
+  "registered": false,
+  "new_trading_cells": 0,
+  "market_outcomes_evaluated": false,
+  "backtests_run": false,
+  "native_runtime_executed": false,
+  "repository_edits": false,
+  "search_budget": {"public_queries": 2, "source_implementations_inspected": 2, "exhaustive_search_claim": false},
+  "queries": [
+    "github TD Sequential strategy automated trading bot stop loss strategy.entry original",
+    "TD Sequential strategy github stoploss -reddit"
+  ],
+  "sources": [
+    {
+      "name": "Sequential Up/Down",
+      "publisher": "5queezer",
+      "gist_id": "902b4db3ab0e843b1545a573d9b53f58",
+      "immutable_gist_revision": "7b1407edd89ca40cda31300b162618cab3707d1a",
+      "immutable_url": "https://gist.github.com/5queezer/902b4db3ab0e843b1545a573d9b53f58/7b1407edd89ca40cda31300b162618cab3707d1a",
+      "raw_url": "https://gist.githubusercontent.com/5queezer/902b4db3ab0e843b1545a573d9b53f58/raw/489062a774f814eb51f487fee573001764590e24/sequential.pine",
+      "utf8_bytes": 4915,
+      "sha256": "c58e3507a56dc1bfd117f2b7c25d808f9060394693f467ff411a60e4ed420959",
+      "original_publisher_status": "Publisher explicitly describes a modified glaz study and credits johan.gradin and JayRogers for components. Original implementation ownership and permission are not established.",
+      "license": "No license notice in inspected file; not established",
+      "defaults": {
+        "pine_version": 4,
+        "timeframe": null,
+        "source": "close",
+        "bars_count": 9,
+        "linear_regression_enabled": false,
+        "linear_regression_length_unused": 13,
+        "pyramiding": 2,
+        "quantity_type": "fixed",
+        "quantity_value": 10000,
+        "process_orders_on_close": false,
+        "take_profit_ticks": 0,
+        "stop_loss_ticks": 0,
+        "trailing_activation_ticks": 100,
+        "trailing_offset_input_ticks": 0,
+        "effective_trailing_offset": "na because input below1 is mapped to na"
+      },
+      "exact_source_mechanics": {
+        "priceflip": "barssince(close<close[4])",
+        "sellsetup": "close>close[4] AND numeric-to-bool(priceflip)",
+        "sell": "sellsetup AND numeric-to-bool(barssince(priceflip!=9))",
+        "sell_overshoots": "Analogous barssince(priceflip!=13),!=14,!=15,!=16 conditions",
+        "priceflip1": "barssince(close>close[4])",
+        "buysetup": "close<close[4] AND numeric-to-bool(priceflip1)",
+        "buy": "buysetup AND numeric-to-bool(barssince(priceflip1!=9))",
+        "buy_overshoots": "Analogous barssince(priceflip1!=13),!=14,!=15,!=16 conditions",
+        "long_entry": "buy OR all four buy overshoots",
+        "short_entry": "sell OR sell overshoot13 OR15 OR16; source omits overshoot14",
+        "exit": "No market-close condition. Opposite entry reverses; unconditional strategy.exit passes profit=na,loss=na,trail_points=100,trail_offset=na at defaults.",
+        "not_full_td_countdown": "This is a setup/overshoot implementation, not a verified complete canonical 13-count countdown. The separate UP/DW count variables feed plots rather than strategy entry logic."
+      },
+      "framework_reference": "https://www.tradingview.com/pine-script-docs/v4/essential/strategies/",
+      "readiness": "NOT_READY_NOT_REGISTERED",
+      "reasons": [
+        "Requested original-publisher provenance and licensing not established",
+        "Default trailing pair contains missing offset; do not silently convert na to zero or enable disabled stop/target",
+        "Native v4 runnable default and numeric-to-bool/barssince behavior not executed",
+        "Fixed10000 units and pyramiding2 are not a defined Spot cash sizing budget",
+        "Tick-denominated trailing protection requires symbol tick-size specification and intrabar execution evidence",
+        "8h adoption has no native timeframe rationale; source semantics cannot be replaced with generic 9/13 textbook rules"
+      ]
+    },
+    {
+      "name": "TD.py",
+      "repository": "jaredrsommer/freqtradestrategies",
+      "commit": "421e6c3de13fbc641bd69207207a3f54bb70f4f4",
+      "path": "TD.py",
+      "url": "https://github.com/jaredrsommer/freqtradestrategies/blob/421e6c3de13fbc641bd69207207a3f54bb70f4f4/TD.py",
+      "raw_url": "https://raw.githubusercontent.com/jaredrsommer/freqtradestrategies/421e6c3de13fbc641bd69207207a3f54bb70f4f4/TD.py",
+      "sha256": "44f36fe7f8ffc4937f7e4f7a1596570315cefa7c358841e9e59190fe28b6cf60",
+      "original_publisher_status": "No original-author notice establishes original implementation provenance in inspected file",
+      "license": "No file license notice; repository-wide license not established by this bounded audit",
+      "defaults_observed": {"timeframe": "2h", "minimal_roi": {"0": 0.10}, "stoploss": -0.40, "sma_ha_close": 3, "sma_ha_open": 5, "max_epa": 1, "max_dca_multiplier": 5.5, "cooldown_lookback": 5, "stop_duration": 5},
+      "actual_entry": "Heikin-Ashi close SMA3 crosses above Heikin-Ashi open SMA5, volume>0",
+      "actual_exit_signal": "Heikin-Ashi open SMA5 crosses above Heikin-Ashi close SMA3, volume>0",
+      "mechanism": "MA crossover, not TD setup or countdown; no sequence counting in inspected source",
+      "framework_gaps": [
+        "position_adjustment_enable: True is an annotation expression, not an assignment enabling DCA",
+        "stop_duration default5 is outside declared IntParameter12..200 range",
+        "JSON sidecar and framework settings can override class defaults; not inspected or pinned here",
+        "Stake is divided by5.5, with optional DCA/partial-exit code but no complete enabled runtime specification"
+      ],
+      "readiness": "EXCLUDED_NOT_REGISTERED",
+      "reasons": ["Not the requested distinct counting hypothesis", "Misleading filename does not establish mechanics", "Original provenance/license not established", "Runtime default inconsistencies; do not repair to create a candidate"]
+    }
+  ],
+  "conclusion": "No source met immutable original-publisher provenance, exact coherent default risk/lifecycle and distinct counting hypothesis requirements within two queries and two source inspections. This bounded negative search is not evidence that no suitable public implementation exists.",
+  "full_candle_audit_unchanged": "outputs/FullCandle-pre-registration-framework-audit.json",
+  "preserved": ["No Bollinger mechanism admitted", "No threshold weakening", "No registration", "No PnL inspection", "No frozen protocol modifications", "No invented fixes"]
+}
