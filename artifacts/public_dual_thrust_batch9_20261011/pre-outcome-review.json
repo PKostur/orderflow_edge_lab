@@ -1,0 +1,106 @@
+{
+  "audit_id": "PSR15-INDEPENDENT-PRE-OUTCOME-REVIEW",
+  "status": "PASS_PRE_OUTCOME_INDEPENDENT_REVIEW_WITH_DECLARED_PARITY_LIMITS",
+  "evaluator_exact_sha256": "2106de7e08d42106c970bfec1b2fc9c5222c0abd07e8845feae8af15a146b807",
+  "canonical_config_sha256": "370b90fa59393f0c0ce80e36c0061df7be4779e1302306a9b1cfcd734e1c9c34",
+  "market_outcomes_inspected": false,
+  "blocking_findings": [],
+  "design_commit": "43a385e9fe3af963a98dfb32f32be34c0de24106",
+  "evaluator_first_committed_at": "1f2db6d74548ea18eb7f7250a47fd3b582bd1b5e",
+  "git_HEAD_at_final_review": "a5d8a0b13eb1fc55e3137470ab86d520a992c5ba",
+  "exact_file_sha256": {
+    "src/orderflow_edge_lab/public_dual_thrust_batch9.py": "2106de7e08d42106c970bfec1b2fc9c5222c0abd07e8845feae8af15a146b807",
+    "tests/test_public_dual_thrust_batch9.py": "dd743c61e445071c3d458bb8144d64fd60edb26c62c05577919ac57594f1ea7b",
+    "config/public_dual_thrust_batch9_v1.json": "177d96cb32de595b1abe29c6a01cd71bb8848a67c704658a2d57c1f91d3ddeda",
+    "docs/PUBLIC_DUAL_THRUST_BATCH9_DESIGN_V1.md": "feae9ff4c173e09814882a79f7773fecb55312b1d96c2d4d6111b0829a749465"
+  },
+  "source_sha256": {
+    "DualThrust8hPinnedKernelSpot": "8dd802e56782ad60e60f11926df1a4924c78c10af6264127168449e50118eef2"
+  },
+  "source_mechanics_audit_exact_HEAD_blob_sha256": {
+    "artifacts/public_dual_thrust_batch9_registration_20261011/DualThrust-source-readiness-audit.json": "5cf51e650aa3c4d04598593067f0cebd41bea22046ae1321b2c7c8a81de2f83d",
+    "artifacts/public_dual_thrust_batch9_registration_20261011/DualThrust-declared-port-prerequisite-review.json": "f3afa824c1d37ca0f5324be35d80ab88add1df798ddfa4c76e788fef91e84636"
+  },
+  "market_data_loaded": false,
+  "market_strategy_execution": false,
+  "repository_changes_by_reviewer": false,
+  "verification": {
+    "independently_reexecuted_candidate_tests": 18,
+    "candidate_tests_result": "PASS",
+    "root_full_mandatory_suite_log_verified": {
+      "tests": 1065,
+      "seconds": 42.855,
+      "result": "PASS",
+      "independently_reexecuted_whole_suite": false
+    },
+    "root_repo_Ruff_log_verified": "All checks passed",
+    "production_real_git_checked_spec": "PASS",
+    "source_audit_exact_working_and_HEAD_bindings": 2,
+    "prior_artifacts_and_definitions_independently_rehashed": 66,
+    "frozen_paths_independently_rehashed": 14,
+    "native_wheel_exact_sha256": "5e29ad2a2388e714239781ecf77ecd001dadc47026c6c64dd46891f5e309ce1b",
+    "installed_native_init_and_PYD_exact_wheel_bytes": "PASS",
+    "independent_actual_CLI_missing_review_probe": "INDEPENDENT_PRE_OUTCOME_REVIEW_REQUIRED raised before nonexistentraw/cache access; no output/cache created",
+    "numeric_bootstrap_alpha": 0.025,
+    "two_sided_interval_coverage": 0.975,
+    "quantiles": [
+      0.0125,
+      0.9875
+    ]
+  },
+  "independent_synthetic_feature_oracle": {
+    "status": "PASS",
+    "scalar_bars": 600,
+    "prefix_checks": 11,
+    "futuremutation_prefix": 300,
+    "includes_partial_startup_windows": true,
+    "source_sha256": "2106de7e08d42106c970bfec1b2fc9c5222c0abd07e8845feae8af15a146b807"
+  },
+  "independent_synthetic_execution_oracle": {
+    "synthetic_cases": 96,
+    "seed": 15902,
+    "exact_event_metadata_matches": true,
+    "all_signal_categories_match": true,
+    "all_cash_BTC_NAV_paths_match": true,
+    "all_minute_excursion_bounds_match": true,
+    "maximum_profit_NAV_error": 6.906475391588174e-12,
+    "reason_counts": {
+      "source_short_to_cash": 99,
+      "fixed_cutoff_mark": 54,
+      "stop_gap": 8,
+      "stop_touch": 23
+    },
+    "censored_cases": 54,
+    "market_data_used": false,
+    "source_sha256_at_execution": "2106de7e08d42106c970bfec1b2fc9c5222c0abd07e8845feae8af15a146b807"
+  },
+  "synthetic_evidence_sha256": {
+    "work\\dual_thrust_batch9_preliminary_feature_oracle.json": "28b10f4a22271770a922d047cd000ef75377288673e303618d09d70b8000720c",
+    "work\\dual_thrust_batch9_preliminary_execution_oracle.json": "dac53cf345bdd208256bc37c170c5119405c65e11f709aa0910fcc5fb25299f5"
+  },
+  "corrected_before_outcomes": [
+    {
+      "issue": "Initial implementation suppressed extrema thresholds until21bars instead of source literal shorter slicing",
+      "resolution": "Root changed start=max(0,i+1-length) before anyoutcomes; independent600bar/prefix reexecution verifies exactshorter startup now. No registeredsource/default change."
+    }
+  ],
+  "reviewed_contract": {
+    "geometry_clock": "Literal21availablewindow min/max including completedcurrentbar; LOWcolumn4 asymmetricdown_max_high preserved; strict .71/.67dailyanchor comparisons. Dailyanchor uses UTCday containing signal8hbarOPEN; datasetorigin00andcontinuous8hrequired, nofuturedayopen.",
+    "ATR": "ATR14 uses exactselectedpinnednativekernel atr_last on atmost240inclusivecurrentcandles; first13undefined. Kernelidentity and nativeguard verified. Referencecomparison atr_last==samekernelatr[-1], not independentnative/arithmetic parity.",
+    "quantity": "Sourcequote min((cash*.02/(signalclose-stop))*signalclose,cash); first Decimal(str(binary64quantity))floor8, thenfee-reservedcashcap andsecondfloor8. Common bound buy settlement uses separate notional+fee arithmetic. Independentoracle tracks this operation order exactly.",
+    "protection": "Stop signalclose minus2entryATR fixed throughoutownacceptedentry, not fill-anchored or held-flag-reanchored. Acceptednextminuteopen activates immediately; adverseopeninggap canstopatsameopen. No target/trailing/timeout.",
+    "priority": "All priorblock restingstopminutes resolved before completed8hdecision. Scheduledoriginalshortcashclose atnextopen precedes thatminute stop. Heldrawflag countedbeforeliquidation; no sameboundaryreentry or intrabar reentry.",
+    "controls": "Replacemententry recomputes ownATR/stop/riskquantity andcash; originalshortstate exit persists. No observedholdingdurations reused. Causal7barlag eligibility and500control accounting inherited unchanged.",
+    "accounting": "Independent96minute-step fixtureoracles compare exacteventmetadata, quantities/sourcequote, all admissioncategories, fullcash/BTCNAV paths and MFE/MAE uncertainty; 99sourceexits,8gapstops,23touchstops,54censors exercised. NAV-profit maxerror6.906475391588174e-12.",
+    "cutoff": "Stillheldcutoff close uses hypotheticalliquidation estimand CENSORED_MTM, no fabricatedexecution. Finalsourceexit queued without unavailable nextopen. Finalflatlongflag unexecuted andcounted.",
+    "frozen_guards": "Canonicaldesign/actualgitregistration, exactcommittedsourceauditbytes andnormalizeddependencies verified. Missingcommittedreview independentlyblocksCLIbeforenativevalidation/rawload. Existing66artifacts/14frozenpath hashes unchanged."
+  },
+  "claim_limits": [
+    "Declared hybrid mathematical port: pinnedexample source plus selectedframeworkhelper meanings plus olderpinnedjesse_rust1.3.0kernel. No nativeJesseengine/order/cancel/fill/sizing parity established.",
+    "MITsource/publisherjesse-ai retained; comment attributionMichaelChalek remainsunverified. LOW-columnrepair notincluded; related breakout/ATR/trend trials retainalloutcomes.",
+    "Syntheticoracle coverage supports frozencontract only; no market outcomes loaded or viabilityclaim.",
+    "Realizedentry/stopcashrisk can exceed intended2percent fromnextopengaps andcosts; allorreject/noresize remainsfrozen.",
+    "Thecontinuousminute panel is alreadyspent inspecteddevelopmenthistory. Futureuntouched separatelyregistered confirmation mandatory beforeviability; no protocolweakening.",
+    "Fixed97.5percent intervals are conservativecarryover foronecell, not repeatedsearch/globalmultiplicity correction. Noorders/Bollinger/frozenlane modifications."
+  ]
+}
