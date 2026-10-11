@@ -1,0 +1,91 @@
+{
+  "kind": "SOURCE_ONLY_PSAR_PREREGISTRATION_MECHANICS_AUDIT",
+  "reviewer": "batch2_validity_review",
+  "registered": false,
+  "new_trading_cells": 0,
+  "strategy_market_outcomes_inspected": false,
+  "orders": false,
+  "repo_or_source_files_modified": false,
+  "published_strategy": {
+    "url": "https://github.com/pcjtse/trading-view-strategies/blob/7b03cff0d80ebd048c8e94d452fd797a8f4b973f/strategies/parabolic_sar.pine",
+    "sha256": "9ff2f2ee020576628316c3162af5b28da6821f187f42b3342c9d6af05e2d6e42",
+    "parameters": {"start": 0.02, "increment": 0.02, "maximum": 0.2},
+    "license": "unestablished",
+    "source_code_copied": false
+  },
+  "primary_reference": {
+    "official_page": "https://www.tradingview.com/pine-script-reference/v5/#fun_ta.sar",
+    "official_asset": "https://static.tradingview.com/static/bundles/91998.903fee1a7992e6653580.js",
+    "asset_sha256": "7b73620f8186ae93af233b5b9d45c336787dc42f94bddcb4be1b80733f558c2d",
+    "asset_bytes": 1212090,
+    "retrieval_method": "Direct official v5 HTML, reference-controller chunk63275 V5 mapping, and official runtime chunk91998 hash mapping were inspected. The official ta.sar example was read from this asset, not from a third-party mirror.",
+    "example_code_copied_or_persisted": false,
+    "documentation_license": "not independently established; mathematical behavior described, no example code copied"
+  },
+  "documented_mathematical_contract": [
+    "First bar undefined. Second-bar direction depends on rising close; equality chooses downward. Seed SAR from previous opposite extreme, EP from current directional extreme, acceleration0.02.",
+    "Advance SAR toward EP, then test strict current-range penetration. A reversal switches direction, selects current/previous extreme, and resets EP and acceleration.",
+    "Initial and reversal bars skip acceleration increments. Other strict new extremes update EP and add0.02 capped0.2.",
+    "Finally clamp using preceding one/two opposite extremes. Calculate continuously from a fixed origin; warmup does not restart state."
+  ],
+  "independent_math_expression": {
+    "implementation": "Fresh scalar float64 state-transition expression for synthetic comparison; no published code pasted and no implementation added to repository.",
+    "arithmetic_order": "SAR plus acceleration times EP-minus-SAR; update/reversal before prior-extreme clamp; strict greater-than and less-than, without epsilon.",
+    "actual_pine_runtime_executed": false
+  },
+  "pinned_native_comparator": {
+    "package": "jesse-rust1.3.0",
+    "source_tag_commit": "65e1007faf1804ca66651bc76cccd3feb80a0d6d",
+    "wheel": "jesse_rust-1.3.0-cp313-cp313-win_amd64.whl",
+    "wheel_sha256": "5e29ad2a2388e714239781ecf77ecd001dadc47026c6c64dd46891f5e309ce1b",
+    "installed_init_and_extension_match_wheel": true,
+    "signature": "sar(candles, acceleration, maximum)",
+    "parameters": {"acceleration": 0.02, "maximum": 0.2},
+    "input": "contiguous float64 Jesse timestamp/open/close/high/low/volume columns",
+    "python": "3.13.14",
+    "numpy": "2.2.4",
+    "license": "MIT package metadata and included license"
+  },
+  "fixture_definition": {
+    "bars": 600,
+    "index": "i=0..599; timestamp=i*28800000; volume=1",
+    "open": "previous close; first open equals first close, except explicit wick-conflict override",
+    "high_low": "max(open,close)+0.8 and min(open,close)-0.6, except zero-range and explicit overrides",
+    "rising_close": "100+0.1*i",
+    "falling_close": "100-0.05*i",
+    "flat_close": "100",
+    "oscillating_close": "100+0.01*i+3*sin(0.3*i)",
+    "gapped_close": "oscillating plus20 from index200, minus30 from index400",
+    "equal_first_close": "oscillating fixture with close1=close0 and its high/low extended if needed",
+    "close_rise_lower_extrema": "oscillating; bar0 open101/close100/high110/low99; bar1 open100/close101/high105/low98",
+    "prefix_endpoints": [2, 3, 5, 20, 50, 240, 300, 599],
+    "post_warmup_comparison_indices": "240..599 inclusive",
+    "signal_comparison": "strict close>SAR and close<SAR, separately; undefined reference value suppresses comparisons"
+  },
+  "synthetic_results": [
+    {"fixture": "rising", "max_abs_sar_error": 1.7000000000000028, "long_differences_all600": 61, "short_differences_all600": 60, "long_differences_post240": 36, "short_differences_post240": 36, "reference_first_two_valid": [100.89999999999999, 99.4], "native_first_two_valid": [99.4, 99.4]},
+    {"fixture": "falling", "max_abs_sar_error": 1.5499999999999972, "long_differences_all600": 100, "short_differences_all600": 101, "long_differences_post240": 60, "short_differences_post240": 60, "reference_first_two_valid": [99.35000000000001, 100.8], "native_first_two_valid": [100.8, 100.8]},
+    {"fixture": "flat_range", "max_abs_sar_error": 1.3999999999999915, "long_differences_all600": 300, "short_differences_all600": 301, "long_differences_post240": 180, "short_differences_post240": 180, "reference_first_two_valid": [99.4, 100.8], "native_first_two_valid": [100.8, 100.8]},
+    {"fixture": "flat_zero_range", "max_abs_sar_error": 0.0, "long_differences_all600": 0, "short_differences_all600": 0, "long_differences_post240": 0, "short_differences_post240": 0, "reference_first_two_valid": [100.0, 100.0], "native_first_two_valid": [100.0, 100.0]},
+    {"fixture": "oscillating", "max_abs_sar_error": 2.296560619984021, "long_differences_all600": 2, "short_differences_all600": 1, "long_differences_post240": 0, "short_differences_post240": 0, "reference_first_two_valid": [101.69656061998403, 99.4], "native_first_two_valid": [99.4, 99.4]},
+    {"fixture": "gapped", "max_abs_sar_error": 2.296560619984021, "long_differences_all600": 2, "short_differences_all600": 1, "long_differences_post240": 0, "short_differences_post240": 0, "reference_first_two_valid": [101.69656061998403, 99.4], "native_first_two_valid": [99.4, 99.4]},
+    {"fixture": "equal_first_close", "max_abs_sar_error": 0.28613062213564433, "long_differences_all600": 1, "short_differences_all600": 0, "long_differences_post240": 0, "short_differences_post240": 0, "reference_first_two_valid": [99.4, 99.4], "native_first_two_valid": [99.4, 99.4]},
+    {"fixture": "close_rise_lower_extrema", "max_abs_sar_error": 5.442780558688199, "long_differences_all600": 1, "short_differences_all600": 2, "long_differences_post240": 0, "short_differences_post240": 0, "reference_first_two_valid": [110.0, 110.0], "native_first_two_valid": [110.0, 110.0]}
+  ],
+  "prefix_result": "Each implementation independently passed every exact prefix comparison at all eight endpoints on all eight fixtures.",
+  "nan_seed_result": "Reference index0 undefined; native index0 finite on all eight fixtures. Seed masks do not agree.",
+  "native_reference_equivalence": "REJECTED_BY_SYNTHETIC_COUNTEREXAMPLES",
+  "requirements_before_registration": [
+    "Choose and name either a declared independent official-reference mathematical port or a separately declared pinned-native adaptation; do not label the two equivalent.",
+    "Freeze initial history origin, undefined-value policy, state reset, float64 arithmetic order and strict comparisons before outcomes.",
+    "Hand-check two/three-bar rising, falling and equal-close seeds, wick-direction conflicts, exact touches, reversals, acceleration increments/cap and preceding-two-extreme clamps.",
+    "Assert exact prefix behavior after arbitrary future-price mutation; extending warmup must not silently restart state.",
+    "Audit strict signal booleans separately from numerical tolerance, including equality and adjacent-representable floating-point cases.",
+    "Direct TradingView calculation/export on identical fixtures and initial history is required before claiming actual Pine built-in indicator parity. Broker-emulator/fill parity requires additional direct evidence.",
+    "Freeze ATR14 seed/recursion, source qualifying-condition bracket replacement, short-to-cash adaptation, sizing, costs, minute execution, controls and cutoff estimand separately.",
+    "Never select a seed, epsilon, kernel or warmup policy after market strategy outcomes; any later redesign needs a new version and trial accounting.",
+    "No unlicensed strategy or documentation code is to be copied into the repository. Source inspection licenses no native performance claim."
+  ],
+  "claim": "Source mechanics and synthetic counterexamples only. No market outcome, actual Pine/TA-Lib/native bot parity, statistical independence or viability is established.",
+  "execution_note": "A large combined audit command was automatically rejected with generic blocked-by-policy text and no detailed reason. Shorter computation-only commands and this artifact-only write succeeded."
+}

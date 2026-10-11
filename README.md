@@ -141,3 +141,5 @@ Fresh public bot research: [six new adaptations across batches 2–4](docs/PUBLI
 Protective simulator foundation: [minute primitives and pinned indicator audit](docs/PROTECTIVE_MINUTE_ENGINEERING_V1.md). Its original audit covers synthetic execution only; subsequent market screening is reported below. Untouched future confirmation remains required.
 
 Protective bot batch5: [MAGen and Ichimoku Spot adaptation results](docs/PUBLIC_PROTECTIVE_BATCH5_RESULTS_V1.md). Both fail their pre-outcome screening gates. The committed evaluator retains minute execution uncertainty, inventory cutoff marks, funded BTC bounds and full cost/control diagnostics. No viable candidate or untouched confirmation pass is claimed.
+
+Protective bot batch6: [SAR and signed money-flow adaptation results](docs/PUBLIC_PROTECTIVE_BATCH6_RESULTS_V1.md). Both fail the frozen historical gates. Primary source/default audits, independent synthetic mechanics checks, minute-close ROI timing, full event ledgers and cost/control diagnostics are retained. Untouched future confirmation remains required for any eventual candidate.
