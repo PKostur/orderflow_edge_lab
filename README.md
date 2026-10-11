@@ -150,3 +150,7 @@ Public Candle batch7: [frozen design](docs/PUBLIC_CANDLE_BATCH7_DESIGN_V1.md), [
 
 Frozen Supertrend default-intent research and its rejection are recorded in [results](docs/PUBLIC_TREND_BATCH8_RESULTS_V1.md), with [conditional prospects](docs/PUBLIC_STRATEGY_CONDITIONAL_PROSPECTS_BATCH8_V1.md). No candidate is promoted; future confirmation remains required.
 
+
+### Public Dual Thrust batch 9
+
+[Frozen design](docs/PUBLIC_DUAL_THRUST_BATCH9_DESIGN_V1.md), [results](docs/PUBLIC_DUAL_THRUST_BATCH9_RESULTS_V1.md) and [conditional prospects](docs/PUBLIC_STRATEGY_CONDITIONAL_PROSPECTS_BATCH9_V1.md) retain the independently audited rejection. No viable candidate or future confirmation pass is claimed.
