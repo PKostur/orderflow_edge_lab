@@ -1,0 +1,69 @@
+{
+  "audit_id": "PSR14-INDEPENDENT-PRE-OUTCOME-REVIEW",
+  "status": "PASS_PRE_OUTCOME_INDEPENDENT_REVIEW_WITH_DECLARED_PARITY_LIMITS",
+  "evaluator_exact_sha256": "a63f46239dabbc91e86db48c7099d48f45d0eba719f3d904c08a561b7def0141",
+  "canonical_config_sha256": "9338cce9daab37e07cbd0eb28b804b0b5ab46f129ed10d7b510fefc9458dd247",
+  "market_outcomes_inspected": false,
+  "blocking_findings": [],
+  "design_commit": "ea9efb2750bdcc639a494ba21e2baf47aea4cdeb",
+  "git_head_at_review": "68cdc0dd7717aad15b92882603dfaeafbb2ca401",
+  "file_exact_sha256": {
+    "src/orderflow_edge_lab/public_trend_batch8.py": "a63f46239dabbc91e86db48c7099d48f45d0eba719f3d904c08a561b7def0141",
+    "tests/test_public_trend_batch8.py": "de6e69f564bcd12602c3a8f5008e72f8910c72d86c9c85ead6bcf3d75391daff",
+    "config/public_trend_batch8_v1.json": "1218d6692de2147c89736e9c68bc47ebe78e95b2b40cdc3c43405037d3cc383e",
+    "docs/PUBLIC_TREND_BATCH8_DESIGN_V1.md": "861b9bab0a85491908769cc163939f9a4d54d23084ff08f8d148e8df7a78f6fe"
+  },
+  "source_mechanics_audit_sha256": {
+    "artifacts/public_trend_batch8_registration_20261011/Supertrend-conditional-source-readiness-audit.json": "6ec6b6f4428b1aa4da43d849b870362383d6f622006d87c97e3061baac22b407",
+    "artifacts/public_trend_batch8_registration_20261011/Supertrend-reference-mechanics-addendum.json": "ec6037b3a926d21e31d32a1f9e3168a0b39768d912b05939153bd7d25a8f8ec2"
+  },
+  "repository_changes_by_reviewer": false,
+  "market_strategy_execution": false,
+  "independent_verification": {
+    "registered_synthetic_unit_tests": 15,
+    "unit_tests_result": "PASS",
+    "production_real_git_checked_spec": "PASS",
+    "primary_source_bytes_retrieved": 5761,
+    "primary_source_sha256": "426e66ff4c7ac6b889ee0e449ad56a8cf962110efca401a3b373858d8a02236e",
+    "primary_MIT_license_sha256": "907852c1a5bc9518bd5bcc9b87c48262e367f0b94d07ce5e875cd4ff5a85fd74",
+    "official_v4_reference_asset_bytes": 351573,
+    "official_v4_reference_asset_sha256": "04fd2cae47a652a1f3c37e91fe0fe0e10cdf6ba08567f23fc89832e533848ccd",
+    "scalar_feature_oracle_fixtures": 8,
+    "bars_each_fixture": 600,
+    "feature_oracle_matches": "Exact ATR, lower, upper, direction and long/short arrays; startup NaNs included. Rising, falling, flat, oscillating, random walk, alternating level and varied range fixtures.",
+    "all_feature_prefix_checks": 48,
+    "all_feature_future_mutation_prefix": 300,
+    "independent_position_oracle_cases": 80,
+    "oracle_seed": 14802,
+    "position_oracle_matches": "Exact entry/endpoint indexes, prices, quantities, reasons, statuses and all raw/held/rejected/zero/admitted/terminal categories across randomized replacement entries and original bearish exit flags; independently reconstructed cash/BTC NAV paths to absolute1e-9.",
+    "maximum_cash_profit_nav_error": 3.637978807091713e-12,
+    "fixed_alpha": 0.025,
+    "two_sided_interval_coverage": 0.975,
+    "quantiles": [
+      0.0125,
+      0.9875
+    ]
+  },
+  "reviewed_mechanics": {
+    "startup_arithmetic": "TR0 high-low; subsequent true range includes prior-close gap. First9ATR undefined; left-to-right scalar first10TR sum/10 seed, then alpha1/10 and beta1-alpha separate products plus addition. Midpoint add/divide and factor3 bands.",
+    "state_priority": "Bands use strictly prior close and prior band, previous upper comparison has first priority for direction if inverted bands satisfy both inequalities. Initial fallback direction1 is not an initial entry; only1-after-minus1 is a long. No warmup restart.",
+    "date_window": "Inclusive bar-opening clock2019-01-01 to9999-01-01T23:59 UTC adapter; gates both flips, no forced date-exit.",
+    "default_orders": "Original opposite flip is sole active default position action; optional15percent stop stays disabled. No strategy.exit exists in this source, no all-NaN strategy.exit issue, no protective line order or invented profit exit/timeout.",
+    "execution": "5percent signal-close fee-reserved floor8 quantity fixed before next1m open, all-or-reject without resizing.10000USD-to-USDT and source native opening-equity timing differences declared. Old held flags are counted before original bearish-to-cash exit; no same-boundary reentry. Controls use original bearish flips and own cash/durations, not observed endogenous holding lengths.",
+    "accounting_cutoff": "Own alt and separate funded BTC cash accounts; open-to-open completed references and close liquidation-value marks. Final queued source exit is censored with retained holding rather than unavailable future fill; final flat raw long flag unexecuted.",
+    "binding_guard": "Actual registration git object, canonical config, normalized reused Python dependencies and exact audit/data receipts checked. CLI validates committed matching independent review and evaluator before retained raw data load. Missing review test rejects.",
+    "bootstrap": "Shared bound two-candidate diagnostic function retains alpha.025; new single-cell metadata does not recompute alpha or claim global repeated-search inference."
+  },
+  "provenance_limits": [
+    "Pinned public publisherrahulmr differs from named MIT author2020TomRumpf and commit authortomcru. Original publication remains unestablished; exact distinction retained.",
+    "Direct source, license and official reference assets independently fetched and exact hashes matched. Mathematical implementation, not native Pine engine execution."
+  ],
+  "claim_limits": [
+    "Synthetic exact reference comparisons verify declared numerical port only; native startup summation, arithmetic, fill and sizing parity remain unverified.",
+    "Synthetic execution oracle verifies selected fixtures and accounting, not exhaustive proof or real market viability.",
+    "The retained panel is already inspected spent development history and lacks2022bear coverage. No market outcomes accessed by this review.",
+    "Any retrospective screen survival remains insufficient for a viable candidate; separately frozen genuinely untouched future confirmation and cost/execution calibration remain mandatory.",
+    "No changes to historical strategies, gates, prospective protocols, Bollinger exclusion or authorization boundary. No orders supported."
+  ],
+  "reviewer_account_availability": "This reviewer completed requested independent work; no quota interruption occurred during this review. Other source-survey agent availability is not represented as completed additional review."
+}
