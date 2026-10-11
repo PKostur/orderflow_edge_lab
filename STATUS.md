@@ -66,7 +66,7 @@ terminal: no retuning, re-siding, or re-phasing under the same IDs.
 
 <!-- BEGIN GENERATED: forward-watches (scripts/generate_status.py) -->
 
-_Generated 2026-10-11T21:59:06Z from `config/prospective_review_clock_v1.json` and the latest dashboard snapshot. Do not edit by hand._
+_Generated 2026-10-11T22:57:39Z from `config/prospective_review_clock_v1.json` and the latest dashboard snapshot. Do not edit by hand._
 
 | Watch | Config | Start | Review gate | Earliest review | Status | Scored days |
 |---|---|---|---|---|---|---|
@@ -84,6 +84,7 @@ _Generated 2026-10-11T21:59:06Z from `config/prospective_review_clock_v1.json` a
 | `universal-cross-asset-trend-invvol-forward-v1` | `config/universal_cross_asset_trend_invvol_forward_v1.json` | 2026-09-28 | 365 calendar days | **2027-09-28** | `COLLECTING` | 13 |
 | `universal-trend-portfolio-forward-v1` | `config/universal_trend_portfolio_forward_v1.json` | 2026-09-28 | 365 calendar days | **2027-09-28** | `COLLECTING` | 13 |
 | `prop-paper-career-v1` | `config/prop_paper_forward_v1.json` | 2026-10-05 | 365 calendar days | **2027-10-05** | `COLLECTING` | 0 |
+| `turn-of-month-forward-v1` | `config/turn_of_month_forward_v1.json` | 2026-10-13 | 365 calendar days | **2027-10-13** | `PRE_START` | 0 |
 
 No verdict of any kind before a watch's earliest review date; the frozen workflow computes it.
 
