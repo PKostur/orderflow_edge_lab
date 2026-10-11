@@ -93,6 +93,10 @@
     "ctrend_universe": "757 Binance USDT spot pairs incl. delisted; 685 after excluding stable/fiat bases and leveraged tokens (BTCUP-style only when the prefix is itself a listed base)",
     "ctrend_g8": "crypto-only independence (corr with crypto trend core <= 0.5); SPY correlation reported descriptively",
     "fomc_calendar": "federalreserve.gov historical pages 1994-2020 and fomccalendars 2021-2026 (263 scheduled meetings; cancelled 2020-03-17/18 and unscheduled calls excluded); days before 1994-02-03 have no cycle (no signal)",
-    "fomc_shift": "perturbation shifts every meeting by +/-1 weekday and applies the base rule"
+    "fomc_shift": "perturbation shifts every meeting by +/-1 weekday and applies the base rule",
+    "ctrend_accounting": "weekly buy-and-hold as in the paper: within week k, V_t = 1 + sum w_i (P_t/P_Sk - 1); daily return V_t/V_(t-1) - 1; turnover sum|w_k - w_(k-1)| charged once at the start of the week (10 bps per side); G4 null uses the same compounded weekly spell returns among eligible coins (decided after review, before the run)",
+    "relisted_tickers": "a gap > 30 calendar days between bars starts a new coin history (SYMBOL#2); no return crosses the gap",
+    "fomc_fix": "parser corrected for cross-month two-day meetings: 1995-02-01, 1998-07-01, 2012-08-01 are the decision days (data correction found in review, before the run)",
+    "non_ascii_symbols": "symbols with non-ASCII names are percent-encoded in URLs and kept in the universe"
   }
 }
