@@ -1,0 +1,71 @@
+{
+  "kind": "VORTEX_SOURCE_NATIVE_TYPESCRIPT_SYNTHETIC_PREREQUISITE",
+  "status": "PASS_SOURCE_INDICATOR_AND_ACTION_MATH_ONLY",
+  "registered": false,
+  "new_trading_cells": 0,
+  "market_outcomes_inspected": false,
+  "source_repository": "cinar/indicatorts",
+  "source_commit": "c6bfb623b2ccbac2c536d60740e8c458e4efa7cd",
+  "source_files_sha256": {
+    "cinar_examples_trend_vortexStrategy.ts": "6761502b0433ac721d774d0ebd9016b990f981dd2997b6adc3391e2eb902e76b",
+    "cinar_src_helper_numArray.ts": "a16e23dacab0aa0160a74c05ea1403adbed36778e6d63e66bc542ab141ea0446",
+    "cinar_src_indicator_trend_movingSum.ts": "45a344f5e490e335ddf2e66b36e1f20a8ff8922be53e530c1e47aa9cd0276c14",
+    "cinar_src_indicator_trend_vortex.ts": "d6a0e61d03bdadd184bc9b4b6aa5e67bed6dae8ace91ec083201661570e7f7c2",
+    "cinar_src_strategy_action.ts": "db972013d4b3a731eec1277f67a4b2cb1a963c7d6016b00611986f1abc109dad",
+    "cinar_src_strategy_asset.ts": "4547c826d6071a0ac34c150f0ef6e089d7ed59bceef42485ed748dd9c1010ebb"
+  },
+  "license_sha256": "f6a6af984fc733520b012f8d0c37c049c02a1d1af7b40037ec1b27f8edc820b5",
+  "compiler_receipt": {
+    "metadata_url": "https://registry.npmjs.org/typescript/5.4.5",
+    "version": "5.4.5",
+    "tarball_url": "https://registry.npmjs.org/typescript/-/typescript-5.4.5.tgz",
+    "integrity": "sha512-vcI4UpRgg81oIRUFwR0WSIHKt11nJ7SAVlYNIu+QpqeyXP+gpQJy/Z4+F0aGxSE4MqwjyXvW/TzgkLAx2AGHwQ==",
+    "tarball_sha256": "154fae77169f04155ac52d521ac59abb07c9be29ea3744732adbf9f14abb2440",
+    "compiler_sha256": "d4eeb6e18a598a21aa0a5c09a52270856e4b23bd31d9c7c60ab80a22b275b07b"
+  },
+  "node_version": "v24.19.0",
+  "typescript_version": "5.4.5",
+  "fixtures": 22,
+  "feature_rows": 6703,
+  "prefix_checks": [
+    1,
+    2,
+    13,
+    14,
+    15,
+    29,
+    50,
+    100,
+    200,
+    300,
+    500,
+    599
+  ],
+  "future_mutation_prefixes": [
+    1,
+    13,
+    14,
+    29,
+    100,
+    300,
+    599
+  ],
+  "maximum_scalar_residual": 0.0,
+  "source_defaults": {
+    "period": 14,
+    "moving_sum_startup": "partial inclusive; first prior high/low/close=self",
+    "zero_true_range": "plus=minus=0",
+    "actions": "BUY on plus>minus, SELL on plus<minus, HOLD equal; states not crossovers",
+    "illustrative_accounting": "initial cash1, full balance buy, all shares sell, same signal close without costs; no explicit protection/timeframe"
+  },
+  "limits": [
+    "This source is an educational directional signal and cost-free accounting example, not a deployed automated bot.",
+    "Native TypeScript functions ran on synthetic fixtures only. No broker, queue, fill, wallet, tick, fee or native exchange execution was tested.",
+    "An eight-hour Binance Spot adaptation must declare next-open execution, realistic fees, cash-reserve sizing, quantity precision and funding before any data; no claim that these are source defaults.",
+    "No Bollinger imports or features in the executed module dependency graph. Unrelated library functions were not used."
+  ],
+  "viable": false,
+  "future_confirmation_started": false,
+  "goal_complete": false,
+  "next": "Independent review of source/defaults and fixture evidence, then a distinct preregistered Spot eight-hour execution contract before any market outcomes, if accepted."
+}

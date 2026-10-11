@@ -1,0 +1,125 @@
+{
+  "audit_id": "NEXT_VWAP_SOURCE_ONLY_READINESS_REVIEW",
+  "status": "ONE_EXCLUDED_ONE_MATHEMATICALLY_DEFINABLE_BUT_UNREADY_FOR_REGISTRATION",
+  "market_data_used": false,
+  "market_outcomes_inspected": false,
+  "performance_CSV_JSON_files_opened": false,
+  "README_performance_claims_opened": false,
+  "native_engine_executed": false,
+  "repository_changes": false,
+  "new_registered_trading_cells": 0,
+  "new_registered_signal_model_cells": 0,
+  "source_file_exact_sha256": {
+    "xenoxavier_user_data_strategies_EmaVwapLong.py": "3ead2fc5ee46fc4e89ebf845a50d56c8b0aad3c97e49c7e9c7fa2e64fb4981d1",
+    "xenoxavier_LICENSE": "98e469f92f60a0ec3fa8448cc072a010fb1094da4e6d040f4765055d26ad273e",
+    "xenoxavier_config.example.json": "c64bc33b43e9737a696db5cd7d3267f3a5e080a17cb7b5211d067e12c4af40e5",
+    "xenoxavier_freqtrade-ema-vwap.inventory.json": "f53d758e406473174ab0823608c641ed3e487445ca902f297bd3d1ac4945c5ca",
+    "zaninifrancesco_strategy.py": "065443d8c843fd7132f82a822a2c04d5d08f07aef9c61eb45d3c7b9bdbc8934b",
+    "zaninifrancesco_risk_management.py": "73a47899405f593d1440dfbf8976617cf78aedf7f9171b824b95843d1d005bc9",
+    "zaninifrancesco_vwap-strategy-backtester.inventory.json": "9aa4f97ae90b35944024052c9487d1d784d018f02b270adc431833c328312a1d"
+  },
+  "source_hashes_independently_refetched": "Pinned raw xenoxavier strategy/LICENSE and zaninifrancesco strategy match local bytes exactly.",
+  "marketing_exposure": {
+    "source": "xenoxavier EmaVwapLong module docstring",
+    "exposed": true,
+    "kind": "Unverified short forward-test profitability and win-rate claims, leverage claims and guarantee-like liquidation/edge prose were visible during required source inspection.",
+    "selection_policy": "No claimed performance numbers used for selection, sizing or readiness. No performance dataset/README opened; no profitability or native forward-test validation performed.",
+    "provenance_limit": "Alleged shadow engine vwapshadow.cjs is not among inspected inventory files; equivalence to that engine is unverified."
+  },
+  "sources": [
+    {
+      "repository": "zaninifrancesco/vwap-strategy-backtester",
+      "commit": "264f9f13cb971951dd3e3bc103defda6289b21c3",
+      "source_url": "https://github.com/zaninifrancesco/vwap-strategy-backtester/blob/264f9f13cb971951dd3e3bc103defda6289b21c3/strategy.py",
+      "decision": "EXCLUDED_UNDER_ENTIRE_BOLLINGER_VOLATILITY_BAND_EXCLUSION_LICENSE_UNESTABLISHED",
+      "observed_mechanics": {
+        "VWAP": "Cumulative Close*Volume / cumulativeVolume from supplied segment start; no daily reset",
+        "bands": "VWAP plus/minus1.5*rolling20 Close standard deviation; pandas default sample std",
+        "entries": "Lower-band reclaim for long; upper-band retreat for short. Signals and entry modeled same close.",
+        "exits": "Close-observed fixed absolute stop/target distances, not intrabar barriers. No cost/spread/cash-admission/censoring protocol.",
+        "sizing": "Fixed initial capital*risk_percentage/100 divided by fixed stop_loss_pips; no dynamic cash/capital cap",
+        "diagnostic_accounting_limits": "Drawdown subtracts total_profit from peak account balance rather than current balance; open endpoint inventory not marked. Do not reuse reported metrics."
+      },
+      "exclusion_reason": "Not literal SMA-centered Bollinger implementation, but explicitly uses rolling standard-deviation volatility bands; renaming center to VWAP does not justify bypassing user entire-band-family exclusion.",
+      "licensing": "GitHub inventory license null; no inspected license notice establishes permission. Unestablished does not prove no license anywhere.",
+      "do_not_repair": "Do not remove bands or substitute a new VWAP rule and call this unchanged source."
+    },
+    {
+      "repository": "xenoxavier/freqtrade-ema-vwap",
+      "commit": "dbd1158cdd2e7014d7aaaabcd042ab4b4aef8450",
+      "source_url": "https://github.com/xenoxavier/freqtrade-ema-vwap/blob/dbd1158cdd2e7014d7aaaabcd042ab4b4aef8450/user_data/strategies/EmaVwapLong.py",
+      "decision": "DECLARED_MATH_PORT_DESIGNABLE_EXECUTION_PROTECTION_DEPENDENCY_CONTRACT_UNRESOLVED_NOT_REGISTERED",
+      "license": "MIT, copyright2026Richard; exact notice retained. Publisher-account/original author identity or shadow-engine provenance unestablished.",
+      "no_Bollinger_observed": "Strategy uses EMA/daily VWAP crossover plus ATR; no rolling std bands observed.",
+      "actual_source_defaults": {
+        "timeframe": "1h",
+        "EMA": "TA-Lib EMA9 on close, native TA-Lib version/seed/arithmetic not pinned by repository",
+        "VWAP": "Daily date.floor(D) cumulative(H+L+C)/3*volume divided cumulativevolume; zero cumulativevolume falls back to close. Source prose UTC must be declared as input timezone contract.",
+        "ATR": "TR via np.maximum with shifted priorclose; firstTR NaN; pandas ewm(span14,adjustFalse), alpha2/15. First valid TR initializes smoothing, not Wilder14/SMA14 seed.",
+        "cross": "EMA>VWAP and previousEMA<=previousVWAP; close strictly above both at crossover",
+        "tradeability": "Unrounded1.5*ATR/crosshigh*100 strictly<3.8",
+        "arming": "Search offsets0,1,2,3 inclusive; choose most recent tradeable cross whose intervening EMA>VWAP. Four eligible bars including cross itself, not three future-only bars.",
+        "entry": "armed and currenthigh>=armtrigger and unrounded arm_stop_pct<3.8. Offset0 trigger=currentcrosshigh, so high>=ownhigh admits same crossover bar without a later breakout. Later flags may recur while armed.",
+        "cross_geometry": "Trigger HIGH fixes recorded stop/target percentages; actual exits anchor parsed percentages to actual trade.open_rate. No hard entry order at triggerhigh.",
+        "tags": "Format stop_pct and target_pct with Python :.2f percent decimals; parse stored text into float. Targets/stops must use rounded tags, not unrounded ATR. Rounded ratio can depart from2; small stop rounds0.00, requiring literal callback behavior or declared invalid rejection.",
+        "customstop": "actualentry*(1-roundedstop_pct/100), raised to entry-(entry-liquidationprice)*.80 if available. Calls stoploss_from_absolute with tradeleverage or20; fallback -.99. Framework stop update lifecycle not established.",
+        "customexit": "current_rate>=actualentry*(1+roundedtarget_pct/100) checks before elapsed60hours timeout; rate observed by callback, not a submitted resting TP price. exit trend always0.",
+        "other_defaults": "minimal_roi0:10 remains fallback; stoploss-.99; process_only_new_candlesFalse; startup50; populate_indicators returns early without columns for dataframe length<40; can_shortFalse.",
+        "orders": "Entry/exit limit, emergency/stop market, on-exchange stop enabled with60second refresh; native pending/partial fill and callback/stop priority require runtime contract.",
+        "leverage": "min(20,exchange max), futures isolated in example config; source guarantee-like liquidation protection is unverified under gaps/funding/latency.",
+        "source_protection_definitions": [
+          {
+            "type": "CooldownPeriod",
+            "stop_duration_candles": 2
+          },
+          {
+            "type": "StoplossGuard",
+            "lookback_period_candles": 24,
+            "trade_limit": 2,
+            "stop_duration_candles": 12,
+            "only_per_pair": true
+          },
+          {
+            "type": "StoplossGuard",
+            "lookback_period_candles": 6,
+            "trade_limit": 5,
+            "stop_duration_candles": 2,
+            "only_per_pair": false
+          }
+        ],
+        "example_config": "Gate isolated futures,1USDT constant stake,100USDT dry-run wallet,max8open,tradingbalance99%; dynamic80volume-ranked assets/age>=3days, BTC and ETH blacklisted. Config example is source evidence, not verified deployed defaults."
+      },
+      "causality": "Vector calculations are prefix-oriented on completed bars: daily cumsum and backward arming search use only current/past rows. That does not verify native closedbar/live callback timing. Same-bar high admission is source actual, not future data when full bar is already closed.",
+      "eight_hour_spot_transfer": {
+        "source_timeframe_changes": "EMA9/ATRspan14 span8xwallclock; dailyVWAP has3bars instead of24; arming offset3 extends to24hours instead of3; preserving candle-count protections maps2cooldown to16hours,24lookback to192hours,12lock to96hours,6lookback to48hours and2lock to16hours.60hour timeout remains wallclock60, not rounded to8bars.",
+        "leverage_liquidation": "Spot cannot retain20x margin/liquidation logic; removing it is explicit adaptation. Do not invent synthetic liquidation or claim unchanged native source.",
+        "capital_universe": "Fixed ETH/SOL/LINK sleeves and BTC reference differ from source dynamicuniverse/blacklist/maxopen/stake. Source stake1 constant and wallet100 are not fullcash or2percent-risk sizing. Exact budget/lot/fees/commoncash adapter must be frozen.",
+        "cross_pair_coupling": "If global StoplossGuard is enabled, symbol sleeves are causally coupled by portfolio-wide negative stop-outs. Independent per-symbol simulation plus Cartesian pooling omits that state. A joint clock/event engine or explicit separate protection-disabled adaptation is required, with no unchanged-source claim.",
+        "protection_activation": "Official docs require --enable-protections for backtest/hyperopt; strategy property alone does not establish active native protections. Activation, stop-reason eligibility, negative-after-cost definition, lookback boundaries and nextcandle rounded lock expiry must be pinned.",
+        "exit_clock": "Need freeze observed minute-close/rate callback proxy and next-open market vs native limit queues, stop activation/ratchet/refresh, timeoutclock, target-vs-timeout-vs-stop priority and intraminute ambiguity. Do not treat callback target as resting native barrier."
+      },
+      "before_registration": [
+        "Pin TA-Lib/pandas/Freqtrade numeric and framework semantics or explicitly independent scalar recurrence; synthetic EMA/firstTR/zero-volume/date reset/armer/tag prefix tests",
+        "Freeze samecrossbar admission and backwardmostrecentcross selection unchanged; do not repair into future-only breakout",
+        "Choose1hsource or explicitly8h transfer; retain numerical defaults and precise candle-count/wallclock distinctions",
+        "Freeze protection activation plus pair/global joint state and full controls owning exits/cash/locks; no observed durations/locks reused",
+        "Freeze parsed rounded percent geometry and fallback/zero tag/liquidation-removal/entrybudget semantics",
+        "Freeze realistic cost, quantity/admission, orderclock/censoring/full histories; run independent synthetic engine review before any market load",
+        "Retain all old gates, source trial/family disclosures and frozen lanes; historical survival only permits separately frozen untouchedfuture confirmation"
+      ]
+    }
+  ],
+  "primary_framework_documentation": {
+    "protections": "https://www.freqtrade.io/en/stable/plugins/",
+    "callbacks": "https://docs.freqtrade.io/en/latest/strategy-callbacks/",
+    "inspected_support": "Protections require explicit backtest enable flag and locks round to next candle. custom_exit is a loop/rate callback; custom_stoploss has after-fill/ratchet and exchange refresh semantics. Documentation is current primary reference, not pinned source runtime parity."
+  },
+  "overlap_and_trial_accounting": {
+    "minimum_preexisting_trading_cells": 22,
+    "minimum_preexisting_signal_model_cells": 23,
+    "new_source_inspection_cells": 0,
+    "family": "EMA-versus-volume-weighted level crossover relates to frozenEMA8/EMA and priorMACD/trend candidates; VWAP volume family relates toCMF. ATR protection relates topriorATR/bracketstudies. Distinct mechanics do not imply independent edge.",
+    "preservation": "No frozen DON8,EMA8,VOL8,DV2,D4,payoff geometry, session watches or prospective definitions changed. Bollinger excluded entirely.",
+    "completion_boundary": "Next genuinely untouched-confirmed viable candidate objective remains unmet; no new performance evaluation or viable candidate produced by source audit."
+  }
+}
