@@ -158,3 +158,7 @@ Frozen Supertrend default-intent research and its rejection are recorded in [res
 ## Public Vortex state research batch 10
 
 [Design](docs/PUBLIC_VORTEX_BATCH10_DESIGN_V1.md), [results](docs/PUBLIC_VORTEX_BATCH10_RESULTS_V1.md), and [conditional prospects](docs/PUBLIC_STRATEGY_CONDITIONAL_PROSPECTS_BATCH10_V1.md). The frozen Spot adaptation was rejected on seven gates: 509 completed trades plus one cutoff, negative 80 bps stress mean and 70.3798% drawdown. Full lossless evidence, trial ledger and independent accounting review are retained. No viable candidate or future confirmation; frozen lanes preserved.
+
+## Public NVI state research batch 11
+
+[Design](docs/PUBLIC_NVI_BATCH11_DESIGN_V1.md), [results](docs/PUBLIC_NVI_BATCH11_RESULTS_V1.md), [conditional prospects](docs/PUBLIC_STRATEGY_CONDITIONAL_PROSPECTS_BATCH11_V1.md). Frozen volume-conditioned state rejected: 127 completed trades plus two cutoff marks; both uncertainty intervals and 60.06% drawdown failed. Full lossless evidence, trial ledger and independent accounting review retained. No viable candidate or future confirmation; frozen lanes preserved.
