@@ -1,0 +1,456 @@
+{
+  "audit_id": "PSR12-FINAL-INDEPENDENT-REVIEW",
+  "status": "PASS_REPRODUCTION_AND_ACCOUNTING_BOTH_CANDIDATES_REJECTED",
+  "results_exact_sha256": "20ab56068daa4ea6aeda06f3aa65d37a7a70b7f9eac8104a965bcd3bbff00e96",
+  "evaluator_exact_sha256": "0d8d648a30b8963a9b3e125f89fc855dd45a6d47721de0f6ea4dce6d4a637d68",
+  "evaluator_git_commit_in_results": "4885536c061c6ad1980db93091e4d03cf41e56ee",
+  "design_commit": "eaaef0c1845cc56cc5ba4d20413153e85b65b377",
+  "canonical_config_sha256": "a654938094a1133981e397ada4c92c438c83b336174ad0a1b5bc96b6d3aed4c5",
+  "independent_reproduction_sha256": "0d540287a04c991ddf008ab3d323922d46451f00b4c1c9324b30243b99ec9dd4",
+  "source_evidence_canonical_match": true,
+  "eight_baseline_case_comparisons": [
+    {
+      "candidate": "PSARReference8hSpot",
+      "case": "40:conservative_limit",
+      "match": true,
+      "canonical_case_sha256": "d4fc0fa996a5d72e8a7fe4f4e89ff308cc941d1663d168214005204456d9748a",
+      "state_accounting_checks": [
+        {
+          "symbol": "ETHUSDT",
+          "state": 0,
+          "admitted": 108,
+          "completed": 107,
+          "censored": 1,
+          "ledger_absolute_errors": [
+            4.547473508864641e-12,
+            6.366462912410498e-12,
+            4.547473508864641e-12
+          ],
+          "nav_profit_reconciliation_error": 1.1823431123048067e-11
+        },
+        {
+          "symbol": "SOLUSDT",
+          "state": 0,
+          "admitted": 108,
+          "completed": 108,
+          "censored": 0,
+          "ledger_absolute_errors": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "nav_profit_reconciliation_error": 1.8189894035458565e-11
+        },
+        {
+          "symbol": "LINKUSDT",
+          "state": 0,
+          "admitted": 118,
+          "completed": 118,
+          "censored": 0,
+          "ledger_absolute_errors": [
+            0.0,
+            3.637978807091713e-12,
+            0.0
+          ],
+          "nav_profit_reconciliation_error": 5.4569682106375694e-12
+        }
+      ]
+    },
+    {
+      "candidate": "PSARReference8hSpot",
+      "case": "40:opening_price_improvement",
+      "match": true,
+      "canonical_case_sha256": "d4fc0fa996a5d72e8a7fe4f4e89ff308cc941d1663d168214005204456d9748a",
+      "state_accounting_checks": [
+        {
+          "symbol": "ETHUSDT",
+          "state": 0,
+          "admitted": 108,
+          "completed": 107,
+          "censored": 1,
+          "ledger_absolute_errors": [
+            4.547473508864641e-12,
+            6.366462912410498e-12,
+            4.547473508864641e-12
+          ],
+          "nav_profit_reconciliation_error": 1.1823431123048067e-11
+        },
+        {
+          "symbol": "SOLUSDT",
+          "state": 0,
+          "admitted": 108,
+          "completed": 108,
+          "censored": 0,
+          "ledger_absolute_errors": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "nav_profit_reconciliation_error": 1.8189894035458565e-11
+        },
+        {
+          "symbol": "LINKUSDT",
+          "state": 0,
+          "admitted": 118,
+          "completed": 118,
+          "censored": 0,
+          "ledger_absolute_errors": [
+            0.0,
+            3.637978807091713e-12,
+            0.0
+          ],
+          "nav_profit_reconciliation_error": 5.4569682106375694e-12
+        }
+      ]
+    },
+    {
+      "candidate": "PSARReference8hSpot",
+      "case": "80:conservative_limit",
+      "match": true,
+      "canonical_case_sha256": "7773d888a5002dad56f7e8ccfdc2ae205540aadf5f9928927118ab0801b562fc",
+      "state_accounting_checks": [
+        {
+          "symbol": "ETHUSDT",
+          "state": 0,
+          "admitted": 108,
+          "completed": 107,
+          "censored": 1,
+          "ledger_absolute_errors": [
+            5.9117155615240335e-12,
+            4.547473508864641e-12,
+            9.094947017729282e-13
+          ],
+          "nav_profit_reconciliation_error": 5.9117155615240335e-12
+        },
+        {
+          "symbol": "SOLUSDT",
+          "state": 0,
+          "admitted": 108,
+          "completed": 108,
+          "censored": 0,
+          "ledger_absolute_errors": [
+            1.0913936421275139e-11,
+            9.094947017729282e-13,
+            6.366462912410498e-12
+          ],
+          "nav_profit_reconciliation_error": 5.4569682106375694e-12
+        },
+        {
+          "symbol": "LINKUSDT",
+          "state": 0,
+          "admitted": 118,
+          "completed": 118,
+          "censored": 0,
+          "ledger_absolute_errors": [
+            7.275957614183426e-12,
+            5.4569682106375694e-12,
+            4.547473508864641e-12
+          ],
+          "nav_profit_reconciliation_error": 1.8189894035458565e-12
+        }
+      ]
+    },
+    {
+      "candidate": "PSARReference8hSpot",
+      "case": "80:opening_price_improvement",
+      "match": true,
+      "canonical_case_sha256": "7773d888a5002dad56f7e8ccfdc2ae205540aadf5f9928927118ab0801b562fc",
+      "state_accounting_checks": [
+        {
+          "symbol": "ETHUSDT",
+          "state": 0,
+          "admitted": 108,
+          "completed": 107,
+          "censored": 1,
+          "ledger_absolute_errors": [
+            5.9117155615240335e-12,
+            4.547473508864641e-12,
+            9.094947017729282e-13
+          ],
+          "nav_profit_reconciliation_error": 5.9117155615240335e-12
+        },
+        {
+          "symbol": "SOLUSDT",
+          "state": 0,
+          "admitted": 108,
+          "completed": 108,
+          "censored": 0,
+          "ledger_absolute_errors": [
+            1.0913936421275139e-11,
+            9.094947017729282e-13,
+            6.366462912410498e-12
+          ],
+          "nav_profit_reconciliation_error": 5.4569682106375694e-12
+        },
+        {
+          "symbol": "LINKUSDT",
+          "state": 0,
+          "admitted": 118,
+          "completed": 118,
+          "censored": 0,
+          "ledger_absolute_errors": [
+            7.275957614183426e-12,
+            5.4569682106375694e-12,
+            4.547473508864641e-12
+          ],
+          "nav_profit_reconciliation_error": 1.8189894035458565e-12
+        }
+      ]
+    },
+    {
+      "candidate": "CMF21Spot8hMinuteCloseROI",
+      "case": "40:conservative_limit",
+      "match": true,
+      "canonical_case_sha256": "e7d17a3f2a52685d5c860f2f733557d727d911be622380ae8fe4feb8bb199dc1",
+      "state_accounting_checks": [
+        {
+          "symbol": "ETHUSDT",
+          "state": 0,
+          "admitted": 519,
+          "completed": 519,
+          "censored": 0,
+          "ledger_absolute_errors": [
+            1.3642420526593924e-12,
+            2.5011104298755527e-12,
+            4.547473508864641e-13
+          ],
+          "nav_profit_reconciliation_error": 2.523847797419876e-11
+        },
+        {
+          "symbol": "SOLUSDT",
+          "state": 0,
+          "admitted": 662,
+          "completed": 662,
+          "censored": 0,
+          "ledger_absolute_errors": [
+            2.5011104298755527e-12,
+            1.4779288903810084e-12,
+            2.6716406864579767e-12
+          ],
+          "nav_profit_reconciliation_error": 2.2737367544323206e-12
+        },
+        {
+          "symbol": "LINKUSDT",
+          "state": 0,
+          "admitted": 596,
+          "completed": 596,
+          "censored": 0,
+          "ledger_absolute_errors": [
+            1.0231815394945443e-12,
+            1.5916157281026244e-12,
+            6.139089236967266e-12
+          ],
+          "nav_profit_reconciliation_error": 2.5579538487363607e-12
+        }
+      ]
+    },
+    {
+      "candidate": "CMF21Spot8hMinuteCloseROI",
+      "case": "40:opening_price_improvement",
+      "match": true,
+      "canonical_case_sha256": "e7d17a3f2a52685d5c860f2f733557d727d911be622380ae8fe4feb8bb199dc1",
+      "state_accounting_checks": [
+        {
+          "symbol": "ETHUSDT",
+          "state": 0,
+          "admitted": 519,
+          "completed": 519,
+          "censored": 0,
+          "ledger_absolute_errors": [
+            1.3642420526593924e-12,
+            2.5011104298755527e-12,
+            4.547473508864641e-13
+          ],
+          "nav_profit_reconciliation_error": 2.523847797419876e-11
+        },
+        {
+          "symbol": "SOLUSDT",
+          "state": 0,
+          "admitted": 662,
+          "completed": 662,
+          "censored": 0,
+          "ledger_absolute_errors": [
+            2.5011104298755527e-12,
+            1.4779288903810084e-12,
+            2.6716406864579767e-12
+          ],
+          "nav_profit_reconciliation_error": 2.2737367544323206e-12
+        },
+        {
+          "symbol": "LINKUSDT",
+          "state": 0,
+          "admitted": 596,
+          "completed": 596,
+          "censored": 0,
+          "ledger_absolute_errors": [
+            1.0231815394945443e-12,
+            1.5916157281026244e-12,
+            6.139089236967266e-12
+          ],
+          "nav_profit_reconciliation_error": 2.5579538487363607e-12
+        }
+      ]
+    },
+    {
+      "candidate": "CMF21Spot8hMinuteCloseROI",
+      "case": "80:conservative_limit",
+      "match": true,
+      "canonical_case_sha256": "4ec8a796eaea6a40195ca0530d13cec3c64a5af7900f616c766c7d049bc147ee",
+      "state_accounting_checks": [
+        {
+          "symbol": "ETHUSDT",
+          "state": 0,
+          "admitted": 519,
+          "completed": 519,
+          "censored": 0,
+          "ledger_absolute_errors": [
+            6.650680006714538e-12,
+            9.748646334628575e-12,
+            1.2448708730516955e-11
+          ],
+          "nav_profit_reconciliation_error": 7.702283255639486e-12
+        },
+        {
+          "symbol": "SOLUSDT",
+          "state": 0,
+          "admitted": 662,
+          "completed": 662,
+          "censored": 0,
+          "ledger_absolute_errors": [
+            6.231459792616079e-12,
+            7.318590178329032e-12,
+            1.0466294497746276e-11
+          ],
+          "nav_profit_reconciliation_error": 5.53157519789238e-12
+        },
+        {
+          "symbol": "LINKUSDT",
+          "state": 0,
+          "admitted": 596,
+          "completed": 596,
+          "censored": 0,
+          "ledger_absolute_errors": [
+            3.872457909892546e-12,
+            6.934897101018578e-12,
+            9.592326932761353e-12
+          ],
+          "nav_profit_reconciliation_error": 1.2640555269172182e-11
+        }
+      ]
+    },
+    {
+      "candidate": "CMF21Spot8hMinuteCloseROI",
+      "case": "80:opening_price_improvement",
+      "match": true,
+      "canonical_case_sha256": "4ec8a796eaea6a40195ca0530d13cec3c64a5af7900f616c766c7d049bc147ee",
+      "state_accounting_checks": [
+        {
+          "symbol": "ETHUSDT",
+          "state": 0,
+          "admitted": 519,
+          "completed": 519,
+          "censored": 0,
+          "ledger_absolute_errors": [
+            6.650680006714538e-12,
+            9.748646334628575e-12,
+            1.2448708730516955e-11
+          ],
+          "nav_profit_reconciliation_error": 7.702283255639486e-12
+        },
+        {
+          "symbol": "SOLUSDT",
+          "state": 0,
+          "admitted": 662,
+          "completed": 662,
+          "censored": 0,
+          "ledger_absolute_errors": [
+            6.231459792616079e-12,
+            7.318590178329032e-12,
+            1.0466294497746276e-11
+          ],
+          "nav_profit_reconciliation_error": 5.53157519789238e-12
+        },
+        {
+          "symbol": "LINKUSDT",
+          "state": 0,
+          "admitted": 596,
+          "completed": 596,
+          "censored": 0,
+          "ledger_absolute_errors": [
+            3.872457909892546e-12,
+            6.934897101018578e-12,
+            9.592326932761353e-12
+          ],
+          "nav_profit_reconciliation_error": 1.2640555269172182e-11
+        }
+      ]
+    }
+  ],
+  "stored_control_tail_checks": [
+    {
+      "candidate": "PSARReference8hSpot",
+      "stored_replicates": 500,
+      "undefined": 0,
+      "original_minimum_mean": -0.9260110441325937,
+      "independently_recomputed_tail_numerator": 447,
+      "independently_recomputed_tail_fraction": 0.894,
+      "matched": true,
+      "full_control_rerun_performed": false
+    },
+    {
+      "candidate": "CMF21Spot8hMinuteCloseROI",
+      "stored_replicates": 500,
+      "undefined": 0,
+      "original_minimum_mean": -47.73148436521413,
+      "independently_recomputed_tail_numerator": 141,
+      "independently_recomputed_tail_fraction": 0.282,
+      "matched": true,
+      "full_control_rerun_performed": false
+    }
+  ],
+  "decision_checks": [
+    {
+      "candidate": "PSARReference8hSpot",
+      "decision": "REJECTED_AS_ADAPTED",
+      "independently_recomputed_failed_gates": [
+        "all_symbols_positive",
+        "excess_descriptive_ci",
+        "leave_week_positive",
+        "net40_mean",
+        "net80_positive",
+        "net_descriptive_ci",
+        "placebo_tail",
+        "portfolio_drawdown",
+        "positive_year_fraction"
+      ],
+      "matched": true
+    },
+    {
+      "candidate": "CMF21Spot8hMinuteCloseROI",
+      "decision": "REJECTED_AS_ADAPTED",
+      "independently_recomputed_failed_gates": [
+        "all_symbols_positive",
+        "excess_descriptive_ci",
+        "leave_week_positive",
+        "net40_mean",
+        "net80_positive",
+        "net_descriptive_ci",
+        "placebo_tail",
+        "portfolio_drawdown",
+        "positive_year_fraction"
+      ],
+      "matched": true
+    }
+  ],
+  "blocking_findings": [],
+  "no_repository_changes_by_reviewer": true,
+  "claim_limits": [
+    "Independent baseline execution uses the same committed strategy evaluator; separate chronological cash/BTC ledger reconstruction is independent accounting evidence, not native platform replication.",
+    "Each candidate has 500 stored randomized control replicates; tails independently recomputed, full 500 control reruns not performed.",
+    "Baseline gap models produced identical observed cases with one joint history; this is not proof ambiguity cannot occur. Synthetic branching and queue behavior were tested before outcomes.",
+    "Censored endpoint is a hypothetical liquidation valuation estimand, not an executed sale.",
+    "SAR is a documented recurrence adaptation without direct native Pine execution evidence; CMF is a registered minute-close ROI adaptation without native Freqtrade lifecycle parity.",
+    "Both candidates are rejected as adapted; these retrospective inspected development data establish no viable trading bot. Future genuinely untouched confirmation remains mandatory for any surviving newly registered candidate.",
+    "Portfolio drawdown uses 8h close liquidation marks and is not an intrabar drawdown bound; funded BTC intraminute references are bounds, not fills."
+  ]
+}

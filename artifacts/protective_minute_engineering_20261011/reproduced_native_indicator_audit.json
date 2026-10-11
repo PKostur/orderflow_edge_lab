@@ -1,0 +1,342 @@
+{
+  "study": "QUEUED-MAGEN-NATIVE-INDICATOR-ENGINEERING-AUDIT",
+  "strategy_trading_cells": 0,
+  "strategy_market_outcomes_inspected": false,
+  "orders": false,
+  "synthetic_fixtures": [
+    {
+      "fixture": "oscillating",
+      "n": 16,
+      "max_abs_errors": {
+        "atr32": 0,
+        "adx8": 0,
+        "linearreg5": 4.263256414560601e-14,
+        "linearreg20": 0
+      }
+    },
+    {
+      "fixture": "oscillating",
+      "n": 33,
+      "max_abs_errors": {
+        "atr32": 0.0,
+        "adx8": 0.0,
+        "linearreg5": 4.263256414560601e-14,
+        "linearreg20": 7.105427357601002e-14,
+        "atr_last": 0.0
+      }
+    },
+    {
+      "fixture": "oscillating",
+      "n": 240,
+      "max_abs_errors": {
+        "atr32": 0.0,
+        "adx8": 0.0,
+        "linearreg5": 7.105427357601002e-14,
+        "linearreg20": 1.2789769243681803e-13,
+        "atr_last": 0.0
+      }
+    },
+    {
+      "fixture": "oscillating",
+      "n": 600,
+      "max_abs_errors": {
+        "atr32": 0.0,
+        "adx8": 0.0,
+        "linearreg5": 7.105427357601002e-14,
+        "linearreg20": 1.2789769243681803e-13,
+        "atr_last": 0.0
+      }
+    },
+    {
+      "fixture": "flat",
+      "n": 16,
+      "max_abs_errors": {
+        "atr32": 0,
+        "adx8": 0,
+        "linearreg5": 0.0,
+        "linearreg20": 0
+      }
+    },
+    {
+      "fixture": "flat",
+      "n": 33,
+      "max_abs_errors": {
+        "atr32": 0.0,
+        "adx8": 0.0,
+        "linearreg5": 0.0,
+        "linearreg20": 0.0,
+        "atr_last": 0.0
+      }
+    },
+    {
+      "fixture": "flat",
+      "n": 240,
+      "max_abs_errors": {
+        "atr32": 0.0,
+        "adx8": 0.0,
+        "linearreg5": 0.0,
+        "linearreg20": 0.0,
+        "atr_last": 0.0
+      }
+    },
+    {
+      "fixture": "flat",
+      "n": 600,
+      "max_abs_errors": {
+        "atr32": 0.0,
+        "adx8": 0.0,
+        "linearreg5": 0.0,
+        "linearreg20": 0.0,
+        "atr_last": 0.0
+      }
+    },
+    {
+      "fixture": "gapped",
+      "n": 16,
+      "max_abs_errors": {
+        "atr32": 0,
+        "adx8": 0,
+        "linearreg5": 5.684341886080802e-14,
+        "linearreg20": 0
+      }
+    },
+    {
+      "fixture": "gapped",
+      "n": 33,
+      "max_abs_errors": {
+        "atr32": 0.0,
+        "adx8": 0.0,
+        "linearreg5": 5.684341886080802e-14,
+        "linearreg20": 7.105427357601002e-14,
+        "atr_last": 0.0
+      }
+    },
+    {
+      "fixture": "gapped",
+      "n": 240,
+      "max_abs_errors": {
+        "atr32": 0.0,
+        "adx8": 0.0,
+        "linearreg5": 8.526512829121202e-14,
+        "linearreg20": 8.526512829121202e-14,
+        "atr_last": 0.0
+      }
+    },
+    {
+      "fixture": "gapped",
+      "n": 600,
+      "max_abs_errors": {
+        "atr32": 0.0,
+        "adx8": 0.0,
+        "linearreg5": 7.105427357601002e-14,
+        "linearreg20": 1.2789769243681803e-13,
+        "atr_last": 0.0
+      }
+    },
+    {
+      "fixture": "declining",
+      "n": 16,
+      "max_abs_errors": {
+        "atr32": 0,
+        "adx8": 0,
+        "linearreg5": 5.684341886080802e-14,
+        "linearreg20": 0
+      }
+    },
+    {
+      "fixture": "declining",
+      "n": 33,
+      "max_abs_errors": {
+        "atr32": 0.0,
+        "adx8": 0.0,
+        "linearreg5": 5.684341886080802e-14,
+        "linearreg20": 5.684341886080802e-14,
+        "atr_last": 0.0
+      }
+    },
+    {
+      "fixture": "declining",
+      "n": 240,
+      "max_abs_errors": {
+        "atr32": 0.0,
+        "adx8": 0.0,
+        "linearreg5": 7.105427357601002e-14,
+        "linearreg20": 9.947598300641403e-14,
+        "atr_last": 0.0
+      }
+    },
+    {
+      "fixture": "declining",
+      "n": 600,
+      "max_abs_errors": {
+        "atr32": 0.0,
+        "adx8": 0.0,
+        "linearreg5": 7.105427357601002e-14,
+        "linearreg20": 9.947598300641403e-14,
+        "atr_last": 0.0
+      }
+    }
+  ],
+  "rolling_slice_checks": [
+    {
+      "fixture": "oscillating",
+      "end": 241,
+      "window": 240,
+      "atr_abs_error": 0.0,
+      "adx_abs_error": 0.0,
+      "continuous_vs_native_window_atr_difference": -2.833517746969605e-05,
+      "continuous_vs_native_window_adx_difference": -3.147704319417244e-12
+    },
+    {
+      "fixture": "oscillating",
+      "end": 333,
+      "window": 240,
+      "atr_abs_error": 0.0,
+      "adx_abs_error": 0.0,
+      "continuous_vs_native_window_atr_difference": -1.9940582020261388e-05,
+      "continuous_vs_native_window_adx_difference": 4.760636329592671e-13
+    },
+    {
+      "fixture": "oscillating",
+      "end": 500,
+      "window": 240,
+      "atr_abs_error": 0.0,
+      "adx_abs_error": 0.0,
+      "continuous_vs_native_window_atr_difference": 1.3046234559777048e-05,
+      "continuous_vs_native_window_adx_difference": 4.128253294766182e-12
+    },
+    {
+      "fixture": "oscillating",
+      "end": 600,
+      "window": 240,
+      "atr_abs_error": 0.0,
+      "adx_abs_error": 0.0,
+      "continuous_vs_native_window_atr_difference": 1.5210210707383709e-05,
+      "continuous_vs_native_window_adx_difference": 1.1652900866465643e-12
+    },
+    {
+      "fixture": "flat",
+      "end": 241,
+      "window": 240,
+      "atr_abs_error": 0.0,
+      "adx_abs_error": 0.0,
+      "continuous_vs_native_window_atr_difference": 0.0,
+      "continuous_vs_native_window_adx_difference": 0.0
+    },
+    {
+      "fixture": "flat",
+      "end": 333,
+      "window": 240,
+      "atr_abs_error": 0.0,
+      "adx_abs_error": 0.0,
+      "continuous_vs_native_window_atr_difference": 0.0,
+      "continuous_vs_native_window_adx_difference": 0.0
+    },
+    {
+      "fixture": "flat",
+      "end": 500,
+      "window": 240,
+      "atr_abs_error": 0.0,
+      "adx_abs_error": 0.0,
+      "continuous_vs_native_window_atr_difference": 0.0,
+      "continuous_vs_native_window_adx_difference": 0.0
+    },
+    {
+      "fixture": "flat",
+      "end": 600,
+      "window": 240,
+      "atr_abs_error": 0.0,
+      "adx_abs_error": 0.0,
+      "continuous_vs_native_window_atr_difference": 0.0,
+      "continuous_vs_native_window_adx_difference": 0.0
+    },
+    {
+      "fixture": "gapped",
+      "end": 241,
+      "window": 240,
+      "atr_abs_error": 0.0,
+      "adx_abs_error": 0.0,
+      "continuous_vs_native_window_atr_difference": -2.833517746969605e-05,
+      "continuous_vs_native_window_adx_difference": -3.147704319417244e-12
+    },
+    {
+      "fixture": "gapped",
+      "end": 333,
+      "window": 240,
+      "atr_abs_error": 0.0,
+      "adx_abs_error": 0.0,
+      "continuous_vs_native_window_atr_difference": -1.99405820198173e-05,
+      "continuous_vs_native_window_adx_difference": 1.8260948309034575e-12
+    },
+    {
+      "fixture": "gapped",
+      "end": 500,
+      "window": 240,
+      "atr_abs_error": 0.0,
+      "adx_abs_error": 0.0,
+      "continuous_vs_native_window_atr_difference": 1.3046234560221137e-05,
+      "continuous_vs_native_window_adx_difference": 7.403855306620244e-12
+    },
+    {
+      "fixture": "gapped",
+      "end": 600,
+      "window": 240,
+      "atr_abs_error": 0.0,
+      "adx_abs_error": 0.0,
+      "continuous_vs_native_window_atr_difference": 5.80853191727293e-05,
+      "continuous_vs_native_window_adx_difference": 1.1510792319313623e-12
+    },
+    {
+      "fixture": "declining",
+      "end": 241,
+      "window": 240,
+      "atr_abs_error": 0.0,
+      "adx_abs_error": 0.0,
+      "continuous_vs_native_window_atr_difference": -2.8647409716420213e-05,
+      "continuous_vs_native_window_adx_difference": 4.504840944719035e-12
+    },
+    {
+      "fixture": "declining",
+      "end": 333,
+      "window": 240,
+      "atr_abs_error": 0.0,
+      "adx_abs_error": 0.0,
+      "continuous_vs_native_window_atr_difference": 4.598611023087784e-05,
+      "continuous_vs_native_window_adx_difference": -6.636469151999336e-12
+    },
+    {
+      "fixture": "declining",
+      "end": 500,
+      "window": 240,
+      "atr_abs_error": 0.0,
+      "adx_abs_error": 0.0,
+      "continuous_vs_native_window_atr_difference": -4.74066160460751e-06,
+      "continuous_vs_native_window_adx_difference": -2.1813661987835076e-12
+    },
+    {
+      "fixture": "declining",
+      "end": 600,
+      "window": 240,
+      "atr_abs_error": 0.0,
+      "adx_abs_error": 0.0,
+      "continuous_vs_native_window_atr_difference": -8.462961532895719e-06,
+      "continuous_vs_native_window_adx_difference": -2.4229507289419416e-12
+    }
+  ],
+  "dependency": "jesse-rust==1.3.0",
+  "source_tag_commit": "65e1007faf1804ca66651bc76cccd3feb80a0d6d",
+  "jesse_engine_commit": "417f8765225e3bfc12043d4b712f19fe15a3c078",
+  "wheel_name": "jesse_rust-1.3.0-cp313-cp313-win_amd64.whl",
+  "wheel_sha256": "5e29ad2a2388e714239781ecf77ecd001dadc47026c6c64dd46891f5e309ce1b",
+  "installed_module_matches_wheel": true,
+  "official_release_digest_previously_verified": true,
+  "official_release_metadata": "https://pypi.org/pypi/jesse-rust/1.3.0/json",
+  "python": "3.13.14",
+  "numpy": "2.2.4",
+  "indicator_tolerance": 1e-09,
+  "risk_and_fill_native_parity": false,
+  "source_unchanged_spot_compatibility": false,
+  "linearreg_input_contract": "contiguous float64; direct strided input triggered a native panic, so only the supported contiguous input was audited",
+  "candidate_viability": "NOT_TESTED",
+  "next": "Freeze a declared compatible protective-order port and conservative timestamp/benchmark bounds before market outcomes; separate untouched confirmation remains required."
+}

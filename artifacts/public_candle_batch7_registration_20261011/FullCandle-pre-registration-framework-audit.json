@@ -1,0 +1,105 @@
+{
+  "kind": "SOURCE_ONLY_PRE_REGISTRATION_FRAMEWORK_AUDIT",
+  "inspection_date_utc": "2026-10-11",
+  "registered": false,
+  "new_trading_cells": 0,
+  "market_outcomes_evaluated": false,
+  "native_runtime_executed": false,
+  "native_fill_parity_claim": false,
+  "repository_edits": false,
+  "orders_supported": false,
+  "binding": {
+    "previous_audit": "outputs/Next-public-bot-default-mechanics-audit.json",
+    "previous_audit_sha256": "1870690d05eb21099fa5d113ec180e41cb40156b735c0ec1ce2cc4c90da52968",
+    "strategy": "Full Candle [Alorse]",
+    "source_version": "0.0.1",
+    "commit": "8fb3837ddcd137f1450c3e82d654ff3df24d54d5",
+    "source_url": "https://github.com/Alorse/pinescript-strategies/blob/8fb3837ddcd137f1450c3e82d654ff3df24d54d5/strategies/other/Full%20Candle.pine",
+    "source_sha256": "8d6335c7752767090dfbfaeba0d878def0dac8171897dd431f9c2c0ca12036be",
+    "license": "MPL-2.0 explicit file notice; copyright alorse",
+    "provenance_limit": "Matching author notice and publisher repository are inspected provenance, not independent proof of authorship or performance."
+  },
+  "primary_references": {
+    "reference_page": "https://www.tradingview.com/pine-script-reference/v5/",
+    "v5_loader": "https://static.tradingview.com/static/bundles/63275.06c88afad175212b5fae.js",
+    "retrieval_method": "Official reference loader getReference maps PineLanguage.V5 to module191998 in bundle91998 plus language chunks; retrieved public primary assets, not a Pine execution engine.",
+    "core_bundle": {
+      "url": "https://static.tradingview.com/static/bundles/91998.903fee1a7992e6653580.js",
+      "utf8_bytes": 1212090,
+      "sha256": "7b73620f8186ae93af233b5b9d45c336787dc42f94bddcb4be1b80733f558c2d"
+    },
+    "english_chunks": [
+      {"url": "https://static.tradingview.com/static/bundles/en.41280.8b5a2b1da38a80192263.js", "utf8_bytes": 29229, "sha256": "99e65d2609b1d5ea0c177d900cb009be7d4420a65bedea4af44aab3340632da9"},
+      {"url": "https://static.tradingview.com/static/bundles/en.67754.232cdb9c419e3aefbcf0.js", "utf8_bytes": 44358, "sha256": "739ee5dc68fbb79f605bfab3beaef7fc8db864f9b7d69485e1bc588024af1557"},
+      {"url": "https://static.tradingview.com/static/bundles/en.66605.1b471f1f032ab644167b.js", "utf8_bytes": 177330, "sha256": "feced4e0c7c5ce77e15f5d5f840be3c0faa921af3c167e6a02d76af9f1edc2f6"},
+      {"url": "https://static.tradingview.com/static/bundles/en.1576.7bdad2a21a705719d84a.js", "utf8_bytes": 39614, "sha256": "0cec4674e34b71eae43099ad0b394d7d3d6156ef166bc19f093c8c7b67d0f1c8"}
+    ],
+    "strategies_concepts": "https://www.tradingview.com/pine-script-docs/v5/concepts/strategies/",
+    "strategy_properties": "https://www.tradingview.com/support/solutions/43000628599-strategy-properties/",
+    "v5_migration": "https://www.tradingview.com/pine-script-docs/migration-guides/to-pine-version-5/",
+    "hash_method": "SHA256 of UTF-8 asset content; byte lengths and hashes independently recomputed in this audit."
+  },
+  "all_na_strategy_exit": {
+    "source_calls": "Unconditional strategy.exit for Long and Short, passing both limit and stop series; both are na when source-default useTP=false and useSL=false.",
+    "verified_documentation": "V5 reference describes price-based TP/SL orders and the v5 migration guide requires price-defining parameters or a complete trailing pair. The source supplies named limit and stop parameters, but these evaluate to na at the disabled defaults.",
+    "reference_fields_inspected": ["strategy.exit description", "strategy.exit remarks", "limit and stop arguments", "English v5 reference assets", "v5 migration exit requirement"],
+    "not_established": "Neither inspected primary reference nor migration text directly establishes runtime behavior when all supplied exit price series are na. It does not prove native no-op, native success, or native failure for this source.",
+    "native_runnable_original_default_status": "UNVERIFIED",
+    "declared_mathematical_adapter": "Explicitly treat absent stop/limit prices as creating no price orders. This models the published disabled protection intention; it is an adapter declaration, not verified unchanged native execution.",
+    "forbidden_silent_repairs": ["Enable optional stop", "Enable optional target", "Add holding timeout", "Replace absent barriers with invented prices", "Claim native runtime parity from mathematical fixtures"]
+  },
+  "ema10": {
+    "reference_locator": "Core bundle ta.ema entry: documented equivalent pine_ema example; description78869 and remark309834.",
+    "documented_equivalent_on_valid_closes": "First valid close initializes EMA; later EMA_t=(2/11)*close_t+(9/11)*EMA_(t-1).",
+    "seed": "First valid close, not a 10-bar SMA",
+    "missing_values": "The reference says source na values are ignored; any segment admission policy must separately prevent bridging missing market observations.",
+    "parity_boundary": "Documented reference-equivalent recurrence is established. Native engine execution was not performed. Segment resets, 240-bar admission warmup, and 8h selection are harness declarations, not source parameters."
+  },
+  "candle_geometry": {
+    "source_lines": [41,42,43,46,47],
+    "range": "high-low",
+    "shadow": "close>open ? high-close : close-low",
+    "shadow_percent": "100*shadow/(high-low)",
+    "long_entry": "close>open AND close>EMA10 AND shadow_percent<=5",
+    "short_entry": "close<open AND close<EMA10 AND shadow_percent<=5",
+    "interpretation": "Bullish upper shadow and bearish lower shadow are constrained to 5% of total range. Body is not the denominator and the opposite wick is unrestricted.",
+    "zero_range": "Undefined division/na; source has no guard. Strict bullish and bearish predicates also fail on a flat candle. Do not coerce shadow_percent to zero or invent a symmetric wick filter."
+  },
+  "clock_and_entry_capture": {
+    "source_omits": ["calc_on_every_tick", "calc_on_order_fills", "process_orders_on_close", "use_bar_magnifier"],
+    "historical_calculation": "Default once at chartbar close",
+    "market_order_fill": "Default earliest next available tick, ordinarily next historical bar open; no source on-close fill request.",
+    "capture_condition": "strategy.opentrades==1 AND strategy.position_size>strategy.position_size[1]",
+    "capture_value": "ta.valuewhen(capture_condition,open,0)",
+    "causal_long_timing": "On the first fillbar close calculation after a new long fills at that bar's open, capture that fillbar raw open. Do not capture on signalclose or before the fill is observed.",
+    "capture_cases": "Flat-to-long and short-to-long size increases qualify if exactly one trade is open; flat-to-short and long-to-short do not. The last captured long reference persists after closing; before the first capture it is na.",
+    "long_exit": "close>entry_price*1.002 AND close>open",
+    "short_exit": "close<strategy.position_avg_price*0.998 AND close<open",
+    "slippage_boundary": "Long exit compares raw fillbar open even when a declared execution model shifts actual fill. Substituting actual fill changes the published long rule."
+  },
+  "sizing": {
+    "source": "Initial capital1000 USD, percent_of_equity10, no explicit qty, commission0.1% per transaction.",
+    "documented_timing": "Strategy Properties specifies percentage of available equity when a trade opens; v5 percent_of_equity reference835364 applies when entry qty is omitted.",
+    "mathematical_target": "At a new flat-to-long opening fill, target quote notional is 0.10*available strategy equity at opening, converted to units using the opening fill price under the declared port.",
+    "cash_constraint": "A Spot port must explicitly define fee-reserved available cash, lot rounding, minimum size, price reference and rejected orders. Fees are booked once on both entry and exit. These details are not supplied by the Pine source.",
+    "not_native_parity": "A signalclose-fixed quantity, USD-to-USDT conversion, synthetic costs, and exchange sizing restrictions are declared deviations or accounting choices, not verified native percent-equity parity."
+  },
+  "pyramiding_priority_and_reversal": {
+    "source_call_sequence": ["Long entry", "Long close", "Long price exit", "Short entry", "Short close", "Short price exit"],
+    "pyramiding": "0: no same-direction additional trades",
+    "native_reversal": "Opposite strategy.entry normally transacts current position close plus newly requested opposite size; published showLong and showShort are both true.",
+    "signal_overlap": "Bullish long-entry and bearish short-entry geometry cannot both occur on the same bar. While already long, same-direction entry is suppressed and a qualifying long close can still issue. A close call addresses matching open entry trades and is not a documented pending-entry cancellation.",
+    "priority_boundary": "General examples of market closes preceding brackets do not prove every samebar collision. Exact native call/collision behavior requires a native fixture; none was executed.",
+    "proposed_spot_declaration": "Long-only Spot: published short-entry geometry closes an existing long to cash, without opening a short. This is an explicit reversal adaptation. Preserve the source long exit and disabled price protection. Freeze priority before market evaluation.",
+    "synthetic_fixture_scope": ["Flat entry plus stale exit reference", "Long entry/close overlap", "Short signal while long", "Fillbar close capture", "NaN reference before first long", "Zero-range candle", "Fee-reserved 10% sizing"],
+    "fixture_limit": "Synthetic mathematical tests verify the declared port, not TradingView native runtime."
+  },
+  "readiness": {
+    "status": "DECLARED_MATHEMATICAL_PORT_CAN_BE_SPECIFIED_NATIVE_ORIGINAL_DEFAULT_RUNTIME_UNVERIFIED_NOT_REGISTERED",
+    "pending": ["Freeze all declared execution/sizing/collision rules", "Keep disabled protection disabled", "Bind implementation to this source and audit", "Verify mathematical adapter fixtures before any outcome inspection"],
+    "gates_unchanged": ["100 events", "52 weeks", "drawdown gate", "negative controls", "cost stress"],
+    "confirmation_boundary": "Any inspected historical run is development evidence. Survival requires the unchanged gates and genuinely untouched future confirmation; no outcome or viability claim is made here.",
+    "frozen_lanes": "No changes to DON8, EMA8, VOL8, DV2, D4, payoff geometry, existing session watches, or frozen prospective protocols.",
+    "bollinger": "Entirely excluded"
+  }
+}

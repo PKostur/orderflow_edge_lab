@@ -23,6 +23,7 @@ assert orderflow_edge_lab.__version__ == '1.0.0'
 assert pathlib.Path(orderflow_edge_lab.__file__).is_relative_to(pathlib.Path(sys.path[1]))
 entries = {e.name: e for e in importlib.metadata.distribution('orderflow-edge-lab').entry_points}
 assert {'orderflow-paper', 'orderflow-probe', 'orderflow-validate', 'orderflow-readiness', 'orderflow-runtime-snapshot', 'orderflow-session-audit', 'orderflow-discover-endpoint', 'orderflow-analyze-endpoint', 'orderflow-audit-causality', 'orderflow-promotion-check', 'orderflow-trial-ledger', 'orderflow-multi-agent', 'orderflow-backtest', 'orderflow-direction-pair', 'orderflow-risk-ladder', 'orderflow-stop-risk', 'orderflow-ema15m-hypothesis', 'orderflow-market-conditions', 'orderflow-condition-aggregate', 'orderflow-pair-screen', 'orderflow-cross-pair', 'orderflow-discovery-aggregate', 'orderflow-dxfeed-login'} <= entries.keys()
+assert 'orderflow-public-strategy-shadow' in entries
 assert callable(entries['orderflow-dxfeed-login'].load())
 name = sys.argv.pop(1)
 sys.argv[0] = name
@@ -49,7 +50,8 @@ raise SystemExit(entries[name].load()())
                         ["orderflow-condition-aggregate", "--help"],
                         ["orderflow-pair-screen", "--help"],
                         ["orderflow-cross-pair", "--help"],
-                        ["orderflow-discovery-aggregate", "--help"]):
+                        ["orderflow-discovery-aggregate", "--help"],
+                        ["orderflow-public-strategy-shadow", "--help"]):
             subprocess.run([sys.executable, "-c", code, *command], env=env, cwd=root, check=True, timeout=30)
     print("Installed wheel smoke checks passed; no network data or orders requested.")
 

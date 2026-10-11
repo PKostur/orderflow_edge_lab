@@ -1,0 +1,61 @@
+{
+  "common_bars": 6726,
+  "common_first_open_utc": "2020-08-11T00:00:00Z",
+  "common_last_open_utc": "2026-09-30T16:00:00Z",
+  "endpoint": "https://api.binance.com/api/v3/klines",
+  "interval": "8h",
+  "no_forward_fill": true,
+  "retrieved_at_utc": "2026-10-10T08:30:24.150751Z",
+  "source": "Binance Spot public REST /api/v3/klines",
+  "symbols": {
+    "BTCUSDT": {
+      "aligned_csv": "aligned_csv/BTC_USDT.csv",
+      "aligned_csv_sha256": "96e25db1fd9882e6435d8b9a9bf23a716ccf0f004de46329f6db2bb47c054d82",
+      "bars": 7395,
+      "first_open_utc": "2020-01-01T00:00:00Z",
+      "gaps": [],
+      "last_open_utc": "2026-09-30T16:00:00Z",
+      "raw_file": "raw/BTCUSDT-8h.jsonl",
+      "raw_sha256": "4168f20e9aff20710847ac31a93e46d5f058efd8ea620c28b026d9ee6e8d821f",
+      "requested_end_exclusive_utc": "2026-10-01T00:00:00Z",
+      "requested_start_utc": "2020-01-01T00:00:00Z"
+    },
+    "ETHUSDT": {
+      "aligned_csv": "aligned_csv/ETH_USDT.csv",
+      "aligned_csv_sha256": "ccbce670762e32b6cd04a80502399a500f34cff856f1794c8bca68bab8858712",
+      "bars": 7395,
+      "first_open_utc": "2020-01-01T00:00:00Z",
+      "gaps": [],
+      "last_open_utc": "2026-09-30T16:00:00Z",
+      "raw_file": "raw/ETHUSDT-8h.jsonl",
+      "raw_sha256": "edca258e5393ef7a7321d3e440fa4e83d3d0504792f153befe06a3d8f6b8924e",
+      "requested_end_exclusive_utc": "2026-10-01T00:00:00Z",
+      "requested_start_utc": "2020-01-01T00:00:00Z"
+    },
+    "LINKUSDT": {
+      "aligned_csv": "aligned_csv/LINK_USDT.csv",
+      "aligned_csv_sha256": "d4bc5b454dec76812fd8358443c78ddf4d67eafc8e6d513d1d5267eb7599ddd2",
+      "bars": 7395,
+      "first_open_utc": "2020-01-01T00:00:00Z",
+      "gaps": [],
+      "last_open_utc": "2026-09-30T16:00:00Z",
+      "raw_file": "raw/LINKUSDT-8h.jsonl",
+      "raw_sha256": "df66f12043a3aac8be892de166002dee6acaff0c70ade9f3414c39df977e18ab",
+      "requested_end_exclusive_utc": "2026-10-01T00:00:00Z",
+      "requested_start_utc": "2020-01-01T00:00:00Z"
+    },
+    "SOLUSDT": {
+      "aligned_csv": "aligned_csv/SOL_USDT.csv",
+      "aligned_csv_sha256": "7b556ce71b1ae787c64baadc66f07aa3b6505f28ff4bad3d77cf7fd7024b7fc7",
+      "bars": 6726,
+      "first_open_utc": "2020-08-11T00:00:00Z",
+      "gaps": [],
+      "last_open_utc": "2026-09-30T16:00:00Z",
+      "raw_file": "raw/SOLUSDT-8h.jsonl",
+      "raw_sha256": "f5a24e9e026e719742c2254983f8bfa2a24562c2b5d826688398f7e18d910a5b",
+      "requested_end_exclusive_utc": "2026-10-01T00:00:00Z",
+      "requested_start_utc": "2020-01-01T00:00:00Z"
+    }
+  },
+  "time_zone": "UTC"
+}

@@ -58,6 +58,14 @@ verdict, and promote nothing. The validation commands analyse an already-frozen 
 contract; they add no threshold to an open watch and label every number they produce as post-hoc.
 See [docs/README.md](docs/README.md) and [docs/VALIDATION_TOOLING.md](docs/VALIDATION_TOOLING.md).
 
+## Public strategy transfer (development only)
+
+The [25-implementation public source survey](docs/PUBLIC_STRATEGY_SOURCE_SURVEY_2026_10_10.md) and [three-family causal spot shadow protocol](docs/PUBLIC_STRATEGY_SHADOW_PROTOCOL_V1.md) provide an offline, no-order research evaluator (`orderflow-public-strategy-shadow`). Its candidate config is **draft, not frozen**; development outputs are spent data, and prospective mode refuses an unfrozen config. No existing frozen watch is changed.
+
+The [Binance Spot 8h development review](docs/PUBLIC_STRATEGY_SPOT_8H_DEVELOPMENT_2026_10_10.md) reports the first exact v1 historical run, source hashes, path and control diagnostics, and decisions. No candidate was frozen for prospective observation.
+
+The [failed-downside replication feasibility audit](docs/PUBLIC_FAILED_DOWNSIDE_REPLICATION_FEASIBILITY_2026_10_10.md) independently reproduces the spent-data ledger and quantifies the sample needed for the +5 bps hurdle. A future freeze remains unjustified because of precision, source-access and executable-cost gaps.
+
 ## MEXC Futures order flow
 
 The repository can record public MEXC Futures `push.deal` and incremental `push.depth` streams for `ENA_USDT`, `BTC_USDT`, or other Futures symbols without API keys.
@@ -121,3 +129,36 @@ Direct PaperEngine callers must supply upstream data/signal validation.
 ## Live trading
 
 Live order transmission is deliberately absent. Any future live adapter should be introduced only after sufficient fresh out-of-sample evidence, paper/shadow reliability evidence, and broker/exchange reconciliation testing exist.
+
+Descriptive venue replication: [KuCoin failed-downside study](docs/PUBLIC_KUCOIN_REPLICATION_2026_10_10.md).
+
+Monthly momentum state study: [fixed-definition rejection](docs/PUBLIC_MONTHLY_MOMENTUM_STATE_2026_10_10.md).
+
+Public-strategy lane: [final development closure and completion audit](docs/PUBLIC_STRATEGY_FINAL_COMPLETION_2026_10_11.md). All three original candidates are rejected for promotion; the later eight-hour volume hypothesis also failed its declared gates. This report links every retained study, clarifies session clocks/overlaps and historical diagnostic limitations, and preserves all frozen protocols.
+
+Fresh public bot research: [six new adaptations across batches 2–4](docs/PUBLIC_BOT_BATCH2_3_RESULTS_2026_10_11.md). All six fail their frozen screening gates. Source provenance, complete events, risk/cost controls and cumulative signal/model versus trading-cell counts are retained. This is spent historical development evidence; no viable candidate or native bot replication is claimed.
+
+Protective simulator foundation: [minute primitives and pinned indicator audit](docs/PROTECTIVE_MINUTE_ENGINEERING_V1.md). Its original audit covers synthetic execution only; subsequent market screening is reported below. Untouched future confirmation remains required.
+
+Protective bot batch5: [MAGen and Ichimoku Spot adaptation results](docs/PUBLIC_PROTECTIVE_BATCH5_RESULTS_V1.md). Both fail their pre-outcome screening gates. The committed evaluator retains minute execution uncertainty, inventory cutoff marks, funded BTC bounds and full cost/control diagnostics. No viable candidate or untouched confirmation pass is claimed.
+
+Protective bot batch6: [SAR and signed money-flow adaptation results](docs/PUBLIC_PROTECTIVE_BATCH6_RESULTS_V1.md). Both fail the frozen historical gates. Primary source/default audits, independent synthetic mechanics checks, minute-close ROI timing, full event ledgers and cost/control diagnostics are retained. Untouched future confirmation remains required for any eventual candidate.
+
+Public Candle batch7: [frozen design](docs/PUBLIC_CANDLE_BATCH7_DESIGN_V1.md), [results](docs/PUBLIC_CANDLE_BATCH7_RESULTS_V1.md), and [conditional research prospects](docs/PUBLIC_STRATEGY_CONDITIONAL_PROSPECTS_20261011.md). Historical screens do not establish viability; untouched future confirmation is required.
+
+### Public trend batch 8
+
+Frozen Supertrend default-intent research and its rejection are recorded in [results](docs/PUBLIC_TREND_BATCH8_RESULTS_V1.md), with [conditional prospects](docs/PUBLIC_STRATEGY_CONDITIONAL_PROSPECTS_BATCH8_V1.md). No candidate is promoted; future confirmation remains required.
+
+
+### Public Dual Thrust batch 9
+
+[Frozen design](docs/PUBLIC_DUAL_THRUST_BATCH9_DESIGN_V1.md), [results](docs/PUBLIC_DUAL_THRUST_BATCH9_RESULTS_V1.md) and [conditional prospects](docs/PUBLIC_STRATEGY_CONDITIONAL_PROSPECTS_BATCH9_V1.md) retain the independently audited rejection. No viable candidate or future confirmation pass is claimed.
+
+## Public Vortex state research batch 10
+
+[Design](docs/PUBLIC_VORTEX_BATCH10_DESIGN_V1.md), [results](docs/PUBLIC_VORTEX_BATCH10_RESULTS_V1.md), and [conditional prospects](docs/PUBLIC_STRATEGY_CONDITIONAL_PROSPECTS_BATCH10_V1.md). The frozen Spot adaptation was rejected on seven gates: 509 completed trades plus one cutoff, negative 80 bps stress mean and 70.3798% drawdown. Full lossless evidence, trial ledger and independent accounting review are retained. No viable candidate or future confirmation; frozen lanes preserved.
+
+## Public NVI state research batch 11
+
+[Design](docs/PUBLIC_NVI_BATCH11_DESIGN_V1.md), [results](docs/PUBLIC_NVI_BATCH11_RESULTS_V1.md), [conditional prospects](docs/PUBLIC_STRATEGY_CONDITIONAL_PROSPECTS_BATCH11_V1.md). Frozen volume-conditioned state rejected: 127 completed trades plus two cutoff marks; both uncertainty intervals and 60.06% drawdown failed. Full lossless evidence, trial ledger and independent accounting review retained. No viable candidate or future confirmation; frozen lanes preserved.

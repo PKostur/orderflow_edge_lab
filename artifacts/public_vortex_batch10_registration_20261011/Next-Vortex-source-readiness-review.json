@@ -1,0 +1,175 @@
+{
+  "kind": "NEXT_VORTEX_SOURCE_READINESS_INDEPENDENT_REVIEW",
+  "status": "CINAR_ACCEPTABLE_FOR_NEW_DECLARED_ADAPTATION_REGISTRATION_MQL4_UNREADY",
+  "market_outcomes_inspected": false,
+  "performance_files_inspected": false,
+  "readme_performance_claims_inspected": false,
+  "repository_modified": false,
+  "registered": false,
+  "new_trading_cells": 0,
+  "viable": false,
+  "goal_complete": false,
+  "source_receipts": [
+    {
+      "file": "cinar_examples_trend_vortexStrategy.ts",
+      "path": "examples/trend/vortexStrategy.ts",
+      "url": "https://raw.githubusercontent.com/cinar/indicatorts/c6bfb623b2ccbac2c536d60740e8c458e4efa7cd/examples/trend/vortexStrategy.ts",
+      "sha256": "6761502b0433ac721d774d0ebd9016b990f981dd2997b6adc3391e2eb902e76b",
+      "bytes": 1331,
+      "remote_exact_match": true
+    },
+    {
+      "file": "cinar_src_indicator_trend_vortex.ts",
+      "path": "src/indicator/trend/vortex.ts",
+      "url": "https://raw.githubusercontent.com/cinar/indicatorts/c6bfb623b2ccbac2c536d60740e8c458e4efa7cd/src/indicator/trend/vortex.ts",
+      "sha256": "d6a0e61d03bdadd184bc9b4b6aa5e67bed6dae8ace91ec083201661570e7f7c2",
+      "bytes": 2744,
+      "remote_exact_match": true
+    },
+    {
+      "file": "cinar_src_indicator_trend_movingSum.ts",
+      "path": "src/indicator/trend/movingSum.ts",
+      "url": "https://raw.githubusercontent.com/cinar/indicatorts/c6bfb623b2ccbac2c536d60740e8c458e4efa7cd/src/indicator/trend/movingSum.ts",
+      "sha256": "45a344f5e490e335ddf2e66b36e1f20a8ff8922be53e530c1e47aa9cd0276c14",
+      "bytes": 906,
+      "remote_exact_match": true
+    },
+    {
+      "file": "cinar_src_helper_numArray.ts",
+      "path": "src/helper/numArray.ts",
+      "url": "https://raw.githubusercontent.com/cinar/indicatorts/c6bfb623b2ccbac2c536d60740e8c458e4efa7cd/src/helper/numArray.ts",
+      "sha256": "a16e23dacab0aa0160a74c05ea1403adbed36778e6d63e66bc542ab141ea0446",
+      "bytes": 7891,
+      "remote_exact_match": true
+    },
+    {
+      "file": "cinar_LICENSE.md",
+      "path": "LICENSE.md",
+      "url": "https://raw.githubusercontent.com/cinar/indicatorts/c6bfb623b2ccbac2c536d60740e8c458e4efa7cd/LICENSE.md",
+      "sha256": "f6a6af984fc733520b012f8d0c37c049c02a1d1af7b40037ec1b27f8edc820b5",
+      "bytes": 1077,
+      "remote_exact_match": true
+    },
+    {
+      "file": "avangardistic_VortexTrend.mq4",
+      "path": "VortexTrend.mq4",
+      "url": "https://raw.githubusercontent.com/avangardistic/vortex-mql4-bot/832c43955db32461a237cfef1c38087b9dd1d703/VortexTrend.mq4",
+      "sha256": "68707fba5e770d8135434f0d1aa88fb636ea9636ceec0d38cf975a6375b4df9c",
+      "bytes": 28223,
+      "remote_exact_match": true
+    },
+    {
+      "file": "cinar_src_strategy_action.ts",
+      "path": "src/strategy/action.ts",
+      "sha256": "db972013d4b3a731eec1277f67a4b2cb1a963c7d6016b00611986f1abc109dad",
+      "bytes": 1488,
+      "remote_exact_match": "not separately fetched by this reviewer; pinned local bytes and prior root receipt bound"
+    },
+    {
+      "file": "cinar_src_strategy_asset.ts",
+      "path": "src/strategy/asset.ts",
+      "sha256": "4547c826d6071a0ac34c150f0ef6e089d7ed59bceef42485ed748dd9c1010ebb",
+      "bytes": 1201,
+      "remote_exact_match": "not separately fetched by this reviewer; pinned local bytes and prior root receipt bound"
+    }
+  ],
+  "preserved_prior_exclusions": {
+    "artifact": "Next-VWAP-source-readiness-review.json",
+    "sha256": "233ea76461c9029134fd3f045fa69b0e4feb2b8789c994a4cbbf5cd10bf146d7",
+    "decision": "Prior rolling-standard-deviation VWAP-band exclusion remains; xenoxavier callbacks/futures/protections remain unready. No Bollinger-derived rules introduced."
+  },
+  "cinar": {
+    "repository": "cinar/indicatorts",
+    "commit": "c6bfb623b2ccbac2c536d60740e8c458e4efa7cd",
+    "license": "MIT, The Indicator Authors 2022-2026; preserve notice for substantial source copies",
+    "scope": "Educational directional signal plus illustrative same-close accounting, not a deployed or executable exchange bot",
+    "default_period": 14,
+    "arithmetic": [
+      "VMplus=abs(high-current_prior_low); VMminus=abs(low-current_prior_high); prior index=max(0,i-1).",
+      "TR=max(high-low,abs(high-priorclose),abs(low-priorclose)).",
+      "Moving sums add current term then subtract term i-14 for i>=14; partial startup sums; preserve binary64 recurrence order rather than recomputing window sums.",
+      "If exact TR sum is zero, both VI values become zero. Otherwise VI is respective VM sum / TR sum.",
+      "BUY when plus>minus; SELL when plus<minus; HOLD otherwise. These are repeated states, not crossover events."
+    ],
+    "illustrative_accounting": "action.applyActions starts cash 1, buys all cash at same completed signal close, sells all shares at SELL, HOLD retains state. No fees, stop, target, short, budget reserve or execution queue.",
+    "causality": "Indicator and state actions are causal on ascending complete bars. Same-close fill after observing close is an illustrative gain convention; the proposed study must declare its next-open adaptation.",
+    "synthetic_native_review": {
+      "artifact": "Vortex-source-native-math-prerequisite.json",
+      "sha256": "774b87fa6cbc9beea704f738c581e729ebceb6f8e983a7c6d61c53ff651ea1fb",
+      "runner_sha256": "3b590846415556cc0273fc16d6f14d05f2eaa310d092eb5d4a13d87047dac649",
+      "oracle_sha256": "3d33054c170aed4aaad64b7293b2a3cd03e1f0346aab6dfbfdfb200f3ed11c56",
+      "compiler_sha256": "d4eeb6e18a598a21aa0a5c09a52270856e4b23bd31d9c7c60ab80a22b275b07b",
+      "compiler_receipt_sha256": "9d4a2c911bda511cd99292daa80b9275849043d11a05229e07872e486a5a8339",
+      "independent_second_native_execution": true,
+      "independent_scalar_reconstruction": true,
+      "fixtures": 22,
+      "rows": 6703,
+      "maximum_absolute_residual": 0.0,
+      "actions_exact": true,
+      "features_exact": true,
+      "illustrative_gains_exact": true,
+      "prefix_checks": 12,
+      "future_mutation_checks": 7,
+      "limits": "Original pinned functions transpiled and executed under the pinned compiler. Loader basename resolution is sound for this closed dependency set; type-only Asset import is erased. No native exchange or broker execution parity tested."
+    },
+    "acceptance": "Acceptable to preregister a distinct declared 8h Spot research adaptation preserving source signal arithmetic and full-balance illustrative intent. This is not final engine or pre-outcome approval.",
+    "required_registration": [
+      "Freeze source bytes, selected native or exact arithmetic contract, UTC complete 8h bar inputs, no source-specified timeframe, 14bar lookback now112h.",
+      "Declare cash capital, fee-reserved fixed signal-close quantity, quantity precision/double rounding if any, next-open all-or-reject admission, SELL-state next-open exit, HOLD retention, held-before-liquidation/no-same-boundary-reentry policy.",
+      "Declare no short, stop, target, trailing, timeout; terminal holdings are censored with conservative liquidation marks and pending final SELL/BUY dispositions.",
+      "Preserve old cost, benchmark, excursion, bootstrap alpha .025, 500 control, robustness and future-unseen confirmation gates without weakening.",
+      "Control entries use own contemporaneous quantity/cash and original SELL-state exits; full path own-capital evolution; causal lag warmup and no future backfill.",
+      "Bind source/license/audits/design plus committed evaluator and required independent synthetic engine review before any raw market load. Add one new declared trading cell only upon registration; inspected/spent data remains development evidence."
+    ]
+  },
+  "mql4": {
+    "repository": "avangardistic/vortex-mql4-bot",
+    "commit": "832c43955db32461a237cfef1c38087b9dd1d703",
+    "author_notice": "Hossein Parasteh 2026",
+    "license": "Inventory has no LICENSE. Startup print claims MIT, but no permission notice is established; do not copy unlicensed source as MIT.",
+    "defaults": {
+      "vortex_length": 30,
+      "ema_length": 10,
+      "fixed_lots": 0.1,
+      "stop_points": 300,
+      "target_points": 600,
+      "reverse": true,
+      "trailing": true,
+      "trailing_points": 250,
+      "break_even": true,
+      "break_even_trigger_points": 250,
+      "break_even_offset_points": 10,
+      "max_spread_points": 20,
+      "slippage_points": 5,
+      "time_filter": false,
+      "day_filter": false
+    },
+    "findings": [
+      "MQL4 series index0 is current incomplete bar; idx-1 is newer, not chronological prior. Source VM uses High[idx]-Low[idx-1] and Low[idx]-High[idx-1] while TR uses chronological older Close[idx+1]. Preserve this asymmetry or explicitly reject, never silently textbook-correct.",
+      "VI[1] includes bar0 high/low via idx1. Code runs signal calculation on first newbar tick only (and startup first tick). At that observation bar0 contains only observed ticks; reconstructing it with eventual completed OHLC would leak future data. A first-tick proxy would need explicit declared quote/timestamp mapping and would be an adaptation.",
+      "Current EMA is index1, prior EMA index2, strict crossings and rising winning EMA are required. It is not cinar state signal and must not count as an independent textbook Vortex strategy without overlap disclosure.",
+      "Seed chooses oldest index where both VI>0; EMA recurrence walks toward zero. Second loop walks toward older indexes. Under default oldest-valid selection all older VI are invalid; it copies seed into old slots and does not necessarily contaminate current EMA. Do not simplify source without fixture evidence. Full chart-history length and seed must be pinned.",
+      "Default 30bars and EMA10 transfer to240h/80h only if chart timeframe explicitly selected. Source uses current chart rather than an explicit 8h timeframe.",
+      "Entries buy Ask/sell Bid; spread gate occurs before reversals. Fixed lots rounded to broker lotstep/min/max and two decimals. Stop/target distances depend on Point/Digits and MODE_STOPLEVEL, including minimum distance max(2*stopLevel,10*Point). No dimension conversion to crypto percentages is justified by source.",
+      "Tick trailing and break-even act in order trailing then break-even; OrderModify may reject too-close stops against both Bid/Ask. Quote sequence, intraminute path, rejects and refreshed quotes influence realized state. 8h/minute Spot OHLCV cannot establish native parity.",
+      "Signal time marked consumed before spread/execution success; no samebar retry after failed admission except internal order retry loop. Opposite reversal closes one matching ticket, waits100ms and refreshes quotes, then opens opposite only if no existing same-side flag. Native bidask/tick/broker lifecycle absent."
+    ],
+    "readiness": "UNREADY_FOR_8H_SPOT_REGISTRATION",
+    "next_prerequisites": [
+      "Establish reuse license or independently derive mathematics with distinct attribution and no copied unlicensed code.",
+      "Choose declared observed-first-tick versus completed-bar contract without hidden repairs; bind chart-history seed and native synthetic fixtures.",
+      "Define Spot removal of short/reverse, point-to-price units, lot capital intent, quote/spread filters, tick trailing/BE uncertainty, broker rejection/retry/priority before any registration. Prefer simpler source candidate rather than inventing these meanings."
+    ]
+  },
+  "primary_references": [
+    "https://docs.mql4.com/predefined/high",
+    "https://docs.mql4.com/series/bufferdirection"
+  ],
+  "blocking_findings_for_source_readiness": [],
+  "not_certified": [
+    "No new frozen config or engine has been reviewed.",
+    "No market or performance outcomes inspected.",
+    "No candidate profitability, viability, untouched confirmation or live execution claim.",
+    "Prior rejected candidates and frozen prospective lanes remain unchanged."
+  ]
+}

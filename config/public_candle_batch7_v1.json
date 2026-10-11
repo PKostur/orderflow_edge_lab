@@ -1,0 +1,143 @@
+{
+  "study_id": "PSR13-PUBLIC-CANDLE-DEFAULT-BATCH7",
+  "version": 1,
+  "candidates": [
+    "FullCandle8hDefaultIntent"
+  ],
+  "source_sha256": {
+    "FullCandle8hDefaultIntent": "8d6335c7752767090dfbfaeba0d878def0dac8171897dd431f9c2c0ca12036be"
+  },
+  "source_manifest": "artifacts/minute_continuity_20261010/source_manifest.json",
+  "source_manifest_sha256": "3fcadef5dea9086425111b12b74f9df84f86b2d0932ca918871fc47b66f7179b",
+  "quality_csv": "artifacts/minute_continuity_20261010/daily_quality.csv",
+  "quality_csv_sha256": "69403a31a4f7f5c234ebbca98e32ba9b2919253f453515c76da964f93e10ed29",
+  "source_policy": "Longest shared complete-day segment chosen solely by previously audited quality; no repairs, imputation or source replacement.",
+  "data_start": "2023-04-01T00:00:00Z",
+  "data_end_exclusive": "2026-10-01T00:00:00Z",
+  "signal_minutes": 480,
+  "execution_minutes": 1,
+  "warmup_bars": 240,
+  "symbols": [
+    "ETHUSDT",
+    "SOLUSDT",
+    "LINKUSDT"
+  ],
+  "benchmark": "BTCUSDT",
+  "episode_initial_cash_per_symbol": 1000,
+  "max_hold_bars": null,
+  "baseline_round_trip_bps": 40,
+  "cost_cases_bps": [
+    20,
+    40,
+    60,
+    80
+  ],
+  "cost_policy": "Each side charges half nominal roundtrip bps on actual modeled notional, including fee plus assumed spread/slippage; reserve in fixed signal-close quantity.",
+  "gap_target_models": [
+    "conservative_limit",
+    "opening_price_improvement"
+  ],
+  "touch_policy": "No protective price orders at source defaults; both registered gap models are intentionally identical, one history. Retain fail-closed history gates and no ambiguity pruning.",
+  "max_symbol_histories": 64,
+  "max_joint_histories": 4096,
+  "entry_policy": "floor8(cash*0.1/(signal_close*(1+sidecost))); fixed before next-open execution, all-or-reject; native opening-equity quantity parity NOT claimed; no resizing, borrowing, pyramiding or orders",
+  "clock_policy": "Completed8h geometry and own position-dependent profit exit decide next1m-open. Original short takes exit reason priority if both predicates true. Existing position counts held long flags before liquidation; no same-boundary re-entry. Entry reference raw fill-bar open becomes usable at fill-bar close. No protective orders, invented timeout or intrabar re-entry.",
+  "endpoint_policy": "Completed events use modeled exit reference; still-held events retain statusCENSORED_MTM and cutoff close mark with hypothetical liquidation burden, never a fictitious order or completed trade.",
+  "principal_return_estimand": "All admitted entry-to-exit-or-fixed-cutoff net reference returns; completed-only means separately descriptive. Per-unit return=(exit/entry)*(1-sidecost)/(1+sidecost)-1.",
+  "funded_btc_benchmark": "At each accepted alt entry allocate the same alt notional/preentry-cash fraction from a separate BTC cash account. Exact BTC open entry; open exit uses BTCopen, intraminute exit uses BTCminute low/high bounds; own costs and remaining inventory; cutoff uses known final close.",
+  "portfolio_policy": "Equal three independent1000USDT cash sleeves; shared8h close mark and hypothetical sale burden. Funded BTC cash/reference uses identical timing. This smaller10% intent is source-derived; existing drawdown30% gate is unchanged.",
+  "seed": 20261017,
+  "bootstrap_replicates": 2000,
+  "bootstrap_calendar_block_weeks": 4,
+  "bootstrap_policy": "Moving contiguous4calendar-week blocks incl zero-event weeks; retain fixed alpha0.025,97.5% two-sided intervals from prior comparator. One newly registered cell; conservative fixed carryover, not two cells or global repeated-search inference.",
+  "placebo_replicates": 500,
+  "placebo_policy": "500 randomized raw long entry flags within eligible calendar entry weeks preserving count. Rerun own entries, raw fill-open reference, dynamic profit exits, durations and original short-to-cash geometry; never reuse observed exit flags or holding lengths. Max control versus minimum observed mean, descriptive only.",
+  "lag_control_bars": 7,
+  "lag_policy": "Shift raw long entry flags7bars after zeroing pre-warmup flags; same dynamic own-position exit engine; descriptive.",
+  "gates": {
+    "min_completed_events": 100,
+    "min_entry_weeks": 52,
+    "min_all_admitted_net40_bps": 5,
+    "require_all_admitted_net80_positive": true,
+    "require_all_symbols_net40_positive": true,
+    "min_positive_year_fraction": 0.6666666666666666,
+    "max_portfolio_drawdown_pct": 30,
+    "require_leave_one_entry_week_out_net40_positive": true,
+    "require_net40_descriptive_lower_ci_positive": true,
+    "require_btc_excess40_descriptive_lower_ci_positive": true,
+    "max_placebo_at_least_observed_fraction": 0.05,
+    "require_no_history_overflow": true
+  },
+  "diagnostics": [
+    "completed/pending/unexecuted/overlap/invalid/cash rejection accounting",
+    "all-admission and completed-only returns/PF",
+    "gross MFE/MAE uncertainty",
+    "calendar entry weeks and4week bootstrap",
+    "fixed UTC sessions and overlap memberships",
+    "symbol/year/month/weekday/hour and causalBTC30bar state",
+    "leave-week and leave-symbol sensitivity",
+    "40/80 costs and20/60 cases",
+    "funded BTC wealth and same-exit reference bounds",
+    "full branch and gap-model sensitivity",
+    "500 randomized-entry controls and7bar lag control"
+  ],
+  "claim": "Spent historical hypothetical development only; SCREEN_SURVIVOR permits separate future preregistration, never viable/untouched/positive-edge/deployment claim.",
+  "future_confirmation": "User completion requires a separate immutable and adequately powered future-only protocol, calibrated costs/quotes/execution, controls and approval-bound paper reliability, frozen before observations start. No viable candidate until that confirmation passes.",
+  "bollinger_bands_excluded": true,
+  "frozen_lanes_modified": false,
+  "authorizes_orders": false,
+  "retuning_permitted": false,
+  "minimum_preexisting_trading_cells": 19,
+  "minimum_preexisting_signal_model_cells": 20,
+  "new_registered_trading_cells": 1,
+  "minimum_registered_trading_cells_after_freeze": 20,
+  "minimum_registered_signal_model_cells_after_freeze": 21,
+  "source_urls": {
+    "FullCandle8hDefaultIntent": "https://github.com/Alorse/pinescript-strategies/blob/8fb3837ddcd137f1450c3e82d654ff3df24d54d5/strategies/other/Full%20Candle.pine"
+  },
+  "runtime": {
+    "python": "3.13.14",
+    "numpy": "2.2.4",
+    "pandas": "2.2.3",
+    "platform": "win32",
+    "precision": "float64 scalar operation order"
+  },
+  "dependency_hash_policy": "Python dependency bytes normalize CRLF to LF solely for cross-platform checkout; all data/audit fingerprints remain exact bytes",
+  "dependency_source_sha256": {
+    "src/orderflow_edge_lab/public_protective_batch5.py": "ea1a2f5564a4261fe3c53e4d3f584b782913222f43228f0843c9d94917eab6d8",
+    "src/orderflow_edge_lab/protective_minute.py": "32345cbe229e734129f063e161f77989c3e2d0facb604dade40b469de31f03bf",
+    "src/orderflow_edge_lab/public_strategy_completion.py": "2a5327410bb5b7acef4dc6959d95b8ea309df0f0cf9f6e692c946b7500a1719a"
+  },
+  "source_mechanics_audit_sha256": {
+    "artifacts/public_candle_batch7_registration_20261011/Next-public-bot-source-survey-v2.json": "ef616dd982f43a4d5f029e467daae3fb6a07046ada164d1ce2599e4775c892c7",
+    "artifacts/public_candle_batch7_registration_20261011/Next-public-bot-default-mechanics-audit.json": "1870690d05eb21099fa5d113ec180e41cb40156b735c0ec1ce2cc4c90da52968",
+    "artifacts/public_candle_batch7_registration_20261011/FullCandle-pre-registration-framework-audit.json": "bdb0ce56d616dfec2caa24dfe66810de252b49095a12d68f4a1affb659ac6dca",
+    "artifacts/public_candle_batch7_registration_20261011/FullCandle-pre-registration-precision-audit.json": "706598720d10368694837ececc2cd5374c8a35a41bb3755c7e40350f25c7cad0",
+    "artifacts/public_candle_batch7_registration_20261011/TDSequential-source-readiness-audit.json": "fb11607080017260ecf748c10c7afcca6b238f21896b6647f908f18fd4bade3e",
+    "artifacts/public_candle_batch7_registration_20261011/Post-FullCandle-public-source-readiness-audit.json": "4740c7394b5a02ef54e6ff239f4ad04d0d185e87df7fbb6b5958d2e7cb590167"
+  },
+  "family_disclosure": "Distinct small directional candle-shadow geometry with EMA level filter, not EMA crossover or a new independent EMA-edge claim. Initial narrower source survey exclusion is retained and corrected by later default-intent audits before this freeze. Source-disabled protection is not enabled to improve results.",
+  "full_candle": {
+    "ema_length": 10,
+    "shadow_percent": 5,
+    "equity_fraction": 0.1,
+    "source_initial_capital_usd": 1000,
+    "take_profit_enabled": false,
+    "stop_loss_enabled": false,
+    "source_optional_take_profit_percent": 1.2,
+    "source_optional_stop_loss_percent": 1.8,
+    "long": "close>open and close>EMA10 and shadow_percentage<=5",
+    "short": "close<open and close<EMA10 and shadow_percentage<=5",
+    "shadow": "range=high-low; shadow=high-close if close>open else close-low; percentage=(shadow*100)/range; zero-range remains NaN",
+    "ema": "first-valid-close seed; alpha=2/(10+1); beta=1-alpha; EMA=alpha*close+beta*previousEMA; separate binary64 operations",
+    "long_profit_exit": "close>(raw_fill_bar_open + raw_fill_bar_open*0.002) and close>open; exact multiply then add, strict comparison",
+    "capture": "On each accepted long, reference is raw 8h fill-bar OPEN. It is usable only at that fill-bar CLOSE, then persists until replaced by next accepted long.",
+    "short_adapter": "Original qualifying short closes an existing long to cash; no shorts opened",
+    "source_close_call": "Close(Long) while flat does not cancel pending Long entry. Held same-side entry ignored even when same decision closes old Long; no same-boundary re-entry.",
+    "disabled_price_orders": "Declared mathematical port treats disabled TP/SL as absent price orders; native all-NaN strategy.exit runtime is unverified",
+    "timeframe": "Source specifies no timeframe; user-selected8h adaptation",
+    "quantity": "floor8(cash*0.1/(signal_close*(1+sidecost))); fixed before next-open execution, all-or-reject; native opening-equity quantity parity NOT claimed",
+    "quote_currency": "Source1000USD adapted to1000USDT with explicit1:1 research accounting assumption; no conversion/native parity claim"
+  },
+  "native_runtime_status": "UNVERIFIED: no TradingView execution or native arithmetic/fill/order lifecycle parity; exact declared independently implemented mathematical port only."
+}

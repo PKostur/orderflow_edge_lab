@@ -1,0 +1,77 @@
+{
+  "kind": "SOURCE_ONLY_SUPERTREND_REFERENCE_MECHANICS_AND_PROVENANCE_CLARIFICATION",
+  "inspection_date_utc": "2026-10-11",
+  "registered": false,
+  "new_trading_cells": 0,
+  "market_outcomes_inspected": false,
+  "native_runtime_executed": false,
+  "repository_edits": false,
+  "prior_audit": "outputs/Supertrend-conditional-source-readiness-audit.json",
+  "prior_audit_sha256": "6ec6b6f4428b1aa4da43d849b870362383d6f622006d87c97e3061baac22b407",
+  "source_binding": {
+    "repository": "rahulmr/Pinescript-SuperTrend-Trading-Strategy",
+    "commit": "dfe2292e58583690271ddf515a991d84faa70563",
+    "path": "supertrend.pinescript",
+    "sha256": "426e66ff4c7ac6b889ee0e449ad56a8cf962110efca401a3b373858d8a02236e",
+    "license": "MIT,2020 Tom Rumpf",
+    "author_commit_attribution": "Tom Rumpf,GitHub tomcru",
+    "source_copy_provenance": "Pinned public source,license and commit-author attribution are auditable. Original publication by rahulmr is not established; author repository tracing in prior audit remains inconclusive.",
+    "mathematical_readiness_clarification": "Original-publisher uncertainty is an attribution limitation, not itself proof that a declared mathematical research port cannot be specified. Retain the precise publisher/author distinction without claiming canonical original publication. No source code was copied into the repository by this audit."
+  },
+  "official_v4_reference": {
+    "page": "https://www.tradingview.com/pine-script-reference/v4/",
+    "loader": "https://static.tradingview.com/static/bundles/63275.06c88afad175212b5fae.js",
+    "loader_binding": "PineLanguage.V4 selects chunks41280,67754,26771,5589,13447 and module913447",
+    "runtime": "https://static.tradingview.com/static/bundles/runtime.9bd00aa4c4abd5fbe0f2.js",
+    "asset": "https://static.tradingview.com/static/bundles/13447.941cb30cbc7f08facdb1.js",
+    "utf8_bytes": 351573,
+    "sha256": "04fd2cae47a652a1f3c37e91fe0fe0e10cdf6ba08567f23fc89832e533848ccd",
+    "locators": ["atr examples documented as reference-equivalent Pine", "rma examples documented as reference-equivalent Pine"],
+    "retrieval": "Direct public primary asset inspection; SHA256 and length independently calculated. This is documentation retrieval, not Pine engine execution."
+  },
+  "atr10_reference_equivalent": {
+    "true_range_startup": "When prior high is absent, current high-low; otherwise maximum of current high-low,absolute(current high-prior close),absolute(current low-prior close). Valid continuous OHLCV assumed; do not synthesize gap bars.",
+    "seed": "RMA initializes with a10-value SMA of true range when prior smoothed value is absent. On a complete valid sequence the first nine ATR values are undefined and the tenth is the10-value mean.",
+    "update": "After seed compute alpha=1/10,beta=1-alpha; form alpha*current true range,form beta*prior ATR,then add the products.",
+    "smoothing": "Wilder/RMA recurrence after initial SMA seed; not a continually rolling10-bar SMA and not EMA coefficient2/11.",
+    "precision_boundary": "Preserve the reference operation sequence. Internal native SMA summation, rounding and runtime NaN details are not proved bit-identical; numerical fixtures would validate only the declared mathematical implementation.",
+    "missing_data_boundary": "Admission must use causal contiguous observations and declared segment state reset/warmup. Documentation examples are not authorization to bridge source-rejected or missing bars."
+  },
+  "source_supertrend_state": {
+    "factor": 3,
+    "midpoint": "Add high and low,then divide by2",
+    "basic_up": "Subtract factor*ATR10 from midpoint",
+    "basic_down": "Add factor*ATR10 to midpoint",
+    "up_update": "If prior close strictly exceeds prior up-band,take maximum of basic_up and prior up-band; otherwise basic_up",
+    "down_update": "If prior close is strictly less than prior down-band,take minimum of basic_down and prior down-band; otherwise basic_down",
+    "direction_priority": "First compare current close strictly above prior down-band and choose1; otherwise compare strictly below prior up-band and choose-1; otherwise previous direction with missing previous direction replaced by1",
+    "startup": "Undefined bands do not manufacture comparisons. Initial fallback direction is1. First computable bands do not themselves open a trade; subsequent entry needs a strict direction flip.",
+    "long_flip": "direction1 following direction-1",
+    "short_flip": "direction-1 following direction1",
+    "equality": "Equality to either prior band does not trigger the corresponding strict direction change",
+    "preserve_source_difference": "Do not replace this recurrence with ta.supertrend or the official generic Supertrend indicator, which may use different band comparison and initialization rules."
+  },
+  "default_execution_and_cash_port_design": {
+    "source_default": "Market entries only on flips inside inclusive2019-01-01 through9999-01-01 date window. Native opposite entries reverse. Default use_sl=false keeps all optional close-observed trailing logic disabled.",
+    "source_quantity": "5%equity,initial10000USD; no active protective price exit and no hold-time cap",
+    "native_clock": "Default historical bar-close calculation; no per-fill or every-tick request; orders normally fill next bar open. No all-na strategy.exit calls exist.",
+    "possible_declared_spot_adapter": "Only enter long from cash on published bullish flip; on bearish flip liquidate existing long to cash and never open short. Fill at the declared next-opening market reference. Specify5%ofopening-equity quote budget,fee-reserved cash,lot rules and costs separately.",
+    "not_yet_frozen": true,
+    "must_not_add": ["Optional15%stop", "Supertrend-line protective stop", "Holding timeout", "Trend-state continuous entries without a flip", "DifferentATR multiplier", "Repaired or simplified band recurrence"],
+    "censoring": "Open trade at segment end remains censored under harness policy; source has no endpoint forced-close rule.",
+    "remaining_declarations": ["8h selection", "long-only reversal", "USD/USDT accounting", "calendar timezone", "fee-reserved opening-equity sizing", "execution latency/friction", "segment reset and warmup", "mathematical precision and synthetic fixtures"],
+    "native_parity": "Unverified; source attribution and reference-equivalent recurrence do not imply native Pine runtime or fill parity."
+  },
+  "specific_prior_adapted_source_overlap": [
+    {"study": "PSR10-PUBLIC-BOT-BATCH4", "config_version": 1, "candidate": "ChandelierExit", "relation": "ATR-based persistent trend/band state; proposed Supertrend flips use previous midpoint-derived bands rather than Chandelier extreme-derived state"},
+    {"study": "PSR11-PUBLIC-PROTECTIVE-BATCH5", "config_version": 1, "candidate": "MAGenSpot8hNativeKernel", "relation": "Trend exposure andATR use; publishedMAGen MA/ADX entry is different from this band-direction flip"},
+    {"study": "PSR11-PUBLIC-PROTECTIVE-BATCH5", "config_version": 1, "candidate": "IchimokuSpot8hATR", "relation": "Directional trend exposure andATR accounting; signal recurrence differs"},
+    {"study": "PSR12-PUBLIC-PROTECTIVE-BATCH6", "config_version": 1, "candidate": "PSARReference8hSpot", "relation": "Persistent directional stop-and-reverse state; this ATR midpoint band mechanism is different but related trend-family development"},
+    {"study": "PSR8-PUBLIC-BOT-BATCH2", "config_version": 1, "candidate": "ASDTSRockwellTrading", "relation": "Broad directional trend exposure; MACD state differs from ATR band flips"},
+    {"study": "PSR8-PUBLIC-BOT-BATCH2", "config_version": 1, "candidate": "AwesomeMacd", "relation": "Broad directional trend exposure; AO/MACD conditions differ"}
+  ],
+  "overlap_evidence_boundary": "Names/versions read from source configuration only; no outcome artifact opened. Existing original25 survey listed Freqtrade Supertrend as a source-only survey item. This audit does not assert that survey item was a registered or tested trading cell, and does not claim statistical independence.",
+  "concrete_next_step": "If chosen, freeze this precisely attributed public-source mathematical cash port and synthetic recurrence/flip/sizing fixtures before registration or any market evaluation. Keep source numeric defaults and disabled protection, disclose source-family reuse and cumulative trial history, and preserve all acceptance/future-confirmation gates. Original-publisher and native-parity claims must remain explicitly unestablished.",
+  "status": "SOURCE_ONLY_DECLARED_MATHEMATICAL_PORT_DESIGNABLE_NOT_REGISTERED_ZERO_NEW_CELLS_NO_VIABILITY_CLAIM",
+  "preserved": ["No Bollinger", "No orders", "No frozen lane changes", "No outcome inspection", "No invented protections", "No threshold weakening", "No phantom trial counts"]
+}

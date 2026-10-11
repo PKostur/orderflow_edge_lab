@@ -1,0 +1,224 @@
+{
+  "clock_note": "Signal is knowable at the 8h candle completion, identical to earliest next-open entry. Candle-open attribution is retrospective and never an executable signal time.",
+  "deployment_eligible": false,
+  "historical_volatility_split_note": "Original diagnostics used sample stdev of 29 prior 8h log returns at 2.5%, although its note said 30. Original regime groups and outputs are preserved; no new split or strategy is fit.",
+  "new_trading_cells": 0,
+  "results": [
+    {
+      "all_signal_candle_open_clock": {
+        "exclusive_membership_counts": {
+          "Asia": 54,
+          "Asia+London": 139,
+          "New_York": 104
+        },
+        "n": 297,
+        "nonexclusive_session_counts": {
+          "Asia": 193,
+          "London": 139,
+          "New_York": 104
+        },
+        "utc_hour_counts": {
+          "0": 54,
+          "16": 104,
+          "8": 139
+        }
+      },
+      "all_signal_completion_clock": {
+        "exclusive_membership_counts": {
+          "Asia": 104,
+          "Asia+London": 54,
+          "New_York": 139
+        },
+        "n": 297,
+        "nonexclusive_session_counts": {
+          "Asia": 158,
+          "London": 54,
+          "New_York": 139
+        },
+        "utc_hour_counts": {
+          "0": 104,
+          "16": 139,
+          "8": 54
+        }
+      },
+      "completed_hypothetical_entry_clock": {
+        "exclusive_membership_counts": {
+          "Asia": 94,
+          "Asia+London": 42,
+          "New_York": 123
+        },
+        "n": 259,
+        "nonexclusive_session_counts": {
+          "Asia": 136,
+          "London": 42,
+          "New_York": 123
+        },
+        "utc_hour_counts": {
+          "0": 94,
+          "16": 123,
+          "8": 42
+        }
+      },
+      "experiment_id": "PSV1-VOLUME-IMPULSE",
+      "overlap_skipped": 38,
+      "pending_earliest_entry_clock": {
+        "exclusive_membership_counts": {},
+        "n": 0,
+        "nonexclusive_session_counts": {},
+        "utc_hour_counts": {}
+      }
+    },
+    {
+      "all_signal_candle_open_clock": {
+        "exclusive_membership_counts": {
+          "Asia": 84,
+          "Asia+London": 78,
+          "New_York": 93
+        },
+        "n": 255,
+        "nonexclusive_session_counts": {
+          "Asia": 162,
+          "London": 78,
+          "New_York": 93
+        },
+        "utc_hour_counts": {
+          "0": 84,
+          "16": 93,
+          "8": 78
+        }
+      },
+      "all_signal_completion_clock": {
+        "exclusive_membership_counts": {
+          "Asia": 93,
+          "Asia+London": 84,
+          "New_York": 78
+        },
+        "n": 255,
+        "nonexclusive_session_counts": {
+          "Asia": 177,
+          "London": 84,
+          "New_York": 78
+        },
+        "utc_hour_counts": {
+          "0": 93,
+          "16": 78,
+          "8": 84
+        }
+      },
+      "completed_hypothetical_entry_clock": {
+        "exclusive_membership_counts": {
+          "Asia": 93,
+          "Asia+London": 82,
+          "New_York": 78
+        },
+        "n": 253,
+        "nonexclusive_session_counts": {
+          "Asia": 175,
+          "London": 82,
+          "New_York": 78
+        },
+        "utc_hour_counts": {
+          "0": 93,
+          "16": 78,
+          "8": 82
+        }
+      },
+      "experiment_id": "PSV1-FAILED-DOWNSIDE",
+      "overlap_skipped": 2,
+      "pending_earliest_entry_clock": {
+        "exclusive_membership_counts": {},
+        "n": 0,
+        "nonexclusive_session_counts": {},
+        "utc_hour_counts": {}
+      }
+    },
+    {
+      "all_signal_candle_open_clock": {
+        "exclusive_membership_counts": {
+          "Asia": 1300,
+          "Asia+London": 1078,
+          "New_York": 1141
+        },
+        "n": 3519,
+        "nonexclusive_session_counts": {
+          "Asia": 2378,
+          "London": 1078,
+          "New_York": 1141
+        },
+        "utc_hour_counts": {
+          "0": 1300,
+          "16": 1141,
+          "8": 1078
+        }
+      },
+      "all_signal_completion_clock": {
+        "exclusive_membership_counts": {
+          "Asia": 1141,
+          "Asia+London": 1300,
+          "New_York": 1078
+        },
+        "n": 3519,
+        "nonexclusive_session_counts": {
+          "Asia": 2441,
+          "London": 1300,
+          "New_York": 1078
+        },
+        "utc_hour_counts": {
+          "0": 1141,
+          "16": 1078,
+          "8": 1300
+        }
+      },
+      "completed_hypothetical_entry_clock": {
+        "exclusive_membership_counts": {
+          "Asia": 887,
+          "Asia+London": 964,
+          "New_York": 723
+        },
+        "n": 2574,
+        "nonexclusive_session_counts": {
+          "Asia": 1851,
+          "London": 964,
+          "New_York": 723
+        },
+        "utc_hour_counts": {
+          "0": 887,
+          "16": 723,
+          "8": 964
+        }
+      },
+      "experiment_id": "PSV1-VWAP-REVERSION",
+      "overlap_skipped": 945,
+      "pending_earliest_entry_clock": {
+        "exclusive_membership_counts": {},
+        "n": 0,
+        "nonexclusive_session_counts": {},
+        "utc_hour_counts": {}
+      }
+    }
+  ],
+  "session_note": "Fixed UTC point memberships only, without DST adjustment. Session counts are nonexclusive; membership counts are exclusive. They do not identify intrabar signal time, fill sequence or within-candle overlap performance. No filter is selected.",
+  "session_windows_utc_start_inclusive_end_exclusive": {
+    "Asia": [
+      0,
+      9
+    ],
+    "London": [
+      7,
+      16
+    ],
+    "New_York": [
+      13,
+      22
+    ]
+  },
+  "source_sha256": {
+    "BTC_USDT": "96e25db1fd9882e6435d8b9a9bf23a716ccf0f004de46329f6db2bb47c054d82",
+    "ETH_USDT": "ccbce670762e32b6cd04a80502399a500f34cff856f1794c8bca68bab8858712",
+    "LINK_USDT": "d4bc5b454dec76812fd8358443c78ddf4d67eafc8e6d513d1d5267eb7599ddd2",
+    "SOL_USDT": "7b556ce71b1ae787c64baadc66f07aa3b6505f28ff4bad3d77cf7fd7024b7fc7"
+  },
+  "specification_sha256": "9d53b634175f6599561822d3de7db5aa5b1f04af1524a1f5d83dd8871ce8bbda",
+  "status": "DESCRIPTIVE_COMPLETION_AUDIT_ONLY",
+  "verified_out_of_sample_evidence": false
+}

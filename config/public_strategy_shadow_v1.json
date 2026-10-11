@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "trial_family": "public-strategy-shadow-v1",
+  "status": "DRAFT_NOT_FROZEN",
+  "frozen_at_utc": null,
+  "freeze_commit": null,
+  "prospective_start_utc": null,
+  "market_type": "spot",
+  "direction": "long_only",
+  "source": "operator-supplied audited spot OHLCV CSV; no network retrieval",
+  "bar_minutes": 480,
+  "benchmark_symbol": "BTC_USDT",
+  "symbols": [
+    "ETH_USDT",
+    "SOL_USDT",
+    "LINK_USDT"
+  ],
+  "costs_bps": {
+    "fee_bps_per_side": 6,
+    "spread_bps_round_trip": 4,
+    "slippage_bps_round_trip": 4
+  },
+  "experiments": [
+    {
+      "id": "PSV1-VOLUME-IMPULSE",
+      "family": "volume_impulse",
+      "lookback_bars": 24,
+      "hold_bars": 3,
+      "parameters": {
+        "volume_multiple": 2,
+        "min_range_bps": 80,
+        "min_close_location": 0.8
+      },
+      "hypothesis": "Large relative-volume bullish close near the bar high predicts positive 3-bar forward spot return net of friction and above matched BTC."
+    },
+    {
+      "id": "PSV1-FAILED-DOWNSIDE",
+      "family": "failed_downside_break",
+      "lookback_bars": 30,
+      "hold_bars": 2,
+      "parameters": {
+        "min_close_location": 0.7
+      },
+      "hypothesis": "A breach below the previous 30-bar low that recovers inside the range predicts 2-bar positive spot reversal versus matched BTC."
+    },
+    {
+      "id": "PSV1-VWAP-REVERSION",
+      "family": "rolling_vwap_reversion",
+      "lookback_bars": 24,
+      "hold_bars": 2,
+      "parameters": {
+        "min_displacement_bps": 70
+      },
+      "hypothesis": "Bullish recovery candle still materially below 24-bar rolling typical-price volume-weighted reference predicts a 2-bar rebound versus BTC."
+    }
+  ],
+  "review_gates": {
+    "min_completed": 60,
+    "min_calendar_weeks": 12,
+    "min_distinct_symbols": 3
+  },
+  "decision_rule": {
+    "metric": "mean_excess_vs_btc_bps",
+    "direction": "greater_than",
+    "threshold": 5,
+    "inconclusive_when": "insufficient completed events or independent calendar weeks or symbols; descriptive cluster interval spans zero; costs stress fails",
+    "secondary_requirements": [
+      "mean_net_bps > 0",
+      "mean_double_cost_net_bps > 0",
+      "descriptive_week_cluster_98pct_interval_bps lower bound > 0"
+    ],
+    "family_wise_error_control": "three trials; independent review must control family-wise error; descriptive interval is not a calibrated hypothesis test"
+  },
+  "design": {
+    "dependence_cluster": "UTC ISO calendar week across all symbols",
+    "design_effect_bps": 5,
+    "design_units": "bps of per-trade net excess versus same-window BTC spot long",
+    "independent_cluster_target": 12,
+    "power_estimate": "NOT ESTABLISHED; 12 weeks is a minimum evidence gate, not proof of adequate statistical power"
+  },
+  "source_requirements": {
+    "timestamp_semantics": "UTC bar open; signal after full bar close; next-bar-open hypothetical entry; exit after fixed holding bars at open",
+    "required_columns": [
+      "timestamp",
+      "open",
+      "high",
+      "low",
+      "close",
+      "volume"
+    ],
+    "strict_contiguous_bars": true,
+    "identical_utc_grids": true,
+    "raw_sha256_recorded": true,
+    "authenticity_independently_verified": false
+  },
+  "claim_boundaries": {
+    "changes_existing_frozen_protocols": false,
+    "changes_DV2_or_Universal": false,
+    "validates_untouched_OOS": false,
+    "permits_promotion": false,
+    "permits_live_trading": false,
+    "permits_leverage": false
+  },
+  "notes": [
+    "Draft protocol, not a pre-registration; only a later version frozen before an unused future window can be prospective.",
+    "A fixed 20 bps round-trip spot friction is an illustrative conservative starting assumption, not calibrated venue execution.",
+    "No stops or intrabar fills are assumed; entries and exits are next-bar-open references and require independent executable-fill replication.",
+    "BTC same-window matched comparison controls some market movement, not altcoin beta, sector, selection, or funding.",
+    "Development output is spent data. Do not relabel it prospective."
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "kind": "PSR16_VORTEX_BATCH10_DRAFT_MECHANICS_INDEPENDENT_REVIEW",
+  "status": "PASS_DRAFT_MECHANICS_NOT_REGISTERED_OR_PRE_OUTCOME_APPROVED",
+  "market_outcomes_inspected": false,
+  "market_data_loaded": false,
+  "registered": false,
+  "actual_pre_outcome_review_approved": false,
+  "repository_modified": false,
+  "blocking_findings": [],
+  "draft_exact_sha256": {
+    "draft_vortex_batch10_config.json": "5789b4aa907e7343cdcbadebd91131afc708a3096f3169ca431a06d3bc6abbd3",
+    "draft_public_vortex_batch10.py": "6dc1fad83279a37c697d4f31e4cfb277db510c3e81984523dd99f6aaa95a1714",
+    "draft_test_public_vortex_batch10.py": "490e3450ee7e979f600922bb77c03e5eb3a73323111e48574db3b9a25b60482f",
+    "register_batch10.py": "94ba7a3d259eef9a094c1018489deba3fba6b7312028b5fed3372674b85cefc3",
+    "verify_vortex_drafts.py": "98d62f174c2210ec6a4eed2bb534ed4b0a15d046804fd497e857b18cd965b231"
+  },
+  "source_readiness_review_sha256": "2b71e8af8a0a281bbb8faae91e341dd7ce72a57a7d22ab8106533fe9a186910a",
+  "native_synthetic_source_audit_sha256": "774b87fa6cbc9beea704f738c581e729ebceb6f8e983a7c6d61c53ff651ea1fb",
+  "synthetic_reexecution": {
+    "root_draft_runner_independently_reexecuted": true,
+    "tests_passed": 12,
+    "registration_binding_test_deferred": 1,
+    "python_source_features_equal_original_typescript_rows": 6703,
+    "fixtures": 22
+  },
+  "independent_position_oracle": {
+    "synthetic_cases": 60,
+    "event_checks": 77,
+    "category_counts": {
+      "source_short_to_cash": 52,
+      "fixed_cutoff_mark": 25
+    },
+    "maximum_nav_residual": 0.0,
+    "all_counts_quantities_excursions_source_metadata_pending_profit_reconciliation_pass": true
+  },
+  "oracle_evidence_sha256": "0ba8034551678807cab0384d242058afa978857561da4f05d1cad8e2ecd0a2c6",
+  "reviewed_contract": [
+    "MIT educational signal plus full-balance same-close illustrative accounting is disclosed as source intent; causal cost-bearing next-open Spot engine is explicitly a distinct mathematical adaptation, not native bot parity.",
+    "Period14 and scalar add-then-subtract rolling sum recurrence preserve source partial startup and first prior=self. Exact zero TR override, strict BUY/SELL states and equality HOLD. No crossover repair.",
+    "8h UTC continuous completed bars, warmup240, next-minuteOPEN, no daily/session indicator resets; no source timeframe parameter is silently changed.",
+    "Quantity Decimal(str(binary64 cash/(signalclose*(1+cost/20000)))) floor8 is determined before next-open fill; separate notional and fee settlement; all-or-reject without gap rescue resizing. Cash rejection is intentional full-cash adapter sensitivity.",
+    "Held status captured before liquidation; controls preserve original SELL-state exits. Raw flags while held are ignored before SELL; no same-boundary reentry. A randomized flag on a flat SELL boundary can enter by control rule; same-boundary original SELL only closes an already held position. No observed durations reused.",
+    "Own dynamic BTC cash buys same alt notional/preentry-alt-cash fraction at BTCopen, funds side fee from own reserve; own returns and subsequent quantities evolve independently. No use of alt profits to replenish BTC.",
+    "No stop/target/trailing/timeout/short. Both gap labels deliberately identical. Completed exit at open excludes later range of exit minute; fixed cutoff includes full final minute and close liquidation mark. MFE/MAE exact endpoints, status/holding clocks, cash profit/NAV all checked.",
+    "Final held SELL remains pending censored, final flat BUY is unexecuted, held final BUY ignored; flags/admissions/event conservation enforced.",
+    "Shared frozen 4week bootstrap and gates retain alpha.025 through unchanged shared dependencies; no narrowing of broad search inference. Stored raw source-state flag controls are rerun with own admission/cash/quantity. Undefined cost stress and missing controls do not become success.",
+    "Registration script checks clean new branch and baseline main, copies immutable source reviews, preserves14frozen paths/prior artifacts, binds source/audit/dependency/data receipts and asserts no prior-file drift. New cell becomes23 trading/24 signal-model afterfreeze; actual attempted count stays22/23 until execution."
+  ],
+  "remaining_required_before_any_market_load": [
+    "This review binds drafts only. Registration placeholders intentionally block checked_spec; source audit hash map currently empty is draft and must be populated exactly by registration script.",
+    "Register immutable config/design, rebuild evaluator constants, commit exact source/test/audit receipts and preservation record; independently validate actual Gitblobs, config canonical hash and new review/evaluator bindings.",
+    "Run actual registration-binding test and full required repository test/lint gates.",
+    "Obtain final independently source/config-bound pre-outcome review and commit it before raw load; production guard must failclosed without it.",
+    "No final or native-engine approval, market survival, viability or future-confirmation inference is conferred by this provisional mechanical review."
+  ]
+}
