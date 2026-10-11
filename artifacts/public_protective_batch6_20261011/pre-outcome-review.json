@@ -1,0 +1,87 @@
+{
+  "audit_id": "PSR12-PRE-OUTCOME-INDEPENDENT-IMPLEMENTATION-REVIEW",
+  "reviewer": "batch2_validity_review",
+  "design_commit": "eaaef0c1845cc56cc5ba4d20413153e85b65b377",
+  "git_head_at_review": "eaaef0c1845cc56cc5ba4d20413153e85b65b377",
+  "canonical_config_sha256": "a654938094a1133981e397ada4c92c438c83b336174ad0a1b5bc96b6d3aed4c5",
+  "exact_file_sha256": {
+    "src/orderflow_edge_lab/public_protective_batch6.py": "0d8d648a30b8963a9b3e125f89fc855dd45a6d47721de0f6ea4dce6d4a637d68",
+    "src/orderflow_edge_lab/public_protective_batch5.py": "ea1a2f5564a4261fe3c53e4d3f584b782913222f43228f0843c9d94917eab6d8",
+    "src/orderflow_edge_lab/protective_minute.py": "eeae8bdc7ad5053a8c34689253a48e2c0ee701ac94c94a2c610901d6bd13ae32",
+    "tests/test_public_protective_batch6.py": "0bdce42c358b9cf26663d2d2dc126a2a54bee274e5f6cc85e7d5027f1ebf947e",
+    "config/public_protective_batch6_v1.json": "dd2e10ca67c061f048f526c17870bde9ef04e993b38289e98f62b5690c5812e0",
+    "docs/PUBLIC_PROTECTIVE_BATCH6_DESIGN_V1.md": "3c0c06299bf667744c6da757149474c74f0839e1e03a1ad5ddac142245c5c915"
+  },
+  "source_sha256": {
+    "PSARReference8hSpot": "9ff2f2ee020576628316c3162af5b28da6821f187f42b3342c9d6af05e2d6e42",
+    "CMF21Spot8hMinuteCloseROI": "0a3d94c8ef857284c9bc37d592af329b1a831f9c504fb2d73b63db00d303db50",
+    "CMF_dependency": "8bfa4fd42727396c01b35f3ef4a651778612798acaf0788bb0915313afe909d5"
+  },
+  "dependency_binding_policy": "Python dependencies SHA256 over CRLF-to-LF normalized bytes; source mechanics audits and source/data receipts remain exact byte hashes. Production checked_spec exercised with actual registered git object.",
+  "scope": {
+    "no_market_outcomes_inspected": true,
+    "no_market_strategy_run": true,
+    "repository_changes_by_reviewer": false,
+    "synthetic_only": true
+  },
+  "verification": {
+    "latest_candidate_unittest_count": 15,
+    "latest_candidate_unittest_result": "PASS",
+    "sar_independent_mathematical_reexpression": {
+      "synthetic_fixtures": 8,
+      "bars_per_fixture": 600,
+      "exact_full_array_matches": 8,
+      "exact_prefix_checks": 64,
+      "seed": 995,
+      "fixture_families": [
+        "rising",
+        "falling",
+        "flat with range",
+        "oscillating",
+        "random walk",
+        "alternating levels",
+        "equal first two closes",
+        "zero range"
+      ],
+      "native_Pine_execution": false
+    },
+    "cmf_independent_minute_step_oracle": {
+      "synthetic_cases": 40,
+      "exact_exit_index_price_reason_status_matches": 40,
+      "seed": 1912,
+      "earlier_same_review_execution": true,
+      "algorithm": "Each minute: queued source/ROI at open; resting low stop with adverse open gap; fee-aware rounded strict ROI observed only at close queues next available open; unresolved final minute is censored.",
+      "case_shape": "4 x 480 minute bars, warmup 1, initial cash 1000, randomized deterministic walk/ranges, mixed source exit boundary"
+    },
+    "feature_prefix_future_mutation_tests": "PASS for both candidates",
+    "actual_entry_stop_anchor_and_original_qualifier_bracket_control_tests": "PASS",
+    "runtime": {
+      "python": "3.13.14",
+      "numpy": "2.2.4",
+      "pandas": "2.2.3",
+      "platform": "win32"
+    }
+  },
+  "blocking_findings": [],
+  "review_conclusion": "No remaining implementation blocker identified for frozen adapted-strategy screening. No claim of native platform parity, candidate viability or future confirmation.",
+  "reviewed_mechanics": {
+    "sar": "Second-close direction with equality bearish; first output undefined; advance, reversal, strict extreme acceleration update, then preceding one/two opposite-extreme clamp. Independent scalar recurrence agrees exactly on synthetic fixtures.",
+    "psar_shared_profile": "Shared Ichimoku profile intentionally reused for long-only full-cash PSAR ATR14 bracket, source close anchors and next-open source exits. Replacements retain original qualifying-long flag independently of randomized/lag entry flags. Full ambiguous histories are retained or fail closed at caps.",
+    "cmf": "21-bar signed flow sum divided by volume sum. Undefined zero-range/zero-volume windows suppress sign triggers. Stop is 95 percent of actual accepted entry open. ROI is fixed 0.1 percent each-side fee formula, rounded to 8 decimals and strictly greater than 1 percent; economic cost stress is separately charged.",
+    "priority": "Pending source/ROI next-open exits precede that minute range; source reason wins shared boundary. Resting stop precedes same-minute ROI close observation. Final close ROI without subsequent open creates no artificial fill.",
+    "accounting": "Signal-close intended full-cash quantity plus cost reserve; all-or-reject next-open entry with no resize; cash and proportional BTC counterfactual settlement/valuation retained. Held/rejected/unexecuted flags reconcile. Censored positions remain holdings marked by liquidation valuation estimand; no executed terminal exit manufactured.",
+    "diagnostics_controls": "Reuses frozen PSR11 four-week clustered bootstrap, candidate-adjusted intervals, actual entry-week counts, causal BTC regime/volatility features, randomized-entry causal reruns with endogenous durations, eligible-only seven-bar lag, cost/gap stress and full-history conservative gates."
+  },
+  "claim_limits": [
+    "Mathematical documented-Pine SAR recurrence port is independently verified; no direct TradingView execution/export evidence exists, so native Pine arithmetic parity is unestablished.",
+    "CMF and minute-close ROI are explicit numerical and execution adaptations; no native Freqtrade lifecycle parity claim.",
+    "40-case oracle independently checks selected synthetic CMF execution behavior, not exhaustive proof or market outcomes.",
+    "Shared PSR11 engine dependency is hash bound and previously reviewed; reuse is not independent reimplementation of the full portfolio engine.",
+    "Dataset is an already retained inspected development panel, not genuinely unseen confirmation; lack of 2022 bear coverage remains.",
+    "No screen result can establish live execution readiness or viability."
+  ],
+  "suggested_nonblocking_followup": [
+    "Unit test named test_reject_changed_dependency_and_design currently validates accepted bindings with mocked git output; explicit dependency/config tamper rejection assertions would strengthen regression coverage. Production real git binding was independently exercised successfully."
+  ],
+  "pre_outcome_review_status": "PASS_WITH_DECLARED_CLAIM_LIMITS"
+}
