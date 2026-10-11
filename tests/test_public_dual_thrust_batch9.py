@@ -3,6 +3,7 @@ from decimal import Decimal, ROUND_DOWN
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
+from unittest.mock import patch
 import numpy as np
 from orderflow_edge_lab import public_dual_thrust_batch9 as study
 from orderflow_edge_lab import public_protective_batch5 as shared
@@ -128,8 +129,19 @@ class DualThrustTests(unittest.TestCase):
         self.assertEqual(a,b);self.assertEqual(a['cash'],9992);self.assertEqual(a['btc_cash_lower'],9992)
         self.assertEqual(a['btc_cash_upper'],9992);self.assertEqual(a['nav'][-1],9992)
     def test_frozen_config_hash_and_missing_committed_review(self):
-        spec=study.checked_spec(ROOT,ROOT/'config/public_dual_thrust_batch9_v1.json')
+        config=ROOT/'config/public_dual_thrust_batch9_v1.json'
+        # Unit tests supply the immutable Git receipt; CI checkouts may be shallow.
+        # Production checked_spec still requires actual registration history.
+        with patch.object(study.subprocess,'check_output',return_value=config.read_bytes()):
+            spec=study.checked_spec(ROOT,config)
         self.assertEqual(shared.digest(spec),study.DESIGN_SHA256)
+        with patch.object(study.subprocess,'check_output',return_value=b'{}'):
+            with self.assertRaisesRegex(ValueError,'design not registered'):
+                study.checked_spec(ROOT,config)
+        changed=dict(spec, new_registered_trading_cells=999)
+        with patch.object(Path,'read_text',return_value=json.dumps(changed)):
+            with self.assertRaisesRegex(ValueError,'changed frozen design'):
+                study.checked_spec(ROOT,config)
         with TemporaryDirectory() as folder:
             with self.assertRaisesRegex(ValueError,'INDEPENDENT_PRE_OUTCOME_REVIEW_REQUIRED'):
                 study.require_pre_outcome_review(Path(folder),spec,ROOT/'src/orderflow_edge_lab/public_dual_thrust_batch9.py')
