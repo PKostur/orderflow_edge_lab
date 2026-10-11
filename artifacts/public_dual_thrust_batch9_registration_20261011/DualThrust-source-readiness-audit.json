@@ -1,0 +1,110 @@
+{
+  "audit_id": "DUAL_THRUST_SOURCE_ONLY_READINESS_REVIEW",
+  "status": "MECHANICALLY_DEFINABLE_DECLARED_PORT_DEPENDENCY_AND_EXECUTION_CONTRACT_UNRESOLVED_NOT_REGISTERED",
+  "market_outcomes_inspected": false,
+  "market_tests_run": false,
+  "native_runtime_executed": false,
+  "repository_edits": false,
+  "new_registered_trading_cells": 0,
+  "new_registered_signal_model_cells": 0,
+  "source_binding": {
+    "strategy": {
+      "url": "https://raw.githubusercontent.com/jesse-ai/example-strategies/7c91e0a37bf62165790120d730442e4f6eb00364/DUAL_THRUST/__init__.py",
+      "commit": "7c91e0a37bf62165790120d730442e4f6eb00364",
+      "bytes": 3639,
+      "sha256": "8dd802e56782ad60e60f11926df1a4924c78c10af6264127168449e50118eef2"
+    },
+    "license": {
+      "url": "https://raw.githubusercontent.com/jesse-ai/example-strategies/7c91e0a37bf62165790120d730442e4f6eb00364/LICENSE",
+      "commit": "7c91e0a37bf62165790120d730442e4f6eb00364",
+      "bytes": 1065,
+      "sha256": "80d873148413a3eb2f96bbe22657bf57ae42046e4d95e81852109c5f3a949d2d"
+    }
+  },
+  "provenance": {
+    "publisher_repository": "jesse-ai/example-strategies",
+    "pinned_commit": "7c91e0a37bf62165790120d730442e4f6eb00364",
+    "source_path": "DUAL_THRUST/__init__.py",
+    "repository_license": "MIT; copyright2020jesse-ai; exact notice retained in work/dual_thrust_source/license.txt",
+    "algorithm_author_comment": "Source attributes Dual Thrust to Michael Chalek and links a Medium article. This comment does not independently establish authorship/original publication or performance. Medium article not used as mechanics authority.",
+    "local_receipt_rehash": "PASS source and license exact bytes match stored receipts",
+    "implementation_policy": "Independent mathematical port possible; no upstream framework/source implementation copied into repository by this reviewer."
+  },
+  "exact_source_defaults": {
+    "up_length": 21,
+    "down_length": 21,
+    "up_coeff": 0.71,
+    "down_coeff": 0.67,
+    "stop_loss_atr_rate": 2,
+    "risk_per_capital_percent": 2,
+    "ATR_call": "ta.atr(self.candles), period/sequential omitted",
+    "source_timeframe": null,
+    "capital": null,
+    "fee_argument": "risk_to_qty fee_rate omitted",
+    "entry_intent": "entry=self.price; buy orsell quantity atentry; stop entryminus/plus2ATR",
+    "position_exit": "Whilelong short_cond liquidates; whileshort long_cond liquidates",
+    "entry_cancellation": "should_cancel_entry alwaysTrue",
+    "no_target": true,
+    "no_timeout": true,
+    "long": "price > anchor_open + .71*max(maxclose21-minlow21,maxhigh21-minclose21)",
+    "short": "price < anchor_open - .67*max(maxclose21-minlow21,maxlow21-minclose21)",
+    "rolling_window": "Most recent21 self.candles including current available candle; do not silently shift to preceding21",
+    "asymmetric_low_column": "down_max_high is named high but reads candles[:,4], the LOW column. Preserve maxlow21 in exact-source port. Changing it to high silently repairs/differs from pinned source."
+  },
+  "inspected_framework_reference": {
+    "commit": "417f8765225e3bfc12043d4b712f19fe15a3c078",
+    "selection": "Current master resolved to immutable commit for bounded source inspection only; NOT a framework version established by strategy source, not registered/native execution contract.",
+    "files_sha256": {
+      "jesse/utils.py": "5c066d17ee66adb6e3c41aa1f167b3231adb3c2b9c5d1def0bcdfb1e9dce064b",
+      "jesse/strategies/Strategy.py": "d2a01f1e366d02f63fa39fd11fcad9adefa22da9ee6da5cf5aca1ec77ca76474",
+      "jesse/indicators/atr.py": "398a12258dbc59b350c8c9ed8a1199a57cd89e7503c7dcd3fa002030c77df06c",
+      "jesse/services/candle_service.py": "be316d02b82620c23fc62705fca7142a462fccfa7e980bd6939af1a6511e93c0",
+      "jesse/helpers.py": "d54afd8da37965cd87b6341d2362af5f92c4bbbf18ae961ad1361a31dc89e86b",
+      "jesse/services/cache.py": "3e103369bbf49f571a12841adc3e0a48d1078d2758c848cd82edc83fff744e1a"
+    },
+    "anchor_mapping": "anchor_timeframe(8h)=1D",
+    "price": "Strategy.price current candle close/cached execution price; live rounding differs",
+    "anchor_cache": "cached wrapper uses perstrategy LRU; Strategy execution clears cached methods at end of execution cycle. No timeless daily anchor cache should be inferred.",
+    "normal_backtest_candles": "get_candles can append observed-only forming daily candle when elapsed observed1m count is not divisible by1440; at divisible boundary returns completed candles.",
+    "normal_live_candles": "Non-timestamp-bucket live branch returns completed higher-timeframe candles. This is a real mode difference, not universal native parity.",
+    "timestamp_bucket_path": "Alternative mode selects daily bucket from latest observed minute timestamp and builds observed-only forming candle; route/source alignment remains a required declared choice.",
+    "ATR_wrapper": "Default14,sequentialFalse; slice_candles uses configurable env.data.warmup_candles_num default240, and calls native jesse_rust.atr_last. Full-history ATR or200-window ATR would change this inspected wrapper unless deliberately declared.",
+    "risk_to_qty": "risk_to_size computes min(((capital*.02)/abs(entry-stop))*entry,capital), then size_to_qty floors units at8decimal precision. Zero risk throws. Fee_rate omitted defaults0; helper capital cap is active. Uncapped2percent-risk quantity is not this inspected helper. Nonzero fee_rate adds separate haircut logic and must not be invented as unchanged source."
+  },
+  "knowledge_timing": {
+    "source_uses_only_daily_open": "Forming daily open is already known once daily first minute observed; source does not use future daily high/low/close. Accessing a forming anchor is not inherently lookahead here.",
+    "required_clock_fixtures": [
+      "Completed8h decisions at08UTC and16UTC: observed forming daily candle typically supplies same day00open in inspected backtest path",
+      "Decision at00UTC after preceding16\u201324bar: last observedminute is23:59, so newest fully observed daily candle belongs preceding day; next day opening minute unavailable at that decision",
+      "Do not select current wallclockday open before first minute is observed",
+      "Do not replace latest forming anchor with latest completed daily candle at08/16 and claim unchanged source",
+      "Freeze continuous UTC aggregation, warmup bucket origin and cache refresh; verify prefix causality with synthetic distinct dayopens and future mutation"
+    ],
+    "runtime_limit": "No actual native Jesse route execution or synthetic native anchor trace performed. Mapping/source branches inspected only; crossversion/callback scheduling parity unresolved."
+  },
+  "required_before_registration": [
+    "Select and bind strategy/framework/helper/nativeATR versions and dependency license evidence, or clearly register independent numeric port with declared seed/window/order instead of native parity claim",
+    "Freeze anchor observed-minute/candle-origin contract and prove08/16/00boundary fixtures; do not invent completed-only semantics",
+    "Freeze exact ATR14 nativekernel/window contract or explicit scalar reference arithmetic; native generic ATR equality is not presumed",
+    "Freeze quantity2percent risk with source helper capital cap, floor8, signal-close/nextopen cashadapter, fee reserve and insufficientcash/invalidstop rejection. No silent resizing/uncapped leverage",
+    "Freeze whether signal-close source entry-price order is adapted to next-open market and immediately active fixed signal-price2ATRstop, protective adverse gaps, close-observed original short liquidation and exit priority. Native source buy tuple/cancel lifecycle not verified",
+    "Controls must recompute entry ATR/stop/own quantities on replacement flags, retain original short_cond state exit and own durations; no reused observed holding lengths",
+    "Preserve down LOW-column asymmetry, default coefficients/21windows/2ATR/2percent risk; changed corrected version would require distinct fresh declaration, never silent repair",
+    "Run scalar prefix, boundary, stop/cash/BTC, pending and execution collision tests, independent review and immutable code/config freeze before any market load",
+    "Keep all old cost/control/survival gates and spent-data/future-confirmation boundaries; no retrospective retuning or native-performance claim"
+  ],
+  "overlap_trial_accounting": {
+    "current_minimum_preexisting_trading_cells": 21,
+    "current_minimum_preexisting_signal_model_cells": 22,
+    "source_inspection_adds_cells": 0,
+    "family_overlap": "Threshold/range breakout plus ATR payoffs overlaps broad frozenDON8/breakout and priorATR/trend candidates Chandelier/MAGen/Ichimoku/PSAR/Supertrend. Not an orthogonal edge claim; signals differ due asymmetric21range and dailyopen anchor.",
+    "new_cell_if_later_registered": "One precisely frozen adaptation would increment byone only at registration; corrected LOW-column version is a separate candidate and not silently included.",
+    "frozen_lanes": "DON8,EMA8,VOL8,DV2,D4,payoff geometry, watches and prospective protocols untouched; Bollinger entirely excluded."
+  },
+  "claim_limits": [
+    "No market data or strategy outcome file inspected for this source-only audit; zero new outcomes and zero registrations.",
+    "Feasible declared8hSpot cash port is conditional on unresolved dependency/execution choices above. Source alone does not settle native Jesse lifecycle.",
+    "MIT publisher/source notice does not establish Michael Chalek authorship or original publisher status.",
+    "No native parity, causal execution proof, survivor or viability claim. Any later historicalscreen survival requires separately frozen genuinely untouched future confirmation."
+  ]
+}

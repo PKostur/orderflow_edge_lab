@@ -1,0 +1,263 @@
+{
+  "audit_id": "DUAL_THRUST_DECLARED_PORT_PREREQUISITE_REVIEW",
+  "status": "DECLARED_MATH_PREREQUISITES_VERIFIED_EXECUTION_CONTRACT_PENDING_NOT_REGISTERED",
+  "market_outcomes_inspected": false,
+  "market_data_used": false,
+  "market_tests_run": false,
+  "strategy_registered": false,
+  "engine_review_certified": false,
+  "pre_outcome_engine_guard_certified": false,
+  "new_trading_cells": 0,
+  "repository_changes": false,
+  "source_commit": "7c91e0a37bf62165790120d730442e4f6eb00364",
+  "source_exact_sha256": "8dd802e56782ad60e60f11926df1a4924c78c10af6264127168449e50118eef2",
+  "selected_framework_helper_reference_commit": "417f8765225e3bfc12043d4b712f19fe15a3c078",
+  "prior_source_readiness_audit_sha256": "5cf51e650aa3c4d04598593067f0cebd41bea22046ae1321b2c7c8a81de2f83d",
+  "native_kernel_identity": {
+    "selected_native_config": {
+      "wheel": "jesse_rust-1.3.0-cp313-cp313-win_amd64.whl",
+      "wheel_sha256": "5e29ad2a2388e714239781ecf77ecd001dadc47026c6c64dd46891f5e309ce1b",
+      "python": "3.13.14",
+      "numpy": "2.2.4",
+      "platform": "win32",
+      "input": "contiguous float64;Jesse columns timestamp,open,close,high,low,volume"
+    },
+    "wheel_exact_sha256": "5e29ad2a2388e714239781ecf77ecd001dadc47026c6c64dd46891f5e309ce1b",
+    "installed_files_exact_match_wheel": true,
+    "installed_package_files_sha256": {
+      "jesse_rust/__init__.py": "315b996233c524b685e77bc294a8085d021a50800cbccbf3ad26cc35177150d0",
+      "jesse_rust/jesse_rust.cp313-win_amd64.pyd": "0308c2f1022942c4c3fb411a6cb58168e2ab67d48f9d2d849dc5f41f4f49800c"
+    },
+    "purpose": "Exact selectedATRkernel arithmetic is part of proposed declared mathematical port, not native Jesse engine compatibility/parity evidence."
+  },
+  "synthetic_evidence_sha256": "0e9f215162e335f6dcb2566414f6db793e5c1ffe48a7a0cf39dd407234bb59b8",
+  "synthetic_evidence": {
+    "atr_crop_fixture": [
+      {
+        "prefix_bars": 1,
+        "window_bars": 1,
+        "last": null,
+        "fullhistory_minus_crop": null
+      },
+      {
+        "prefix_bars": 2,
+        "window_bars": 2,
+        "last": null,
+        "fullhistory_minus_crop": null
+      },
+      {
+        "prefix_bars": 13,
+        "window_bars": 13,
+        "last": null,
+        "fullhistory_minus_crop": null
+      },
+      {
+        "prefix_bars": 14,
+        "window_bars": 14,
+        "last": 4.621068833198236,
+        "fullhistory_minus_crop": 0.0
+      },
+      {
+        "prefix_bars": 15,
+        "window_bars": 15,
+        "last": 4.415378658097855,
+        "fullhistory_minus_crop": 0.0
+      },
+      {
+        "prefix_bars": 21,
+        "window_bars": 21,
+        "last": 4.784367566359607,
+        "fullhistory_minus_crop": 0.0
+      },
+      {
+        "prefix_bars": 239,
+        "window_bars": 239,
+        "last": 5.312777749367881,
+        "fullhistory_minus_crop": 0.0
+      },
+      {
+        "prefix_bars": 240,
+        "window_bars": 240,
+        "last": 5.205720747936723,
+        "fullhistory_minus_crop": 0.0
+      },
+      {
+        "prefix_bars": 241,
+        "window_bars": 240,
+        "last": 5.238631220976996,
+        "fullhistory_minus_crop": -1.3571368917553173e-08
+      },
+      {
+        "prefix_bars": 300,
+        "window_bars": 240,
+        "last": 4.644573453701521,
+        "fullhistory_minus_crop": 1.4900281897212153e-08
+      },
+      {
+        "prefix_bars": 600,
+        "window_bars": 240,
+        "last": 4.630504092043003,
+        "fullhistory_minus_crop": -1.5305508860308237e-08
+      }
+    ],
+    "daily_anchor_fixtures": [
+      {
+        "signal_bar_open": 1680307200,
+        "decision_time": 1680336000,
+        "decision_hour_UTC": 8,
+        "anchor_day_open": 100,
+        "next_day_open_if_mutated": 99999,
+        "anchor_unchanged_under_future_day_mutation": true
+      },
+      {
+        "signal_bar_open": 1680336000,
+        "decision_time": 1680364800,
+        "decision_hour_UTC": 16,
+        "anchor_day_open": 100,
+        "next_day_open_if_mutated": 99999,
+        "anchor_unchanged_under_future_day_mutation": true
+      },
+      {
+        "signal_bar_open": 1680364800,
+        "decision_time": 1680393600,
+        "decision_hour_UTC": 0,
+        "anchor_day_open": 100,
+        "next_day_open_if_mutated": 99999,
+        "anchor_unchanged_under_future_day_mutation": true
+      },
+      {
+        "signal_bar_open": 1680393600,
+        "decision_time": 1680422400,
+        "decision_hour_UTC": 8,
+        "anchor_day_open": 200,
+        "next_day_open_if_mutated": 99999,
+        "anchor_unchanged_under_future_day_mutation": true
+      },
+      {
+        "signal_bar_open": 1680422400,
+        "decision_time": 1680451200,
+        "decision_hour_UTC": 16,
+        "anchor_day_open": 200,
+        "next_day_open_if_mutated": 99999,
+        "anchor_unchanged_under_future_day_mutation": true
+      },
+      {
+        "signal_bar_open": 1680451200,
+        "decision_time": 1680480000,
+        "decision_hour_UTC": 0,
+        "anchor_day_open": 200,
+        "next_day_open_if_mutated": 99999,
+        "anchor_unchanged_under_future_day_mutation": true
+      },
+      {
+        "signal_bar_open": 1680480000,
+        "decision_time": 1680508800,
+        "decision_hour_UTC": 8,
+        "anchor_day_open": 300,
+        "next_day_open_if_mutated": 99999,
+        "anchor_unchanged_under_future_day_mutation": true
+      },
+      {
+        "signal_bar_open": 1680508800,
+        "decision_time": 1680537600,
+        "decision_hour_UTC": 16,
+        "anchor_day_open": 300,
+        "next_day_open_if_mutated": 99999,
+        "anchor_unchanged_under_future_day_mutation": true
+      },
+      {
+        "signal_bar_open": 1680537600,
+        "decision_time": 1680566400,
+        "decision_hour_UTC": 0,
+        "anchor_day_open": 300,
+        "next_day_open_if_mutated": 99999,
+        "anchor_unchanged_under_future_day_mutation": true
+      }
+    ],
+    "low_column_fixture": {
+      "source_range": 20.0,
+      "silently_repaired_high_range": 50.0,
+      "source_down_threshold": 106.6,
+      "repaired_down_threshold": 86.5,
+      "synthetic_close": 100,
+      "source_short": true,
+      "repaired_short": false
+    },
+    "risk_fixtures": [
+      {
+        "capital": 10000,
+        "entry": 100,
+        "stop": 99.99,
+        "quote_size": 10000,
+        "quantity": 100.0,
+        "capital_cap_active": true,
+        "actual_price_risk": 1.0000000000005116
+      },
+      {
+        "capital": 10000,
+        "entry": 100,
+        "stop": 95,
+        "quote_size": 4000.0,
+        "quantity": 40.0,
+        "capital_cap_active": false,
+        "actual_price_risk": 200.0
+      },
+      {
+        "capital": 1000,
+        "entry": 200,
+        "stop": 180,
+        "quote_size": 200.0,
+        "quantity": 1.0,
+        "capital_cap_active": false,
+        "actual_price_risk": 20.0
+      },
+      {
+        "capital": 1000,
+        "entry": 200,
+        "stop": 199.5,
+        "quote_size": 1000,
+        "quantity": 5.0,
+        "capital_cap_active": true,
+        "actual_price_risk": 2.5
+      }
+    ],
+    "scratch_mathematical_contract_features": {
+      "bars": 600,
+      "exact_scalar_threshold_and_daily_anchor_matches": 600,
+      "all_feature_prefix_checks": 10,
+      "future_mutation_unchanged_prefix": 300,
+      "strict_equal_threshold_is_not_entry": true,
+      "scope": "Ephemeral independently declared math function only; no strategy engine, order lifecycle, frozen config or registration exists."
+    }
+  },
+  "strict_boundary_checks": {
+    "price_equal_down_threshold_does_not_short": true,
+    "next_binary64_below_down_threshold_shorts": true
+  },
+  "verified_contract": {
+    "anchor": "UTC day containing signal8h bar OPEN; independently agrees with day of lastobservedminute before08/16/00decision. At00decision prior16bar retains precedingdayopen.9boundarycases across3distinctdayopens. No nextdayopen used.",
+    "anchor_requirement": "Continuous dataset startsUTC00; require known firstdailyminute, never use firstavailable08/16baropen as a missingdaily00open repair. Prototype fixtures use fully aligned data.",
+    "source_asymmetry": "LOW column4 max retained for down_max_high. Valid21bar fixture yields source shortTrue vs silently repairedHIGH variantFalse. Currentcompletedbar included both21windows.",
+    "feature_causality": "600declaredscratchmath feature rows independently matched scalar anchor/range thresholds;10allfeatureprefix checks and future mutation leave300barprefix unchanged. No complete strategy engine inspected.",
+    "risk": "2percent source helper calculates cappedquote min(((capital*.02)/abs(entry-stop))*entry,capital); then divisionentry andfloor8. Four scalarfixtures cover capactive and capinactive. Fee_rate remains0 for sourcehelper comparison.",
+    "ATR": "Default14, trailing240 inclusivecurrentcompletedbar, exact installedjesse_rust1.3.0 wheel. Prefixlengths1,2,13 yieldNaN;14 becomesfinite. atr_last equals samekernelatr[-1] exactly for selected11cold/warm/croppedprefixes. Futureinputmutation has no earlierkernel effect. Cropped240 vsfullhistory differs at241/300/600 by about1e-8, so do not substitute fullhistory recurrence. This comparison is within chosenkernel, not an independent ATR/native parity proof."
+  },
+  "remaining_before_registration": [
+    "Specify exact fee-reserve operation order: source fee0 helper result plus explicit commoncash reservation/cap rule; generic fee-reserve wording does not uniquely define quantity",
+    "Specify fixedsignalclose vsactualfill stop anchoring and whether source2ATRsignalclose price is retained or explicitly reanchored; nextopen entryreference andgaprejection. Reject nonfinite/zeroATR/nonpositivestop rather than invent fallback",
+    "Specify sourceentry atself.price adaptation and cancellation: marketnextopen vsnative tupleorder classification/cancel-at-nextcycle is unverified. Define all-or-reject, no partialfills, no samedecisionreentry",
+    "Specify protective stop activation andstopbeforecompleted8hdecision priority, adverse opening-gap price, original shortstatecash exit atnextopen, finalqueued/censoredholding semantics",
+    "Controls must recompute ownATRbrackets andriskquantity atreplacemententry decisions, preserve originalshortcondition as stateexit, retain same causalclock andowncash/durations",
+    "Freeze exactnumeric/source/native identities andclockcontract plus alloldgates/cost/control rules, then implement complete engine, test independent execution/accounting andrequire committed preoutcome review before marketdata",
+    "Retain attribution/license andsourcefamily/trialhistory; noMichaelChalekauthorshipevidence, no nativeengineparity; optionalcorrectedLOWcolumn variant would be a separate explicitlyregistered cell"
+  ],
+  "blocking_findings_for_existing_frozen_lanes": [],
+  "registration_readiness": "Not ready to certify registration/engine execution: lifecycle and exactfee/cash adapter choices above remain to be frozen and tested. No current source/math contradiction found under the proposed contract.",
+  "claim_limits": [
+    "Synthetic scratch mathematical calculations only. No frozenconfig, strategyengine, guard, actualnativeJesseroute or marketoutcome has been reviewed here.",
+    "Current selectedframeworkhelpers plus olderselectednativewheel define an explicit hybrid mathematical contract, not inferred unchanged source-runtime semantics.",
+    "Nineanchorcases prove declaredUTCclock arithmetic against latestobservedminutebucket, not nativecandle_store executiontrace.",
+    "All previousstrategies/gates/prospectiveprotocols untouched; noBollinger/noorders/nofutureconfirmation.",
+    "Eventual historicalsurvival would require separatelyfrozen genuinelyuntouchedfutureconfirmation beforeviability."
+  ]
+}
