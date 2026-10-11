@@ -1,0 +1,60 @@
+{
+  "kind": "PSR17_NVI_BATCH11_DRAFT_MECHANICS_INDEPENDENT_REVIEW",
+  "status": "PASS_DRAFT_MECHANICS_NOT_REGISTERED_OR_PRE_OUTCOME_APPROVED",
+  "blocking_findings": [],
+  "market_outcomes_inspected": false,
+  "market_data_loaded": false,
+  "repository_modified": false,
+  "registered": false,
+  "new_registered_trials": 0,
+  "minimum_cumulative_attempted_trading_cells": 23,
+  "minimum_cumulative_attempted_signal_model_cells": 24,
+  "draft_evaluator_exact_sha256": "d74b313bd5dd4af65b69d807d95acd36c667762d479b803e5be90f15b1b2fbb9",
+  "draft_config_exact_sha256": "ca9f65ae6e64bfc26749e7582b198da4cf0efd64830c29fb437b052014a74076",
+  "draft_canonical_config_sha256": "cceb17cf0e7f0577b5d9da3cff3092ed1be921a94b1b042ab3350785e60b5a26",
+  "source_readiness_artifact_exact_sha256": "33b183b7de6ab5b5da85bcf4e4d90a247e5cd42e683c73dbe4986dc8f731f817",
+  "native_source_math_artifact_exact_sha256": "b39bfe7cf3a3742c9f79951d929b0c2ce6cfe3847b6f2039818aad50479c548a",
+  "prior_feature_helper_review_exact_sha256": "73f2a1fa7904fb18fa1ba7addd24f189ae2b0ad330e392480df272a7df0c31a7",
+  "validations": {
+    "ast_execution_control_diagnostic_functions_identical": true,
+    "original_native_fixture_count": 22,
+    "original_native_feature_rows": 8985,
+    "actual_draft_native_exact": true,
+    "invalid_config_production_guard": true,
+    "independent_synthetic_cases": 80,
+    "events_checked": 88,
+    "flat_sell_randomized_entry_cases": 47,
+    "counts": {
+      "raw_entry_flags": 301,
+      "cash_rejected": 97,
+      "accepted_entries": 88,
+      "held_entry_ignored": 83,
+      "unexecuted_final_entry": 33
+    },
+    "maximum_nav_residual": 0.0
+  },
+  "mechanics": [
+    "Actual draft feature body matches pinned original TypeScript NVI/EMA/actions exactly for8985rows22fixtures. Separate prior feature-helper artifact is supplementary; this review explicitly binds actual draft evaluator bytes.",
+    "Cumulative initialization Apr1retained8hfirstbar fixed at1000, EMAfirstvalue seed1000, continuous history throughwarmup. No admission/day/session/month/year reset or rolling240 crop. Base-assetvolume is summed across complete480minute bars.",
+    "Volume rise strictly freezes NVI; equal/fallingvolume update. Exact previousNVI+((currentclose-previousclose)/previousclose)*previousNVI. EMA255alpha2/256 andbeta1-alpha in source operation order; BUYbelowEMA/SELLaboveEMA/equalityHOLDstates preserved.",
+    "AST equality proves simulation, diagnostics, baseline/control evaluation, configcheck and pre-outcome guard unchanged from frozen Vortex except candidate binding outside functions. Existing source-intent fullcash adapter, old gates/alpha.025, no protections and no invented timeout remain.",
+    "Independent80syntheticcash/BTCpaths match all quantities/admissioncounts, heldflag-before-SELL, originalSELL nextopenexits, no sameboundaryreentry, cutoffmarkcensor, finalpending/unexecutedflags and exactMFE/MAE endpoints. Forty-seven accepted randomizedentries onflatoriginalSELLboundaries explicitly exercise that control contract.",
+    "Fixedsignalclose Decimal(str(cash/(close*(1+side))))floor8; separatebuydebitnotional+fee; nextopenallorreject without resize. OwnBTCcashnotionalfractions/quantities/costs andNAV reconciled withzeroresidual. Cashrejections97, admitted88, ignored83, finalunexecuted33 conserve301rawflags.",
+    "Actualdraft checked_spec fails changedfrozensignature before Git/rawload because DESIGNconstants UNREGISTERED. No productionapproved review orregisteredoutcomes are inferred."
+  ],
+  "remaining_before_any_market_load": [
+    "Freeze immutable config/design and populate exactsource/nativefixtures/compiler/runner/audit bindings; retain all prior frozen paths and rejectedstudy artifacts, including latestVortexpaths.",
+    "Bind originalsource/compiler/licensebytes toregistrationaudits; NVI feature nativeoracle and clock/fullhistory anchor fixtures must remain immutable.",
+    "Implement and independently rerun actualregisteredtests for feature/domain/prefix/anchor and executioncontrolclock/admission/funding/excursion/censor/accounting, plus requiredfullrepositorytests/lint.",
+    "Commit actualsource/configconstants and evidence, verifyGitblobs and canonicalhash; final independently bound pre-outcome review must be committed before raw/cacheload.",
+    "Keep attemptcount23/24 until newregisteredversionexecutes; afterregistrationnewcell24/25 isregisteredonly, notviable."
+  ],
+  "limits": [
+    "Source is educational signal plus cost-free same-close cash illustration. Draft is declared allcashSpotnextopenadapter, notnativebot or exchangeparity.",
+    "No market data, cache or outcomes loaded for this review. Rejected closedversions were not tuned or modified.",
+    "Exactfixtureagreement doesnot establish allfloatingpointdomains orcapitalfillreliability. No hiddenepsilon/seed/source-directionrepair.",
+    "Existing frozen cost/control/confirmation gates remain mandatory. A future survivor would require separate immutable untouchedconfirmation; no viablecandidate or futurestart claim."
+  ],
+  "viable": false,
+  "future_confirmation_started": false
+}
