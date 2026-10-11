@@ -207,3 +207,62 @@ def cost_wall_bps(gross_returns: pd.Series, turnover: pd.Series) -> float | None
     if gm <= 0 or tm == 0:
         return None
     return float(gm / (tm / 2 / 1e4))
+
+
+EULER_MASCHERONI = 0.5772156649015329
+
+
+def expected_max_normal_z(n_trials: int) -> float:
+    """Bailey & Lopez de Prado approximation of E[max of N standard normals] (0 for N = 1)."""
+    from math import e
+    from statistics import NormalDist
+
+    n = int(n_trials)
+    if n < 1:
+        raise ValueError("n_trials must be >= 1")
+    if n == 1:
+        return 0.0
+    nd = NormalDist()
+    g = EULER_MASCHERONI
+    return float((1.0 - g) * nd.inv_cdf(1.0 - 1.0 / n) + g * nd.inv_cdf(1.0 - 1.0 / (n * e)))
+
+
+def deflated_sharpe_null_consistent(daily_returns, n_trials: int) -> dict:
+    """Null-consistent deflated Sharpe (strategy-search-v2 G5).
+
+    SR0 is the expected maximum of N zero-edge strategies with this sample's own length and return shape.
+    Skew and kurtosis are population moments (kurtosis not excess).  All Sharpe values are per day.
+    """
+    from math import sqrt
+    from statistics import NormalDist
+
+    x = np.asarray(pd.Series(daily_returns).dropna(), dtype=float)
+    t = int(len(x))
+    if t < 3:
+        raise ValueError("need at least 3 daily returns")
+    sd = float(x.std(ddof=1))
+    if sd <= 0:
+        raise ValueError("returns have zero variance")
+    sr = float(x.mean() / sd)
+    d = x - x.mean()
+    m2 = float(np.mean(d**2))
+    skew = float(np.mean(d**3) / m2**1.5)
+    kurt = float(np.mean(d**4) / m2**2)
+    var_term = 1.0 - skew * sr + (kurt - 1.0) / 4.0 * sr**2
+    if var_term <= 0:
+        raise ValueError("non-positive Sharpe variance term")
+    se0 = sqrt(var_term / (t - 1))
+    emax = expected_max_normal_z(n_trials)
+    sr0 = se0 * emax
+    prob = float(NormalDist().cdf((sr - sr0) * sqrt(t - 1) / sqrt(var_term)))
+    return {
+        "sharpe_daily": sr,
+        "sr0_daily": float(sr0),
+        "expected_max_z": emax,
+        "n_trials": int(n_trials),
+        "T": t,
+        "skew": skew,
+        "kurtosis": kurt,
+        "probability": prob,
+        "pass": bool(prob >= 0.95),
+    }
