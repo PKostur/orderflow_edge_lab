@@ -1,0 +1,42 @@
+{
+  "review_kind": "READ_ONLY_ADVERSARIAL_PRE_OUTCOME_REVIEW",
+  "study_id": "PSR11-PUBLIC-PROTECTIVE-BATCH5",
+  "reviewer": "batch2_validity_review",
+  "design_commit": "d586630a0ec845c5977976340d000f24a894b4af",
+  "reviewed_evaluator_sha256": "ea1a2f5564a4261fe3c53e4d3f584b782913222f43228f0843c9d94917eab6d8",
+  "reviewed_evaluator_commit": "68e5664065e419c95f829b972aea7dc62ac58e64",
+  "reviewed_evaluator": "src/orderflow_edge_lab/public_protective_batch5.py",
+  "strategy_market_outcomes_inspected": false,
+  "market_strategy_outcomes_run_by_reviewer": false,
+  "source_files_modified_by_reviewer": false,
+  "blocking_findings_remaining": [],
+  "status": "PRE_OUTCOME_IMPLEMENTATION_REVIEW_PASSED",
+  "resolved_before_outcomes": [
+    "Original Ichimoku qualifying-long flags govern bracket replacement and pending replacement; randomized entry flags do not change this source condition.",
+    "Censored holding duration includes the final minute through its closing boundary; intraminute exits retain duration bounds.",
+    "Observed entry-week count uses only actual event weeks; zero calendar weeks do not mutate the observed-week mapping.",
+    "Bootstrap quantiles are alpha/2 and 1-alpha/2, with explicit 97.5 percent two-sided descriptive coverage for two candidate cells.",
+    "BTC direction uses previous completed close divided by the close 30 intervals earlier; volatility retains 29 prior returns.",
+    "Seven-bar lag controls zero all source entry flags before the original eligibility boundary before shifting.",
+    "Any undefined stress-history mean makes the net80 gate fail rather than dropping that history."
+  ],
+  "verified": [
+    "Pinned published MAGen and Ichimoku mathematical entry, exit and bracket defaults agree with the declared compatible adaptations.",
+    "MAGen uses the actual pinned native linear-regression, ADX and ATR kernels with contiguous float64 inputs and registered window semantics.",
+    "Both candidates' long, short, exit and ATR outputs on a 300-bar synthetic prefix match the corresponding full 400-bar outputs exactly.",
+    "Synthetic both-touch execution produces two full account histories; independently calculated target-first cash 10718.5 and stop-first cash 9670.6 match the simulator.",
+    "Own-cash and funded BTC fraction allocations, actual-notional costs, censored inventory marks and event admission accounting are consistent with the frozen estimands.",
+    "Same-minute BTC low/high comparator bounds and MFE/MAE inner/outer bounds remain reference uncertainty bounds.",
+    "Per-symbol and joint history limits fail closed; controls rerun sizing, brackets and endogenous durations. The evaluator wrapper records rejection with evaluation_complete false when a baseline or control reaches the registered limit.",
+    "The command-line runner refuses to inspect market outcomes when the evaluator differs from its committed source.",
+    "All 14 current synthetic tests in test_public_protective_batch5 pass."
+  ],
+  "claim_limits": [
+    "This review establishes implementation consistency and synthetic behavior, not market performance, native strategy execution parity or viability.",
+    "Historical data remains spent development evidence; descriptive intervals do not correct the entire cumulative strategy search.",
+    "Minute OHLC touch fills, gap handling and eight-hour liquidation-value marks remain hypothetical assumptions without quote, queue, latency or historical fill calibration.",
+    "Sampled eight-hour portfolio drawdown is not an intraminute drawdown bound.",
+    "Funded BTC lower and upper wealth paths are conservative reference bounds, not executed comparator fills.",
+    "A historical screen survivor still requires separately frozen, adequately powered untouched confirmation and approval-bound paper reliability."
+  ]
+}
