@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import io
+import json
 from pathlib import Path
+import urllib.parse
 import tempfile
 import unittest
 import zipfile
@@ -489,6 +491,116 @@ class DescriptiveDiagnosticsTests(unittest.TestCase):
         self.assertEqual(rows[0]["perp_fallback_bars"], 11)
         values = [r["max_adverse_excursion"] for r in rows]
         self.assertEqual(values, sorted(values, reverse=True))
+
+
+class FakeRest:
+    """Mock of the public fundingRate endpoint: ``data`` maps symbol -> {settlement time: rate}."""
+
+    def __init__(self, data: dict[str, dict[pd.Timestamp, float]] | None = None, *, error: Exception | None = None,
+                 jitter_ms: int = 0):
+        self.data, self.error, self.jitter_ms, self.urls = data or {}, error, jitter_ms, []
+
+    def __call__(self, url: str) -> bytes:
+        self.urls.append(url)
+        if self.error is not None:
+            raise self.error
+        query = urllib.parse.parse_qs(urllib.parse.urlsplit(url).query)
+        start, end = int(query["startTime"][0]), int(query["endTime"][0])
+        rows = []
+        for when, rate in sorted(self.data.get(query["symbol"][0], {}).items()):
+            ms = int(when.value // 1_000_000) + self.jitter_ms
+            if start <= ms <= end:
+                rows.append({"symbol": query["symbol"][0], "fundingTime": ms, "fundingRate": f"{rate:.8f}",
+                             "markPrice": "1.0"})
+        return json.dumps(rows).encode()
+
+
+class FundingRestTests(unittest.TestCase):
+    """Short held bars are verified on the public REST endpoint (mocked here)."""
+
+    def setUp(self):
+        self.frames = {"AAAUSDT": synthetic_8h(400, 11), "BBBUSDT": synthetic_8h(400, 12)}
+        idx = self.frames["AAAUSDT"].index
+        self.full8 = {s: pd.Series(0.0001, index=f.index[1:]) for s, f in self.frames.items()}
+        self.full4_a = pd.Series(0.0001, index=pd.date_range(idx[0] + pd.Timedelta(hours=4), idx[-1], freq="4h"))
+        base = tcl.run_sleeves_detailed(CORE, self.frames, self.full8)
+        held: set[pd.Timestamp] = set()
+        for e in base.episodes:
+            if e["symbol"] == "AAAUSDT":
+                held.update(idx[idx.get_loc(e["entry_time"]) + 1:idx.get_loc(e["exit_time"]) + 1])
+        self.open = sorted(held)[5]  # a held open
+        self.half = self.open - pd.Timedelta(hours=4)  # its 4h settlement at the half bar
+        self.funding4 = {**self.full8, "AAAUSDT": self.full4_a}
+
+    def test_normal_data_does_not_touch_the_network(self):
+        rest = FakeRest()
+        run = tcl.run_sleeves_detailed(CORE, self.frames, self.funding4, rest_fetch=rest)
+        self.assertEqual(rest.urls, [])
+        self.assertEqual(run.funding_rest, {})
+
+    def test_rest_confirmed_skip_passes_and_is_recorded(self):
+        # the exchange skipped one 4h settlement: archive and REST both lack it
+        archive_series = self.full4_a.drop(self.half)
+        rest = FakeRest({"AAAUSDT": {self.open: 0.0001}})
+        run = tcl.run_sleeves_detailed(CORE, self.frames, {**self.funding4, "AAAUSDT": archive_series}, rest_fetch=rest)
+        entry = run.funding_rest["AAAUSDT"]
+        self.assertEqual(entry["repaired_from_rest"], [])
+        self.assertEqual([c["open"] for c in entry["confirmed_by_rest"]], [self.open.isoformat()])
+        self.assertEqual(entry["confirmed_by_rest"][0]["settlements_present"], 1)
+        self.assertEqual(entry["confirmed_by_rest"][0]["settlements_from_interval"], 2)
+        self.assertEqual(entry["confirmed_by_rest"][0]["settlements_on_rest"], 1)
+        self.assertNotIn("BBBUSDT", run.funding_rest)
+        # the account is the one of the archive as it is (nothing invented for the skipped settlement)
+        self.assertIn("symbol=AAAUSDT", rest.urls[0])
+
+    def test_rest_supplies_the_missing_settlement_and_the_sleeves_are_rerun_with_it(self):
+        reference = tcl.run_sleeves_detailed(CORE, self.frames, self.funding4)
+        archive_series = self.full4_a.drop(self.half)
+        rest = FakeRest({"AAAUSDT": {k: 0.0001 for k in self.full4_a.index}})
+        run = tcl.run_sleeves_detailed(CORE, self.frames, {**self.funding4, "AAAUSDT": archive_series}, rest_fetch=rest)
+        entry = run.funding_rest["AAAUSDT"]
+        self.assertEqual(entry["confirmed_by_rest"], [])
+        self.assertEqual(entry["repaired_from_rest"], [{"settlement": self.half.isoformat(), "rate": 0.0001}])
+        for name, series in reference.intervals.items():
+            pd.testing.assert_series_equal(run.intervals[name], series)
+        # the repaired settlement is not re-queried by the other sleeve of the symbol (its series is already merged)
+        self.assertEqual(len(rest.urls), len(set(rest.urls)))
+
+    def test_rest_unreachable_fails(self):
+        archive_series = self.full4_a.drop(self.half)
+        for error in (OSError("connection refused"), ValueError("bad json")):
+            with self.assertRaises(tcl.TrendCoreLeverageError):
+                tcl.run_sleeves_detailed(CORE, self.frames, {**self.funding4, "AAAUSDT": archive_series},
+                                         rest_fetch=FakeRest(error=error))
+
+    def test_rest_garbage_payload_fails(self):
+        with self.assertRaises(tcl.TrendCoreLeverageError):
+            tcl.rest_funding("AAAUSDT", self.open - pd.Timedelta(hours=8), self.open, lambda url: b'{"code": -1121}')
+
+    def test_no_rest_configured_fails_as_before(self):
+        with self.assertRaises(tcl.TrendCoreLeverageError):
+            tcl.run_sleeves_detailed(CORE, self.frames, {**self.funding4, "AAAUSDT": self.full4_a.drop(self.half)})
+
+    def test_zero_settlement_bar_with_empty_rest_fails(self):
+        archive_series = self.full4_a.drop([self.half, self.open])
+        with self.assertRaises(tcl.TrendCoreLeverageError) as ctx:
+            tcl.run_sleeves_detailed(CORE, self.frames, {**self.funding4, "AAAUSDT": archive_series},
+                                     rest_fetch=FakeRest({"AAAUSDT": {}}))
+        self.assertIn(self.open.isoformat(), str(ctx.exception))
+
+    def test_zero_settlement_bar_is_repaired_when_rest_has_it(self):
+        archive_series = self.full4_a.drop([self.half, self.open])
+        rest = FakeRest({"AAAUSDT": {k: 0.0001 for k in self.full4_a.index}})
+        run = tcl.run_sleeves_detailed(CORE, self.frames, {**self.funding4, "AAAUSDT": archive_series}, rest_fetch=rest)
+        times = [r["settlement"] for r in run.funding_rest["AAAUSDT"]["repaired_from_rest"]]
+        self.assertEqual(times, [self.half.isoformat(), self.open.isoformat()])
+
+    def test_rest_funding_window_and_jitter(self):
+        open_ = ts("2024-01-02 08:00")
+        data = {"AAAUSDT": {open_ - pd.Timedelta(hours=8): 0.0002, open_: 0.0003, open_ + pd.Timedelta(hours=8): 0.0004}}
+        out = tcl.rest_funding("AAAUSDT", open_ - pd.Timedelta(hours=8), open_, FakeRest(data, jitter_ms=5))
+        self.assertEqual(list(out.index), [open_])  # (after, until]: the earlier and later settlements are outside
+        self.assertAlmostEqual(out.iloc[0], 0.0003)
 
 
 class OutputTests(unittest.TestCase):

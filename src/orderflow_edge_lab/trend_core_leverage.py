@@ -41,6 +41,7 @@ import pandas as pd
 
 from orderflow_edge_lab import binance_futures_archive as archive
 from orderflow_edge_lab import leverage_sim as lev
+from orderflow_edge_lab.binance_futures_archive import Fetcher
 from orderflow_edge_lab.canonical_v3 import run_canonical_backtest_v3
 from orderflow_edge_lab.universal_backtest import ExecutionModel, legacy_strategy
 
@@ -179,9 +180,10 @@ def _daily(series: pd.Series) -> pd.Series:
     return series.loc[(series.index.hour == 0) & (series.index.minute == 0)]
 
 
-def funding_gaps(index: pd.DatetimeIndex, raw: pd.Series | None,
-                 held: Sequence[tuple[int, int]]) -> tuple[list[str], int]:
-    """Held bar opens that did not receive their funding settlements, and the number of held opens checked.
+def funding_shortfalls(index: pd.DatetimeIndex, raw: pd.Series | None,
+                       held: Sequence[tuple[int, int]]) -> tuple[list[tuple[int, int, int]], int]:
+    """Held bar opens short of settlements as (bar position, settlements present, settlements expected), and the
+    number of held opens checked.
 
     ``held``: (entry bar, exit bar) positions on ``index``; the position is held into the opens ``entry+1 .. exit``
     (including the terminal bar), and each needs its settlements in (previous open, this open] (the slots of
@@ -208,9 +210,118 @@ def funding_gaps(index: pd.DatetimeIndex, raw: pd.Series | None,
             nearest = np.clip(times.searchsorted(index, side="left"), 0, len(times) - 1)
             length = np.diff(index.as_unit("ns").asi8, prepend=index.as_unit("ns").asi8[0]).astype(float)
             expected = np.maximum(1, np.rint(length / interval[nearest])).astype(int)
-    missing = [f"{index[t].isoformat()} ({int(counts[t])} of {int(expected[t])} settlements)"
-               for t in opens if counts[t] < expected[t]]
-    return missing, len(opens)
+    return [(t, int(counts[t]), int(expected[t])) for t in opens if counts[t] < expected[t]], len(opens)
+
+
+def _describe_shortfalls(index: pd.DatetimeIndex, short: Sequence[tuple[int, int, int]]) -> list[str]:
+    return [f"{index[t].isoformat()} ({count} of {expected} settlements)" for t, count, expected in short]
+
+
+def funding_gaps(index: pd.DatetimeIndex, raw: pd.Series | None,
+                 held: Sequence[tuple[int, int]]) -> tuple[list[str], int]:
+    """``funding_shortfalls`` as readable strings (and the number of held opens checked)."""
+    short, n = funding_shortfalls(index, raw, held)
+    return _describe_shortfalls(index, short), n
+
+
+FUNDING_REST_URL = "https://fapi.binance.com/fapi/v1/fundingRate"
+
+
+def rest_funding(symbol: str, after: pd.Timestamp, until: pd.Timestamp, fetch: Fetcher) -> pd.Series:
+    """Settlements in (``after``, ``until``] from the public Binance REST ``fundingRate`` endpoint (no key).
+
+    ``fetch(url) -> bytes``.  Times are rounded to the minute as the archive loader does.  Any transport or format
+    error raises ``TrendCoreLeverageError``.
+    """
+    margin = pd.Timedelta(minutes=2)  # settlements carry millisecond jitter; filtered back to the window below
+    start_ms = int((after - margin).value // 1_000_000)
+    end_ms = int((until + margin).value // 1_000_000)
+    url = f"{FUNDING_REST_URL}?symbol={symbol}&startTime={start_ms}&endTime={end_ms}&limit=1000"
+    try:
+        rows = json.loads(fetch(url))
+        times = [pd.Timestamp(int(r["fundingTime"]), unit="ms", tz="UTC").round("min") for r in rows]
+        rates = [float(r["fundingRate"]) for r in rows]
+    except Exception as exc:  # noqa: BLE001 - every failure mode must stop the study loudly
+        raise TrendCoreLeverageError(f"{symbol}: REST funding query for ({after}, {until}] failed: {exc!r}") from exc
+    out = pd.Series(rates, index=pd.DatetimeIndex(times, tz="UTC") if times else pd.DatetimeIndex([], tz="UTC"),
+                    dtype=float)
+    return out.loc[(out.index > after) & (out.index <= until)].sort_index()
+
+
+class FundingVerifier:
+    """Funding series per symbol plus the REST verification of held bars that look short of settlements.
+
+    ``fetch=None`` disables the REST step: a short held bar then fails.  A short held bar is looked up on the REST
+    endpoint for (previous open, this open]: extra settlements are merged into the series (repaired, the caller reruns
+    the backtest); if REST confirms what the archive has (at least one settlement, nothing more), the bar is accepted
+    as exchange-confirmed; REST errors, or an empty REST answer for a short bar, fail loudly.
+    """
+
+    def __init__(self, funding: Mapping[str, pd.Series], fetch: Fetcher | None = None) -> None:
+        self.fetch = fetch
+        self.series: dict[str, pd.Series] = {k: v.copy() for k, v in funding.items()}
+        self.repaired: dict[str, dict[pd.Timestamp, float]] = {}
+        self.confirmed: dict[str, dict[pd.Timestamp, dict[str, Any]]] = {}
+        self._rest: dict[tuple[str, pd.Timestamp], pd.Series] = {}
+
+    def series_for(self, symbol: str) -> pd.Series:
+        return self.series.get(symbol, pd.Series(dtype=float))
+
+    def _query(self, symbol: str, index: pd.DatetimeIndex, t: int) -> pd.Series:
+        key = (symbol, index[t])
+        if key not in self._rest:
+            assert self.fetch is not None
+            self._rest[key] = rest_funding(symbol, index[t - 1], index[t], self.fetch)
+        return self._rest[key]
+
+    def verify(self, symbol: str, name: str, index: pd.DatetimeIndex, held: Sequence[tuple[int, int]]) -> bool:
+        """True when settlements were merged from REST (rerun the backtest); raises when a held open stays uncovered."""
+        short, n_held = funding_shortfalls(index, self.series_for(symbol), held)
+        if not short:
+            return False
+
+        def fail(reason: str, rows: Sequence[tuple[int, int, int]]) -> TrendCoreLeverageError:
+            return TrendCoreLeverageError(
+                f"{name}: {len(rows)} of {n_held} held bar opens lack funding settlements ({reason}); first "
+                f"{FUNDING_UNCOVERED_LISTED}: " + "; ".join(_describe_shortfalls(index, rows)[:FUNDING_UNCOVERED_LISTED]))
+
+        if self.fetch is None:
+            raise fail("no REST verification configured", short)
+        raw = self.series_for(symbol)
+        known = set(pd.DatetimeIndex(pd.to_datetime(raw.index, utc=True)))
+        new: dict[pd.Timestamp, float] = {}
+        for t, _, _ in short:
+            for when, rate in self._query(symbol, index, t).items():
+                if when not in known:
+                    new[when] = float(rate)
+        if new:
+            merged = pd.concat([raw, pd.Series(new)]).sort_index()
+            merged.index = pd.DatetimeIndex(pd.to_datetime(merged.index, utc=True))
+            self.series[symbol] = merged
+            self.repaired.setdefault(symbol, {}).update(new)
+        still, _ = funding_shortfalls(index, self.series_for(symbol), held)
+        empty = [row for row in still if len(self._query(symbol, index, row[0])) == 0]
+        if empty:
+            raise fail("the REST endpoint returns no settlement there", empty)
+        merged_times = set(pd.DatetimeIndex(pd.to_datetime(self.series_for(symbol).index, utc=True)))
+        for t, count, expected in still:
+            rest = self._query(symbol, index, t)
+            if not set(rest.index) <= merged_times:  # cannot happen after the merge; kept as a guard
+                raise fail("REST settlements missing after the merge", [(t, count, expected)])
+            self.confirmed.setdefault(symbol, {})[index[t]] = {
+                "open": index[t].isoformat(), "settlements_present": count, "settlements_from_interval": expected,
+                "settlements_on_rest": int(len(rest)), "rest_times": [x.isoformat() for x in rest.index]}
+        return bool(new)
+
+    def report(self) -> dict[str, dict[str, Any]]:
+        out: dict[str, dict[str, Any]] = {}
+        for symbol in sorted(set(self.repaired) | set(self.confirmed)):
+            out[symbol] = {
+                "confirmed_by_rest": [v for _, v in sorted(self.confirmed.get(symbol, {}).items())],
+                "repaired_from_rest": [{"settlement": k.isoformat(), "rate": r}
+                                       for k, r in sorted(self.repaired.get(symbol, {}).items())],
+            }
+        return out
 
 
 class SleeveRun(NamedTuple):
@@ -218,6 +329,7 @@ class SleeveRun(NamedTuple):
     episodes: list[dict[str, Any]]
     intervals: dict[str, pd.Series]  # per sleeve: 8h interval returns, stamped at the interval's closing open
     funding_coverage: dict[str, dict[str, Any] | None]  # per sleeve: engine coverage and the held-bar check
+    funding_rest: dict[str, dict[str, Any]]  # per symbol: bars confirmed by REST, settlements repaired from REST
 
 
 def interval_returns(equity: pd.Series) -> pd.Series:
@@ -232,13 +344,16 @@ def interval_returns(equity: pd.Series) -> pd.Series:
 
 
 def run_sleeves_detailed(core: Mapping[str, Any], frames: Mapping[str, pd.DataFrame],
-                         funding: Mapping[str, pd.Series] | None) -> SleeveRun:
+                         funding: Mapping[str, pd.Series] | None, *, rest_fetch: Fetcher | None = None) -> SleeveRun:
     """Per-sleeve daily returns (exactly ``sleeve_daily_returns``), episodes (trade ledger) and 8h interval returns.
 
     Episode: {sleeve, symbol, entry_time (open of the entry bar), exit_time, side, weight (signed entry position),
     entry_price (open of the entry bar), net_return, terminal}.  With ``funding`` given, every bar open at which a
     position is held (entry+1 .. exit of each episode) must have all its expected funding settlements
-    (``funding_gaps``), otherwise this raises: a gap would be booked as zero funding.  Holes while flat are allowed.
+    (``funding_shortfalls``), otherwise this raises: a gap would be booked as zero funding.  Holes while flat are
+    allowed.  With ``rest_fetch`` (``url -> bytes``), a short held bar is looked up on the public Binance REST
+    ``fundingRate`` endpoint (``FundingVerifier``): missing settlements found there are merged in (the sleeve is rerun
+    with them), a bar REST confirms as it is in the archive is accepted; the default ``None`` makes every short bar fail.
     """
     from orderflow_edge_lab.vol_sizing import vol_sized_strategy
 
@@ -247,6 +362,7 @@ def run_sleeves_detailed(core: Mapping[str, Any], frames: Mapping[str, pd.DataFr
     sizing = core["sizing"]
     if sizing.get("method") != "entry_inverse_vol":
         raise TrendCoreLeverageError(f"unknown sizing method: {sizing.get('method')}")
+    verifier = FundingVerifier(funding, rest_fetch) if funding is not None else None
     columns: dict[str, pd.Series] = {}
     intervals: dict[str, pd.Series] = {}
     coverage: dict[str, dict[str, Any] | None] = {}
@@ -257,27 +373,27 @@ def run_sleeves_detailed(core: Mapping[str, Any], frames: Mapping[str, pd.DataFr
                                       bars_per_year=int(sizing.get("bars_per_year", 3 * 365)))
         for symbol in core["source"]["symbols"]:
             frame = frames[symbol]
-            result = run_canonical_backtest_v3(
-                frame, strategy, dict(spec["parameters"]), execution, return_equity=True,
-                funding=None if funding is None else funding.get(symbol, pd.Series(dtype=float)))
-            equity = result.get("equity_path")
-            if equity is None or len(equity) < 2:
-                raise TrendCoreLeverageError(f"{spec['audit_id']}/{symbol}: no equity path")
             name = f"{spec['audit_id']}:{symbol}"
-            if funding is not None:
+            for _ in range(5):  # a REST repair changes the funding series: rerun until it is stable
+                result = run_canonical_backtest_v3(
+                    frame, strategy, dict(spec["parameters"]), execution, return_equity=True,
+                    funding=None if verifier is None else verifier.series_for(symbol))
+                equity = result.get("equity_path")
+                if equity is None or len(equity) < 2:
+                    raise TrendCoreLeverageError(f"{spec['audit_id']}/{symbol}: no equity path")
+                if verifier is None:
+                    coverage[name] = None
+                    break
                 held = [(frame.index.get_loc(pd.Timestamp(t["entry"])), frame.index.get_loc(pd.Timestamp(t["exit"])))
                         for t in result.get("trades_ledger", [])]
-                uncovered, n_held = funding_gaps(frame.index, funding.get(symbol), held)
-                if uncovered:
-                    raise TrendCoreLeverageError(
-                        f"{name}: {len(uncovered)} of {n_held} held bar opens lack funding settlements (would be "
-                        f"booked as zero funding); first {FUNDING_UNCOVERED_LISTED}: "
-                        + "; ".join(uncovered[:FUNDING_UNCOVERED_LISTED]))
-                cov = result["accounting"].get("funding_coverage")
-                coverage[name] = {"engine_coverage": None if cov is None else float(cov), "held_bar_opens": n_held,
-                                  "held_bar_opens_uncovered": 0}
+                if not verifier.verify(symbol, name, frame.index, held):
+                    cov = result["accounting"].get("funding_coverage")
+                    coverage[name] = {"engine_coverage": None if cov is None else float(cov),
+                                      "held_bar_opens": len(sorted({t for a, b in held for t in range(a + 1, b + 1)})),
+                                      "held_bar_opens_uncovered": 0}
+                    break
             else:
-                coverage[name] = None
+                raise TrendCoreLeverageError(f"{name}: funding repair from REST did not stabilise")
             columns[name] = _daily(equity.iloc[:-1]).pct_change()
             intervals[name] = interval_returns(equity)
             opens = frame["open"].astype(float)
@@ -289,7 +405,8 @@ def run_sleeves_detailed(core: Mapping[str, Any], frames: Mapping[str, pd.DataFr
                     "entry_price": float(opens.loc[entry]), "net_return": float(trade["net_bps"]) / 1e4,
                     "terminal": bool(trade["terminal_liquidation"]),
                 })
-    return SleeveRun(pd.DataFrame(columns).iloc[1:], episodes, intervals, coverage)
+    return SleeveRun(pd.DataFrame(columns).iloc[1:], episodes, intervals, coverage,
+                     {} if verifier is None else verifier.report())
 
 
 def run_sleeves(core: Mapping[str, Any], frames: Mapping[str, pd.DataFrame],
@@ -575,8 +692,8 @@ def level_stats(daily: pd.Series, liquidation_times: Sequence[pd.Timestamp], lev
 
 def assess(core: Mapping[str, Any], frames: Mapping[str, pd.DataFrame], funding: Mapping[str, pd.Series] | None,
            marks: Mapping[str, pd.DataFrame], *, samples: Mapping[str, tuple[str, str]] = SAMPLES,
-           config: lev.LeverageConfig = lev.LeverageConfig()) -> dict[str, Any]:
-    run = run_sleeves_detailed(core, frames, funding)
+           config: lev.LeverageConfig = lev.LeverageConfig(), rest_fetch: Fetcher | None = None) -> dict[str, Any]:
+    run = run_sleeves_detailed(core, frames, funding, rest_fetch=rest_fetch)
     sleeves, episodes = run.daily, run.episodes
     paths = [episode_adverse_path(e, marks.get(e["symbol"])) for e in episodes]
     coverage = [episode_mark_coverage(e, marks.get(e["symbol"])) for e in episodes]
@@ -626,6 +743,7 @@ def assess(core: Mapping[str, Any], frames: Mapping[str, pd.DataFrame], funding:
             "samples": effective,
         },
         "funding_coverage": dict(run.funding_coverage),
+        "funding_rest_verification": run.funding_rest,
         "top_adverse_excursions_by_symbol": top_adverse_excursions(episodes, paths, coverage),
         "episodes_without_mark_bars": int(sum(len(p[0]) == 0 for p in paths)),
         "mark_coverage": {

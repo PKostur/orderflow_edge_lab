@@ -45,7 +45,7 @@ def main() -> int:
                        "first_mark_bar_end": None if first_mark is None else str(first_mark),
                        "funding_rows": int(len(funding[sym])), "perp_fallback_mark_bars": fallback_counts[sym]}
     run_core = {**core, "source": {**core["source"], "symbols": list(available.values())}}
-    result = tcl.assess(run_core, frames, funding, marks)
+    result = tcl.assess(run_core, frames, funding, marks, rest_fetch=tcl.archive.http_fetch)
     first_marks = sorted(r["first_mark_bar_end"] for r in ranges.values() if r["first_mark_bar_end"] is not None)
     mark_note = ("mark-price klines are used where the mark archive has a bar; the perp 1h high/low stand in before a "
                  "symbol's first mark bar and for holes after it (counts per symbol in ranges[*].perp_fallback_mark_bars). "
@@ -58,7 +58,8 @@ def main() -> int:
             "core_config_sha256": sha256(CORE_CONFIG.read_bytes()).hexdigest(),
             "study_config_sha256": sha256(STUDY_CONFIG.read_bytes()).hexdigest(),
             "symbols_used": available, "symbols_missing_from_cache": missing_from_cache, "ranges": ranges,
-            "funding_coverage": result.pop("funding_coverage"), "mark_vs_perp_divergence": divergence,
+            "funding_coverage": result.pop("funding_coverage"),
+            "funding_rest_verification": result.pop("funding_rest_verification"), "mark_vs_perp_divergence": divergence,
             "top_adverse_excursions_by_symbol": result.pop("top_adverse_excursions_by_symbol"),
             "input_sha256": tcl.input_digest(available),
             "mark_note": mark_note,
