@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "search_id": "strategy-search-v3-leveraged",
+  "status": "DECLARED_BEFORE_ANY_CANDIDATE",
+  "question": "Does any published short-holding-period strategy, tested exactly as published on Binance USDT-M perpetuals at its natural timeframe, have a real edge after costs and funding, and at what leverage does it stay below a 5% probability of ruin?",
+  "registration_note": "Declared 2026-10-12 after the user removed the leverage veto (research only; no real orders) and asked for short holding periods across different timeframes. Gates G1-G8 are inherited from strategy-search-v2 (null-consistent deflated Sharpe, with N counting every trial in v1, v2 and v3: v1 contributes 9). Edge is judged at 1x; leverage is judged separately by ruin probability, because leverage scales an edge but cannot create one.",
+  "scope": {
+    "timeframes": "holding periods from 15 minutes to 3 days, tested at the candidate's own published bar interval (15m, 30m, 1h, 2h, 4h, 8h, 1d)",
+    "data": "Binance USDT-M futures archive (data.binance.vision): klines at the needed interval, mark-price klines for liquidation checks, fundingRate history; delisted contracts included; free only",
+    "eligible": "explicit, codable rules with published parameters; crypto perpetual or applicable to it",
+    "excluded": "families already failed in this repo when tested at the SAME timeframe and universe (8h breakouts/mean reversion/session effects on the 10 old coins, funding carry, Fear & Greed, Kronos), grid/DCA/martingale (negative-skew ruin by construction), anything needing order-book replay, paid data, or real order placement"
+  },
+  "procedure": {
+    "no_tuning": "published parameters only; ambiguities resolved in a round registration before testing",
+    "trial_budget": 30,
+    "rounds": "research rounds of up to 8 candidates; stop at the first candidate passing every gate, at budget exhaustion, or after 3 rounds",
+    "ledger": "research/strategy_search_v3/trials.jsonl"
+  },
+  "costs": {
+    "fees": "Binance USDT-M taker 5 bps per side on every entry and exit (no maker assumption), plus 2 bps slippage per side; i.e. 14 bps round trip on notional, scaled by leverage",
+    "funding": "realized Binance funding on held notional at each settlement while a position is open",
+    "samples": "development = source sample truncated to data availability, else data start to 2022-12-31; validation = 2023-01-01 to 2026-09-30 minus development"
+  },
+  "gates_at_1x": "G1-G8 exactly as strategy-search-v2 (G5 = review_methods.deflated_sharpe_null_consistent with cumulative N); annualization by calendar days (365) on daily-aggregated returns",
+  "leverage_assessment": {
+    "levels": [1, 2, 3, 5, 10, 20],
+    "liquidation": "isolated margin per position; a position is liquidated when the adverse mark-price move within a bar (mark high/low) reaches 1/L minus the maintenance margin rate (0.5% for this study), losing its margin plus a 0.5% liquidation fee",
+    "ruin": "account equity falling below 50% of its starting value at any point",
+    "statistic": "probability of ruin within 365 days from a stationary block bootstrap of daily account returns at each leverage (mean block 10 days, 5000 paths, seed 20261012), computed on the validation sample",
+    "reported_max_safe_leverage": "the largest tested L with ruin probability <= 5% and no liquidation events in the historical validation path"
+  },
+  "outcome": {
+    "promising_prospect": "passes G1-G8 at 1x AND has a max safe leverage >= 2; it is then registered as a descriptive paper forward watch at its max safe leverage (simulated only)",
+    "no_pass": "report FAIL with the full ledger; no loosening of gates"
+  },
+  "claims": {
+    "strategy_promotion_authorized": false,
+    "live_trading_authorized": false,
+    "orders_sent": false
+  }
+}
