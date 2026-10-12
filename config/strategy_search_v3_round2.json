@@ -68,6 +68,7 @@
     "exits": "close at t+hold, else last close in (entry, exit], else flat; funding over (entry, exit] on entry notional; trades exiting beyond the data are dropped and counted",
     "null": "mean per-trade gross over development trades; each trade re-drawn among closes of the same contract and calendar month with a usable exit on or before the development end; seed 20261012; identity reproduces observed",
     "metrics_data": "sum_open_interest in base units; files sorted, exact duplicate rows dropped and counted, conflicting duplicates fail, partial/missing days reported in provenance",
-    "leverage": "assess_trade_book: each position's own (entry, exit] mark window; P&L and cost stamped at exit as in the gate accounting"
+    "leverage": "assess_trade_book: each position's own (entry, exit] mark window; P&L and cost stamped at exit as in the gate accounting",
+    "review_fixes_2026_10_12": "before the single run: no entries before 2021-12-01 (BTC OI from 11-30 used only for the lookback); an event needs perp quote volume > 0 in the bar ending t (no trades on post-delisting zero-volume bars), same for G4 candidates; OI rows <= 0 treated as missing; partial metrics days and OI staleness reported (rule unchanged); the runner verifies round2_universe.json (metrics_day 2021-12-01, 30 symbols, 2020-Q4 rank window) and never rebuilds silently; leverage liquidation checks fall back to perp 1h high/low where mark bars are missing; gate daily series zero-filled over the full registered windows; leverage bootstrap uses first-to-last exit day inside validation (edge zeros omitted, slightly conservative)"
   }
 }
