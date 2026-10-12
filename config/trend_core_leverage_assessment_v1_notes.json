@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "applies_to": "config/trend_core_leverage_assessment_v1.json (frozen)",
+  "date_utc": "2026-10-12",
+  "before": "the single run; no real-data result computed",
+  "notes": {
+    "mark_coverage": "cached Binance mark-price klines start 2023-03 (ENA 2024-04); for holds before that, perp 1h high/low stands in for the mark (last-price wicks are usually wider than mark wicks, so this errs toward more liquidations); recorded in provenance",
+    "simulation": "daily sleeve-level simulation (leverage_sim's per-position booking at entry breaks the daily bootstrap for multi-day holds): sleeve daily returns x L floored at -100%; each episode checked for liquidation from the entry fill with running adverse excursion over mark bars in (entry, exit]; on liquidation the sleeve loses |w|(1 + 0.005 L) of capital at entry, earlier booked P&L of that episode is reversed and the sleeve is flat until the scheduled exit",
+    "max_safe_leverage": "headline = largest L with P(ruin 365d) <= 5% in BOTH samples (whole and 2023-2026) and zero liquidations in the 2023-2026 path (stricter reading); per-sample values also reported",
+    "windows": "daily stamp d covers day d-1 (repo convention); annual return = final_equity^(365/days) - 1; each sample slices the full-history path and bootstraps from the slice"
+  }
+}
