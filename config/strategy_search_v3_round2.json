@@ -48,7 +48,7 @@
   "amendments": [
     {
       "date_utc": "2026-10-12",
-      "before": "any open-interest data beyond a 4-day BTCUSDT smoke file was downloaded; no event return computed",
+      "before": "any event or trade return was computed. Data inspected before this amendment (correction recorded 2026-10-12 after review): the universe listing (which metrics files exist per symbol), a 4-day BTCUSDT smoke download, and a few single-day BTCUSDT/ETHUSDT metrics files from 2021, 2022, 2024 and 2026 compared with mark prices only to determine the timestamp convention of sum_open_interest. No price-event or return statistic was computed.",
       "reason": "Binance futures metrics (open interest) are published from 2021-12-01 for every perpetual except BTCUSDT (2020-09-01), so the registered universe ('metrics from 2021-01-01') would contain one contract",
       "changes": {
         "universe": "same ranking (mean daily perp quote volume 2020-10-01..2020-12-31, computed before the sample) but the metrics requirement becomes 'metrics files from 2021-12-01'; top 30 kept, delisted kept",
