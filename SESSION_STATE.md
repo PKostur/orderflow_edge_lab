@@ -59,6 +59,7 @@
 - Vault persistence study pre-registered (`config/hyperliquid_vault_persistence_v1.json`, 30d formation/holding terciles, single look after ~7 cycles, ~2027-05).
 - Forward drawdown envelopes (`research/forward_envelopes/envelopes_v1.json`, blend S4 + trend core, as-backtested and zero-edge bands, shown on the dashboard; blend's as-backtested band is optimistic because its dev series used Binance funding).
 - Blend capacity (`research/capacity/blend_capacity_v1.md`): square-root impact (Y=1, MEXC volume) eats 25/50/100% of an assumed 10%/yr edge at ~$0.45M/$1.8M/$7.2M; small-cap coins (AKE, NIL, RARE, PHA, LSK) dominate impact.
+- **strategy-search-v3-leveraged round 1 (2026-10-12): FAIL.** Perp log-basis quintile 8h (Luo thesis) reproduced in development (2020-01..2023-07 net Sharpe 2.15, t 3.78, null p 0.001, DSR 0.994) but the 1h entry-delay variant falls to -0.40 (edge = same-price execution / bounce) and validation 2023-07..2026-09 is Sharpe -5.2, -84%; cost wall 19.6 bps < 42. Leverage: ruin at every level (2x ends at 1.8% of equity, 10x 9,865 liquidations). Leverage veto removed by user 2026-10-12 (research only). v3 trials 1/30, cumulative N 10.
 - Human execution: CET 09/15/21 timing costs little; market > limit; tuning grids are noise.
 - Canonical accounting: v2 frozen; v3 (fixed quantity) and v3.1 (+funding) for new work.
 - Trend bot (`trend_bot.py`, paper only): parked by user.
