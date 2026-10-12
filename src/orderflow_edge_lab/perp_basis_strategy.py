@@ -177,7 +177,11 @@ def funding_integrity(perp: Mapping[str, pd.DataFrame], funding: Mapping[str, pd
     ended: dict[str, str] = {}
     missing: list[str] = []
     for name, frame in perp.items():
-        last_bar = frame.index[-1]
+        # the archive keeps publishing flat zero-volume bars after a delisting, so "trading" means volume > 0
+        traded = frame[frame["quote_volume"] > 0] if "quote_volume" in frame.columns else frame
+        if traded.empty:
+            continue
+        last_bar = traded.index[-1]
         base = base_name(name)
         f = funding.get(base)
         last_settlement = f.index[-1] if f is not None and len(f) else None

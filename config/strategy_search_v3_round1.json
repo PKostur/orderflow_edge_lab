@@ -66,6 +66,7 @@
     "null": "one random permutation of eligible contracts per settlement; 999 draws; seed 20261012; statistic = mean daily gross over development days",
     "relisting": "perp split at gaps > 30 days; spot kept unsplit and used only where a spot bar exists at t",
     "liquidation": "adverse mark move >= 1/L - 0.005 from the entry fill, measured on mark 1h high/low of bars ending in (entry, exit] => loss |w| * (1 + 0.005 L); period costs scale with L; period return floored at -100%; ruin = equity < 50% at a period end; stationary bootstrap mean block 10, 365 days, 5000 paths, common index matrix across L; max safe L = largest L with ruin <= 5% and zero historical liquidations",
-    "g8": "crypto trend core reference only (descriptive SPY omitted for a crypto candidate)"
+    "g8": "crypto trend core reference only (descriptive SPY omitted for a crypto candidate)",
+    "funding_integrity_activity": "a contract counts as trading only on bars with quote_volume > 0: the Binance archive keeps publishing flat zero-volume bars for delisted perps (e.g. AGIX through 2026), which the first run's integrity check (stopped before any statistic was computed) wrongly treated as active. Strategy eligibility (volume > 1M) was never affected."
   }
 }

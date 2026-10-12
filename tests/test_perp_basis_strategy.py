@@ -401,6 +401,17 @@ class IntegrityAndDescriptiveTests(unittest.TestCase):
         with self.assertRaises(pbs.PerpBasisError):
             pbs.funding_integrity(perp, funding, **kwargs)
 
+    def test_zero_volume_bars_after_delisting_do_not_count_as_trading(self):
+        ends = bar_ends("2021-03-01 01:00", "2021-03-08 00:00")
+        dead = perp_frame(ends, 1.0)
+        dead.loc[dead.index[100]:, "quote_volume"] = 0.0  # archive keeps flat zero-volume bars after a delisting
+        stamps = [str(t) for t in pd.date_range("2021-03-01", "2021-03-03", freq="8h", tz="UTC")]
+        funding = {"DUSDT": funding_frame(stamps, [0.0001] * len(stamps))}  # funding stopped with trading
+        kwargs = {"required_last": ts("2021-03-08 00:00"), "window_start": ts("2021-03-01 00:00")}
+        out = pbs.funding_integrity({"DUSDT": dead}, funding, **kwargs)
+        self.assertEqual(out["active_symbols"], 0)
+        self.assertIn("DUSDT", out["ended_in_final_week"])
+
     def test_non_finite_funding_is_an_error_never_zero(self):
         bad = funding_frame(["2021-03-01 16:00"], [np.nan])
         with self.assertRaises(pbs.PerpBasisError):
