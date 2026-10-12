@@ -56,6 +56,9 @@
 - Search v2 template (`config/strategy_search_v2.json`): null-consistent deflated Sharpe (`review_methods.deflated_sharpe_null_consistent`); v1 not rescored. Forward watch `turn-of-month-forward-v1` (SPY, start 2026-10-13, review 365d, descriptive) in the blend workflow.
 - Bots-report improvements (2026-10-12): Hyperliquid vault daily panel collector (`hyperliquid_vaults.py`, collection only; scheduled via PR #146 with liquidation flow), truncation-invariance check (`truncation_check.py`, tests/test_truncation_invariance.py), paper-account fill-realism scenarios (`paper_fill_scenarios.py`, descriptive, in the blend workflow).
 - FINDING (open, not fixed: frozen-watch code): `multi_premia_human_forward._xs_weights` (lines 41-44) requires the next day's open to mark a coin tradable: latest day's S2/S3 weights are 0 (display only; replay recomputes) and historical books skip coins that delist the next day (one day of future listing knowledge, slightly flattering backtests). Fix in any successor version.
+- Vault persistence study pre-registered (`config/hyperliquid_vault_persistence_v1.json`, 30d formation/holding terciles, single look after ~7 cycles, ~2027-05).
+- Forward drawdown envelopes (`research/forward_envelopes/envelopes_v1.json`, blend S4 + trend core, as-backtested and zero-edge bands, shown on the dashboard; blend's as-backtested band is optimistic because its dev series used Binance funding).
+- Blend capacity (`research/capacity/blend_capacity_v1.md`): square-root impact (Y=1, MEXC volume) eats 25/50/100% of an assumed 10%/yr edge at ~$0.45M/$1.8M/$7.2M; small-cap coins (AKE, NIL, RARE, PHA, LSK) dominate impact.
 - Human execution: CET 09/15/21 timing costs little; market > limit; tuning grids are noise.
 - Canonical accounting: v2 frozen; v3 (fixed quantity) and v3.1 (+funding) for new work.
 - Trend bot (`trend_bot.py`, paper only): parked by user.

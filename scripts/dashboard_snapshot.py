@@ -83,6 +83,20 @@ def cumulative(series: dict[str, float], keep: int = 400) -> list[list]:
     return out
 
 
+def envelope_position(watch_id, daily: dict) -> dict | None:
+    path = pathlib.Path("research/forward_envelopes/envelopes_v1.json")
+    if watch_id not in ("multi-premia-blend-v1", "crypto-trend-core-v1") or not path.exists() or not daily:
+        return None
+    import pandas as pd
+
+    from orderflow_edge_lab.drawdown_envelopes import position_in_envelope
+    w = json.loads(path.read_text(encoding="utf-8"))["watches"].get(watch_id)
+    if not w:
+        return None
+    rets = [float(v) for _, v in sorted(daily.items())]
+    return {name: position_in_envelope(rets, pd.DataFrame(v)) for name, v in w["variants"].items()}
+
+
 def watch_entry(spec, cache: dict[int, pathlib.Path]) -> dict:
     wf, fname, name, group, primary, horizon = spec
     e = {"id": wf.removesuffix(".yml") + ("" if fname == "report.json" else "-" + fname.removesuffix("_report.json")), "name": name, "group": group,
@@ -121,6 +135,12 @@ def watch_entry(spec, cache: dict[int, pathlib.Path]) -> dict:
                            for i, s in enumerate(r["strategies"])} if isinstance(r["strategies"], list) else {}
     else:
         e["days"] = (books.get(primary) or {}).get("days") or 0
+    try:  # descriptive drawdown envelope; guarded so a missing file or bad series never breaks the snapshot
+        env = envelope_position(e.get("watch_id"), (r.get("daily_returns") or {}).get(primary) or {})
+        if env:
+            e["envelope"] = env
+    except Exception:
+        pass
     if "latest_book" in r:
         e["latest_book"] = r["latest_book"]
     return e
