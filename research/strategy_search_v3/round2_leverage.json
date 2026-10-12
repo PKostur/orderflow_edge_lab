@@ -1,0 +1,125 @@
+{
+  "book_diagnostics": {
+    "dropped_unusable_exit": 0,
+    "entries": 1459
+  },
+  "claims": {
+    "live_trading_authorized": false,
+    "orders_sent": false,
+    "strategy_promotion_authorized": false
+  },
+  "gate_verdict_file": "round2_results.json",
+  "generated_utc": "2026-10-12T18:42:49.612487+00:00",
+  "id": "V3R2C1_liquidation_cascade_reversal",
+  "leverage_assessment": {
+    "config": {
+      "horizon_days": 365,
+      "liquidation_fee_basis": "fraction of notional (L*|w|) on top of the lost margin |w|",
+      "liquidation_fee_rate": 0.005,
+      "maintenance_margin_rate": 0.005,
+      "mean_block_days": 10,
+      "paths": 5000,
+      "ruin_fraction": 0.5,
+      "seed": 20261012
+    },
+    "levels": {
+      "1": {
+        "daily_mean": 0.0008427688015766669,
+        "daily_std": 0.009305145995856582,
+        "historical_final_equity": 2.589849316568395,
+        "historical_max_drawdown": -0.13323423981928517,
+        "historical_min_equity": 1.0003735383888157,
+        "historical_ruin": false,
+        "liquidation_threshold": 0.995,
+        "median_final_equity_365d": 1.3311619287221794,
+        "n_liquidations": 0,
+        "n_positions": 695,
+        "p05_final_equity_365d": 1.038688794932828,
+        "ruin_probability": 0.0
+      },
+      "10": {
+        "daily_mean": 0.0039592413060554246,
+        "daily_std": 0.0921161883620773,
+        "historical_final_equity": 1.4606092742442742,
+        "historical_max_drawdown": -0.9835661909140538,
+        "historical_min_equity": 0.31664036505716414,
+        "historical_ruin": true,
+        "liquidation_threshold": 0.095,
+        "median_final_equity_365d": 1.222771848846105,
+        "n_liquidations": 106,
+        "n_positions": 695,
+        "p05_final_equity_365d": 0.05407021345537298,
+        "ruin_probability": 0.5348
+      },
+      "2": {
+        "daily_mean": 0.0016042271081144661,
+        "daily_std": 0.01847594380243619,
+        "historical_final_equity": 5.577865313429378,
+        "historical_max_drawdown": -0.2507192780990798,
+        "historical_min_equity": 1.0007470767776312,
+        "historical_ruin": false,
+        "liquidation_threshold": 0.495,
+        "median_final_equity_365d": 1.6744771696699101,
+        "n_liquidations": 2,
+        "n_positions": 695,
+        "p05_final_equity_365d": 1.052607422885461,
+        "ruin_probability": 0.0
+      },
+      "20": {
+        "daily_mean": 0.0025367194453058046,
+        "daily_std": 0.16716269106200837,
+        "historical_final_equity": 7.785970687538982e-06,
+        "historical_max_drawdown": -0.9999994558929728,
+        "historical_min_equity": 7.492320898366365e-06,
+        "historical_ruin": true,
+        "liquidation_threshold": 0.045000000000000005,
+        "median_final_equity_365d": 0.0387082749885956,
+        "n_liquidations": 297,
+        "n_positions": 695,
+        "p05_final_equity_365d": 5.8481083645610835e-05,
+        "ruin_probability": 0.9182
+      },
+      "3": {
+        "daily_mean": 0.0025356384880761665,
+        "daily_std": 0.028689037031625616,
+        "historical_final_equity": 13.1983722351545,
+        "historical_max_drawdown": -0.35799572932027124,
+        "historical_min_equity": 1.001120615166447,
+        "historical_ruin": false,
+        "liquidation_threshold": 0.3283333333333333,
+        "median_final_equity_365d": 2.170651528584567,
+        "n_liquidations": 5,
+        "n_positions": 695,
+        "p05_final_equity_365d": 1.0712843280135926,
+        "ruin_probability": 0.0006
+      },
+      "5": {
+        "daily_mean": 0.004013759475432018,
+        "daily_std": 0.044045095155197236,
+        "historical_final_equity": 43.07558251994185,
+        "historical_max_drawdown": -0.5309904228117759,
+        "historical_min_equity": 1.0018676919440783,
+        "historical_ruin": false,
+        "liquidation_threshold": 0.195,
+        "median_final_equity_365d": 3.121820370704544,
+        "n_liquidations": 16,
+        "n_positions": 695,
+        "p05_final_equity_365d": 1.0458242432293703,
+        "ruin_probability": 0.016
+      }
+    },
+    "mark_bars_in_windows": 16680,
+    "max_adverse_excursion": 0.7357926089141446,
+    "max_safe_leverage": 1,
+    "perp_fallback_bars_in_windows": 0,
+    "positions_using_perp_fallback_bars": 0,
+    "positions_without_any_bars": 0,
+    "positions_without_mark_bars": 0,
+    "sample": "validation 2023-07-01 .. 2026-09-30",
+    "stamping": "P&L and costs stamped at the position exit time (daily returns by exit day)"
+  },
+  "promising_prospect": false,
+  "round": 2,
+  "schema_version": 1,
+  "search_id": "strategy-search-v3-leveraged"
+}
