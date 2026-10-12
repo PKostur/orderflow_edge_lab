@@ -99,8 +99,13 @@ class Guards(unittest.TestCase):
     def test_default_paths_point_at_the_registered_files(self):
         self.assertTrue((ROOT / "config" / "strategy_search_v3_leveraged.json").exists())
         self.assertTrue((ROOT / "config" / "strategy_search_v3_round1.json").exists())
-        self.assertFalse((ROOT / "research" / "strategy_search_v3" / "round1_results.json").exists(),
-                         "the single look must not have been taken by a test")
+        # the real single look was taken on 2026-10-12 (commit 21be091); tests must never have written it
+        results = ROOT / "research" / "strategy_search_v3" / "round1_results.json"
+        if results.exists():
+            import json
+            candidate = json.loads(results.read_text(encoding="utf-8"))["candidates"][0]
+            self.assertEqual(candidate["id"], "V3R1C1_logbasis_quintile_8h")
+            self.assertFalse(candidate["gates"]["G3"]["pass"])  # the recorded real verdict, not a test's
 
 
 class EndToEnd(unittest.TestCase):
