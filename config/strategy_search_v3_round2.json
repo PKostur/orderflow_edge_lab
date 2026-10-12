@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "search_id": "strategy-search-v3-leveraged",
+  "round": 2,
+  "status": "DECLARED_BEFORE_TESTING",
+  "registration_note": "Declared 2026-10-12 under amendment 1, before any open-interest data was downloaded and before any event return was computed. Trials after this round: v1 9 + v3 2 = 11 cumulative.",
+  "candidates": [
+    {"id": "V3R2C1_liquidation_cascade_reversal",
+     "label": "repo hypothesis, not published",
+     "motivation": "Forced liquidations sell (buy) regardless of value; when a large price move coincides with a large drop in open interest, positions were closed by force rather than by informed flow, so part of the move should reverse over the following day. Literature (BitMEX liquidation studies; liquidation-cascade preprints) documents cascades and recoveries but no tested trading rule.",
+     "universe": "Binance USDT-M perpetuals ranked by mean daily perp quote volume over 2020-10-01..2020-12-31 (computed from 1h klines before the development sample); the top 30 that also have Binance futures metrics files from 2021-01-01; list fixed at that rank, delisted contracts kept",
+     "data": "Binance futures 1h klines (perp close, quote volume), 1h mark-price klines, fundingRate, and futures/um/daily/metrics 5-minute sum_open_interest (value in contracts or coin as published; use the same field throughout)",
+     "signal": "at each 1h bar close t: r4 = close_t / close_(t-4h) - 1; oi4 = OI_t / OI_(t-4h) - 1 with OI_x = last 5-minute sum_open_interest at or before x; LONG event if r4 <= -0.05 and oi4 <= -0.05; SHORT event if r4 >= +0.05 and oi4 <= -0.05",
+     "trade": "enter at close_t in the event direction, exit at the close 24h later; one open position per contract (events while in a position are ignored); notional per trade = 10% of account equity at entry; at most 10 concurrent positions (if more qualify at the same t, take the largest |r4|)",
+     "returns": "perp price return + realized funding over (entry, exit], costs 14 bps round trip per trade; daily account returns aggregated by exit day",
+     "development": ["2021-01-01", "2023-06-30"],
+     "validation": ["2023-07-01", "2026-09-30"],
+     "perturb": {"price_threshold": [0.04, 0.06], "oi_threshold": [0.04, 0.06], "hold_hours": [19, 29], "lookback_hours": [3, 5]},
+     "null": "event null: each real trade is replaced by a trade in the same contract, same direction and same calendar month at a uniformly random 1h close (999 draws, seed 20261012); statistic = mean per-trade gross return",
+     "annualization": "daily account returns, 365"}
+  ],
+  "trials_after_round": "11 cumulative (N for G5)"
+}
