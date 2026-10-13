@@ -304,6 +304,21 @@
         "research/near_miss_forward/reference_daily_v1.json"
       ],
       "forward_workflow": "multi-premia-blend-v1.yml"
+    },
+    {
+      "watch_id": "tradfi-perps-forward-v1",
+      "priority": 19,
+      "family": "tradfi_perps_independent_breadth",
+      "prospective_start_utc": "2026-10-19T00:00:00Z",
+      "review_gate": {
+        "type": "calendar_days",
+        "minimum_days": 365
+      },
+      "canonical_artifacts": [
+        "config/tradfi_perps_forward_v1.json",
+        "research/tradfi_perps_forward/universe_v1.json"
+      ],
+      "forward_workflow": "multi-premia-blend-v1.yml"
     }
   ]
 }

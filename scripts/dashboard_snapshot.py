@@ -36,6 +36,7 @@ WATCHES = [
     ("multi-premia-blend-v1.yml", "fast_gates_report.json", "Fast decision gates (implementation, breakage alarm, venues)", "Lead candidate", None, 60),
     ("multi-premia-blend-v1.yml", "tom_forward_report.json", "Turn-of-month SPY (search-v1 near miss)", "Forward-only candidates", "tom", 365),
     ("multi-premia-blend-v1.yml", "near_miss_forward_report.json", "Near-miss paper (cascade/CTREND/trend 2x)", "Forward-only candidates", "cascade_1x", 180),
+    ("multi-premia-blend-v1.yml", "tradfi_perps_forward_report.json", "TradFi perps (momentum / weekend fade)", "Forward-only candidates", "B2_weekend_fade_1x", 365),
     ("canonical-v3-forward-companion-v1.yml", "report.json", "Canonical v3 companion", "Accounting", None, None),
 ]
 
