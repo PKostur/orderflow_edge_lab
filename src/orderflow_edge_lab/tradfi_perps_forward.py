@@ -37,7 +37,6 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
 from hashlib import sha256
-import io
 import json
 from pathlib import Path
 import sys
@@ -57,7 +56,7 @@ from orderflow_edge_lab import binance_spot_archive as bsa
 from orderflow_edge_lab import leverage_sim as lev
 from orderflow_edge_lab import liquidation_cascade as lc
 from orderflow_edge_lab import near_miss_forward as nmf
-from orderflow_edge_lab.trend_portfolio_forward import newey_west_t, summarize
+from orderflow_edge_lab.trend_portfolio_forward import summarize
 
 WATCH_ID = "tradfi-perps-forward-v1"
 DEFAULT_CONFIG = "config/tradfi_perps_forward_v1.json"
