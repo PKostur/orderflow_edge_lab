@@ -589,7 +589,9 @@ class RunnerTests(unittest.TestCase):
     def run_main(self, **extra):
         argv = ["--out-dir", str(self.out), "--universe", str(self.universe),
                 "--data-dir-primary", str(self.root / "p"), "--data-dir-consistency", str(self.root / "c")]
-        with mock.patch.object(self.runner, "dirty_files", return_value=extra.get("dirty", [])):
+        # isolate from the real single-look sentinel (the committed result lives at the default OUT_DIR)
+        with mock.patch.object(self.runner, "dirty_files", return_value=extra.get("dirty", [])), \
+                mock.patch.object(self.runner, "OUT_DIR", self.root / "default_out"):
             return self.runner.main(argv)
 
     def test_refuses_when_a_result_exists(self):
