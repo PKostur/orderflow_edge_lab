@@ -22,6 +22,10 @@ on:
       - "research/fast_gates/venue_replication.json"
       - "src/orderflow_edge_lab/tom_forward.py"
       - "config/turn_of_month_forward_v1.json"
+      - "src/orderflow_edge_lab/near_miss_forward.py"
+      - "config/near_miss_forward_v1.json"
+      - "research/near_miss_forward/reference_daily_v1.json"
+      - "tests/test_near_miss_forward.py"
       - ".github/workflows/multi-premia-blend-v1.yml"
 
 permissions:
@@ -91,4 +95,64 @@ jobs:
             artifacts/multi_premia_blend/paper_fill_scenarios.json
             artifacts/multi_premia_blend/fast_gates_report.json
             artifacts/multi_premia_blend/tom_forward_report.json
+          if-no-files-found: error
+
+  near_miss:
+    # near-miss-forward-v1: descriptive paper watch (cascade 1x/2x, CTREND 1x, trend core 1x/2x); data.binance.vision only
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e ".[research]"
+      - name: Tests
+        run: python -m unittest tests.test_near_miss_forward tests.test_liquidation_cascade tests.test_leverage_sim -v
+      - name: Archive cache key (ISO week + UTC day)
+        id: cachekey
+        run: |
+          echo "week=$(date -u +%G-W%V)" >> "$GITHUB_OUTPUT"
+          echo "day=$(date -u +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
+      - name: Restore the archive caches (incremental downloads)
+        id: restore
+        uses: actions/cache/restore@v4
+        with:
+          path: nm_cache
+          key: near-miss-archive-${{ steps.cachekey.outputs.week }}-${{ steps.cachekey.outputs.day }}
+          restore-keys: |
+            near-miss-archive-${{ steps.cachekey.outputs.week }}-
+            near-miss-archive-
+      - name: Run near-miss forward watch (near-miss-forward-v1)
+        timeout-minutes: 75  # leaves time for the cache save below after a slow cold run
+        run: python -m orderflow_edge_lab.near_miss_forward --cache-root nm_cache --output artifacts/multi_premia_blend/near_miss_forward_report.json
+      - name: Save the archive caches (also after a failed or timed-out run)
+        if: always() && steps.restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: nm_cache
+          key: near-miss-archive-${{ steps.cachekey.outputs.week }}-${{ steps.cachekey.outputs.day }}
+      - name: Enforce frozen boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open("artifacts/multi_premia_blend/near_miss_forward_report.json",encoding="utf-8"))
+          if r["prospective_start_utc"] != "2026-10-15T00:00:00+00:00":
+              raise SystemExit("prospective start changed")
+          for key, flag in r["claims"].items():
+              if key.endswith("_authorized") and flag:
+                  raise SystemExit(f"watch exceeded authority: {key}")
+          if r["claims"].get("orders_sent"):
+              raise SystemExit("orders_sent")
+          stamps = [t for series in r.get("daily_returns", {}).values() for t in series]
+          if any(t <= r["prospective_start_utc"] for t in stamps):
+              raise SystemExit("pre-start day scored")
+          print(json.dumps({"report":"near_miss_forward_report.json","status":r["status"],"data_end":r["data_end_utc"],"days":{k:v["days"] for k,v in r["forward"].items()}}))
+          PY
+      - name: Upload
+        uses: actions/upload-artifact@v6
+        with:
+          name: near-miss-forward-v1
+          path: artifacts/multi_premia_blend/near_miss_forward_report.json
           if-no-files-found: error

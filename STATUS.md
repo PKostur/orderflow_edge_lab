@@ -79,6 +79,7 @@ _Generated 2026-10-12T22:40:16Z from `config/prospective_review_clock_v1.json` a
 | `multi-premia-human-v1-forward` | `config/multi_premia_blend_v1.json` | 2026-09-29 | 180 calendar days | **2027-03-28** | `COLLECTING` | 12 |
 | `zoo-mirror-forward-v1` | `config/zoo_mirror_forward_v1.json` | 2026-10-03 | 180 calendar days | **2027-04-01** | `COLLECTING` | 8 |
 | `paper-account-blend-v1` | `config/paper_account_blend_v1.json` | 2026-10-05 | 180 calendar days | **2027-04-03** | `COLLECTING` | 6 |
+| `near-miss-forward-v1` | `config/near_miss_forward_v1.json` | 2026-10-15 | 180 calendar days | **2027-04-13** | `PRE_START` | 0 |
 | `news-sentiment-v1-forward` | `config/news_sentiment_v1.json` | 2026-11-01 | 180 calendar days | **2027-04-30** | `PRE_START` | 0 |
 | `universal-cross-asset-trend-forward-v1` | `config/universal_cross_asset_trend_forward_v1.json` | 2026-09-28 | 365 calendar days | **2027-09-28** | `COLLECTING` | 13 |
 | `universal-cross-asset-trend-invvol-forward-v1` | `config/universal_cross_asset_trend_invvol_forward_v1.json` | 2026-09-28 | 365 calendar days | **2027-09-28** | `COLLECTING` | 13 |

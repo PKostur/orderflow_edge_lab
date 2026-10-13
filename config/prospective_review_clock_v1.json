@@ -289,6 +289,21 @@
         "config/turn_of_month_forward_v1.json"
       ],
       "forward_workflow": "multi-premia-blend-v1.yml"
+    },
+    {
+      "watch_id": "near-miss-forward-v1",
+      "priority": 18,
+      "family": "regime_bound_near_misses",
+      "prospective_start_utc": "2026-10-15T00:00:00Z",
+      "review_gate": {
+        "type": "calendar_days",
+        "minimum_days": 180
+      },
+      "canonical_artifacts": [
+        "config/near_miss_forward_v1.json",
+        "research/near_miss_forward/reference_daily_v1.json"
+      ],
+      "forward_workflow": "multi-premia-blend-v1.yml"
     }
   ]
 }
