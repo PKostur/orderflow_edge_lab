@@ -80,6 +80,7 @@ _Generated 2026-10-13T21:38:06Z from `config/prospective_review_clock_v1.json` a
 | `zoo-mirror-forward-v1` | `config/zoo_mirror_forward_v1.json` | 2026-10-03 | 180 calendar days | **2027-04-01** | `COLLECTING` | 10 |
 | `paper-account-blend-v1` | `config/paper_account_blend_v1.json` | 2026-10-05 | 180 calendar days | **2027-04-03** | `COLLECTING` | 7 |
 | `near-miss-forward-v1` | `config/near_miss_forward_v1.json` | 2026-10-15 | 180 calendar days | **2027-04-13** | `PRE_START` | 0 |
+| `fade24-forward-v1` | `config/fade24_forward_v1.json` | 2026-10-17 | 180 calendar days | **2027-04-15** | `PRE_START` | 0 |
 | `news-sentiment-v1-forward` | `config/news_sentiment_v1.json` | 2026-11-01 | 180 calendar days | **2027-04-30** | `PRE_START` | 0 |
 | `universal-cross-asset-trend-forward-v1` | `config/universal_cross_asset_trend_forward_v1.json` | 2026-09-28 | 365 calendar days | **2027-09-28** | `COLLECTING` | 15 |
 | `universal-cross-asset-trend-invvol-forward-v1` | `config/universal_cross_asset_trend_invvol_forward_v1.json` | 2026-09-28 | 365 calendar days | **2027-09-28** | `COLLECTING` | 15 |

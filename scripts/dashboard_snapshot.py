@@ -36,6 +36,7 @@ WATCHES = [
     ("multi-premia-blend-v1.yml", "fast_gates_report.json", "Fast decision gates (implementation, breakage alarm, venues)", "Lead candidate", None, 60),
     ("multi-premia-blend-v1.yml", "tom_forward_report.json", "Turn-of-month SPY (search-v1 near miss)", "Forward-only candidates", "tom", 365),
     ("multi-premia-blend-v1.yml", "near_miss_forward_report.json", "Near-miss paper (cascade/CTREND/trend 2x)", "Forward-only candidates", "cascade_1x", 180),
+    ("multi-premia-blend-v1.yml", "fade24_forward_report.json", "Fade-24h bracket 2x (paper)", "Forward-only candidates", "fade24_F1", 180),
     ("multi-premia-blend-v1.yml", "tradfi_perps_forward_report.json", "TradFi perps (momentum / weekend fade)", "Forward-only candidates", "B2_weekend_fade_1x", 365),
     ("canonical-v3-forward-companion-v1.yml", "report.json", "Canonical v3 companion", "Accounting", None, None),
 ]
@@ -131,6 +132,12 @@ def watch_entry(spec, cache: dict[int, pathlib.Path]) -> dict:
                     "cum": s.get("cumulative_return"), "mdd": s.get("max_drawdown"), "mean_bps": s.get("mean_daily_bps"),
                     "series": cumulative((r.get("daily_returns") or {}).get(k) or {})}
     e["books"] = books
+    until = r.get("interim_biased_until")
+    if until:  # interim stats favour fast take-profits until this instant (descriptive flag only)
+        e["interim_biased_until"] = until
+        e["interim_biased"] = bool(r.get("as_of_utc") and r["as_of_utc"] < until)
+    if r.get("scored_day_digests") is not None:
+        e["scored_day_digests"] = r["scored_day_digests"]
     if "strategies" in r:
         e["days"] = r.get("calendar_days_elapsed")
         e["strategies"] = {str(s.get("audit_id") or s.get("strategy_id") or i): {kk: vv for kk, vv in s.items() if isinstance(vv, (int, float, str))}
@@ -148,12 +155,32 @@ def watch_entry(spec, cache: dict[int, pathlib.Path]) -> dict:
     return e
 
 
+def track_revisions(items: list[dict], out: pathlib.Path, now: str) -> None:
+    """Compare fade24 scored-day digests with the previous snapshot's (stored next to the dashboard output) and expose
+    ``revised_days`` on the row; every revision is appended to a cumulative log file."""
+    from orderflow_edge_lab.fade24_forward import compare_digests
+    store = out / "fade24_digests.json"
+    previous = json.loads(store.read_text(encoding="utf-8")) if store.exists() else None
+    for e in items:
+        digests = e.pop("scored_day_digests", None)
+        if digests is None:
+            continue
+        revised = compare_digests(previous, digests)
+        e["revised_days"] = revised
+        flat = [f"{b}:{d}" for b, days in revised.items() for d in days]
+        if flat:
+            with (out / "fade24_revision_log.jsonl").open("a", encoding="utf-8") as fh:
+                fh.write(json.dumps({"detected_utc": now, "run_id": e.get("run_id"), "revised": revised}) + chr(10))
+        store.write_text(json.dumps(digests, allow_nan=False), encoding="utf-8")
+
+
 def main(out_dir: str = "artifacts/dashboard") -> int:
     out = pathlib.Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     now = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     cache: dict[int, pathlib.Path] = {}
     watches = [watch_entry(s, cache) for s in WATCHES]
+    track_revisions([w for w in watches if w.get("watch_id") == "fade24-forward-v1"], out, now)
     runs_raw = json.loads(gh("run", "list", "-L", "150", "--json", "workflowName,headBranch,createdAt,conclusion,status,url,event"))
     latest: dict[str, dict] = {}
     for r in runs_raw:
