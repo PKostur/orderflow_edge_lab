@@ -1,0 +1,151 @@
+{
+  "study_id": "PSR18-PUBLIC-FORCE-INDEX-STATE-BATCH12",
+  "version": 1,
+  "candidates": [
+    "ForceIndex8hCashSourceIntent"
+  ],
+  "source_sha256": {
+    "ForceIndex8hCashSourceIntent": "2e55b0a72012cf800ad6fa4f3729bc3a1d41270943e96420ef4155e3e55b2c04"
+  },
+  "source_manifest": "artifacts/minute_continuity_20261010/source_manifest.json",
+  "source_manifest_sha256": "3fcadef5dea9086425111b12b74f9df84f86b2d0932ca918871fc47b66f7179b",
+  "quality_csv": "artifacts/minute_continuity_20261010/daily_quality.csv",
+  "quality_csv_sha256": "69403a31a4f7f5c234ebbca98e32ba9b2919253f453515c76da964f93e10ed29",
+  "source_policy": "Longest shared complete-day segment chosen solely by previously audited quality; no repairs, imputation or source replacement.",
+  "data_start": "2023-04-01T00:00:00Z",
+  "data_end_exclusive": "2026-10-01T00:00:00Z",
+  "signal_minutes": 480,
+  "execution_minutes": 1,
+  "warmup_bars": 240,
+  "symbols": [
+    "ETHUSDT",
+    "SOLUSDT",
+    "LINKUSDT"
+  ],
+  "benchmark": "BTCUSDT",
+  "episode_initial_cash_per_symbol": 10000,
+  "max_hold_bars": null,
+  "baseline_round_trip_bps": 40,
+  "cost_cases_bps": [
+    20,
+    40,
+    60,
+    80
+  ],
+  "cost_policy": "Each side charges half nominal roundtrip bps on actual modeled notional, including fee plus assumed spread/slippage; reserve in fixed signal-close quantity.",
+  "gap_target_models": [
+    "conservative_limit",
+    "opening_price_improvement"
+  ],
+  "touch_policy": "No source protection; no invented stop/target/timeout. Both registered gap labels intentionally identical, onehistory. Shared no-pruning/failclosed caps retained.",
+  "max_symbol_histories": 64,
+  "max_joint_histories": 4096,
+  "entry_policy": "Three independent10000USDT sleeves. Decimal(str(cash/(signalclose*(1+sidecost)))) floor8; fixed quantity before nextminuteOPEN, all-or-reject without resize. HeldBUY countedignored before SELL; no sameboundaryreentry. No target/stop/timeout/trailing/short/borrow/pyramid/orders.",
+  "clock_policy": "Use completed8h features, action at next1mOPEN. Fixedwarmup240. No day/session reset or timeframe-derived parameter changes.",
+  "endpoint_policy": "Completed events use modeled exit reference; still-held events retain statusCENSORED_MTM and cutoff close mark with hypothetical liquidation burden, never a fictitious order or completed trade.",
+  "principal_return_estimand": "All admitted entry-to-exit-or-fixed-cutoff net reference returns; completed-only means separately descriptive. Per-unit return=(exit/entry)*(1-sidecost)/(1+sidecost)-1.",
+  "funded_btc_benchmark": "At each accepted alt entry allocate the same alt notional/preentry-cash fraction from a separate BTC cash account. Exact BTC open entry; open exit uses BTCopen, intraminute exit uses BTCminute low/high bounds; own costs and remaining inventory; cutoff uses known final close.",
+  "portfolio_policy": "Equal three10000USDT cash sleeves; source fullbalance illustrative intent with explicit fee-reserved fixedsignal-close quantity. FundedBTC owncash; gates unchanged.",
+  "seed": 20261022,
+  "bootstrap_replicates": 2000,
+  "bootstrap_calendar_block_weeks": 4,
+  "bootstrap_policy": "Moving contiguous4calendar-week blocks incl zero-event weeks; retain fixed alpha0.025,97.5% two-sided intervals from prior comparator. One newly registered cell; conservative fixed carryover, not two cells or global repeated-search inference.",
+  "placebo_replicates": 500,
+  "placebo_policy": "500 eligibleentryweek rawBUY-state randomizations preservingweekflagcount; same originalSELL-state exits, ownacceptedentries/quantities/cash/durations. No observed endogenous lengths reused.",
+  "lag_control_bars": 7,
+  "lag_policy": "Shift rawBUY-state flags7bars after zeroingprewarmup; same sourceSELL cash exit and causalengine.",
+  "gates": {
+    "min_completed_events": 100,
+    "min_entry_weeks": 52,
+    "min_all_admitted_net40_bps": 5,
+    "require_all_admitted_net80_positive": true,
+    "require_all_symbols_net40_positive": true,
+    "min_positive_year_fraction": 0.6666666666666666,
+    "max_portfolio_drawdown_pct": 30,
+    "require_leave_one_entry_week_out_net40_positive": true,
+    "require_net40_descriptive_lower_ci_positive": true,
+    "require_btc_excess40_descriptive_lower_ci_positive": true,
+    "max_placebo_at_least_observed_fraction": 0.05,
+    "require_no_history_overflow": true
+  },
+  "diagnostics": [
+    "completed/pending/unexecuted/overlap/invalid/cash rejection accounting",
+    "all-admission and completed-only returns/PF",
+    "gross MFE/MAE uncertainty",
+    "calendar entry weeks and4week bootstrap",
+    "fixed UTC sessions and overlap memberships",
+    "symbol/year/month/weekday/hour and causalBTC30bar state",
+    "leave-week and leave-symbol sensitivity",
+    "40/80 costs and20/60 cases",
+    "funded BTC wealth and same-exit reference bounds",
+    "full branch and gap-model sensitivity",
+    "500 randomized-entry controls and7bar lag control"
+  ],
+  "claim": "Spent historical hypothetical development only; SCREEN_SURVIVOR permits separate future preregistration, never viable/untouched/positive-edge/deployment claim.",
+  "future_confirmation": "User completion requires a separate immutable and adequately powered future-only protocol, calibrated costs/quotes/execution, controls and approval-bound paper reliability, frozen before observations start. No viable candidate until that confirmation passes.",
+  "bollinger_bands_excluded": true,
+  "frozen_lanes_modified": false,
+  "authorizes_orders": false,
+  "retuning_permitted": false,
+  "minimum_preexisting_trading_cells": 24,
+  "minimum_preexisting_signal_model_cells": 25,
+  "new_registered_trading_cells": 1,
+  "minimum_registered_trading_cells_after_freeze": 25,
+  "minimum_registered_signal_model_cells_after_freeze": 26,
+  "source_urls": {
+    "ForceIndex8hCashSourceIntent": "https://github.com/cinar/indicatorts/blob/c6bfb623b2ccbac2c536d60740e8c458e4efa7cd/examples/volume/forceIndexStrategy.ts"
+  },
+  "runtime": {
+    "python": "3.13.14",
+    "numpy": "2.2.4",
+    "pandas": "2.2.3",
+    "platform": "win32",
+    "precision": "float64 scalar operation order"
+  },
+  "dependency_hash_policy": "Python dependency bytes normalize CRLF to LF solely for cross-platform checkout; all data/audit fingerprints remain exact bytes",
+  "dependency_source_sha256": {
+    "src/orderflow_edge_lab/public_protective_batch5.py": "ea1a2f5564a4261fe3c53e4d3f584b782913222f43228f0843c9d94917eab6d8",
+    "src/orderflow_edge_lab/protective_minute.py": "32345cbe229e734129f063e161f77989c3e2d0facb604dade40b469de31f03bf",
+    "src/orderflow_edge_lab/public_strategy_completion.py": "2a5327410bb5b7acef4dc6959d95b8ea309df0f0cf9f6e692c946b7500a1719a"
+  },
+  "source_mechanics_audit_sha256": {
+    "artifacts/public_force_index_batch12_registration_20261011/ForceIndex-source-native-math-prerequisite.json": "81ac9d3f31f7b55826b7c1d9fa1c6a3dc7552bc1286246c9d167ea5c47e5a761",
+    "artifacts/public_force_index_batch12_registration_20261011/Next-ForceIndex-source-readiness-review.json": "a5a02b13137d5d2c4a44e92ed6f3dacbb290b89462dc0323f97edd16e48ebc7d",
+    "artifacts/public_force_index_batch12_registration_20261011/ForceIndex-batch12-draft-mechanics-review.json": "c770cb0157a4f3d659304562f9a3d50c307446bde9b23f7f110570c23d21f3fc",
+    "artifacts/public_force_index_batch12_registration_20261011/Post-NVI-public-source-readiness.json": "baf42d70a10ebb589a8f30768b849b40cb17531a21e46945d0fac66770b592ce",
+    "artifacts/public_force_index_batch12_registration_20261011/fi-synthetic-input.json": "9bc859cba953e23f4a1b778c857c020609590f0512f371ed2b17584a34b3077b",
+    "artifacts/public_force_index_batch12_registration_20261011/fi-native-synthetic-output.json": "9534ffdb67895c53b79a7a4f81ed3ffd183cc654ea9ca7235f32071e0528b004",
+    "artifacts/public_force_index_batch12_registration_20261011/typescript-5.4.5-receipt.json": "9d4a2c911bda511cd99292daa80b9275849043d11a05229e07872e486a5a8339",
+    "artifacts/public_force_index_batch12_registration_20261011/execute_fi_source.cjs": "7c8a12ea9cab3f04a4181405dfa6525f9026d7c0cc201e03d4005bef69dbd14d",
+    "artifacts/public_force_index_batch12_registration_20261011/cinar_examples_volume_forceIndexStrategy.ts": "2e55b0a72012cf800ad6fa4f3729bc3a1d41270943e96420ef4155e3e55b2c04",
+    "artifacts/public_force_index_batch12_registration_20261011/cinar_src_indicator_volume_forceIndex.ts": "4abcc23342773d5e09391123f28f019ec450cb0c87169ea12a232767cd23770b",
+    "artifacts/public_force_index_batch12_registration_20261011/cinar_src_indicator_trend_exponentialMovingAverage.ts": "f794e26c447f2b9ec3b9243b09bf530b735429717b884149d105782220febed1",
+    "artifacts/public_force_index_batch12_registration_20261011/cinar_src_helper_numArray.ts": "a16e23dacab0aa0160a74c05ea1403adbed36778e6d63e66bc542ab141ea0446",
+    "artifacts/public_force_index_batch12_registration_20261011/cinar_src_strategy_action.ts": "db972013d4b3a731eec1277f67a4b2cb1a963c7d6016b00611986f1abc109dad",
+    "artifacts/public_force_index_batch12_registration_20261011/cinar_src_strategy_asset.ts": "4547c826d6071a0ac34c150f0ef6e089d7ed59bceef42485ed748dd9c1010ebb",
+    "artifacts/public_force_index_batch12_registration_20261011/cinar_LICENSE.md": "f6a6af984fc733520b012f8d0c37c049c02a1d1af7b40037ec1b27f8edc820b5"
+  },
+  "family_disclosure": "Volume-weighted smoothed price-difference momentum overlaps earlier trend/volume families. Distinct formula does not prove orthogonality. No performance-based source selection.",
+  "native_runtime_status": "Original pinned TypeScript ForceIndex/actions independently compared on8985synthetic rows,10prefixes/5futuremutations. Source math only, not full deployedbot/nativeSpot parity. Mandatory independent committed evaluator/config review before rawload.",
+  "required_pre_outcome_review": {
+    "path": "artifacts/public_force_index_batch12_registration_20261011/pre-outcome-review.json",
+    "required_status": "PASS_PRE_OUTCOME_INDEPENDENT_REVIEW_WITH_DECLARED_PARITY_LIMITS",
+    "must_bind": [
+      "evaluator_exact_sha256",
+      "canonical_config_sha256"
+    ],
+    "before_any_raw_market_load": true
+  },
+  "source_attribution": "cinar/indicatorts, MITcopyright2022-2026TheIndicatorAuthors. Source is explicitly educational/research example, not a deployedbot. No publisherprofitability claim used; explicit fundedcash execution adaptation.",
+  "force_index": {
+    "period": 13,
+    "equity_fraction": 1.0,
+    "volume_units": "Binance Spot base-asset volume summed across complete480minute bars.",
+    "history_anchor": "2023-04-01T00:00:00Z initialize once and carry full history; no rolling240 or day/admission/year reset.",
+    "formula": "Raw(currentClose-prevClose)*currentVolume; firstprior=self and raw0. EMA13 alpha2/14,beta1-alpha,firstseedraw0,currentRaw*alpha+previousEMA*beta.",
+    "actions": "BUY everyFI>0; SELL everyFI<0; HOLD equality.",
+    "source_accounting": "Educational signal with illustrative same-close cost-free fullbalance intent.",
+    "declared_cash_adapter": "Three independent10000USDT sleeves. Decimal(str(cash/(signalclose*(1+sidecost)))) floor8; fixed quantity before nextminuteOPEN, all-or-reject without resize. HeldBUY countedignored before SELL; no sameboundaryreentry. No target/stop/timeout/trailing/short/borrow/pyramid/orders.",
+    "clock": "Use completed8h features, action at next1mOPEN. Fixedwarmup240. No day/session reset or timeframe-derived parameter changes."
+  }
+}

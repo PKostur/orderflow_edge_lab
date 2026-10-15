@@ -162,3 +162,7 @@ Frozen Supertrend default-intent research and its rejection are recorded in [res
 ## Public NVI state research batch 11
 
 [Design](docs/PUBLIC_NVI_BATCH11_DESIGN_V1.md), [results](docs/PUBLIC_NVI_BATCH11_RESULTS_V1.md), [conditional prospects](docs/PUBLIC_STRATEGY_CONDITIONAL_PROSPECTS_BATCH11_V1.md). Frozen volume-conditioned state rejected: 127 completed trades plus two cutoff marks; both uncertainty intervals and 60.06% drawdown failed. Full lossless evidence, trial ledger and independent accounting review retained. No viable candidate or future confirmation; frozen lanes preserved.
+
+## Public Force Index research batch 12
+
+[Design](docs/PUBLIC_FORCE_INDEX_BATCH12_DESIGN_V1.md), [results](docs/PUBLIC_FORCE_INDEX_BATCH12_RESULTS_V1.md), [conditional prospects](docs/PUBLIC_STRATEGY_CONDITIONAL_PROSPECTS_BATCH12_V1.md). Frozen adaptation rejected:584completed trades plus onecutoff, five gates failed including62.38% drawdown, both uncertainty intervals and randomized-control tail. Full lossless evidence and independent accounting retained. No viable candidate or future confirmation; frozen lanes and current scheduling files preserved.

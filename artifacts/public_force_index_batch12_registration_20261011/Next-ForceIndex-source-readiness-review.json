@@ -1,0 +1,105 @@
+{
+  "kind": "FORCE_INDEX_SOURCE_READINESS_INDEPENDENT_REVIEW",
+  "status": "ACCEPTABLE_FOR_NEW_DECLARED_ADAPTATION_PREREGISTRATION",
+  "blocking_findings": [],
+  "market_outcomes_inspected": false,
+  "market_data_loaded": false,
+  "performance_files_inspected": false,
+  "registered": false,
+  "new_registered_trials": 0,
+  "repository_modified": false,
+  "source_repository": "cinar/indicatorts",
+  "source_commit": "c6bfb623b2ccbac2c536d60740e8c458e4efa7cd",
+  "native_math_artifact": "ForceIndex-source-native-math-prerequisite.json",
+  "native_math_artifact_exact_sha256": "81ac9d3f31f7b55826b7c1d9fa1c6a3dc7552bc1286246c9d167ea5c47e5a761",
+  "source_files_exact_sha256": {
+    "cinar_examples_volume_forceIndexStrategy.ts": "2e55b0a72012cf800ad6fa4f3729bc3a1d41270943e96420ef4155e3e55b2c04",
+    "cinar_src_indicator_volume_forceIndex.ts": "4abcc23342773d5e09391123f28f019ec450cb0c87169ea12a232767cd23770b",
+    "cinar_src_indicator_trend_exponentialMovingAverage.ts": "f794e26c447f2b9ec3b9243b09bf530b735429717b884149d105782220febed1",
+    "cinar_src_helper_numArray.ts": "a16e23dacab0aa0160a74c05ea1403adbed36778e6d63e66bc542ab141ea0446",
+    "cinar_src_strategy_action.ts": "db972013d4b3a731eec1277f67a4b2cb1a963c7d6016b00611986f1abc109dad",
+    "cinar_src_strategy_asset.ts": "4547c826d6071a0ac34c150f0ef6e089d7ed59bceef42485ed748dd9c1010ebb",
+    "typescript-5.4.5.js": "d4eeb6e18a598a21aa0a5c09a52270856e4b23bd31d9c7c60ab80a22b275b07b",
+    "execute_fi_source.cjs": "7c8a12ea9cab3f04a4181405dfa6525f9026d7c0cc201e03d4005bef69dbd14d",
+    "fi-synthetic-input.json": "9bc859cba953e23f4a1b778c857c020609590f0512f371ed2b17584a34b3077b",
+    "fi-native-synthetic-output.json": "9534ffdb67895c53b79a7a4f81ed3ffd183cc654ea9ca7235f32071e0528b004"
+  },
+  "source_license": {
+    "type": "MIT",
+    "copyright": "The Indicator Authors2022-2026",
+    "notice_sha256": "f6a6af984fc733520b012f8d0c37c049c02a1d1af7b40037ec1b27f8edc820b5",
+    "requirement": "Retain license notice for copied substantial source portions."
+  },
+  "validations": {
+    "independent_native_second_execution": true,
+    "independent_scalar_features_actions_exact": true,
+    "fixtures": 22,
+    "rows": 8985,
+    "prefix_checks": 10,
+    "future_mutation_checks": 5,
+    "max_residual": 0.0,
+    "immutable_source_refs": [
+      {
+        "url": "https://raw.githubusercontent.com/cinar/indicatorts/c6bfb623b2ccbac2c536d60740e8c458e4efa7cd/examples/volume/forceIndexStrategy.ts",
+        "sha256": "2e55b0a72012cf800ad6fa4f3729bc3a1d41270943e96420ef4155e3e55b2c04",
+        "remote_exact_match": true
+      },
+      {
+        "url": "https://raw.githubusercontent.com/cinar/indicatorts/c6bfb623b2ccbac2c536d60740e8c458e4efa7cd/src/indicator/volume/forceIndex.ts",
+        "sha256": "4abcc23342773d5e09391123f28f019ec450cb0c87169ea12a232767cd23770b",
+        "remote_exact_match": true
+      }
+    ]
+  },
+  "semantics": [
+    "Default period13. Raw value is (current close minus previous close) times current volume. The first previous close is the first close itself, so raw0=0.",
+    "EMA seed is the first raw value0; alpha=2/(1+13)=2/14 and beta=1-alpha. Each subsequent result is current raw*alpha + prior EMA*beta in that exact binary64 order. No SMA13 seed or undefined startup period.",
+    "BUY whenever smoothed FI>0, SELL whenever FI<0, HOLD equality. Repeated directional states, not zero crossovers. No source threshold magnitude, extra trend filter, target, stop or timeout.",
+    "Volume is used every bar, including equal and increasing volume; this is not NVI volume-rise freezing. Zero volume makes current raw zero but EMA can retain a nonzero prior sign while decaying.",
+    "Indicator uses current completed close and volume plus prior recursive state; no future inputs. No day/session reset. Recursive EMA history must start at a fixed declared retained-data anchor and carry through admission warmup.",
+    "Educational fiStrategy example combines indicator with action enums. Existing applyActions illustration starts cash1, buys all cash and sells all shares at same signal close without fees. It is not an executable broker or deployed exchange bot."
+  ],
+  "runtime_review": {
+    "original_pinned_typescript_executed": true,
+    "independent_native_repeat_exact": true,
+    "independent_scalar_reconstruction_exact": true,
+    "compiler_version": "5.4.5",
+    "compiler_sha256": "d4eeb6e18a598a21aa0a5c09a52270856e4b23bd31d9c7c60ab80a22b275b07b",
+    "compiler_receipt_sha256": "9d4a2c911bda511cd99292daa80b9275849043d11a05229e07872e486a5a8339",
+    "runner_sha256": "7c8a12ea9cab3f04a4181405dfa6525f9026d7c0cc201e03d4005bef69dbd14d",
+    "loader": "Original source is transpiled into CommonJS and executed in a closed, pinned module set. Basename imports resolve uniquely for these modules; unknown imports fail closed.",
+    "fixtures": 22,
+    "rows": 8985,
+    "prefix_checks": 10,
+    "future_mutation_checks": 5,
+    "maximum_residual": 0.0
+  },
+  "redundancy_and_selection": [
+    "Force Index is volume-weighted close-change momentum followed by EMA. It overlaps broad price momentum, EMA and volume families already studied. Different source identifiers or formulas do not establish independent information or an orthogonal edge.",
+    "With constant positive volume, FI reduces to a positive constant times EMA13 of close differences. This supplies a clear structural price-momentum overlap without reading market outcomes. Current variable volume changes the weights; no empirical incremental forecast value is established.",
+    "Raw FI units depend on asset price and volume units. Sign-only rules avoid pooling magnitude thresholds, but cross-symbol raw levels must not be treated as comparable or normalized evidence.",
+    "Parent states this source was selected on its mechanism before outcomes. Reviewer read only pinned source, license/helpers, synthetic fixtures and audit. No README or performance result was used to select or modify FI.",
+    "Bollinger Bands are absent from the executed dependency graph. Earlier source exclusions, rejected adaptations and frozen lane definitions remain unchanged."
+  ],
+  "required_contracts_before_market_load": [
+    "Freeze source, license, compiler/native execution receipts and exact arithmetic. Preserve period13, first raw0/EMA0, current volume, strict FI sign states and zero-volume memory; no epsilon repairs or sign reversal.",
+    "Declare UTC continuous completed8h bars and Binance Spot base-asset volume summed over480 completed minutes. Do not silently substitute quote volume, trade counts, tick volume or sum of minute Force Index. FI of an8h close difference times8h volume is not the sum of minute FI.",
+    "Fix full retained-history anchor and initial state before observations; carry EMA through240-bar admission warmup and all bars. Period13 becomes104hours on8h; source has no explicit timeframe. No rolling240 crop or trade/day/session reset.",
+    "Declare full-cash source-intent budget adapter: sleeve capital, fee-reserved fixed signal-close quantity and precision, next-open all-or-reject admission without rescue resize, full SELL-state liquidation, held-before-exit rule and no same-boundary reentry.",
+    "Declare no stop, target, trailing, timeout, shorts, borrowing or pyramiding. Terminal holdings remain censored liquidation-value marks; final queued SELL and flat final BUY require explicit accounting. Gap labels are identical in the absence of barriers.",
+    "Retain existing realistic costs, funded BTC own-cash reference, calendar/session/excursion/robustness diagnostics, control path own quantities and durations, fixed alpha .025 and frozen screening gates. Randomized entries retain original SELL states, including the explicit flat-SELL entry convention.",
+    "If later claiming volume adds forecast information, freeze and test a matched price-only comparator separately before those outcomes; existing source screening alone makes no such attribution claim.",
+    "Create immutable registration and evaluator/test bindings with prior preservation receipts, run independent synthetic feature/prefix/clock/cash/control/endpoint checks and required repository gates, then commit the mandatory final pre-outcome review before any raw/cache load."
+  ],
+  "readiness": "Mechanically definable for a newly declared eight-hour Spot source-intent cash adaptation. This source review approves no production evaluator or registered market test.",
+  "limits": [
+    "Original source is educational signal and cost-free accounting illustration. Synthetic TypeScript equality is source-math evidence, not native deployed-bot, broker or exchange execution parity.",
+    "Positive closes and nonnegative finite volumes must be required by a future data contract. Fixtures do not establish arbitrary overflow/invalid-input behavior or every floating-point edge case.",
+    "No market data, strategy outcomes or profitability claims were inspected. No trial was registered by this audit.",
+    "Retained historical evidence is spent development. Survival would only permit a separate immutable adequately powered untouched future confirmation; no viability or completion claim follows."
+  ],
+  "orders": false,
+  "viable": false,
+  "future_confirmation_started": false,
+  "goal_complete": false
+}

@@ -1,0 +1,58 @@
+{
+  "kind": "PSR18_FORCE_INDEX_BATCH12_DRAFT_MECHANICS_INDEPENDENT_REVIEW",
+  "status": "PASS_DRAFT_MECHANICS_NOT_REGISTERED_OR_PRE_OUTCOME_APPROVED",
+  "blocking_findings": [],
+  "market_outcomes_inspected": false,
+  "market_data_loaded": false,
+  "repository_modified": false,
+  "registered": false,
+  "new_registered_trials": 0,
+  "draft_evaluator_exact_sha256": "e05a20be6f0b668720ae8bb5317a8f5d707ed9c9a2161c307472a2e4e809d421",
+  "draft_config_exact_sha256": "f2223bc73b3b50fe12ada2a03bc46fcffdf5db477817ebf15d587c54a4595446",
+  "draft_canonical_config_sha256": "1a1149fa499a154968beb511b802728c1b9851e93b22f6b88f24d22c13734a42",
+  "draft_test_exact_sha256": "92eba2f26582e4e323454eb91f3bb1dbeb5153929107517a44c7f480972359e8",
+  "draft_test_harness_exact_sha256": "79d913990dbcc58c1c519233181b222e936d0094bb582e5cf472dc2aad8a7e6f",
+  "source_readiness_artifact_exact_sha256": "a5a02b13137d5d2c4a44e92ed6f3dacbb290b89462dc0323f97edd16e48ebc7d",
+  "native_source_math_artifact_exact_sha256": "81ac9d3f31f7b55826b7c1d9fa1c6a3dc7552bc1286246c9d167ea5c47e5a761",
+  "validations": {
+    "ast_functions_identical_to_frozen_nvi": true,
+    "actual_draft_original_native_feature_rows": 8985,
+    "fixtures": 22,
+    "independent_scalar_cash_paths": 80,
+    "event_checks": 79,
+    "flat_sell_control_entries": 44,
+    "counts": {
+      "raw_entry_flags": 265,
+      "cash_rejected": 81,
+      "accepted_entries": 79,
+      "held_entry_ignored": 73,
+      "unexecuted_final_entry": 32
+    },
+    "max_nav_residual": 0.0,
+    "unregistered_config_production_guard_pass": true,
+    "synthetic_tests_independently_reexecuted": 15
+  },
+  "mechanics": [
+    "Actual draft features match original pinned TypeScript on8,985 rows across22 fixtures. Formula is current close difference times current base volume, first prior=self, raw seed0, EMA13 alpha2/14 and beta1-alpha in exact source order.",
+    "FI positive/negative sign states are BUY/SELL, equality HOLD. Zero-volume current input is0 but prior EMA can retain its sign. No epsilon, crossover or direction repair.",
+    "Config fixes April1 retained-history initialization, continuous carry through240-bar admission warmup and no daily/admission/year or rolling240 reset. Complete8h base volume is summed across480 underlying minutes.",
+    "Simulation, controls, diagnostics and registration/review guards are AST-identical to frozen NVI. Same declared full-cash signal-close fee reserve and floor8 fixed quantity; next-open all-or-reject with no resize.",
+    "Independent80 synthetic paths checked79 events and44 accepted randomized BUY entries while flat on original SELL states. Admission counts, held-before-exit policy, original SELL next-open exits, no same-boundary reentry and final pending/censor/unexecuted dispositions reconciled.",
+    "BTC owns cash, notional fraction, quantities and fees. Cash/BTC NAV matched the separate scalar reconstruction with zero residual. Event quantities, exact open/cutoff excursion endpoints, holding clocks and profit/NAV conservation passed.",
+    "No source stop, target, trailing, timeout, short or borrowing is introduced. Both gap labels remain identical. Existing costs, fixed alpha .025,500 controls and frozen rejection gates remain unchanged.",
+    "Actual unregistered checked_spec fails before market loading. Harness replaces config hash in memory only for mocked Git tests; on-disk production constants remain UNREGISTERED."
+  ],
+  "remaining_required": [
+    "Populate and freeze exact source/license/native fixture/compiler/runner/audit receipts with preservation of all prior frozen definitions and rejected studies.",
+    "Commit actual config/design and evaluator constants, rerun registered tests and required repository gates, then independently inspect actual Git blobs and exact hashes.",
+    "Commit the final evaluator/config-bound independent pre-outcome review unchanged before any raw-data or cache load. This draft artifact is not production approval."
+  ],
+  "limits": [
+    "Educational source and cost-free illustrative cash intent are adapted to funded next-open Spot execution. No deployed-bot or exchange parity claim.",
+    "Volume-weighted momentum overlaps prior price and volume families; no orthogonality or incremental volume-information claim.",
+    "No market data or outcome-driven tuning occurred. This audit adds no registered trial; attempted counts remain24 trading and25 signal-model until a new version executes.",
+    "Source fixture equality does not establish arbitrary numerical inputs, fill realism or viability. Future untouched confirmation remains mandatory after any screen survivor."
+  ],
+  "viable": false,
+  "future_confirmation_started": false
+}
