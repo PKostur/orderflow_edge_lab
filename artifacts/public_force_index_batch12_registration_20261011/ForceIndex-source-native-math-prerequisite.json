@@ -1,0 +1,38 @@
+{
+  "kind": "FORCE_INDEX_NATIVE_SOURCE_MATH_PREREQUISITE",
+  "status": "PASS_SYNTHETIC_SOURCE_MATH_ONLY",
+  "source_commit": "c6bfb623b2ccbac2c536d60740e8c458e4efa7cd",
+  "node": "v24.19.0",
+  "typescript": "5.4.5",
+  "synthetic_fixtures": 22,
+  "synthetic_rows": 8985,
+  "exact_scalar_feature_action_match": true,
+  "prefix_checks": 10,
+  "future_mutation_checks": 5,
+  "file_sha256": {
+    "cinar_examples_volume_forceIndexStrategy.ts": "2e55b0a72012cf800ad6fa4f3729bc3a1d41270943e96420ef4155e3e55b2c04",
+    "cinar_src_indicator_volume_forceIndex.ts": "4abcc23342773d5e09391123f28f019ec450cb0c87169ea12a232767cd23770b",
+    "cinar_src_indicator_trend_exponentialMovingAverage.ts": "f794e26c447f2b9ec3b9243b09bf530b735429717b884149d105782220febed1",
+    "cinar_src_helper_numArray.ts": "a16e23dacab0aa0160a74c05ea1403adbed36778e6d63e66bc542ab141ea0446",
+    "cinar_src_strategy_action.ts": "db972013d4b3a731eec1277f67a4b2cb1a963c7d6016b00611986f1abc109dad",
+    "cinar_src_strategy_asset.ts": "4547c826d6071a0ac34c150f0ef6e089d7ed59bceef42485ed748dd9c1010ebb",
+    "typescript-5.4.5.js": "d4eeb6e18a598a21aa0a5c09a52270856e4b23bd31d9c7c60ab80a22b275b07b",
+    "execute_fi_source.cjs": "7c8a12ea9cab3f04a4181405dfa6525f9026d7c0cc201e03d4005bef69dbd14d",
+    "fi-synthetic-input.json": "9bc859cba953e23f4a1b778c857c020609590f0512f371ed2b17584a34b3077b",
+    "fi-native-synthetic-output.json": "9534ffdb67895c53b79a7a4f81ed3ffd183cc654ea9ca7235f32071e0528b004"
+  },
+  "source_semantics": [
+    "Current close difference times current base volume; first prior close=self makes first raw value zero.",
+    "EMA13 alpha2/14, first-value seed, exact operation order.",
+    "BUY every FI>0, SELL every FI<0, HOLD equality.",
+    "Source is educational signal; deployed bot parity not claimed."
+  ],
+  "new_registered_trials": 0,
+  "market_data_loaded": false,
+  "orders": false,
+  "readiness": "Separate source readiness and adaptation preregistration plus exact-evaluator independent pre-outcome review required before market outcomes.",
+  "limits": [
+    "Price-volume momentum overlaps earlier trend/volume families; no orthogonality claim.",
+    "No performance-based source selection."
+  ]
+}
