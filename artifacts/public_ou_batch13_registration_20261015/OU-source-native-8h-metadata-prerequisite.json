@@ -1,0 +1,38 @@
+{
+  "kind": "OU_NATIVE_SOURCE_MATH_PREREQUISITE",
+  "status": "PASS_SYNTHETIC_SOURCE_RUNTIME_MATH_ONLY",
+  "source_commit": "945c7c430c799687be17092eaebcad6baace1a9e",
+  "source_exact_sha256": "e9940bfb353602c635ca085eb4de3dc8d9521d48e5ca4017c3d83ebb5cfa2fb3",
+  "backtrader": "1.9.78.123",
+  "scipy": "1.15.2",
+  "numpy": "2.2.4",
+  "pandas": "2.2.3",
+  "fixtures": 16,
+  "original_native_feature_rows": 4090,
+  "original_native_synthetic_broker_advice": 55,
+  "unit_size_all_native_advices": true,
+  "exact_port_vs_native_fit_sma_rows": true,
+  "prefix_checks": 7,
+  "future_mutation_checks": 3,
+  "new_registered_trials": 0,
+  "market_data_loaded": false,
+  "live_or_exchange_orders": false,
+  "scope": "Original unmodified strategy class AST run through isolated pinned Backtrader virtual broker on synthetic8h candles; no original module top-level imports or runner download/backtest/plot code executed.",
+  "limits": [
+    "SMA usesmath.fsum/current30; OLS usespinnedscipy.linregress andnp.std ddof0 in originalorder; not a separately derivedOLS oracle.",
+    "Generic published runner selects QuantileChannelStrategy; native unit1 is framework default, not demonstrated publishedOU run.",
+    "Full native source is two-sided; any Spot long/cash study must preregister explicit scope and rejected-order lifecycle limits.",
+    "No marketperformance or newtrial. Source licenseREADMEclaimsMITcode but standaloneLICENSE absent and placeholder remains."
+  ],
+  "feed_metadata": {
+    "timeframe": "Minutes",
+    "compression": 480,
+    "timestamp_spacing_minutes": 480
+  },
+  "same_features_and_advice_as_prior_default_metadata_output": true,
+  "file_sha256": {
+    "azary_codes_OUMeanReversionStrategy.py": "e9940bfb353602c635ca085eb4de3dc8d9521d48e5ca4017c3d83ebb5cfa2fb3",
+    "ou-8h-synthetic-input.json": "5adbfcbbdfef56477850b18bc10134d5bab03e4db9c0be3417de10cbe875e80d",
+    "ou-8h-native-synthetic-output.json": "acd82a222c3533dd72fc9e3334181dd6b0b8181da6cd8c013821f884a3f4d03f"
+  }
+}

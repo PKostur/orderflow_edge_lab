@@ -1,0 +1,50 @@
+{
+  "kind": "POST_FORCE_INDEX_SOURCE_READINESS",
+  "status": "ONE_NEW_UNREGISTERED_DRAFT_READY_FOR_DESIGN_FREEZE_AFTER_PARENT_RELEASE",
+  "new_registered_trials": 0,
+  "new_attempted_trials": 0,
+  "market_data_loaded": false,
+  "live_or_exchange_orders": false,
+  "selection_basis": "New explicit rolling log-price OU estimator and separate long-exit rule; no historical performance inspected for selection. Source default one-unit framework intent retained in new declared Spot long/cash scope, not chosen by outcome-based size changes.",
+  "sources": [
+    {
+      "repo": "MAKSAT-DEL/mtf-breakout-bot",
+      "commit": "9903df12cb3ed13a79a0646cea37f4b311c15bf6",
+      "status": "CAUSALITY_READINESS_REJECTED_NO_MARKET_TRIAL",
+      "evidence": "MTF-breakout-source-causality-independent-review.json"
+    },
+    {
+      "repo": "ali-azary/backtrader_automation",
+      "commit": "abc049f5c8f482636925574e412f910a342ed782",
+      "status": "SELECTED_INVENTORY_ONLY_NO_CANDIDATE_EXTRACTED",
+      "limits": "Selectedinventory names onlytwo Python runners; no whole-repository absence-of-strategy claim."
+    },
+    {
+      "repo": "ali-azary/Algorithmic-Trading-From-Beginner-to-Advanced",
+      "commit": "945c7c430c799687be17092eaebcad6baace1a9e",
+      "status": "OU_NATIVE_AND_DRAFT_MATH_REVIEWED_NO_MARKET_TRIAL",
+      "candidate": "OU8hOneUnitLongCashAdaptation",
+      "other_received_source_files_not_evaluated": [
+        "KeltnerBreakoutStrategy.py",
+        "OBVmomentumStrategy.py"
+      ],
+      "license": "PinnedREADME declaresCodeMIT, standalonecodeLICENSE/notice absent and placeholder remains; boundedreceipt retained, no PDFcontent used."
+    }
+  ],
+  "exclusions": "No Bollinger strategy selected, implemented or tested. Search snippets and inventory may contain excluded names; no marketing performance used.",
+  "goal_complete": false,
+  "viable_candidates": [],
+  "future_confirmation_started": false,
+  "minimum_attempted_trading_cells_before_next_freeze": 25,
+  "minimum_attempted_signal_model_cells_before_next_freeze": 26,
+  "audit_sha256": {
+    "MTF-breakout-source-causality-readiness.json": "936fcab4ff4a1b0557d7c43b7235634a29b60fe93a470576ec79092b742905b1",
+    "MTF-breakout-source-causality-independent-review.json": "0890162c28a4cec37bde07996315fa2fe01c27b7818f6ff211e221db252fdb92",
+    "OU-source-semantic-readiness-review.json": "7eb2281796f42df33f8a9cb6847d9e59fedc6386900ecd038863f55833f7e52f",
+    "OU-source-native-math-prerequisite.json": "8e68e87a11a59e67d2a06a8f375eab2cd748a574aae9bb8a1418e527fd932a98",
+    "OU-source-native-8h-metadata-prerequisite.json": "284a40b2b8c73509e0a3bbbeebb1c8c61b71cba4779a96c9070fedccf8771f57",
+    "OU-source-native-readiness-review.json": "bcf8b53a66616591cc6639fbb938455840a18a040c4e37f8e5380052edce4d96",
+    "OU-feature-helper-synthetic-review.json": "739bcb1eccdc027f7a2417f57d16e18eb9e8c09f14e5a0a95c40424aa116cdf4",
+    "OU-batch13-draft-mechanics-review.json": "203cf0735918ce58c82260d46b140b778cf88140f60f9026a3b568ca167a46b7"
+  }
+}

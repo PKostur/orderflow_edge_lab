@@ -1,0 +1,89 @@
+{
+  "kind": "OU_SOURCE_NATIVE_READINESS_INDEPENDENT_REVIEW",
+  "status": "PASS_SOURCE_NATIVE_MECHANICS_READINESS_WITH_DECLARED_SCOPE_LIMITS",
+  "blocking_findings_for_completed_native_prerequisite": [],
+  "market_data_loaded": false,
+  "market_strategy_outcomes_inspected": false,
+  "new_registered_trials": 0,
+  "new_attempted_market_trials": 0,
+  "registered": false,
+  "repository_modified": false,
+  "production_evaluator_approved": false,
+  "source_repository": "ali-azary/Algorithmic-Trading-From-Beginner-to-Advanced",
+  "source_commit": "945c7c430c799687be17092eaebcad6baace1a9e",
+  "source_exact_sha256": "e9940bfb353602c635ca085eb4de3dc8d9521d48e5ca4017c3d83ebb5cfa2fb3",
+  "native_prerequisite_artifact": "OU-source-native-math-prerequisite.json",
+  "native_prerequisite_artifact_exact_sha256": "8e68e87a11a59e67d2a06a8f375eab2cd748a574aae9bb8a1418e527fd932a98",
+  "semantic_review_artifact_exact_sha256": "7eb2281796f42df33f8a9cb6847d9e59fedc6386900ecd038863f55833f7e52f",
+  "runtime_receipt_exact_sha256": "2a1bc0fcf92d1dc35fecd74f62ef3b063246fcbbce81f41e638a0af6709e5e7a",
+  "source_native_script_exact_sha256": "27ae4fe8cc5d55e7767ff075990b382aadf6bf11e3ffff6cd674f116323294e4",
+  "independent_repeat_script_exact_sha256": "6ebdb40e9e5e80c09adee4d6fa964b37c1d28737617d9fc41417f10c88c161f6",
+  "independent_repeat_output_exact_sha256": "acd82a222c3533dd72fc9e3334181dd6b0b8181da6cd8c013821f884a3f4d03f",
+  "source_input_output_exact_sha256": {
+    "azary_codes_OUMeanReversionStrategy.py": "e9940bfb353602c635ca085eb4de3dc8d9521d48e5ca4017c3d83ebb5cfa2fb3",
+    "ou-synthetic-input.json": "5adbfcbbdfef56477850b18bc10134d5bab03e4db9c0be3417de10cbe875e80d",
+    "ou-native-synthetic-output.json": "acd82a222c3533dd72fc9e3334181dd6b0b8181da6cd8c013821f884a3f4d03f"
+  },
+  "validations": {
+    "native_original_class_repeat_exact": true,
+    "fixtures": 16,
+    "feature_rows": 4090,
+    "broker_advices": 55,
+    "independent_source_state_advice_reconstruction_exact": true,
+    "all_native_advice_unit1": true,
+    "prefix_checks": 7,
+    "future_mutation_checks": 3,
+    "installed_backtrader_package_files_byte_equal_wheel": 171,
+    "wheel_sha256": "9a07a516b0de9155539a35c56e9404d8711dd7020b3d37b30495e83e1b9d5dfd",
+    "pypi_metadata_sha_verified": true,
+    "shared_pinned_scipy_fit_kernel_not_independent_ols": true,
+    "versions": {
+      "backtrader": "1.9.78.123",
+      "scipy": "1.15.2",
+      "numpy": "2.2.4",
+      "pandas": "2.2.3"
+    }
+  },
+  "observed_branch_coverage": {
+    "theta_gt_1e_minus6": 2819,
+    "theta_at_or_below_1e_minus6": 900,
+    "negative_theta": 158,
+    "zero_or_negative_eqstd": 742,
+    "fit_returned_none": 371
+  },
+  "confirmed_contracts": [
+    "Original strategy class AST is unmodified and runs through actual isolated Backtrader1.9.78.123. Only trusted bindings are injected; original top-level yfinance/plot imports, notebook runner and data download code are not executed.",
+    "Independent second execution exactly matched16 fixtures,4090 fit/SMA rows and55 synthetic broker order advices. Separate state reconstruction from source fit/SMA reproduced every advice side, bar and signed unit size.",
+    "Default sizer requests one unit for buys and minus one for sells. This verifies synthetic submitted advice quantity, not every fill or a live exchange contract. The generic published runner still selects QuantileChannelStrategy rather than OU.",
+    "Current-inclusive30 log closes, scipy.stats.linregress lag/increment fit, theta=-slope, strict theta>1e-6 branch, negative-theta fallback, population residual np.std and scalar np.log match the port exactly. Native SMA30 matches math.fsum/30 on these fixtures.",
+    "Prefix7 and future-mutation3 checks pass. Native fixture timestamps are8h apart; the simple PandasData feed has default timeframe metadata and no native resampling, so this is an8h-spaced bar stream rather than a proven production feed configuration.",
+    "Long entry z<-1 AND close>SMA30, separate long exit z>0; short entry z>1 AND close<SMA30, short exit z<0. Independent state advice reconstruction preserves these strict branches and pending next-bar state.",
+    "Both theta branches, negative theta, invalid constant fits and nonpositive equilibrium scales occur in the fixture evidence. Those source branches skip entries/exits where invalid; no positive-theta, stationarity or half-life filter was added.",
+    "The selected Backtrader wheel hash matches PyPI metadata.171 installed package files match wheel bytes. No global dependency installation or modification was performed by this review."
+  ],
+  "readiness": "Native source-math/default-size prerequisite now passes within the tested synthetic scope. A one-unit long/cash8h research adaptation is definable, but requires immutable registration, its own execution implementation and final source/config-bound pre-outcome review.",
+  "remaining_mandatory_adaptation_contracts": [
+    "Freeze separate original long-entry and long-exit flags, invalid-fit hold behavior, arithmetic order, runtime versions/files and precise SMA/OLS/log/std contracts. The port shares pinned SciPy fit kernels; do not replace them with a separately derived OLS or NumPy mean without new precision evidence.",
+    "Declare one base-asset unit for each accepted Spot long entry, three10000USDT sleeves, fee-funded debit and all-or-reject admission. No commented95% sizer restoration, full-cash scaling or fractional rescue resizing.",
+    "Define next-minute-open entry/exit order clocks, pending order state, when cash and inventory change, unit quantity at liquidation, rejected admission behavior and no same-boundary reentry. Preserve source exit z>0 independently of the native short-entry qualifier.",
+    "Disclose removal of shorts and source30-bar startup replacement by240-bar admission warmup. Native original two-sided advice and adapted one-sided execution are separate claims.",
+    "Source clears position_type when submitting an exit. An exit rejection may leave native inventory without a matching position_type. A simplified adapter that assumes fully filled exits must explicitly declare this excluded failure mode and test its own inventory/debit contract.",
+    "No invented stop, target, timeout, half-life or theta guard. Define final queued exits and entry flags, cutoff censoring, exact MFE/MAE intervals, own BTC benchmark fraction/funding and complete NAV conservation.",
+    "Retain all frozen costs, diagnostics, bootstrap alpha .025,500 controls and gates. Randomized entries use original long-exit state and own admitted durations/funding. Register before market data and commit the required final independent actual evaluator review before any raw/cache load."
+  ],
+  "licensing": {
+    "receipt_exact_sha256": "2c5e6a5ad814b15ac6695909efe10267bd5bca4ef96a7fd07e0af95d36cf5ace",
+    "status": "Bounded README code-MIT statement; no complete standalone license notice received, with contradictory add-license placeholder retained.",
+    "limit": "No PDF read and no claim that a standalone MIT license file was obtained. Retain source attribution and provenance."
+  },
+  "limits": [
+    "Fit comparison uses the same pinned SciPy linregress and NumPy kernels in original source and port. It is not independent mathematical OLS derivation. The independent contribution includes repeated native execution, package byte verification and separate source-state advice interpretation.",
+    "Synthetic virtual broker orders execute internally; no live/exchange API or market data was used. The proof establishes neither realistic Spot fees/fills nor full native production-bot parity.",
+    "Boundary coverage is finite. Exact theta=1e-6, near-zero strict z/SMA comparisons, rejected exits and held invalid-fit windows still need explicit execution-evaluator tests where relevant.",
+    "Native source works with completed bar values in these fixtures. Production availability timestamps and default market next-open processing require separate explicit adapter tests.",
+    "Prior source semantic review pending-runtime condition is resolved only for this recorded proof. No market trial, viable candidate or future confirmation starts here."
+  ],
+  "orders_live": false,
+  "viable": false,
+  "future_confirmation_started": false
+}

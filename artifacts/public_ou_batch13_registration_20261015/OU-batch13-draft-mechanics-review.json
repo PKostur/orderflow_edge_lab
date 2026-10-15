@@ -1,0 +1,100 @@
+{
+  "kind": "PSR19_OU_BATCH13_DRAFT_MECHANICS_INDEPENDENT_REVIEW",
+  "status": "PASS_DRAFT_MECHANICS_NOT_REGISTERED_OR_PRE_OUTCOME_APPROVED",
+  "blocking_findings": [],
+  "market_outcomes_inspected": false,
+  "market_data_loaded": false,
+  "repository_modified": false,
+  "registered": false,
+  "new_registered_trials": 0,
+  "draft_evaluator_exact_sha256": "972d385e414b4989fed7fd1b5ed2fc3491faac97dbcb4543f48664c37cde5ce6",
+  "draft_config_exact_sha256": "b73daad71cad5c6b110bc4023b497b575a1acefa87e01623bd4d457409ffcce2",
+  "draft_canonical_config_sha256": "7922c2132fffd942621305c9b12f18b8a2e8a491704281a4a18ae039960b2aa4",
+  "draft_test_exact_sha256": "e5d68bd753216c3eed25a7be480ba2014f19a456a642c3e3632170e477719a1f",
+  "draft_harness_exact_sha256": "3ece82ad930fd85bd287a5cd9e36f764973dba9f404f4ac110ad7e4ef679e23e",
+  "feature_helper_review_exact_sha256": "739bcb1eccdc027f7a2417f57d16e18eb9e8c09f14e5a0a95c40424aa116cdf4",
+  "native_readiness_review_exact_sha256": "bcf8b53a66616591cc6639fbb938455840a18a040c4e37f8e5380052edce4d96",
+  "validations": {
+    "actual_native_feature_rows_exact": 4090,
+    "simulate_ast_difference_limited_to_qty_exit_key_reason": true,
+    "shared_controls_diagnostics_guards_ast_unchanged": true,
+    "independent_one_unit_synthetic_paths": 80,
+    "event_checks": 108,
+    "randomized_flat_exit_entries": 68,
+    "counts": {
+      "raw_entry_flags": 290,
+      "accepted_entries": 108,
+      "held_entry_ignored": 89,
+      "cash_rejected": 64,
+      "unexecuted_final_entry": 29
+    },
+    "maximum_nav_residual": 0.0,
+    "held_actual_invalid_fit_retained_to_cutoff": true,
+    "primary_runtime_tests_independently_reexecuted": 17,
+    "primary_runtime": {
+      "python": "3.13.14",
+      "numpy": "2.2.4",
+      "scipy": "1.15.2",
+      "pandas": "2.2.3",
+      "platform": "win32"
+    },
+    "isolated_alternate_runtime_tests_independently_reexecuted": 17,
+    "alternate_runtime": {
+      "python": "3.13.14",
+      "numpy": "2.4.6",
+      "scipy": "1.17.1",
+      "pandas": "2.2.3",
+      "platform": "win32"
+    },
+    "alternate_wheel_receipts": [
+      {
+        "package": "numpy",
+        "version": "2.4.6",
+        "filename": "numpy-2.4.6-cp313-cp313-win_amd64.whl",
+        "sha256": "c4fc99836233ea196540b17ab0983aff60ed07941751930f5f4d05bc3b3b7359"
+      },
+      {
+        "package": "scipy",
+        "version": "1.17.1",
+        "filename": "scipy-1.17.1-cp313-cp313-win_amd64.whl",
+        "sha256": "37425bc9175607b0268f493d79a292c39f9d001a357bebb6b88fdfaff13f6448"
+      }
+    ],
+    "alternate_wheel_receipt_exact_sha256": "93644c6d70cd9055994bf5ba5db2c427de072f318a491971e23882a266563767",
+    "global_dependencies_modified": false,
+    "added_control_invalid_fit_test_independently_passed_both_runtimes": true
+  },
+  "mechanics": [
+    "Actual draft matches4090 pinned native fit/SMA rows exactly under the primary runtime, preserving scalar NumPy logs, SciPy linregress, population residual standard deviation, math.fsum SMA30 and literal theta fallback. Long-entry and separate long-exit z>0 semantics match the reviewed helper.",
+    "AST comparison against frozen Force Index finds only intended simulation changes: fixed quantity1.0, exit_long key and source_long_z_exit_to_cash reason. Controls, diagnostics, config guard and committed-review guard functions are unchanged. Main adds SciPy version checking and future cumulative trial counts.",
+    "Independent80 one-unit synthetic execution paths cover108 events and68 accepted randomized entries on flat EXIT boundaries. All quantities, cash/BTC funding, NAV, counts, source exit clocks, no same-boundary reentry, pending/censor states and MFE/MAE endpoints reconcile; NAV residual is0.",
+    "An actual40-bar constant-price feature stream with invalid OU fits accepted a deliberately randomized entry afterbar30 and retained inventory to cutoff without an invented exit. This tests the whole-entry replacement control contract separately from native entry eligibility.",
+    "Corrected config explicitly states that random and lag flags replace the entire entry qualifier, including current fit validity and SMA. They may enter an invalid-fit row; original invalid-fit exit flags remain false. Source long exit z>0 is not the original short-entry SELL condition.",
+    "One unit never scales with capital or signal price. Insufficient cash including actual side cost rejects the entire unit; no95% sizer, full-cash reserve resizing, borrowing, pyramiding or shorts is introduced.",
+    "Funded long exits are modeled filled at next minute open. This explicitly excludes asynchronous rejected-exit/orphan-state recovery parity. Source short direction is excluded in the new Spot scope; no stop, target, timeout or theta-positive filter is invented.",
+    "Corrected provenance names the actual ali-azary repository and pinned source with bounded README code-MIT statement, missing standalone notice and placeholder; no invented Indicator Authors attribution, full license-file receipt or PDF use remains."
+  ],
+  "portability_assessment": [
+    "All17 tests passed on the primary runtime and an independently extracted isolated Windows Python3.13 runtime using NumPy2.4.6/SciPy1.17.1. Wheels were downloaded from PyPI metadata and SHA256 verified; no global dependency installation was changed.",
+    "The predefined native fixture numerical tolerance is rtol1e-9/atol1e-10 with strict boolean action checks. Primary runtime native fit/SMA comparisons were separately exact in this review; alternate test success is a bounded fixture smoke check, not all-input numerical equivalence.",
+    "Concrete remaining sensitivity is cancellation in nearly deterministic log increments: tiny residual variance, theta near1e-6 or z near0/-1 can turn small library/platform differences into different strict branches. No epsilon repair is permitted. The production runtime guard excludes alternate versions from market evaluation.",
+    "Linux builds, other Python versions and the reported Python3.10 NumPy2.2.6/SciPy1.15.3 stack were not executed by this reviewer. Their CI results remain separate gates; Windows fixture success is not a broader portability claim."
+  ],
+  "remaining_before_market_load": [
+    "Register immutable source/config/design/runtime and exact source/native/license/audit receipts, retaining all frozen lanes and prior rejected studies. Current production constants remain UNREGISTERED and no new trial exists.",
+    "Run actual registered tests and required repository gates, then independently verify exact working and Git-blob bindings, dependency hashes, preservation receipts and production cold guard.",
+    "Commit the final actual evaluator/config-bound independent pre-outcome review before any raw-data or cache load. This draft approval does not approve that future gate."
+  ],
+  "limits": [
+    "Source fit uses a shared pinned SciPy kernel, not independent mathematical OLS derivation. Original native evidence is two-sided; this is a newly declared one-unit long/cash execution adaptation.",
+    "Unspent future confirmation, exchange fill reliability and live bot parity are unproved. No market outcomes or current draft performance were inspected.",
+    "Attempted counts remain25 trading/26 signal-model until a new registered version executes. Future registration would add one cell for26/27, without establishing viability."
+  ],
+  "viable": false,
+  "future_confirmation_started": false,
+  "supersedes": {
+    "artifact": "OU-batch13-draft-mechanics-review-16-tests-predecessor-20261015.json",
+    "exact_sha256": "98de5cc14469ce25c72d42631d0774a0a6c9684d266be6ca4b44b311b6f8b2a1",
+    "note": "Exact prior16-test audit retained. This current review independently reran all17 tests under both already prepared runtimes and binds the actual current test file."
+  }
+}

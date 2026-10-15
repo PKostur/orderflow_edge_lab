@@ -1,0 +1,98 @@
+{
+  "kind": "OU_FEATURE_HELPER_SYNTHETIC_INDEPENDENT_REVIEW",
+  "status": "PASS_EXPLICIT_8H_NATIVE_METADATA_AND_SYNTHETIC_FEATURE_HELPER",
+  "blocking_findings": [],
+  "market_data_loaded": false,
+  "market_strategy_outcomes_inspected": false,
+  "new_registered_trials": 0,
+  "new_attempted_market_trials": 0,
+  "registered": false,
+  "repository_modified": false,
+  "production_evaluator_approved": false,
+  "feature_helper_exact_sha256": "bd5786ae040998f492548e566ac442f7b0e0eaaa8d4187e2de9c3aac90364458",
+  "explicit_8h_prerequisite_exact_sha256": "284a40b2b8c73509e0a3bbbeebb1c8c61b71cba4779a96c9070fedccf8771f57",
+  "explicit_8h_native_script_exact_sha256": "9d118c34eb8108b56c022cb4d7bbcb3b855d3d734469effc639156983d032f84",
+  "source_exact_sha256": "e9940bfb353602c635ca085eb4de3dc8d9521d48e5ca4017c3d83ebb5cfa2fb3",
+  "source_commit": "945c7c430c799687be17092eaebcad6baace1a9e",
+  "source_synthetic_files_exact_sha256": {
+    "azary_codes_OUMeanReversionStrategy.py": "e9940bfb353602c635ca085eb4de3dc8d9521d48e5ca4017c3d83ebb5cfa2fb3",
+    "ou-8h-synthetic-input.json": "5adbfcbbdfef56477850b18bc10134d5bab03e4db9c0be3417de10cbe875e80d",
+    "ou-8h-native-synthetic-output.json": "acd82a222c3533dd72fc9e3334181dd6b0b8181da6cd8c013821f884a3f4d03f"
+  },
+  "native_readiness_review_exact_sha256": "bcf8b53a66616591cc6639fbb938455840a18a040c4e37f8e5380052edce4d96",
+  "prior_native_proof_exact_sha256": "8e68e87a11a59e67d2a06a8f375eab2cd748a574aae9bb8a1418e527fd932a98",
+  "explicit_metadata": {
+    "timeframe": "Minutes",
+    "compression": 480,
+    "timestamp_spacing_minutes": 480,
+    "independent_actual_native_repeat": true,
+    "complete_native_output_byte_equal_prior_default_metadata_output": true
+  },
+  "native_validations": {
+    "native_original_class_repeat_exact": true,
+    "fixtures": 16,
+    "feature_rows": 4090,
+    "broker_advices": 55,
+    "independent_source_state_advice_reconstruction_exact": true,
+    "all_native_advice_unit1": true,
+    "prefix_checks": 7,
+    "future_mutation_checks": 3,
+    "installed_backtrader_package_files_byte_equal_wheel": 171,
+    "wheel_sha256": "9a07a516b0de9155539a35c56e9404d8711dd7020b3d37b30495e83e1b9d5dfd",
+    "pypi_metadata_sha_verified": true,
+    "shared_pinned_scipy_fit_kernel_not_independent_ols": true,
+    "versions": {
+      "backtrader": "1.9.78.123",
+      "scipy": "1.15.2",
+      "numpy": "2.2.4",
+      "pandas": "2.2.3"
+    }
+  },
+  "feature_validations": {
+    "feature_rows_compared": 4090,
+    "fixtures": 16,
+    "fit_sma_z_entry_exit_exact": true,
+    "invalid_or_nonpositive_scale_rows_no_entry_or_exit": 1113,
+    "exit_long_true_without_short_entry_qualifier": 1446,
+    "prefix_checks": 7,
+    "future_mutation_checks": 3,
+    "mocked_theta_branch_cases": [
+      -0.01,
+      0.0,
+      1e-06,
+      1.0000000000000002e-06,
+      0.1
+    ],
+    "forced_fit_exception_and_flat_rows_hold_flags": true,
+    "branch_mock_limit": "Mocks test branch selection only, not independent OLS mathematics."
+  },
+  "confirmed_semantics": [
+    "Actual original class was independently rerun with explicit480-minute Backtrader feed metadata and8h-spaced synthetic timestamps. All4090 feature rows and55 one-unit advices match the retained output exactly; prior default-feed metadata limitation is resolved for these fixtures.",
+    "Actual helper fit, native SMA, z and boolean flags match16 original native fixtures. SMA is math.fsum of current-inclusive30 closes divided by30; logs are scalar NumPy operations, OLS is pinned SciPy1.15.2, residual standard deviation is NumPy population ddof0.",
+    "No theta-positive filter was added. mu and equilibrium scale use the strict theta>1e-6 branch; fallback applies at equality and below. Additional mocked-fit branch checks include negative theta,zero,exact1e-6 and its next representable value above.",
+    "Source fit exceptions and nonpositive equilibrium scale produce no entry or long exit flags, preserving a held position in the intended forthcoming engine.1113 retained rows exercise those skipped branches. No automatic protective liquidation is implied.",
+    "Long entry remains z<-1 AND close>SMA30. Separate long exit is z>0, independent of short-entry threshold and SMA qualifier.1446 rows have true long exit while the native short-entry qualifier is false.",
+    "All helper arrays pass7 prefix checks and3 future-mutation checks. Pre29 startup fields are undefined with false action flags; no future resampling or history repair exists.",
+    "Positive finite close validation is explicit. Helper has no loader, config, broker, wallet, order, cutoff or study execution. It cannot establish held inventory behavior beyond supplying the correct false/true flags."
+  ],
+  "residual_risks_and_required_cash_adapter_tests": [
+    "Implement and freeze the one-unit long/cash scope explicitly. Use separate original long-exit flags, not a generic short-entry field. Test random BUY while flat on an exit boundary, held-before-liquidation snapshots and no same-boundary reentry.",
+    "Invalid fit, zero/negative scale and NaN z must not manufacture an exit. Add a held-position synthetic path that transitions into such windows and retains inventory until a later valid source exit or fixed cutoff.",
+    "Specify pending order status, cash debit and inventory at next-minute open, fee-funded all-or-reject unit entry and held-unit liquidation. Preserve one unit; no95% sizer restoration, full-cash scaling or fee-reserve fractional resizing.",
+    "Source clears its position_type on exit submission before fill. A simplified adapter must disclose excluded rejected-exit/orphan-state behavior and test its own lifecycle. Current helper does not resolve that execution question.",
+    "Expected nonfinite/exception fit diagnostics use NaNs internally. A final JSON report must avoid undefined metrics being silently converted into passing gates; record skip counts and preserve strict flags without epsilon repairs.",
+    "Pin runtime versions and required dependency source/binary receipts for actual evaluator arithmetic. Shared SciPy/NumPy kernel agreement is not a separately derived OLS proof.",
+    "Validate native source30-bar startup versus declared240 admission warmup; fixed input availability clocks; censored pending final exits; exact MFE/MAE; own funded BTC; full NAV/cash conservation; all old diagnostics, costs, controls and gates.",
+    "Actual registration/config/evaluator binding, required repository tests and final committed independent pre-outcome review remain mandatory before raw data. This feature audit is not that approval."
+  ],
+  "limits": [
+    "Branch mocks verify branch policy only. They are not independent OLS calculations or native edge-input runtime coverage.",
+    "Native original strategy is two-sided. Helper deliberately exposes a prospective long-entry/long-exit scope; it is not a full unchanged original strategy or native Spot bot.",
+    "Synthetic virtual broker orders were used only for source proof. No real exchange API, market data or outcome-driven source selection occurred.",
+    "Bounded README MIT statement and missing standalone-license placeholder remain as documented; no PDF read or full license notice claim.",
+    "Bollinger exclusion, frozen lanes and all prior rejected versions remain intact. Zero new trials, no viable candidate or future confirmation."
+  ],
+  "orders_live": false,
+  "viable": false,
+  "future_confirmation_started": false
+}
