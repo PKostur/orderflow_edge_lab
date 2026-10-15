@@ -1,0 +1,88 @@
+{
+  "kind": "OU_SOURCE_SEMANTIC_READINESS_INDEPENDENT_REVIEW",
+  "status": "SEMANTICS_DEFINABLE_NATIVE_MECHANICS_PREREQUISITE_PENDING",
+  "source_repository": "ali-azary/Algorithmic-Trading-From-Beginner-to-Advanced",
+  "source_commit": "945c7c430c799687be17092eaebcad6baace1a9e",
+  "source_exact_sha256": "e9940bfb353602c635ca085eb4de3dc8d9521d48e5ca4017c3d83ebb5cfa2fb3",
+  "source_receipts": [
+    {
+      "path": "codes/OUMeanReversionStrategy.py",
+      "url": "https://raw.githubusercontent.com/ali-azary/Algorithmic-Trading-From-Beginner-to-Advanced/945c7c430c799687be17092eaebcad6baace1a9e/codes/OUMeanReversionStrategy.py",
+      "sha256": "e9940bfb353602c635ca085eb4de3dc8d9521d48e5ca4017c3d83ebb5cfa2fb3",
+      "remote_exact_match": true
+    },
+    {
+      "path": "codes/backtest.py",
+      "url": "https://raw.githubusercontent.com/ali-azary/Algorithmic-Trading-From-Beginner-to-Advanced/945c7c430c799687be17092eaebcad6baace1a9e/codes/backtest.py",
+      "sha256": "a9feb0f4a976fe0007b7e44aead017cc8e8d041872b4de5b69f12534e88846de",
+      "remote_exact_match": true
+    }
+  ],
+  "market_data_loaded": false,
+  "market_strategy_outcomes_inspected": false,
+  "source_module_imported": false,
+  "source_or_native_strategy_executed": false,
+  "new_registered_trials": 0,
+  "new_attempted_market_trials": 0,
+  "registered": false,
+  "repository_modified": false,
+  "blocking_findings_for_semantic_exploration": [],
+  "blocking_preconditions_before_registration_or_execution": [
+    "Actual pinned Backtrader/SciPy/NumPy native synthetic mechanics proof remains outstanding. Do not certify that runtime, defaults, precision or evaluator yet.",
+    "No immutable eight-hour Spot design or evaluator exists for this source. The new long/cash scope, one-unit budget, execution lifecycle and invalid-fit contract must be frozen before raw data."
+  ],
+  "semantic_contract": [
+    "Default lookback30, SMA30, entry threshold1 and exit threshold0. Current-inclusive30 completed closes are individually logged in chronological order. The estimator regresses29 log increments on their29 lagged log levels using scipy.stats.linregress.",
+    "theta=-slope. Only when theta>1e-6 use mu=intercept/theta and equilibrium_std=sigma/sqrt(2*theta). At equality or below, including negative theta, mu is the mean of all30 log prices and equilibrium_std=sigma. Do not add a positive-theta or half-life filter.",
+    "Residuals=dx-(intercept+slope*x_lag), sigma=np.std(residuals) with default population ddof0. Current z=(log current close-mu)/equilibrium_std. Use source arithmetic and library defaults rather than textbook OU reparameterization.",
+    "Flat long entry is strictly z<-1 AND current close>SMA30. Native short entry is z>1 AND current close<SMA30. These are current states, not threshold crossings.",
+    "Held long exit is strictly z>0; held short exit is strictly z<0. The long exit is independent of short-entry price/SMA and threshold1 conditions. A Spot long/cash adapter must retain a distinct long-exit flag instead of reusing the short-entry flag.",
+    "Source has no active stop, target, trailing, timeout, max-hold or same-bar reversal. Its branch structure separates flat entry from held exit. Pending orders suppress new signals after feature calculation.",
+    "Fewer than10 estimator inputs return None values; default strategy waits until lookback30, with SMA30 framework minimum period. Fit exceptions return None values. None mu/std or std<=0 makes next return before entry or exit, preserving any holding.",
+    "Source NaN mu/std is not explicitly rejected: comparisons can remain false and holdings persist. A future positive finite data contract may exclude invalid prices, but unsupported nonfinite fit results need a declared fail-closed/hold policy and synthetic fixtures. No automatic liquidation is a source default."
+  ],
+  "causality": "Completed current/past closes suffice for the rolling fit and SMA. No future resampling is present. Eight-hour signals must be timestamped as available only after the completed bar, with actions at next minute open. dt=1 is one supplied bar; do not silently rescale theta/sigma or optimize thresholds for8h.",
+  "sizer_and_runner": [
+    "Strategy buy()/sell() calls omit size. Official Backtrader documentation supplies a default fixed stake of one unit when no sizer override exists.",
+    "Pinned codes/backtest.py leaves addsizer(PercentSizer,percents=95) commented, so it supplies no active95% sizing override. It sets initial cash100000 and commission .001.",
+    "The runner currently selects QuantileChannelStrategy, not OUMeanReversionStrategy, and includes notebook magic. It is not a standalone executable published OU experiment. Selecting OU under the default framework sizer is an explicit declared research instantiation.",
+    "A proposed one-unit-per-entry Spot adapter preserves the default stake interpretation, with separate10000USDT sleeves and all-or-reject fee funding. It must not claim all-cash or95% source intent. Risk and portfolio utilization differ from earlier full-cash studies."
+  ],
+  "native_precision_and_lifecycle_requirements": [
+    "Pin Backtrader1.9.78.123 distribution and relevant runtime files, SciPy1.15.2, NumPy, Python/platform and exact source. Actual native proof is not established by this semantic audit.",
+    "Execute original class/methods under isolated trusted bindings on synthetic positive-price fixtures only. No yfinance data download, generic notebook runner, broker orders or PnL-driven selection is needed.",
+    "Compare actual Backtrader SMA30 arithmetic, scipy.linregress outputs, np.log and population np.std, theta branch around1e-6, strict z/SMA states and framework startup. A NumPy rolling mean or alternate OLS implementation may differ at strict comparisons; do not repair discrepancies with epsilon.",
+    "Include constant and nearly constant log windows, zero residual variance, negative/tiny theta and branch-boundary cases, exponential paths, trending and oscillating paths, prefix checks and future-only mutations. Show invalid fits retain position and skip exits.",
+    "Verify default fixed stake1 and default market next-open order clocks in the pinned runtime. Verify submitted/accepted/completed/rejected notifications and no same-boundary reentry under the declared adapter.",
+    "Source sets position_type=None immediately when submitting an exit. An exit rejection can leave an open position without a matching position_type. An idealized always-filled long exit may deliberately exclude that lifecycle failure, but it must be disclosed as an execution adaptation and not native engine parity.",
+    "Native source trades both directions from its30-bar startup. A240-bar admission warmup and removal of native shorts are explicit scope adaptations; feature equivalence and adapted position-engine validation are separate claims."
+  ],
+  "required_eight_hour_cash_registration": [
+    "Freeze long entry, separate long-exit state, skipped-fit behavior, strict inequalities, literal estimator and SMA rules, source pins and synthetic runtime proof before outcomes.",
+    "Declare one base-asset unit per admitted entry, no fractional fee-reserve resizing or default full-cash multiplication. Buy1 at next minute open only if cash funds price plus side cost; exits sell the held unit. State whether zero or rejected entries remain eligible next signal.",
+    "Declare the three10000USDT sleeves, source default stake versus changed runner capital/commission, fee/spread/slippage costs, no shorts/borrow/pyramiding or invented protections,240 admission warmup and final pending/censored valuation.",
+    "Specify randomized/lagged entry controls against unchanged long-exit z>0 state, own funding/quantities/durations and invalid-fit holds. Same-exit BTC funding fractions, full portfolio NAV and exact excursion clocks remain required.",
+    "Preserve all frozen diagnostics, costs, bootstrap alpha .025, controls, rejection gates and future confirmation requirements. Add one declared trial only upon actual registration, including source overlap and all previous failures.",
+    "Commit exact config/design/evaluator/tests/source/native/license-audit and preservation bindings, then obtain and commit an independent actual pre-outcome review before raw/cache loading."
+  ],
+  "licensing": {
+    "receipt": "azary_license_readiness.json",
+    "receipt_exact_sha256": "2c5e6a5ad814b15ac6695909efe10267bd5bca4ef96a7fd07e0af95d36cf5ace",
+    "readme_statement": "Pinned README says Code: MIT License and educational/research scope.",
+    "qualification": "The same section asks to choose/add an actual LICENSE file; GitHub license metadata is null and no standalone notice was received in selected artifacts. This audit does not claim a complete MIT license file or verified copyright notice was delivered.",
+    "policy": "Retain bounded provenance and attribution. Do not present the PDF license as code permission; no PDF was read. Avoid copying unverified substantial code under a claimed received license notice."
+  },
+  "primary_framework_references": [
+    "https://www.backtrader.com/docu/sizers/sizers/",
+    "https://www.backtrader.com/docu/order-creation-execution/order-creation-execution/"
+  ],
+  "limits": [
+    "Source-only semantics and immutable byte checks, with no native strategy execution or synthetic performance yet. No production evaluator approval.",
+    "OU naming does not establish stationarity or a tradable mean-reversion process. Negative-theta fallback is a source behavior, not statistical confirmation.",
+    "Eight-hour Spot long-only scope and source-default one-unit sizing are a new declared adaptation, not an unchanged published full native strategy or deployed bot.",
+    "Bollinger exclusion and all frozen lanes and rejected versions remain unchanged. No viable candidate, untouched result or future confirmation starts here."
+  ],
+  "orders": false,
+  "viable": false,
+  "future_confirmation_started": false
+}
