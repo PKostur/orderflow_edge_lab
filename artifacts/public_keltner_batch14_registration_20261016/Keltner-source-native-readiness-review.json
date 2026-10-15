@@ -1,0 +1,77 @@
+{
+  "kind": "KELTNER_SOURCE_NATIVE_READINESS_INDEPENDENT_REVIEW",
+  "status": "PASS_SOURCE_NATIVE_MECHANICS_READY_FOR_DECLARED_SCOPE_PREREGISTRATION",
+  "blocking_findings": [],
+  "market_data_loaded": false,
+  "market_strategy_outcomes_inspected": false,
+  "new_registered_trials": 0,
+  "new_attempted_market_trials": 0,
+  "registered": false,
+  "repository_modified": false,
+  "production_evaluator_approved": false,
+  "source_repository": "ali-azary/Algorithmic-Trading-From-Beginner-to-Advanced",
+  "source_commit": "945c7c430c799687be17092eaebcad6baace1a9e",
+  "source_exact_sha256": "151bbda331aa8db25951830372ef5d359ad680d1515ad125e0b2a33a55cebea1",
+  "native_prerequisite_artifact_exact_sha256": "14bc84ac1ce2ef5709bb579b32b401b0d2c3964c6ee4bf60fa27339556359e2a",
+  "native_proof_script_exact_sha256": "7021cd8a5780d476ee759b23ee0a77885a87369be7f23772ad85b61b4c2e50b1",
+  "independent_repeat_script_exact_sha256": "48b89cacf70600026e3baed2518b34ff9c692cc3c9df502b912c36c66f3680cc",
+  "independent_repeat_complete_output_exact_sha256": "34a79b49625b629befa33aaa9d9d842dce9ac2ab709b29af051d350dda72a1d9",
+  "native_source_fixture_hashes": {
+    "azary_codes_KeltnerBreakoutStrategy.py": "151bbda331aa8db25951830372ef5d359ad680d1515ad125e0b2a33a55cebea1",
+    "keltner-synthetic-input.json": "1a51f43511b2343f02be4a51fbc8ff4e20bbba3c2c3bcc37d19f61afed027f19",
+    "keltner-native-synthetic-output.json": "34a79b49625b629befa33aaa9d9d842dce9ac2ab709b29af051d350dda72a1d9"
+  },
+  "validations": {
+    "original_native_repeat_exact": true,
+    "independent_scalar_ema_atr_channel_and_two_sided_state_advice_exact": true,
+    "fixtures": 16,
+    "native_feature_rows": 4090,
+    "native_advices": 271,
+    "unit_size_all_advices": true,
+    "prefix_checks": 7,
+    "future_mutation_checks": 3,
+    "source_http_refetch_exact": true,
+    "source_url": "https://raw.githubusercontent.com/ali-azary/Algorithmic-Trading-From-Beginner-to-Advanced/945c7c430c799687be17092eaebcad6baace1a9e/codes/KeltnerBreakoutStrategy.py",
+    "source_sha256": "151bbda331aa8db25951830372ef5d359ad680d1515ad125e0b2a33a55cebea1",
+    "long_exit_true_without_previous_short_entry": 1290,
+    "lagged_long_entry_qualifier_and_current_long_exit_both_true": 5,
+    "backtrader": "1.9.78.123",
+    "feed_timeframe": "Minutes",
+    "compression": 480
+  },
+  "semantics": [
+    "Original unmodified KeltnerChannel and KeltnerBreakoutStrategy classes were independently rerun under pinned Backtrader1.9.78.123, explicit Minutes/compression480 synthetic feeds. Complete retained output bytes match exactly.",
+    "Effective strategy defaults are EMA30, ATR7 and multiplier1.0. Strategy ATR7 overrides the indicator class default14. Channel mid is EMA; top/bottom are mid plus/minus one ATR.",
+    "EMA first valid seed at index29 is math.fsum of closes0..29 divided by30; later previous*(1-2/31)+current_close*(2/31). Wilder ATR7 starts with true ranges1..7, seed math.fsum/7, then previous*(1-1/7)+currentTR*(1/7). TR uses max(current high,prior close)-min(current low,prior close). No ATR0 seed, EMA first-close seed or algebraic smoothing rewrite.",
+    "Flat long entry checks previous close>previous upper; short checks previous close<previous lower. Source observes that prior-bar predicate only during next() after the current bar completes. Breakout at barj is checked atj+1; a default/reference next-open fill occurs atj+2. Do not remove the extra one-bar delay or fill at the current open printed in the log.",
+    "Held long exits on current close<current EMA30; held short exits on current close>current EMA30. Long exit is separate from previous-bar short entry. First previous band is undefined at startup, so no flat entry at index29.",
+    "Five tested rows satisfy lagged long-entry and current long-exit predicates together. Original flat branch enters; it does not immediately liquidate that new position. Preserve held-before-action branching in any Spot adapter.",
+    "Source order variable blocks while pending and resets after terminal notifications. Position sign drives exits; the OU position_type orphan issue does not apply to this class. Simplified filled-next-open execution still needs explicit pending/reject contracts.",
+    "Native default unit1 advice is confirmed. No stop, target, trailing, timeout, pyramiding or risk-sized protection is specified. A one-unit long/cash scope is a new declared adaptation; the native class also shorts."
+  ],
+  "causality_and_history": [
+    "Inputs use completed current/prior bars with no future resampling. Prefix and future-mutation invariance pass for the recorded fixtures.",
+    "The previous-day comment denotes index-1, not a calendar-day filter. On8h bars this remains one8h bar. Fix source data origin, EMA/ATR initialization and continuous recursive carry through admission warmup; no rolling240 reseed or trade/day/session reset.",
+    "Channel width is ATR; no standard-deviation Bollinger feature or rule is executed. Prior Bollinger exclusion remains intact."
+  ],
+  "prerequisites_for_new_spot_scope": [
+    "Freeze exact source/runtime/EMA/ATR seeds and arithmetic, period30/7, multiplier1.0, prior-bar entry delay and separate current EMA exit before outcomes.",
+    "Define one base-asset unit, sleeve capital, next-minute-open whole-unit fee debit/all-or-reject entry, held-unit exit, own BTC notional fraction and cash/quantity/NAV, pending orders and final censor/unexecuted flags. No full-cash or commented95% resize.",
+    "Explicitly remove source shorts and apply fixed admission warmup as new scope. Test delayed entry with simultaneous current exit, rejected admission, pending final exit, no same-boundary liquidation/reentry, exact MFE/MAE and inventory conservation.",
+    "Preserve all frozen costs, diagnostics, bootstrap alpha .025,500 controls and gates. Randomized/lag entry controls replace the full entry qualifier while retaining the separate source long exit; declare invalid/startup handling and own durations/funding.",
+    "Create immutable config/evaluator/tests with exact native/source/license/preservation receipts; run required tests and final actual source/config-bound independent pre-outcome review, committed before raw/cache load."
+  ],
+  "license": {
+    "receipt_exact_sha256": "2c5e6a5ad814b15ac6695909efe10267bd5bca4ef96a7fd07e0af95d36cf5ace",
+    "status": "Bounded README Code:MIT statement; no standalone code license notice received and add-license placeholder remains.",
+    "limit": "No PDF read, invented copyright notice or full license-file receipt claim."
+  },
+  "limits": [
+    "EMA/ATR scalar port was inspected and independently repeated against actual native output; no external market or PnL selection was used. Synthetic native broker state is not exchange fill reliability or full production bot parity.",
+    "Strong overlap with prior trend, ATR and breakout mechanisms remains. Source distinctness does not prove orthogonality, incremental predictive information or edge.",
+    "Original two-sided native proof is separate from future one-sided Spot execution. No registered cell, viable candidate or future confirmation begins here."
+  ],
+  "orders_live": false,
+  "viable": false,
+  "future_confirmation_started": false
+}

@@ -1,0 +1,82 @@
+{
+  "kind": "PSR20_KELTNER_BATCH14_DRAFT_MECHANICS_INDEPENDENT_REVIEW",
+  "status": "PASS_DRAFT_MECHANICS_NOT_REGISTERED_OR_PRE_OUTCOME_APPROVED",
+  "blocking_findings": [],
+  "market_outcomes_inspected": false,
+  "market_data_loaded": false,
+  "repository_modified": false,
+  "registered": false,
+  "new_registered_trials": 0,
+  "draft_evaluator_exact_sha256": "06f6f9b37b7d1a38bc52066c8aa6c54830d4ee0b96ee2340feaf723747a5a157",
+  "draft_config_exact_sha256": "1d7dcc2508d0d4b56d8bd86afc07852b96fb4b6bf14b647d552b37c7a8825bb0",
+  "draft_canonical_config_sha256": "49e5b919719b9c291bc9924f91274d6ec7e02a1a3af7a241c0657a267d927ea4",
+  "draft_test_exact_sha256": "57db067d90e1e431567116876d1e5b33563b17074b637e7df1970a1bdea29d32",
+  "draft_harness_exact_sha256": "0a3bb0882adc5d03bb5a5ed6df32d0f0e5065554e9d9bf3f11406980ace635fe",
+  "native_readiness_artifact_exact_sha256": "832656ad94889d84c6ad038b9fda7ce5669d10a27fb288c75f8ac4e32f60bb6d",
+  "feature_helper_review_exact_sha256": "4617d17388240e3ba0be2727bf93cf3aff7b0f67e663037f49b8d68b8e0cd2b0",
+  "validations": {
+    "actual_native_feature_rows_exact": 4090,
+    "simulate_ast_difference_limited_to_exit_reason": true,
+    "shared_controls_diagnostics_guards_ast_unchanged": true,
+    "independent_one_unit_synthetic_paths": 80,
+    "event_checks": 108,
+    "randomized_flat_exit_entries": 68,
+    "counts": {
+      "raw_entry_flags": 290,
+      "accepted_entries": 108,
+      "held_entry_ignored": 89,
+      "cash_rejected": 64,
+      "unexecuted_final_entry": 29
+    },
+    "maximum_nav_residual": 0.0,
+    "flat_native_roundoff_exit_preserved_without_epsilon": true,
+    "primary_tests_independently_reexecuted": 18,
+    "primary_runtime": {
+      "python": "3.13.14",
+      "numpy": "2.2.4",
+      "scipy": "1.15.2",
+      "pandas": "2.2.3",
+      "platform": "win32"
+    },
+    "isolated_alternate_tests_independently_reexecuted": 18,
+    "isolated_alternate_runtime": {
+      "python": "3.13.14",
+      "numpy": "2.4.6",
+      "scipy": "1.17.1",
+      "pandas": "2.2.3",
+      "platform": "win32"
+    },
+    "alternate_wheel_receipt_exact_sha256": "93644c6d70cd9055994bf5ba5db2c427de072f318a491971e23882a266563767",
+    "global_dependencies_modified": false
+  },
+  "mechanics": [
+    "Actual draft matches4090 native channel rows exactly, with original EMA30 SMA seed, Wilder ATR7 seedTR1..7, multiplier1.0 and source operation order. Source prior-bar entry delay and separate current close<EMA long exit are retained.",
+    "Compared with the frozen OU cash engine, simulation differs only in its exit reason. Shared controls, diagnostics and committed config/review guards are AST-identical. Fixed one-unit sizing and funding behavior remain unchanged.",
+    "Independent80 one-unit synthetic paths checked108 event records and68 accepted randomized entries on flat EXIT boundaries. Counts, quantity, cash/BTC funding, NAV, source exit timing, no same-boundary reentry, pending/censor/unexecuted flags and exact MFE/MAE endpoints reconcile with zero NAV residual.",
+    "Flat Keltner close100 can have a tiny native EMA roundoff above100, making strict long-exit true. Actual draft preserves those literal values and flags; no epsilon, price rounding or invented invalid-fit hold rule is introduced.",
+    "An actual flat feature stream with randomized entry was followed through its next eligible source-exit boundary. A simultaneous entry and exit while flat opens first and waits for a later boundary; it does not immediately liquidate the new position.",
+    "Breakout barj is checked only whenj+1 completes; reference fill is next minute open atj+2. Config explicitly retains that extra one-bar delay and full-history recursive EMA/ATR carry through240 admission warmup.",
+    "Original short entry/exit flags remain available as source features but execute no shorts in the declared new Spot scope. Random/lag controls replace the entire delayed long-entry qualifier and retain the separate current EMA exit with own funding and durations.",
+    "Correct source attribution and bounded README MIT/missing notice provenance are retained. SciPy is included solely in the frozen environment identity, with no SciPy feature kernel or unused stats import.",
+    "Positive finite close is checked by the feature port. The existing pinned retained-panel loader additionally validates finite positive consistent OHLC, nonnegative volume and exact minute-grid alignment before production feature calculation."
+  ],
+  "portability_scope": [
+    "All18 draft tests passed independently under the primary runtime and the already prepared isolated Windows Python3.13 NumPy2.4.6/SciPy1.17.1 runtime. This includes native-flat roundoff boolean checks; no global dependency changes were made.",
+    "Primary native channel values were separately exact. CI numerical tolerances and strict source flags are fixture checks, not all-platform equivalence. No Linux or Python3.10 runtime was executed by this reviewer.",
+    "No algebraic EMA/ATR rewrite, epsilon or flat-price special case is allowed if a different runtime changes strict comparisons. Actual production runtime identity remains frozen."
+  ],
+  "remaining_before_market_load": [
+    "Register immutable config/design, exact source/native/license/audit receipts and preservation of all prior frozen lanes and rejected versions. Current UNREGISTERED constants and empty source-audit map are draft placeholders.",
+    "Run actual registered18 tests and required repository gates, then verify actual source/config/test/Git/provenance and all preservation hashes plus production missing-review cold guard.",
+    "Commit the final actual evaluator/config-bound independent pre-outcome review before any raw-data or cache load. This draft audit does not approve that future gate."
+  ],
+  "limits": [
+    "Source is a two-sided educational Backtrader strategy; this is a separately declared one-unit long/cash next-open Spot adaptation, not a full unchanged native or live exchange bot.",
+    "The reference funded exit excludes asynchronous broker rejection queues. One-unit exposure depends on asset price; no equal-risk or full-capital investment claim.",
+    "No stop, target, trailing or timeout is invented. All prior costs, bootstrap alpha .025, controls, diagnostics and rejection gates remain unchanged.",
+    "ATR/trend/breakout family overlap remains; no Bollinger standard-deviation feature, orthogonality or incremental predictive claim is introduced.",
+    "No market data or outcomes were inspected. Current attempted totals remain26 trading/27 signal-model; a future freeze would register27/28 without establishing viability."
+  ],
+  "viable": false,
+  "future_confirmation_started": false
+}

@@ -1,0 +1,61 @@
+{
+  "kind": "OBV_SOURCE_BOUNDED_INDEPENDENT_REVIEW",
+  "status": "PASS_BOUNDED_FINDINGS_CONFIRMED_SOURCE_REMAINS_UNSELECTED",
+  "blocking_findings_in_parent_claims": [],
+  "source_readiness": "NOT_SELECTED_PENDING_SOURCE_STATE_AND_ORDER_LIFECYCLE_SPECIFICATION",
+  "parent_readiness_exact_sha256": "2009ce36ee982352b5263394c2e84cf456b4403d83ecc25f0ed824c804031135",
+  "indicator_synthetic_proof_exact_sha256": "324609da0190e4ca96b8dbc4833eacc4e97c757543ce8a1f15101620c112d541",
+  "original_probe_script_exact_sha256": "39bdff42eb84e52ecdadc70ecd64c1ab142f669e06f1632d41a3310840e036dd",
+  "independent_probe_script_exact_sha256": "553f7ffd07b4b59f129a444fe5e74098bd243bebc0876bfaa498452ee53047be",
+  "source_repository": "ali-azary/Algorithmic-Trading-From-Beginner-to-Advanced",
+  "source_commit": "945c7c430c799687be17092eaebcad6baace1a9e",
+  "source_exact_sha256": "46dbac252a3fde1922a5ff230d49a786773f1d1aec6d0d66f6cd0d7977459eac",
+  "validations": {
+    "native_indicator_only_repeat_exact": true,
+    "backtrader": "1.9.78.123",
+    "source_sha256": "46dbac252a3fde1922a5ff230d49a786773f1d1aec6d0d66f6cd0d7977459eac",
+    "source_http_refetch_exact": true,
+    "source_url": "https://raw.githubusercontent.com/ali-azary/Algorithmic-Trading-From-Beginner-to-Advanced/945c7c430c799687be17092eaebcad6baace1a9e/codes/OBVmomentumStrategy.py",
+    "rows_per_fixture": 64,
+    "mutation_only_bar63": true,
+    "first_obv_values": [
+      3.0,
+      -3.0
+    ],
+    "prefix0_through62_offset": 6.0,
+    "rational_obv_minus_sma30_offset_cancels_rows29_through62": true,
+    "strategy_class_or_callbacks_executed": false,
+    "market_data_loaded": false
+  },
+  "market_data_loaded": false,
+  "market_strategy_outcomes_inspected": false,
+  "original_strategy_class_executed": false,
+  "source_order_callbacks_executed": false,
+  "repository_modified": false,
+  "new_registered_trials": 0,
+  "new_attempted_market_trials": 0,
+  "registered": false,
+  "confirmed_bounded_findings": [
+    "Original CustomOBV only was independently rerun under pinned Backtrader1.9.78.123 with explicit480-minute synthetic feed metadata. Retained base/mutated indicator rows match exactly.",
+    "In this preloaded default-runtime fixture, first-bar close[-1] resolves to the final buffered close. Changing only bar63 from90 to110 changes first OBV from+3 to-3, with identical earlier closes and constant OBV difference6 over rows0..62.",
+    "This establishes first-state future dependence for the tested indicator/runtime setup. It does not establish strategy crossing changes, order differences, economic effects or universal behavior under every streaming/preload mode.",
+    "An additive constant cancels algebraically in OBV minus its30-bar SMA. Exact rational arithmetic confirmed cancellation on rows29..62 of this fixture. No floating-point CrossOver equivalence or full-strategy causality rejection is claimed.",
+    "Static notify_order creates sell StopTrail after each completed buy and buy StopTrail after each completed sell, including completed trailing orders. It does not assign these new trailing orders to self.order or restrict callback creation to initial entries.",
+    "Those untracked pending trailing orders can coexist with ordinary flat-entry logic. A simple single-entry/single-source-exit cash engine would omit callback-created orders and therefore would not represent the complete original lifecycle."
+  ],
+  "wording_qualification": "Opposite pending trailing entry means opposite side of the completed order. After a long sell exit, the callback queues a buy, potentially reentering the original long direction; after a short buy exit it queues a sell. This is not evidence that every callback reverses the prior portfolio position.",
+  "remaining_source_requirements": [
+    "Leave source unselected until initialization/runtime scope and complete pending-order, fill, cancel, reversal and funding behavior are specified and tested with original native order observations.",
+    "Do not replace first previous close with current close and claim unchanged native source. A declared causal initialization port, if ever chosen, must be distinguished from this original indicator proof.",
+    "Preserve original OBV/SMA30 CrossOver, RSI14 and volume-SMA7 qualifiers and2% trailing callback semantics in a future source audit. Any omission or Spot scope change requires an explicitly new adaptation.",
+    "Bounded README code-MIT statement and missing standalone notice/placeholder remain documented. No full license-file receipt or PDF content is claimed."
+  ],
+  "limits": [
+    "Only the original indicator and synthetic probe strategy were executed; the original trading strategy, notifications, trail orders and full native economic paths were not run.",
+    "Static callback possibilities are not a demonstrated fill sequence. No numerical strategy-causality, crossing, profit or viability conclusion follows.",
+    "No market data, live API or external order path was accessed. This readiness check registers no trial and leaves all frozen lanes, previous rejections and Bollinger exclusion unchanged."
+  ],
+  "orders_live": false,
+  "viable": false,
+  "future_confirmation_started": false
+}
