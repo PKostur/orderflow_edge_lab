@@ -1,15 +1,18 @@
-"""Deferred tests of the 2026-10-16 evidence audit (reports/Deeper branch evidence audit.md, Sections 0.2 to 0.8).
+"""Deferred tests of the 2026-10-16 evidence audit (reports/Deeper branch evidence audit.md, Sections 0.2 to 0.9).
 
-Runs once on a GitHub-hosted runner (audit-deferred-v1.yml), which can reach the exchanges and the artifact store.
+Runs once on a GitHub-hosted runner (audit-deferred-v1.yml), which can reach MEXC, data.binance.vision, Hyperliquid
+and the artifact store (Binance's fapi answers 451 to US runners, so Binance data comes from data.binance.vision).
 Descriptive only: reads artifacts and public market data, writes one JSON result, never changes a watch.
-Sections: B1, C1, C2, C3, C4, D4 + D5, S1_hyperliquid_common.  Each section records its own error instead of
-stopping the run; nothing is retried beyond each fetcher's own retries.
+Sections: C1, B1, C2, C3 (prices; funding deferred), C4, D4 + D5, S1_hyperliquid_common.  Each section records its
+own error instead of stopping the run, the result file is rewritten after every section, and nothing is retried
+beyond each fetcher's own retries.
 """
 
 from __future__ import annotations
 
 import argparse
 import ast
+import contextlib
 import importlib.util
 import io
 import json
@@ -31,8 +34,11 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 BCFG = json.loads((ROOT / "config/multi_premia_blend_v1.json").read_text(encoding="utf-8"))
 DEV_START, DEV_END = "2020-06-01", "2026-09-12"
-C3_START = "2026-10-04T00:00:00Z"
+C3_START = "2026-10-04"
 REVISION_TOL = 1e-9
+B1_MIN_DAYS = 10
+D4_MAX_EMPTY_FUNDING_SHARE = 0.25
+ALIAS = {"FILECOIN": "FIL", "TRUMPOFFICIAL": "TRUMP", "PUMPFUN": "PUMP"}
 REPORT_ARTIFACT_BY_FILE = {"near_miss_forward_report.json": "near-miss-forward-v1",
                            "fade24_forward_report.json": "fade24-forward-v1",
                            "tradfi_perps_forward_report.json": "tradfi-perps-forward-v1"}
@@ -62,9 +68,26 @@ def _load_script(name: str):
     return mod
 
 
+def _clean(o: Any) -> Any:
+    """JSON-safe: NaN/inf -> None, numpy scalars -> Python."""
+    if isinstance(o, dict):
+        return {str(k): _clean(v) for k, v in o.items()}
+    if isinstance(o, (list, tuple)):
+        return [_clean(v) for v in o]
+    if isinstance(o, (np.floating, float)):
+        f = float(o)
+        return f if math.isfinite(f) else None
+    if isinstance(o, np.integer):
+        return int(o)
+    if isinstance(o, np.bool_):
+        return bool(o)
+    return o
+
+
 def watches() -> list[tuple[str, str, str, str]]:
     """(display name, artifact name, report file, primary book) from dashboard_snapshot.WATCHES, read without importing."""
     tree = ast.parse((ROOT / "scripts/dashboard_snapshot.py").read_text(encoding="utf-8"))
+    rows: list = []
     for node in tree.body:
         if isinstance(node, ast.Assign) and any(getattr(t, "id", None) == "WATCHES" for t in node.targets):
             rows = ast.literal_eval(node.value)
@@ -78,23 +101,28 @@ def watches() -> list[tuple[str, str, str, str]]:
 
 
 # ---------------------------------------------------------------- artifacts
-def fetch_artifacts(repo: str, token: str, names: set[str]) -> list[dict[str, Any]]:
+def fetch_artifacts(repo: str, token: str, names: set[str]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     arch = _load_script("archive_forward_artifacts")
-    out = []
+    out, errors, seen = [], [], set()
     for a in arch.list_artifacts(repo, token):
-        if a["name"] not in names or a.get("expired"):
+        if a["name"] not in names or a.get("expired") or int(a["id"]) in seen:
             continue
-        with zipfile.ZipFile(io.BytesIO(arch._get(a["archive_download_url"], token))) as z:
-            files = {}
-            for info in z.infolist():
-                if info.filename.endswith(".json"):
-                    try:
-                        files[Path(info.filename).name] = json.loads(z.read(info))
-                    except ValueError:
-                        pass
+        seen.add(int(a["id"]))
+        try:
+            with zipfile.ZipFile(io.BytesIO(arch._get(a["archive_download_url"], token))) as z:
+                files = {}
+                for info in z.infolist():
+                    if info.filename.endswith(".json"):
+                        try:
+                            files[Path(info.filename).name] = json.loads(z.read(info))
+                        except ValueError:
+                            pass
+        except Exception as exc:
+            errors.append({"artifact": a["id"], "name": a["name"], "error": repr(exc)[:300]})
+            continue
         out.append({"id": a["id"], "name": a["name"], "created_at": a["created_at"],
                     "head_sha": a["workflow_run"].get("head_sha"), "files": files})
-    return sorted(out, key=lambda a: (a["created_at"], a["id"]))
+    return sorted(out, key=lambda a: (a["created_at"], a["id"])), errors
 
 
 def series_of(report: dict[str, Any] | None, book: str) -> pd.Series | None:
@@ -103,8 +131,7 @@ def series_of(report: dict[str, Any] | None, book: str) -> pd.Series | None:
     d = (report.get("daily_returns") or {}).get(book)
     if not d:
         return None
-    s = pd.Series({pd.Timestamp(k): float(v) for k, v in d.items()}).sort_index()
-    return s
+    return pd.Series({pd.Timestamp(k): float(v) for k, v in d.items()}).sort_index()
 
 
 def c1_revisions(arts, wl) -> dict[str, Any]:
@@ -137,8 +164,8 @@ def latest_series(arts, wl) -> dict[str, pd.Series]:
     out = {}
     for name, art, report, book in wl:
         for a in reversed(arts):
-            if a["name"] == art:
-                s = series_of(a["files"].get(report), book)
+            if a["name"] == art and report in a["files"]:
+                s = series_of(a["files"][report], book)
                 if s is not None and len(s):
                     out[name] = s
                 break
@@ -149,7 +176,7 @@ def b1_family(latest: dict[str, pd.Series]) -> dict[str, Any]:
     from orderflow_edge_lab.review_methods import bh_family, expected_max_normal_z
     from orderflow_edge_lab.trend_portfolio_forward import summarize
 
-    p, per = {}, {}
+    p, per, included, excluded = {}, {}, {}, {}
     for name, s in latest.items():
         sm = summarize(s, nw_lags=5)
         t = sm["newey_west_t"]
@@ -157,10 +184,23 @@ def b1_family(latest: dict[str, pd.Series]) -> dict[str, Any]:
                      "cumulative_return": sm["cumulative_return"]}
         if t is not None and math.isfinite(t):
             p[name] = 1.0 - NormalDist().cdf(t)
-    frame = pd.DataFrame(latest).dropna()
-    res: dict[str, Any] = {"watches": per, "common_days": int(len(frame)), "included": list(frame.columns)}
+        gaps = s.index.to_series().diff().dropna()
+        calendar_daily = bool(len(gaps) == 0 or (gaps == pd.Timedelta(days=1)).all())
+        if len(s) < B1_MIN_DAYS:
+            excluded[name] = f"fewer than {B1_MIN_DAYS} scored days"
+        elif not calendar_daily:
+            excluded[name] = "stamps are not calendar-daily"
+        elif float(s.std(ddof=1)) == 0.0:
+            excluded[name] = "constant series"
+        else:
+            included[name] = s
+    frame = pd.DataFrame(included).dropna()
+    res: dict[str, Any] = {"watches": per, "excluded_from_n_eff": excluded, "included": list(frame.columns),
+                           "common_days": int(len(frame))}
     if len(frame) >= 5 and frame.shape[1] >= 2:
-        c = frame.corr().fillna(0.0).values
+        c = frame.corr().values
+        np.fill_diagonal(c, 1.0)
+        c = np.nan_to_num(c, nan=0.0)
         lam = np.linalg.eigvalsh(c)
         n_eff = float(lam.sum() ** 2 / (lam ** 2).sum())
         res.update({"n_eff": n_eff, "eigenvalues": [float(x) for x in lam],
@@ -168,13 +208,13 @@ def b1_family(latest: dict[str, pd.Series]) -> dict[str, Any]:
                     "correlation": pd.DataFrame(c, index=frame.columns, columns=frame.columns).round(3).to_dict()})
     else:
         res["n_eff"] = None
-        res["note"] = "fewer than 5 common days or fewer than 2 watches: N_eff not estimable"
+        res["note"] = "fewer than 5 common days or fewer than 2 included watches: N_eff not estimable"
     res["bh_q010"] = bh_family(p, q=0.10) if p else {}
     return res
 
 
 def c2_determinism(arts) -> dict[str, Any]:
-    out = {}
+    out: dict[str, Any] = {}
     for art, report, argv in C2_MODULES:
         key = f"{art}/{report}"
         latest = next((a for a in reversed(arts) if a["name"] == art and report in a["files"]), None)
@@ -183,112 +223,98 @@ def c2_determinism(arts) -> dict[str, Any]:
             continue
         ref = latest["files"][report]
         as_of = ref.get("as_of_utc")
-        with tempfile.TemporaryDirectory() as d:
-            outp = Path(d) / "r.json"
-            cmd = [sys.executable, "-m", *argv, "--output", str(outp), "--as-of", str(as_of)]
-            proc = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, timeout=3600)
-            if proc.returncode != 0:
-                out[key] = {"as_of": as_of, "error": proc.stderr[-2000:]}
-                continue
-            new = json.loads(outp.read_text(encoding="utf-8"))
-        books = {}
-        ok = True
+        try:
+            with tempfile.TemporaryDirectory() as d:
+                outp = Path(d) / "r.json"
+                cmd = [sys.executable, "-m", *argv, "--output", str(outp), "--as-of", str(as_of)]
+                proc = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, timeout=3600)
+                if proc.returncode != 0:
+                    out[key] = {"as_of": as_of, "error": proc.stderr[-2000:]}
+                    continue
+                new = json.loads(outp.read_text(encoding="utf-8"))
+        except subprocess.TimeoutExpired:
+            out[key] = {"as_of": as_of, "error": "timeout after 3600 s"}
+            continue
+        books, ok = {}, True
         for book in sorted(set(ref.get("daily_returns", {})) | set(new.get("daily_returns", {}))):
             a, b = ref.get("daily_returns", {}).get(book, {}), new.get("daily_returns", {}).get(book, {})
             same_keys = set(a) == set(b)
             gap = max((abs(a[k] - b[k]) for k in set(a) & set(b)), default=0.0)
             books[book] = {"same_stamps": same_keys, "n_ref": len(a), "n_new": len(b), "max_abs_gap": gap}
             ok = ok and same_keys and gap <= REVISION_TOL
-        out[key] = {"as_of": as_of, "artifact": latest["id"], "artifact_head_sha": latest["head_sha"], "pass": ok, "books": books}
+        out[key] = {"as_of": as_of, "artifact": latest["id"], "artifact_head_sha": latest["head_sha"], "pass": ok,
+                    "coins_with_data": {"ref": ref.get("coins_with_data"), "new": new.get("coins_with_data")},
+                    "missing_symbols": {"ref": ref.get("missing_symbols"), "new": new.get("missing_symbols")},
+                    "books": books}
     out["paper_account_report.json"] = {"not_testable": "paper_account has no --as-of option"}
     return out
 
 
 # ---------------------------------------------------------------- market data
-def binance_window(fg, sym: str, s_ms: int, e_ms: int):
-    for cand in fg.sym_candidates(sym):
-        rows, s0 = {}, s_ms
-        try:
-            while s0 < e_ms:
-                d = fg._get(f"https://fapi.binance.com/fapi/v1/klines?symbol={cand}&interval=8h&startTime={s0}"
-                            f"&endTime={e_ms - 1}&limit=1500")
-                if not d:
-                    break
-                for k in d:
-                    if int(k[6]) < e_ms:
-                        rows[int(k[0])] = [float(x) for x in k[1:6]]
-                s0 = int(d[-1][0]) + 1
-                if len(d) < 1500:
-                    break
-        except Exception:
-            rows = {}
-        if not rows:
-            continue
-        fund, s0 = [], s_ms
-        while s0 < e_ms:
-            d = fg._get(f"https://fapi.binance.com/fapi/v1/fundingRate?symbol={cand}&startTime={s0}&endTime={e_ms}&limit=1000")
-            if not d:
-                break
-            fund += d
-            s0 = int(d[-1]["fundingTime"]) + 1
-            if len(d) < 1000:
-                break
-        fs = pd.Series({pd.Timestamp(int(x["fundingTime"]), unit="ms", tz="UTC"): float(x["fundingRate"]) for x in fund},
-                       dtype=float).sort_index()
-        return cand, fg._frame(rows), fs
-    return None, None, None
+def binance_candidates(sym: str) -> list[str]:
+    base = sym.replace("_USDT", "")
+    base = ALIAS.get(base, base)
+    return [f"{base}USDT", f"1000{base}USDT"]
 
 
-def _daily_sum(s: pd.Series) -> pd.Series:
-    s = s.dropna()
-    return s.groupby(s.index.floor("D")).sum() if len(s) else pd.Series(dtype=float)
+def binance_archive(dataset: str, sym: str, start: str, end: str) -> tuple[str | None, pd.DataFrame]:
+    """First candidate contract with data in data.binance.vision ('perp' 1h klines or 'funding')."""
+    from orderflow_edge_lab.binance_futures_archive import load_dataset
+
+    for cand in binance_candidates(sym):
+        f = load_dataset(dataset, cand, start=start, end=end)
+        if len(f):
+            return cand, f
+    return None, pd.DataFrame()
 
 
-def c3_reconcile(fg, end: pd.Timestamp) -> dict[str, Any]:
-    from orderflow_edge_lab.basis_convergence import fetch_mexc_funding_history
+def _binance_daily_open(f: pd.DataFrame) -> pd.Series:
+    """00:00 UTC open = open of the 1h bar ending 01:00 (archive frames are indexed by bar end)."""
+    s = f["open"][f.index.hour == 1]
+    s.index = s.index.floor("D")
+    return s.astype(float)
+
+
+def c3_reconcile(end: pd.Timestamp) -> dict[str, Any]:
     from orderflow_edge_lab.mexc_history import fetch_mexc_futures_klines
     from orderflow_edge_lab.xs_premia import daily_open_panel
 
-    s_ms, e_ms = int(pd.Timestamp(C3_START).timestamp() * 1000), int(end.timestamp() * 1000)
+    end_day = (end - pd.Timedelta(days=1)).strftime("%Y-%m-%d")
 
     def load(s):
+        err = {}
         try:
-            m = fetch_mexc_futures_klines(s, "8h", C3_START, end.isoformat())
-            mf = fetch_mexc_funding_history(s, C3_START, end.isoformat())["funding_rate"]
+            m = fetch_mexc_futures_klines(s, "8h", f"{C3_START}T00:00:00Z", end.isoformat())
         except Exception as exc:
-            return s, None, None, None, None, repr(exc)
-        cand, b, bf = binance_window(fg, s, s_ms, e_ms)
-        return s, m, mf, b, bf, cand
+            m, err["mexc"] = None, repr(exc)[:300]
+        try:
+            cand, b = binance_archive("perp", s, C3_START, end_day)
+        except Exception as exc:
+            cand, b, err["binance"] = None, pd.DataFrame(), repr(exc)[:300]
+        return s, m, cand, b, err
 
     with ThreadPoolExecutor(4) as ex:
         got = list(ex.map(load, BCFG["symbols"]))
-    mex = {s: m for s, m, _, b, _, _ in got if m is not None and b is not None}
-    bin_ = {s: b for s, m, _, b, _, _ in got if m is not None and b is not None}
-    missing = {s: (c if m is None else "no binance contract") for s, m, _, b, _, c in got if m is None or b is None}
-    om, ob = daily_open_panel(mex), daily_open_panel(bin_)
-    rm, rb = (om.shift(-1) / om - 1.0), (ob.shift(-1) / ob - 1.0)
+    mex = {s: m for s, m, c, b, _ in got if m is not None and len(m) and len(b)}
+    bopen = pd.DataFrame({s: _binance_daily_open(b) for s, m, c, b, _ in got if s in mex})
+    problems = {s: (e or {"binance": "no contract in archive"}) for s, m, c, b, e in got if s not in mex}
+    om = daily_open_panel(mex)
+    rm, rb = (om.shift(-1) / om - 1.0), (bopen.shift(-1) / bopen - 1.0)
     rm, rb = rm.align(rb, join="inner")
     gap = (rm - rb).abs()
-    both = gap.notna()
+    n = int(gap.notna().values.sum())
     exc_r = [{"date": d.isoformat(), "symbol": s, "mexc": float(rm.at[d, s]), "binance": float(rb.at[d, s]),
               "gap_bps": float(gap.at[d, s] * 1e4)} for d, s in gap[gap > 0.005].stack().index]
-    fm = pd.DataFrame({s: _daily_sum(mf) for s, m, mf, b, bf, _ in got if s in mex})
-    fb = pd.DataFrame({s: _daily_sum(bf) for s, m, mf, b, bf, _ in got if s in mex})
-    fm, fb = fm.align(fb, join="inner")
-    fboth = fm.notna() & fb.notna()
-    sign_ok = (np.sign(fm) == np.sign(fb)) & fboth
-    fgap = (fm - fb).abs()
-    exc_f = [{"date": d.isoformat(), "symbol": s, "mexc": float(fm.at[d, s]), "binance": float(fb.at[d, s]),
-              "gap_bps": float(fgap.at[d, s] * 1e4)} for d, s in fgap[(fgap > 0.0005) & fboth].stack().index]
-    n_f = int(fboth.values.sum())
-    return {"coins_compared": len(mex), "missing": missing, "window": [C3_START, end.isoformat()],
-            "returns": {"coin_days": int(both.values.sum()), "exceptions_gt_50bps": len(exc_r),
-                        "exception_rate": (len(exc_r) / int(both.values.sum())) if both.values.sum() else None,
-                        "median_gap_bps": float(np.nanmedian(gap.values) * 1e4) if both.values.sum() else None,
-                        "exceptions": exc_r[:200]},
-            "funding": {"coin_days": n_f, "sign_agreement": (float(sign_ok.values.sum()) / n_f) if n_f else None,
-                        "sign_rule_pass_ge_0_90": (float(sign_ok.values.sum()) / n_f >= 0.90) if n_f else None,
-                        "exceptions_gt_5bps": len(exc_f), "exceptions": exc_f[:200]}}
+    return {"coins_compared": len(mex), "problems": problems, "window": [C3_START, end_day],
+            "contracts": {s: c for s, m, c, b, _ in got if s in mex},
+            "stamp_convention": "d = open(d) to open(d+1), one day earlier than the watches' stamps",
+            "returns": {"coin_days": n, "exceptions_gt_50bps": len(exc_r),
+                        "exception_rate": (len(exc_r) / n) if n else None,
+                        "median_gap_bps": float(np.nanmedian(gap.values) * 1e4) if n else None,
+                        "p95_gap_bps": float(np.nanpercentile(gap.values, 95) * 1e4) if n else None,
+                        "exceptions": exc_r[:300]},
+            "funding": {"status": "DEFERRED", "reason": "data.binance.vision publishes fundingRate monthly only; "
+                                                         "the 2026-10 file is needed (addendum 0.9)"}}
 
 
 def c4_beta(latest: dict[str, pd.Series], end: pd.Timestamp, reports: dict[str, dict]) -> dict[str, Any]:
@@ -315,45 +341,37 @@ def c4_beta(latest: dict[str, pd.Series], end: pd.Timestamp, reports: dict[str, 
     return out
 
 
-def dev_data():
+def dev_data() -> tuple[dict, dict, dict[str, Any]]:
+    """Development construction: MEXC 8h klines + Binance funding (data.binance.vision monthly files)."""
     from orderflow_edge_lab.mexc_history import fetch_mexc_futures_klines
 
-    alias = {"FILECOIN": "FIL", "TRUMPOFFICIAL": "TRUMP", "PUMPFUN": "PUMP"}
-    s0_all = int(pd.Timestamp(DEV_START, tz="UTC").timestamp() * 1000)
-    e0 = int(pd.Timestamp(DEV_END, tz="UTC").timestamp() * 1000)
-    fg = _load_script("fast_gates_venue_replication_2026_10_04")
-
-    def funding(sym):  # same requests as scripts/multi_premia_eval_2026_09_27.py funding()
-        base = alias.get(sym.replace("_USDT", ""), sym.replace("_USDT", ""))
-        for cand in (f"{base}USDT", f"1000{base}USDT"):
-            s0, rows = s0_all, []
-            try:
-                while s0 < e0:
-                    d = fg._get(f"https://fapi.binance.com/fapi/v1/fundingRate?symbol={cand}&startTime={s0}&endTime={e0}&limit=1000")
-                    if not d:
-                        break
-                    rows += d
-                    s0 = int(d[-1]["fundingTime"]) + 1
-                    if len(d) < 1000:
-                        break
-            except Exception:
-                rows = []
-            if rows:
-                return pd.Series({pd.Timestamp(int(x["fundingTime"]), unit="ms", tz="UTC"): float(x["fundingRate"])
-                                  for x in rows}).sort_index()
-        return pd.Series(dtype=float)
+    errors: dict[str, str] = {}
 
     def load(s):
         try:
-            return s, fetch_mexc_futures_klines(s, "8h", f"{DEV_START}T00:00:00Z", f"{DEV_END}T00:00:00Z"), funding(s)
-        except Exception:
-            return s, None, None
+            f = fetch_mexc_futures_klines(s, "8h", f"{DEV_START}T00:00:00Z", f"{DEV_END}T00:00:00Z")
+        except Exception as exc:
+            return s, None, None, f"mexc: {exc!r}"[:300]
+        try:
+            _, fr = binance_archive("funding", s, DEV_START, DEV_END)
+            fu = fr["rate"].astype(float) if len(fr) else pd.Series(dtype=float)
+            fu = fu[(fu.index >= pd.Timestamp(DEV_START, tz="UTC")) & (fu.index < pd.Timestamp(DEV_END, tz="UTC"))]
+            fu = fu[~fu.index.duplicated(keep="first")]
+        except Exception as exc:
+            return s, f, pd.Series(dtype=float), f"binance funding: {exc!r}"[:300]
+        return s, f, fu, None
 
     with ThreadPoolExecutor(4) as ex:
         got = list(ex.map(load, BCFG["symbols"]))
-    frames = {s: f for s, f, _ in got if f is not None and len(f) > 400}
-    fund = {s: fu for s, f, fu in got if s in frames}
-    return frames, fund
+    for s, f, fu, e in got:
+        if e:
+            errors[s] = e
+    frames = {s: f for s, f, _, _ in got if f is not None and len(f) > 400}
+    fund = {s: (fu if fu is not None else pd.Series(dtype=float)) for s, f, fu, _ in got if s in frames}
+    empty = sorted(s for s, fu in fund.items() if len(fu) == 0)
+    meta = {"coins": len(frames), "missing_or_short": sorted(set(BCFG["symbols"]) - set(frames)), "errors": errors,
+            "empty_funding": empty, "empty_funding_share": (len(empty) / len(frames)) if frames else None}
+    return frames, fund, meta
 
 
 def run_xs_open_only(opens, fund, score, *, rebalance_days, q, cost_bps, min_names=8):
@@ -404,11 +422,12 @@ def d4_d5(frames, fund) -> dict[str, Any]:
         "open_only": lambda sc, rb, q: run_xs_open_only(opens, fp, sc, rebalance_days=rb, q=q, cost_bps=cost),
         "pit_successor": lambda sc, rb, q: run_xs_pit(opens, last_close, fp, sc, rebalance_days=rb, q=q, cost_bps=cost),
     }
-    res: dict[str, Any] = {"coins": len(frames), "window": [DEV_START, DEV_END], "construction": "MEXC 8h prices + Binance funding (development)"}
+    res: dict[str, Any] = {"coins": len(frames), "window": [DEV_START, DEV_END],
+                           "construction": "MEXC 8h prices + Binance funding (data.binance.vision monthly files)"}
     legs_by = {}
     for vname, fn in variants.items():
         legs = {"S1": base["S1"]}
-        info = {}
+        info: dict[str, Any] = {}
         for leg, (sc, rb, q) in specs.items():
             o = fn(sc, rb, q)
             r = o["returns"].copy()
@@ -420,22 +439,29 @@ def d4_d5(frames, fund) -> dict[str, Any]:
                 info[leg]["settlements_without_price"] = sum(1 for x in o["settlements"] if x["price"] != "last_close")
         lg = pd.concat([pd.Series(v).rename(n) for n, v in legs.items()], axis=1).dropna()
         lg = lg[(lg != 0).all(axis=1).cumsum() > 0]
-        lg["S4"] = blend(lg[["S1", "S2", "S3"]], vol_window=int(BCFG["blend"]["vol_window_days"]), min_obs=int(BCFG["blend"]["min_obs"]))
+        lg["S4"] = blend(lg[["S1", "S2", "S3"]], vol_window=int(BCFG["blend"]["vol_window_days"]),
+                         min_obs=int(BCFG["blend"]["min_obs"]))
         legs_by[vname] = lg
         res[vname] = {leg: {**_stats(lg[leg]), **info.get(leg, {})} for leg in ("S1", "S2", "S3", "S4")}
+    drops: dict[str, Any] = {}
     for leg, (sc, rb, q) in specs.items():
-        drops = []
+        spec_n, scored_n = [], []
         for i, d in enumerate(opens.index[:-1]):
             if i % rb == 0:
-                drops.append(int((opens.loc[d].notna() & nxt.loc[d].isna() & sc.loc[d].notna()).sum()))
-        res.setdefault("dropped_by_mask_per_rebalance", {})[leg] = {"mean": float(np.mean(drops)), "total": int(np.sum(drops)),
-                                                                    "rebalances": len(drops)}
+                ending = opens.loc[d].notna() & nxt.loc[d].isna()
+                spec_n.append(int(ending.sum()))
+                scored_n.append(int((ending & sc.loc[d].notna()).sum()))
+        drops[leg] = {"rebalances": len(spec_n),
+                      "as_specified_open_d_none_d1": {"mean": float(np.mean(spec_n)), "total": int(np.sum(spec_n))},
+                      "with_score": {"mean": float(np.mean(scored_n)), "total": int(np.sum(scored_n))}}
+    res["dropped_by_mask_per_rebalance"] = drops
     chk = (legs_by["original"]["S2"] - base["S2"].reindex(legs_by["original"].index)).abs().max()
     res["sanity_original_S2_matches_leg_returns_max_abs"] = float(chk)
     for v in ("open_only", "pit_successor"):
-        res[f"diff_{v}_minus_original"] = {leg: {"sharpe": (res[v][leg]["sharpe"] or 0) - (res["original"][leg]["sharpe"] or 0),
-                                                 "mean_daily": res[v][leg]["mean_daily"] - res["original"][leg]["mean_daily"]}
-                                           for leg in ("S2", "S3", "S4")}
+        res[f"diff_{v}_minus_original"] = {
+            leg: {"sharpe": (res[v][leg]["sharpe"] or 0.0) - (res["original"][leg]["sharpe"] or 0.0),
+                  "mean_daily": res[v][leg]["mean_daily"] - res["original"][leg]["mean_daily"]}
+            for leg in ("S2", "S3", "S4")}
     return res
 
 
@@ -443,7 +469,10 @@ def s1_hyperliquid(frames, fund) -> dict[str, Any]:
     from orderflow_edge_lab.multi_premia_forward import leg_returns
 
     hv = _load_script("hyperliquid_venue_check_2026_10_09")
-    data = hv.fetch_all(BCFG["symbols"])
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        data = hv.fetch_all(BCFG["symbols"])
+    fetch_errors = [line for line in buf.getvalue().splitlines() if line.startswith("fail")]
     coins = sorted(s for s in data if s in frames)
 
     def s1(fr, fu):
@@ -454,19 +483,42 @@ def s1_hyperliquid(frames, fund) -> dict[str, Any]:
     v = s1({s: data[s][1] for s in coins}, {s: data[s][2] for s in coins})
     r = s1({s: frames[s] for s in coins}, {s: fund[s] for s in coins})
     common = v.index.intersection(r.index)
-    return {"coins": len(coins), "window": [hv.START, hv.END], "common_days": int(len(common)),
+    return {"coins": len(coins), "fetch_errors": fetch_errors, "window": [hv.START, hv.END],
+            "common_days": int(len(common)),
             "first": str(common.min()) if len(common) else None, "last": str(common.max()) if len(common) else None,
             "hyperliquid_S1": _stats(v.loc[common]), "reference_S1": _stats(r.loc[common]),
             "daily_correlation": float(v.loc[common].corr(r.loc[common])) if len(common) > 2 else None}
 
 
-def _section(results: dict, key: str, fn: Callable[[], Any]) -> Any:
-    try:
-        results[key] = fn()
-    except Exception:
-        results[key] = {"error": traceback.format_exc()[-3000:]}
-    print(f"[audit] {key}: {'error' if isinstance(results[key], dict) and 'error' in results[key] else 'done'}", flush=True)
-    return results[key]
+class Runner:
+    def __init__(self, output: Path, results: dict[str, Any]):
+        self.output, self.results = output, results
+        output.parent.mkdir(parents=True, exist_ok=True)
+        self.write()
+
+    def write(self) -> None:
+        self.output.write_text(json.dumps(_clean(self.results), indent=1, sort_keys=True, default=str) + "\n",
+                               encoding="utf-8")
+
+    def fetch(self, key: str, fn: Callable[[], Any]) -> Any:
+        """Run a data-loading step; store only its error (the caller stores metadata)."""
+        try:
+            return fn()
+        except Exception:
+            self.results[key] = {"error": traceback.format_exc()[-3000:]}
+            self.write()
+            print(f"[audit] {key}: error", flush=True)
+            return None
+
+    def section(self, key: str, fn: Callable[[], Any]) -> Any:
+        try:
+            self.results[key] = fn()
+        except Exception:
+            self.results[key] = {"error": traceback.format_exc()[-3000:]}
+        self.write()
+        bad = isinstance(self.results[key], dict) and "error" in self.results[key]
+        print(f"[audit] {key}: {'error' if bad else 'done'}", flush=True)
+        return self.results[key]
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -474,44 +526,48 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--output", required=True, type=Path)
     p.add_argument("--repo", default=os.environ.get("GITHUB_REPOSITORY", ""))
     a = p.parse_args(argv)
+    output = a.output.resolve()
     os.chdir(ROOT)
     os.environ.setdefault("TEMP", tempfile.gettempdir())  # the reused venue scripts read TEMP at import
     token = os.environ["GH_TOKEN"]
     end = pd.Timestamp.now(tz="UTC").floor("h")
-    results: dict[str, Any] = {"audit": "deeper-branch-evidence-audit-2026-10-16", "run_utc": end.isoformat(),
-                               "git_head": os.environ.get("GITHUB_SHA"), "descriptive_only": True}
     wl = watches()
-    results["watch_list"] = [list(w) for w in wl]
+    run = Runner(output, {"audit": "deeper-branch-evidence-audit-2026-10-16", "run_utc": end.isoformat(),
+                          "git_head": os.environ.get("GITHUB_SHA"), "descriptive_only": True,
+                          "watch_list": [list(w) for w in wl]})
+    fetched = run.fetch("artifacts_meta", lambda: fetch_artifacts(a.repo, token, {w[1] for w in wl}))
     arts: list[dict[str, Any]] = []
-    try:
-        arts = fetch_artifacts(a.repo, token, {w[1] for w in wl})
-        results["artifacts_meta"] = {"count": len(arts), "first": arts[0]["created_at"] if arts else None,
-                                     "last": arts[-1]["created_at"] if arts else None}
-    except Exception:
-        results["artifacts_meta"] = {"error": traceback.format_exc()[-3000:]}
-    latest = latest_series(arts, wl) if arts else {}
+    if fetched is not None:
+        arts, errors = fetched
+        run.results["artifacts_meta"] = {"count": len(arts), "download_errors": errors,
+                                         "first": arts[0]["created_at"] if arts else None,
+                                         "last": arts[-1]["created_at"] if arts else None}
+        run.write()
+    latest = latest_series(arts, wl)
     reports = {}
     for name, art, report, _b in wl:
         for x in reversed(arts):
             if x["name"] == art and report in x["files"]:
                 reports[name] = x["files"][report]
                 break
-    _section(results, "C1_revisions", lambda: c1_revisions(arts, wl))
-    _section(results, "B1_family", lambda: b1_family(latest))
-    _section(results, "C2_determinism", lambda: c2_determinism(arts))
-    fg = _load_script("fast_gates_venue_replication_2026_10_04")
-    _section(results, "C3_reconciliation", lambda: c3_reconcile(fg, end))
-    _section(results, "C4_btc_beta", lambda: c4_beta(latest, end, reports))
-    try:
-        frames, fund = dev_data()
-        results["dev_data_meta"] = {"coins": len(frames), "missing": sorted(set(BCFG["symbols"]) - set(frames))}
-        _section(results, "D4_D5_mask_size", lambda: d4_d5(frames, fund))
-        _section(results, "S1_hyperliquid_common", lambda: s1_hyperliquid(frames, fund))
-    except Exception:
-        results["dev_data_meta"] = {"error": traceback.format_exc()[-3000:]}
-    a.output.parent.mkdir(parents=True, exist_ok=True)
-    a.output.write_text(json.dumps(results, indent=1, sort_keys=True, default=str) + "\n", encoding="utf-8")
-    print(json.dumps({k: ("error" if isinstance(v, dict) and "error" in v else "ok") for k, v in results.items()
+    run.section("C1_revisions", lambda: c1_revisions(arts, wl))
+    run.section("B1_family", lambda: b1_family(latest))
+    run.section("C2_determinism", lambda: c2_determinism(arts))
+    run.section("C3_reconciliation", lambda: c3_reconcile(end))
+    run.section("C4_btc_beta", lambda: c4_beta(latest, end, reports))
+    got = run.fetch("dev_data_meta", dev_data)
+    if got is not None:
+        frames, fund, meta = got
+        run.results["dev_data_meta"] = meta
+        run.write()
+        share = meta["empty_funding_share"]
+        if share is None or share > D4_MAX_EMPTY_FUNDING_SHARE:
+            run.results["D4_D5_mask_size"] = {"aborted": f"empty Binance funding share {share} > {D4_MAX_EMPTY_FUNDING_SHARE}"}
+            run.write()
+        else:
+            run.section("D4_D5_mask_size", lambda: d4_d5(frames, fund))
+        run.section("S1_hyperliquid_common", lambda: s1_hyperliquid(frames, fund))
+    print(json.dumps({k: ("error" if isinstance(v, dict) and "error" in v else "ok") for k, v in run.results.items()
                       if isinstance(v, dict)}), flush=True)
     return 0
 

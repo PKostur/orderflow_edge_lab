@@ -16,6 +16,7 @@ import hashlib
 import io
 import json
 import os
+import shutil
 import urllib.request
 import zipfile
 from pathlib import Path
@@ -41,17 +42,20 @@ def select(artifacts: Iterable[Mapping[str, Any]], archived_ids: set[int]) -> li
     """Artifacts to download: unexpired, allow-listed, not archived yet; ledgers newest per UTC day only."""
     out: list[Mapping[str, Any]] = []
     newest_ledger: dict[tuple[str, str], Mapping[str, Any]] = {}
+    seen: set[int] = set()
     for a in artifacts:
-        if a.get("expired") or int(a["id"]) in archived_ids:
+        if a.get("expired") or int(a["id"]) in seen:
             continue
+        seen.add(int(a["id"]))
         name = a["name"]
         if name in REPORT_ARTIFACTS:
-            out.append(a)
+            if int(a["id"]) not in archived_ids:
+                out.append(a)
         elif name in LEDGER_ARTIFACTS:
-            key = (name, str(a["created_at"])[:10])
+            key = (name, str(a["created_at"])[:10])   # newest of the day over all unexpired, then skip if archived
             if key not in newest_ledger or str(a["created_at"]) > str(newest_ledger[key]["created_at"]):
                 newest_ledger[key] = a
-    out.extend(newest_ledger.values())
+    out.extend(a for a in newest_ledger.values() if int(a["id"]) not in archived_ids)
     return sorted(out, key=lambda a: (str(a["created_at"]), int(a["id"])))
 
 
@@ -69,6 +73,8 @@ def target_dir(root: Path, a: Mapping[str, Any]) -> Path:
 
 
 def extract(zip_bytes: bytes, dest: Path) -> dict[str, str]:
+    if dest.exists():
+        shutil.rmtree(dest)      # a newer same-day ledger replaces the folder, so manifest hashes match the files
     dest.mkdir(parents=True, exist_ok=True)
     hashes = {}
     with zipfile.ZipFile(io.BytesIO(zip_bytes)) as z:
@@ -86,8 +92,9 @@ def extract(zip_bytes: bytes, dest: Path) -> dict[str, str]:
 
 
 def _get(url: str, token: str) -> bytes:
-    req = urllib.request.Request(url, headers={"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json",
-                                               "X-GitHub-Api-Version": "2022-11-28"})
+    req = urllib.request.Request(url, headers={"Accept": "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28"})
+    # unredirected: the token goes to api.github.com only, never to the blob host an artifact download redirects to
+    req.add_unredirected_header("Authorization", f"Bearer {token}")
     with urllib.request.urlopen(req, timeout=120) as r:
         return r.read()
 

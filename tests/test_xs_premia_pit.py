@@ -26,6 +26,19 @@ class PointInTimeTests(unittest.TestCase):
         pd.testing.assert_series_equal(a["returns"], b["returns"])
         self.assertEqual(b["settlements"], [])
 
+    def test_identical_to_run_xs_with_staggered_listings_and_weekly_rebalance(self):
+        opens, last_close, fund = panel(seed=11)
+        for j, start in enumerate((5, 20, 33)):
+            opens.iloc[:start, j] = np.nan               # late listings, never delisted
+            last_close.iloc[:start, j] = np.nan
+        fund.iloc[:, :] = np.random.default_rng(3).normal(1e-4, 1e-4, fund.shape)
+        score = momentum_score(opens, 10)
+        for rb in (1, 7):
+            a = run_xs(opens, fund, score, rebalance_days=rb, q=0.25, cost_bps=20)
+            b = run_xs_pit(opens, last_close, fund, score, rebalance_days=rb, q=0.25, cost_bps=20)
+            pd.testing.assert_series_equal(a["returns"], b["returns"])
+            pd.testing.assert_series_equal(a["turnover"], b["turnover"])
+
     def test_delisting_coin_is_selectable_and_settles_at_last_close(self):
         opens, last_close, fund = panel()
         opens.iloc[40:, 0] = 100.0

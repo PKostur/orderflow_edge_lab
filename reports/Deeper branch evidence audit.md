@@ -76,6 +76,28 @@ Written after the first results were published and before any DEFERRED test ran.
 - S1 on Hyperliquid common days: `fetch_all` from `scripts/hyperliquid_venue_check_2026_10_09.py` over its registered window, and the reference legs from the D4 data on the same coins. S1 Sharpe on the common stamps for both. Descriptive; no pass rule.
 - Anything that fails to fetch is reported as a failure with the error. Nothing is retried beyond each fetcher's own retries, and nothing is re-run.
 
+### 0.9 Addendum after the independent pre-run review (2026-10-16, before any deferred test ran)
+
+A read-only review of the runner found three blockers and several issues that would each have wasted the single look. Changes, all before any deferred test ran:
+
+- Binance source: `fapi.binance.com` returns HTTP 451 to GitHub-hosted (US) runners, as the repo already records (`docs/CROSS_SECTIONAL_VENUE_REPLICATION_V1.md`). Binance data therefore comes from `data.binance.vision` through `binance_futures_archive.load_dataset`, with checksums verified:
+  - C3 prices use 1h klines; the 00:00 open is the open of the bar ending 01:00.
+  - C3 funding is DEFERRED again. The archive publishes fundingRate only as monthly files, so the October forward window can be checked once the 2026-10 file appears (early November).
+  - D4, D5 and the S1 reference use the monthly fundingRate files for 2020-06 to 2026-09 (column `rate`). These may differ slightly from the fapi series the development run used.
+  - D4/D5 abort if Binance funding is empty for more than 25% of frames. Coins without a Binance contract legitimately have none.
+- Artifact downloads send the GitHub token only to api.github.com (unredirected header), not to the blob host it redirects to. Each artifact's error is recorded separately, and artifacts are deduplicated by id.
+- B1 inclusion: watches with at least 10 scored days whose stamps are calendar-daily. This excludes turn-of-month SPY (weekday stamps only) and watches started after 2026-10-06. Constant series are listed and excluded. The correlation diagonal is 1.
+- The mask-drop count is reported two ways: as specified (open on d, none on d+1), and restricted to coins with a score.
+- C3 return stamps follow the run_xs convention (d = open d to open d+1), one day earlier than the watches' stamps. Both venues use the same convention, so gaps are unaffected.
+- Install: `pip install -e ".[research]"`, without the constraints file, exactly as the forward workflows install, plus `statsmodels==0.14.4`. `pip freeze` is recorded. The runner is pinned to ubuntu-24.04.
+- Single look:
+  - A network preflight (MEXC, data.binance.vision, Hyperliquid, GitHub API) runs before anything else. Failing it uses no look.
+  - The look counts from the moment the run step starts: a marker branch `audit/deferred-started-2026-10-16` is pushed just before it, and the guard refuses to start if either the marker or the results branch exists. A missing branch means `git ls-remote` exit code 2; any other code fails the guard.
+  - Results are written after every section and uploaded as an artifact even if the job fails.
+- C2 records `coins_with_data` and `missing_symbols` for both runs, so a transient fetch failure is not read as nondeterminism. Each module's timeout is caught separately.
+- Per-symbol fetch errors (C3, D4 data, Hyperliquid) are recorded with the error text.
+- The archiver picks the newest ledger artifact per day over all unexpired artifacts before skipping archived ones, and clears the folder before writing, so manifest hashes match the files.
+
 ## 1. Results
 
 Section 0 was committed as `7bee829` (2026-10-16T14:17Z) before any computation below. Scratch code: `part_a.py`, `part_b2.py`, `part_c5.py`, `part_d.py`, `part_e5.py`, `part_x2.py` in the session scratchpad (not committed; each is described where used). One correction was made during execution and is reported: the first C5 parse cut the monitor timestamp at the hour, which split one watch name; the regex was fixed and C5 re-run with the same rule. No other test was run twice.

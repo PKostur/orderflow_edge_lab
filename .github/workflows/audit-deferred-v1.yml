@@ -1,8 +1,9 @@
 name: Audit Deferred Tests v1
 
-# Runs the DEFERRED tests of reports/Deeper branch evidence audit.md (Section 0.8) once, on a hosted runner that can
-# reach the exchanges and the artifact store. Triggered by a push to audit/run-deferred-v1. Single look: refuses to
-# run if the results branch already exists. Descriptive only; writes results to audit/deferred-results-2026-10-16.
+# Runs the DEFERRED tests of reports/Deeper branch evidence audit.md (Sections 0.8 and 0.9) once, on a hosted runner
+# that can reach MEXC, data.binance.vision, Hyperliquid and the artifact store. Triggered by a push to
+# audit/run-deferred-v1. Single look: a marker branch is pushed just before the run step, and the guard refuses to
+# start if the marker or the results branch exists. Descriptive only.
 
 on:
   push:
@@ -18,27 +19,55 @@ concurrency:
 
 jobs:
   deferred:
-    runs-on: ubuntu-latest
-    timeout-minutes: 240
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
     steps:
       - uses: actions/checkout@v5
       - name: Single-look guard
         run: |
-          if git ls-remote --exit-code --heads origin audit/deferred-results-2026-10-16 >/dev/null; then
-            echo "results branch exists: the deferred tests already ran once"; exit 1
-          fi
+          set -u
+          for b in audit/deferred-started-2026-10-16 audit/deferred-results-2026-10-16; do
+            git ls-remote --exit-code --heads origin "$b" >/dev/null; rc=$?
+            if [ "$rc" -eq 0 ]; then echo "$b exists: the deferred tests already started once"; exit 1; fi
+            if [ "$rc" -ne 2 ]; then echo "cannot verify $b (git ls-remote exit $rc)"; exit 1; fi
+          done
+      - name: Network preflight (uses no look)
+        run: |
+          set -euo pipefail
+          curl -fsS -m 30 -o /dev/null https://contract.mexc.com/api/v1/contract/ping
+          curl -fsS -m 30 -o /dev/null "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision?delimiter=/&prefix=data/futures/um/monthly/fundingRate/BTCUSDT/"
+          curl -fsS -m 30 -o /dev/null https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-09.zip.CHECKSUM
+          curl -fsS -m 30 -o /dev/null -X POST -H 'Content-Type: application/json' -d '{"type":"meta"}' https://api.hyperliquid.xyz/info
+          curl -fsS -m 30 -o /dev/null -H "Authorization: Bearer ${{ github.token }}" "https://api.github.com/repos/${{ github.repository }}/actions/artifacts?per_page=1"
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      - name: Install
-        run: python -m pip install -e ".[research]" -c requirements/constraints.txt
+      - name: Install (as the forward workflows install) plus statsmodels
+        run: |
+          python -m pip install -e ".[research]"
+          python -m pip install "statsmodels==0.14.4"
+          mkdir -p audit_out
+          python -m pip freeze > audit_out/pip_freeze.txt
       - name: Tests of the code under audit
-        run: python -m unittest tests.test_xs_premia_pit tests.test_xs_premia tests.test_archive_forward_artifacts -v
+        run: |
+          python -c "import statsmodels.api"
+          python -m unittest tests.test_xs_premia_pit tests.test_xs_premia tests.test_archive_forward_artifacts -v
+      - name: Mark the look as started
+        run: |
+          set -euo pipefail
+          git push origin "HEAD:refs/heads/audit/deferred-started-2026-10-16"
       - name: Run the deferred tests (single look)
         env:
           GH_TOKEN: ${{ github.token }}
           TEMP: ${{ runner.temp }}
         run: python scripts/audit_deferred_2026_10_16.py --output audit_out/deferred_results_v1.json
+      - name: Upload results artifact
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: audit-deferred-results-2026-10-16
+          path: audit_out/
+          if-no-files-found: warn
       - name: Publish results branch
         if: always()
         run: |
@@ -50,12 +79,9 @@ jobs:
           cd res_wt
           git checkout --orphan audit/deferred-results-2026-10-16
           git rm -rf --quiet .
-          cp ../audit_out/deferred_results_v1.json .
+          cp ../audit_out/deferred_results_v1.json ../audit_out/pip_freeze.txt .
           printf 'Deferred tests of the 2026-10-16 evidence audit, run once by audit-deferred-v1.yml at %s (source %s).\n' \
             "$(date -u +%Y-%m-%dT%H:%MZ)" "$GITHUB_SHA" > README.md
           git add -A
           git commit -q -m "audit: deferred test results (single run)"
           git push origin HEAD:audit/deferred-results-2026-10-16
-      - name: Summary
-        if: always()
-        run: python -c "import json;r=json.load(open('audit_out/deferred_results_v1.json'));print(json.dumps(r,default=str)[:60000])" || true

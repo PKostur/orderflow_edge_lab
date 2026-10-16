@@ -27,6 +27,36 @@ class SelectTests(unittest.TestCase):
                 art(7, "fade24-forward-v1", "2026-10-16T01:00:00Z", expired=True)]
         self.assertEqual([a["id"] for a in arch.select(arts, set())], [1, 4, 2, 5])
 
+    def test_ledger_never_falls_back_to_an_older_same_day_artifact(self):
+        arts = [art(3, "liquidation-flow-ledger-v1", "2026-10-16T01:00:00Z"),
+                art(4, "liquidation-flow-ledger-v1", "2026-10-16T20:00:00Z")]
+        self.assertEqual([a["id"] for a in arch.select(arts, set())], [4])
+        self.assertEqual(arch.select(arts, {4}), [])
+
+    def test_token_is_not_forwarded_on_redirect(self):
+        import unittest.mock as mock
+        seen = {}
+
+        class Resp:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *a):
+                return False
+
+            def read(self):
+                return b"{}"
+
+        def fake_urlopen(req, timeout):
+            seen["redirected"] = dict(req.headers)
+            seen["unredirected"] = dict(req.unredirected_hdrs)
+            return Resp()
+
+        with mock.patch.object(arch.urllib.request, "urlopen", fake_urlopen):
+            arch._get("https://api.github.com/x", "tok")
+        self.assertNotIn("Authorization", seen["redirected"])
+        self.assertEqual(seen["unredirected"]["Authorization"], "Bearer tok")
+
     def test_already_archived_are_skipped(self):
         arts = [art(1, "fade24-forward-v1", "2026-10-16T01:00:00Z"), art(2, "fade24-forward-v1", "2026-10-16T02:00:00Z")]
         self.assertEqual([a["id"] for a in arch.select(arts, {1})], [2])
