@@ -1,0 +1,47 @@
+{
+  "kind": "KAMA_EQUATIONS_FEATURE_HELPER_INDEPENDENT_SYNTHETIC_REVIEW",
+  "status": "PASS_SYNTHETIC_FEATURE_HELPER_WITH_DECLARED_SOURCE_LIMITS",
+  "blocking_findings": [],
+  "market_data_loaded": false,
+  "market_outcomes_inspected": false,
+  "helper_exact_sha256": "e8415e819134a8c26c50180669fed6fc4bff45bd1681d3bcf5b89f83e0e5681d",
+  "mathematical_spec_sha256": "7e906ab309bf72bad521d8b7dc5a013f39b165c73e0ab4dd34f2fb226bcea0ad",
+  "source_native_math_prerequisite_sha256": "041335f6469b7f5d3fb7220973ff0b2cf1b0b15ab60bce076e92a67098bd01f9",
+  "source_native_readiness_review_sha256": "df0193404ed4e48eb18396d86564abcba74ca4f8d85ad21e93453e395d47bc96",
+  "root_helper_proof_sha256": "00e5964148d9bc4b7ace81cd6b6556ed1fd75a84374977ae8c6d4a7daa2e5101",
+  "native_fixture_input_sha256": "8be6df91dc9fe87e52525c5c5ec237e59be1c087a0d4253497e5df21efa875e9",
+  "native_fixture_output_sha256": "6da0d32865fcee3984905f18f1ddcdfa6c72f3a0f0006dfd4b4f9de48c9f3372",
+  "validations": {
+    "native_kama_values_and_nan_masks_exact": 4714,
+    "available_bar_actions_exact": 4902,
+    "native_action_count": 4924,
+    "unattached_native_short_stream_holds_excluded": 22,
+    "native_nan_values": 780,
+    "fixtures": 21,
+    "all_feature_prefix_checks": 11,
+    "all_feature_future_mutation_checks": 3,
+    "intermediate_compensated_denominator_efficiency_and_weight_exact": true,
+    "positive_finite_domain_refusals": 4,
+    "output_only_available_bars": true,
+    "flat_then_rising_recursive_nan_and_hold_preserved": true,
+    "no_kama_native_go_or_executable_tracked": true
+  },
+  "mechanics": [
+    "ER10/fast2/slow30 scalar double equations and exact operation sequence match specification. Neumaier incoming-add then outgoing-remove, ten-slot ring, nonfinite recovery physical index order are retained.",
+    "Seed close9 produces first KAMA at10. No division-by-zero substitution, NaN restart, epsilon, crossing reinterpretation or rolling reset.",
+    "BUY above/SELL below are repeated states; equality and NaN both HOLD. Firstmin(10,n) available bars HOLD; native unattached padding is explicitly clipped, never converted to phantom bars.",
+    "Educational source Outcome supplies fullcash intent; a future candidate must use declared signal-close fee-reserved floor8 fixed quantity, next-open all-or-reject adapter, not unit1. Whole control entry replacement may enter invalid KAMA states while original exit remains false."
+  ],
+  "limits": [
+    "Synthetic feature helper only; no registered candidate, cash simulator approval, market result or viable bot claim.",
+    "Exact finite values and NaN masks on retained fixtures, not IEEE NaN payload, all-input or cross-platform proof. Nonfinite denominator recovery branch inspected and scalar matched on present fixtures; no claim every overflow trajectory tested.",
+    "Original AGPL Go/source/helpers/harness/binaries remain outside Git. This mathematical Python prototype is outside Git. Future implementation must be independently authored from equations; URI/hash provenance and numeric synthetic receipts do not authorize copying GPL-family source.",
+    "No native exchange or full-bot parity. Broad prior trend/adaptive-average overlap; no orthogonality or incremental-volume claim.",
+    "Future actual immutable design/evaluator/test/source-preservation approval and committed review before raw/cache load remain mandatory."
+  ],
+  "new_registered_trials": 0,
+  "new_attempted_trials": 0,
+  "repository_modified": false,
+  "candidate_production_approved": false,
+  "orders": false
+}
