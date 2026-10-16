@@ -170,3 +170,7 @@ Frozen Supertrend default-intent research and its rejection are recorded in [res
 ## Public strategy batch13
 
 [OU one-unit long/cash frozen screen](docs/PUBLIC_OU_BATCH13_RESULTS_V1.md) and [conditional prospects](docs/PUBLIC_STRATEGY_CONDITIONAL_PROSPECTS_BATCH13_V1.md). Rejected; no viable candidate or future confirmation. Frozen lanes preserved; Bollinger excluded.
+
+## Public strategy batch14
+
+[Keltner delayed-breakout one-unit long/cash frozen screen](docs/PUBLIC_KELTNER_BATCH14_RESULTS_V1.md) and [conditional prospects](docs/PUBLIC_STRATEGY_CONDITIONAL_PROSPECTS_BATCH14_V1.md). Rejected; no viable candidate or future confirmation. Frozen lanes preserved; Bollinger excluded.

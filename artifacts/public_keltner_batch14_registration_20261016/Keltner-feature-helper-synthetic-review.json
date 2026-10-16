@@ -1,0 +1,69 @@
+{
+  "kind": "KELTNER_FEATURE_HELPER_SYNTHETIC_INDEPENDENT_REVIEW",
+  "status": "PASS_SYNTHETIC_FEATURE_HELPER_WITH_DECLARED_SOURCE_LIMITS",
+  "blocking_findings": [],
+  "market_data_loaded": false,
+  "market_outcomes_inspected": false,
+  "new_registered_trials": 0,
+  "new_attempted_market_trials": 0,
+  "registered": false,
+  "repository_modified": false,
+  "production_evaluator_approved": false,
+  "helper_exact_sha256": "e0e47da6c35061bf4742a787329407ef8935564bd971f6e6a7efd71686123fae",
+  "helper_review_script_exact_sha256": "46d43088161744704efbbfbbd4e80671393542cd917f61a3a1c3b4f05870be3b",
+  "source_native_readiness_review_exact_sha256": "832656ad94889d84c6ad038b9fda7ce5669d10a27fb288c75f8ac4e32f60bb6d",
+  "source_native_math_prerequisite_exact_sha256": "14bc84ac1ce2ef5709bb579b32b401b0d2c3964c6ee4bf60fa27339556359e2a",
+  "source_exact_sha256": "151bbda331aa8db25951830372ef5d359ad680d1515ad125e0b2a33a55cebea1",
+  "native_synthetic_input_exact_sha256": "1a51f43511b2343f02be4a51fbc8ff4e20bbba3c2c3bcc37d19f61afed027f19",
+  "native_synthetic_output_exact_sha256": "34a79b49625b629befa33aaa9d9d842dce9ac2ab709b29af051d350dda72a1d9",
+  "validations": {
+    "helper_exact_sha256": "e0e47da6c35061bf4742a787329407ef8935564bd971f6e6a7efd71686123fae",
+    "native_feature_rows_exact": 4090,
+    "native_two_sided_advice_from_helper_flags_exact": 271,
+    "fixtures": 16,
+    "prefix_checks": 7,
+    "future_mutation_checks": 3,
+    "simultaneous_lagged_long_entry_and_current_exit": 5,
+    "long_exit_without_short_entry": 1303,
+    "startup_lengths_checked": [
+      0,
+      1,
+      7,
+      8,
+      28,
+      29,
+      30,
+      31
+    ],
+    "entry_flags_false_before_index30": true,
+    "full_history_crop_non_equivalence_verified": true,
+    "market_data_loaded": false,
+    "new_trials": 0
+  },
+  "semantics": [
+    "Actual helper exactly matches4090 retained native mid/top/bottom rows across16 synthetic fixtures. Reconstructed original two-sided position branching from helper flags reproduces271 native unit order advices, including side and bar.",
+    "EMA30 seeds at index29 with math.fsum of closes0..29 divided by30, then previous*(1-2/31)+current*(2/31). Wilder ATR7 seeds at index7 from TR1..7, then previous*(1-1/7)+currentTR*(1/7). TR uses prior close with current high/low. Multiplier is1.0; strategy ATR7 overrides indicator default14.",
+    "Entry flags remain false through index29. At indexi>=30, long/short uses close[i-1] above/below that prior channel. Under next-minute-open execution, breakout barj is observed at completedj+1 and filled atj+2. No delay removal or current-open log-price fill is allowed.",
+    "Long exit uses current close<current EMA, independently of prior lower-band short entry. Short exit uses current close>current EMA.1303 tested rows have a long exit without a short entry, including first valid row29.",
+    "Five tested rows have simultaneous lagged long-entry and current long-exit flags. Original flat branch opens and cannot immediately close the newly opened position at that boundary; subsequent cash simulation must use pre-boundary holding state.",
+    "Every helper array passes7 prefix and3 future-only mutation checks. Startup lengths0,1,7,8,28,29,30,31 are defined without out-of-range seed access. Recursive initialization differs after a rolling240 crop, so the full fixed history must be retained.",
+    "Helper only computes features. It has no loader, wallet, orders, cutoff handling, state machine or production config. Returning original short flags does not authorize short execution in a later Spot scope."
+  ],
+  "required_before_cash_adapter_approval": [
+    "Freeze EMA30/ATR7/multiplier1 seeds and operation order, retained history origin and continuous carry through admission warmup. No day/session, entry or rolling240 reset.",
+    "Validate positive finite consistent OHLC and complete ascending8h availability timestamps before feature calculation. The current synthetic helper trusts candle structure/domain; future loader/evaluator guards must establish those contracts.",
+    "Use a separate exit_long flag for current close<EMA. Do not reuse previous lower-band short entry or accidentally remove the extra entry delay. Include simultaneous-entry/exit and first-valid-row fixtures.",
+    "Declare one-unit long/cash scope, fee-funded all-or-reject admission, own BTC quantity/cash, source pending-order behavior versus idealized filled exit, no same-boundary liquidation/reentry, and terminal pending/censored dispositions.",
+    "Preserve no source stop, target, timeout or trailing protection, along with all old costs, control entry replacement/exit semantics, diagnostics and rejection gates. Require immutable registration and final committed actual evaluator/config review before raw data."
+  ],
+  "limits": [
+    "Comparison uses original retained native synthetic outputs and the actual helper under the current pinned runtime. It is not full Spot/exchange execution parity or proof for every numerical input/platform.",
+    "Native original strategy is two-sided; proposed one-unit Spot long/cash adaptation is separate. The helper itself places no orders and adds no trial.",
+    "ATR envelopes overlap earlier trend/volatility/breakout families. No standard-deviation Bollinger feature is executed and no orthogonality or edge claim follows.",
+    "Bounded README code-MIT statement and missing standalone license placeholder remain as previously documented. No PDF or market-performance data was read.",
+    "All existing frozen lanes and prior rejected versions remain unchanged. No viability or future confirmation begins here."
+  ],
+  "orders": false,
+  "viable": false,
+  "future_confirmation_started": false
+}

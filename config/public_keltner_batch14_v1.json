@@ -1,0 +1,160 @@
+{
+  "study_id": "PSR20-PUBLIC-KELTNER-ONEUNIT-LONG-CASH-BATCH14",
+  "version": 1,
+  "candidates": [
+    "Keltner8hOneUnitLongCashAdaptation"
+  ],
+  "source_sha256": {
+    "Keltner8hOneUnitLongCashAdaptation": "151bbda331aa8db25951830372ef5d359ad680d1515ad125e0b2a33a55cebea1"
+  },
+  "source_manifest": "artifacts/minute_continuity_20261010/source_manifest.json",
+  "source_manifest_sha256": "3fcadef5dea9086425111b12b74f9df84f86b2d0932ca918871fc47b66f7179b",
+  "quality_csv": "artifacts/minute_continuity_20261010/daily_quality.csv",
+  "quality_csv_sha256": "69403a31a4f7f5c234ebbca98e32ba9b2919253f453515c76da964f93e10ed29",
+  "source_policy": "Longest shared complete-day segment chosen solely by previously audited quality; no repairs, imputation or source replacement.",
+  "data_start": "2023-04-01T00:00:00Z",
+  "data_end_exclusive": "2026-10-01T00:00:00Z",
+  "signal_minutes": 480,
+  "execution_minutes": 1,
+  "warmup_bars": 240,
+  "symbols": [
+    "ETHUSDT",
+    "SOLUSDT",
+    "LINKUSDT"
+  ],
+  "benchmark": "BTCUSDT",
+  "episode_initial_cash_per_symbol": 10000,
+  "max_hold_bars": null,
+  "baseline_round_trip_bps": 40,
+  "cost_cases_bps": [
+    20,
+    40,
+    60,
+    80
+  ],
+  "cost_policy": "Eachsidecharges halfnominalroundtripcost onactualmodelednotional;1unit unchanged and all-or-reject on insufficientcash includingcost.",
+  "gap_target_models": [
+    "conservative_limit",
+    "opening_price_improvement"
+  ],
+  "touch_policy": "No source protection; no invented stop/target/timeout. Both registered gap labels intentionally identical, onehistory. Shared no-pruning/failclosed caps retained.",
+  "max_symbol_histories": 64,
+  "max_joint_histories": 4096,
+  "entry_policy": "Declarednew8h Spot long/cash adaptation: fixed1baseunit, three10000USDTsleeves, originalsource prior-bar entry delay, executionnextminuteOPEN, fee-inclusive all-or-reject withoutresize/borrow/short/pyramid/partial/orders. HeldflagsignoredcountedbeforecurrentEMAexit. No sameboundaryreentry orliquidationofnewentry evenifexitflagtrue.",
+  "clock_policy": "At completed current bar i, flatlong qualifier priorclose[i-1]>priorupper[i-1]. Earliest signal i30; next-minute-open fill i+1. Breakout atj is checkedatj+1 and filledopenj+2. Do not remove onebar delay. Fixed240admissionwarmup. CurrentcompleteEMAexit; nextminuteOPEN. No day/session reset.",
+  "endpoint_policy": "Completed events use modeled exit reference; still-held events retain statusCENSORED_MTM and cutoff close mark with hypothetical liquidation burden, never a fictitious order or completed trade.",
+  "principal_return_estimand": "All admitted entry-to-exit-or-fixed-cutoff net reference returns; completed-only means separately descriptive. Per-unit return=(exit/entry)*(1-sidecost)/(1+sidecost)-1.",
+  "funded_btc_benchmark": "At each accepted alt entry allocate the same alt notional/preentry-cash fraction from a separate BTC cash account. Exact BTC open entry; open exit uses BTCopen, intraminute exit uses BTCminute low/high bounds; own costs and remaining inventory; cutoff uses known final close.",
+  "portfolio_policy": "Equal10000USDTcashsleeves each holdingatmost1unit. Assetprice-dependent exposure, not equalrisk orfullbalance. FundedBTC owncash/quantity/cost. Allrisk/returngates unchanged.",
+  "seed": 20261024,
+  "bootstrap_replicates": 2000,
+  "bootstrap_calendar_block_weeks": 4,
+  "bootstrap_policy": "Moving contiguous4calendar-week blocks incl zero-event weeks; retain fixed alpha0.025,97.5% two-sided intervals from prior comparator. One newly registered cell; conservative fixed carryover, not two cells or global repeated-search inference.",
+  "placebo_replicates": 500,
+  "placebo_policy": "500weeklyrandomizations replaceentire source delayedlongentry qualifier, preservingeligibleweekrawflagcount; retain originalcurrentclose<EMA30 longexit, ownfunding/admission/quantity/duration. No observedendogenousdurations. No implicit source-entrymask. Warmup240 provides definedEMA/ATR.",
+  "lag_control_bars": 7,
+  "lag_policy": "Lagcomplete delayedlongentry flags by7eight-hourbars afterwarmup240; keep originalcurrentEMA30longexit and ownfixedunitcash/admission/durations. No addedvalidityfilter orobserveddurationreuse.",
+  "gates": {
+    "min_completed_events": 100,
+    "min_entry_weeks": 52,
+    "min_all_admitted_net40_bps": 5,
+    "require_all_admitted_net80_positive": true,
+    "require_all_symbols_net40_positive": true,
+    "min_positive_year_fraction": 0.6666666666666666,
+    "max_portfolio_drawdown_pct": 30,
+    "require_leave_one_entry_week_out_net40_positive": true,
+    "require_net40_descriptive_lower_ci_positive": true,
+    "require_btc_excess40_descriptive_lower_ci_positive": true,
+    "max_placebo_at_least_observed_fraction": 0.05,
+    "require_no_history_overflow": true
+  },
+  "diagnostics": [
+    "completed/pending/unexecuted/overlap/invalid/cash rejection accounting",
+    "all-admission and completed-only returns/PF",
+    "gross MFE/MAE uncertainty",
+    "calendar entry weeks and4week bootstrap",
+    "fixed UTC sessions and overlap memberships",
+    "symbol/year/month/weekday/hour and causalBTC30bar state",
+    "leave-week and leave-symbol sensitivity",
+    "40/80 costs and20/60 cases",
+    "funded BTC wealth and same-exit reference bounds",
+    "full branch and gap-model sensitivity",
+    "500 randomized-entry controls and7bar lag control"
+  ],
+  "claim": "Spent historical hypothetical development only; SCREEN_SURVIVOR permits separate future preregistration, never viable/untouched/positive-edge/deployment claim.",
+  "future_confirmation": "User completion requires a separate immutable and adequately powered future-only protocol, calibrated costs/quotes/execution, controls and approval-bound paper reliability, frozen before observations start. No viable candidate until that confirmation passes.",
+  "bollinger_bands_excluded": true,
+  "frozen_lanes_modified": false,
+  "authorizes_orders": false,
+  "retuning_permitted": false,
+  "minimum_preexisting_trading_cells": 26,
+  "minimum_preexisting_signal_model_cells": 27,
+  "new_registered_trading_cells": 1,
+  "minimum_registered_trading_cells_after_freeze": 27,
+  "minimum_registered_signal_model_cells_after_freeze": 28,
+  "source_urls": {
+    "Keltner8hOneUnitLongCashAdaptation": "https://github.com/ali-azary/Algorithmic-Trading-From-Beginner-to-Advanced/blob/945c7c430c799687be17092eaebcad6baace1a9e/codes/KeltnerBreakoutStrategy.py"
+  },
+  "runtime": {
+    "python": "3.13.14",
+    "numpy": "2.2.4",
+    "pandas": "2.2.3",
+    "platform": "win32",
+    "precision": "float64 scalar operation order",
+    "scipy": "1.15.2"
+  },
+  "dependency_hash_policy": "Python dependency bytes normalize CRLF to LF solely for cross-platform checkout; all data/audit fingerprints remain exact bytes",
+  "dependency_source_sha256": {
+    "src/orderflow_edge_lab/public_protective_batch5.py": "ea1a2f5564a4261fe3c53e4d3f584b782913222f43228f0843c9d94917eab6d8",
+    "src/orderflow_edge_lab/protective_minute.py": "32345cbe229e734129f063e161f77989c3e2d0facb604dade40b469de31f03bf",
+    "src/orderflow_edge_lab/public_strategy_completion.py": "2a5327410bb5b7acef4dc6959d95b8ea309df0f0cf9f6e692c946b7500a1719a"
+  },
+  "source_mechanics_audit_sha256": {
+    "artifacts/public_keltner_batch14_registration_20261016/Keltner-source-native-math-prerequisite.json": "14bc84ac1ce2ef5709bb579b32b401b0d2c3964c6ee4bf60fa27339556359e2a",
+    "artifacts/public_keltner_batch14_registration_20261016/Keltner-source-native-readiness-review.json": "832656ad94889d84c6ad038b9fda7ce5669d10a27fb288c75f8ac4e32f60bb6d",
+    "artifacts/public_keltner_batch14_registration_20261016/Keltner-feature-helper-synthetic-review.json": "4617d17388240e3ba0be2727bf93cf3aff7b0f67e663037f49b8d68b8e0cd2b0",
+    "artifacts/public_keltner_batch14_registration_20261016/Keltner-batch14-draft-mechanics-review.json": "857ab54286ef4372669690f30a6f238f3c9a520cb89b179297c11dfff98ca074",
+    "artifacts/public_keltner_batch14_registration_20261016/OBV-source-bounded-readiness.json": "2009ce36ee982352b5263394c2e84cf456b4403d83ecc25f0ed824c804031135",
+    "artifacts/public_keltner_batch14_registration_20261016/OBV-source-bounded-independent-review.json": "a84e5a6883fe14b1d9064a1370d68bc1e50523e9a2973e0180812be8517e63bc",
+    "artifacts/public_keltner_batch14_registration_20261016/KAMA-source-native-math-prerequisite.json": "041335f6469b7f5d3fb7220973ff0b2cf1b0b15ab60bce076e92a67098bd01f9",
+    "artifacts/public_keltner_batch14_registration_20261016/KAMA-source-native-readiness-review.json": "df0193404ed4e48eb18396d86564abcba74ca4f8d85ad21e93453e395d47bc96",
+    "artifacts/public_keltner_batch14_registration_20261016/Post-OU-public-source-readiness.json": "67e970ea051735cb33f9a7fc1db1976d4224c22f6a0603951ab0f198d6d88ae7",
+    "artifacts/public_keltner_batch14_registration_20261016/azary_codes_KeltnerBreakoutStrategy.py.txt": "151bbda331aa8db25951830372ef5d359ad680d1515ad125e0b2a33a55cebea1",
+    "artifacts/public_keltner_batch14_registration_20261016/azary_codes_backtest.py.txt": "a9feb0f4a976fe0007b7e44aead017cc8e8d041872b4de5b69f12534e88846de",
+    "artifacts/public_keltner_batch14_registration_20261016/azary_license_readiness.json": "2c5e6a5ad814b15ac6695909efe10267bd5bca4ef96a7fd07e0af95d36cf5ace",
+    "artifacts/public_keltner_batch14_registration_20261016/azary_strategy_source_inventory.json": "e8fbd220151989f055578dc638c31df33684a6a126c2ad984c1e56e8b2b0475e",
+    "artifacts/public_keltner_batch14_registration_20261016/keltner-source-refetch-receipt.json": "470d042ab05712ff03f9ba0a2db88950412ee001e99318ea48ef7612ad23f59b",
+    "artifacts/public_keltner_batch14_registration_20261016/keltner-synthetic-input.json": "1a51f43511b2343f02be4a51fbc8ff4e20bbba3c2c3bcc37d19f61afed027f19",
+    "artifacts/public_keltner_batch14_registration_20261016/keltner-native-synthetic-output.json": "34a79b49625b629befa33aaa9d9d842dce9ac2ab709b29af051d350dda72a1d9",
+    "artifacts/public_keltner_batch14_registration_20261016/backtrader-runtime-receipt.json": "2a1bc0fcf92d1dc35fecd74f62ef3b063246fcbbce81f41e638a0af6709e5e7a",
+    "artifacts/public_keltner_batch14_registration_20261016/check_keltner_source_math.py": "7021cd8a5780d476ee759b23ee0a77885a87369be7f23772ad85b61b4c2e50b1",
+    "artifacts/public_keltner_batch14_registration_20261016/kama-selected-source-inventory.json": "20805ef0daa31eac29f03a42bdf87e9d7608bd2cf810269ce9946f1a3a017a7a",
+    "artifacts/public_keltner_batch14_registration_20261016/kama-synthetic-input.json": "8be6df91dc9fe87e52525c5c5ec237e59be1c087a0d4253497e5df21efa875e9",
+    "artifacts/public_keltner_batch14_registration_20261016/kama-native-synthetic-output.json": "6da0d32865fcee3984905f18f1ddcdfa6c72f3a0f0006dfd4b4f9de48c9f3372",
+    "artifacts/public_keltner_batch14_registration_20261016/kama-selected-native-source-receipt.json": "3e4e5c006313c56f0176b60057f8264846a69fd3967f0f2347ce282b75f8d40b"
+  },
+  "family_disclosure": "Broad priorEMA/ATR/trend/breakout overlap remains. This source clock/channel/exit combination is not a claim of orthogonality or incremental forecasting/edge.",
+  "native_runtime_status": "Originaltwo unmodifiedclassAST independentlyexecuted and repeated exact withBacktrader1.9.78.123 explicit8h:4090EMA/ATR/channelrows,271unitadvices,7prefix/3futurechecks. Genericrunner selectsanotherstrategy. Sourceentry hasadditionalone-bar delay; no nativeSpot/livebotparity. Sourceposition-driven exits avoidOUposition_typeorphanstate butreferencefilledexit scope doesnotmodelasynchronousbrokerfailurequeues.",
+  "required_pre_outcome_review": {
+    "path": "artifacts/public_keltner_batch14_registration_20261016/pre-outcome-review.json",
+    "required_status": "PASS_PRE_OUTCOME_INDEPENDENT_REVIEW_WITH_DECLARED_PARITY_LIMITS",
+    "must_bind": [
+      "evaluator_exact_sha256",
+      "canonical_config_sha256"
+    ],
+    "before_any_raw_market_load": true
+  },
+  "source_attribution": "ali-azary/Algorithmic-Trading-From-Beginner-to-Advanced pinned945c7c430c799687be17092eaebcad6baace1a9e, codes/KeltnerBreakoutStrategy.py. README Code MIT statement; no standalone code license notice received and placeholder remains. No invented copyright holder/date/full-license claim. No PDF content. DeclarednewSpotlongcashscope, not unchangedtwo-sided/nativeSpotbotparity orpublishedprofitability.",
+  "keltner": {
+    "ema_period": 30,
+    "atr_period": 7,
+    "multiplier": 1.0,
+    "quantity_units": 1.0,
+    "ema": "math.fsum closes0..29/30 then prior*(1-2/31)+current*(2/31)",
+    "atr": "TR=max(currentH,priorC)-min(currentL,priorC);seedmath.fsum TR1..7/7 then prior*(1-1/7)+currentTR*(1/7)",
+    "history": "Initialize once at fixed2023-04-01 data origin; carry recursively through240 admission warmup. No rolling240/day/session/trade reset.",
+    "entry": "At completed current bar i, flatlong qualifier priorclose[i-1]>priorupper[i-1]. Earliest signal i30; next-minute-open fill i+1. Breakout atj is checkedatj+1 and filledopenj+2. Do not remove onebar delay.",
+    "exit": "Heldlong currentclose<currentEMA30. Separate from native priorclose<priorlower shortentry. Flat branch mayenter when currentexittrue; no immediate sameboundary liquidation.",
+    "source_short_scope": "Originalalso entersshort onpriorclose<priorlower and exits short oncurrentclose>currentEMA; excluded from declarednewSpotlongcashscope."
+  }
+}
