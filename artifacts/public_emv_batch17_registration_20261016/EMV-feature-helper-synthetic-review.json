@@ -1,0 +1,45 @@
+{
+  "kind": "EMV_EQUATIONS_HELPER_INDEPENDENT_SYNTHETIC_REVIEW",
+  "status": "PASS_SYNTHETIC_FEATURE_HELPER_WITH_DECLARED_SOURCE_LIMITS",
+  "blocking_findings": [],
+  "market_data_loaded": false,
+  "market_outcomes_inspected": false,
+  "helper_exact_sha256": "9ded6993ad790dc425218615177ddf96129dd6064132e074ba6cc9b58b301678",
+  "mathematical_spec_sha256": "f48598ed1b11604fbca3f9f82e5c1079d18e9f1f1db850e34b18f8a089ec2428",
+  "source_bounded_review_sha256": "ea4b47cd88d061142dbac488cd841cbf2bc21845b81b35394c8f844ea7d38d5d",
+  "root_synthetic_proof_sha256": "ba7c3bc2ce6cbfb1e3014e651a7f8702f91369a5154fef47c8e28803dbea86a3",
+  "native_input_sha256": "bcfd9bf00526f6b7bb425fec3cf839225afdfd0ebd3c4ac1ccc00b0ab5a5c6d3",
+  "native_output_sha256": "683581b2a8592b8fa082a853812a5598d9645f35fd65cb75658844b10ad37139",
+  "validations": {
+    "native_indicator_values_and_nonfinite_classes_exact": 2507,
+    "native_nan_values": 390,
+    "available_bar_actions_exact": 2799,
+    "native_padded_action_count": 2829,
+    "unattached_short_input_holds_excluded": 30,
+    "fixtures": 23,
+    "all_feature_prefix_checks": 11,
+    "all_feature_future_mutation_checks": 3,
+    "midpoint_previous_box_raw_ease_and_compensated_sum_intermediates_exact": true,
+    "invalid_domain_refusals": 10,
+    "empty_n_by6_outputs_defined": true,
+    "first_output_raw14_and_startup_hold_preserved": true,
+    "nonfinite_buffer_recovery_confirmed": true
+  },
+  "mechanics": [
+    "Distance from raw i uses previous raw i-1 box ratio, preserving explicit sequential divisions and midpoint addition/division. No current-box replacement or range/volume algebraic rewrite.",
+    "Neumaier incoming term then negative outgoing, physical ring-order nonfinite recomputation and SMA14 output at raw14 remain exact. Invalid contributors may recover after leaving the window; no zero/nonfinite substitution or permanent-poisoning change.",
+    "States BUY level>0, SELL level<0, HOLD equality/NaN. Output exactly n available slots, first min14 startup HOLD, no extra padding bars.",
+    "Domain explicitly finite positive ordered high/low and nonnegative finite base volume; zero range and zero volume allowed. Execution loader must separately enforce complete OHLCV contract."
+  ],
+  "limits": [
+    "Synthetic helper and equations only; no registered EMV candidate, simulator, market trial or production approval.",
+    "Exact values/nonfinite classes and intermediates on retained23fixtures; no NaN payload or universal platform/input parity claim. Prior original-native source proof retained, native rebuild not repeated for this helper.",
+    "AGPL Go/helpers/harness/build remain outside Git; independent mathematical implementation only with URI/hash/numeric evidence, no copied GPL-family code authorized.",
+    "Fullcash educational intent requires separately declared fee-reserved floor8 signalclose fixed quantity, next-open all-or-reject funded engine. No native deployed bot/exchange parity.",
+    "Source prior-box alignment is causal; no lookahead failure, orthogonality, viability or performance claim."
+  ],
+  "new_registered_trials": 0,
+  "new_attempted_trials": 0,
+  "repository_modified": false,
+  "candidate_production_approved": false
+}

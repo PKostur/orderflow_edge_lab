@@ -1,0 +1,210 @@
+{
+  "kind": "PUBLIC_SCREEN_SUPPLEMENT_LINE_ENDING_BRIDGE_INDEPENDENT_REVIEW",
+  "status": "PASS_EXACT_NEWLINE_TRANSFORMATION_AND_COMMITTED_LF_TESTS",
+  "blocking_findings": [],
+  "merged_main_commit": "6d873b0f2e1f11e5cf65ee1833a3a199a3c695be",
+  "introduced_source_commit": "b4d7b80a81767bbad2c3f2790401b176c0175d2f",
+  "source_commit_is_merged_main_ancestor": true,
+  "bridges": [
+    {
+      "path": "src/orderflow_edge_lab/public_screen_supplement.py",
+      "actual_historical_audited_executed_CRLF_sha256": "078d55ae6098740cf586d30b0de7b26f32aba0a503a77910675259147267baf1",
+      "LF_normalized_sha256": "86e57e6fe0f96f6c964c7dc7be95c6c835e17794417acad21202af5637fb516b",
+      "historical_CRLF_pairs": 150,
+      "committed_LF_newlines": 150,
+      "exact_transform_only_CRLF_to_LF": true,
+      "working_LF_normalized_equals_head_and_initial_git_blob": true,
+      "working_raw_sha256": "86e57e6fe0f96f6c964c7dc7be95c6c835e17794417acad21202af5637fb516b",
+      "python_AST_identical": true,
+      "committed_Git_LF_sha256": "86e57e6fe0f96f6c964c7dc7be95c6c835e17794417acad21202af5637fb516b"
+    },
+    {
+      "path": "tests/test_public_screen_supplement.py",
+      "actual_historical_audited_executed_CRLF_sha256": "9b3be393de2d44cf917129d567b516d380f7c16059ad25ae4c32f50b41acc61c",
+      "LF_normalized_sha256": "660cc981060af4daa1804c1bf0004f710138707eb8d06e059d0460a7f38ed9ab",
+      "historical_CRLF_pairs": 122,
+      "committed_LF_newlines": 122,
+      "exact_transform_only_CRLF_to_LF": true,
+      "working_LF_normalized_equals_head_and_initial_git_blob": true,
+      "working_raw_sha256": "9b3be393de2d44cf917129d567b516d380f7c16059ad25ae4c32f50b41acc61c",
+      "python_AST_identical": true,
+      "committed_Git_LF_sha256": "660cc981060af4daa1804c1bf0004f710138707eb8d06e059d0460a7f38ed9ab"
+    }
+  ],
+  "validations": {
+    "committed_LF_synthetic_tests_independently_reexecuted": 14,
+    "normalized_bytes_and_AST_identical": true,
+    "original_frozen_paths_rehashed": 14,
+    "preexisting_prior_paths_rehashed": 264,
+    "aroon_paths_working_and_committed_verified": 37,
+    "bridge_files_not_among_original14_or_prior264": true
+  },
+  "aroon_paths": [
+    {
+      "path": "artifacts/public_aroon_batch16_20261016/descriptive-supplement-index.json",
+      "sha256": "8243b15fc46ef435f6b1b8a60ff2c5d011b8f6c90e20bccd4951b02ad83d9436"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_20261016/descriptive-supplement-summary.json",
+      "sha256": "0a47f42a8b42abebcb5e81ba6e860d849642d23d46cffcb04e770136693e1799"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_20261016/descriptive-supplement.json.gz",
+      "sha256": "a05441fcac67e66245a0e846e7b4e643268db77cf168c58373b916689500f5f1"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_20261016/final-independent-review.json",
+      "sha256": "2b41c9fb3d928c74ebdac3fd743ff3e6e42d9e2dfeb2a87b29a595b7c2e5e94f"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_20261016/pre-outcome-review.json",
+      "sha256": "c0c62294054a8f90d1807f3a427a69071185af1a8cf6b168b89c6e3b4e1533e6"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_20261016/result_index.json",
+      "sha256": "635a031d9066c4d70cabe3e1215eceb70475f437c2117f5143def7ec025682e8"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_20261016/result_summary.json",
+      "sha256": "a4df39296735ce7b2bdc40560f968da87c73410f9a996e91771373fa6623e1a5"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_20261016/results.json.gz",
+      "sha256": "5df271a723bd3307b51bdfaa6945aa31d5bb7f646aac593b34a0caf9f1d332a4"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_20261016/supplement-application-source-snapshot.py.txt",
+      "sha256": "0e0d159ce87679fdd803c121f3bb40ba8db4115453460810064470bf44882e3d"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_20261016/supplement-independent-review.json",
+      "sha256": "312ae3c7a4824bf425cc61b463e35eb4682a202f2969dd96bfdc7d0dd412e7a8"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_20261016/trial_ledger.json",
+      "sha256": "f4727800fb05b57f06e1ed8be1ed6c251990b767aaef1bc220bfa087d6c5ea30"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_20261016/verification.json",
+      "sha256": "b26f8ad516c88819e5b83e1cdcb1da664971041ae9e74bb96c22ba47c33932e4"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_registration_20261016/Aroon-batch16-draft-mechanics-review.json",
+      "sha256": "673ebaddeb61eb6b03e27dbaa4192e9e2a24ce61a9cdb4ae33a05093077bd3b6"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_registration_20261016/Aroon-feature-helper-synthetic-proof.json",
+      "sha256": "a3db094df3c926e297ef2a47698b0895503a1632571d1b709ce3cb171b306477"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_registration_20261016/Aroon-feature-helper-synthetic-review.json",
+      "sha256": "a1969ff226383acd7aef0127086639997a350efe9a7811750de4599a81f042ba"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_registration_20261016/Aroon-mathematical-specification-draft.md",
+      "sha256": "6fe049017161fb2aa20482a1454eddae1c0269c661707b51e313a907d8c1aeaa"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_registration_20261016/Aroon-source-bounded-readiness-review.json",
+      "sha256": "4a5db9ef5ea66c84a7a37d6151d00b1ef3dcb317462b999bceeed970f40cae94"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_registration_20261016/EMV-batch17-draft-mechanics-review.json",
+      "sha256": "25d3091673ccb95709c9674be68c0b81700c2d5c21781da7303d116ca90e43ed"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_registration_20261016/EMV-feature-helper-synthetic-proof.json",
+      "sha256": "ba7c3bc2ce6cbfb1e3014e651a7f8702f91369a5154fef47c8e28803dbea86a3"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_registration_20261016/EMV-feature-helper-synthetic-review.json",
+      "sha256": "a41dd06ff51a8818a6d7d86cc429f0cfe2b1a3d3c08d0fbb08d511e7114c555a"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_registration_20261016/EMV-mathematical-specification-draft.md",
+      "sha256": "f48598ed1b11604fbca3f9f82e5c1079d18e9f1f1db850e34b18f8a089ec2428"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_registration_20261016/EMV-source-bounded-readiness-review.json",
+      "sha256": "ea4b47cd88d061142dbac488cd841cbf2bc21845b81b35394c8f844ea7d38d5d"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_registration_20261016/Public-screen-descriptive-supplement-method-draft.md",
+      "sha256": "ac705594c926c9ea238fc7393271223c5c698f4faa14a00f1ebf0d3ef10b7ad1"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_registration_20261016/Public-screen-supplement-draft-independent-review.json",
+      "sha256": "22ac3cc5a1cf0f5b10c955b3c3d43ffd9d4ad2ece2f95cd8b24151ff267be26c"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_registration_20261016/aroon-native-synthetic-output.json",
+      "sha256": "812b4ec2e3e7ccd7a79c0330edcafb4bf4a0bacb0094284140906b03d3b071c2"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_registration_20261016/aroon-selected-native-source-receipt.json",
+      "sha256": "fce26c2f1edc1ab75ca8ccc2be2c4fa3f93bdf6e8f3cf5749cf1890cc9dbafd6"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_registration_20261016/aroon-synthetic-input.json",
+      "sha256": "a5a3194c71e3cb06bdf43c067e12263e2d908a9321a3fa77da4ced4a755e0759"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_registration_20261016/emv-native-synthetic-output.json",
+      "sha256": "683581b2a8592b8fa082a853812a5598d9645f35fd65cb75658844b10ad37139"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_registration_20261016/emv-selected-native-source-receipt.json",
+      "sha256": "2b6dc6568a6942a43433300d2c368725a543901acdc2509b21f49c51a4fce7f1"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_registration_20261016/emv-synthetic-input.json",
+      "sha256": "bcfd9bf00526f6b7bb425fec3cf839225afdfd0ebd3c4ac1ccc00b0ab5a5c6d3"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_registration_20261016/pre-outcome-review.json",
+      "sha256": "c0c62294054a8f90d1807f3a427a69071185af1a8cf6b168b89c6e3b4e1533e6"
+    },
+    {
+      "path": "artifacts/public_aroon_batch16_registration_20261016/preservation-before-outcomes.json",
+      "sha256": "9c47986689c48ce36beabb71f934c59d5b9ba62922320f8d3d8760eb65315c13"
+    },
+    {
+      "path": "config/public_aroon_batch16_v1.json",
+      "sha256": "59064a0f7b7beeba89a70788ec2bc30594bb6246bc7edad8a3d231ed277eed17"
+    },
+    {
+      "path": "docs/PUBLIC_AROON_BATCH16_DESIGN_V1.md",
+      "sha256": "1ce80ac4db8c8ac7e6c388395ce285e6e4f2bf997ed55e8a8ec803663a447a71"
+    },
+    {
+      "path": "docs/PUBLIC_AROON_BATCH16_RESULTS_V1.md",
+      "sha256": "600eea8631bdb99e37deef017d579fb32a4fd54d7997dbbf3e40ffc1304c12a2"
+    },
+    {
+      "path": "src/orderflow_edge_lab/public_aroon_batch16.py",
+      "sha256": "9e5f74bf15faed31f5acd6ed92d448b320aa22581e47630371ef5b1b21197889"
+    },
+    {
+      "path": "tests/test_public_aroon_batch16.py",
+      "sha256": "8f2b4cfe37a68fea1922adc9f02a2fb2ed8b1ea30a0e1a5efed016a4c204c1fe"
+    }
+  ],
+  "proposal": {
+    "status": "ACCEPTABLE_BEFORE_NEW_EMV_FREEZE",
+    "restore_exact_audited_CRLF_bytes": true,
+    "apply_text_false_attributes_before_commit": true,
+    "retain_additive_bridge_and_original_report_hashes": true,
+    "note": "Restoring the exact audited source/test bytes under -text before the next design freeze changes checkout byte identity only. Bind new design to its actual bytes; retain this explicit LF/CRLF bridge for earlier merged-main verification. Do not rewrite historical reports or substitute normalized identity for claimed exact historical execution hash."
+  },
+  "limits": [
+    "No market or outcome recomputation. Exact normalized bytes and AST equality establish no Python logic transformation; original reports truthfully retain the CRLF actual-execution hashes.",
+    "Git blob and fresh-main source are LF and therefore do not have the historical exact raw hash. This bridge makes that distinction explicit; it does not claim raw byte equality.",
+    "This is additive provenance evidence, not permission to change frozen strategy definitions, gates, results, audits or prospective protocols.",
+    "Root must commit any future exact-byte restoration with -text attributes before the new EMV registration and preserve all prior paths."
+  ],
+  "market_data_loaded": false,
+  "market_outcomes_inspected": false,
+  "repository_modified": false,
+  "new_strategy_trials": 0,
+  "frozen_strategy_or_result_changes": false
+}
