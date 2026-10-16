@@ -101,6 +101,7 @@ A read-only review of the runner found three blockers and several issues that wo
   - The frozen MEXC fetcher refuses fewer than 200 bars, so C3 and C4 fetch MEXC 8h klines from 2026-06-01 and then use only rows from the pre-registered window (C3: from 2026-10-04; C4: the inner join with each watch series).
   - The archive rounds funding settlement times to the minute, so `daily_funding_panel` may assign a 00:00 settlement to the previous day where the development fapi timestamps carried millisecond jitter. This shifts absolute S3 and funding P&L slightly against development. It does not affect the D4/D5 variant differences, which share identical inputs.
   - D4 records which Binance contract supplied each coin's funding.
+- Run log: run 38980878407 (2026-10-16 23:20Z) stopped at the single-look guard itself. GitHub runs steps under `bash -e`, so the "branch absent" exit code 2 ended the shell before it was tested. No marker was pushed, no data was fetched and no look was used. The guard was fixed (`|| rc=$?`) and the run re-triggered.
 
 ## 1. Results
 
