@@ -1,0 +1,57 @@
+{
+  "kind": "PSR21_KAMA_BATCH15_DRAFT_INDEPENDENT_MECHANICS_REVIEW",
+  "status": "PASS_DRAFT_MECHANICS_NOT_REGISTERED_OR_PRE_OUTCOME_APPROVED",
+  "blocking_findings": [],
+  "market_data_loaded": false,
+  "market_outcomes_inspected": false,
+  "draft_evaluator_exact_sha256": "a0b6a37b3e9c99eca829fd69a2a2eb9f63f13b0627f7681789aec77202985352",
+  "draft_config_exact_sha256": "a6f57fa784dc209007def33fd59634a41732b27ff523f53a820d768657fda759",
+  "draft_test_exact_sha256": "131507a77d6d246ebd568cabe56b20bbe093880245bb20d18b9801feff015d60",
+  "mathematical_helper_review_sha256": "4b0e644b24e9bc1ce97d2b4a4db5a9e09ec8128101d9d3d5be34134edb8ff99b",
+  "validations": {
+    "synthetic_tests_independently_reexecuted": 17,
+    "actual_native_kama_values_exact": 4714,
+    "available_bar_actions_exact": 4902,
+    "fixtures": 21,
+    "all_feature_prefix_checks": 11,
+    "all_feature_future_mutation_checks": 3,
+    "feature_arrays_exact_prior_independently_reviewed_helper": true,
+    "simulate_ast_only_exit_key_and_reason_changed_from_frozen_FI": true,
+    "shared_controls_diagnostics_guards_ast_unchanged": true,
+    "independent_fullcash_synthetic_paths": 80,
+    "event_checks": 96,
+    "nav_marks_checked": 1440,
+    "randomized_flat_exit_entries": 61,
+    "counts": {
+      "raw_entry_flags": 277,
+      "cash_rejected": 84,
+      "unexecuted_final_entry": 26,
+      "accepted_entries": 96,
+      "held_entry_ignored": 71
+    },
+    "maximum_nav_residual": 0.0,
+    "whole_random_entry_can_enter_invalid_kama_and_hold_to_censor": true
+  },
+  "mechanics": [
+    "Source ER10/fast2/slow30, close9 seed/first10 output, compensated add/remove denominator and recursive NaN/HOLD stay unchanged; no crossing, epsilon or rolling resets.",
+    "Educational fullcash intent uses exact fee-reserved signal-close Decimal floor8 fixed quantity, nextopen all-or-reject. Funded BTC/cash/NAV, no same-boundary reentry, source SELL exit, pending/censor/excursions checked separately.",
+    "Whole randomized/lagged BUY replacement keeps original SELL, including false exit under invalid KAMA. Cost cases, alpha.025,500controls and all gates unchanged.",
+    "Draft attribution and specification explicitly prohibit upstream AGPL Go/helper/harness/build copying into Git; mathematical implementation and URI/hash/numeric evidence only."
+  ],
+  "limits": [
+    "Unregistered synthetic draft only; no market data, trial or actual committed-source approval.",
+    "Same frozen FI cash engine reused; independent synthetic accounting verifies80 paths, not exchange execution or every runtime/input.",
+    "Original AGPL source supplied educational signals/fullcash accounting intent, not a deployed exchange bot. Legal source-copy boundary remains mandatory; no relicensing assertion.",
+    "Previously tested exact native numeric fixtures/NaN masks do not establish NaN payload or universal cross-platform parity.",
+    "Actual new branch/freeze requires verified parent release, full required tests/lint, immutable config/evaluator and independent review committed before first raw/cache load.",
+    "No viability/untouched confirmation/orthogonality claim."
+  ],
+  "minimum_current_attempted_trading_cells": 27,
+  "minimum_current_attempted_signal_model_cells": 28,
+  "minimum_registered_trading_cells_after_future_freeze": 28,
+  "minimum_registered_signal_model_cells_after_future_freeze": 29,
+  "new_registered_trials": 0,
+  "new_attempted_trials": 0,
+  "repository_modified": false,
+  "candidate_production_approved": false
+}

@@ -1,0 +1,161 @@
+{
+  "study_id": "PSR19-PUBLIC-OU-ONEUNIT-LONG-CASH-BATCH13",
+  "version": 1,
+  "candidates": [
+    "OU8hOneUnitLongCashAdaptation"
+  ],
+  "source_sha256": {
+    "OU8hOneUnitLongCashAdaptation": "e9940bfb353602c635ca085eb4de3dc8d9521d48e5ca4017c3d83ebb5cfa2fb3"
+  },
+  "source_manifest": "artifacts/minute_continuity_20261010/source_manifest.json",
+  "source_manifest_sha256": "3fcadef5dea9086425111b12b74f9df84f86b2d0932ca918871fc47b66f7179b",
+  "quality_csv": "artifacts/minute_continuity_20261010/daily_quality.csv",
+  "quality_csv_sha256": "69403a31a4f7f5c234ebbca98e32ba9b2919253f453515c76da964f93e10ed29",
+  "source_policy": "Longest shared complete-day segment chosen solely by previously audited quality; no repairs, imputation or source replacement.",
+  "data_start": "2023-04-01T00:00:00Z",
+  "data_end_exclusive": "2026-10-01T00:00:00Z",
+  "signal_minutes": 480,
+  "execution_minutes": 1,
+  "warmup_bars": 240,
+  "symbols": [
+    "ETHUSDT",
+    "SOLUSDT",
+    "LINKUSDT"
+  ],
+  "benchmark": "BTCUSDT",
+  "episode_initial_cash_per_symbol": 10000,
+  "max_hold_bars": null,
+  "baseline_round_trip_bps": 40,
+  "cost_cases_bps": [
+    20,
+    40,
+    60,
+    80
+  ],
+  "cost_policy": "Eachsidecharges halfnominalroundtripcost onactualmodelednotional;1unit unchanged and all-or-reject on insufficientcash includingcost.",
+  "gap_target_models": [
+    "conservative_limit",
+    "opening_price_improvement"
+  ],
+  "touch_policy": "No source protection; no invented stop/target/timeout. Both registered gap labels intentionally identical, onehistory. Shared no-pruning/failclosed caps retained.",
+  "max_symbol_histories": 64,
+  "max_joint_histories": 4096,
+  "entry_policy": "Explicit new8h Spot long/cash mathematical adaptation. Fixed1baseunit, framework default intent verified by native synthetic runtime, not fullbalance or95%commentedSizer. Three10000USDTsleeves. Completed8h signal atnextminuteOPEN, all-or-reject debit includingcosts, no resize/borrow/short/pyramid/partial/orders. HeldBUYcountedignored beforez>0longexit; no sameboundaryreentry.",
+  "clock_policy": "Use completed8h features, action at next1mOPEN. Fixedwarmup240. No day/session reset or timeframe-derived parameter changes.",
+  "endpoint_policy": "Completed events use modeled exit reference; still-held events retain statusCENSORED_MTM and cutoff close mark with hypothetical liquidation burden, never a fictitious order or completed trade.",
+  "principal_return_estimand": "All admitted entry-to-exit-or-fixed-cutoff net reference returns; completed-only means separately descriptive. Per-unit return=(exit/entry)*(1-sidecost)/(1+sidecost)-1.",
+  "funded_btc_benchmark": "At each accepted alt entry allocate the same alt notional/preentry-cash fraction from a separate BTC cash account. Exact BTC open entry; open exit uses BTCopen, intraminute exit uses BTCminute low/high bounds; own costs and remaining inventory; cutoff uses known final close.",
+  "portfolio_policy": "Equal10000USDTcashsleeves each holdingatmost1unit. Assetprice-dependent exposure, not equalrisk orfullbalance. FundedBTC owncash/quantity/cost. Allrisk/returngates unchanged.",
+  "seed": 20261023,
+  "bootstrap_replicates": 2000,
+  "bootstrap_calendar_block_weeks": 4,
+  "bootstrap_policy": "Moving contiguous4calendar-week blocks incl zero-event weeks; retain fixed alpha0.025,97.5% two-sided intervals from prior comparator. One newly registered cell; conservative fixed carryover, not two cells or global repeated-search inference.",
+  "placebo_replicates": 500,
+  "placebo_policy": "500eligibleentryweek rawlong-entry flagrandomizations preservingweekflagcount; unchanged original long-exit z>0 condition, ownacceptedentries/quantities/cash/durations. Not the original short-entry SELL predicate. No observedendogenouslengthsreused. Random flags replace the entire nativeentryqualifier, includingfitvalidity andSMAcondition; mayenteroninvalidfitrows. No implicitnativeentryvaliditymaskretained. Original long-exitflag remainsfalseoninvalidfit, so holdingspersist.",
+  "lag_control_bars": 7,
+  "lag_policy": "Laglong-entryflags by7eight-hourbars afterfixedwarmup; retain unchanged original long-exit z>0 and fixed1unit funding/cash rules, not originalshort-entrySELL predicate. Delayedflags replace the entireentryqualifier, includingcurrentfitvalidity/SMAcondition; mayenteroncurrentlyinvalidfitrows. Original invalid-fitlongexit remainsfalse.",
+  "gates": {
+    "min_completed_events": 100,
+    "min_entry_weeks": 52,
+    "min_all_admitted_net40_bps": 5,
+    "require_all_admitted_net80_positive": true,
+    "require_all_symbols_net40_positive": true,
+    "min_positive_year_fraction": 0.6666666666666666,
+    "max_portfolio_drawdown_pct": 30,
+    "require_leave_one_entry_week_out_net40_positive": true,
+    "require_net40_descriptive_lower_ci_positive": true,
+    "require_btc_excess40_descriptive_lower_ci_positive": true,
+    "max_placebo_at_least_observed_fraction": 0.05,
+    "require_no_history_overflow": true
+  },
+  "diagnostics": [
+    "completed/pending/unexecuted/overlap/invalid/cash rejection accounting",
+    "all-admission and completed-only returns/PF",
+    "gross MFE/MAE uncertainty",
+    "calendar entry weeks and4week bootstrap",
+    "fixed UTC sessions and overlap memberships",
+    "symbol/year/month/weekday/hour and causalBTC30bar state",
+    "leave-week and leave-symbol sensitivity",
+    "40/80 costs and20/60 cases",
+    "funded BTC wealth and same-exit reference bounds",
+    "full branch and gap-model sensitivity",
+    "500 randomized-entry controls and7bar lag control"
+  ],
+  "claim": "Spent historical hypothetical development only; SCREEN_SURVIVOR permits separate future preregistration, never viable/untouched/positive-edge/deployment claim.",
+  "future_confirmation": "User completion requires a separate immutable and adequately powered future-only protocol, calibrated costs/quotes/execution, controls and approval-bound paper reliability, frozen before observations start. No viable candidate until that confirmation passes.",
+  "bollinger_bands_excluded": true,
+  "frozen_lanes_modified": false,
+  "authorizes_orders": false,
+  "retuning_permitted": false,
+  "minimum_preexisting_trading_cells": 25,
+  "minimum_preexisting_signal_model_cells": 26,
+  "new_registered_trading_cells": 1,
+  "minimum_registered_trading_cells_after_freeze": 26,
+  "minimum_registered_signal_model_cells_after_freeze": 27,
+  "source_urls": {
+    "OU8hOneUnitLongCashAdaptation": "https://github.com/ali-azary/Algorithmic-Trading-From-Beginner-to-Advanced/blob/945c7c430c799687be17092eaebcad6baace1a9e/codes/OUMeanReversionStrategy.py"
+  },
+  "runtime": {
+    "python": "3.13.14",
+    "numpy": "2.2.4",
+    "pandas": "2.2.3",
+    "platform": "win32",
+    "precision": "float64 scalar operation order",
+    "scipy": "1.15.2"
+  },
+  "dependency_hash_policy": "Python dependency bytes normalize CRLF to LF solely for cross-platform checkout; all data/audit fingerprints remain exact bytes",
+  "dependency_source_sha256": {
+    "src/orderflow_edge_lab/public_protective_batch5.py": "ea1a2f5564a4261fe3c53e4d3f584b782913222f43228f0843c9d94917eab6d8",
+    "src/orderflow_edge_lab/protective_minute.py": "32345cbe229e734129f063e161f77989c3e2d0facb604dade40b469de31f03bf",
+    "src/orderflow_edge_lab/public_strategy_completion.py": "2a5327410bb5b7acef4dc6959d95b8ea309df0f0cf9f6e692c946b7500a1719a"
+  },
+  "source_mechanics_audit_sha256": {
+    "artifacts/public_ou_batch13_registration_20261015/OU-source-semantic-readiness-review.json": "7eb2281796f42df33f8a9cb6847d9e59fedc6386900ecd038863f55833f7e52f",
+    "artifacts/public_ou_batch13_registration_20261015/OU-source-native-math-prerequisite.json": "8e68e87a11a59e67d2a06a8f375eab2cd748a574aae9bb8a1418e527fd932a98",
+    "artifacts/public_ou_batch13_registration_20261015/OU-source-native-8h-metadata-prerequisite.json": "284a40b2b8c73509e0a3bbbeebb1c8c61b71cba4779a96c9070fedccf8771f57",
+    "artifacts/public_ou_batch13_registration_20261015/OU-source-native-readiness-review.json": "bcf8b53a66616591cc6639fbb938455840a18a040c4e37f8e5380052edce4d96",
+    "artifacts/public_ou_batch13_registration_20261015/OU-feature-helper-synthetic-review.json": "739bcb1eccdc027f7a2417f57d16e18eb9e8c09f14e5a0a95c40424aa116cdf4",
+    "artifacts/public_ou_batch13_registration_20261015/OU-batch13-draft-mechanics-review.json": "203cf0735918ce58c82260d46b140b778cf88140f60f9026a3b568ca167a46b7",
+    "artifacts/public_ou_batch13_registration_20261015/Post-ForceIndex-public-source-readiness.json": "634d6ec0a779ed0d2bb392539d8655ed88fdc9bd5ecef7abe55f86ccf898e4c4",
+    "artifacts/public_ou_batch13_registration_20261015/azary_codes_OUMeanReversionStrategy.py.txt": "e9940bfb353602c635ca085eb4de3dc8d9521d48e5ca4017c3d83ebb5cfa2fb3",
+    "artifacts/public_ou_batch13_registration_20261015/azary_codes_backtest.py.txt": "a9feb0f4a976fe0007b7e44aead017cc8e8d041872b4de5b69f12534e88846de",
+    "artifacts/public_ou_batch13_registration_20261015/azary_strategy_source_inventory.json": "e8fbd220151989f055578dc638c31df33684a6a126c2ad984c1e56e8b2b0475e",
+    "artifacts/public_ou_batch13_registration_20261015/azary_license_readiness.json": "2c5e6a5ad814b15ac6695909efe10267bd5bca4ef96a7fd07e0af95d36cf5ace",
+    "artifacts/public_ou_batch13_registration_20261015/ou-synthetic-input.json": "5adbfcbbdfef56477850b18bc10134d5bab03e4db9c0be3417de10cbe875e80d",
+    "artifacts/public_ou_batch13_registration_20261015/ou-native-synthetic-output.json": "acd82a222c3533dd72fc9e3334181dd6b0b8181da6cd8c013821f884a3f4d03f",
+    "artifacts/public_ou_batch13_registration_20261015/ou-8h-synthetic-input.json": "5adbfcbbdfef56477850b18bc10134d5bab03e4db9c0be3417de10cbe875e80d",
+    "artifacts/public_ou_batch13_registration_20261015/ou-8h-native-synthetic-output.json": "acd82a222c3533dd72fc9e3334181dd6b0b8181da6cd8c013821f884a3f4d03f",
+    "artifacts/public_ou_batch13_registration_20261015/backtrader-runtime-receipt.json": "2a1bc0fcf92d1dc35fecd74f62ef3b063246fcbbce81f41e638a0af6709e5e7a",
+    "artifacts/public_ou_batch13_registration_20261015/check_ou_source_math.py": "27ae4fe8cc5d55e7767ff075990b382aadf6bf11e3ffff6cd674f116323294e4",
+    "artifacts/public_ou_batch13_registration_20261015/check_ou_source_math_8h.py": "9d118c34eb8108b56c022cb4d7bbcb3b855d3d734469effc639156983d032f84"
+  },
+  "family_disclosure": "Rolling log-price OU conditional equilibrium estimate plusSMA trendcondition, distinct from prior fixedoscillator thresholds. Broadmeanreversion/trend overlaps remain; no orthogonality orvalidOUstatisticalfit claim. Literalnonpositive-theta fallback retained.",
+  "native_runtime_status": "OriginalunmodifiedclassAST independentlyexecuted withBacktrader1.9.78.123/SciPy1.15.2 onsynthetic8hcandles:4090features/55unitadvices. SharedSciPykernel not independentOLSderivation. Genericrunner selectsanotherstrategy. No fullnativeSpot/livebotparity; explicitnewlong/cashfunding/lifecycle scope required. Originalrejectedexitcanorphanposition_type; referenceadaptermodels fundedlongexitsatnextOPEN, not asynchronousfailure/persistence.",
+  "required_pre_outcome_review": {
+    "path": "artifacts/public_ou_batch13_registration_20261015/pre-outcome-review.json",
+    "required_status": "PASS_PRE_OUTCOME_INDEPENDENT_REVIEW_WITH_DECLARED_PARITY_LIMITS",
+    "must_bind": [
+      "evaluator_exact_sha256",
+      "canonical_config_sha256"
+    ],
+    "before_any_raw_market_load": true
+  },
+  "source_attribution": "ali-azary/Algorithmic-Trading-From-Beginner-to-Advanced, pinned945c7c430c799687be17092eaebcad6baace1a9e. README declares Code:MIT License and separate CC-BY-NC book, but no standalone code license/notice received and placeholder remains; preserve bounded provenance, no invented copyright holder/date or full license-file claim. No PDF content used. Educational class, generic runner selects another strategy. New explicitly scoped one-unit8h Spot long/cash mathematical adaptation; no published profitability or full nativeSpotbot parity claim.",
+  "ou": {
+    "lookback": 30,
+    "sma_period": 30,
+    "entry_threshold": 1.0,
+    "exit_threshold": 0.0,
+    "quantity_units": 1.0,
+    "logarithm": "np.log scalarforeachclose, currentinclusive30bararray",
+    "regression": "scipy1.15.2 stats.linregress(laglog,deltaLog);theta=-slope;mu=intercept/theta onlytheta>1e-6 elsemean(logs);sigma=np.std residuals ddof0;eq=sigma/sqrt(2theta) onlytheta>1e-6 elsesigma.",
+    "sma": "Backtrader Average usesmath.fsum(current30prices)/30",
+    "actions": "NewSpotlongscope:entryz<\u22121ANDclose>SMA30;exitlongz>0 independentlyofshortentry. No source theta-positive/halflifefilter added. Invalid/eqstd<=0 fit emitsneitherentrynorexit andholdspersist.",
+    "history": "Eachsourcefit isrolling30includingcurrentclosedbar, sourceSMA30seed; fixed240baradmissionwarmup. Do not substitute fullhistoryOLS or differentstartup.",
+    "source_short_scope": "Publishedclassalsoshortswhenz>1ANDclose<SMA30 andclosesshortz<0; explicitlyexcludedfromnewSpotlong/cashscope, not claimedunchangedfullbot.",
+    "native_quantity_scope": "Nativeframework default1unit onexplicitOUinstantiation; genericpublishedrunnercurrentlyselectsQuantileChannelStrategy,95%Sizercommentedout.",
+    "declared_cash_adapter": "Explicit new8h Spot long/cash mathematical adaptation. Fixed1baseunit, framework default intent verified by native synthetic runtime, not fullbalance or95%commentedSizer. Three10000USDTsleeves. Completed8h signal atnextminuteOPEN, all-or-reject debit includingcosts, no resize/borrow/short/pyramid/partial/orders. HeldBUYcountedignored beforez>0longexit; no sameboundaryreentry.",
+    "pending_exit_scope": "ReferencefillednextOPENlongliquidation; no broker/exchange rejectionqueues, sourceorphan-state recoveryorfullasynchronousparityclaimed.",
+    "clock": "Use completed8h features, action at next1mOPEN. Fixedwarmup240. No day/session reset or timeframe-derived parameter changes."
+  }
+}

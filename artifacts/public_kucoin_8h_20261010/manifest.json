@@ -1,0 +1,239 @@
+{
+  "design_commit": "ce7d0f4363ed9ec01883ab61e581ae3ecfcfad38",
+  "design_sha256": "b4f5e22f648764356da07dc4013ef0fbd11d35e1a57848bedf98b958fb821248",
+  "study_id": "PSR2-KUCOIN-FAILED-DOWNSIDE",
+  "source": "KuCoin Spot",
+  "requests": [
+    {
+      "url": "https://api.kucoin.com/api/v2/symbols",
+      "requested_at_utc": "2026-10-10T10:34:06.912540+00:00",
+      "received_at_utc": "2026-10-10T10:34:07.631048+00:00",
+      "file": "symbols.json",
+      "sha256": "87e82b8efb174665c887cb8f389fcee7059b0944e2637498ee096dfea583fa3e"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/orderbook/level2_20?symbol=BTC-USDT",
+      "requested_at_utc": "2026-10-10T10:34:07.631684+00:00",
+      "received_at_utc": "2026-10-10T10:34:07.994788+00:00",
+      "file": "BTC-USDT-book.json",
+      "sha256": "f38f610d1b85868a7405894fcf387264f2fbff796ff2d26d9e5d387f1cfe6d63"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/candles?symbol=BTC-USDT&type=8hour&startAt=1628121600&endAt=1656921599",
+      "requested_at_utc": "2026-10-10T10:34:07.995352+00:00",
+      "received_at_utc": "2026-10-10T10:34:09.417574+00:00",
+      "file": "BTC-USDT-0.json",
+      "sha256": "77ce33515dd7251b2d141074b55326b63f47cec6faf473217d4884cdd8d0892c"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/candles?symbol=BTC-USDT&type=8hour&startAt=1656921600&endAt=1685721599",
+      "requested_at_utc": "2026-10-10T10:34:09.518089+00:00",
+      "received_at_utc": "2026-10-10T10:34:09.946725+00:00",
+      "file": "BTC-USDT-1.json",
+      "sha256": "c183fd881ab15d48638be9ae68923dcd7c29ec5098ccd9bb21d99b2d39cd607c"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/candles?symbol=BTC-USDT&type=8hour&startAt=1685721600&endAt=1714521599",
+      "requested_at_utc": "2026-10-10T10:34:10.047371+00:00",
+      "received_at_utc": "2026-10-10T10:34:10.434572+00:00",
+      "file": "BTC-USDT-2.json",
+      "sha256": "30419a18ad0201498673059e1e8c95172c5c99d37ccb91661d2bf7c4552cf165"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/candles?symbol=BTC-USDT&type=8hour&startAt=1714521600&endAt=1743321599",
+      "requested_at_utc": "2026-10-10T10:34:10.535507+00:00",
+      "received_at_utc": "2026-10-10T10:34:10.930365+00:00",
+      "file": "BTC-USDT-3.json",
+      "sha256": "fe015cd6868383ae1c541747349702f329d3ddc8dfcb9cb3d5975e4d43f356d8"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/candles?symbol=BTC-USDT&type=8hour&startAt=1743321600&endAt=1772121599",
+      "requested_at_utc": "2026-10-10T10:34:11.030931+00:00",
+      "received_at_utc": "2026-10-10T10:34:11.453061+00:00",
+      "file": "BTC-USDT-4.json",
+      "sha256": "5749fb8f8ce6aa878e304ecc78959cb5f53fe1ded0011a4698361a807b7a6c0d"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/candles?symbol=BTC-USDT&type=8hour&startAt=1772121600&endAt=1790812799",
+      "requested_at_utc": "2026-10-10T10:34:11.553501+00:00",
+      "received_at_utc": "2026-10-10T10:34:11.962747+00:00",
+      "file": "BTC-USDT-5.json",
+      "sha256": "ee314cbca03400c6c68ff16cd15d0eddf1c5c07e75ce039f151c8e9a25ddf79f"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/orderbook/level2_20?symbol=ETH-USDT",
+      "requested_at_utc": "2026-10-10T10:34:12.103846+00:00",
+      "received_at_utc": "2026-10-10T10:34:12.445261+00:00",
+      "file": "ETH-USDT-book.json",
+      "sha256": "5ba5504f71c1c7bbdf9b1b260a8ee557005bc1ced7db9856c0bdae9dcb3a02d3"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/candles?symbol=ETH-USDT&type=8hour&startAt=1628121600&endAt=1656921599",
+      "requested_at_utc": "2026-10-10T10:34:12.445724+00:00",
+      "received_at_utc": "2026-10-10T10:34:12.885249+00:00",
+      "file": "ETH-USDT-0.json",
+      "sha256": "23b529a9bacfbb12ff4abdee88ea95135b916c0fb192a228f41acfb3cff99208"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/candles?symbol=ETH-USDT&type=8hour&startAt=1656921600&endAt=1685721599",
+      "requested_at_utc": "2026-10-10T10:34:12.985849+00:00",
+      "received_at_utc": "2026-10-10T10:34:13.419910+00:00",
+      "file": "ETH-USDT-1.json",
+      "sha256": "7343cccc9aaf976bbea94da53b8d4d06778019b17fc4d21d4e83fa606b695d2f"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/candles?symbol=ETH-USDT&type=8hour&startAt=1685721600&endAt=1714521599",
+      "requested_at_utc": "2026-10-10T10:34:13.520449+00:00",
+      "received_at_utc": "2026-10-10T10:34:13.924703+00:00",
+      "file": "ETH-USDT-2.json",
+      "sha256": "fd87aa691af9bdb8c3d68de2a139064a9479960be42bbee489ba5d524379c0a6"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/candles?symbol=ETH-USDT&type=8hour&startAt=1714521600&endAt=1743321599",
+      "requested_at_utc": "2026-10-10T10:34:14.025373+00:00",
+      "received_at_utc": "2026-10-10T10:34:14.413563+00:00",
+      "file": "ETH-USDT-3.json",
+      "sha256": "f780703105633a662a2888edcf1c8d5069e32aa879424e2e102a2c8faf337320"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/candles?symbol=ETH-USDT&type=8hour&startAt=1743321600&endAt=1772121599",
+      "requested_at_utc": "2026-10-10T10:34:14.514353+00:00",
+      "received_at_utc": "2026-10-10T10:34:14.979506+00:00",
+      "file": "ETH-USDT-4.json",
+      "sha256": "29e85d2d8a83a312ba1026f5b2ee29b0c9d6d7bd79fe75550e34b19d20e37864"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/candles?symbol=ETH-USDT&type=8hour&startAt=1772121600&endAt=1790812799",
+      "requested_at_utc": "2026-10-10T10:34:15.080094+00:00",
+      "received_at_utc": "2026-10-10T10:34:15.498596+00:00",
+      "file": "ETH-USDT-5.json",
+      "sha256": "478d508d81d018857637067d3fbb5cbcf1848adf9c87995fd70d25ae629f1d80"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/orderbook/level2_20?symbol=SOL-USDT",
+      "requested_at_utc": "2026-10-10T10:34:15.635583+00:00",
+      "received_at_utc": "2026-10-10T10:34:15.959469+00:00",
+      "file": "SOL-USDT-book.json",
+      "sha256": "236205bc74685772381a4c04e29430bb5f79a08bcce6455fc49c0bbc3cb5d503"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/candles?symbol=SOL-USDT&type=8hour&startAt=1628121600&endAt=1656921599",
+      "requested_at_utc": "2026-10-10T10:34:15.959990+00:00",
+      "received_at_utc": "2026-10-10T10:34:16.362199+00:00",
+      "file": "SOL-USDT-0.json",
+      "sha256": "352ad3a99c2fc7e58f071b8212f3b3d6ef298342f5099f800317f54f55c77854"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/candles?symbol=SOL-USDT&type=8hour&startAt=1656921600&endAt=1685721599",
+      "requested_at_utc": "2026-10-10T10:34:16.463035+00:00",
+      "received_at_utc": "2026-10-10T10:34:16.879111+00:00",
+      "file": "SOL-USDT-1.json",
+      "sha256": "540cc4174c510f79ac9320b52f44c72dd46a8dc4c487535208992edd0c929540"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/candles?symbol=SOL-USDT&type=8hour&startAt=1685721600&endAt=1714521599",
+      "requested_at_utc": "2026-10-10T10:34:16.979704+00:00",
+      "received_at_utc": "2026-10-10T10:34:17.364384+00:00",
+      "file": "SOL-USDT-2.json",
+      "sha256": "8b7caf541d1a3e514847e29e7cff338ee6a9809eebea0784cde76ef59860090e"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/candles?symbol=SOL-USDT&type=8hour&startAt=1714521600&endAt=1743321599",
+      "requested_at_utc": "2026-10-10T10:34:17.465023+00:00",
+      "received_at_utc": "2026-10-10T10:34:17.874416+00:00",
+      "file": "SOL-USDT-3.json",
+      "sha256": "7fe24a81ca87b26217778f545139b0700aa75be3ca443c41cb1ceff6220e1f9b"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/candles?symbol=SOL-USDT&type=8hour&startAt=1743321600&endAt=1772121599",
+      "requested_at_utc": "2026-10-10T10:34:17.975175+00:00",
+      "received_at_utc": "2026-10-10T10:34:18.655742+00:00",
+      "file": "SOL-USDT-4.json",
+      "sha256": "aedc6d210ea77004b8d267109fbb5059a235bf8f6d45619832baf8d1eb3a7bcb"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/candles?symbol=SOL-USDT&type=8hour&startAt=1772121600&endAt=1790812799",
+      "requested_at_utc": "2026-10-10T10:34:18.756301+00:00",
+      "received_at_utc": "2026-10-10T10:34:19.110712+00:00",
+      "file": "SOL-USDT-5.json",
+      "sha256": "8a7b1b1ea9efc4f0cd5a9fe98e46c0f61dde9b9cdf49b45f0170a6a6cd2c1c4d"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/orderbook/level2_20?symbol=LINK-USDT",
+      "requested_at_utc": "2026-10-10T10:34:19.248344+00:00",
+      "received_at_utc": "2026-10-10T10:34:19.573017+00:00",
+      "file": "LINK-USDT-book.json",
+      "sha256": "4d09a468c5795aab3395d089ae2f326674b9c1b6efd2592bcb446ab3e2f308d0"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/candles?symbol=LINK-USDT&type=8hour&startAt=1628121600&endAt=1656921599",
+      "requested_at_utc": "2026-10-10T10:34:19.573516+00:00",
+      "received_at_utc": "2026-10-10T10:34:19.993574+00:00",
+      "file": "LINK-USDT-0.json",
+      "sha256": "1b162449cf685fc34f8103b1abf6745730de75c93004c9aed0dc99af182a9ab8"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/candles?symbol=LINK-USDT&type=8hour&startAt=1656921600&endAt=1685721599",
+      "requested_at_utc": "2026-10-10T10:34:20.094152+00:00",
+      "received_at_utc": "2026-10-10T10:34:20.503180+00:00",
+      "file": "LINK-USDT-1.json",
+      "sha256": "2ce0df7d90aca556f54f5f91471249f628245ceb8efb6c54610fbba0084da492"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/candles?symbol=LINK-USDT&type=8hour&startAt=1685721600&endAt=1714521599",
+      "requested_at_utc": "2026-10-10T10:34:20.603893+00:00",
+      "received_at_utc": "2026-10-10T10:34:21.035106+00:00",
+      "file": "LINK-USDT-2.json",
+      "sha256": "a3e94bd7dbd0069b88497132e5a0ffb4b22bc6130a6babc69c90c9c6c39da504"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/candles?symbol=LINK-USDT&type=8hour&startAt=1714521600&endAt=1743321599",
+      "requested_at_utc": "2026-10-10T10:34:21.135797+00:00",
+      "received_at_utc": "2026-10-10T10:34:21.553732+00:00",
+      "file": "LINK-USDT-3.json",
+      "sha256": "79e6edfa6ae728df9de220e32090d629f0073a80bf5bd10ca1afed94d8daecee"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/candles?symbol=LINK-USDT&type=8hour&startAt=1743321600&endAt=1772121599",
+      "requested_at_utc": "2026-10-10T10:34:21.654250+00:00",
+      "received_at_utc": "2026-10-10T10:34:22.047953+00:00",
+      "file": "LINK-USDT-4.json",
+      "sha256": "dcf354474f8dc43ad7f2743562b5d36072e9168900222b73917b9f1afa473af9"
+    },
+    {
+      "url": "https://api.kucoin.com/api/v1/market/candles?symbol=LINK-USDT&type=8hour&startAt=1772121600&endAt=1790812799",
+      "requested_at_utc": "2026-10-10T10:34:22.148809+00:00",
+      "received_at_utc": "2026-10-10T10:34:22.551616+00:00",
+      "file": "LINK-USDT-5.json",
+      "sha256": "68765b5ec5d38f02907c8d83cf06e40527a669f14ff0f6ea5e9b0c8fe24e7e79"
+    }
+  ],
+  "symbols": {
+    "BTC-USDT": {
+      "bars": 5649,
+      "first": "2021-08-05T00:00:00Z",
+      "last": "2026-09-30T16:00:00Z",
+      "csv_sha256": "2508149b41a2153d86202e1233040c1f883da4e7e24cdb4dd69f76f016c37a70"
+    },
+    "ETH-USDT": {
+      "bars": 5649,
+      "first": "2021-08-05T00:00:00Z",
+      "last": "2026-09-30T16:00:00Z",
+      "csv_sha256": "5a09de5460fd4d2044bcf3a2c43a5a54d38250c80453c1fc8c413458249ebbd8"
+    },
+    "SOL-USDT": {
+      "bars": 5649,
+      "first": "2021-08-05T00:00:00Z",
+      "last": "2026-09-30T16:00:00Z",
+      "csv_sha256": "3fbdd7c1fcc4f07ba036dc52619ace086857e20f34eef2f228c8e186e3bd83ff"
+    },
+    "LINK-USDT": {
+      "bars": 5649,
+      "first": "2021-08-05T00:00:00Z",
+      "last": "2026-09-30T16:00:00Z",
+      "csv_sha256": "7b4e8cdbbe444b5df3db6c54529c720b95ccf58fcb84978fe0dc6eae8c4921f6"
+    }
+  },
+  "complete": true,
+  "no_forward_fill": true
+}

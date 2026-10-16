@@ -1,0 +1,24 @@
+{
+  "kind": "OBV_SOURCE_BOUNDED_READINESS",
+  "source_commit": "945c7c430c799687be17092eaebcad6baace1a9e",
+  "source_exact_sha256": "46dbac252a3fde1922a5ff230d49a786773f1d1aec6d0d66f6cd0d7977459eac",
+  "status": "NOT_SELECTED_PENDING_SOURCE_STATE_AND_ORDER_LIFECYCLE_SPECIFICATION",
+  "original_indicator_synthetic_native_first_obv": [
+    3.0,
+    -3.0
+  ],
+  "future_mutation_bar": 63,
+  "all_earlier_closes_unchanged": true,
+  "earlier_obv_constant_offset": 6.0,
+  "market_data_loaded": false,
+  "new_registered_trials": 0,
+  "new_attempted_trials": 0,
+  "orders": false,
+  "findings": [
+    "Original CustomOBV first next() reads close[-1] at bar0; preloaded Backtrader buffer resolves that to final close. A mutation only at bar63 changes the first state. Do not replace first previous close with current close and claim unchanged native source.",
+    "A constant additive OBV offset mathematically cancels in OBV minus its30bar SMA. This fixture does not prove changed crossing predicates, strategy advice or economic results; no fullstrategy causal rejection claimed.",
+    "Original notify_order creates a sell StopTrail after every completed BUY and a buy StopTrail after every completed SELL, without limiting this behavior to initial entries. These new orders are not assigned to self.order. A trailing exit can therefore create an opposite pending trailing entry while flat; ordinary entry logic can also act.",
+    "Original is two-sided with RSI14 and volumeSMA7 entry qualifiers, OBV/SMA30 crosses and2% trailing orders. A simple long-entry/one-source-exit cash adapter would omit part of the original callback lifecycle. New pending-order/reversal/cancel/fill semantics and synthetic native order proofs would be required before any declaredSpotadaptation.",
+    "This source has not been registered or market-tested. Readiness limitations do not establish absence of edge or global source exhaustion. Educational license provenance remains bounded to README Code MIT statement, absent standalone notice and placeholder."
+  ]
+}

@@ -13,6 +13,11 @@ optional research extra — `python -m pip install -e ".[research]"` (numpy, pan
 scikit-learn). CI installs it; data recording, replay, paper execution, and the
 engineering tests do not need it.
 
+## Public strategy research transfer (development only)
+
+- [PUBLIC_STRATEGY_SOURCE_SURVEY_2026_10_10](PUBLIC_STRATEGY_SOURCE_SURVEY_2026_10_10.md) — 25 inspected upstream implementations with source, mechanics, license and evidence caveats.
+- [PUBLIC_STRATEGY_SHADOW_PROTOCOL_V1](PUBLIC_STRATEGY_SHADOW_PROTOCOL_V1.md) — seven ranked hypotheses, three offline executable shadow experiments, causal/friction/freeze gates.
+
 ## Research validity and promotion
 
 - [PROMOTION_GATE](PROMOTION_GATE.md) — what a promotion requires: freeze, holdout audit, trial ledger, economics, reliability.

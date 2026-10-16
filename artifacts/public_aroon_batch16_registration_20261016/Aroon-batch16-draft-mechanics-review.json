@@ -1,0 +1,56 @@
+{
+  "kind": "PSR22_AROON_BATCH16_DRAFT_INDEPENDENT_MECHANICS_REVIEW",
+  "status": "PASS_DRAFT_MECHANICS_NOT_REGISTERED_OR_PRE_OUTCOME_APPROVED",
+  "blocking_findings": [],
+  "market_data_loaded": false,
+  "market_outcomes_inspected": false,
+  "draft_evaluator_exact_sha256": "a2d19a5c0a2f9b945158a898bb4395b5ef486be7b3d4940b1edd57d702baa309",
+  "draft_config_exact_sha256": "7783b980bdad85cc44eb5fd6b6836a4b4c739d48921cb57d35a196d00ff5bf71",
+  "draft_test_exact_sha256": "83a1ef3cbce24e4cee3a1fdbdb96b999a0e258008691a5ccdf5954335871ffe7",
+  "mathematical_helper_review_sha256": "a1969ff226383acd7aef0127086639997a350efe9a7811750de4599a81f042ba",
+  "validations": {
+    "synthetic_tests_independently_reexecuted": 17,
+    "actual_native_aroon_pairs_exact": 1061,
+    "available_bar_actions_exact": 1493,
+    "fixtures": 20,
+    "all_feature_prefix_checks": 11,
+    "all_feature_future_mutation_checks": 3,
+    "feature_arrays_exact_prior_independently_reviewed_helper": true,
+    "simulate_ast_only_exit_key_and_reason_changed_from_frozen_FI": true,
+    "shared_controls_diagnostics_guards_ast_unchanged": true,
+    "independent_fullcash_synthetic_paths": 80,
+    "event_checks": 96,
+    "nav_marks_checked": 1440,
+    "randomized_flat_exit_entries": 61,
+    "counts": {
+      "raw_entry_flags": 277,
+      "cash_rejected": 84,
+      "unexecuted_final_entry": 26,
+      "accepted_entries": 96,
+      "held_entry_ignored": 71
+    },
+    "maximum_nav_residual": 0.0,
+    "whole_random_entry_can_enter_flat_source_hold_and_remain_censored": true
+  },
+  "mechanics": [
+    "Source raw25high/low extrema feed trailingupto25extrema plateau-age windows withoutadditional24delay; roundedstates andavailableonlystartup24HOLD unchanged. Full positivefiniteorderedhighlow domain retained.",
+    "Educational fullcash intent uses exactfee-reserved signalcloseDecimalfloor8 fixedquantity,nextopenallorreject. FundedBTC/cash/NAV,nosameboundaryreentry,sourceSELLexit,pending/censor/excursions separatelychecked.",
+    "Whole randomized/laggedBUYreplacement keeps originalSELL; flatUpDownHOLD can admitrandomentry andremaincensored. Costs,alpha.025,500controls andallgates unchanged.",
+    "AGPL source/helper/harness/build copying intoGit excluded; independent mathematical specification/implementation andURI/hash/numeric evidence only."
+  ],
+  "limits": [
+    "Unregistered syntheticdraft only; no marketdata/trial/actualcommittedsource approval.",
+    "FrozenFIcashengine reused;80independentsyntheticpaths verifyaccounting,not exchangeexecution/everyinput/runtime.",
+    "Exactfinitefixtureparity doesnotestablish universalplatformparity. Original educationalsignal/fullcashintent isnotdeployedbot.",
+    "Actualnextfreeze requiresverifiedparentrelease,newbranch,fulltests/lint,immutableconfig/evaluator andindependentreviewcommitted beforefirstload.",
+    "No viability/untouched/orthogonality claim."
+  ],
+  "minimum_current_attempted_trading_cells": 28,
+  "minimum_current_attempted_signal_model_cells": 29,
+  "minimum_registered_trading_cells_after_future_freeze": 29,
+  "minimum_registered_signal_model_cells_after_future_freeze": 30,
+  "new_registered_trials": 0,
+  "new_attempted_trials": 0,
+  "repository_modified": false,
+  "candidate_production_approved": false
+}

@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "ledger_id": "public-strategy-research-ledger-v1",
+  "recorded_date_utc": "2026-10-10",
+  "development_merge_commit": "18f2d15294949689c5c1165032867d284dd034c7",
+  "selection_history": {
+    "public_sources_surveyed": 25,
+    "hypothesis_families_inspected": 7,
+    "distinct_threshold_cells_inspected": 9
+  },
+  "entries": [
+    {
+      "id": "PSV1-VOLUME-IMPULSE",
+      "status": "REJECTED_AS_SPECIFIED",
+      "data_spent": true,
+      "retuning_under_same_id_permitted": false
+    },
+    {
+      "id": "PSV1-VWAP-REVERSION",
+      "status": "REJECTED_AS_SPECIFIED",
+      "data_spent": true,
+      "retuning_under_same_id_permitted": false
+    },
+    {
+      "id": "PSV1-FAILED-DOWNSIDE",
+      "status": "REJECTED_FOR_PROMOTION_AFTER_VENUE_COST_FAILURE",
+      "data_spent": true,
+      "retuning_under_same_id_permitted": false,
+      "prior_development_status": "DEVELOPMENT_INTERESTING_NOT_READY"
+    },
+    {
+      "id": "PSR1-FAILED-DOWNSIDE-FEASIBILITY",
+      "status": "PROSPECTIVE_FREEZE_NOT_JUSTIFIED",
+      "config_path": "config/public_failed_downside_replication_design_v1.json",
+      "candidate_frozen": false,
+      "prospective_start_utc": null
+    }
+  ],
+  "authorizes_orders": false,
+  "opens_existing_frozen_lanes": false,
+  "kucoin_descriptive_replication": {
+    "study_id": "PSR2-KUCOIN-FAILED-DOWNSIDE",
+    "design_commit": "ce7d0f4363ed9ec01883ab61e581ae3ecfcfad38",
+    "additional_threshold_cells": 0,
+    "venue_history_is_future_oos": false,
+    "disposition": "REJECT_COST_ROBUST_SURVIVAL_NO_PROMOTION",
+    "next_step": "close candidate for promotion without retuning; new hypothesis requires new identifier"
+  },
+  "public_research_extensions": {
+    "design_commit": "2d97c880ed34c46bf21a12204edbf43a0201fa3b",
+    "volume": {
+      "study_id": "PSR5-VOLUME-FUTURE-VOLATILITY",
+      "implementation_commit": "fee7520d856c483c3d36a7771a9051d25ff59beb",
+      "status": "REJECTED_AS_SPECIFIED",
+      "new_predictor_hypotheses": 1,
+      "retuning_permitted": false,
+      "data_spent": true
+    },
+    "minute": {
+      "study_id": "PSR6-MINUTE-BTC-LEADLAG-FEASIBILITY",
+      "implementation_commit": "18d1be2bd12ad292f6cc7b3bd900cd246d0ebdfb",
+      "status": "SOURCE_ACCESS_FEASIBLE_EXECUTION_AND_PREDICTION_UNCONFIRMED",
+      "new_feasibility_studies": 1,
+      "sampled_dates": 12,
+      "source_archives": 48,
+      "continuous_multi_year_history": false,
+      "sample_data_spent": true,
+      "paper_replication": false
+    },
+    "additional_trading_cells": 0,
+    "minimum_cumulative_signal_cells": 10,
+    "economics": "NOT_DESIGNED_NOT_RUN",
+    "prospective_start_utc": null,
+    "next_step": "close PSR5 without retuning; PSR6 passes access only and needs a distinct continuous-data/power/execution protocol before predictive or trading claims"
+  },
+  "btc_relative_state": {
+    "study_id": "PSR4-BTC-RELATIVE-STRENGTH",
+    "candidate_id": "BRS1-30D-7D-SPOT",
+    "design_commit": "a79816e74505a577a4f77ad51684dc430aff917f",
+    "implementation_commit": "34092f8b097f615ff12b8857416f125c7ff24f29",
+    "new_predictor_hypotheses": 1,
+    "model_definitions": ["baseline", "extended", "delayed_control"],
+    "placebo_controls": 500,
+    "additional_trading_cells_executed": 0,
+    "minimum_cumulative_signal_cells": 10,
+    "status": "REJECTED_AS_SPECIFIED",
+    "state_failed_checks": 5,
+    "economics": "NOT_RUN",
+    "data_spent": true,
+    "retuning_permitted": false,
+    "prospective_start_utc": null,
+    "next_step": "close this definition; review a distinct falsifiable question before any new identifier or data collection; no automatic watch"
+  },
+  "monthly_momentum_state": {
+    "study_id": "PSR3-MONTHLY-MOMENTUM-STATE",
+    "candidate_id": "PSM1-12M-1M-SPOT",
+    "design_commit": "6c2a37f0ba091f557d61efa19e61ed38c966f610",
+    "additional_signal_cells": 1,
+    "minimum_cumulative_cells": 10,
+    "status": "REJECTED_AS_SPECIFIED",
+    "data_spent": true,
+    "retuning_permitted": false,
+    "prospective_start_utc": null,
+    "next_step": "incremental BTC-relative market-state information and capital-path economics; new identifier required"
+  },
+  "minute_continuity_execution": {
+    "study_id": "PSR7-MINUTE-CONTINUITY-POWER-EXECUTION",
+    "design_commit": "1f05a9c2e93d9f26b908ee9faeb00def487e8f52",
+    "implementation_commit": "5e357ce517053b8a1172688b138fa66cc223d9ad",
+    "status": "FEASIBILITY_STUDY_COMPLETE_RESEARCH_READINESS_BLOCKED",
+    "source_archives": 276,
+    "checksum_verified_archives": 276,
+    "fully_audited_candles": 11219639,
+    "known_missing_minutes_in_schema_valid_files": 841,
+    "unquantified_expected_slots_in_rejected_months": 869760,
+    "verified_shared_full_weeks": 271,
+    "new_feasibility_studies": 1,
+    "new_predictor_hypotheses": 0,
+    "additional_trading_cells": 0,
+    "minimum_cumulative_signal_cells": 10,
+    "research_readiness": false,
+    "retuning_permitted": false,
+    "data_spent": true,
+    "economics": "NOT_DESIGNED_NOT_RUN",
+    "prospective_start_utc": null,
+    "next_step": "close this feasibility study; any future predictive design requires a distinct preregistration, adequate independent loss evidence and historical execution inputs; no automatic watch"
+  }
+}

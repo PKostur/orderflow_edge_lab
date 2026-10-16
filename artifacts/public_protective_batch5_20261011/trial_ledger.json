@@ -1,0 +1,46 @@
+{
+  "study_id": "PSR11-PUBLIC-PROTECTIVE-BATCH5",
+  "prior_ledger": "artifacts/public_bot_batch2_20261011/source_and_trial_ledger.json",
+  "minimum_preexisting_trading_cells": 15,
+  "minimum_preexisting_signal_model_cells": 16,
+  "new_registered_cells": [
+    "MAGenSpot8hNativeKernel",
+    "IchimokuSpot8hATR"
+  ],
+  "new_attempted_cells": 2,
+  "new_exhaustively_evaluated_cells": 2,
+  "minimum_attempted_trading_cells": 17,
+  "minimum_attempted_signal_model_cells": 18,
+  "decisions": [
+    {
+      "candidate": "MAGenSpot8hNativeKernel",
+      "decision": "REJECTED_AS_ADAPTED",
+      "failed_gates": [
+        "all_symbols_positive",
+        "excess_descriptive_ci",
+        "leave_week_positive",
+        "net40_mean",
+        "net80_positive",
+        "net_descriptive_ci",
+        "placebo_tail",
+        "portfolio_drawdown",
+        "positive_year_fraction"
+      ]
+    },
+    {
+      "candidate": "IchimokuSpot8hATR",
+      "decision": "REJECTED_AS_ADAPTED",
+      "failed_gates": [
+        "excess_descriptive_ci",
+        "net_descriptive_ci",
+        "placebo_tail",
+        "portfolio_drawdown"
+      ]
+    }
+  ],
+  "all_prior_source_and_forecast_history_retained": true,
+  "global_search_adjusted_inference": false,
+  "controls_are_related_versions_not_independent_trials": true,
+  "viable_candidates": [],
+  "future_confirmation_started": false
+}

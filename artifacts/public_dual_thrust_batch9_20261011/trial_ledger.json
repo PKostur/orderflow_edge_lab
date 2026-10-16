@@ -1,0 +1,32 @@
+{
+  "study_id": "PSR15-PUBLIC-DUAL-THRUST-BATCH9",
+  "prior_ledger": "artifacts/public_trend_batch8_20261011/trial_ledger.json",
+  "minimum_preexisting_trading_cells": 21,
+  "minimum_preexisting_signal_model_cells": 22,
+  "new_registered_cells": [
+    "DualThrust8hPinnedKernelSpot"
+  ],
+  "new_attempted_cells": 1,
+  "new_exhaustively_evaluated_cells": 1,
+  "minimum_attempted_trading_cells": 22,
+  "minimum_attempted_signal_model_cells": 23,
+  "decisions": [
+    {
+      "candidate": "DualThrust8hPinnedKernelSpot",
+      "decision": "REJECTED_AS_ADAPTED",
+      "failed_gates": [
+        "all_symbols_positive",
+        "completed_events",
+        "entry_weeks",
+        "excess_descriptive_ci",
+        "net_descriptive_ci",
+        "placebo_tail"
+      ]
+    }
+  ],
+  "all_prior_source_and_forecast_history_retained": true,
+  "global_search_adjusted_inference": false,
+  "controls_are_related_versions_not_independent_trials": true,
+  "viable_candidates": [],
+  "future_confirmation_started": false
+}

@@ -1,0 +1,132 @@
+{
+  "kind": "BOUNDED_PRIMARY_SOURCE_SUPERTREND_CONDITIONAL_READINESS_AUDIT",
+  "inspection_date_utc": "2026-10-11",
+  "registered": false,
+  "new_trading_cells": 0,
+  "market_outcomes_inspected": false,
+  "market_backtests_run": false,
+  "native_runtime_executed": false,
+  "native_parity_claim": false,
+  "repository_edits": false,
+  "orders_supported": false,
+  "scope": "One bounded survey: three public discovery queries, two complete Supertrend strategy implementations, pinned license/README and commit-author metadata, and a publisher repository lookup. No performance-directed selection or exhaustive search claim.",
+  "queries": [
+    "github Supertrend strategy original Pine copyright strategy.entry MPL -hasnocool -fmzquant -reddit",
+    "github Supertrend strategy QuantNomad PineScript",
+    "site:tradingview.com/support Supertrend Strategy"
+  ],
+  "clearer_mechanics_lead": {
+    "name": "SuperTrend Strategy",
+    "repository": "rahulmr/Pinescript-SuperTrend-Trading-Strategy",
+    "commit": "dfe2292e58583690271ddf515a991d84faa70563",
+    "source_path": "supertrend.pinescript",
+    "source_url": "https://github.com/rahulmr/Pinescript-SuperTrend-Trading-Strategy/blob/dfe2292e58583690271ddf515a991d84faa70563/supertrend.pinescript",
+    "raw_url": "https://raw.githubusercontent.com/rahulmr/Pinescript-SuperTrend-Trading-Strategy/dfe2292e58583690271ddf515a991d84faa70563/supertrend.pinescript",
+    "receipt": {
+      "status": 200,
+      "received_utc": "2026-10-11T09:10:50.1516497Z",
+      "utf8_bytes": 5761,
+      "sha256": "426e66ff4c7ac6b889ee0e449ad56a8cf962110efca401a3b373858d8a02236e",
+      "etag": "W/\"a83408ccc138133a638ea26c1f7e4aea023d94113b3a62d33be02f557dc42394\""
+    },
+    "license": {
+      "name": "MIT",
+      "copyright": "2020 Tom Rumpf",
+      "raw_url": "https://raw.githubusercontent.com/rahulmr/Pinescript-SuperTrend-Trading-Strategy/dfe2292e58583690271ddf515a991d84faa70563/LICENSE",
+      "sha256": "907852c1a5bc9518bd5bcc9b87c48262e367f0b94d07ce5e875cd4ff5a85fd74",
+      "utf8_bytes": 1066,
+      "status": 200,
+      "received_utc": "2026-10-11T09:10:50.5841565Z",
+      "requirement": "Retain copyright and MIT permission notice in any future copied or substantially adapted implementation."
+    },
+    "readme": {
+      "raw_url": "https://raw.githubusercontent.com/rahulmr/Pinescript-SuperTrend-Trading-Strategy/dfe2292e58583690271ddf515a991d84faa70563/README.md",
+      "sha256": "ddbc3ea98dea56c9994afaaf9ea80065334712d3bc1181fe1bc55b46e0ef564f",
+      "utf8_bytes": 475,
+      "status": 200,
+      "received_utc": "2026-10-11T09:10:50.9655539Z",
+      "description": "Publisher describes ATR-based long/short trend reversal on candle closes."
+    },
+    "author_provenance": {
+      "commit_api": "https://api.github.com/repos/rahulmr/Pinescript-SuperTrend-Trading-Strategy/commits/dfe2292e58583690271ddf515a991d84faa70563",
+      "commit_author_name": "Tom Rumpf",
+      "commit_author_github_login": "tomcru",
+      "commit_author_time_utc": "2020-03-27T21:42:53Z",
+      "repository_created_utc": "2020-06-20T11:10:52Z",
+      "github_fork_flag": false,
+      "original_publisher_status": "UNESTABLISHED: inspected repository account differs from named license/commit author, and repository creation postdates commit. GitHub fork=false is not proof of original publication.",
+      "bounded_followup": "Public tomcru repository inventory yielded no Pine/trading repository name in the inspected100-entry response. No exhaustive author search or ownership conclusion is made."
+    },
+    "defaults": {
+      "pine_version": 4,
+      "atr_period": 10,
+      "atr_factor": 3,
+      "initial_capital": 10000,
+      "currency": "USD",
+      "quantity_type": "percent_of_equity",
+      "quantity_percent": 5,
+      "max_bars_back": 4000,
+      "use_stop_loss": false,
+      "unused_stop_percent_when_disabled": 15,
+      "background": true,
+      "start": "2019-01-01T00:00 exchange timezone",
+      "finish": "9999-01-01T23:59 exchange timezone",
+      "date_gate": "Inclusive bar-opening time>=start and<=finish",
+      "timeframe": null,
+      "commission_and_slippage": "Not specified; default native zero friction does not satisfy research cost accounting",
+      "administrative_timeout": null
+    },
+    "causal_source_recurrence": {
+      "basic_up": "(high+low)/2 - (factor*ATR10)",
+      "basic_down": "(high+low)/2 + (factor*ATR10)",
+      "trend_up": "If previous close>previous trend_up, max(basic_up,previous trend_up); else basic_up",
+      "trend_down": "If previous close<previous trend_down, min(basic_down,previous trend_down); else basic_down",
+      "trend": "If current close>previous trend_down,1; else if current close<previous trend_up,-1; else nz(previous trend,1)",
+      "long_signal": "trend==1 AND previous trend==-1",
+      "short_signal": "trend==-1 AND previous trend==1",
+      "important_difference": "Use this source's previous-band comparison and priority, not substitute TradingView ta.supertrend or a generic textbook version."
+    },
+    "default_order_state": {
+      "clock": "No calc_on_every_tick,calc_on_order_fills or process_orders_on_close arguments: default completed historical bar calculation, next available tick market execution, normally next bar open.",
+      "entry": "Inside date window, a long or short flip assigns entry_price=current close and a hypothetical sl_price; then market strategy.entry for that side.",
+      "default_exit": "Opposite market strategy.entry reverses existing exposure. Explicit strategy.close is reachable only when use_sl=true; it is disabled by the published default.",
+      "protection": "No strategy.exit call and no active native protective price barrier at default. Do not enable optional15%stop, invent a hold timeout, or treat the plotted Supertrend line as a submitted stop.",
+      "disabled_optional_state": "entry_price/sl_price variables may update even with use_sl=false but do not trigger default exits. Optional close-observed trailing logic is outside the default study.",
+      "priority": "Terminate path is disabled; long/short flip predicates are mutually exclusive. Default order lifecycle has no conflicting same-bar bracket or all-na exit calls.",
+      "initial_direction": "Fallback direction1 is not an initial entry; entry requires a prior opposite direction. Preserve startup NaN and flip behavior.",
+      "window_ending": "Source has no forced close at finish. Segment ending must censor open positions, not silently liquidate as a source exit."
+    },
+    "declared_spot_port_possibility": {
+      "mechanically_definable": true,
+      "proposal_not_frozen": "At completed8h bars, flat-to-long on published long flip; close existing long to cash on published short flip; next-open market reference. Do not open short exposure. Preserve5%opening-equity intention, ATR10/factor3, calendar gate and disabled optional stop.",
+      "adaptations_to_declare": ["8h horizon not specified upstream", "long-only cash reversal", "USD-to-USDT accounting", "exchange versus UTC date timestamp", "fee-reserved cash and lot precision", "spread/slippage/cost stresses", "no-gap segment admission and right censoring"],
+      "indicator_precision_pending": "Freeze Pine-v4 ATR/RMA startup, missing-value behavior, separately rounded operation order and source recurrence before outcome inspection. Official ATR help supports true-range/RMA concept but is insufficient to prove exact v4 seed behavior.",
+      "native_limit": "A mathematical port can be tested causally, but native Pine execution and bitwise indicator/fill parity have not been measured."
+    },
+    "status": "MECHANICALLY_DEFINABLE_SOURCE_ONLY_PROVENANCE_AND_ATR_STARTUP_PENDING_NOT_REGISTERED"
+  },
+  "second_source_inspection": {
+    "name": "Supertrend [Alorse]",
+    "source_commit": "8fb3837ddcd137f1450c3e82d654ff3df24d54d5",
+    "raw_url": "https://raw.githubusercontent.com/Alorse/pinescript-strategies/8fb3837ddcd137f1450c3e82d654ff3df24d54d5/strategies/trend/Supertrend.pine",
+    "sha256": "14b43e8f0483282161317431b9e94ab6964bb6e0f555b9afc0b95687ae40987c",
+    "utf8_bytes": 2071,
+    "http_status": 200,
+    "retrieval_logged_utc": "2026-10-11T09:10:09.6703490Z",
+    "defaults": {"pine_version": 4,"atr_period": 10,"factor": 3.7,"bars_back": 2,"target_factor": 1.5,"equity_percent": 10,"commission_percent": 0.01,"capital": 1000,"pyramiding": 0},
+    "state_findings": "Only Long entry and Long stop/target exit are active. Low2 stop updates while flat and persists while holding. entry_price resets to current close on both bullish and bearish flips, including while long, which can update the active long target. Bearish flip is not a market-close rule. Short calls are commented out.",
+    "license": "No notice in inspected file; no repository-wide license established here",
+    "status": "NOT_READY_NOT_REGISTERED",
+    "reason": "License/provenance and native target mutation/lifecycle require separate resolution. Do not replace bearish target reset with intuitive reversal or enable commented shorts."
+  },
+  "primary_framework_sources": [
+    "https://www.tradingview.com/pine-script-docs/v4/essential/strategies/",
+    "https://www.tradingview.com/support/solutions/43000501823-average-true-range-atr/",
+    "https://www.tradingview.com/support/solutions/43000645068-supertrend-strategy/",
+    "https://www.tradingview.com/support/solutions/43000634738-supertrend/"
+  ],
+  "source_family_disclosure": "Original25 survey already included Freqtrade Supertrend; ATR trend risk also relates to rejected Chandelier/SAR/MAGen mechanisms. These newly inspected implementations are source-level distinctions, not an independent new edge or statistical trial. Do not repeat an existing adapted cell under a new name.",
+  "concrete_next_step": "If this lead is pursued, first establish original-author/publisher provenance and exact v4 ATR startup, then freeze the explicit long-only5%cash port and synthetic fixtures before registration or market outcomes. Keep existing cost,control,drawdown,100-event,52-week and untouched-future gates. If provenance cannot be established, retain as excluded source evidence and choose a different lane.",
+  "final_readiness": "NO_NEW_READY_OR_REGISTERED_CANDIDATE_NO_VIABILITY_CLAIM",
+  "preserved": ["All prior rejection decisions", "No Bollinger", "No frozen lanes or prospective protocol changes", "No invented protection or timeout", "No phantom trial count", "No native parity claim"]
+}

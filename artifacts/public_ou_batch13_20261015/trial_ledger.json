@@ -1,0 +1,29 @@
+{
+  "study_id": "PSR19-PUBLIC-OU-ONEUNIT-LONG-CASH-BATCH13",
+  "prior_ledger": "artifacts/public_force_index_batch12_20261015/trial_ledger.json",
+  "minimum_preexisting_trading_cells": 25,
+  "minimum_preexisting_signal_model_cells": 26,
+  "new_registered_cells": [
+    "OU8hOneUnitLongCashAdaptation"
+  ],
+  "new_attempted_cells": 1,
+  "new_exhaustively_evaluated_cells": 1,
+  "minimum_attempted_trading_cells": 26,
+  "minimum_attempted_signal_model_cells": 27,
+  "decisions": [
+    {
+      "candidate": "OU8hOneUnitLongCashAdaptation",
+      "decision": "REJECTED_AS_ADAPTED",
+      "failed_gates": [
+        "excess_descriptive_ci",
+        "net_descriptive_ci",
+        "placebo_tail"
+      ]
+    }
+  ],
+  "all_prior_source_and_forecast_history_retained": true,
+  "global_search_adjusted_inference": false,
+  "controls_are_related_versions_not_independent_trials": true,
+  "viable_candidates": [],
+  "future_confirmation_started": false
+}

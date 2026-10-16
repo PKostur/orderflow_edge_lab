@@ -1,0 +1,102 @@
+{
+  "kind": "KAMA_SOURCE_NATIVE_READINESS_INDEPENDENT_REVIEW",
+  "status": "PASS_SOURCE_NATIVE_MATH_READINESS_WITH_AGPL_REPOSITORY_COPY_EXCLUDED",
+  "blocking_findings_for_completed_math_prerequisite": [],
+  "market_data_loaded": false,
+  "market_outcomes_inspected": false,
+  "new_registered_trials": 0,
+  "new_attempted_market_trials": 0,
+  "registered": false,
+  "repository_modified": false,
+  "production_evaluator_approved": false,
+  "source_repository": "Hulme-Labs/indicatorgo",
+  "source_parent": "cinar/indicator",
+  "source_commit": "35bd387db11de8e544ad545c68f198677ce4c6b7",
+  "source_native_prerequisite_exact_sha256": "041335f6469b7f5d3fb7220973ff0b2cf1b0b15ab60bce076e92a67098bd01f9",
+  "native_proof_script_exact_sha256": "51aecd4bce28106741c60743d3722b54d11690e467c027ec9df0ba3188b8322b",
+  "independent_native_review_script_exact_sha256": "bc6b067d990cfb4428609f0bd6f4254b51bfba924faf641d77687ce6a9f8a9c9",
+  "independent_scalar_review_script_exact_sha256": "308c9779f45095207a3b616cd2555896e244ce510425657206d483f0d6b262d3",
+  "source_input_output_hashes": {
+    "indicatorgo_strategy_trend_kama_strategy.go": "9082b7ecb026a90514356b13147725f98dd3f6263b5e7d4c7c29e2530063317e",
+    "indicatorgo_trend_kama.go": "cf568d2461c449d8e78bb822258336675455db4e9def25a5f2aba354b0af438b",
+    "kama-synthetic-input.json": "8be6df91dc9fe87e52525c5c5ec237e59be1c087a0d4253497e5df21efa875e9",
+    "kama-native-synthetic-output.json": "6da0d32865fcee3984905f18f1ddcdfa6c72f3a0f0006dfd4b4f9de48c9f3372"
+  },
+  "native_rebuild_validations": {
+    "source_files_archive_and_working_exact": 95,
+    "original_go_files_archive_and_working_exact": 92,
+    "source_archive_sha256": "3915df15ab22a4d5e286e1232f773cc7f37afb36bfb5f0188b1b642109717113",
+    "selected_receipt_sha256": "3e4e5c006313c56f0176b60057f8264846a69fd3967f0f2347ce282b75f8d40b",
+    "go_version": "go version go1.26.1 windows/amd64",
+    "go_exe_sha256": "a8f114f8a0a7e057fee64152b76ac50c7289981de2a76455b4baee1a034734fa",
+    "independent_exe_sha256": "450b29933fa6d935bfc5253088abb9dbb3ddf5e986720e27caa9967ec6be13b1",
+    "independent_output_sha256": "6da0d32865fcee3984905f18f1ddcdfa6c72f3a0f0006dfd4b4f9de48c9f3372",
+    "native_output_byte_exact": true,
+    "no_init_functions": true,
+    "excluded_test_csv_bollinger_files_not_extracted": true,
+    "build_environment": {
+      "GOPROXY": "off",
+      "GOSUMDB": "off",
+      "GOTOOLCHAIN": "local",
+      "GOWORK": "off"
+    },
+    "source_unchanged_pinned_refetch_verified": true
+  },
+  "scalar_validations": {
+    "independent_scalar_values_actions_exact": true,
+    "fixtures": 21,
+    "kama_rows": 4714,
+    "actions": 4924,
+    "nan_rows": 780,
+    "prefix_checks": 11,
+    "future_mutation_checks": 3,
+    "extra_holds_on_short_inputs": 22,
+    "flat_then_rise_remains_nan": true,
+    "source_shift_length_max10_n_confirmed": true,
+    "outcome_go_sha256": "ece2d29dd724c8657c77865ea3444e8dc1b97aff52c05de3adfc10cda3fc10f7"
+  },
+  "semantics": [
+    "Effective source defaults are ER10, fast2 and slow30. Internal previous KAMA starts from close9, first adaptive output corresponds to bar10. Efficiency direction is abs(close[i]-close[i-10]); denominator is the10 absolute one-bar changes ending at i.",
+    "The moving sum uses Neumaier compensation, adding current change before removing the delayed change. Source also has a ring-buffer nonfinite-sum recovery path. No ordinary rolling-sum substitution or accumulation-order repair is justified by the source.",
+    "Adaptive coefficient is (ER*(2/3-2/31)+2/31)^2, then previousKAMA + coefficient*(currentClose-previousKAMA). Preserve source scalar order and the selected math.Pow behavior; fixture equality is not every-input cross-language proof.",
+    "Strategy emits BUY for each close>KAMA state, SELL for close<KAMA, HOLD for equality or unordered NaN comparisons. It is not a crossing trigger despite comments.",
+    "A genuinely flat change window causes0/0 NaN. Once KAMA recursive state becomes NaN, it remains NaN even when denominator recovers; original comparisons emit HOLD. Flat-then-rise fixture confirms no reset or repair.",
+    "Shift emits10 leading HOLDs even for inputs shorter than10. Native action stream length is max(10,n). A future240-warmup adaptation must explicitly align only existing input bars and discard unattached padding, without claiming identical full stream lengths on short inputs.",
+    "Source snapshots in the native harness supply only Close; no dates, OHLCV repository, CSV, report or outcome functions are invoked. Input order and actual bar-availability timestamps are responsibilities of a future adapter.",
+    "Recursive KAMA and compensated sum require fixed initial history and continuous carry. No rolling240 reseed, day/session reset, parameter tuning or NaN resurrection."
+  ],
+  "educational_accounting_intent": {
+    "outcome_go_exact_sha256": "ece2d29dd724c8657c77865ea3444e8dc1b97aff52c05de3adfc10cda3fc10f7",
+    "scope": "Static original OutcomeWithContext was read, not executed for performance.",
+    "intent": "Starts balance1/shares0; BUY while cash-funded spends full balance at supplied value, SELL while holding liquidates shares, otherwise holds. Marks the supplied current value without costs.",
+    "future_adapter": "If selected, preserve this bounded full-cash intent through an explicitly new signal-close fee-reserved floor8 fixed quantity and next-open all-or-reject cash adapter. Do not substitute arbitrary one-unit sizing. No source exchange order, commission, queue or broker fill contract is established."
+  },
+  "license_and_original_user_boundary": {
+    "type": "GNU AGPLv3",
+    "license_exact_sha256": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef",
+    "full_license_received_outside_repository": true,
+    "source_notice": "Copyright2021-2026 Onur Cinar; fork pinned separately.",
+    "original_specification": "Original specification forbids copying GPL/LGPL code into the repository without explicit acceptance and requires mechanics to be reimplemented from specification. Parent applies the same boundary to AGPL; no code adoption is authorized.",
+    "mandatory_rule": "Keep all copied AGPL Go/helper/native harness source and builds outside the Git repository. A future repository implementation must be independently authored from explicit equations/specification; retain remote URI/hash provenance and synthetic receipts, not vendored or renamed copied Go/helper/wrapper code.",
+    "verified": "Current selected native source/build directory is outside repository; no indicatorgo or kama_strategy.go tracked path was found.",
+    "no_relicensing_claim": true
+  },
+  "next_requirements_before_any_candidate_study": [
+    "Prepare an independent mathematical specification and newly authored implementation, with no AGPL source/code adoption into Git. Preserve source/compiler/license hash receipts and copy boundary explicitly.",
+    "Freeze periods, first-output/seed, compensated add/remove order, full history origin, NaN/HOLD poisoning and available-bar action alignment. Declare primary numerical port/runtime rather than universal native parity; test strict action flags and prefix invariance.",
+    "If full-cash Spot scope is selected, declare capital, fee reserve, floor8 precision, fixed signal-close quantity, next-open all-or-reject admission, original SELL-state cash exit, no same-boundary reentry, pending/censored accounting and own BTC funding.",
+    "Negative controls replace entire entry state including finite-KAMA validity. Declare what happens when randomized/lagged entry lands after NaN poisoning, where the original SELL signal remains false and holdings can persist to cutoff.",
+    "Retain all frozen costs, diagnostics, controls, bootstrap alpha .025, rejection gates and future confirmation requirements. No invented stop, target, timeout or state repair.",
+    "Require immutable registration and final independently bound actual config/evaluator/source/runtime review committed before any raw/cache load. Source readiness adds zero trials."
+  ],
+  "scope_and_limits": [
+    "Independent offline Go1.26.1 windows/amd64 rebuild with proxy/sumdb disabled and local toolchain produced byte-identical native output.95 original selected upstream files, including92.go files, match archive and receipt exactly; local proof wrapper is additional.",
+    "No package init function was present. Snapshot-only main does not call selected repository network/file-fetch helpers, report generation, illustrative Outcome or order APIs. No CSV/test data/Bollinger indicator files were extracted for the proof.",
+    "All21 fixtures,4714 KAMA outputs,4924 actions and780 NaNs match separate scalar calculations exactly.11 prefix and3 future-mutation checks pass. No native funding/exchange execution or all-platform parity claim.",
+    "Broad adaptive-average and trend overlap remains. Source novelty does not establish orthogonality, incremental information, stationarity or edge. No market-performance source selection or global-exhaustion claim.",
+    "All frozen lanes and prior rejected versions remain unchanged. No production candidate, viable bot or future confirmation begins here."
+  ],
+  "orders": false,
+  "viable": false,
+  "future_confirmation_started": false
+}

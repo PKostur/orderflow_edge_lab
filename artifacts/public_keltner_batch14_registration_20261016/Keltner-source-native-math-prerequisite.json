@@ -1,0 +1,31 @@
+{
+  "kind": "KELTNER_SOURCE_NATIVE_MATH_PREREQUISITE",
+  "status": "PASS_SYNTHETIC_SOURCE_RUNTIME_MATH_ONLY",
+  "source_commit": "945c7c430c799687be17092eaebcad6baace1a9e",
+  "source_exact_sha256": "151bbda331aa8db25951830372ef5d359ad680d1515ad125e0b2a33a55cebea1",
+  "backtrader": "1.9.78.123",
+  "fixtures": 16,
+  "original_native_feature_rows": 4090,
+  "original_native_synthetic_broker_advices": 271,
+  "prefix_checks": 7,
+  "future_mutation_checks": 3,
+  "exact_features_and_advices": true,
+  "feed_timeframe": "Minutes",
+  "compression": 480,
+  "market_data_loaded": false,
+  "new_registered_trials": 0,
+  "new_attempted_trials": 0,
+  "orders": false,
+  "limits": [
+    "Original unmodified two classes only; no top-level finance imports, downloads, plots or runner executed.",
+    "Native two-sided synthetic broker state is observed; any Spot long/cash scope must be separately declared. No live/nativeSpot execution parity.",
+    "Strategy ATR7 overrides indicator default14. EMA30 SMA seed at29; Wilder ATR7 TR seed bars1..7; original scalar operation order. Entry uses previous completed close/channel, observed after current completed bar; exit uses current close/mid. Default unit1, no stop/target/trailing/timeout.",
+    "Same educational book-repository bounded README Code MIT statement; standalone LICENSE absent and placeholder remains. No published profitability claim.",
+    "Broad prior trend/ATR/breakout overlap; source mechanics do not demonstrate orthogonality or incremental predictive information."
+  ],
+  "file_sha256": {
+    "azary_codes_KeltnerBreakoutStrategy.py": "151bbda331aa8db25951830372ef5d359ad680d1515ad125e0b2a33a55cebea1",
+    "keltner-synthetic-input.json": "1a51f43511b2343f02be4a51fbc8ff4e20bbba3c2c3bcc37d19f61afed027f19",
+    "keltner-native-synthetic-output.json": "34a79b49625b629befa33aaa9d9d842dce9ac2ab709b29af051d350dda72a1d9"
+  }
+}

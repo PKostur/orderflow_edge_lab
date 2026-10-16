@@ -1,0 +1,132 @@
+{
+  "kind": "SOURCE_ONLY_PRE_REGISTRATION_MECHANICS_AUDIT",
+  "inspection_date_utc": "2026-10-11",
+  "registered": false,
+  "market_outcomes_inspected": false,
+  "new_trading_cells": 0,
+  "orders_supported": false,
+  "native_fill_parity_claim": false,
+  "frozen_protocol_changes": false,
+  "strategy": {
+    "name": "TechnicalExampleStrategy",
+    "commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
+    "path": "user_data/strategies/berlinguyinca/TechnicalExampleStrategy.py",
+    "url": "https://github.com/freqtrade/freqtrade-strategies/blob/f3340ce11f5bdf62f598522e64d1f5638eaa13f5/user_data/strategies/berlinguyinca/TechnicalExampleStrategy.py",
+    "sha256": "0a3d94c8ef857284c9bc37d592af329b1a831f9c504fb2d73b63db00d303db50",
+    "license": "GPL-3.0 repository license",
+    "timeframe": "5m",
+    "interface_version": 3,
+    "entry": "CMF21 < 0",
+    "exit_signal": "CMF21 > 0",
+    "minimal_roi": {"0": 0.01},
+    "stoploss": -0.05,
+    "stake_amount": "Not specified in source; framework configuration required",
+    "stake_currency": "Not specified in source; framework configuration required"
+  },
+  "indicator": {
+    "repository": "freqtrade/technical",
+    "commit": "b396fa7c1379ef39bdd8f04f5826e90b261767ca",
+    "path": "technical/indicators/volume_indicators.py",
+    "url": "https://github.com/freqtrade/technical/blob/b396fa7c1379ef39bdd8f04f5826e90b261767ca/technical/indicators/volume_indicators.py",
+    "sha256": "8bfa4fd42727396c01b35f3ef4a651778612798acaf0788bb0915313afe909d5",
+    "license": "GPL-3.0 repository license",
+    "formula": "rolling_sum_21(((2*close-high-low)/(high-low))*volume) / rolling_sum_21(volume)",
+    "zero_range_policy": "Preserve published division and pandas rolling behavior: no fillzero repair; NaN suppresses both comparisons",
+    "zero_volume_policy": "No source guard for a zero rolling volume denominator; retain nonfinite behavior and do not create signals by repair",
+    "dependency_pin_caveat": "Inspected port dependency pin, not a dependency version declared by the strategy file"
+  },
+  "framework": {
+    "repository": "freqtrade/freqtrade",
+    "branch_resolved": "develop",
+    "commit": "9a2f03a6bf8408f155591304c78aab20ca5c44cc",
+    "runtime_installed_or_executed": false,
+    "defaults_without_configuration_override": {
+      "use_exit_signal": true,
+      "exit_profit_only": false,
+      "ignore_roi_if_entry_signal": false,
+      "exit_profit_offset": 0.0,
+      "trailing_stop": false,
+      "trailing_stop_positive": null,
+      "trailing_stop_positive_offset": 0.0,
+      "trailing_only_offset_is_reached": false,
+      "use_custom_stoploss": false,
+      "use_custom_roi": false,
+      "can_short": false,
+      "process_only_new_candles": true,
+      "startup_candle_count": 0,
+      "position_adjustment_enable": false,
+      "order_types": {
+        "entry": "limit",
+        "exit": "limit",
+        "stoploss": "limit",
+        "stoploss_on_exchange": false,
+        "stoploss_on_exchange_interval": 60
+      },
+      "order_time_in_force": {"entry": "GTC", "exit": "GTC"}
+    },
+    "default_provenance": {
+      "signal_flags": "StrategyResolver defaults; IStrategy declares annotations without corresponding assigned values",
+      "other_defaults": "IStrategy class attributes",
+      "override_precedence": "configuration > strategy > non-None resolver default"
+    },
+    "missing_run_configuration": ["stake_amount", "stake_currency", "wallet/capital", "exchange", "pairlist", "max_open_trades allocation", "fees", "entry/exit pricing", "timeouts", "precision and minimum-order rules"],
+    "primary_urls": {
+      "interface_defaults": "https://github.com/freqtrade/freqtrade/blob/9a2f03a6bf8408f155591304c78aab20ca5c44cc/freqtrade/strategy/interface.py#L71-L128",
+      "resolver_defaults_and_overrides": "https://github.com/freqtrade/freqtrade/blob/9a2f03a6bf8408f155591304c78aab20ca5c44cc/freqtrade/resolvers/strategy_resolver.py#L59-L120",
+      "exit_priority": "https://github.com/freqtrade/freqtrade/blob/9a2f03a6bf8408f155591304c78aab20ca5c44cc/freqtrade/strategy/interface.py#L1419-L1520",
+      "stop_anchor": "https://github.com/freqtrade/freqtrade/blob/9a2f03a6bf8408f155591304c78aab20ca5c44cc/freqtrade/strategy/interface.py#L1547-L1550",
+      "stop_precision": "https://github.com/freqtrade/freqtrade/blob/9a2f03a6bf8408f155591304c78aab20ca5c44cc/freqtrade/persistence/trade_model.py#L839-L879",
+      "fee_values": "https://github.com/freqtrade/freqtrade/blob/9a2f03a6bf8408f155591304c78aab20ca5c44cc/freqtrade/persistence/trade_model.py#L1057-L1118",
+      "profit_and_roi_price": "https://github.com/freqtrade/freqtrade/blob/9a2f03a6bf8408f155591304c78aab20ca5c44cc/freqtrade/persistence/trade_model.py#L1208-L1265",
+      "strict_roi_comparison": "https://github.com/freqtrade/freqtrade/blob/9a2f03a6bf8408f155591304c78aab20ca5c44cc/freqtrade/strategy/interface.py#L1719-L1732",
+      "backtest_roi_fill": "https://github.com/freqtrade/freqtrade/blob/9a2f03a6bf8408f155591304c78aab20ca5c44cc/freqtrade/optimize/backtesting.py#L651-L711"
+    }
+  },
+  "derived_long_spot_equations": {
+    "assumptions": "Single fully filled long, leverage1, no borrowing/funding, entry and exit proportional quote fees, unchanged amount",
+    "entry_price_symbol": "E = actual average entry fill, not signal close",
+    "open_value": "quantity * E * (1 + fee_open)",
+    "close_value": "quantity * exit_price * (1 - fee_close)",
+    "net_roi": "exit_price * (1-fee_close) / (E*(1+fee_open)) - 1",
+    "one_percent_boundary_price": "E * 1.01 * (1+fee_open)/(1-fee_close)",
+    "native_trigger": "round(net_roi,8) > 0.01; equality does not satisfy min_roi_reached",
+    "native_backtest_boundary_fill": "Once ROI condition reached at candle bound, backtester derives close_rate_for_roi; surrounding special-case/gap/candle logic also applies",
+    "stop_price_before_precision": "0.95 * E",
+    "native_stop_precision": "Long stop rounded UP to configured price precision/tick; actual initial stop then persists without trailing/custom stop",
+    "stop_net_roi_before_execution_burden": "0.95*(1-fee_close)/(1+fee_open)-1",
+    "ten_bps_fee_each_side_example": {
+      "fee_open": 0.001,
+      "fee_close": 0.001,
+      "target_price_multiplier": 1.012022022022022,
+      "gross_target_bps": 120.22022022022,
+      "net_stop_roi": -0.0518981018981019
+    },
+    "cost_caveat": "Extra spread/slippage/impact assumptions must be accounted once, separately and consistently; source minimalROI is fee-aware, not guaranteed net profit after all execution burden"
+  },
+  "native_exit_behavior": {
+    "source_exit_enabled": true,
+    "source_exit_can_close_at_loss": true,
+    "roi_not_suppressed_by_entry_signal": true,
+    "native_reason_priority": ["exit_signal/custom_exit", "stoploss/liquidation", "ROI", "trailing_stoploss"],
+    "source_collision": "CMF<0 and CMF>0 cannot both be true for same finite CMF; NaN makes both false",
+    "temporal_caveat": "Reason list priority is engine semantics, not proof of actual market event order or queue fills"
+  },
+  "port_preregistration_requirements": [
+    "Keep CMF21 conditions, published nonfinite behavior,1%fee-awareROI and-5%actual-entry stop unchanged",
+    "Declare5m-to8h adaptation and full past-only warmup",
+    "Declare limit-to-market entry/exit/stop changes; pinned defaults are all limit",
+    "Specify actual-fill protection activation and fee-reserved stake without future-price sizing",
+    "Preserve close-completed signal generation and define exact next-minute activation",
+    "Specify whether protection active before queued signal exit at same opening; conservative stop-first differs from native reason priority and must be labelled",
+    "Specify strict versus inclusive ROI threshold and precision explicitly",
+    "Retain gap,dual-touch,rejection and segment-ending censor accounting",
+    "Freeze costs,controls,acceptance gates and untouched future confirmation before outcomes"
+  ],
+  "limitations": [
+    "Current framework pin may differ from source author's historical environment",
+    "No native strategy runtime,backtest,exchange fill or market PnL evaluated",
+    "One-minute OHLCV cannot establish within-minute ordering,quotes,depth,latency or queue fills",
+    "No sizing or execution parity claim without pinned configuration and native fixtures",
+    "Historical development screen cannot satisfy future untouched confirmation requirement"
+  ]
+}

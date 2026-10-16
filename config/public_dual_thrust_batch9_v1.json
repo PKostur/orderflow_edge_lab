@@ -1,0 +1,157 @@
+{
+  "study_id": "PSR15-PUBLIC-DUAL-THRUST-BATCH9",
+  "version": 1,
+  "candidates": [
+    "DualThrust8hPinnedKernelSpot"
+  ],
+  "source_sha256": {
+    "DualThrust8hPinnedKernelSpot": "8dd802e56782ad60e60f11926df1a4924c78c10af6264127168449e50118eef2"
+  },
+  "source_manifest": "artifacts/minute_continuity_20261010/source_manifest.json",
+  "source_manifest_sha256": "3fcadef5dea9086425111b12b74f9df84f86b2d0932ca918871fc47b66f7179b",
+  "quality_csv": "artifacts/minute_continuity_20261010/daily_quality.csv",
+  "quality_csv_sha256": "69403a31a4f7f5c234ebbca98e32ba9b2919253f453515c76da964f93e10ed29",
+  "source_policy": "Longest shared complete-day segment chosen solely by previously audited quality; no repairs, imputation or source replacement.",
+  "data_start": "2023-04-01T00:00:00Z",
+  "data_end_exclusive": "2026-10-01T00:00:00Z",
+  "signal_minutes": 480,
+  "execution_minutes": 1,
+  "warmup_bars": 240,
+  "symbols": [
+    "ETHUSDT",
+    "SOLUSDT",
+    "LINKUSDT"
+  ],
+  "benchmark": "BTCUSDT",
+  "episode_initial_cash_per_symbol": 10000,
+  "max_hold_bars": null,
+  "baseline_round_trip_bps": 40,
+  "cost_cases_bps": [
+    20,
+    40,
+    60,
+    80
+  ],
+  "cost_policy": "Each side charges half nominal roundtrip bps on actual modeled notional, including fee plus assumed spread/slippage; reserve in fixed signal-close quantity.",
+  "gap_target_models": [
+    "conservative_limit",
+    "opening_price_improvement"
+  ],
+  "touch_policy": "Single fixed protective stop: scheduled source marketclose resolves at nextminuteopen before stop; otherwise open<=stop fills adverseopen, else firstlow<=stop fillsstop intraminute. No target; both gap models identical, one history. No pruning.",
+  "max_symbol_histories": 64,
+  "max_joint_histories": 4096,
+  "entry_policy": "r=cash*.02; source_quote=min((r/(signalclose-stop))*signalclose,cash); source_q=floor8(source_quote/signalclose); q=floor8(min(source_q,cash/(signalclose*(1+sidecost)))); Decimal(str(binary64quantity)) floor8 eachtime. Source fee0 helper then declared commonfee reservation.; fixed at signaldecision; nextopen cash all-or-reject. Openinggaps can alter realized risk beyond2percent; no resizing.",
+  "clock_policy": "Completed8hbar decides next1mopen. Heldflagcount precedes sourceclose andstop. Source bearishstate closesheldlong atopen; then stop withinentryboundary/minutes. No sameboundaryreentry, no heldflagreanchor.",
+  "endpoint_policy": "Completed events use modeled exit reference; still-held events retain statusCENSORED_MTM and cutoff close mark with hypothetical liquidation burden, never a fictitious order or completed trade.",
+  "principal_return_estimand": "All admitted entry-to-exit-or-fixed-cutoff net reference returns; completed-only means separately descriptive. Per-unit return=(exit/entry)*(1-sidecost)/(1+sidecost)-1.",
+  "funded_btc_benchmark": "At each accepted alt entry allocate the same alt notional/preentry-cash fraction from a separate BTC cash account. Exact BTC open entry; open exit uses BTCopen, intraminute exit uses BTCminute low/high bounds; own costs and remaining inventory; cutoff uses known final close.",
+  "portfolio_policy": "Equal three10000USDT cash sleeves; capital-capped2percent source stoprisk intent plus fee-reserved fixedsignal-close adapter; actualgap/cost risk may differ. FundedBTC owncash reference; gates unchanged.",
+  "seed": 20261019,
+  "bootstrap_replicates": 2000,
+  "bootstrap_calendar_block_weeks": 4,
+  "bootstrap_policy": "Moving contiguous4calendar-week blocks incl zero-event weeks; retain fixed alpha0.025,97.5% two-sided intervals from prior comparator. One newly registered cell; conservative fixed carryover, not two cells or global repeated-search inference.",
+  "placebo_replicates": 500,
+  "placebo_policy": "500 eligibleentryweek rawlongflag randomizations preservingweekflagcount; eachownentry recomputes selectedATRstop, ownquantity/cash/durations, originalshortstateexit. No observed durations reused. Descriptive maxcontrol vsminbaseline cohortmean.",
+  "lag_control_bars": 7,
+  "lag_policy": "Shift rawlongflags7bars after zeroingprewarmup; own ATR/stop/quantity and originalshortstateexit.",
+  "gates": {
+    "min_completed_events": 100,
+    "min_entry_weeks": 52,
+    "min_all_admitted_net40_bps": 5,
+    "require_all_admitted_net80_positive": true,
+    "require_all_symbols_net40_positive": true,
+    "min_positive_year_fraction": 0.6666666666666666,
+    "max_portfolio_drawdown_pct": 30,
+    "require_leave_one_entry_week_out_net40_positive": true,
+    "require_net40_descriptive_lower_ci_positive": true,
+    "require_btc_excess40_descriptive_lower_ci_positive": true,
+    "max_placebo_at_least_observed_fraction": 0.05,
+    "require_no_history_overflow": true
+  },
+  "diagnostics": [
+    "completed/pending/unexecuted/overlap/invalid/cash rejection accounting",
+    "all-admission and completed-only returns/PF",
+    "gross MFE/MAE uncertainty",
+    "calendar entry weeks and4week bootstrap",
+    "fixed UTC sessions and overlap memberships",
+    "symbol/year/month/weekday/hour and causalBTC30bar state",
+    "leave-week and leave-symbol sensitivity",
+    "40/80 costs and20/60 cases",
+    "funded BTC wealth and same-exit reference bounds",
+    "full branch and gap-model sensitivity",
+    "500 randomized-entry controls and7bar lag control"
+  ],
+  "claim": "Spent historical hypothetical development only; SCREEN_SURVIVOR permits separate future preregistration, never viable/untouched/positive-edge/deployment claim.",
+  "future_confirmation": "User completion requires a separate immutable and adequately powered future-only protocol, calibrated costs/quotes/execution, controls and approval-bound paper reliability, frozen before observations start. No viable candidate until that confirmation passes.",
+  "bollinger_bands_excluded": true,
+  "frozen_lanes_modified": false,
+  "authorizes_orders": false,
+  "retuning_permitted": false,
+  "minimum_preexisting_trading_cells": 21,
+  "minimum_preexisting_signal_model_cells": 22,
+  "new_registered_trading_cells": 1,
+  "minimum_registered_trading_cells_after_freeze": 22,
+  "minimum_registered_signal_model_cells_after_freeze": 23,
+  "source_urls": {
+    "DualThrust8hPinnedKernelSpot": "https://github.com/jesse-ai/example-strategies/blob/7c91e0a37bf62165790120d730442e4f6eb00364/DUAL_THRUST/__init__.py"
+  },
+  "runtime": {
+    "python": "3.13.14",
+    "numpy": "2.2.4",
+    "pandas": "2.2.3",
+    "platform": "win32",
+    "precision": "float64 scalar operation order"
+  },
+  "dependency_hash_policy": "Python dependency bytes normalize CRLF to LF solely for cross-platform checkout; all data/audit fingerprints remain exact bytes",
+  "dependency_source_sha256": {
+    "src/orderflow_edge_lab/public_protective_batch5.py": "ea1a2f5564a4261fe3c53e4d3f584b782913222f43228f0843c9d94917eab6d8",
+    "src/orderflow_edge_lab/protective_minute.py": "32345cbe229e734129f063e161f77989c3e2d0facb604dade40b469de31f03bf",
+    "src/orderflow_edge_lab/public_strategy_completion.py": "2a5327410bb5b7acef4dc6959d95b8ea309df0f0cf9f6e692c946b7500a1719a"
+  },
+  "source_mechanics_audit_sha256": {
+    "artifacts/public_dual_thrust_batch9_registration_20261011/DualThrust-source-readiness-audit.json": "5cf51e650aa3c4d04598593067f0cebd41bea22046ae1321b2c7c8a81de2f83d",
+    "artifacts/public_dual_thrust_batch9_registration_20261011/DualThrust-declared-port-prerequisite-review.json": "f3afa824c1d37ca0f5324be35d80ab88add1df798ddfa4c76e788fef91e84636"
+  },
+  "family_disclosure": "Distinct anchored asymmetric21range breakout; overlaps broad frozenDON8/breakout and ATR/trend families. No orthogonality or independentedge claim. Prior source-only inspection addszero cells. This precisely registered adaptation addsone; correctedLOW-column variant is not included.",
+  "native_runtime_status": "Unverified native Jesse order/cancel/fill parity. Explicit hybrid math contract: pinned published strategy, selectedcurrentframeworkhelper meanings and prior pinnedjesse_rust1.3.0kernel; no source-runtime version inferred.",
+  "required_pre_outcome_review": {
+    "path": "artifacts/public_dual_thrust_batch9_registration_20261011/pre-outcome-review.json",
+    "required_status": "PASS_PRE_OUTCOME_INDEPENDENT_REVIEW_WITH_DECLARED_PARITY_LIMITS",
+    "must_bind": [
+      "evaluator_exact_sha256",
+      "canonical_config_sha256"
+    ],
+    "before_any_raw_market_load": true
+  },
+  "native": {
+    "wheel": "jesse_rust-1.3.0-cp313-cp313-win_amd64.whl",
+    "wheel_sha256": "5e29ad2a2388e714239781ecf77ecd001dadc47026c6c64dd46891f5e309ce1b",
+    "python": "3.13.14",
+    "numpy": "2.2.4",
+    "platform": "win32",
+    "input": "contiguous float64;Jesse columns timestamp,open,close,high,low,volume"
+  },
+  "dual_thrust": {
+    "up_length": 21,
+    "down_length": 21,
+    "up_coeff": 0.71,
+    "down_coeff": 0.67,
+    "atr_period": 14,
+    "native_nonsequential_window": 240,
+    "stop_loss_atr_rate": 2,
+    "risk_fraction": 0.02,
+    "framework_helpers_commit": "417f8765225e3bfc12043d4b712f19fe15a3c078",
+    "anchor": "UTC day containing completed signal bar OPEN; daily00open must exist in observed prefix. At00decision preceding16bar retains previousdayopen.",
+    "up_range": "max(maxclose21-minlow21,maxhigh21-minclose21), including currentcompletedbar",
+    "down_range": "max(maxclose21-minlow21,maxLOW21-minclose21), preserve source LOWcolumn4 asymmetric down_max_high",
+    "entry": "close > dailyopen + .71*up_range, strict",
+    "source_exit": "close < dailyopen - .67*down_range, strict; close existinglong to cash only",
+    "stop": "signalclose - 2*selectednativeATR14(last240 inclusivecurrentbar), fixed for ownentry; never reanchor on held flags or fill price",
+    "quantity": "r=cash*.02; source_quote=min((r/(signalclose-stop))*signalclose,cash); source_q=floor8(source_quote/signalclose); q=floor8(min(source_q,cash/(signalclose*(1+sidecost)))); Decimal(str(binary64quantity)) floor8 eachtime. Source fee0 helper then declared commonfee reservation.",
+    "invalid": "Reject entry flag with nonfinite/nonpositive ATR, stop<=0 or stop>=signalclose. No fallback/repair.",
+    "protection": "Stop activates at accepted nextminuteOPEN, including immediate adverse gap at that sameopen. No target/trailing/timeout.",
+    "held": "Count/ignore heldrawentry before boundaryliquidation; no sameboundaryreentry. No source-long flag reanchor.",
+    "orders": "Original entrytuple/self.price and cancelentry semantics replaced by declared nextopen market all-or-reject; no limitwaiting,partialfill,resize,short,borrow,pyramid,liveorders. Native parity unverified."
+  },
+  "source_attribution": "Source published byjesse-ai example-strategies, MITcopyright2020jesse-ai. CommentattributionMichaelChalek unverified. No source code copied; independent declared math, no originalpublisher claim."
+}

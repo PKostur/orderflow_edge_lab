@@ -1,0 +1,64 @@
+{
+  "kind": "POST_OU_PUBLIC_SOURCE_BOUNDED_READINESS",
+  "status": "NEXT_KELTNER_DRAFT_REVIEWED_OTHER_SOURCES_NOT_REGISTERED",
+  "market_data_loaded": false,
+  "new_registered_trials": 0,
+  "new_attempted_trials": 0,
+  "minimum_cumulative_attempted_cells": {
+    "trading": 26,
+    "signal_model": 27
+  },
+  "all17_fresh_completed_adaptations_rejected": true,
+  "viable_candidates": [],
+  "future_confirmation_started": false,
+  "goal_complete": false,
+  "audit_sha256": {
+    "Keltner-source-native-math-prerequisite.json": "14bc84ac1ce2ef5709bb579b32b401b0d2c3964c6ee4bf60fa27339556359e2a",
+    "Keltner-source-native-readiness-review.json": "832656ad94889d84c6ad038b9fda7ce5669d10a27fb288c75f8ac4e32f60bb6d",
+    "Keltner-feature-helper-synthetic-review.json": "4617d17388240e3ba0be2727bf93cf3aff7b0f67e663037f49b8d68b8e0cd2b0",
+    "Keltner-batch14-draft-mechanics-review.json": "857ab54286ef4372669690f30a6f238f3c9a520cb89b179297c11dfff98ca074",
+    "OBV-source-bounded-readiness.json": "2009ce36ee982352b5263394c2e84cf456b4403d83ecc25f0ed824c804031135",
+    "OBV-source-bounded-independent-review.json": "a84e5a6883fe14b1d9064a1370d68bc1e50523e9a2973e0180812be8517e63bc",
+    "KAMA-source-native-math-prerequisite.json": "041335f6469b7f5d3fb7220973ff0b2cf1b0b15ab60bce076e92a67098bd01f9",
+    "KAMA-source-native-readiness-review.json": "df0193404ed4e48eb18396d86564abcba74ca4f8d85ad21e93453e395d47bc96"
+  },
+  "selected_next": {
+    "candidate": "Keltner8hOneUnitLongCashAdaptation",
+    "native_rows": 4090,
+    "native_advices": 271,
+    "draft_tests": 18,
+    "independent_cash_paths": 80,
+    "independent_events": 108,
+    "registration": false,
+    "actual_committed_pre_outcome_review_still_required": true
+  },
+  "other_sources": [
+    {
+      "source": "OBVmomentumStrategy",
+      "status": "UNSELECTED_LIFECYCLE_SPECIFICATION_PENDING",
+      "no_strategy_causality_or_economic_failure_claim": true,
+      "new_trials": 0
+    },
+    {
+      "source": "Hulme-Labs/indicatorgo KAMA",
+      "status": "SOURCE_NATIVE_MATH_ONLY_NOT_SPOT_CANDIDATE",
+      "native_kama_rows": 4714,
+      "native_actions": 4924,
+      "new_trials": 0,
+      "agpl_source_and_harness_outside_repository": true,
+      "requires_independent_mathematical_specification_and_implementation_without_vendored_gpl_source": true
+    }
+  ],
+  "claims": [
+    "Bounded selected-source survey, not exhaustive public-source search.",
+    "No original profitability or orthogonality inference from native synthetic parity.",
+    "Keltner must preserve extra entrybar, native strict roundoff, fixedunit funding and distinct currentEMAexit.",
+    "OBV constant indicator offset cancels against SMA; no crossing or strategy outcome change proven.",
+    "KAMA state actions, Neumaier denominator and permanentNaN/HOLD retained without repair; illustrative costfree close accounting is not exchange execution.",
+    "Original uploaded specification forbids GPL/LGPL code copying into repository without explicit acceptance; AGPL native work stays outside Git.",
+    "Any historical survivor requires separate frozen future-only confirmation; no viable candidate now."
+  ],
+  "bollinger_excluded": true,
+  "frozen_lanes_modified": false,
+  "orders": false
+}

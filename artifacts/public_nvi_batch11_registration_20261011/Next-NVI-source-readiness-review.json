@@ -1,0 +1,120 @@
+{
+  "kind": "NVI_SOURCE_READINESS_INDEPENDENT_REVIEW",
+  "status": "ACCEPTABLE_FOR_NEW_DECLARED_ADAPTATION_PREREGISTRATION",
+  "blocking_findings": [],
+  "market_outcomes_inspected": false,
+  "market_data_loaded": false,
+  "performance_files_inspected": false,
+  "new_registered_trials": 0,
+  "registered": false,
+  "repository_modified": false,
+  "source_repository": "cinar/indicatorts",
+  "source_commit": "c6bfb623b2ccbac2c536d60740e8c458e4efa7cd",
+  "source_native_math_artifact": "NVI-source-native-math-prerequisite.json",
+  "source_native_math_artifact_exact_sha256": "b39bfe7cf3a3742c9f79951d929b0c2ce6cfe3847b6f2039818aad50479c548a",
+  "independent_evidence": {
+    "fixtures": 22,
+    "rows": 8985,
+    "independent_native_repeat_exact": true,
+    "independent_scalar_features_ema_actions_exact": true,
+    "maxerr": 0.0,
+    "prefix_checks": 10,
+    "future_mutation_checks": 5,
+    "source_receipts": [
+      {
+        "file": "cinar_examples_volume_negativeVolumeIndexStrategy.ts",
+        "url": "https://raw.githubusercontent.com/cinar/indicatorts/c6bfb623b2ccbac2c536d60740e8c458e4efa7cd/examples/volume/negativeVolumeIndexStrategy.ts",
+        "sha256": "c9e94337ce6129d71d5436cc7786713934513a348b3dff1d6f731b3d84b439fe",
+        "remote_exact_match": true
+      },
+      {
+        "file": "cinar_src_indicator_volume_negativeVolumeIndex.ts",
+        "url": "https://raw.githubusercontent.com/cinar/indicatorts/c6bfb623b2ccbac2c536d60740e8c458e4efa7cd/src/indicator/volume/negativeVolumeIndex.ts",
+        "sha256": "64b5697f3bb3352607b34a9e18fca31fdd7b86de392be4fa0665f7ae0326df55",
+        "remote_exact_match": true
+      },
+      {
+        "file": "cinar_src_indicator_trend_exponentialMovingAverage.ts",
+        "url": "https://raw.githubusercontent.com/cinar/indicatorts/c6bfb623b2ccbac2c536d60740e8c458e4efa7cd/src/indicator/trend/exponentialMovingAverage.ts",
+        "sha256": "f794e26c447f2b9ec3b9243b09bf530b735429717b884149d105782220febed1",
+        "remote_exact_match": true
+      }
+    ],
+    "compiler_receipt": {
+      "metadata_url": "https://registry.npmjs.org/typescript/5.4.5",
+      "version": "5.4.5",
+      "tarball_url": "https://registry.npmjs.org/typescript/-/typescript-5.4.5.tgz",
+      "integrity": "sha512-vcI4UpRgg81oIRUFwR0WSIHKt11nJ7SAVlYNIu+QpqeyXP+gpQJy/Z4+F0aGxSE4MqwjyXvW/TzgkLAx2AGHwQ==",
+      "tarball_sha256": "154fae77169f04155ac52d521ac59abb07c9be29ea3744732adbf9f14abb2440",
+      "compiler_sha256": "d4eeb6e18a598a21aa0a5c09a52270856e4b23bd31d9c7c60ab80a22b275b07b"
+    }
+  },
+  "source_files_exact_sha256": {
+    "cinar_examples_volume_negativeVolumeIndexStrategy.ts": "c9e94337ce6129d71d5436cc7786713934513a348b3dff1d6f731b3d84b439fe",
+    "cinar_src_indicator_volume_negativeVolumeIndex.ts": "64b5697f3bb3352607b34a9e18fca31fdd7b86de392be4fa0665f7ae0326df55",
+    "cinar_src_indicator_trend_exponentialMovingAverage.ts": "f794e26c447f2b9ec3b9243b09bf530b735429717b884149d105782220febed1",
+    "cinar_src_helper_numArray.ts": "a16e23dacab0aa0160a74c05ea1403adbed36778e6d63e66bc542ab141ea0446",
+    "cinar_src_strategy_action.ts": "db972013d4b3a731eec1277f67a4b2cb1a963c7d6016b00611986f1abc109dad",
+    "cinar_src_strategy_asset.ts": "4547c826d6071a0ac34c150f0ef6e089d7ed59bceef42485ed748dd9c1010ebb",
+    "typescript-5.4.5.js": "d4eeb6e18a598a21aa0a5c09a52270856e4b23bd31d9c7c60ab80a22b275b07b",
+    "execute_nvi_source.cjs": "6fa4bd7123f79d8be4ee5f99fdb460392c028aa86465311a5bc1b95bd0bb4109",
+    "nvi-synthetic-input.json": "9bc859cba953e23f4a1b778c857c020609590f0512f371ed2b17584a34b3077b",
+    "nvi-native-synthetic-output.json": "4ac4c254db03e939b708ceec1a5d073ef7f73440ddd38af3165a383d1482c3eb"
+  },
+  "source_license": {
+    "path": "LICENSE.md",
+    "sha256": "f6a6af984fc733520b012f8d0c37c049c02a1d1af7b40037ec1b27f8edc820b5",
+    "type": "MIT",
+    "attribution": "The Indicator Authors 2022-2026; preserve notice for copied substantial portions"
+  },
+  "semantics": [
+    "start=1000; nvi() does not use period. Source strategy passes default period255 to EMA only. The NVIConfig docstring phrase that period affects start contradicts the actual function; defaults are independent and code semantics govern.",
+    "For i0 NVI=start. For i>0 only previous_volume<current_volume freezes previousNVI. Equal or decreasing volume updates previousNVI + ((currentclose-previousclose)/previousclose)*previousNVI. Equal and zero volumes are valid and not automatically skipped.",
+    "EMA seed=nvi[0], alpha=2/(1+255)=2/256, beta=1-alpha; next=currNVI*alpha+priorEMA*beta. Source first-close/first-NVI seed, no SMA255 initialization and no length255 validity delay.",
+    "BUY repeated state NVI<EMA; SELL repeated state NVI>EMA; HOLD equality. Preserve source direction and strict comparisons; do not reverse to textbook NVI trend rules or insert crossovers/epsilon.",
+    "Cumulative NVI uses all prior volume-conditioned returns; EMA recursive history has infinite mathematical memory. No daily or session reset, no fixed finite rollingNVI window. Full-series start and future continuation must be declared.",
+    "Source illustrative action.applyActions supports cash1 fullbalance BUY/sellallshares atsame signalclose withoutfees; source nviStrategy itself is educational, not an exchange bot. No stop, target, timeout, trailing, shorts, exposure budget, brokerage or executable fill contract."
+  ],
+  "native_math_review": {
+    "original_unmodified_typescript_executed": true,
+    "independent_second_execution": true,
+    "independent_scalar_reconstruction": true,
+    "fixtures": 22,
+    "rows": 8985,
+    "prefix_checks": 10,
+    "future_mutation_checks": 5,
+    "maximum_residual": 0.0,
+    "feature_ema_action_arrays_exact": true,
+    "compiler_version": "5.4.5",
+    "compiler_exact_sha256": "d4eeb6e18a598a21aa0a5c09a52270856e4b23bd31d9c7c60ab80a22b275b07b",
+    "runner_exact_sha256": "6fa4bd7123f79d8be4ee5f99fdb460392c028aa86465311a5bc1b95bd0bb4109",
+    "oracle_script_exact_sha256": "6188d95022fb60f6b618dada150ad3749484db6504752960f318b3b17d3c502b",
+    "loader_review": "Closed basename module set matches actual imports; unknown imports failclosed. transpileModule executes pinned source CommonJS; no handwritten substitute for the native source execution.",
+    "fixture_coverage": "Random/rising/falling/flat close paths; equal/increasing/decreasing and zero volume values; prefix and future mutation paths. Positive closes only."
+  },
+  "readiness": "No source-mechanics blocker for a distinctly declared 8h Spot fullcash next-open research adaptation. Frozen design and separate evaluator/source-bound pre-outcome review are mandatory; this is not that approval.",
+  "required_preregistration": [
+    "Freeze exact retained-data/history anchor: NVI1000 and EMA1000 at first retained complete bar; compute continuously through admission warmup and throughout execution; no reinitialize at trade, day/session, rolling240 crop or validation boundary. Future-only continuation state and seed history must be separately immutable before confirmation observations.",
+    "Bind exchange volume field and units: Binance Spot base asset volume aggregation across the completed8h bars; not quote volume, trade counts or tick volume. No imputation, equality tolerance or quantization change.",
+    "Retain period255/seed1000 and exact scalar binary64 order, equal-volume update and BUY-below/SELL-above states. Declare8h timeframe transfer255bars=2040hours/85days; any admissionwarmup240 does not replace sourceEMA startup or imply full seed convergence.",
+    "Declare fullcash budget adapter/capital, realistic sidecosts, fee-reserved fixed signal-close quantity and precision, all-or-reject next-open admission, originalSELL-state next-open full liquidation, held-before-exit/no-same-boundary reentry, finalpending/censor semantics.",
+    "Preserve no source protections rather than inventing stop/target/timeout/short; bracket gaplabels identical; quantity and cash reject diagnostics remain visible.",
+    "Freeze same existing gates, costs, fundedBTC owncash/quantities, return/MFE/MAE/cluster/session/stress/control diagnostics, fixed alpha.025 and500controls before market evaluation. Randomized/lag entry controls preserve originalSELL state and recompute own endogenous duration/quantity/cash.",
+    "Bind source/license/native runner+compiler/fixtures/audits/design/evaluator/dependencies plus preservation receipts; run synthetic feature/clock/cash/control/prefix accounting and full required suite; commit final independent pre-outcome review before raw/cache load.",
+    "One new source-specific adaptation trial only atregistration; include prior failed versions and overlapping cumulative-return/trend/volume-family dependence in global search disclosure. Source inspection and synthetic audit addzero tested trials."
+  ],
+  "family_and_selection_disclosure": [
+    "Volume-conditioned cumulative close returns differ mechanically from Vortex normalized range movement; EMA trend/state overlap with earlier public strategies remains and is not independent edge evidence.",
+    "Parent reports mechanism-based source selection before outcomes and that FI13/EMV14 were also surveyed; this reviewer inspected only NVI sources, synthetic evidence and already-bound helpers. No market performance or README claims used.",
+    "Bollinger Bands entirely excluded: no such dependency in executed NVI source module graph. Existing MQL4/VWAP exclusions and all frozen lane/rejection definitions remain."
+  ],
+  "limits": [
+    "Educational source and illustrative accounting, not a deployed native bot. Synthetic native math equality does not establish exchange execution, market-fill realism or strategy profitability.",
+    "Synthetic source/default tests do not establish behavior for invalid zero/negative closing prices; production data contracts must reject invalid prices.",
+    "Source declares no timeframe; eight-hour Spot execution is an explicitly new adaptation. No native Pine/MT4/Freqtrade/Jesse/exchange parity claim.",
+    "Retained historical evidence is spent development data. No screening result or adequate future-only protocol has been run for this source; viability and user goal remain unmet."
+  ],
+  "viable": false,
+  "future_confirmation_started": false,
+  "goal_complete": false
+}

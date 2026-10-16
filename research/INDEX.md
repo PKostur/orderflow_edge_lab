@@ -39,6 +39,10 @@ For the single-page operational view (next decision dates, stop rules), see
 | Continuous self-improvement sequence (332 epochs: v1 pilot, v2 state refinement, v3 adversarial/horizon stress, cross-symbol screens) | Frozen discovery-v1 strategy family; state-prediction transfer; conditioning and stop-rescue attempts | `self_improvement/CONTINUOUS_SELF_IMPROVEMENT_REPORT_V1.md`, `self_improvement_v1_summary.json` |
 | Volatility/liquidity state transfer into strategy conditioning | Positive state-prediction transfer (60s volatility expansion, median rho +0.352) did **not** convert into positive executable expectancy | `self_improvement/CONTINUOUS_SELF_IMPROVEMENT_REPORT_V1.md`, `config/state_threshold_freeze_v1.json` |
 
+## New public-strategy transfer research — draft only
+
+The [25-source implementation survey](../docs/PUBLIC_STRATEGY_SOURCE_SURVEY_2026_10_10.md) and [three-experiment shadow protocol](../docs/PUBLIC_STRATEGY_SHADOW_PROTOCOL_V1.md) are **EXPLORATORY — DEVELOPMENT ONLY**. The spot-only candidate manifest `config/public_strategy_shadow_v1.json` is not frozen and the prospective CLI mode is disabled until a separate future-only, independently audited version is registered. No OOS observations or trading authority are created.
+
 ## Exploratory — development only (already-inspected data)
 
 | Area | Contents |

@@ -12,3 +12,64 @@ config/*.json -text
 
 # Hash-bound D4 formal-review snapshots must remain byte-identical.
 research/volatility_state_d4/review_snapshot_*.json -text
+
+# Audited public Spot CSV hashes bind the exact collector bytes, including EOLs.
+artifacts/public_spot_8h_20261010/aligned_csv/*.csv -text whitespace=cr-at-eol
+artifacts/public_kucoin_8h_20261010/raw/*.json -text
+artifacts/public_kucoin_8h_20261010/aligned_csv/*.csv -text
+# PSR4 output manifest binds the exact generated CSV/JSON bytes across platforms.
+artifacts/public_btc_relative_state_20261010/* -text whitespace=cr-at-eol
+artifacts/public_research_extensions_20261010/** -text whitespace=cr-at-eol
+# PSR7 report and auditor fingerprints bind their exact bytes.
+artifacts/minute_continuity_20261010/** -text whitespace=cr-at-eol
+src/orderflow_edge_lab/minute_continuity_execution.py -text
+artifacts/public_strategy_completion_20261011/** -text whitespace=cr-at-eol
+artifacts/public_bot_batch2_20261011/** -text whitespace=cr-at-eol
+artifacts/protective_minute_engineering_20261011/** -text whitespace=cr-at-eol
+artifacts/public_protective_batch5_20261011/** -text whitespace=cr-at-eol
+src/orderflow_edge_lab/public_protective_batch5.py -text
+artifacts/public_protective_batch6_registration_20261011/** -text whitespace=cr-at-eol
+artifacts/public_protective_batch6_20261011/** -text whitespace=cr-at-eol
+src/orderflow_edge_lab/public_protective_batch6.py -text
+artifacts/public_candle_batch7_registration_20261011/** -text
+artifacts/public_candle_batch7_20261011/** -text
+src/orderflow_edge_lab/public_candle_batch7.py -text
+artifacts/public_trend_batch8_registration_20261011/** -text
+artifacts/public_trend_batch8_20261011/** -text
+src/orderflow_edge_lab/public_trend_batch8.py -text
+
+artifacts/public_dual_thrust_batch9_registration_20261011/** -text
+artifacts/public_dual_thrust_batch9_20261011/** -text
+src/orderflow_edge_lab/public_dual_thrust_batch9.py -text
+
+artifacts/public_vortex_batch10_registration_20261011/** -text
+artifacts/public_vortex_batch10_20261011/** -text
+src/orderflow_edge_lab/public_vortex_batch10.py -text
+
+artifacts/public_nvi_batch11_registration_20261011/** -text
+artifacts/public_nvi_batch11_20261011/** -text
+src/orderflow_edge_lab/public_nvi_batch11.py -text
+
+artifacts/public_force_index_batch12_registration_20261011/** -text
+artifacts/public_force_index_batch12_20261011/** -text
+src/orderflow_edge_lab/public_force_index_batch12.py -text
+artifacts/public_force_index_batch12_20261015/** -text
+
+artifacts/public_ou_batch13_registration_20261015/** -text
+artifacts/public_ou_batch13_20261015/** -text
+src/orderflow_edge_lab/public_ou_batch13.py -text
+
+artifacts/public_keltner_batch14_registration_20261016/** -text
+artifacts/public_keltner_batch14_20261016/** -text
+src/orderflow_edge_lab/public_keltner_batch14.py -text
+
+artifacts/public_kama_batch15_registration_20261016/** -text
+artifacts/public_kama_batch15_20261016/** -text
+src/orderflow_edge_lab/public_kama_batch15.py -text
+
+artifacts/public_aroon_batch16_registration_20261016/** -text
+artifacts/public_aroon_batch16_20261016/** -text
+src/orderflow_edge_lab/public_aroon_batch16.py -text
+
+artifacts/public_kama_batch15_descriptive_supplement_20261016/** -text
+src/orderflow_edge_lab/public_screen_supplement.py -text

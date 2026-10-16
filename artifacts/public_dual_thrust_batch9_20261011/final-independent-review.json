@@ -1,0 +1,351 @@
+{
+  "audit_id": "PSR15-FINAL-INDEPENDENT-REVIEW",
+  "status": "PASS_REPRODUCTION_ACCOUNTING_REJECTION_CONFIRMED",
+  "results_exact_sha256": "594bd5b8ac9ea1fbbf5957446b93e9e47db831e1d54851a2a24ccbae6134f29e",
+  "evaluator_exact_sha256": "2106de7e08d42106c970bfec1b2fc9c5222c0abd07e8845feae8af15a146b807",
+  "evaluator_git_commit_in_results": "9cde8ddc1316acf801150554e59cddd71773c49b",
+  "design_commit": "43a385e9fe3af963a98dfb32f32be34c0de24106",
+  "canonical_config_sha256": "370b90fa59393f0c0ce80e36c0061df7be4779e1302306a9b1cfcd734e1c9c34",
+  "source_sha256": {
+    "DualThrust8hPinnedKernelSpot": "8dd802e56782ad60e60f11926df1a4924c78c10af6264127168449e50118eef2"
+  },
+  "native_wheel_sha256": "5e29ad2a2388e714239781ecf77ecd001dadc47026c6c64dd46891f5e309ce1b",
+  "source_evidence_canonical_match": true,
+  "independent_same_engine_rerun_sha256": "2407800dace3caea1a7e0c545a746345890baa966aeba785a9eaa5c6d61edb03",
+  "baseline_comparisons": [
+    {
+      "case": "40:conservative_limit",
+      "canonical_case_sha256": "f142b971694dcb1718b68760a382de130a71779e49de0bc07aad6dc431d40b50",
+      "matched": true,
+      "summary": {
+        "admitted": 25,
+        "completed": 24,
+        "censored_mtm": 1,
+        "mean_net_bps": 604.2294885688448,
+        "median_net_bps": -467.5874148613568,
+        "mean_completed_only_net_bps": 551.2667476335715,
+        "per_unit_profit_factor": 2.4626793469828208,
+        "cash_profit_factor_with_cutoff_marks": 2.3439369777325383,
+        "completed_cash_profit_factor": 2.05296086945658,
+        "win_fraction": 0.28,
+        "mean_gross_bps": 646.7314103667157,
+        "mean_btc_excess_lower_bps": -23.031787945945375,
+        "mean_btc_excess_upper_bps": -1.2742980376433024,
+        "mean_mfe_lower_bps": 2908.671046437377,
+        "mean_mfe_upper_bps": 2908.671046437377,
+        "mean_mae_lower_bps": -466.03875306410157,
+        "mean_mae_upper_bps": -451.76426836034244
+      },
+      "portfolio_metrics": {
+        "roi_pct": 19.10729510864082,
+        "drawdown_pct": -17.085047005096932,
+        "funded_btc_roi_lower_pct": 16.208866522113176,
+        "funded_btc_roi_upper_pct": 17.124787269845232,
+        "note": "8h-close hypothetical liquidation-value marks; drawdown is not an intrabar bound. Funded BTC intervals are reference bounds, not executed fills."
+      }
+    },
+    {
+      "case": "40:opening_price_improvement",
+      "canonical_case_sha256": "f142b971694dcb1718b68760a382de130a71779e49de0bc07aad6dc431d40b50",
+      "matched": true,
+      "summary": {
+        "admitted": 25,
+        "completed": 24,
+        "censored_mtm": 1,
+        "mean_net_bps": 604.2294885688448,
+        "median_net_bps": -467.5874148613568,
+        "mean_completed_only_net_bps": 551.2667476335715,
+        "per_unit_profit_factor": 2.4626793469828208,
+        "cash_profit_factor_with_cutoff_marks": 2.3439369777325383,
+        "completed_cash_profit_factor": 2.05296086945658,
+        "win_fraction": 0.28,
+        "mean_gross_bps": 646.7314103667157,
+        "mean_btc_excess_lower_bps": -23.031787945945375,
+        "mean_btc_excess_upper_bps": -1.2742980376433024,
+        "mean_mfe_lower_bps": 2908.671046437377,
+        "mean_mfe_upper_bps": 2908.671046437377,
+        "mean_mae_lower_bps": -466.03875306410157,
+        "mean_mae_upper_bps": -451.76426836034244
+      },
+      "portfolio_metrics": {
+        "roi_pct": 19.10729510864082,
+        "drawdown_pct": -17.085047005096932,
+        "funded_btc_roi_lower_pct": 16.208866522113176,
+        "funded_btc_roi_upper_pct": 17.124787269845232,
+        "note": "8h-close hypothetical liquidation-value marks; drawdown is not an intrabar bound. Funded BTC intervals are reference bounds, not executed fills."
+      }
+    },
+    {
+      "case": "80:conservative_limit",
+      "canonical_case_sha256": "de11f85bf35bfbecc4c008f0318d4a42b22af8337c1681f9f0924fbf57bda4f6",
+      "matched": true,
+      "summary": {
+        "admitted": 25,
+        "completed": 24,
+        "censored_mtm": 1,
+        "mean_net_bps": 561.896897136702,
+        "median_net_bps": -505.6412619385331,
+        "mean_completed_only_net_bps": 509.14558599701695,
+        "per_unit_profit_factor": 2.27648328164479,
+        "cash_profit_factor_with_cutoff_marks": 2.1556693972219594,
+        "completed_cash_profit_factor": 1.893285681076388,
+        "win_fraction": 0.28,
+        "mean_gross_bps": 646.7314103667157,
+        "mean_btc_excess_lower_bps": -22.939843946608626,
+        "mean_btc_excess_upper_bps": -1.2692109789140067,
+        "mean_mfe_lower_bps": 2908.671046437377,
+        "mean_mfe_upper_bps": 2908.671046437377,
+        "mean_mae_lower_bps": -466.03875306410157,
+        "mean_mae_upper_bps": -451.76426836034244
+      },
+      "portfolio_metrics": {
+        "roi_pct": 17.512111626165662,
+        "drawdown_pct": -17.514843460621865,
+        "funded_btc_roi_lower_pct": 14.6660125238135,
+        "funded_btc_roi_upper_pct": 15.567297270655779,
+        "note": "8h-close hypothetical liquidation-value marks; drawdown is not an intrabar bound. Funded BTC intervals are reference bounds, not executed fills."
+      }
+    },
+    {
+      "case": "80:opening_price_improvement",
+      "canonical_case_sha256": "de11f85bf35bfbecc4c008f0318d4a42b22af8337c1681f9f0924fbf57bda4f6",
+      "matched": true,
+      "summary": {
+        "admitted": 25,
+        "completed": 24,
+        "censored_mtm": 1,
+        "mean_net_bps": 561.896897136702,
+        "median_net_bps": -505.6412619385331,
+        "mean_completed_only_net_bps": 509.14558599701695,
+        "per_unit_profit_factor": 2.27648328164479,
+        "cash_profit_factor_with_cutoff_marks": 2.1556693972219594,
+        "completed_cash_profit_factor": 1.893285681076388,
+        "win_fraction": 0.28,
+        "mean_gross_bps": 646.7314103667157,
+        "mean_btc_excess_lower_bps": -22.939843946608626,
+        "mean_btc_excess_upper_bps": -1.2692109789140067,
+        "mean_mfe_lower_bps": 2908.671046437377,
+        "mean_mfe_upper_bps": 2908.671046437377,
+        "mean_mae_lower_bps": -466.03875306410157,
+        "mean_mae_upper_bps": -451.76426836034244
+      },
+      "portfolio_metrics": {
+        "roi_pct": 17.512111626165662,
+        "drawdown_pct": -17.514843460621865,
+        "funded_btc_roi_lower_pct": 14.6660125238135,
+        "funded_btc_roi_upper_pct": 15.567297270655779,
+        "note": "8h-close hypothetical liquidation-value marks; drawdown is not an intrabar bound. Funded BTC intervals are reference bounds, not executed fills."
+      }
+    }
+  ],
+  "independent_full_chronological_accounting": [
+    {
+      "case": "40:conservative_limit",
+      "symbol": "ETHUSDT",
+      "counts_reconciled": true,
+      "all_NAV_cash_BTC_errors": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "profit_NAV_error": 0.0
+    },
+    {
+      "case": "40:conservative_limit",
+      "symbol": "SOLUSDT",
+      "counts_reconciled": true,
+      "all_NAV_cash_BTC_errors": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "profit_NAV_error": 0.0
+    },
+    {
+      "case": "40:conservative_limit",
+      "symbol": "LINKUSDT",
+      "counts_reconciled": true,
+      "all_NAV_cash_BTC_errors": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "profit_NAV_error": 1.8189894035458565e-12
+    },
+    {
+      "case": "40:opening_price_improvement",
+      "symbol": "ETHUSDT",
+      "counts_reconciled": true,
+      "all_NAV_cash_BTC_errors": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "profit_NAV_error": 0.0
+    },
+    {
+      "case": "40:opening_price_improvement",
+      "symbol": "SOLUSDT",
+      "counts_reconciled": true,
+      "all_NAV_cash_BTC_errors": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "profit_NAV_error": 0.0
+    },
+    {
+      "case": "40:opening_price_improvement",
+      "symbol": "LINKUSDT",
+      "counts_reconciled": true,
+      "all_NAV_cash_BTC_errors": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "profit_NAV_error": 1.8189894035458565e-12
+    },
+    {
+      "case": "80:conservative_limit",
+      "symbol": "ETHUSDT",
+      "counts_reconciled": true,
+      "all_NAV_cash_BTC_errors": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "profit_NAV_error": 1.8189894035458565e-12
+    },
+    {
+      "case": "80:conservative_limit",
+      "symbol": "SOLUSDT",
+      "counts_reconciled": true,
+      "all_NAV_cash_BTC_errors": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "profit_NAV_error": 0.0
+    },
+    {
+      "case": "80:conservative_limit",
+      "symbol": "LINKUSDT",
+      "counts_reconciled": true,
+      "all_NAV_cash_BTC_errors": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "profit_NAV_error": 0.0
+    },
+    {
+      "case": "80:opening_price_improvement",
+      "symbol": "ETHUSDT",
+      "counts_reconciled": true,
+      "all_NAV_cash_BTC_errors": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "profit_NAV_error": 1.8189894035458565e-12
+    },
+    {
+      "case": "80:opening_price_improvement",
+      "symbol": "SOLUSDT",
+      "counts_reconciled": true,
+      "all_NAV_cash_BTC_errors": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "profit_NAV_error": 0.0
+    },
+    {
+      "case": "80:opening_price_improvement",
+      "symbol": "LINKUSDT",
+      "counts_reconciled": true,
+      "all_NAV_cash_BTC_errors": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "profit_NAV_error": 0.0
+    }
+  ],
+  "independent_events_checked": 100,
+  "full_NAV_paths_checked": 12,
+  "NAV_marks_checked": 43176,
+  "maximum_account_residual": 1.8189894035458565e-12,
+  "source_exit_stop_censor_reason_counts": {
+    "stop_touch": 68,
+    "source_short_to_cash": 28,
+    "fixed_cutoff_mark": 4
+  },
+  "stored_control_audit": {
+    "replicates": 500,
+    "undefined": 0,
+    "tail_numerator": 453,
+    "tail_fraction": 0.906,
+    "matched": true,
+    "full500_path_reruns": false
+  },
+  "decision": {
+    "decision": "REJECTED_AS_ADAPTED",
+    "failed_gates": [
+      "all_symbols_positive",
+      "completed_events",
+      "entry_weeks",
+      "excess_descriptive_ci",
+      "net_descriptive_ci",
+      "placebo_tail"
+    ],
+    "matched": true
+  },
+  "fixed_alpha": 0.025,
+  "blocking_findings": [],
+  "repository_changes": false,
+  "claim_limits": [
+    "Second execution of same frozen engine/selectednativeATRkernel with rehashedretaineddata; independent scalar doublefloor sourcequantity, chronological admission/cash/BTC/NAV and earliestsourceexit/stop/minuteexcursion/censor reconstruction. Not independentnativeJesseengine parity.",
+    "500stored control means andgates independentlyaudited, not500fullcontrolpath reruns.",
+    "Only24completedentries baseline; positive descriptivemean/portfolio metrics cannot override failedsamplesize/weekcoverage/interval/control gates.",
+    "Signalclose-fixedstop andnextopen execution aredeclaredadaptations; realizedgap/cost risk mayexceed2percent. No target/trailing/timeout/reanchor introduced.",
+    "Inspected spentdevelopmentpanel andsharedfamilies/manytrialhistory provide no untouchedconfirmation/viability. Rejectedversion startsno futureconfirmation.",
+    "8hNAVdrawdown isnotintrabar bound; BTCintraminute lower/upper values are referencebounds, notexecutedfills. NativeJesse order/cancel/fill/sizing parity and MichaelChalek authorship remainunverified."
+  ]
+}

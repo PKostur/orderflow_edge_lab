@@ -1,0 +1,390 @@
+{
+  "source_commit": "35bd387db11de8e544ad545c68f198677ce4c6b7",
+  "archive_url": "https://codeload.github.com/Hulme-Labs/indicatorgo/zip/35bd387db11de8e544ad545c68f198677ce4c6b7",
+  "archive_sha256": "3915df15ab22a4d5e286e1232f773cc7f37afb36bfb5f0188b1b642109717113",
+  "selected_files": [
+    {
+      "path": "LICENSE.md",
+      "sha256": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef"
+    },
+    {
+      "path": "asset/asset.go",
+      "sha256": "8487f136ab198613b0ba676f1ae92768d4812e041a1eb4c021091bd5ac929c02"
+    },
+    {
+      "path": "asset/file_system_repository.go",
+      "sha256": "11694f13a8e230e855499334ea4803fc4938ba2631b00c4541de4c904693085d"
+    },
+    {
+      "path": "asset/in_memory_repository.go",
+      "sha256": "fd285a46b1b43851a1bbea69892440e59c7f0eab9adad3e8d1ded2ca22740d35"
+    },
+    {
+      "path": "asset/repository.go",
+      "sha256": "55278468e7279c1f31f10091622445815dc0f2b519d678294b1fcf4dc4edab69"
+    },
+    {
+      "path": "asset/repository_factory.go",
+      "sha256": "0544a9bbc2d1598e2fec377f36e2427e455adff15eb1a186e208c358bba9a2f0"
+    },
+    {
+      "path": "asset/snapshot.go",
+      "sha256": "790359a3ff0aa6cd32a99627ad1dda33d7c802ac12e7b9cf2bb3ab9cf6cdb52c"
+    },
+    {
+      "path": "asset/sql_repository.go",
+      "sha256": "6b234ee52401389148acac3952cb4fd6227aceba5953ea904ba2b4898f59631c"
+    },
+    {
+      "path": "asset/sql_repository_dialect.go",
+      "sha256": "14fb063260b195fe650f5cf63d81083deb6e09a117ce79ca935b011fe30161d4"
+    },
+    {
+      "path": "asset/sync.go",
+      "sha256": "8f0e417998e449f7b9bf6b08e2f7cd5e8f5adf6d83823f3dbdabced1ea8d70a4"
+    },
+    {
+      "path": "asset/tiingo_repository.go",
+      "sha256": "73b2895aab35367e0096c0d780e347d1c3ee3c121a7aaff01ef63e0744938f72"
+    },
+    {
+      "path": "go.mod",
+      "sha256": "de30e8ec1e0a372c0c6191a1f9a059d469083bd4d4767b33f0c86a68ada50c4a"
+    },
+    {
+      "path": "helper/Lowest.go",
+      "sha256": "061597846a2ce2469efea1d7316752b14ad42ad70dc84613bc21b0bd03da469a"
+    },
+    {
+      "path": "helper/abs.go",
+      "sha256": "b6069b46d4e88022da5a40070d7a549e1ecaca49f14f76d6d85ee67c7c1d6cd3"
+    },
+    {
+      "path": "helper/add.go",
+      "sha256": "f35b34353277f4f3984d00e7c7652e32786fa97e9104cf7c1906a498ab968336"
+    },
+    {
+      "path": "helper/annotation_report_column.go",
+      "sha256": "112506f42160115dd7362825c666e5084ea6caa7a253e3eb06e007abcf480d74"
+    },
+    {
+      "path": "helper/apply.go",
+      "sha256": "79c9bd0ee1f3aa8236b5b125cfbf9cd7ee452c13b468d6b502a75caa0e09bb29"
+    },
+    {
+      "path": "helper/bst.go",
+      "sha256": "9ad95141eff594a1e0c385b8b38c3089e82bda6ac3413fc5fc227003221e4ba3"
+    },
+    {
+      "path": "helper/buffered.go",
+      "sha256": "23d77d0dee4b92252f38f485afe1eeab5f9dd217e3faa677d019f0e4f2ee2883"
+    },
+    {
+      "path": "helper/chan_to_json.go",
+      "sha256": "1b9a456e1b9923f6ce78cf5b2ac1fef323e0f5a7de17886d45a48478b3f30131"
+    },
+    {
+      "path": "helper/chan_to_slice.go",
+      "sha256": "407e5efab8f9b709340365e3d991254a04a3113dfa426d1bc46f0ff5bdb37957"
+    },
+    {
+      "path": "helper/change.go",
+      "sha256": "6c6a83e18ae6fb2cc11cfe179eabe41041a9ac8ac76ef415cf5a1d05d82c0840"
+    },
+    {
+      "path": "helper/change_percent.go",
+      "sha256": "0592172131b21be5c6193c5a6fb5a494b7fe06763b85082dadc96fb7b5472ec7"
+    },
+    {
+      "path": "helper/change_ratio.go",
+      "sha256": "0bddc64d79bbe44796b13a8c2b6c6b1a396a3d9d667a638df37a5e4f4385d0cf"
+    },
+    {
+      "path": "helper/check.go",
+      "sha256": "6a81d8fee7b60495176b3dd0a2fef7fad5058426a2dccc15bebfeb26f0d0f652"
+    },
+    {
+      "path": "helper/closer.go",
+      "sha256": "7c026a289256f2d8d5d127fc04a7429ff9a6aabf687c66e8466f6e866afb5f7b"
+    },
+    {
+      "path": "helper/count.go",
+      "sha256": "d9934595cf2009557fc2e9d01b9f8bb24459bf3edf22034fdebb155b2b61b0a1"
+    },
+    {
+      "path": "helper/csv.go",
+      "sha256": "21ac6a47ed41607ac2e4e597b029c87cb46a2668fab2f6b7f7543b435ee1e92f"
+    },
+    {
+      "path": "helper/database.go",
+      "sha256": "38d7d624165e6151fdf161cb28af67473bc021249e498827b8d2dec82bf1ce57"
+    },
+    {
+      "path": "helper/days_between.go",
+      "sha256": "1bff6f990178ba5df2e269decccece1df1835edf8e8a2951fafc3b95bd3185ec"
+    },
+    {
+      "path": "helper/decrement_by.go",
+      "sha256": "479d0ee817186506c1591b0309eb79c7571b03ad2a1d50c6f0d16a12ee71b249"
+    },
+    {
+      "path": "helper/divide.go",
+      "sha256": "0cf75e5b1b3aba4e491f8f5a198143c0b207251b4bed05ed328401e20b804fe2"
+    },
+    {
+      "path": "helper/divide_by.go",
+      "sha256": "283cca4936657f8f50b0725bec4f5b2884fc112a892a0c3921694fa94f290ef0"
+    },
+    {
+      "path": "helper/drain.go",
+      "sha256": "e1e032f92e79b161e8e79edc12b4de563368ca7d5b665f78c24290c8ce21dff3"
+    },
+    {
+      "path": "helper/duplicate.go",
+      "sha256": "df86dc1602f729090bca8e647e7aa42d3000467ee9f54b5b9809d0e6bc5299d7"
+    },
+    {
+      "path": "helper/echo.go",
+      "sha256": "80f10aa350d89704957a48e29f115568441df5f70c6e9239d85603291966e866"
+    },
+    {
+      "path": "helper/field.go",
+      "sha256": "88aa027137266c7e2662da98ba10863596090debb758bd2b19b169f6b1f63685"
+    },
+    {
+      "path": "helper/filter.go",
+      "sha256": "bb5938b34554a66484bdf35f8d10d3ca6f2dceb0dd0e7d45429503656270cb0b"
+    },
+    {
+      "path": "helper/first.go",
+      "sha256": "38da61d0a5e01ff9426135f681470a663f43dab2f7ac7499edc84b08d05e322b"
+    },
+    {
+      "path": "helper/gcd.go",
+      "sha256": "17d7dfdf4bf5a67ec8c4fd1d97913a2258f2882c92d81398a1fb4727bc016dfc"
+    },
+    {
+      "path": "helper/head.go",
+      "sha256": "7f606854ea0aaa68bce76c5a424815366861461be01dbf8ea3c23cf8a7bf0344"
+    },
+    {
+      "path": "helper/helper.go",
+      "sha256": "b957d02b4ddeec9feca8e245ad5b6f39c404621a2db21caeda3b81a3dc94518a"
+    },
+    {
+      "path": "helper/highest.go",
+      "sha256": "bd34d5b18561f1610fccbca758838aafcb74f151fd02131cf6cc145d620420ab"
+    },
+    {
+      "path": "helper/increment_by.go",
+      "sha256": "2b6c8866c55ed00f67805d01cf42b2716a20505b56eb2259e7fbaec59bf442e3"
+    },
+    {
+      "path": "helper/json_to_chan.go",
+      "sha256": "adc42d2a9d66a78842bddb59f5f7a1570e90c5f0fc1912ac8a79186ff9bf5b6b"
+    },
+    {
+      "path": "helper/keep_negatives.go",
+      "sha256": "dcea0237fa223fc1880500b2c1057ded9da7a519a9c03222b33f2e28b9767b1c"
+    },
+    {
+      "path": "helper/keep_positives.go",
+      "sha256": "c794530bd16be3a523ef0c5ffd59e3d8e43a98fd8637adf2a671c5a66d6420f0"
+    },
+    {
+      "path": "helper/last.go",
+      "sha256": "77be8cf08def297c4a2663fc9dc6d7324dd953aa7f7b0e1303bca782f844526b"
+    },
+    {
+      "path": "helper/lcm.go",
+      "sha256": "a010ae5585d658a620c5b8b4d5e4e334dbd9c0358170ee5a499c3850b0899b3f"
+    },
+    {
+      "path": "helper/map.go",
+      "sha256": "32ef9bccd1064ad0bf1e485922b66814553cd34350eba5a2f35a140b00f1905b"
+    },
+    {
+      "path": "helper/map_with_previous.go",
+      "sha256": "d619f88c7ca8657b87d49518b56335b6ed2e48a67dcf702f14c3ff5e6439b74b"
+    },
+    {
+      "path": "helper/max_since.go",
+      "sha256": "5b23cf1534aefc160e37293ca0dc5d0d3588959fcccb59e93df9d2b50dc5135d"
+    },
+    {
+      "path": "helper/min_since.go",
+      "sha256": "4569ba3f4b7ecbbf327d50513a5e9634463935c01dc6d4313d358162238304dc"
+    },
+    {
+      "path": "helper/multiply.go",
+      "sha256": "02c50c1ab665b972909cb124f76b2e34bdeb199584be1092957dc514b1cd3190"
+    },
+    {
+      "path": "helper/multiply_by.go",
+      "sha256": "c235b785681f0f0ddd0c8643bb440d390228c7a627aa8d4aea285537ca8609c7"
+    },
+    {
+      "path": "helper/numeric_report_column.go",
+      "sha256": "d18215c8df27a59ba3fd12cc5300af2a0bf1f6281b6f9633ece5a0f1519e46a9"
+    },
+    {
+      "path": "helper/operate.go",
+      "sha256": "a421fc8cb4184265a916012b6e4e2048a4db371f54096a9b3b0eb614e13add04"
+    },
+    {
+      "path": "helper/operate3.go",
+      "sha256": "3f0843d40c76b39353640ce08d2e80ea50d3f95c752e4eab91717e110c0efb2a"
+    },
+    {
+      "path": "helper/operate4.go",
+      "sha256": "53666071acfbe489099eaa6e42ce8947be7ab8e5c6ae4d83af2ede6a2df06cd1"
+    },
+    {
+      "path": "helper/operate5.go",
+      "sha256": "800bc04d93c65a8d2ccbff2d693b5fc672b23ee0099efcb1cf4ba3cef2671e08"
+    },
+    {
+      "path": "helper/percent_rank.go",
+      "sha256": "8452b2682e59a699fd9f08f46de93b71d90a90de3fb103041bfd5e50d7c13141"
+    },
+    {
+      "path": "helper/pipe.go",
+      "sha256": "eb514d9386fe4a1bc2d98dd9b1e026a5a07c9015c79f5e040f9ddd22a0590a6a"
+    },
+    {
+      "path": "helper/pow.go",
+      "sha256": "563797f81f38a5778e0660b8ee727e701ffd02fd3371a63fe24d13b17beb4e2f"
+    },
+    {
+      "path": "helper/reflect.go",
+      "sha256": "ff4cdb9f48d9ee933bee9d14640f5f3de3d9a07277d43b0f975307f855e0dea9"
+    },
+    {
+      "path": "helper/remove.go",
+      "sha256": "bc66cbc636344534e129beaa9fc6d40a0f69d1f89887ee1dae094c95ff203d12"
+    },
+    {
+      "path": "helper/report.go",
+      "sha256": "a47f18d0a0c5618bb7ae04efd34a20964ae524f344dfcef730830ffe3d0ed540"
+    },
+    {
+      "path": "helper/ring.go",
+      "sha256": "3ac72eeb83d57d35a3af635e05cb21a75fec3958ede2cd0d416d3d37223673e9"
+    },
+    {
+      "path": "helper/round_digit.go",
+      "sha256": "253f3017fb7d83b2216ce2e6ee185f8de9108aeae348e86097ca4283d364a525"
+    },
+    {
+      "path": "helper/round_digits.go",
+      "sha256": "57bbfbdd35d84b96e7e5a7ab08584988d326f7220442af01f13e39859139431f"
+    },
+    {
+      "path": "helper/seq.go",
+      "sha256": "dbe0ffa62af8f3af259a5d0038d6abdc8e4b2638f208d2a6ea076b66773cfc5d"
+    },
+    {
+      "path": "helper/shift.go",
+      "sha256": "0ec6ea65434c68f1b5821f9838b4c6bcea4c292b3544222aa8437ff4e325eaae"
+    },
+    {
+      "path": "helper/sign.go",
+      "sha256": "e2ab5bdcf6e258afdf23ffe86d2f90e144a875e938744d10d82a9fb217a03ef2"
+    },
+    {
+      "path": "helper/since.go",
+      "sha256": "c0468763f638230432f60a5fa4b4711b5b824ed5dd7e9f09921e13d5937e45e8"
+    },
+    {
+      "path": "helper/skip.go",
+      "sha256": "4335a4d3571eb95a23502ffa7ddc13d401206cde5ccb43843dd5ba45bab41403"
+    },
+    {
+      "path": "helper/skip_last.go",
+      "sha256": "07f2fe4629a194c2bc3d6338b9c8c65a40d84cd8356227f35647957f427a5463"
+    },
+    {
+      "path": "helper/slice_to_chan.go",
+      "sha256": "bf5f77ee8af8de54ce7694a396731c17f8584d73c7644a3f7236a17c8f220a56"
+    },
+    {
+      "path": "helper/slices_reverse.go",
+      "sha256": "59d8fcf1f21ad0a500173ed4d895ba26f8e04ca372be037e2886517ae629cc37"
+    },
+    {
+      "path": "helper/sqrt.go",
+      "sha256": "c32cbf7925132c900216fe4c62bc04bd17b6a0a03126e5c4d998ac7e82d5f2ec"
+    },
+    {
+      "path": "helper/subtract.go",
+      "sha256": "cfa183a3eac27652c346084946e03f07e9d955d4d6a2fa74f27d1892d55142b0"
+    },
+    {
+      "path": "helper/sync.go",
+      "sha256": "783e8d51d816bf9d7b4549b89e11242ac5efaa1846969f0f16d95347a0d3009c"
+    },
+    {
+      "path": "helper/waitable.go",
+      "sha256": "ca13c0b3b10e50ecf56c8f163cb3653f70c1ff485f2cd2e0ae6cf737845d5cb1"
+    },
+    {
+      "path": "helper/window.go",
+      "sha256": "0dea43357e2b508b34cc076a5fe6808ea660f64851191452e2b3e541bc23f238"
+    },
+    {
+      "path": "strategy/action.go",
+      "sha256": "aae5f0bf228757824eb6bae2affd89fccc4a64e21ed955355893135e201a7781"
+    },
+    {
+      "path": "strategy/and_strategy.go",
+      "sha256": "ddea5f2fdbd1e8b854bb8875ec76d0eda075c6052fa42210605715ae014c8621"
+    },
+    {
+      "path": "strategy/buy_and_hold_strategy.go",
+      "sha256": "d5d611cb29a324a26a9555e0304af7d67cb2904f2e1966d20554aa04bc31ab6c"
+    },
+    {
+      "path": "strategy/majority_strategy.go",
+      "sha256": "586bed2cded7dcbf6392f345c944122f26bf6afedf5d033677462b48bbb240dd"
+    },
+    {
+      "path": "strategy/or_strategy.go",
+      "sha256": "6ababbd498991002a2ce2ef2409ba0d6b3deb37fa69dfa6b99bae4fabe3fc044"
+    },
+    {
+      "path": "strategy/outcome.go",
+      "sha256": "ece2d29dd724c8657c77865ea3444e8dc1b97aff52c05de3adfc10cda3fc10f7"
+    },
+    {
+      "path": "strategy/result.go",
+      "sha256": "00f376a34fca835aed6c41113da4eb1273556f57d4f6796fb0719909be716220"
+    },
+    {
+      "path": "strategy/split_strategy.go",
+      "sha256": "c8413c638a2962aa3805a126b846aa756424491243a138c650b751157e153438"
+    },
+    {
+      "path": "strategy/strategy.go",
+      "sha256": "da3cb3eb314887e718f4c4d2c97bf6e607598a27bf9cd512e623ede45e32d9b2"
+    },
+    {
+      "path": "strategy/trend/kama_strategy.go",
+      "sha256": "9082b7ecb026a90514356b13147725f98dd3f6263b5e7d4c7c29e2530063317e"
+    },
+    {
+      "path": "trend/kama.go",
+      "sha256": "cf568d2461c449d8e78bb822258336675455db4e9def25a5f2aba354b0af438b"
+    },
+    {
+      "path": "trend/moving_sum.go",
+      "sha256": "c8d19008a2a6fa973a27aba51debbec29a10784db98bb85606b865a925244c68"
+    },
+    {
+      "path": "helper/report.tmpl",
+      "sha256": "8edff1b376c1453b003a078863b1db21aea24d3b77e4d8ea2e7f4f165ac8bad9"
+    }
+  ],
+  "excluded_indicators_selected": false,
+  "tests_or_market_fixtures_extracted": false,
+  "market_data_loaded": false
+}

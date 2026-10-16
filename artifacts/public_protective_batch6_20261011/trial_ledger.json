@@ -1,0 +1,51 @@
+{
+  "study_id": "PSR12-PUBLIC-PROTECTIVE-BATCH6",
+  "prior_ledger": "artifacts/public_protective_batch5_20261011/trial_ledger.json",
+  "minimum_preexisting_trading_cells": 17,
+  "minimum_preexisting_signal_model_cells": 18,
+  "new_registered_cells": [
+    "PSARReference8hSpot",
+    "CMF21Spot8hMinuteCloseROI"
+  ],
+  "new_attempted_cells": 2,
+  "new_exhaustively_evaluated_cells": 2,
+  "minimum_attempted_trading_cells": 19,
+  "minimum_attempted_signal_model_cells": 20,
+  "decisions": [
+    {
+      "candidate": "PSARReference8hSpot",
+      "decision": "REJECTED_AS_ADAPTED",
+      "failed_gates": [
+        "all_symbols_positive",
+        "excess_descriptive_ci",
+        "leave_week_positive",
+        "net40_mean",
+        "net80_positive",
+        "net_descriptive_ci",
+        "placebo_tail",
+        "portfolio_drawdown",
+        "positive_year_fraction"
+      ]
+    },
+    {
+      "candidate": "CMF21Spot8hMinuteCloseROI",
+      "decision": "REJECTED_AS_ADAPTED",
+      "failed_gates": [
+        "all_symbols_positive",
+        "excess_descriptive_ci",
+        "leave_week_positive",
+        "net40_mean",
+        "net80_positive",
+        "net_descriptive_ci",
+        "placebo_tail",
+        "portfolio_drawdown",
+        "positive_year_fraction"
+      ]
+    }
+  ],
+  "all_prior_source_and_forecast_history_retained": true,
+  "global_search_adjusted_inference": false,
+  "controls_are_related_versions_not_independent_trials": true,
+  "viable_candidates": [],
+  "future_confirmation_started": false
+}
