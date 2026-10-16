@@ -97,6 +97,10 @@ A read-only review of the runner found three blockers and several issues that wo
 - C2 records `coins_with_data` and `missing_symbols` for both runs, so a transient fetch failure is not read as nondeterminism. Each module's timeout is caught separately.
 - Per-symbol fetch errors (C3, D4 data, Hyperliquid) are recorded with the error text.
 - The archiver picks the newest ledger artifact per day over all unexpired artifacts before skipping archived ones, and clears the folder before writing, so manifest hashes match the files.
+- From the second review pass, also before any run:
+  - The frozen MEXC fetcher refuses fewer than 200 bars, so C3 and C4 fetch MEXC 8h klines from 2026-06-01 and then use only rows from the pre-registered window (C3: from 2026-10-04; C4: the inner join with each watch series).
+  - The archive rounds funding settlement times to the minute, so `daily_funding_panel` may assign a 00:00 settlement to the previous day where the development fapi timestamps carried millisecond jitter. This shifts absolute S3 and funding P&L slightly against development. It does not affect the D4/D5 variant differences, which share identical inputs.
+  - D4 records which Binance contract supplied each coin's funding.
 
 ## 1. Results
 

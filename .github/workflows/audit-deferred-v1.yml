@@ -35,6 +35,7 @@ jobs:
         run: |
           set -euo pipefail
           curl -fsS -m 30 -o /dev/null https://contract.mexc.com/api/v1/contract/ping
+          curl -fsS -m 30 -o /dev/null https://api.mexc.com/api/v1/contract/ping
           curl -fsS -m 30 -o /dev/null "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision?delimiter=/&prefix=data/futures/um/monthly/fundingRate/BTCUSDT/"
           curl -fsS -m 30 -o /dev/null https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-09.zip.CHECKSUM
           curl -fsS -m 30 -o /dev/null -X POST -H 'Content-Type: application/json' -d '{"type":"meta"}' https://api.hyperliquid.xyz/info

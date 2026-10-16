@@ -35,6 +35,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BCFG = json.loads((ROOT / "config/multi_premia_blend_v1.json").read_text(encoding="utf-8"))
 DEV_START, DEV_END = "2020-06-01", "2026-09-12"
 C3_START = "2026-10-04"
+MEXC_FETCH_START = "2026-06-01T00:00:00Z"   # fetch_mexc_futures_klines refuses fewer than 200 bars; slice afterwards
 REVISION_TOL = 1e-9
 B1_MIN_DAYS = 10
 D4_MAX_EMPTY_FUNDING_SHARE = 0.25
@@ -284,7 +285,8 @@ def c3_reconcile(end: pd.Timestamp) -> dict[str, Any]:
     def load(s):
         err = {}
         try:
-            m = fetch_mexc_futures_klines(s, "8h", f"{C3_START}T00:00:00Z", end.isoformat())
+            m = fetch_mexc_futures_klines(s, "8h", MEXC_FETCH_START, end.isoformat())
+            m = m.loc[m.index >= pd.Timestamp(C3_START, tz="UTC")]
         except Exception as exc:
             m, err["mexc"] = None, repr(exc)[:300]
         try:
@@ -323,7 +325,7 @@ def c4_beta(latest: dict[str, pd.Series], end: pd.Timestamp, reports: dict[str, 
     from orderflow_edge_lab.mexc_history import fetch_mexc_futures_klines
     from orderflow_edge_lab.xs_premia import daily_open_panel
 
-    btc = daily_open_panel({"BTC_USDT": fetch_mexc_futures_klines("BTC_USDT", "8h", "2026-09-15T00:00:00Z",
+    btc = daily_open_panel({"BTC_USDT": fetch_mexc_futures_klines("BTC_USDT", "8h", MEXC_FETCH_START,
                                                                    end.isoformat())})["BTC_USDT"]
     rbtc = btc.pct_change()
     out = {}
@@ -346,6 +348,7 @@ def dev_data() -> tuple[dict, dict, dict[str, Any]]:
     from orderflow_edge_lab.mexc_history import fetch_mexc_futures_klines
 
     errors: dict[str, str] = {}
+    contracts: dict[str, str | None] = {}
 
     def load(s):
         try:
@@ -353,7 +356,8 @@ def dev_data() -> tuple[dict, dict, dict[str, Any]]:
         except Exception as exc:
             return s, None, None, f"mexc: {exc!r}"[:300]
         try:
-            _, fr = binance_archive("funding", s, DEV_START, DEV_END)
+            cand, fr = binance_archive("funding", s, DEV_START, DEV_END)
+            contracts[s] = cand
             fu = fr["rate"].astype(float) if len(fr) else pd.Series(dtype=float)
             fu = fu[(fu.index >= pd.Timestamp(DEV_START, tz="UTC")) & (fu.index < pd.Timestamp(DEV_END, tz="UTC"))]
             fu = fu[~fu.index.duplicated(keep="first")]
@@ -370,7 +374,8 @@ def dev_data() -> tuple[dict, dict, dict[str, Any]]:
     fund = {s: (fu if fu is not None else pd.Series(dtype=float)) for s, f, fu, _ in got if s in frames}
     empty = sorted(s for s, fu in fund.items() if len(fu) == 0)
     meta = {"coins": len(frames), "missing_or_short": sorted(set(BCFG["symbols"]) - set(frames)), "errors": errors,
-            "empty_funding": empty, "empty_funding_share": (len(empty) / len(frames)) if frames else None}
+            "empty_funding": empty, "empty_funding_share": (len(empty) / len(frames)) if frames else None,
+            "binance_funding_contracts": contracts}
     return frames, fund, meta
 
 
