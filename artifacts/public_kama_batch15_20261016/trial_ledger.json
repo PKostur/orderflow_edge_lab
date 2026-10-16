@@ -1,0 +1,33 @@
+{
+  "study_id": "PSR21-PUBLIC-KAMA-STATE-BATCH15",
+  "prior_ledger": "artifacts/public_keltner_batch14_20261016/trial_ledger.json",
+  "minimum_preexisting_trading_cells": 27,
+  "minimum_preexisting_signal_model_cells": 28,
+  "new_registered_cells": [
+    "KAMAState8hCashSourceIntent"
+  ],
+  "new_attempted_cells": 1,
+  "new_exhaustively_evaluated_cells": 1,
+  "minimum_attempted_trading_cells": 28,
+  "minimum_attempted_signal_model_cells": 29,
+  "decisions": [
+    {
+      "candidate": "KAMAState8hCashSourceIntent",
+      "decision": "REJECTED_AS_ADAPTED",
+      "failed_gates": [
+        "excess_descriptive_ci",
+        "leave_week_positive",
+        "net80_positive",
+        "net_descriptive_ci",
+        "placebo_tail",
+        "portfolio_drawdown",
+        "positive_year_fraction"
+      ]
+    }
+  ],
+  "all_prior_source_and_forecast_history_retained": true,
+  "global_search_adjusted_inference": false,
+  "controls_are_related_versions_not_independent_trials": true,
+  "viable_candidates": [],
+  "future_confirmation_started": false
+}
