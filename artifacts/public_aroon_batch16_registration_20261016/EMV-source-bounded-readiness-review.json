@@ -1,0 +1,58 @@
+{
+  "kind": "EMV_PINNED_SOURCE_BOUNDED_NATIVE_EQUATIONS_REVIEW",
+  "status": "PASS_BOUNDED_NATIVE_EQUATIONS_READINESS_NOT_REGISTERED",
+  "blocking_findings": [],
+  "market_data_loaded": false,
+  "market_outcomes_inspected": false,
+  "source_commit": "35bd387db11de8e544ad545c68f198677ce4c6b7",
+  "selected_source_receipt_sha256": "2b6dc6568a6942a43433300d2c368725a543901acdc2509b21f49c51a4fce7f1",
+  "source_hashes": {
+    "volume/emv.go": "566b0ebe7dcda3d4a0bddabca718d0baab21042f13beb7d76b342b4eee5ed086",
+    "strategy/volume/ease_of_movement_strategy.go": "804f722a2e58204d5928eb35a08cc422f65b8c6c74201a811f8db4134e8f871b",
+    "trend/sma.go": "65210bfc886b1b08038c54611796cd970a864b59175a41a6c6f0a9b45d1f470d",
+    "trend/moving_sum.go": "c8d19008a2a6fa973a27aba51debbec29a10784db98bb85606b865a925244c68",
+    "helper/change.go": "6c6a83e18ae6fb2cc11cfe179eabe41041a9ac8ac76ef415cf5a1d05d82c0840",
+    "helper/divide.go": "0cf75e5b1b3aba4e491f8f5a198143c0b207251b4bed05ed328401e20b804fe2",
+    "helper/operate.go": "a421fc8cb4184265a916012b6e4e2048a4db371f54096a9b3b0eb614e13add04",
+    "strategy/outcome.go": "ece2d29dd724c8657c77865ea3444e8dc1b97aff52c05de3adfc10cda3fc10f7",
+    "LICENSE.md": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef"
+  },
+  "native_wrapper_sha256": "b03fca2d70d7079ebb9eb55896f257d5e255e89b874cd5b086e11974a8c0d6bc",
+  "independent_binary_sha256": "6bde9cc6f7b300fce0b523423c56ce7ee013f2119da0e9d350755ff62fb76967",
+  "independent_input_sha256": "bcfd9bf00526f6b7bb425fec3cf839225afdfd0ebd3c4ac1ccc00b0ab5a5c6d3",
+  "independent_output_sha256": "683581b2a8592b8fa082a853812a5598d9645f35fd65cb75658844b10ad37139",
+  "validations": {
+    "original_source_files_rehashed": 98,
+    "fixtures": 23,
+    "native_indicator_values_exact": 2507,
+    "native_actions_exact": 2829,
+    "unattached_short_input_holds": 30,
+    "nan_values": 390,
+    "prefix_checks": 11,
+    "future_mutation_checks": 3,
+    "allfinite_values_and_nonfinite_classifications_exact": true,
+    "zero_volume_positive_range_nan_preserved": true,
+    "zero_range_positive_volume_zero_preserved": true,
+    "zero_volume_and_range_nan_preserved": true,
+    "nonfinite_buffer_recovery_to_later_finite_values_confirmed": true,
+    "source_pairwise_previous_box_alignment_confirmed": true,
+    "first_output_raw_index14": true
+  },
+  "mechanics": [
+    "Default14SMA;mid[i]=(high[i]+low[i])/2 and distance sequence starts raw1. box[i]=(volume[i]/100000000)/(high[i]-low[i]) startsraw0. Pairwise Divide therefore forms termk=(mid[k+1]-mid[k])/box[k], not currentbarbox[k+1].",
+    "MovingSum14 processes incomingterm before negativeoutgoingterm, Neumaier compensation and physicalring-order recomputation on nonfinite total; divide14 onlyafter14terms. FirstEMV raw14; source prepends14HOLD, shortinputs mayhavephantompadding. No alignmentrepair/safezero substitution.",
+    "BUY everyEMV>0,SELL everyEMV<0,HOLDzero/NaN; repeatedsignstates despitecrossingcomment. Native infinity if any would comparebysign; no blanketfinitegate maybesilentlyadded.",
+    "ZeroVwithpositiveRange canproduceInf/NaN upstream; compensatedsum generallyNaN whileinvalidvaluesremain. ZeroRangewithpositiveV yieldsinfinitebox thenzeroterm. SimultaneouszeroVRange givesNaN. Nativebufferrecoveryoccurswhennonfiniteleaves,notpermanentpoisoning.",
+    "Originaleducational Outcome balance1/shares0 suppliesfullcashsameclosecostfreeintent. Future8hSpotportmustdeclarebasevolume,fullhistoryclock/domain,fee-reservedsignalclosefloor8fixedqty/nextopenallorreject,ownfundedBTC/cash/lifecycle/controls/censoring."
+  ],
+  "limits": [
+    "Boundedsource/nativeequationsonly;nooriginalOutcome/PnL/marketCSV/exchangeexecution,registeredtrialorfullcandidateapproval.",
+    "Exactfinitevaluesandnonfiniteclassificationson23syntheticfixtures,notNaNpayloadbits/allinputs/platformparity. Previousboxalignmentiscausalpastdata,notalookaheadfinding;itdiffersfromusualsamebarformulaandmustnotberepairedsilently.",
+    "AGPLGo/helpers/harness/buildremainoutsideGitunderuploadedconstraint;futureimplementationmustbeindependentlyauthoredfromequationswithURI/hashandnumericreceipts,nocopiedGPLfamilysource.",
+    "Price/volume/trendfamilyoverlapremains,noorthogonality/incremental-information/viabilityclaim. Historicalsurvivalwouldrequireseparateimmutableuntouchedconfirmation."
+  ],
+  "new_registered_trials": 0,
+  "new_attempted_trials": 0,
+  "repository_modified": false,
+  "candidate_production_approved": false
+}
