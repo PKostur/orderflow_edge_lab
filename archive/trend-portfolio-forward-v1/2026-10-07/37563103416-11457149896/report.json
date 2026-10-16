@@ -1,0 +1,102 @@
+{
+  "as_of_utc": "2026-10-07T02:41:38.065526+00:00",
+  "claims": {
+    "descriptive_only": true,
+    "leverage_authorized": false,
+    "live_trading_authorized": false,
+    "regime_filter_authorized": false,
+    "strategy_definitions_modified": false,
+    "strategy_promotion_authorized": false,
+    "verified_out_of_sample_evidence": false
+  },
+  "daily_returns": {
+    "hedged": {
+      "2026-09-29T00:00:00+00:00": -0.007494479201949809,
+      "2026-09-30T00:00:00+00:00": -0.006517858094128157,
+      "2026-10-01T00:00:00+00:00": 0.0031930814618049423,
+      "2026-10-02T00:00:00+00:00": -0.0031856475244419185,
+      "2026-10-03T00:00:00+00:00": -0.006696083819975421,
+      "2026-10-04T00:00:00+00:00": 0.002261661662465606,
+      "2026-10-05T00:00:00+00:00": 0.001267132293397012,
+      "2026-10-06T00:00:00+00:00": -0.0033567951120344213
+    },
+    "plain": {
+      "2026-09-29T00:00:00+00:00": -0.015610730644008282,
+      "2026-09-30T00:00:00+00:00": -0.012891411589273209,
+      "2026-10-01T00:00:00+00:00": 0.007592725078692727,
+      "2026-10-02T00:00:00+00:00": -0.005454941666114336,
+      "2026-10-03T00:00:00+00:00": -0.015550594368987525,
+      "2026-10-04T00:00:00+00:00": 0.009043825174255615,
+      "2026-10-05T00:00:00+00:00": 0.013845939405654683,
+      "2026-10-06T00:00:00+00:00": -0.003151638192940128
+    }
+  },
+  "days_to_detect_anchor_sharpe": {
+    "basket": 6337,
+    "hedged": 1276,
+    "plain": 1276
+  },
+  "forward": {
+    "basket": {
+      "annualized_sharpe": -0.8557420097090289,
+      "cumulative_return": -0.005821019564021701,
+      "days": 8,
+      "max_drawdown": -0.02426685235680337,
+      "mean_daily_bps": -6.4029281917942935,
+      "minimum_detectable_sharpe": 13.509256086106296,
+      "newey_west_t": null
+    },
+    "hedged": {
+      "annualized_sharpe": -11.414114272640976,
+      "cumulative_return": -0.020409097546436383,
+      "days": 8,
+      "max_drawdown": -0.013172999823147347,
+      "mean_daily_bps": -25.66123541857771,
+      "minimum_detectable_sharpe": 13.509256086106296,
+      "newey_west_t": null
+    },
+    "plain": {
+      "annualized_sharpe": -4.519890774050189,
+      "cumulative_return": -0.022434684428071172,
+      "days": 8,
+      "max_drawdown": -0.026204375890250486,
+      "mean_daily_bps": -27.72103350340057,
+      "minimum_detectable_sharpe": 13.509256086106296,
+      "newey_west_t": null
+    }
+  },
+  "historical_anchor": {
+    "beta_mean": -0.04,
+    "note": "Even in-sample the combined portfolio is not significant at t=2 (t=1.71 over 2.7 years).",
+    "series": {
+      "basket": {
+        "annualized_sharpe": 0.48,
+        "days": 983,
+        "max_drawdown": -0.718,
+        "mean_daily_bps": 9.01,
+        "newey_west_t": 0.79
+      },
+      "hedged": {
+        "annualized_sharpe": 1.07,
+        "days": 983,
+        "max_drawdown": -0.263,
+        "mean_daily_bps": 11.18,
+        "newey_west_t": 1.66
+      },
+      "plain": {
+        "annualized_sharpe": 1.07,
+        "days": 983,
+        "max_drawdown": -0.301,
+        "mean_daily_bps": 11.11,
+        "newey_west_t": 1.71
+      }
+    },
+    "window": "2024-01-01..2026-09-12 (already inspected; not out-of-sample)"
+  },
+  "latest_beta": 0.5543182989466702,
+  "prospective_start_utc": "2026-09-28T00:00:00+00:00",
+  "review_window_open": false,
+  "schema_version": 1,
+  "status": "COLLECTING",
+  "watch_id": "universal-trend-portfolio-forward-v1"
+}

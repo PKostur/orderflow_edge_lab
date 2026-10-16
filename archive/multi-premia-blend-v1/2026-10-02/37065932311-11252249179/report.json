@@ -1,0 +1,77 @@
+{
+  "as_of_utc": "2026-10-02T21:17:57.208360+00:00",
+  "claims": {
+    "leverage_authorized": false,
+    "live_trading_authorized": false,
+    "paper_trading_authorized": false,
+    "strategy_promotion_authorized": false,
+    "verified_out_of_sample_evidence": false
+  },
+  "coins_with_data": 70,
+  "daily_returns": {
+    "S1": {
+      "2026-09-30T00:00:00+00:00": -5.9698187965078516e-05,
+      "2026-10-01T00:00:00+00:00": 0.002430076942073638,
+      "2026-10-02T00:00:00+00:00": -0.005083434417638404
+    },
+    "S2": {
+      "2026-09-30T00:00:00+00:00": -0.01220322724263152,
+      "2026-10-01T00:00:00+00:00": 0.007899986032432978,
+      "2026-10-02T00:00:00+00:00": -0.009587207245772056
+    },
+    "S3": {
+      "2026-09-30T00:00:00+00:00": -0.010333072730753672,
+      "2026-10-01T00:00:00+00:00": 0.012869547572905366,
+      "2026-10-02T00:00:00+00:00": -0.001900902400987745
+    },
+    "S4_blend": {
+      "2026-09-30T00:00:00+00:00": -0.0035333700422633847,
+      "2026-10-01T00:00:00+00:00": 0.004913533705254205,
+      "2026-10-02T00:00:00+00:00": -0.005266302405019998
+    }
+  },
+  "forward": {
+    "S1": {
+      "annualized_sharpe": -4.514299517031655,
+      "cumulative_return": -0.0027252496622014455,
+      "days": 3,
+      "max_drawdown": -0.005083434417638366,
+      "mean_daily_bps": -9.043518878432815,
+      "minimum_detectable_sharpe": 22.06052281036573,
+      "newey_west_t": null
+    },
+    "S2": {
+      "annualized_sharpe": -8.093245505024361,
+      "cumulative_return": -0.01394467345759931,
+      "days": 3,
+      "max_drawdown": -0.009587207245772111,
+      "mean_daily_bps": -46.301494853235326,
+      "minimum_detectable_sharpe": 22.06052281036573,
+      "newey_west_t": null
+    },
+    "S3": {
+      "annualized_sharpe": 0.3446259192227364,
+      "cumulative_return": 0.0004980216647116897,
+      "days": 3,
+      "max_drawdown": -0.0019009024009877251,
+      "mean_daily_bps": 2.1185748038798304,
+      "minimum_detectable_sharpe": 22.06052281036573,
+      "newey_west_t": null
+    },
+    "S4_blend": {
+      "annualized_sharpe": -4.543920203828625,
+      "cumulative_return": -0.00391067700401404,
+      "days": 3,
+      "max_drawdown": -0.005266302405020018,
+      "mean_daily_bps": -12.953795806763925,
+      "minimum_detectable_sharpe": 22.06052281036573,
+      "newey_west_t": null
+    }
+  },
+  "missing_symbols": [],
+  "prospective_start_utc": "2026-09-29T00:00:00+00:00",
+  "review_window_open": false,
+  "schema_version": 1,
+  "status": "COLLECTING",
+  "watch_id": "multi-premia-blend-v1"
+}

@@ -1,0 +1,68 @@
+{
+  "claims": {
+    "live_trading_authorized": false,
+    "news_is_causal": false,
+    "paper_trading_authorized": false,
+    "strategy_promotion_authorized": false
+  },
+  "first_item_utc": "2025-12-29T16:10:19+00:00",
+  "items_new": 63,
+  "items_total": 653,
+  "ledger_sha256": "ed1de1e64216fe9ad16f457f4f639815842b1022e66c14de74726ec10597fca4",
+  "protocol": "news-sentiment-v1",
+  "run_utc": "2026-10-02T20:57:22.428055+00:00",
+  "sources": {
+    "beincrypto": {
+      "items": 12,
+      "ok": true
+    },
+    "bitcoinist": {
+      "items": 8,
+      "ok": true
+    },
+    "bitcoinmagazine": {
+      "items": 10,
+      "ok": true
+    },
+    "coindesk": {
+      "items": 25,
+      "ok": true
+    },
+    "cointelegraph": {
+      "items": 30,
+      "ok": true
+    },
+    "cryptoslate": {
+      "items": 10,
+      "ok": true
+    },
+    "decrypt": {
+      "items": 39,
+      "ok": true
+    },
+    "newsbtc": {
+      "items": 10,
+      "ok": true
+    },
+    "reddit_bitcoin": {
+      "items": 25,
+      "ok": true
+    },
+    "reddit_cryptocurrency": {
+      "items": 25,
+      "ok": true
+    },
+    "reddit_ethereum": {
+      "error": "HTTPError: HTTP Error 429: Too Many Requests",
+      "ok": false
+    },
+    "theblock": {
+      "items": 19,
+      "ok": true
+    },
+    "utoday": {
+      "items": 92,
+      "ok": true
+    }
+  }
+}

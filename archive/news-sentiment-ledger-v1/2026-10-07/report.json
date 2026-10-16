@@ -1,0 +1,68 @@
+{
+  "claims": {
+    "live_trading_authorized": false,
+    "news_is_causal": false,
+    "paper_trading_authorized": false,
+    "strategy_promotion_authorized": false
+  },
+  "first_item_utc": "2025-12-29T16:10:19+00:00",
+  "items_new": 59,
+  "items_total": 1283,
+  "ledger_sha256": "7fc7a00f90df526cf4017225e0fff1e6f33ecb2a114efc1b1fdd730fec5f323a",
+  "protocol": "news-sentiment-v1",
+  "run_utc": "2026-10-07T21:33:06.375681+00:00",
+  "sources": {
+    "beincrypto": {
+      "items": 12,
+      "ok": true
+    },
+    "bitcoinist": {
+      "items": 8,
+      "ok": true
+    },
+    "bitcoinmagazine": {
+      "items": 10,
+      "ok": true
+    },
+    "coindesk": {
+      "items": 25,
+      "ok": true
+    },
+    "cointelegraph": {
+      "items": 30,
+      "ok": true
+    },
+    "cryptoslate": {
+      "items": 10,
+      "ok": true
+    },
+    "decrypt": {
+      "items": 37,
+      "ok": true
+    },
+    "newsbtc": {
+      "items": 10,
+      "ok": true
+    },
+    "reddit_bitcoin": {
+      "error": "HTTPError: HTTP Error 429: Too Many Requests",
+      "ok": false
+    },
+    "reddit_cryptocurrency": {
+      "items": 25,
+      "ok": true
+    },
+    "reddit_ethereum": {
+      "error": "HTTPError: HTTP Error 429: Too Many Requests",
+      "ok": false
+    },
+    "theblock": {
+      "items": 20,
+      "ok": true
+    },
+    "utoday": {
+      "items": 96,
+      "ok": true
+    }
+  }
+}

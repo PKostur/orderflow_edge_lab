@@ -1,0 +1,77 @@
+{
+  "as_of_utc": "2026-10-08T22:03:46.332372+00:00",
+  "calendar_days_elapsed": 3,
+  "claims": {
+    "leverage_authorized": false,
+    "live_trading_authorized": false,
+    "paper_trading_authorized": false,
+    "strategy_promotion_authorized": false
+  },
+  "gates": {
+    "G1_implementation": {
+      "checkpoints": {},
+      "cum_diff": -0.00032072941835053007,
+      "days": 2,
+      "expected_days": 1,
+      "status": "COLLECTING",
+      "te_annualized": 0.00029977633052952614
+    },
+    "G2_breakage_alarm": {
+      "cum": -0.011921868800810809,
+      "days": 3,
+      "max_drawdown": -0.012409504780979574,
+      "min_rolling_60d": null,
+      "rules_hit": {
+        "drawdown": false,
+        "rolling_60d": false
+      },
+      "status": "OK",
+      "thresholds": {
+        "max_drawdown": -0.13678,
+        "min_rolling_60d": -0.10552
+      }
+    },
+    "G3_venue_replication": {
+      "status": "MIXED",
+      "venues": {
+        "binance": {
+          "coins": 70,
+          "mexc_sharpe": 2.0899035401840425,
+          "passes": true,
+          "sharpe": 1.0527346510318532,
+          "t": 2.3116085090031415
+        },
+        "bybit": {
+          "coins": 58,
+          "mexc_sharpe": 1.7602453748867646,
+          "passes": false,
+          "sharpe": 0.4139319772774999,
+          "t": 0.8313790054887986
+        }
+      }
+    }
+  },
+  "prospective_start_utc": "2026-10-05T00:00:00+00:00",
+  "schema_version": 1,
+  "status": "COLLECTING",
+  "strategies": [
+    {
+      "audit_id": "G1_implementation",
+      "cum_diff": -0.00032072941835053007,
+      "days": 2,
+      "status": "COLLECTING"
+    },
+    {
+      "alarm_at": -0.13678,
+      "audit_id": "G2_breakage_alarm",
+      "days": 3,
+      "max_drawdown": -0.012409504780979574,
+      "status": "OK"
+    },
+    {
+      "audit_id": "G3_venue_replication",
+      "status": "MIXED"
+    }
+  ],
+  "watch_id": "fast-gates-v1"
+}

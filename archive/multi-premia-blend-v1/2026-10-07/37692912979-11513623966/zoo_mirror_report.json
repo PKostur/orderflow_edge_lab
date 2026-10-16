@@ -1,0 +1,50 @@
+{
+  "as_of_utc": "2026-10-07T21:58:15.776594+00:00",
+  "claims": {
+    "leverage_authorized": false,
+    "live_trading_authorized": false,
+    "paper_trading_authorized": false,
+    "strategy_promotion_authorized": false
+  },
+  "coins_with_data": 70,
+  "daily_returns": {
+    "M2_btc_shock_reversal": {
+      "2026-10-04T00:00:00+00:00": 0.0,
+      "2026-10-05T00:00:00+00:00": 0.0,
+      "2026-10-06T00:00:00+00:00": -0.008120650463367405,
+      "2026-10-07T00:00:00+00:00": -0.0010072965055358313
+    },
+    "M4_lottery_momentum": {
+      "2026-10-04T00:00:00+00:00": -0.002147971684349777,
+      "2026-10-05T00:00:00+00:00": -0.006423475675676561,
+      "2026-10-06T00:00:00+00:00": 0.0019316112342903343,
+      "2026-10-07T00:00:00+00:00": -0.0017686179619885033
+    }
+  },
+  "forward": {
+    "M2_btc_shock_reversal": {
+      "annualized_sharpe": -11.118074932381102,
+      "cumulative_return": -0.009119767066068873,
+      "days": 4,
+      "max_drawdown": -0.009119767066068873,
+      "mean_daily_bps": -22.819867422258092,
+      "minimum_detectable_sharpe": 19.1049731745428,
+      "newey_west_t": null
+    },
+    "M4_lottery_momentum": {
+      "annualized_sharpe": -11.748082909307508,
+      "cumulative_return": -0.008399438530197423,
+      "days": 4,
+      "max_drawdown": -0.006423475675676582,
+      "mean_daily_bps": -21.02113521931127,
+      "minimum_detectable_sharpe": 19.1049731745428,
+      "newey_west_t": null
+    }
+  },
+  "missing_symbols": [],
+  "prospective_start_utc": "2026-10-03T00:00:00+00:00",
+  "review_window_open": false,
+  "schema_version": 1,
+  "status": "COLLECTING",
+  "watch_id": "zoo-mirror-forward-v1"
+}

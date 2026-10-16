@@ -1,0 +1,69 @@
+{
+  "as_of_utc": "2026-09-30T22:48:00.779900+00:00",
+  "claims": {
+    "leverage_authorized": false,
+    "live_trading_authorized": false,
+    "paper_trading_authorized": false,
+    "strategy_promotion_authorized": false,
+    "verified_out_of_sample_evidence": false
+  },
+  "coins_with_data": 70,
+  "daily_returns": {
+    "S1": {
+      "2026-09-30T00:00:00+00:00": -5.9698187965078516e-05
+    },
+    "S2": {
+      "2026-09-30T00:00:00+00:00": -0.01220322724263152
+    },
+    "S3": {
+      "2026-09-30T00:00:00+00:00": -0.010333072730753672
+    },
+    "S4_blend": {
+      "2026-09-30T00:00:00+00:00": -0.0035333700422633847
+    }
+  },
+  "forward": {
+    "S1": {
+      "annualized_sharpe": null,
+      "cumulative_return": -5.969818796502935e-05,
+      "days": 1,
+      "max_drawdown": 0.0,
+      "mean_daily_bps": -0.5969818796507852,
+      "minimum_detectable_sharpe": 38.2099463490856,
+      "newey_west_t": null
+    },
+    "S2": {
+      "annualized_sharpe": null,
+      "cumulative_return": -0.012203227242631565,
+      "days": 1,
+      "max_drawdown": 0.0,
+      "mean_daily_bps": -122.0322724263152,
+      "minimum_detectable_sharpe": 38.2099463490856,
+      "newey_west_t": null
+    },
+    "S3": {
+      "annualized_sharpe": null,
+      "cumulative_return": -0.010333072730753678,
+      "days": 1,
+      "max_drawdown": 0.0,
+      "mean_daily_bps": -103.33072730753672,
+      "minimum_detectable_sharpe": 38.2099463490856,
+      "newey_west_t": null
+    },
+    "S4_blend": {
+      "annualized_sharpe": null,
+      "cumulative_return": -0.003533370042263395,
+      "days": 1,
+      "max_drawdown": 0.0,
+      "mean_daily_bps": -35.33370042263385,
+      "minimum_detectable_sharpe": 38.2099463490856,
+      "newey_west_t": null
+    }
+  },
+  "missing_symbols": [],
+  "prospective_start_utc": "2026-09-29T00:00:00+00:00",
+  "review_window_open": false,
+  "schema_version": 1,
+  "status": "COLLECTING",
+  "watch_id": "multi-premia-blend-v1"
+}

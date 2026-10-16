@@ -1,0 +1,56 @@
+{
+  "as_of_utc": "2026-10-03T19:33:06.913188+00:00",
+  "claims": {
+    "descriptive_only": true,
+    "leverage_authorized": false,
+    "live_trading_authorized": false,
+    "paper_trading_authorized": false,
+    "strategy_definitions_modified": false,
+    "strategy_promotion_authorized": false,
+    "verified_out_of_sample_evidence": false
+  },
+  "daily_returns": {
+    "core": {
+      "2026-09-30T00:00:00+00:00": -0.0060781941533671925,
+      "2026-10-01T00:00:00+00:00": 0.0018497789742657183,
+      "2026-10-02T00:00:00+00:00": -0.0032396178736635813,
+      "2026-10-03T00:00:00+00:00": -0.0030519852974454005
+    },
+    "core_voltarget": {
+      "2026-09-30T00:00:00+00:00": -0.004832235145213948,
+      "2026-10-01T00:00:00+00:00": 0.0014705958290873009,
+      "2026-10-02T00:00:00+00:00": -0.00257553394169025,
+      "2026-10-03T00:00:00+00:00": -0.0024263638582229024
+    }
+  },
+  "forward": {
+    "core": {
+      "annualized_sharpe": -15.26396343742462,
+      "cumulative_return": -0.010494742069638296,
+      "days": 4,
+      "max_drawdown": -0.006281715904989271,
+      "mean_daily_bps": -26.300045875526138,
+      "minimum_detectable_sharpe": 19.1049731745428,
+      "newey_west_t": null
+    },
+    "core_voltarget": {
+      "annualized_sharpe": -15.263963437424618,
+      "cumulative_return": -0.008347565129213752,
+      "days": 4,
+      "max_drawdown": -0.004995648617441506,
+      "mean_daily_bps": -20.9088427900995,
+      "minimum_detectable_sharpe": 19.1049731745428,
+      "newey_west_t": null
+    }
+  },
+  "overlay_state": {
+    "forward_mean_leverage": 0.7950116470920875,
+    "latest_gross": 0.21026343162908762,
+    "latest_leverage": 0.7950116470920875
+  },
+  "prospective_start_utc": "2026-09-29T00:00:00+00:00",
+  "review_window_open": false,
+  "schema_version": 1,
+  "status": "COLLECTING",
+  "watch_id": "crypto-trend-core-voltarget-v1"
+}

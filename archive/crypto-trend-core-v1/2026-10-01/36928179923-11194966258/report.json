@@ -1,0 +1,61 @@
+{
+  "as_of_utc": "2026-10-01T21:22:26.533293+00:00",
+  "claims": {
+    "descriptive_only": true,
+    "leverage_authorized": false,
+    "live_trading_authorized": false,
+    "paper_trading_authorized": false,
+    "strategy_definitions_modified": false,
+    "strategy_promotion_authorized": false,
+    "verified_out_of_sample_evidence": false
+  },
+  "daily_returns": {
+    "combined": {
+      "2026-09-30T00:00:00+00:00": -0.0060781941533671925,
+      "2026-10-01T00:00:00+00:00": 0.0018497789742657183
+    },
+    "crypto": {
+      "2026-09-30T00:00:00+00:00": -0.0060781941533671925,
+      "2026-10-01T00:00:00+00:00": 0.0018497789742657183
+    }
+  },
+  "forward": {
+    "combined": {
+      "annualized_sharpe": -7.205214065844873,
+      "cumulative_return": -0.004239658494847864,
+      "days": 2,
+      "max_drawdown": 0.0,
+      "mean_daily_bps": -21.14207589550737,
+      "minimum_detectable_sharpe": 27.018512172212592,
+      "newey_west_t": null
+    },
+    "crypto": {
+      "annualized_sharpe": -7.205214065844873,
+      "cumulative_return": -0.004239658494847864,
+      "days": 2,
+      "max_drawdown": 0.0,
+      "mean_daily_bps": -21.14207589550737,
+      "minimum_detectable_sharpe": 27.018512172212592,
+      "newey_west_t": null
+    }
+  },
+  "forward_sleeve_breadth": {
+    "combined": null,
+    "crypto": null
+  },
+  "funding_contribution": {
+    "combined": {
+      "annualized": -0.023986891178388633,
+      "days": 2
+    },
+    "crypto": {
+      "annualized": -0.023986891178388633,
+      "days": 2
+    }
+  },
+  "prospective_start_utc": "2026-09-29T00:00:00+00:00",
+  "review_window_open": false,
+  "schema_version": 1,
+  "status": "COLLECTING",
+  "watch_id": "crypto-trend-core-v1"
+}

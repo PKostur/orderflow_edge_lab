@@ -1,0 +1,88 @@
+{
+  "as_of_utc": "2026-10-03T19:19:34.926868+00:00",
+  "claims": {
+    "descriptive_only": true,
+    "leverage_authorized": false,
+    "live_trading_authorized": false,
+    "regime_filter_authorized": false,
+    "strategy_definitions_modified": false,
+    "strategy_promotion_authorized": false,
+    "verified_out_of_sample_evidence": false
+  },
+  "daily_returns": {
+    "combined": {
+      "2026-09-29T00:00:00+00:00": -0.009324885843619348,
+      "2026-09-30T00:00:00+00:00": -0.011928021832033535,
+      "2026-10-01T00:00:00+00:00": 0.006625482051633518,
+      "2026-10-02T00:00:00+00:00": -0.004100693025737609,
+      "2026-10-03T00:00:00+00:00": -0.009214441711524303
+    },
+    "crypto": {
+      "2026-09-29T00:00:00+00:00": -0.015720047466495034,
+      "2026-09-30T00:00:00+00:00": -0.013053095135221215,
+      "2026-10-01T00:00:00+00:00": 0.007467171581850322,
+      "2026-10-02T00:00:00+00:00": -0.005573254283137948,
+      "2026-10-03T00:00:00+00:00": -0.01569733667492736
+    },
+    "tradfi": {
+      "2026-09-29T00:00:00+00:00": 0.0034654374021320248,
+      "2026-09-30T00:00:00+00:00": -0.009677875225658172,
+      "2026-10-01T00:00:00+00:00": 0.0049421029911999115,
+      "2026-10-02T00:00:00+00:00": -0.001155570510936932,
+      "2026-10-03T00:00:00+00:00": 0.0037513482152818096
+    }
+  },
+  "forward": {
+    "combined": {
+      "annualized_sharpe": -14.439617197096982,
+      "cumulative_return": -0.027739024704917292,
+      "days": 5,
+      "max_drawdown": -0.018587464849138424,
+      "mean_daily_bps": -55.885120722562554,
+      "minimum_detectable_sharpe": 17.08800749063506,
+      "newey_west_t": null
+    },
+    "crypto": {
+      "annualized_sharpe": -16.514381306290755,
+      "cumulative_return": -0.04204570443775901,
+      "days": 5,
+      "max_drawdown": -0.026746107043532308,
+      "mean_daily_bps": -85.15312395586247,
+      "minimum_detectable_sharpe": 17.08800749063506,
+      "newey_west_t": null
+    },
+    "tradfi": {
+      "annualized_sharpe": 0.8407302370759498,
+      "cumulative_return": 0.00125324269240501,
+      "days": 5,
+      "max_drawdown": -0.009677875225658217,
+      "mean_daily_bps": 2.6508857440372844,
+      "minimum_detectable_sharpe": 17.08800749063506,
+      "newey_west_t": null
+    }
+  },
+  "forward_sleeve_breadth": {
+    "combined": null,
+    "crypto": null,
+    "tradfi": null
+  },
+  "funding_contribution": {
+    "combined": {
+      "annualized": -0.015200184761562143,
+      "days": 5
+    },
+    "crypto": {
+      "annualized": -0.04829744154156206,
+      "days": 5
+    },
+    "tradfi": {
+      "annualized": 0.05099432879843765,
+      "days": 5
+    }
+  },
+  "prospective_start_utc": "2026-09-28T00:00:00+00:00",
+  "review_window_open": false,
+  "schema_version": 1,
+  "status": "COLLECTING",
+  "watch_id": "universal-cross-asset-trend-forward-v1"
+}
