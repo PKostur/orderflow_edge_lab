@@ -163,6 +163,7 @@ What the live claims actually support. The forward watches can detect breakage b
 8. Most forward reports carry no provenance hash, the frozen manifest omits every forward config, and artifacts expire after 90 days (E1, E3, E7).
 9. G2's false-alarm statement holds only at Sharpe 1.39 (E5).
 10. Correction to my earlier report: "trend robust" refers to funding, and that holds. A cross-venue weakness of the trend leg is not established (E6).
+11. Repo test suite on the audit commit (Python 3.13.16, pandas 2.3.3, numpy 2.4.6, `.[research]` extras with `requirements/constraints.txt`): 1569 tests, OK. A first run without the `[research]` extra gave 20 errors: 15 from the missing scikit-learn, 4 modules that failed to import for the same reason, and 2 in `test_universal_existing_validation` that passed on the re-run in the corrected environment. No production file was changed by the audit.
 
 Unresolved (DEFERRED, rules fixed in Section 0): B1, C1 to C4, D4, X1, and S1 on Hyperliquid common days. They need `data.binance.vision`, `fapi.binance.com`, `api.mexc.com`, `contract.mexc.com`, `api.hyperliquid.xyz` and the GitHub artifact storage host (`*.blob.core.windows.net`) to be allowed, or a run on your machine. Each runs once, unchanged.
 
