@@ -1,0 +1,220 @@
+{
+  "status": "PASS_ALL_SIX_EARLY_MINUTE_SUPPLEMENTS_EIGHT_ADAPTATIONS_INDEPENDENT_AUDIT",
+  "blocking_findings": [],
+  "supplements": [
+    {
+      "study": "Protective-batch5",
+      "supplement_exact_sha256": "0a34fed88c4ce8d258d8dde04b5022f7e5ccb17e007fb9d2127b6c3e4eb02756",
+      "raw_result_exact_sha256": "ee9f25f36cbb424ffbad2db8776ec0ba137329882fbafdc1a978587fce6da5f5",
+      "evaluator_exact_sha256": "ea1a2f5564a4261fe3c53e4d3f584b782913222f43228f0843c9d94917eab6d8",
+      "config_exact_sha256": "349c514acd5a73664a2e8011d52e0c62aa704ac5e99a5a7c2a11a641ce80c9b4",
+      "committed_index_exact_sha256": "1a345133bf191a2dfc62412af53f915312aec1cf39a684bc009deb590adb6689",
+      "original_screen_execution_git_commit": "68e5664065e419c95f829b972aea7dc62ac58e64",
+      "supplement_execution_git_commit": "2bf73fe8a53e5d6a3041c52735d8c3a3cc64cde4",
+      "native_selected_wheel_verified": true,
+      "cases": [
+        {
+          "candidate": "MAGenSpot8hNativeKernel",
+          "case": "40:opening_price_improvement",
+          "joint": 0,
+          "events": 354,
+          "completed": 353
+        },
+        {
+          "candidate": "MAGenSpot8hNativeKernel",
+          "case": "40:conservative_limit",
+          "joint": 0,
+          "events": 354,
+          "completed": 353
+        },
+        {
+          "candidate": "IchimokuSpot8hATR",
+          "case": "40:opening_price_improvement",
+          "joint": 0,
+          "events": 251,
+          "completed": 248
+        },
+        {
+          "candidate": "IchimokuSpot8hATR",
+          "case": "40:conservative_limit",
+          "joint": 0,
+          "events": 251,
+          "completed": 248
+        }
+      ]
+    },
+    {
+      "study": "Protective-batch6",
+      "supplement_exact_sha256": "1fcdd6c66f7eb921b2a587a697090397033fef09a990235c93aaccc2e5fc4641",
+      "raw_result_exact_sha256": "20ab56068daa4ea6aeda06f3aa65d37a7a70b7f9eac8104a965bcd3bbff00e96",
+      "evaluator_exact_sha256": "0d8d648a30b8963a9b3e125f89fc855dd45a6d47721de0f6ea4dce6d4a637d68",
+      "config_exact_sha256": "dd2e10ca67c061f048f526c17870bde9ef04e993b38289e98f62b5690c5812e0",
+      "committed_index_exact_sha256": "36b44ba967020d6d74bf683b8c094e385f3e97796f9a9cc7ff926c4c10bd777a",
+      "original_screen_execution_git_commit": "4885536c061c6ad1980db93091e4d03cf41e56ee",
+      "supplement_execution_git_commit": "2bf73fe8a53e5d6a3041c52735d8c3a3cc64cde4",
+      "native_selected_wheel_verified": false,
+      "cases": [
+        {
+          "candidate": "PSARReference8hSpot",
+          "case": "40:opening_price_improvement",
+          "joint": 0,
+          "events": 334,
+          "completed": 333
+        },
+        {
+          "candidate": "PSARReference8hSpot",
+          "case": "40:conservative_limit",
+          "joint": 0,
+          "events": 334,
+          "completed": 333
+        },
+        {
+          "candidate": "CMF21Spot8hMinuteCloseROI",
+          "case": "40:opening_price_improvement",
+          "joint": 0,
+          "events": 1777,
+          "completed": 1777
+        },
+        {
+          "candidate": "CMF21Spot8hMinuteCloseROI",
+          "case": "40:conservative_limit",
+          "joint": 0,
+          "events": 1777,
+          "completed": 1777
+        }
+      ]
+    },
+    {
+      "study": "Candle-batch7",
+      "supplement_exact_sha256": "619bd86f84d89a9d92eeb7fab25f4486264d345797882ca6c9ff891ec8f507f4",
+      "raw_result_exact_sha256": "170e6b3983282ac1ce76d09d7daca872525f95eaa9293a876ec03d164aa96586",
+      "evaluator_exact_sha256": "baeb8d8e5d0775e9a567c81d17bd3d264ce2122883b4125bd8255c45057903fa",
+      "config_exact_sha256": "017a174c1c2449c13531add7e04a8bdcaf47fbf0d786341e4cc2346f397f7956",
+      "committed_index_exact_sha256": "f11ee9cb4369b6afb5a91fb4c45ada85ba6949cc662614bd19f52fbf83a33e10",
+      "original_screen_execution_git_commit": "8e1657777584d26aefca98f60c9c94a1f516ff69",
+      "supplement_execution_git_commit": "2bf73fe8a53e5d6a3041c52735d8c3a3cc64cde4",
+      "native_selected_wheel_verified": false,
+      "cases": [
+        {
+          "candidate": "FullCandle8hDefaultIntent",
+          "case": "40:opening_price_improvement",
+          "joint": 0,
+          "events": 219,
+          "completed": 219
+        },
+        {
+          "candidate": "FullCandle8hDefaultIntent",
+          "case": "40:conservative_limit",
+          "joint": 0,
+          "events": 219,
+          "completed": 219
+        }
+      ]
+    },
+    {
+      "study": "Trend-batch8",
+      "supplement_exact_sha256": "5b001178074e51d625043598c0036815d752b47a6c6e8158aed1ec7e0e098824",
+      "raw_result_exact_sha256": "abf9d32769b2937dfe104de8c9d7c10291ca8921e90ec1c510811e81b6371d6d",
+      "evaluator_exact_sha256": "a63f46239dabbc91e86db48c7099d48f45d0eba719f3d904c08a561b7def0141",
+      "config_exact_sha256": "1218d6692de2147c89736e9c68bc47ebe78e95b2b40cdc3c43405037d3cc383e",
+      "committed_index_exact_sha256": "6b044291ebcce1b611d35f5f593fecbb21c90423d077674c9131760875336d94",
+      "original_screen_execution_git_commit": "bfd451e81cea6c2deab10c05a2e6b740ba419f22",
+      "supplement_execution_git_commit": "2bf73fe8a53e5d6a3041c52735d8c3a3cc64cde4",
+      "native_selected_wheel_verified": false,
+      "cases": [
+        {
+          "candidate": "SupertrendFlip8hDefaultIntent",
+          "case": "40:opening_price_improvement",
+          "joint": 0,
+          "events": 118,
+          "completed": 115
+        },
+        {
+          "candidate": "SupertrendFlip8hDefaultIntent",
+          "case": "40:conservative_limit",
+          "joint": 0,
+          "events": 118,
+          "completed": 115
+        }
+      ]
+    },
+    {
+      "study": "DualThrust-batch9",
+      "supplement_exact_sha256": "a9c806cc7bb5a4bc0ace9d64e3a075c4f2c8dd90215b96fcbcb134e7515ad9f1",
+      "raw_result_exact_sha256": "594bd5b8ac9ea1fbbf5957446b93e9e47db831e1d54851a2a24ccbae6134f29e",
+      "evaluator_exact_sha256": "2106de7e08d42106c970bfec1b2fc9c5222c0abd07e8845feae8af15a146b807",
+      "config_exact_sha256": "177d96cb32de595b1abe29c6a01cd71bb8848a67c704658a2d57c1f91d3ddeda",
+      "committed_index_exact_sha256": "e202240aa9053fb2cf76fefaf80b47b0b9256fce6d2851a9ab222061e85c0547",
+      "original_screen_execution_git_commit": "9cde8ddc1316acf801150554e59cddd71773c49b",
+      "supplement_execution_git_commit": "2bf73fe8a53e5d6a3041c52735d8c3a3cc64cde4",
+      "native_selected_wheel_verified": true,
+      "cases": [
+        {
+          "candidate": "DualThrust8hPinnedKernelSpot",
+          "case": "40:opening_price_improvement",
+          "joint": 0,
+          "events": 25,
+          "completed": 24
+        },
+        {
+          "candidate": "DualThrust8hPinnedKernelSpot",
+          "case": "40:conservative_limit",
+          "joint": 0,
+          "events": 25,
+          "completed": 24
+        }
+      ]
+    },
+    {
+      "study": "Vortex-batch10",
+      "supplement_exact_sha256": "adced7b019205813a7e20cd5b8d6f3dbad32e76ad0736d55305252c7695b36bd",
+      "raw_result_exact_sha256": "57a61c2d27fd7698915e173d11d6ef18517cbf3f05f63ee99ee818bd6b7874d2",
+      "evaluator_exact_sha256": "3cbd3849d441609e6fd5f0adae95adcf3a796d792d7e7eb40d94a291f548a490",
+      "config_exact_sha256": "0dbe1b5629393d71f5582de4fabc38c4772224ac887bd2fa05c985e9d9a9115f",
+      "committed_index_exact_sha256": "08a07a85e39867356aa7b8908d0379441012bf60c48814a3603dd986515e26f8",
+      "original_screen_execution_git_commit": "284e99ce78a33b9207d019281eb68242997c0f1d",
+      "supplement_execution_git_commit": "2bf73fe8a53e5d6a3041c52735d8c3a3cc64cde4",
+      "native_selected_wheel_verified": false,
+      "cases": [
+        {
+          "candidate": "VortexState8hCashSourceIntent",
+          "case": "40:opening_price_improvement",
+          "joint": 0,
+          "events": 510,
+          "completed": 509
+        },
+        {
+          "candidate": "VortexState8hCashSourceIntent",
+          "case": "40:conservative_limit",
+          "joint": 0,
+          "events": 510,
+          "completed": 509
+        }
+      ]
+    }
+  ],
+  "validations": {
+    "studies": 6,
+    "adaptations": 8,
+    "baseline_gap_joint_cases": 16,
+    "independent_first_peak_event_records": 7176,
+    "all_and_completed_populations": 32,
+    "conservative_unresolved_intraminute_records": 646,
+    "exact_result_source_config_index_runtime_method_population_bindings": true,
+    "raw_cache_receipts_rehashed": true,
+    "native5_and9_selected_wheel_verified": true,
+    "all_original_gaps_cartesian_histories_and_verdicts_preserved": true,
+    "medians_extremes_week_concentration_OLS_cost_aggregates_and_raw_clocks_verified": true
+  },
+  "limits": [
+    "Post-screen descriptive backfill only, no new strategy trials, gates, fills or promotion.",
+    "Protective intraminute first-peak uncertainty retains full-MAE-tozero where unresolved; no invented tick order or executable peak fills.",
+    "Reviewed primitive and population replay plus separate literal peak/statistic/time arithmetic; original strategy/control paths not independently rerun here.",
+    "Fixed10/30cost arithmetic is conditional baseline reference-return burden, not new funded simulations; endpointbeta fits descriptive sensitivities not causal alpha.",
+    "Every40gap and Cartesianjoint retained without favorable selection. Same event appearing in multiple gapcases is counted as repeated auditrecord, not newtrade."
+  ],
+  "new_strategy_trials": 0,
+  "repository_modified": false,
+  "viable": false,
+  "future_confirmation_started": false
+}
