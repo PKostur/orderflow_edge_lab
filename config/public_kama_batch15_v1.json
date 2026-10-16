@@ -1,0 +1,148 @@
+{
+  "study_id": "PSR21-PUBLIC-KAMA-STATE-BATCH15",
+  "version": 1,
+  "candidates": [
+    "KAMAState8hCashSourceIntent"
+  ],
+  "source_sha256": {
+    "KAMAState8hCashSourceIntent": "9082b7ecb026a90514356b13147725f98dd3f6263b5e7d4c7c29e2530063317e"
+  },
+  "source_manifest": "artifacts/minute_continuity_20261010/source_manifest.json",
+  "source_manifest_sha256": "3fcadef5dea9086425111b12b74f9df84f86b2d0932ca918871fc47b66f7179b",
+  "quality_csv": "artifacts/minute_continuity_20261010/daily_quality.csv",
+  "quality_csv_sha256": "69403a31a4f7f5c234ebbca98e32ba9b2919253f453515c76da964f93e10ed29",
+  "source_policy": "Longest shared complete-day segment chosen solely by previously audited quality; no repairs, imputation or source replacement.",
+  "data_start": "2023-04-01T00:00:00Z",
+  "data_end_exclusive": "2026-10-01T00:00:00Z",
+  "signal_minutes": 480,
+  "execution_minutes": 1,
+  "warmup_bars": 240,
+  "symbols": [
+    "ETHUSDT",
+    "SOLUSDT",
+    "LINKUSDT"
+  ],
+  "benchmark": "BTCUSDT",
+  "episode_initial_cash_per_symbol": 10000,
+  "max_hold_bars": null,
+  "baseline_round_trip_bps": 40,
+  "cost_cases_bps": [
+    20,
+    40,
+    60,
+    80
+  ],
+  "cost_policy": "Each side charges half nominal roundtrip bps on actual modeled notional, including fee plus assumed spread/slippage; reserve in fixed signal-close quantity.",
+  "gap_target_models": [
+    "conservative_limit",
+    "opening_price_improvement"
+  ],
+  "touch_policy": "No source protection; no invented stop/target/timeout. Both registered gap labels intentionally identical, onehistory. Shared no-pruning/failclosed caps retained.",
+  "max_symbol_histories": 64,
+  "max_joint_histories": 4096,
+  "entry_policy": "Three independent10000USDT sleeves. Decimal(str(cash/(signalclose*(1+sidecost)))) floor8; fixed quantity before nextminuteOPEN, all-or-reject without resize. HeldBUY countedignored before SELL; no sameboundaryreentry. No target/stop/timeout/trailing/short/borrow/pyramid/orders.",
+  "clock_policy": "Use completed8h features, action at next1mOPEN. Fixedwarmup240. No day/session reset or timeframe-derived parameter changes.",
+  "endpoint_policy": "Completed events use modeled exit reference; still-held events retain statusCENSORED_MTM and cutoff close mark with hypothetical liquidation burden, never a fictitious order or completed trade.",
+  "principal_return_estimand": "All admitted entry-to-exit-or-fixed-cutoff net reference returns; completed-only means separately descriptive. Per-unit return=(exit/entry)*(1-sidecost)/(1+sidecost)-1.",
+  "funded_btc_benchmark": "At each accepted alt entry allocate the same alt notional/preentry-cash fraction from a separate BTC cash account. Exact BTC open entry; open exit uses BTCopen, intraminute exit uses BTCminute low/high bounds; own costs and remaining inventory; cutoff uses known final close.",
+  "portfolio_policy": "Equal three10000USDT cash sleeves; source fullbalance illustrative intent with explicit fee-reserved fixedsignal-close quantity. FundedBTC owncash; gates unchanged.",
+  "seed": 20261025,
+  "bootstrap_replicates": 2000,
+  "bootstrap_calendar_block_weeks": 4,
+  "bootstrap_policy": "Moving contiguous4calendar-week blocks incl zero-event weeks; retain fixed alpha0.025,97.5% two-sided intervals from prior comparator. One newly registered cell; conservative fixed carryover, not two cells or global repeated-search inference.",
+  "placebo_replicates": 500,
+  "placebo_policy": "500 eligibleentryweek rawBUY-state randomizations preservingweekflagcount; same originalSELL-state exits, ownacceptedentries/quantities/cash/durations. No observed endogenous lengths reused.",
+  "lag_control_bars": 7,
+  "lag_policy": "Shift rawBUY-state flags7bars after zeroingprewarmup; same sourceSELL cash exit and causalengine.",
+  "gates": {
+    "min_completed_events": 100,
+    "min_entry_weeks": 52,
+    "min_all_admitted_net40_bps": 5,
+    "require_all_admitted_net80_positive": true,
+    "require_all_symbols_net40_positive": true,
+    "min_positive_year_fraction": 0.6666666666666666,
+    "max_portfolio_drawdown_pct": 30,
+    "require_leave_one_entry_week_out_net40_positive": true,
+    "require_net40_descriptive_lower_ci_positive": true,
+    "require_btc_excess40_descriptive_lower_ci_positive": true,
+    "max_placebo_at_least_observed_fraction": 0.05,
+    "require_no_history_overflow": true
+  },
+  "diagnostics": [
+    "completed/pending/unexecuted/overlap/invalid/cash rejection accounting",
+    "all-admission and completed-only returns/PF",
+    "gross MFE/MAE uncertainty",
+    "calendar entry weeks and4week bootstrap",
+    "fixed UTC sessions and overlap memberships",
+    "symbol/year/month/weekday/hour and causalBTC30bar state",
+    "leave-week and leave-symbol sensitivity",
+    "40/80 costs and20/60 cases",
+    "funded BTC wealth and same-exit reference bounds",
+    "full branch and gap-model sensitivity",
+    "500 randomized-entry controls and7bar lag control"
+  ],
+  "claim": "Spent historical hypothetical development only; SCREEN_SURVIVOR permits separate future preregistration, never viable/untouched/positive-edge/deployment claim.",
+  "future_confirmation": "User completion requires a separate immutable and adequately powered future-only protocol, calibrated costs/quotes/execution, controls and approval-bound paper reliability, frozen before observations start. No viable candidate until that confirmation passes.",
+  "bollinger_bands_excluded": true,
+  "frozen_lanes_modified": false,
+  "authorizes_orders": false,
+  "retuning_permitted": false,
+  "minimum_preexisting_trading_cells": 27,
+  "minimum_preexisting_signal_model_cells": 28,
+  "new_registered_trading_cells": 1,
+  "minimum_registered_trading_cells_after_freeze": 28,
+  "minimum_registered_signal_model_cells_after_freeze": 29,
+  "source_urls": {
+    "KAMAState8hCashSourceIntent": "https://github.com/Hulme-Labs/indicatorgo/blob/35bd387db11de8e544ad545c68f198677ce4c6b7/strategy/trend/kama_strategy.go"
+  },
+  "runtime": {
+    "python": "3.13.14",
+    "numpy": "2.2.4",
+    "pandas": "2.2.3",
+    "platform": "win32",
+    "precision": "float64 scalar operation order"
+  },
+  "dependency_hash_policy": "Python dependency bytes normalize CRLF to LF solely for cross-platform checkout; all data/audit fingerprints remain exact bytes",
+  "dependency_source_sha256": {
+    "src/orderflow_edge_lab/public_protective_batch5.py": "ea1a2f5564a4261fe3c53e4d3f584b782913222f43228f0843c9d94917eab6d8",
+    "src/orderflow_edge_lab/protective_minute.py": "32345cbe229e734129f063e161f77989c3e2d0facb604dade40b469de31f03bf",
+    "src/orderflow_edge_lab/public_strategy_completion.py": "2a5327410bb5b7acef4dc6959d95b8ea309df0f0cf9f6e692c946b7500a1719a"
+  },
+  "source_mechanics_audit_sha256": {
+    "artifacts/public_kama_batch15_registration_20261016/KAMA-source-native-math-prerequisite.json": "041335f6469b7f5d3fb7220973ff0b2cf1b0b15ab60bce076e92a67098bd01f9",
+    "artifacts/public_kama_batch15_registration_20261016/KAMA-source-native-readiness-review.json": "df0193404ed4e48eb18396d86564abcba74ca4f8d85ad21e93453e395d47bc96",
+    "artifacts/public_kama_batch15_registration_20261016/KAMA-feature-helper-synthetic-proof.json": "00e5964148d9bc4b7ace81cd6b6556ed1fd75a84374977ae8c6d4a7daa2e5101",
+    "artifacts/public_kama_batch15_registration_20261016/KAMA-feature-helper-synthetic-review.json": "4b0e644b24e9bc1ce97d2b4a4db5a9e09ec8128101d9d3d5be34134edb8ff99b",
+    "artifacts/public_kama_batch15_registration_20261016/KAMA-batch15-draft-mechanics-review.json": "675109e00b9023f6e4634b9d38140b353eb7c71f792ce4f69669b4f04856e0ad",
+    "artifacts/public_kama_batch15_registration_20261016/KAMA-mathematical-specification-draft.md": "7e906ab309bf72bad521d8b7dc5a013f39b165c73e0ab4dd34f2fb226bcea0ad",
+    "artifacts/public_kama_batch15_registration_20261016/kama-selected-source-inventory.json": "20805ef0daa31eac29f03a42bdf87e9d7608bd2cf810269ce9946f1a3a017a7a",
+    "artifacts/public_kama_batch15_registration_20261016/kama-synthetic-input.json": "8be6df91dc9fe87e52525c5c5ec237e59be1c087a0d4253497e5df21efa875e9",
+    "artifacts/public_kama_batch15_registration_20261016/kama-native-synthetic-output.json": "6da0d32865fcee3984905f18f1ddcdfa6c72f3a0f0006dfd4b4f9de48c9f3372",
+    "artifacts/public_kama_batch15_registration_20261016/kama-selected-native-source-receipt.json": "3e4e5c006313c56f0176b60057f8264846a69fd3967f0f2347ce282b75f8d40b"
+  },
+  "family_disclosure": "Adaptive price smoothing overlaps prior EMA/trend families; no incremental-information or orthogonality claim. Source prepared before Keltner outcomes; no outcome-based tuning.",
+  "native_runtime_status": "Pinned original Go source independently rebuilt offline, 4714 KAMA values/4924 native actions on21 synthetic fixtures. Adapter clips22 phantom short-input HOLD slots:4902 actual-bar actions. Mathematical implementation only, not native deployed bot or execution parity.",
+  "required_pre_outcome_review": {
+    "path": "artifacts/public_kama_batch15_registration_20261016/pre-outcome-review.json",
+    "required_status": "PASS_PRE_OUTCOME_INDEPENDENT_REVIEW_WITH_DECLARED_PARITY_LIMITS",
+    "must_bind": [
+      "evaluator_exact_sha256",
+      "canonical_config_sha256"
+    ],
+    "before_any_raw_market_load": true
+  },
+  "source_attribution": "Hulme-Labs/indicatorgo fork of cinar/indicator, pinned35bd387db11de8e544ad545c68f198677ce4c6b7, AGPLv3. No upstream Go, helpers, harness or build code copied into Git; independently authored mathematical specification/implementation, source URI/hash receipts and synthetic numerical data only.",
+  "kama": {
+    "er_period": 10,
+    "fast_period": 2,
+    "slow_period": 30,
+    "history_anchor": "2023-04-01T00:00:00Z initialize once; no rolling240/day/trade reset",
+    "seed": "previous KAMA is close9; first output at10",
+    "formula": "ER abs(Ci-Ci-10)/Neumaier rolling10 absolute changes; incoming before negative outgoing; circular physical-order nonfinite denominator recovery. Weight=(ER*(2/3-2/31)+2/31)^2. K=previous+weight*(current-previous), exact scalar float64 order.",
+    "actions": "BUY every close>K; SELL every close<K; HOLD equality/unordered. Preserve recursive NaN permanently, no zero-denominator or level repair. First min(10,n) HOLD; only n actual bar slots.",
+    "source_accounting": "Original educational OutcomeWithContext balance1, shares0, BUYflat fullbalance/currentclose and SELLheld fullshares, same-close no costs. Cash-intent only.",
+    "declared_cash_adapter": "Three independent10000USDT sleeves. Decimal(str(cash/(signalclose*(1+sidecost)))) floor8; fixed quantity before nextminuteOPEN, all-or-reject without resize. HeldBUY countedignored before SELL; no sameboundaryreentry. No target/stop/timeout/trailing/short/borrow/pyramid/orders.",
+    "clock": "Use completed8h features, action at next1mOPEN. Fixedwarmup240. No day/session reset or timeframe-derived parameter changes.",
+    "controls": "Entire BUY qualifier replaced; randomized entries may occur while KAMA invalid and SELLfalse; own funding/durations/censoring unchanged."
+  }
+}

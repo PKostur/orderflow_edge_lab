@@ -1,0 +1,37 @@
+{
+  "kind": "KAMA_SOURCE_NATIVE_SYNTHETIC_PREREQUISITE",
+  "status": "PASS_SYNTHETIC_SOURCE_RUNTIME_MATH_ONLY",
+  "source_repository": "Hulme-Labs/indicatorgo",
+  "source_parent": "cinar/indicator",
+  "source_commit": "35bd387db11de8e544ad545c68f198677ce4c6b7",
+  "go": "go1.26.1",
+  "fixtures": 21,
+  "native_kama_rows": 4714,
+  "native_actions": 4924,
+  "nan_rows_preserved": 780,
+  "exact_scalar_values_and_actions": true,
+  "prefix_checks": 11,
+  "future_mutation_checks": 3,
+  "market_data_loaded": false,
+  "new_registered_trials": 0,
+  "new_attempted_trials": 0,
+  "orders": false,
+  "semantics": [
+    "ER10, fast2,slow30. Seed previousKAMA withclose9; first adaptive outputatbar10. Directionabs(Ci-Ci-10), denominator10absolute1bar changes. Preserve original Neumaier compensated moving sum add/remove order; no ordinaryrolling sum replacement.",
+    "Source action is BUY everyclose>KAMA, SELL everyclose<KAMA, HOLD equality/unordered comparison, not a crossing trigger despite prose. Full recursive carry required, no day/240-window resets.",
+    "Source0/0 onflat10change window yieldsNaN. KAMA thenremainsNaN evenafterdenominatorrecovers; actioncomparisons bothfalse, HOLD. No zero-denominator or recursive-state repair permitted underunchangedmathclaim.",
+    "Native Shift prepends10HOLDs evenforinputshorterthan10; source action stream lengthmax(10,n). A future240warmupSpotadaptermustexplicitlyalign onlyavailableinputbars; no phantom newbars or nativefullstreamlengthparityclaim.",
+    "Native Go compiler/toolchain may change floating evaluation; this proof usesgo1.26.1 windows/amd64 and exact scalar Python fixture comparisons, not exchange execution parity."
+  ],
+  "limits": [
+    "Selected unchanged source plus transitive helper/asset/strategy files compiled locally; no packageinit functions, downloads or source repository fetch functions executed. No source market tests/CSV fixtures extracted.",
+    "Go build hadGOPROXY/GOSUMDB off andGOTOOLCHAIN local; source usesAGPLv3, originalnotice andfulllicense retained. Any distributed reuse needs source-license-compatible provenance; no license change inferred.",
+    "This is source readiness only, not registeredcandidate, approvedSpotfundingadapter, orthogonalforecast or profitablebot. Nativeorder/funding/sizer lifecycle notprovidedbythissignal class."
+  ],
+  "file_sha256": {
+    "indicatorgo_strategy_trend_kama_strategy.go": "9082b7ecb026a90514356b13147725f98dd3f6263b5e7d4c7c29e2530063317e",
+    "indicatorgo_trend_kama.go": "cf568d2461c449d8e78bb822258336675455db4e9def25a5f2aba354b0af438b",
+    "kama-synthetic-input.json": "8be6df91dc9fe87e52525c5c5ec237e59be1c087a0d4253497e5df21efa875e9",
+    "kama-native-synthetic-output.json": "6da0d32865fcee3984905f18f1ddcdfa6c72f3a0f0006dfd4b4f9de48c9f3372"
+  }
+}
