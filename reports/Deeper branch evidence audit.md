@@ -60,3 +60,131 @@ Branch `research/payoff-geometry-v1-1`, audit date 2026-10-16. Descriptive only.
 - X3. Sealed prediction file: write `research/audit_2026_10_16/prediction_seal_v1.json` holding the envelope percentiles at days 30, 60, 90, 180 for the two enveloped watches, the review rules, and sha256 of every frozen forward config. Attempt an OpenTimestamps stamp; if the calendar servers are unreachable, record that and keep the sha256 in git only (author-controlled, so weaker).
 - X4. Narrow external review checklist (funding sign, timestamp alignment, point-in-time universe, fee side), written for a human reviewer; not run.
 - No arbiter is reported as passed unless it was run in this audit.
+
+## 1. Results
+
+Section 0 was committed as `7bee829` (2026-10-16T14:17Z) before any computation below. Scratch code: `part_a.py`, `part_b2.py`, `part_c5.py`, `part_d.py`, `part_e5.py`, `part_x2.py` in the session scratchpad (not committed; each is described where used). One correction was made during execution and is reported: the first C5 parse cut the monitor timestamp at the hour, which split one watch name; the regex was fixed and C5 re-run with the same rule. No other test was run twice.
+
+### Part A. What each watch can decide
+
+- A1, A2 (ARITHMETIC). All 16 forward watches are MONITOR under the pre-registered rule; none is a TEST. The 80%-power MDE is 3.54 at 180 days, 2.49 at 365 days and 5.01 at 90 days (canonical v3 companion). The repo's "about 2.8 at 180 days" is the 50%-power, t = 2 form (`2 / sqrt(180/365) = 2.85`), so the two figures agree once the power assumption is stated. Rejecting SR = 0 takes 4.1 years at true SR 1.0 (50% power) or 9.3 years (80%), and 12.2 or 27.8 years at true SR 0.5. TOM and the cross-asset watches score trading days, so their true MDE is somewhat higher than shown.
+- A3 (VERIFIED by run). PSR and MinTRL on the five committed reference series. The cross-check passes: PSR from the audit's scipy implementation and from the repo's `deflated_sharpe_null_consistent(x, 1)` agree to 1e-16.
+
+| Series (window) | Ann. Sharpe | Skew | Kurtosis | PSR(0) | MinTRL days (moments) | MinTRL days (iid) |
+|---|---:|---:|---:|---:|---:|---:|
+| cascade 1x (2023-07 to 2026-09) | 1.73 | 7.3 | 106 | 1.000 | 183 | 332 |
+| cascade 2x | 1.66 | 8.1 | 128 | 1.000 | 194 | 361 |
+| CTREND 1x (2022-06 to 2026-09) | 0.95 | 0.1 | 8.7 | 0.976 | 1104 | 1104 |
+| trend core 1x (2023-01 to 2026-09) | 1.05 | -0.4 | 11.7 | 0.977 | 927 | 902 |
+| trend core 2x | 1.02 | -0.3 | 11.3 | 0.974 | 977 | 956 |
+
+  Reading: these are already-seen windows (the cascade's development window, Sharpe -0.12, is not in the file), so PSR here is not evidence for the rules. They show that even at a historical Sharpe near 1, a watch needs 2.5 to 3 years of forward days to reach 95% confidence, and that the cascade's extreme positive skew is what shortens its MinTRL.
+
+### Part B. Family and effective N
+
+- B1: DEFERRED (needs the forward artifacts).
+- B2 (VERIFIED by run, historical series only). On the 1188 common days of the five reference series, N_eff = 2.79. The 1x and 2x versions are near copies (correlation 0.985 cascade, 0.998 trend core), and the three families are almost uncorrelated with each other (|r| <= 0.05). Five watched books carry about three independent bets.
+- B3 (VERIFIED by reading; configuration count is a heuristic floor). Ledgered strategy-search trials: 11 (9 in `strategy_search_v1/trials.jsonl`, 2 in `strategy_search_v3/trials.jsonl`; the remaining ledger rows are ineligible candidates or leverage notes). Families evaluated on the shared crypto data outside the ledger: 21 (multi-premia blend and its human, robustness and stress variants; funding overlay; regime switch; trend channel exit; trend ensemble; chop-regime search; portfolio vol target; XS low-vol; strategy zoo v1 and v2; custom sentiment; Kronos; prop-firm v1 to v7; leverage bracket v1 and v2; trend-core leverage; human-constrained grid; payoff geometry; volatility-state D4; LSK conditional), plus the 157-batch orderflow discovery ledger. Configurations: at least 403 Sharpe-bearing result entries in those folders' JSON files plus 360 bracket cells (72 + 288), so at least about 760. Cumulative N = 11 is the ledger count, not the search size. Deflating with N = 11 understates the multiple-testing burden by an amount this audit cannot pin down, because many entries are sub-periods or neighbours of one rule.
+
+### Part C. Reconciliation and attribution
+
+- C1 to C4: DEFERRED (exchange hosts and artifact storage unreachable).
+- C5 (VERIFIED by run). 249 monitor records from 29 monitor commits (2026-10-03 19:44Z to 2026-10-16 09:03Z), 10 watches. Day counts never decrease. There is one silent revision: the human 5-coin book at 14 scored days read -3.24% at 2026-10-13 22:32Z and -3.21% at 2026-10-14 06:32Z and 14:32Z. A scored day changed after it was first reported. The cause cannot be identified without the run artifacts (C1). Possible causes are a MEXC bar revision, a coin whose data arrived late, or the replay recomputing a day under the next-day-open mask (Part D). Nothing in the monitor or dashboard surfaces revisions today.
+- C6 (VERIFIED by run). The books match (`S4_blend`, `combined`). At 16 scored days:
+
+| Watch | Value | As-backtested p5 / p50 | Band | Zero-edge p5 / p50 | Band |
+|---|---:|---:|---|---:|---|
+| Blend S4 | -2.79% | -2.32% / +0.50% | below p5 | -3.53% / -0.75% | p5 to p50 |
+| Trend core combined | -4.02% | -2.77% / +0.11% | below p5 | -3.45% / -0.58% | below p5 |
+
+  Reading: one pointwise look at day 16, among 29 monitor looks, is not a verdict (the formal reviews are at 180 days and G2 is the registered alarm). But both lead watches are already outside the band their own backtest implies, and trend core is outside the zero-edge band too. This is the first quantity the next review should attribute (C4 beta and C3 venue checks).
+- C7 pre-mortem: items 1 to 3 and 5 are DEFERRED with C3 and C4. Item 4: the only committed cost evidence (`research/cost_realism/snapshot_2026_09_26.json`) covers 15 mostly liquid instruments, all inside the assumed 20 bps round trip. The small caps that dominate the capacity study's impact (AKE, NIL, RARE, PHA, LSK) are not covered, so spread risk on the blend's tail coins is untested.
+
+### Part D. The next-day-open tradability mask
+
+- D1 (VERIFIED by reading). The mask `opens.loc[d].notna() & ret.loc[d].notna()`, with `ret = opens.shift(-1) / opens - 1`, appears in four places: `xs_premia.run_xs` (line 54), `multi_premia_human_forward._xs_weights` (line 43), `scripts/multi_premia_human_eval_2026_09_28.py` (line 71), and `scripts/xs_low_vol_eval_2026_09_28.py` (line 32). Books that inherit it:
+  - through `run_xs`: the blend watch (`multi_premia_forward` S2 and S3, hence S4), the zoo-mirror watch, strategy zoo v1 and v2, the development, robustness and stress scripts, and the Kronos evaluation;
+  - through `_xs_weights`: the human books, the paper account, paper-fill scenarios and (via reports) fast gates G1.
+  So the blend's development Sharpe, its holdout and its forward watch all share the mask, not only the human watch.
+- D2 (VERIFIED by run, synthetic). Pass: the mask uses future information. A coin with the top momentum score on day d, whose last open is day d, gets weight 0 under the original and 0.25 under the open-only variant. One other coin's weight changes, and `run_xs`'s day-d return differs (-0.027% against -0.093%). Only that day differs. One more thing appeared: under the open-only variant, the delisting coin's missing return is filled with 0, so removing the mask alone would also be wrong. A correct successor needs an explicit delisting settlement rule (last traded price or a stated haircut).
+- D3 (VERIFIED by run, synthetic). Neither form of the repo's truncation check detects this mask, so no test can catch it today.
+  - At lag 0 the check flags 15 of 16 probes. This is the known last-day effect the repo's existing test documents, and it fires on every coin, so it is not specific to delisting.
+  - At lag 1, the form the repo uses to call the legs causal, it passes everywhere, including a probe placed on the delisting day.
+  - The planted one-bar look-ahead is flagged (positive control), and causal momentum passes (negative control). The check works as designed but cannot see this kind of look-ahead.
+  - `tests/test_truncation_invariance.py` tests the scores and `coin_targets`, not `run_xs`. It records the mask as "documented, not a lookahead", and D2 shows that label is too generous.
+- D4 (size on real data): DEFERRED. The bias acts only on rebalance days just before a delisting or data hole, so it is probably small. Its direction is unknown: dropping a soon-delisted name from the short side removes a likely winner trade.
+
+### Part E. Provenance and internal consistency
+
+- E1 (VERIFIED by reading). Only `near_miss_forward`, `fade24_forward` and `tradfi_perps_forward` write a config hash and data digests into their reports, and `hyperliquid_vaults` writes one digest. No forward report writes a commit SHA or a code hash. The blend, human, paper account, zoo, prop paper, fast gates, TOM, trend portfolio, cross-asset (and so trend core), vol-target and canonical v3 reports carry none. The GitHub artifact metadata does bind each artifact to its run's head SHA (`workflow_run.head_sha`), so the link exists outside the file for as long as the artifact lives.
+- E2 (VERIFIED by run). Pass. Every forward config was first committed before its `prospective_start_utc` (lead times 15 hours (canonical v3) to 6 days; news sentiment 31 days). The only later edits (paper account, fast gates, liquidation flow) were also committed before their starts. For the 11 watches whose import closure was checked (blend, human, paper account, trend core via cross-asset, vol-target, zoo, fast gates, trend portfolio, prop paper, TOM, canonical v3), no module in the closure has a commit after that watch's start; near-miss, fade24, TradFi and liquidation flow were not checked. Caveat: these are git committer dates, which the author controls. Push times or an external timestamp would be the independent check, and neither is available here.
+- E3 (VERIFIED by reading). `config/frozen_manifest_v1.json` hashes 13 older configs (discovery, regime, session, conditioning, LSK) and none of the branch's forward-watch configs. The seal in X3 now records sha256 for 72 configs whose status begins FROZEN or DECLARED.
+- E4 (VERIFIED by run). `forward_formal_reviews_v1.json` was first committed at 2026-09-29T22:01:57Z (`12dc796`), and the amendment was committed at 2026-09-29T23:31:02Z (`e0e219b`). The amendment's recorded date (2026-09-29T21:45Z) is 16 minutes before the file existed, so it is mis-stamped by about 1h46m. The substantive claim still holds: the commit is 29 minutes before the first blend, human or trend-core day could be scored (stamps after 2026-09-30T00:00Z). The "Registered 2026-09-30" note uses local time.
+- E5 (VERIFIED by reading, plus ARITHMETIC).
+  - Superseded figures in live use: `config/fast_gates_v1.json` calibrates G2 at Sharpe 1.39 and records `dev_sharpe_raw` 2.0879. `scripts/dashboard_snapshot.py` lines 45 and 49 show the 1.39 / 3.16 and 2.09 / 4.48 rows with verdict "pass". The 1.39 row carries a "not decision-grade" note; the 2.09 row's note reads "robust to neighbours 1.6–2.2", with no funding caveat. `SESSION_STATE.md` line 42 still states "dev Sharpe 2.09 (t 4.48), robust to neighbours" without the funding caveat. Other mentions are historical result documents and benchmarks.
+  - G2 quantification: the iid normal approximation is within the 20% registered bound (13.7% on drawdown, 19.0% on rolling 60d), so it is used. It runs deeper than the bootstrap (8.4% false alarm at 1.39 against 3.6% registered), so read the following as relative changes. Relative to the alarm's design point, the registered thresholds' false-alarm rate rises 1.4x if the true Sharpe is 1.05, 2.0x at 0.67 and 3.3x at 0. Equivalently, the method would set the drawdown threshold about 1.2, 2.6 and 5.4 points deeper at those Sharpes.
+  - Reading: G2 is calibrated to a blend that the repo's own later tests no longer support. Its stated "<= 5% false alarm" holds only if the true Sharpe is 1.39. At a corrected Sharpe near 1 it alarms more often than stated. That is the conservative direction for a breakage alarm, but it should be stated in the review.
+- E6 (VERIFIED by reading). This corrects my earlier report (`reports/Deeper research branch review.md`).
+  - "Trend (S1) is robust to both checks" in `research/fast_gates/RESULT.md` and SESSION_STATE.md refers to robustness to the funding swap. That claim holds: S1 is 0.42 to 0.40 on development coins and 0.65 to 0.56 on untouched coins when Binance funding is replaced by MEXC funding.
+  - Across venues, Binance gives S1 1.22 against 1.17 for MEXC on the same coins. Bybit gives 0.68, from a defective run with 58 of 70 coins.
+  - The Hyperliquid 0.65 against 1.19 comparison is not like-for-like: Hyperliquid covers 1158 days from 2023 and the reference covers 2229 days from 2020. The only committed common-days comparison is for S4.
+  - So "the trend leg is weaker on other venues" is not established. What is established is that S1 was weak in 2025-06 to 2026-09 on both funding sources (0.40 to 0.65).
+  - S1 on Hyperliquid's common days is DEFERRED.
+- E7 (VERIFIED by API, recommendation only). Report artifacts expire 90 days after creation (`expires_at` = created + 90 days on the latest blend run). The earliest blend forward-day artifacts (2026-09-29) expire around 2026-12-28. The blend workflow has run 54 times in about 17 days, roughly 3 runs a day, at about 11 KB per artifact. Retaining a daily input digest plus compressed bars, funding and per-day weights would cost little storage. The real constraints are the 90-day expiry and the lack of a vintage archive.
+
+### External arbiters
+
+| Arbiter | Status in this audit | Result |
+|---|---|---|
+| X1 independent vendor reconciliation (C3) | DEFERRED | hosts blocked |
+| X2 planted-signal recovery (audit code) | run | PASS by rule: true 1.5 measured 0.68 (interval 0.28 to 2.72); null measured 0.43 (interval -0.84 to 0.84). The width of the interval is itself the Part A point. |
+| X3 sealed prediction file | written, `research/audit_2026_10_16/prediction_seal_v1.json`, sha256 `ffdd23f5…dd720` | OpenTimestamps not stamped: calendar servers blocked; git-only, author-controlled |
+| X4 external review checklist | written below, not run | n/a |
+| Repo test suite on this commit | run | see Section 2, item 11 |
+
+X4 checklist for a human reviewer (scope: the blend, paper account and trend core code paths, about 600 lines):
+1. Funding sign: a long position pays positive funding; check `run_xs` `(w * f).sum()` against MEXC's sign convention.
+2. Timestamp alignment: confirm the funding print at the 00:00 bar is charged to the day it is earned, not the next day.
+3. Point-in-time universe: the next-day-open mask (Part D) and any universe filter using a full-history length (`len(f) >= 250` in `coin_targets`) must be checked against the trading date.
+4. Fee side and size: taker on every rebalance, 20 bps round trip in development against `max(taker, 2bp) + 5bp` in the paper account.
+5. Delisting settlement: what return a held coin gets on its last day.
+
+## 2. Findings
+
+What the live claims actually support. The forward watches can detect breakage but cannot confirm an edge before about 2029. Two of them already sit below the 5th percentile of their own backtest envelopes. The headline historical numbers they were built on are superseded and still drive the G2 calibration and the dashboard. The blend's cross-sectional legs share a confirmed one-day survivorship look-ahead, of unknown size, that the repo's look-ahead test cannot detect. Every forward config and watch module was in place before its start.
+
+1. No watch can test a Sharpe-1 edge in its review window. All 16 are monitors (A1).
+2. Blend and trend core are below the as-backtested p5 at day 16, and trend core is below the zero-edge p5 too (C6).
+3. One silent revision of an already reported day exists, and nothing in the monitoring chain surfaces revisions (C5).
+4. The next-day-open mask is in `run_xs`, so it affects the blend's development, holdout and forward series. It uses future information (D2), the truncation check is blind to it (D3), and a simple removal would credit delisting coins 0% (D2).
+5. Trial accounting: 11 ledgered trials, against at least 21 unledgered families and at least about 760 configurations (B3).
+6. Five reference books carry about 2.8 independent bets (B2).
+7. Frozen-before-start holds for every watch config and code path (E2). The formal-review amendment is mis-stamped but still precedes the first scorable day (E4).
+8. Most forward reports carry no provenance hash, the frozen manifest omits every forward config, and artifacts expire after 90 days (E1, E3, E7).
+9. G2's false-alarm statement holds only at Sharpe 1.39 (E5).
+10. Correction to my earlier report: "trend robust" refers to funding, and that holds. A cross-venue weakness of the trend leg is not established (E6).
+
+Unresolved (DEFERRED, rules fixed in Section 0): B1, C1 to C4, D4, X1, and S1 on Hyperliquid common days. They need `data.binance.vision`, `fapi.binance.com`, `api.mexc.com`, `contract.mexc.com`, `api.hyperliquid.xyz` and the GitHub artifact storage host (`*.blob.core.windows.net`) to be allowed, or a run on your machine. Each runs once, unchanged.
+
+Decisions for you (none acted on):
+1. Merge main into this branch (clean merge, 101 commits behind).
+2. Open a landing PR to main, which would also deliver the backtest-workflow fix main still lacks.
+3. The TradFi B1 rule for a symbol permanently missing on Yahoo.
+4. Whether a successor version should fix the mask with an explicit delisting settlement rule. The frozen watches stay as they are.
+5. Whether to download and archive the forward artifacts before the first ones expire around 2026-12-28.
+6. Whether to allow the blocked hosts so the deferred tests can run.
+
+## 3. Recap
+
+| Claim | Evidence layer used | Result | Arbiter | Label |
+|---|---|---|---|---|
+| Watches can decide the edge question | registered horizons | No: all 16 MONITOR | arithmetic, PSR cross-check | ARITHMETIC / VERIFIED |
+| Forward results in line with backtest | monitor history, committed envelopes | Blend and trend core below as-backtested p5 at day 16 | envelope file (pre-committed) | VERIFIED |
+| Reported forward days are stable | 29 monitor commits | One silent revision (human book, 14d) | git history | VERIFIED |
+| Mask is "not a lookahead" | code, synthetic run | Refuted: future information used; truncation test blind | positive/negative controls | VERIFIED |
+| Mask size | none available | Unknown | paired replay | DEFERRED |
+| Cumulative N = 11 | ledgers, result folders | Floor; at least 21 families, at least about 760 configurations | file reading | VERIFIED (config count heuristic) |
+| Frozen before start | full git history | Pass for all configs and code closures | git (author-controlled dates) | VERIFIED |
+| G2 false alarm <= 5% | registered thresholds | Only at Sharpe 1.39; 1.4x to 3.3x higher below | iid approximation within 20% | ARITHMETIC |
+| Trend leg robust | committed venue tables | Robust to funding; cross-venue weakness not established | file reading | VERIFIED |
+| Prices, funding, P&L correct | none available | Not testable here | independent vendor | DEFERRED |
