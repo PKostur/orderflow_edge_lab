@@ -1,0 +1,61 @@
+name: Audit Deferred Tests v1
+
+# Runs the DEFERRED tests of reports/Deeper branch evidence audit.md (Section 0.8) once, on a hosted runner that can
+# reach the exchanges and the artifact store. Triggered by a push to audit/run-deferred-v1. Single look: refuses to
+# run if the results branch already exists. Descriptive only; writes results to audit/deferred-results-2026-10-16.
+
+on:
+  push:
+    branches: [audit/run-deferred-v1]
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: audit-deferred-v1
+  cancel-in-progress: false
+
+jobs:
+  deferred:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v5
+      - name: Single-look guard
+        run: |
+          if git ls-remote --exit-code --heads origin audit/deferred-results-2026-10-16 >/dev/null; then
+            echo "results branch exists: the deferred tests already ran once"; exit 1
+          fi
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e ".[research]" -c requirements/constraints.txt
+      - name: Tests of the code under audit
+        run: python -m unittest tests.test_xs_premia_pit tests.test_xs_premia tests.test_archive_forward_artifacts -v
+      - name: Run the deferred tests (single look)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TEMP: ${{ runner.temp }}
+        run: python scripts/audit_deferred_2026_10_16.py --output audit_out/deferred_results_v1.json
+      - name: Publish results branch
+        if: always()
+        run: |
+          set -euo pipefail
+          test -f audit_out/deferred_results_v1.json || { echo "no results file"; exit 1; }
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git worktree add --detach res_wt
+          cd res_wt
+          git checkout --orphan audit/deferred-results-2026-10-16
+          git rm -rf --quiet .
+          cp ../audit_out/deferred_results_v1.json .
+          printf 'Deferred tests of the 2026-10-16 evidence audit, run once by audit-deferred-v1.yml at %s (source %s).\n' \
+            "$(date -u +%Y-%m-%dT%H:%MZ)" "$GITHUB_SHA" > README.md
+          git add -A
+          git commit -q -m "audit: deferred test results (single run)"
+          git push origin HEAD:audit/deferred-results-2026-10-16
+      - name: Summary
+        if: always()
+        run: python -c "import json;r=json.load(open('audit_out/deferred_results_v1.json'));print(json.dumps(r,default=str)[:60000])" || true

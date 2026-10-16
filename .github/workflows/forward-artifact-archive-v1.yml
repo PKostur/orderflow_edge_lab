@@ -6,6 +6,8 @@ name: Forward Artifact Archive v1
 
 on:
   workflow_dispatch:
+  push:
+    branches: [ops/run-forward-artifact-archive]   # one-off runs before this workflow exists on main
 
 permissions:
   actions: read
