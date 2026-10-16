@@ -1,0 +1,55 @@
+name: Forward Artifact Archive v1
+
+# Copies forward-watch report artifacts into the orphan branch archive/forward-artifacts-v1 before
+# GitHub's 90-day artifact expiry, with a manifest of artifact id, run id, head SHA and file hashes.
+# Read-only towards the watches. Dispatched daily by branch-forward-scheduler (from main) or by hand.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: forward-artifact-archive
+  cancel-in-progress: false
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Test the archiver
+        run: python -m unittest tests.test_archive_forward_artifacts -v
+      - name: Prepare archive branch
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin archive/forward-artifacts-v1 >/dev/null; then
+            git fetch --depth 1 origin archive/forward-artifacts-v1
+            git worktree add archive_wt FETCH_HEAD
+            git -C archive_wt checkout -B archive/forward-artifacts-v1
+          else
+            git worktree add --detach archive_wt
+            git -C archive_wt checkout --orphan archive/forward-artifacts-v1
+            git -C archive_wt rm -rf --quiet .
+            printf '# Forward artifact archive v1\n\nWritten by forward-artifact-archive-v1.yml; see manifest.jsonl.\n' > archive_wt/README.md
+          fi
+      - name: Archive new artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/archive_forward_artifacts.py --archive-root archive_wt/archive
+      - name: Commit and push
+        run: |
+          set -euo pipefail
+          cd archive_wt
+          git add -A
+          if git diff --cached --quiet; then echo "nothing new"; exit 0; fi
+          git commit -q -m "archive: forward artifacts $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push origin HEAD:archive/forward-artifacts-v1
