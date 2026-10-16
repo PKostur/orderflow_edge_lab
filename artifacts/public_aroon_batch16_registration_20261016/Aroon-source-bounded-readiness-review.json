@@ -1,0 +1,58 @@
+{
+  "kind": "AROON_PINNED_SOURCE_BOUNDED_READINESS_INDEPENDENT_REVIEW",
+  "status": "PASS_BOUNDED_NATIVE_EQUATIONS_READINESS_NOT_REGISTERED",
+  "blocking_findings": [],
+  "market_data_loaded": false,
+  "market_outcomes_inspected": false,
+  "source_commit": "35bd387db11de8e544ad545c68f198677ce4c6b7",
+  "selected_source_receipt_sha256": "fce26c2f1edc1ab75ca8ccc2be2c4fa3f93bdf6e8f3cf5749cf1890cc9dbafd6",
+  "source_hashes": {
+    "trend/aroon.go": "aaefbb4d8448456dc968bd503a941d3f477a56da3b627d3e00e94227cb93a3f8",
+    "strategy/trend/aroon_strategy.go": "4b07abe1db13df7a934993de038b65b265958cbff152bbca664e86017275fbde",
+    "trend/moving_max.go": "0b921e68f8c3e6c44678a066c47e5e31919b298f05d94265b1a37e901c285dd9",
+    "trend/moving_min.go": "b05a1fbec1f911dade97ed3483647031267b7f2f4cfdb2e391d8364adc2dd5ae",
+    "helper/window.go": "0dea43357e2b508b34cc076a5fe6808ea660f64851191452e2b3e541bc23f238",
+    "helper/max_since.go": "5b23cf1534aefc160e37293ca0dc5d0d3588959fcccb59e93df9d2b50dc5135d",
+    "helper/min_since.go": "4569ba3f4b7ecbbf327d50513a5e9634463935c01dc6d4313d358162238304dc",
+    "helper/slices_reverse.go": "59d8fcf1f21ad0a500173ed4d895ba26f8e04ca372be037e2886517ae629cc37",
+    "helper/bst.go": "9ad95141eff594a1e0c385b8b38c3089e82bda6ac3413fc5fc227003221e4ba3",
+    "helper/round_digit.go": "253f3017fb7d83b2216ce2e6ee185f8de9108aeae348e86097ca4283d364a525",
+    "strategy/outcome.go": "ece2d29dd724c8657c77865ea3444e8dc1b97aff52c05de3adfc10cda3fc10f7",
+    "LICENSE.md": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef"
+  },
+  "wrapper_exact_sha256": "c6b847bc5dd542042dff7ac8bb03e8e6ea800d9439311fbf333417facd04fe08",
+  "independent_binary_sha256": "551e05b0d4c9c81948aea8121aca874bcad741099acd0c691ecd6686b2830a99",
+  "independent_input_sha256": "a5a3194c71e3cb06bdf43c067e12263e2d908a9321a3fa77da4ced4a755e0759",
+  "independent_output_sha256": "812b4ec2e3e7ccd7a79c0330edcafb4bf4a0bacb0094284140906b03d3b071c2",
+  "runtime": "go version go1.26.1 windows/amd64",
+  "validations": {
+    "selected_original_files_rehashed": 99,
+    "synthetic_fixtures": 20,
+    "native_indicator_pairs_exact": 1061,
+    "native_actions_exact": 1541,
+    "prefix_checks": 11,
+    "future_mutation_checks": 3,
+    "scalar_source_equations_exact": true,
+    "declared_conventional_recent_raw_high_age_differences": 535,
+    "flat_source_up_down_100_to4_then4_confirmed": true,
+    "source_n25_oneoutput_and24holds_confirmed": true
+  },
+  "mechanics": [
+    "Aroon default25 consumes already emitted rolling25 raw high maxima and low minima. Moving extrema first emit at raw index24. The subsequent Window emits partial prefixes immediately, so no additional24-bar delay.",
+    "MaxSince/MinSince reverse scan the last up-to25 moving-extrema values, count through the first extreme plateau and stop on the next less-extreme value; age=count-1 reaches the oldest end of that contiguous extreme plateau. It is not simply most recent raw-high/low argmax/argmin.",
+    "BST is a multiset: duplicate values retained and one outgoing occurrence removed. For strictly positive finite Spot prices the zero shift padding is not an actual observation.",
+    "Sequential -age+25, divide25, multiply100, Go nearest-away rounding0digits. Source BUY when roundedUp>roundedDown, SELL reverse, HOLD equality; states not crossovers.",
+    "Strategy prepends24HOLD even for shorter inputs. A future available-bar interface must clip phantom padding explicitly; raw n25 has1indicator pair plus24HOLD.",
+    "Original educational Outcome balance1/shares0 supplies fullcash same-close costfree intent. Any proposed8hSpot cash model must explicitly specify future nextopen fees/reserved sizing/funding/lifecycle; no new engine approved."
+  ],
+  "limits": [
+    "Source/native math only, no original Outcome/PnL/market CSV or exchange orders executed. Prefix/future checks establish this finite synthetic domain, not universal/native deployedbot parity.",
+    "Source differs mechanically from a declared conventional most-recent-raw-extreme Aroon; no profitability or generalized strategy failure inference. Do not silently replace it with textbook Aroon or repair flat behavior.",
+    "AGPL original Go/helpers/harness/build remain outside Git. Future repo code must be independently authored from explicit equations; URI/hash and numeric receipts only, under uploaded no-GPL-copy constraint.",
+    "No registration, trial, candidate approval or orthogonality claim. Other excluded families and frozen protocols untouched."
+  ],
+  "new_registered_trials": 0,
+  "new_attempted_trials": 0,
+  "repository_modified": false,
+  "candidate_production_approved": false
+}

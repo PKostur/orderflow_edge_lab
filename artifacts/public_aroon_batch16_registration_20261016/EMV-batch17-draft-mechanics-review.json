@@ -1,0 +1,58 @@
+{
+  "kind": "PSR23_EMV_BATCH17_DRAFT_INDEPENDENT_MECHANICS_REVIEW",
+  "status": "PASS_DRAFT_MECHANICS_NOT_REGISTERED_OR_PRE_OUTCOME_APPROVED",
+  "blocking_findings": [],
+  "market_data_loaded": false,
+  "market_outcomes_inspected": false,
+  "draft_evaluator_exact_sha256": "45e42ebe071c4b185f907f4fa9a4d26bb36ab4539e6c329475eec42a8dcfa7dd",
+  "draft_config_exact_sha256": "54657cf683fb658d093b6852cce61f3436899826b4fca905fe8b70e4a3bcdb0a",
+  "draft_test_exact_sha256": "80964d2b7c983a8b15393ea251048891d88069899ba969a050e3e24c0dc38004",
+  "mathematical_helper_review_sha256": "a41dd06ff51a8818a6d7d86cc429f0cfe2b1a3d3c08d0fbb08d511e7114c555a",
+  "validations": {
+    "synthetic_tests_independently_reexecuted": 17,
+    "actual_native_emv_values_exact": 2507,
+    "available_bar_actions_exact": 2799,
+    "fixtures": 23,
+    "all_feature_prefix_checks": 11,
+    "all_feature_future_mutation_checks": 3,
+    "feature_arrays_exact_prior_independently_reviewed_helper": true,
+    "simulate_ast_only_exit_key_and_reason_changed_from_frozen_FI": true,
+    "shared_controls_diagnostics_guards_ast_unchanged": true,
+    "independent_fullcash_synthetic_paths": 80,
+    "event_checks": 96,
+    "nav_marks_checked": 1440,
+    "randomized_flat_exit_entries": 61,
+    "counts": {
+      "raw_entry_flags": 277,
+      "cash_rejected": 84,
+      "unexecuted_final_entry": 26,
+      "accepted_entries": 96,
+      "held_entry_ignored": 71
+    },
+    "maximum_nav_residual": 0.0,
+    "whole_random_entry_can_enter_flat_source_hold_and_remain_censored": true
+  },
+  "mechanics": [
+    "Source previous-bar box ratio, midpoint/raw distance, Neumaier incoming/removal physical-ring recovery, SMA14 firstoutput raw14 and repeatedsign states match approvedhelper/native fixtures; no current-box/crossing/zero repair.",
+    "Educational fullcash intent uses fee-reserved signalclose Decimalfloor8 fixedquantity nextopenall-or-reject; cash/BTC/NAV/events/excursions/censor/pending/no-reentry independentlychecked.",
+    "Whole randomized/laggedBUY replacement retains sourceSELL evenwheninvalid/zero; flat sourceHOLD canadmitcontrolentry andstaycensored. Costs,alpha.025,500controls/gates preserved.",
+    "AGPL source/helper/harness/build stay outsideGit; independent equations implementation withURI/hash/numeric evidence only."
+  ],
+  "limits": [
+    "Unregistered syntheticdraft only, no marketload/trial/actualcommittedsource approval.",
+    "Conditional futureconfigpreexisting29trading30signal assumes Aroon16 actuallyattempted andpublished afterallrequiredgates. Currentactualattempts remain28trading29signal;futurefreeze30/31isnotcurrentfact.",
+    "Any Aroonsurvivor wouldrequire itsownfrozen untouchedfutureprotocol; this readinessaudit neitherbypasses that nor authorizesanotherfreeze.",
+    "FrozenFIcashengine reused;80synthetic paths verifyaccounting notnativeexchange execution/allinputs/platforms. Exactfinitevalues/NaNclasses on23fixtures notNaNpayloadbitparity.",
+    "Actualnextfreeze requiresverifiedparentrelease,newbranch,fulltests/lint,immutableconfig/evaluator andcommitted independentsource review beforefirstload. No viability/orthogonality claim."
+  ],
+  "minimum_current_attempted_trading_cells": 28,
+  "minimum_current_attempted_signal_model_cells": 29,
+  "minimum_conditional_preexisting_trading_cells": 29,
+  "minimum_conditional_preexisting_signal_model_cells": 30,
+  "minimum_registered_trading_cells_after_future_freeze": 30,
+  "minimum_registered_signal_model_cells_after_future_freeze": 31,
+  "new_registered_trials": 0,
+  "new_attempted_trials": 0,
+  "repository_modified": false,
+  "candidate_production_approved": false
+}

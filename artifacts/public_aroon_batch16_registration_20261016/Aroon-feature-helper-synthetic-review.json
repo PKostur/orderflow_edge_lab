@@ -1,0 +1,42 @@
+{
+  "kind": "AROON_EQUATIONS_HELPER_INDEPENDENT_SYNTHETIC_REVIEW",
+  "status": "PASS_SYNTHETIC_FEATURE_HELPER_WITH_DECLARED_SOURCE_LIMITS",
+  "blocking_findings": [],
+  "market_data_loaded": false,
+  "market_outcomes_inspected": false,
+  "helper_exact_sha256": "068624eef7760ebdaf235dd4387c24f7e7f88ed20db6c938790f0955d44e80c0",
+  "mathematical_spec_sha256": "6fe049017161fb2aa20482a1454eddae1c0269c661707b51e313a907d8c1aeaa",
+  "root_synthetic_proof_sha256": "a3db094df3c926e297ef2a47698b0895503a1632571d1b709ce3cb171b306477",
+  "source_bounded_readiness_review_sha256": "4a5db9ef5ea66c84a7a37d6151d00b1ef3dcb317462b999bceeed970f40cae94",
+  "native_input_sha256": "a5a3194c71e3cb06bdf43c067e12263e2d908a9321a3fa77da4ced4a755e0759",
+  "native_output_sha256": "812b4ec2e3e7ccd7a79c0330edcafb4bf4a0bacb0094284140906b03d3b071c2",
+  "validations": {
+    "fixtures": 20,
+    "native_indicator_pairs_exact": 1061,
+    "available_bar_actions_exact": 1493,
+    "native_padded_action_count": 1541,
+    "unattached_short_input_holds_excluded": 48,
+    "all_feature_prefix_checks": 11,
+    "all_feature_future_mutation_checks": 3,
+    "positive_finite_ordered_highlow_refusals": 7,
+    "empty_output_arrays_defined": true,
+    "startup_only_min24_available_holds": true,
+    "source_flat_plateau_decay_preserved": true
+  },
+  "mechanics": [
+    "Rolling25rawhighmax/lowmin beginindex24; trailingup-to25 emittedextrema window begins immediately withoutsecond24delay. Reverse scan retains newer values until extreme and oldest contiguous plateau boundary.",
+    "Exact scalar -1*age+25, divide25, multiply100, nonnegative nearest-away floor(value+.5). Repeated roundedUp/Down states, equalityHOLD; no textbookmostrecentrawextreme correction or crossing trigger.",
+    "Positivefinitehigh/lowandhigh>=low domain explicitly guarded, empty n\u00d76 input returns emptyarrays. Close/open are copied; any future executionloader must retain separate completeOHLCVdomain contract.",
+    "Only availablebars are emitted; shortnative24padding clipped. Original educational fullcash intent requires separate declaredfee-reserved signalclosefloor8 nextopenall-or-reject adapter, no unit1 assumption."
+  ],
+  "limits": [
+    "Synthetic mathematical helper only; no candidateconfig/engine/preregistration/markettrial approval or production parity.",
+    "Exact20fixture finitevalues/states do not establish allinput/crossplatform equality. Prior native99sourcefile proof is preserved rather than native rebuild repeated for this helper.",
+    "AGPL Go/helpers/harness/build remain outsideGit. Mathematical independently authored futureimplementation only, with URI/hash and numeric receipts; no copiedGPLfamilysource authorized.",
+    "No marketoutcomes/full sourceOutcome executed. Trend/rangeextreme overlap remains; no orthogonality or viability claim."
+  ],
+  "new_registered_trials": 0,
+  "new_attempted_trials": 0,
+  "repository_modified": false,
+  "candidate_production_approved": false
+}
