@@ -1,0 +1,29 @@
+{
+  "study_id": "PSR22-PUBLIC-AROON-STATE-BATCH16",
+  "prior_ledger": "artifacts/public_kama_batch15_20261016/trial_ledger.json",
+  "minimum_preexisting_trading_cells": 28,
+  "minimum_preexisting_signal_model_cells": 29,
+  "new_registered_cells": [
+    "AroonState8hCashSourceIntent"
+  ],
+  "new_attempted_cells": 1,
+  "new_exhaustively_evaluated_cells": 1,
+  "minimum_attempted_trading_cells": 29,
+  "minimum_attempted_signal_model_cells": 30,
+  "decisions": [
+    {
+      "candidate": "AroonState8hCashSourceIntent",
+      "decision": "REJECTED_AS_ADAPTED",
+      "failed_gates": [
+        "excess_descriptive_ci",
+        "net_descriptive_ci",
+        "portfolio_drawdown"
+      ]
+    }
+  ],
+  "all_prior_source_and_forecast_history_retained": true,
+  "global_search_adjusted_inference": false,
+  "controls_are_related_versions_not_independent_trials": true,
+  "viable_candidates": [],
+  "future_confirmation_started": false
+}
