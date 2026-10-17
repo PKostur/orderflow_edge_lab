@@ -1,0 +1,104 @@
+{
+  "kind": "BATCH18_FINAL_UNREGISTERED_DRAFT_INDEPENDENT_MECHANICS_REVIEW",
+  "status": "PASS_DRAFT_MECHANICS_NOT_REGISTERED_OR_PRE_OUTCOME_APPROVED",
+  "blocking_findings": [],
+  "draft_evaluator_exact_sha256": "9cbb9f232fc8772045d502c0cdd171cca39fb8fc998a61bd2cc4376d1c0637cb",
+  "draft_config_exact_sha256": "1f8fce100cdf014d863e5921c089ffff334bef2f9835ffcb0e4fe7a3f92cb31f",
+  "draft_test_exact_sha256": "0f7f95868cc5ff2cb1720f3e4be7afa2cb9e06f40c791f009f4289c7c60ef9fc",
+  "final_test_proof_bindings": [
+    {
+      "path": "Batch18-full-prototype-synthetic-proof.json",
+      "sha256": "0cec7a8efa4e7d80b031b1b4128471563ed2420a81365cb8c635bf6a5d6894b7",
+      "independently_rerun_here": false,
+      "counts": {
+        "controls_each": 500,
+        "bootstrap_each_case": 2000
+      }
+    },
+    {
+      "path": "Batch18-ci-smoke-synthetic-proof.json",
+      "sha256": "a5510e0319ecac0efa9555652e5f8985f1e6ccf24c2e0aaf598c3243426e9664",
+      "independently_rerun_here": false,
+      "counts": {
+        "controls_each": 3,
+        "bootstrap_each_case": 64
+      }
+    }
+  ],
+  "independent_wallet_evidence_sha256": "b244d51618a1b1de4fb5963c08803879364af1d90f24370ddcfee1228e589f61",
+  "source_readiness_review_sha256": "9fff664b5a4c4323d5961241b8e00b72b5363cece56ee7ede8702483cfaec588",
+  "validations": {
+    "final_tests_independently_reexecuted": 15,
+    "reviewer_test_controls_each": 3,
+    "reviewer_test_bootstrap_each_case": 64,
+    "retained_full500_each_and2000_per_case_proof_exact_final_bound": true,
+    "retained_native_fixtures": 18,
+    "native_fill_bars_quantities": 74,
+    "maximum_native_price_vs_open_residual": 1.4210854715202004e-14,
+    "native_price_absolute_tolerance": 1e-10,
+    "independent_synthetic_wallet_paths": 80,
+    "independent_events": 332,
+    "independent_nav_marks": 5040,
+    "maximum_independent_cash_btc_nav_residual": 0.0,
+    "independent_admission_counts": {
+      "raw_entry_flags": 1136,
+      "created_entry_orders": 451,
+      "accepted_entries": 332,
+      "held_entry_ignored": 685,
+      "created_exit_orders": 289,
+      "filled_exits": 267,
+      "unexecuted_final_exit": 22,
+      "upstream_flat_short_refused": 182,
+      "submission_margin": 101,
+      "execution_margin": 11,
+      "unexecuted_final_entry": 7
+    },
+    "independent_final_intents": {
+      "EXIT": 22,
+      "NONE": 51,
+      "ENTRY": 7
+    },
+    "unmocked_source_positive_btc_negative_roundoff_entire_case_abort": true,
+    "negative_nan_infinite_btc_debit_abort_no_clamp": true,
+    "source_fixed_units_two_stage_funding_Eplus6_and_UpDown_exit_checked": true,
+    "whole_control_replacement_owncash_quantity_duration_checked": true,
+    "all_shared_control_evaluator_gate_AST_unchanged": true,
+    "features_prefix_future_threshold_source_scope_native_receipts_exact": true,
+    "own_design_record_consistent_with_final_config_source_and_bounded_proofs": true
+  },
+  "resolved_prior_prerequisites": [
+    {
+      "id": "PAIRED_BTC_LIFECYCLE",
+      "resolution": "Full reference source/BTC owncash and per-side costs, source-rejection no BTC debit, actual source notional/pre-cash fraction, matched OPEN exits, cutoff hypothetical liquidation and NAV conservation independently checked on80newpaths/332events; no upstreamnativeBTC claim."
+    },
+    {
+      "id": "COMPLETE_EXECUTION_FREEZE",
+      "resolution": "Draft fixes nextOPEN atomic fullfills, two-stage source checks, one common side burden on reference notionals and explicitly excludes partial/delayed/asynchronous/exchange execution. Any negative/nonfinite BTCdebit aborts the complete evaluation including controls; no benchmark-onlyskip/clamp/prune. Bound before market data."
+    }
+  ],
+  "mechanics": [
+    "Quickstart two strict declines across three closes with sourceunit1; actualentryE records endogenousexit decisioncloseE+5, fillOPENE+6. UpDown40 subtract-then-divide thresholdentry<-.01/longexit>=+.01, sourceunit10, unusedstrength staysunused/upstreamflatshortsrefused.",
+    "Admission firstclose239/OPEN240 with flat no-pending prior wallet. Created-close then OPEN literal debit checks; no resize/funding rescue. Source marketfillreference and sourcecash arithmetic are explicit mathematical adapters, not wholepublisher/nativeexchange parity.",
+    "BTC owns separate cash and quantity; all entry/exit fees, no source-profit substitution. Matched source events/endpointreturns/MFE-MAE/pending/censor and eight-hour liquidation-value NAV conserve the reference wallets.",
+    "No sameOPEN liquidation/reentry. FinalENTRY/EXIT requests are administrativelyunfilled; held inventory censored separately, no invented fill/timeout.",
+    "Source/BTC cash uses separatelyrounded literal operations; exact/signedzero accepted; anynegative source meansMargin, anynegative/nonfiniteBTCdebit aborts entirecase. This stricter policy is explicitly declared compared with oldshared tolerance and has mocked/unmocked tests.",
+    "Shared diagnostics/gates/caps/costcases/random500/lag7/bootstrap2000alpha.025 stayfixed; randomizedcontrols ownentryclock/funding/unitquantity/duration. All files remain outsideGit and main/checked_spec/pre-review barriers refuse market use."
+  ],
+  "limits": [
+    "Unregistered mathematical prototype only. Immutable config/evaluator/source/audit binding and independent review committed before firstdata remain mandatory after PR172 verified baseline. This is not actualpre-outcome approval.",
+    "Reviewer independently reran15CI-smoke tests and80walletpaths. Full500controls\u00d72candidates/2000bootstrap proof is exactfinal-bound retained producer evidence, not independently rerun here; no market outcomes involved.",
+    "Native18fixture/74fill bars+quantities match; average executionprice can differ fromOPENby1.42e-14, within explicit1e-10 fixture tolerance. No publisherdefaultpreloaded/cloudQuantfork or exchangeparity claim.",
+    "Originaldefaultpreload startupfailure is retained. Explicitstreaming/cashorigin/longcash refusal are adaptations; they do not repair or relabel unchangednativebot.",
+    "Atomicreference scope excludes partialfills, asynchronous cancellation/delays/races and externalgenericRejected events. Declaring these unmodeled doesnot prove native exceptionalorder recovery or live reliability.",
+    "GPLsource/framework/ownnativeharness remainoutsideGit; future repository code independentlyauthored mathematical implementation and numeric/provenance receipts only.",
+    "30trading31signal currentlyattempted; conditionalfuturefreeze32/33 only. No newtrial, viability, futureconfirmation start or protocol weakening."
+  ],
+  "market_data_loaded": false,
+  "market_outcomes_inspected": false,
+  "market_pnl_evaluated": false,
+  "new_registered_trials": 0,
+  "new_attempted_trials": 0,
+  "repository_modified": false,
+  "candidate_production_approved": false,
+  "own_design_record_exact_sha256": "5d46a319f9dfb69bee9251161fa45cb848a3f0983a333cc5f92c188031303132"
+}

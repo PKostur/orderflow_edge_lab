@@ -1,0 +1,120 @@
+{
+  "kind": "SYNTHETIC_ONLY_PINNED_BACKTRADER_SOURCE_CLASS_AUDIT",
+  "market_data_loaded": false,
+  "pnl_evaluated": false,
+  "native_framework": "Backtrader1.9.78.123",
+  "wheel_sha256": "9a07a516b0de9155539a35c56e9404d8711dd7020b3d37b30495e83e1b9d5dfd",
+  "framework_scope": "Original pinned quickstart class and pinned cloudQuant source classes executed in standard pinned Backtrader wheel; cloudQuant fork-native runtime not executed. AST class extraction excludes all upstream market loading and test outcome assertions. Logging suppressed; core methods unchanged.",
+  "fixture": "64 synthetic8hOHLCV rows; only final close/open/high/low differ between runs; prior63 rows identical; baseline final100,mutation final1; default preloading/runonce.",
+  "results": {
+    "quickstart06": {
+      "source_sha256": "47b82d6ae2e3940bff80450e8c17a7074204c1f7ff70f7e56a25fe0e988e0d4c",
+      "first_prefix_state_difference": {
+        "baseline": {
+          "bar": 0,
+          "position": 0,
+          "pending": true
+        },
+        "mutated": {
+          "bar": 0,
+          "position": 0,
+          "pending": false
+        }
+      },
+      "baseline_first_fills": [
+        {
+          "bar": 1,
+          "side": "BUY",
+          "size": 1
+        },
+        {
+          "bar": 7,
+          "side": "SELL",
+          "size": -1
+        }
+      ],
+      "mutated_first_fills": [
+        {
+          "bar": 3,
+          "side": "BUY",
+          "size": 1
+        },
+        {
+          "bar": 9,
+          "side": "SELL",
+          "size": -1
+        }
+      ]
+    },
+    "TD": {
+      "source_sha256": "a38ab281291b200216229a6efbe86c88d0b2e179ecba962e09ca33f3776a9b87",
+      "first_prefix_state_difference": {
+        "baseline": {
+          "bar": 4,
+          "position": 0,
+          "pending": false,
+          "buyTrig": false,
+          "sellTrig": false,
+          "tdsl": 0,
+          "tdss": 0,
+          "buyCountdown": 0,
+          "sellCountdown": 0
+        },
+        "mutated": {
+          "bar": 4,
+          "position": 0,
+          "pending": false,
+          "buyTrig": true,
+          "sellTrig": false,
+          "tdsl": 1,
+          "tdss": 0,
+          "buyCountdown": 0,
+          "sellCountdown": 0
+        }
+      },
+      "baseline_first_fills": [],
+      "mutated_first_fills": []
+    },
+    "UpDown": {
+      "source_sha256": "35b643f11fb5aba0041fae5ae19ab3a8bf312865ef9be126ab8cfb2c181b45e4",
+      "first_prefix_state_difference": {
+        "baseline": {
+          "bar": 39,
+          "position": 0,
+          "pending": true,
+          "returns": -0.76
+        },
+        "mutated": {
+          "bar": 39,
+          "position": 0,
+          "pending": true,
+          "returns": 23.0
+        }
+      },
+      "baseline_first_fills": [
+        {
+          "bar": 40,
+          "side": "BUY",
+          "size": 10
+        },
+        {
+          "bar": 41,
+          "side": "SELL",
+          "size": -10
+        },
+        {
+          "bar": 42,
+          "side": "SELL",
+          "size": -10
+        }
+      ],
+      "mutated_first_fills": [
+        {
+          "bar": 40,
+          "side": "SELL",
+          "size": -10
+        }
+      ]
+    }
+  }
+}

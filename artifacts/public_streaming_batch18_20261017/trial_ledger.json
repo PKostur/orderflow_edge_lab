@@ -1,0 +1,47 @@
+{
+  "study_id": "PSR24-PUBLIC-STREAMING-REVERSAL-BATCH18",
+  "prior_ledger": "artifacts/public_emv_batch17_20261016/trial_ledger.json",
+  "minimum_preexisting_trading_cells": 30,
+  "minimum_preexisting_signal_model_cells": 31,
+  "new_registered_cells": [
+    "Quickstart06TwoDown8hOneUnitLongCash",
+    "UpDown40Return8hTenUnitLongCash"
+  ],
+  "new_attempted_cells": 2,
+  "new_exhaustively_evaluated_cells": 2,
+  "minimum_attempted_trading_cells": 32,
+  "minimum_attempted_signal_model_cells": 33,
+  "decisions": [
+    {
+      "candidate": "Quickstart06TwoDown8hOneUnitLongCash",
+      "decision": "REJECTED_AS_ADAPTED",
+      "failed_gates": [
+        "all_symbols_positive",
+        "excess_descriptive_ci",
+        "leave_week_positive",
+        "net40_mean",
+        "net80_positive",
+        "net_descriptive_ci",
+        "positive_year_fraction"
+      ]
+    },
+    {
+      "candidate": "UpDown40Return8hTenUnitLongCash",
+      "decision": "REJECTED_AS_ADAPTED",
+      "failed_gates": [
+        "all_symbols_positive",
+        "excess_descriptive_ci",
+        "leave_week_positive",
+        "net40_mean",
+        "net80_positive",
+        "net_descriptive_ci",
+        "positive_year_fraction"
+      ]
+    }
+  ],
+  "all_prior_source_and_forecast_history_retained": true,
+  "global_search_adjusted_inference": false,
+  "controls_are_related_versions_not_independent_trials": true,
+  "viable_candidates": [],
+  "future_confirmation_started": false
+}

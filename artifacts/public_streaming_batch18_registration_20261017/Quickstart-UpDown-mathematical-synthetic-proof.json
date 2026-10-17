@@ -1,0 +1,142 @@
+{
+  "kind": "SYNTHETIC_ONLY_MATHEMATICAL_READINESS_DRAFT_PROOF",
+  "market_data_loaded": false,
+  "market_pnl_evaluated": false,
+  "registered": false,
+  "new_trading_cells": 0,
+  "runtime": {
+    "python": "3.13.14 (tags/v3.13.14:fd17997, Jun 10 2026, 13:03:48) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "framework": "Backtrader1.9.78.123",
+    "wheel_sha256": "9a07a516b0de9155539a35c56e9404d8711dd7020b3d37b30495e83e1b9d5dfd",
+    "preload": false,
+    "runonce": false,
+    "checksubmit": true,
+    "cash": 10000,
+    "commission_side": 0.002
+  },
+  "source_sha256": {
+    "quickstart": "47b82d6ae2e3940bff80450e8c17a7074204c1f7ff70f7e56a25fe0e988e0d4c",
+    "updown": "35b643f11fb5aba0041fae5ae19ab3a8bf312865ef9be126ab8cfb2c181b45e4"
+  },
+  "checks": {
+    "quick_scalar_array_exact": true,
+    "updown_scalar_array_exact": true,
+    "zero_denominator_returns_zero": true,
+    "feature_prefix_40": true,
+    "feature_prefix_239": true,
+    "feature_prefix_319": true,
+    "feature_futuretail_invariance": true,
+    "feature_no_early_history": true,
+    "native_updown_numeric_valid_history_exact": true,
+    "quickstart_funded_fills_match": true,
+    "quickstart_funded_first_order_stage": true,
+    "quickstart_native_pending_at_signal_close": true,
+    "quickstart_native_flat_before_admission": true,
+    "quickstart_created_unfunded_gapdown_fills_match": true,
+    "quickstart_created_unfunded_gapdown_first_order_stage": true,
+    "quickstart_execution_unfunded_gapup_fills_match": true,
+    "quickstart_execution_unfunded_gapup_first_order_stage": true,
+    "quickstart_origin239_first_fill": true,
+    "quickstart_origin239_Eplus6": true,
+    "quickstart_origin240_first_fill": true,
+    "quickstart_origin240_Eplus6": true,
+    "quickstart_native_futuretail_state": true,
+    "quickstart_native_prefix_state": true,
+    "quickstart_oscillating_native_math_fills_match": true,
+    "quickstart_math_futuretail_state": true,
+    "quickstart_math_prefix_state": true,
+    "quickstart_native_long_only": true,
+    "quickstart_final_signal_unfilled_native": true,
+    "quickstart_final_signal_admin_cancel_math": true,
+    "quickstart_final_open_position_censored_native": true,
+    "quickstart_final_exit_no_fabricated_fill_math": true,
+    "updown_funded_fills_match": true,
+    "updown_funded_first_order_stage": true,
+    "updown_native_pending_at_signal_close": true,
+    "updown_native_flat_before_admission": true,
+    "updown_created_unfunded_gapdown_fills_match": true,
+    "updown_created_unfunded_gapdown_first_order_stage": true,
+    "updown_execution_unfunded_gapup_fills_match": true,
+    "updown_execution_unfunded_gapup_first_order_stage": true,
+    "updown_origin239_first_fill": true,
+    "updown_origin240_first_fill": true,
+    "updown_native_futuretail_state": true,
+    "updown_native_prefix_state": true,
+    "updown_oscillating_native_math_fills_match": true,
+    "updown_math_futuretail_state": true,
+    "updown_math_prefix_state": true,
+    "updown_native_long_only": true,
+    "updown_final_signal_unfilled_native": true,
+    "updown_final_signal_admin_cancel_math": true,
+    "updown_final_open_position_censored_native": true,
+    "updown_final_exit_no_fabricated_fill_math": true,
+    "threshold_-0.01": true,
+    "threshold_-0.0100001": true,
+    "threshold_0.01": true,
+    "threshold_0.0099999": true,
+    "actual_return_minus1percent_no_entry": true,
+    "actual_return_plus1percent_exit": true,
+    "updown_no_flat_short": true,
+    "math_pending_lock": true,
+    "math_cancel_clears_only_pending": true,
+    "math_later_source_signal_reentry": true,
+    "btc_own_fraction_no_source_profit_substitution": true
+  },
+  "all_selected_checks_pass": true,
+  "failed_checks": [],
+  "scope": "Unmodified pinned source class bodies; explicit streaming,warmup cash-origin and refusal of upstream flat shorts wrappers. Standard framework only,not full publisher harness/default-preloaded or exchange parity.",
+  "limits": [
+    "Partial/asynchronous delayed/canceled broker orders not proved natively; mathematical pending/cancel fixtures only.",
+    "No exchange precision/minimum/liquidity or additional slippage convention proved.",
+    "Feature helper has NaN before valid40bar-lag domain; source native first computation at39is outside comparison domain.",
+    "Final native pending remains unfilled; mathematical administrative cancellation and right censoring are explicitly declared.",
+    "BTC fixture checks own-equity fraction sizing only,not full paired benchmark lifecycle.",
+    "TD remains unadmitted. No source selection from EMV17 outcomes."
+  ],
+  "receipts": [
+    {
+      "path": "work\\quickstart_updown_readiness_proof.py",
+      "sha256": "72252bbd73143650ef001370882d2746bbd160de61fb9e10c1483b1333b86d83"
+    },
+    {
+      "path": "work\\quickstart_updown_mathematical_draft.py",
+      "sha256": "c71abc35003eb3011ea1f33c2f79e8883eb5d3a87bcb30616f16b89b61124729"
+    },
+    {
+      "path": "work\\Quickstart-UpDown-selected-synthetic-fixtures.json",
+      "sha256": "6f26da594180c33c00bc94b7eeefbf700f42328cef79e3e9e8d8adfb912aa2f8"
+    },
+    {
+      "path": "outputs\\Quickstart-UpDown-selected-native-output.json",
+      "sha256": "287d6ffa2ceec4fe1e08a741988c4cf81815ee92f240edb19ac80ae1105a828d"
+    },
+    {
+      "path": "outputs\\Quickstart-UpDown-mathematical-readiness-draft.md",
+      "sha256": "62452c120cf3bb0af6a83ce556f6fd07ac8479597b70fb94b7fd4bb1dccfcdf5"
+    },
+    {
+      "path": "outputs\\Quickstart-UpDown-funding-and-origin-clarification.md",
+      "sha256": "c0523546d7231a2c3dac2e64efba29e677a57272b28a10e4d0676b84e4632053"
+    }
+  ],
+  "broker_dependency": {
+    "wheel_member": "backtrader/brokers/bbroker.py",
+    "sha256": "0fd397a72814f0de31fcd318b4a1da2030412ae9bea426c0d5dcdd001a52965e",
+    "method_lines": {
+      "check_submitted": [
+        558,
+        583
+      ],
+      "_execute": [
+        687,
+        845
+      ],
+      "next": [
+        1176,
+        1233
+      ]
+    },
+    "mechanics": "check_submitted pseudo-executes at order.created.price using cloned position/cash; execution then uses actual opening price. Insufficient cash at either stage can produceMargin. checksubmit defaultsTrue in this wheel."
+  }
+}

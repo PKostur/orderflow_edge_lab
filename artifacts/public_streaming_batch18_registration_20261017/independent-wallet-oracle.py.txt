@@ -1,0 +1,55 @@
+from pathlib import Path
+import json,sys,importlib.util,numpy as np,math,hashlib
+from collections import Counter
+b=Path.cwd();sys.path.insert(0,str(b/'work/orderflow_edge_lab/src'));source=b/'work/draft_public_streaming_batch18.py';config=b/'work/draft_public_streaming_batch18_config.json';sp=importlib.util.spec_from_file_location('batch18_independent_wallet',source);m=importlib.util.module_from_spec(sp);sp.loader.exec_module(m);spec=json.loads(config.read_text());rng=np.random.default_rng(1824)
+def minute_data(op,cl):
+ n=len(op);a=np.empty((n*480,6));a[:,0]=1577836800+np.arange(n*480)*60;a[:,1]=np.repeat(op,480);a[:,4]=a[:,1];a[479::480,4]=cl;a[:,2]=np.maximum(a[:,1],a[:,4])*1.002;a[:,3]=np.minimum(a[:,1],a[:,4])*.998;a[:,5]=1.;return a
+paths=events=marks=0;residual=0.;counts=Counter();pending=Counter();marginfails=0
+for trial in range(80):
+ kind=trial%2;candidate=m.CANDIDATES[kind];units=1. if not kind else 10.;base=(100.,9500.,10500.,5000.)[(trial//2)%4]/units;n=260;close=np.full(n,base);close[235:]=base*np.exp(rng.normal(0,.07,n-235));opening=close.copy();opening[240:]=close[239:-1]*np.exp(rng.normal(0,.03,n-240));data=minute_data(opening,close);bp=30000*np.exp(np.arange(n)*.0002+.01*np.sin(np.arange(n)/3));btc=minute_data(bp,bp*1.001);c=m.shared.bars8h(data);f=m.source_features(c,candidate,spec);flags=rng.random(n)<.65;side=(20,40,60,80)[trial%4]/20000;cost=int(side*20000)
+ cash=bcash=10000.;p=None;ct=Counter();orderevents=[];expected_events=[];nav=[cash];bnav=[bcash];failed=False
+ def debit(wallet,q,price):
+  notional=q*price;return (wallet-notional)-notional*side
+ def credit(wallet,q,price):
+  notional=q*price;return (wallet+notional)-notional*side
+ def request(i):
+  if flags[i]:
+   ct['raw_entry_flags']+=1
+   if p is not None:ct['held_entry_ignored']+=1
+  if p is None and kind and f['exit_long'][i]:ct['upstream_flat_short_refused']+=1
+  leave=p is not None and (i>=p[0]+5 if not kind else bool(f['exit_long'][i]))
+  intent='ENTRY' if p is None and flags[i] else 'EXIT' if leave else None
+  if intent:ct['created_'+intent.lower()+'_orders']+=1
+  return intent
+ for bar in range(240,n):
+  i=bar-1;j=bar*480;intent=request(i);price=float(data[j,1]);bprice=float(btc[j,1])
+  if intent=='ENTRY':
+   if debit(cash,units,float(c[i,2]))<0:status='SUBMISSION_MARGIN';ct['submission_margin']+=1
+   elif debit(cash,units,price)<0:status='EXECUTION_MARGIN';ct['execution_margin']+=1
+   else:
+    fraction=units*price/cash;bq=bcash*fraction/bprice;left=debit(bcash,bq,bprice)
+    if not math.isfinite(left) or left<0:failed=True;break
+    before=cash;cash=debit(cash,units,price);bcash=left;p=(bar,units,bq,price,bprice,before);ct['accepted_entries']+=1;status='FILLED_ENTRY'
+   orderevents.append((i,bar,intent,status))
+  elif intent=='EXIT':
+   entrybar,q,bq,ep,bep,before=p;cash=credit(cash,q,price);bcash=credit(bcash,bq,bprice);expected_events.append((entrybar*480,j,ep,price,q,bep,False,cash-before));p=None;ct['filled_exits']+=1;orderevents.append((i,bar,intent,'FILLED_EXIT'))
+  end=(bar+1)*480-1;nav.append(cash if p is None else credit(cash,p[1],float(data[end,4])));bnav.append(bcash if p is None else credit(bcash,p[2],float(btc[end,4])))
+ if failed:
+  try:m.simulate(data,btc,c,f,candidate,spec,cost,spec['gap_target_models'][trial%2],entry_flags=flags)
+  except ValueError as e:assert 'BTC reference margin' in str(e);marginfails+=1;continue
+  raise AssertionError('literal numeric failclosed missing')
+ final=request(n-1)
+ if final:ct['unexecuted_final_'+final.lower()]+=1
+ if p:
+  eb,q,bq,ep,bep,before=p;endpoint=float(data[-1,4]);expected_events.append((eb*480,len(data)-1,ep,endpoint,q,bep,True,credit(cash,q,endpoint)-before))
+ got=m.simulate(data,btc,c,f,candidate,spec,cost,spec['gap_target_models'][trial%2],entry_flags=flags)[0];assert got['counts']==dict(ct);assert got['cash']==cash and got['btc_cash_lower']==bcash==got['btc_cash_upper'];assert got['pending_source_exit']==(final=='EXIT');assert bool(got['pending_order'])==bool(final)
+ actualorders=[(o['created_bar'],o['fill_bar'] if o['status'].startswith('FILLED') else o['due_bar'],o['intent'],o['status']) for o in got['orders'] if o['status']!='FINAL_QUEUED_UNFILLED'];assert actualorders==orderevents
+ for a,z in [(nav,got['nav']),(bnav,got['btc_nav_lower']),(bnav,got['btc_nav_upper'])]:
+  err=max(abs(x-y) for x,y in zip(a,z));assert err<1e-8;residual=max(residual,err);marks+=len(a)
+ for x,e in zip(expected_events,got['events'],strict=True):
+  a,z,ep,xp,q,bep,censor,profit=x;assert(e['entry_index'],e['endpoint_minute_index'],e['quantity'],e['endpoint_reference_price'])==(a,z,q,xp);assert (e['status']=='CENSORED_MTM')==censor;assert abs(profit-e['net_cash_profit_or_cutoff_mark'])<1e-8;stop=z+1 if censor else z;peak=max(ep,xp,data[z,1],float(data[a:stop,2].max()) if stop>a else ep);low=min(ep,xp,data[z,1],float(data[a:stop,3].min()) if stop>a else ep);assert e['mfe_bps_bounds']==[10000*(peak/ep-1)]*2 and e['mae_bps_bounds']==[10000*(low/ep-1)]*2;assert abs(e['net_bps']-10000*(xp/ep*(1-side)/(1+side)-1))<1e-9;assert e['source_created_bar']==a//480-1 and e['source_entry_bar']==a//480;assert e['source_signal_close']==c[a//480-1,2];assert e['source_reference_known_at']==m.shared.stamp(int(c[a//480-1,0]//1000)+28800)
+  if not kind and not censor:assert z//480==a//480+6
+  events+=1
+ assert abs(got['nav'][-1]-10000.-sum(e['net_cash_profit_or_cutoff_mark'] for e in got['events']))<1e-8;counts.update(ct);pending[final or 'NONE']+=1;paths+=1
+r=dict(source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),config_sha256=hashlib.sha256(config.read_bytes()).hexdigest(),independent_synthetic_paths=paths,literal_numeric_failclosed_cases=marginfails,independent_events=events,nav_marks=marks,max_nav_residual=residual,counts=dict(counts),final_intents=dict(pending),market_data_loaded=False)
+p=b/'work/batch18_independent_wallet_evidence.json';p.write_text(json.dumps(r,indent=2)+'\n');print(json.dumps(r))
