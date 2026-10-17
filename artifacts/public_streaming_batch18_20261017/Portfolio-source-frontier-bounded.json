@@ -1,0 +1,113 @@
+{
+  "kind": "BOUNDED_PRIMARY_SOURCE_PORTFOLIO_READINESS_FRONTIER",
+  "inspection_utc_date": "2026-10-17",
+  "registered": false,
+  "new_trading_cells": 0,
+  "new_market_attempts": 0,
+  "market_datasets_or_caches_loaded": false,
+  "batch18_outcomes_loaded": false,
+  "backtests_or_native_strategy_runs": false,
+  "external_orders": false,
+  "repository_edits": false,
+  "scope": "Two explicit portfolio stacks from the publisher's introductory example. Other discovered constructor calls were not made additional candidates. Source and dependency definitions inspected statically; no backtest/data-fetch call executed.",
+  "primary_browsing_queries": [
+    "site:github.com/pmorissette/bt SelectMomentum RunMonthly",
+    "site:github.com/pmorissette/bt WeighInvVol RunMonthly"
+  ],
+  "extraction_safeguard": "Notebook inspection selected only exact bt.Strategy,bt.get and bt.Backtest Call nodes. No assignment statements,output objects,performance-summary data or result/plot calls were selected. Library inspection selected exact named classes/methods; only the two exact DateOffset constants were resolved as constructor metadata. Previous quarantined leads and the earlier extraction incident remain unchanged.",
+  "publisher": {
+    "repository": "pmorissette/bt",
+    "commit": "819cd9d3ba612bc29563201417d0bf5c6cc7dda1",
+    "license": "MIT",
+    "copyright": "2015 Philippe Morissette",
+    "license_url": "https://raw.githubusercontent.com/pmorissette/bt/819cd9d3ba612bc29563201417d0bf5c6cc7dda1/LICENSE",
+    "license_sha256": "8711471566d722d55eca3f09196f342b2ee2960616e68127ec2a17b39ff99949",
+    "license_utf8_bytes": 1086,
+    "provenance": "Framework publisher's own algorithms and introductory example; publisher/author attribution is source evidence,not proof of original economic invention or performance."
+  },
+  "source_receipts": [
+    {"path":"docs/source/intro.ipynb","sha256":"b8409ee3109cecc51fcec6de886fcc97b6b77dec7a1ef3e5408892a1f69785d0","utf8_bytes":345591,"url":"https://raw.githubusercontent.com/pmorissette/bt/819cd9d3ba612bc29563201417d0bf5c6cc7dda1/docs/source/intro.ipynb"},
+    {"path":"bt/algos.py","sha256":"9d43ec6fa0823252375a3d5c7a5e9aa8172d9e8e2e1c28e0005f2cddd120fc80","utf8_bytes":102253,"url":"https://raw.githubusercontent.com/pmorissette/bt/819cd9d3ba612bc29563201417d0bf5c6cc7dda1/bt/algos.py"},
+    {"path":"bt/core.py","sha256":"365b790a9c2830dc2a401a4e8e261b422ef880d962039579626d34b3d49191de","utf8_bytes":91941,"url":"https://raw.githubusercontent.com/pmorissette/bt/819cd9d3ba612bc29563201417d0bf5c6cc7dda1/bt/core.py"},
+    {"path":"bt/backtest.py","sha256":"c68f3fff22a9a336ca92922c9d367ea27baccb9ee35c97e1500342171c7ed498","utf8_bytes":37287,"url":"https://raw.githubusercontent.com/pmorissette/bt/819cd9d3ba612bc29563201417d0bf5c6cc7dda1/bt/backtest.py"},
+    {"path":"pyproject.toml","sha256":"c683e9f28bbe3ae66ccad629a5ecdf525139e76cb24233cb3e0603511e6c4adf","utf8_bytes":5485,"url":"https://raw.githubusercontent.com/pmorissette/bt/819cd9d3ba612bc29563201417d0bf5c6cc7dda1/pyproject.toml"}
+  ],
+  "shared_example_context": {
+    "universe_locator": "intro.ipynb code cell3,exact bt.get Call",
+    "published_universe": ["spy","agg"],
+    "data_start": "2010-01-01",
+    "data_source": "bt.get requests external equity/bond price history; the request was not executed",
+    "timeframe": "Example price rows are daily-style external price history; no8h-native claim or complete OHLCV execution model",
+    "Backtest_calls": "intro code cell7 bt.Backtest(s,data); cell14 bt.Backtest(s2,data),no keyword execution/capital overrides",
+    "native_Backtest_defaults": {"initial_capital":1000000.0,"commissions":null,"integer_positions":true,"progress_bar":false,"volume":null,"volatility":null},
+    "risk": "No protective stop,target,leverage overlay or holding timeout specified by either stack"
+  },
+  "stacks": [
+    {
+      "label": "Monthly equal-weight scheduled portfolio",
+      "locator": "docs/source/intro.ipynb code cell5,exact bt.Strategy Call,name s1",
+      "constructor_stack": ["RunMonthly()","SelectAll()","WeighEqually()","Rebalance()"],
+      "selection": "Select all current universe columns with available positive current prices; include_no_data=false,include_negative=false",
+      "weights": "Each selected asset receives1/N; no selections gives empty targets",
+      "rebalance": "On monthly schedule,close holdings absent from targets and move selected holdings toward weights using a saved pre-rebalance portfolio-value base",
+      "hypothesis": "Scheduled allocation/rebalancing,not a directional alpha signal. Useful as a portfolio baseline/control,not evidence of a newly profitable bot.",
+      "family_overlap": "Different allocation and shared-cash mechanics from single-symbol fresh adaptations. Shares market exposure and calendar timing with existing research; no statistical independence claim.",
+      "status": "EXPLICIT_PUBLISHED_PORTFOLIO_CONTROL_MECHANICS_NOT_ADMITTED_OR_REGISTERED"
+    },
+    {
+      "label": "Weekly inverse-volatility portfolio",
+      "locator": "docs/source/intro.ipynb code cell14,exact bt.Strategy Call,name s2",
+      "constructor_stack": ["RunWeekly()","SelectAll()","WeighInvVol()","Rebalance()"],
+      "defaults": {"lookback":"pd.DateOffset(months=3)","lag":"pd.DateOffset(days=0)","volatility_ddof":1},
+      "selection": "Same positive-current-price SelectAll policy; there is no momentum rank,trend filter or return-sign entry condition",
+      "weight_calculation": "For selected assets,slice prices from current timestamp minus3calendar months through current timestamp,lag0; compute price returns and per-column sample standard deviation; normalize inverse volatility. Infinite reciprocals become missing; drop missing weights.",
+      "special_cases": ["No selected assets gives empty weights","One selected asset gets100%without estimating volatility","All invalid/zero-volatility reciprocals can produce empty weights and therefore deallocation","No maximum asset weight,covariance/risk-parity solver or total-volatility target is added"],
+      "history_boundary": "Source does not demand a full3calendar-month history before calculation. A common240bar8h warmup is80days and does not itself guarantee3calendar months; adding a completeness requirement changes source admission and must be declared.",
+      "family_overlap": "Portfolio sizing by relative risk is a different decision from prior single-symbol entries,but uses volatility information already present in VOL8/ATR and other frozen/rejected research. Shared data and broad factor overlap remain; no independent edge claim.",
+      "status": "EXPLICIT_PUBLISHED_ALLOCATION_HYPOTHESIS_NATIVE_CASH_CLOCK_DEPENDENCY_PROOFS_PENDING"
+    }
+  ],
+  "shared_schedule_semantics": {
+    "classes": "RunPeriod.__init__/__call__,RunMonthly.compare_dates,RunWeekly.compare_dates",
+    "run_on_first_date": true,
+    "run_on_end_of_period": false,
+    "run_on_last_date": false,
+    "bootstrap": "Backtest adds a synthetic reference row; index0 does not run. First actual input date at index1 is eligible by default.",
+    "monthly": "Year or month differs from previous input row",
+    "weekly": "ISO year/week differs from previous input row",
+    "endpoint_blocker": "Last input row takes a separate run_on_last_date=false branch,even if it is a new calendar period. Full-series versus truncated-prefix decisions can therefore differ at the endpoint. This is static evidence requiring synthetic verification,not a claimed observed native test.",
+    "warmup_blocker": "Suppressing orders before a research admission does not automatically make that admission a source first date. Forcing an initial rebalance at admission would need an explicit source-intent adaptation.",
+    "timestamp_blocker": "8h open-labeled versus close-labeled UTC timestamps change which completed feature row is the first in a week/month. Date labels,timezone and next-open execution must be fixed before registration."
+  },
+  "native_order_and_accounting": {
+    "clock": "Backtest.run updates the strategy at the current price-row date,executes strategy.run,and updates again. Rebalance allocates using current-row prices. It is not an asynchronous next-opening exchange market-order model.",
+    "target_base": "Rebalance preserves pre-allocation portfolio value while processing target deltas; an optional cash key scales investable targets,but neither published stack sets one.",
+    "allocation": "Core StrategyBase.rebalance lines1067-1129 delegates weight-delta value to SecurityBase.allocate lines1613-1757. Default integer positions floor/ceil share adjustments. Allocation iteratively adjusts quantity for commission outlay; this is not the prior fixed-unit all-or-reject order policy.",
+    "deallocation": "Holdings omitted from target weights are closed before target allocations; selected targets are then processed in target iteration order. Invalid direct target prices are prevalidated by Rebalance._validate_target_prices lines1959-1995.",
+    "funding_limit": "Shared-cash sale/purchase ordering,fees,rounding,partial portfolio rebalances and failure atomicity have not been executed or proved here. Do not assume stock-unit rounding equals crypto lots or that a rebalance is one indivisible exchange order.",
+    "economics": "No research spread/fee/slippage stress model is provided by the two example constructors. Source commission=None and accounting defaults do not authorize weakening frozen economics.",
+    "native_proof": "NONE: no library installation,synthetic/native backtest or market run performed in this survey"
+  },
+  "dependency_limits": {
+    "requirements": ["Python>=3.9","ffn>=1.1.2","pyprind>=2.11","tqdm>=4"],
+    "not_locked": "The project dependency declaration does not fix an exact ffn/pandas/numpy runtime. to_returns and external-price preprocessing need a pinned dependency closure or a separately declared own mathematical equivalent before native parity claims.",
+    "default_prices": "Adjusted equity/bond closes and their provider/calendar handling are not Binance Spot OHLCV. Reusing published allocation formulas does not establish unchanged market or execution semantics."
+  },
+  "momentum_lead_not_invented": {
+    "locator": "bt/algos.py SelectMomentum.__init__",
+    "finding": "n is required. Default lookback3calendar months,lag0,descending=true,all_or_none=false do not define a complete portfolio without n,universe,schedule and weighting/execution stack.",
+    "decision": "No top-one/top-k momentum bot was synthesized from component defaults or selected from outcomes. This component inspection is not a third admitted source or trial."
+  },
+  "requirements_for_a_future_declared8h_Spot_study": [
+    "Freeze a PnL-independent universe from already available symbols; original SPY/AGG must be disclosed as replaced,not silently treated as crypto",
+    "Freeze pooled portfolio capital and benchmark/accounting; existing independent10000USDT single-symbol sleeves are not automatically a cross-sectional shared wallet",
+    "Define UTC8h timestamp convention,closed-feature rebalance schedule,next-open order/funding policy,and portfolio lot/cash/rejection handling before outcomes",
+    "Prove schedule prefix/endpoint behavior,first eligible admission,missing/zero/constant-price and one-asset edge cases with synthetic fixtures",
+    "Pin runtime and calculate exact inverse-volatility returns/standard-deviation conventions; do not retune lookback,lag,schedule or caps",
+    "Define portfolio turnover/trade-event clusters,negative controls,matched BTC benchmark and costs prospectively; do not reinterpret single-position gates after seeing results",
+    "Retain no active protective stops/targets and no invented timeout; retain all frozen-lane protocols unchanged"
+  ],
+  "decision": "TWO_AUDITABLE_PUBLISHED_STACKS_NO_CANDIDATE_ADMITTED_NO_NEW_TRIALS",
+  "next_step": "If root chooses a separate portfolio research lane,write a source-bound mathematical specification and synthetic schedule/cash/weight proofs before registration. Monthly equal-weight is a natural control for the weekly inverse-volatility allocation hypothesis; no historical performance or viability has been assessed.",
+  "preserved": ["Prior negative/quarantined frontier and incident retained","No Bollinger mechanism selected","No frozen lane modification","No prior rejection retuned","No batch18 outcome inspection","No source/native parity claim"]
+}
