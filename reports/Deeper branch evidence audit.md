@@ -104,6 +104,19 @@ A read-only review of the runner found three blockers and several issues that wo
 - Run log: run 38980878407 (2026-10-16 23:20Z) stopped at the single-look guard itself. GitHub runs steps under `bash -e`, so the "branch absent" exit code 2 ended the shell before it was tested. No marker was pushed, no data was fetched and no look was used. The guard was fixed (`|| rc=$?`) and the run re-triggered.
 - Run log: run 38980961540 (2026-10-16 23:21Z) stopped in the pre-look test step. `statsmodels==0.14.4` does not import with the runner's scipy 1.18.1 (`_lazywhere` was removed). No marker was pushed, no data was fetched and no look was used. The pin was changed to `statsmodels==0.15.0`, which was verified locally against scipy 1.18.1 with the same HAC fit, and the run re-triggered.
 
+### 0.10 B1 version 2 (registered 2026-10-17 22:50Z, before computation)
+
+B1 as registered was not estimable because the paper account stamps its days at 08:00 UTC and every other watch at 00:00 UTC. This version is new, is registered before it is computed, and runs once. It does not replace the B1 result above.
+
+- Source: the archive branch `archive/forward-artifacts-v1` at the first commit made by the archive refresh triggered 2026-10-17 22:48Z (its sha is recorded with the result). From it, the latest archived artifact per watch that contains the watch's report file.
+- Watch series: as in 0.8, the primary book per `scripts/dashboard_snapshot.py` WATCHES.
+- Stamp normalisation: each stamp is floored to its UTC date. The paper account's 08:00 stamp on date D covers D-1 08:00 to D 08:00, while the others' 00:00 stamp on D covers D-1 00:00 to D 00:00. The windows overlap by 16 of 24 hours, so the paper account's correlations with the others are biased towards zero. This is reported, not corrected.
+- Inclusion: at least 10 scored days, calendar-daily after normalisation, non-constant.
+- Common dates: the intersection over the included watches; at least 5 are required, otherwise not estimable.
+- Primary output: participation-ratio N_eff over the correlation eigenvalues (diagonal 1), the eigenvalues, and `expected_max_normal_z(round(N_eff))`.
+- Sensitivity, registered now: the same computation excluding the paper account (timing mismatch, and the same construction as the blend).
+- Descriptive only. No BH or trading conclusion is drawn; Part A already shows that these series cannot test an edge.
+
 ## 1. Results
 
 Section 0 was committed as `7bee829` (2026-10-16T14:17Z) before any computation below. Scratch code: `part_a.py`, `part_b2.py`, `part_c5.py`, `part_d.py`, `part_e5.py`, `part_x2.py` in the session scratchpad (not committed; each is described where used). One correction was made during execution and is reported: the first C5 parse cut the monitor timestamp at the hour, which split one watch name; the regex was fixed and C5 re-run with the same rule. No other test was run twice.
