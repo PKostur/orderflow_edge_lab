@@ -4,6 +4,7 @@ import json
 import math
 from pathlib import Path
 import sys
+import subprocess
 import unittest
 from unittest.mock import patch
 import numpy as np
@@ -64,6 +65,13 @@ def run_fixture(kind, fixture, cost=40, btc=None, flags=None, gap=None):
 
 
 class Batch18DraftTests(unittest.TestCase):
+    def test_registered_cli_help_resolves_runtime_names_without_loading_data(self):
+        completed = subprocess.run([sys.executable, '-m', 'orderflow_edge_lab.public_streaming_batch18', '--help'],
+                                   cwd=REPO, text=True, capture_output=True, check=False)
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+        self.assertIn('--raw', completed.stdout)
+        self.assertIn('--cache', completed.stdout)
+
     def test_native_selected_streaming_fill_and_inventory_parity(self):
         cases = [('funded', 'funded'), ('created_unfunded_gapdown', 'created_unfunded_gapdown'),
                  ('execution_unfunded_gapup', 'execution_unfunded_gapup'),
