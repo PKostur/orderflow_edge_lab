@@ -1,0 +1,134 @@
+# Moon Dev Ai Agents Github Walkthrough
+# channel: Moon Dev
+# url: https://www.youtube.com/watch?v=RlqzkSgDKDc
+
+[0:00:00] All right. So, my AI agents for trading
+[0:00:04] GitHub is now open source. Again, I want
+[0:00:06] to walk you through it step by step
+[0:00:08] here. So, you can see how to use it. Go
+[0:00:10] ahead and just type in Mundev AI agents
+[0:00:12] to Google or whatever. And I want to
+[0:00:14] walk you through all of this. You can
+[0:00:16] see I've already written a nice read me
+[0:00:18] that explains everything. You can read
+[0:00:19] it all here. You should be watching this
+[0:00:22] video here. Uh I will put video updates
+[0:00:24] and training into this this um playlist
+[0:00:27] here. You can see the live agents that
+[0:00:30] we already have. We have a trading
+[0:00:31] agent. It's an example agent that
+[0:00:33] analyzes token data via LLM to make the
+[0:00:36] best decisions. Then we have a strategy
+[0:00:39] agent which manages and executes trading
+[0:00:41] strategies placed in the the strategies
+[0:00:43] folder. Then we have a risk agent
+[0:00:46] monitors risk. We have a copy agent, a
+[0:00:48] whale agent monitors whale activities,
+[0:00:51] sentiment agent, listing arbitrage
+[0:00:52] agent, a focus agent, a funding agent, a
+[0:00:55] liquidation agent, a chart agent. All of
+[0:00:57] these agents, you can read through them
+[0:00:59] here. They're absolutely sick. This was
+[0:01:01] the fastest growing GitHub in the world
+[0:01:03] until I made it private. It is public
+[0:01:05] now. There's no token ever associated
+[0:01:08] with this and there never will be. If
+[0:01:10] you want to learn more, you can see the
+[0:01:12] ship features. Um, we were working on
+[0:01:15] this for multiple months here and I'm
+[0:01:17] still working on in the background, but
+[0:01:19] I made it private. Now it's public
+[0:01:21] again. Go ahead and
+[0:01:24] you can see here the docs here. This is
+[0:01:26] a nice folder with documentations.
+[0:01:29] Um, what I want to show you really
+[0:01:31] though is where to find all the code.
+[0:01:32] It's in the src. You can see yourv
+[0:01:36] example here. You'll have to copy this
+[0:01:37] and make it yourv, but all of the code
+[0:01:40] is in the src folder here. And you can
+[0:01:43] go here to agents and this is where all
+[0:01:46] of the agents live. So you can see we
+[0:01:48] have the base agent, the back test
+[0:01:50] runner, the chart analys analysis agent,
+[0:01:53] the chat agent, the chat uh the clips
+[0:01:57] agent, the coin gecko agent, the
+[0:01:59] compliance agent, the copybot agent, the
+[0:02:01] funding ARB agent, the liquidation
+[0:02:04] agent. These are all different trading
+[0:02:05] strategies, the sentiment agent. So, I'm
+[0:02:08] going to continue to work on this and I
+[0:02:10] challenge you to to pull it and build
+[0:02:12] your own stuff that you think will work
+[0:02:15] for you, you and your agents. I'll
+[0:02:17] continue to build the infrastructure out
+[0:02:20] and you can use this code however you'd
+[0:02:21] like. As you know, this is not financial
+[0:02:24] advice. Please pause the video here and
+[0:02:26] see that I am not a financial adviser. I
+[0:02:28] never will be and never want to be. So,
+[0:02:31] please read this, pause here. I'm just a
+[0:02:33] coder coding from my bedroom. Okay? you
+[0:02:35] can have all of the code for all of
+[0:02:37] this. Now, so what I want to go ahead
+[0:02:40] and do now that you know the structure,
+[0:02:42] again, the structure is the most
+[0:02:43] important part because yes, you can just
+[0:02:45] pull this in AI and she can detail it
+[0:02:48] for you, but the read me, I explain it
+[0:02:50] all here in the readme what we're
+[0:02:51] building. I'm just going to continue to
+[0:02:52] build on top of this. Make sure to hit
+[0:02:55] the star and the fork if you want the
+[0:02:58] code. You just hit star here to save it
+[0:03:00] to your your uh GitHub and then fork if
+[0:03:04] you want the actual code. Now here in
+[0:03:06] the src is the main part. So src here we
+[0:03:11] have agents here and then we have the
+[0:03:13] models here. So I'm actually going to
+[0:03:15] update this now today because I've been
+[0:03:18] fading Grock from Twitter. So you can
+[0:03:21] see I have Claude, I have Deepseek, I
+[0:03:23] have Gemini, I have Grock, the other
+[0:03:24] Grock. Uh, we have Olama, we have Open
+[0:03:27] AI. Today, we're going to implement
+[0:03:29] Grock as I see some chatter about Grock
+[0:03:32] being a good trader. We already have
+[0:03:33] DeepSeek. Looks like that's the best
+[0:03:35] trader, but we'll go ahead and update
+[0:03:37] that model here today. That's again in
+[0:03:39] the source models folder. Then we have
+[0:03:42] the source agent. And then the data
+[0:03:43] folder is where you can save all your
+[0:03:46] data. And here's some extra scripts.
+[0:03:50] These are also helpful here. So, just go
+[0:03:52] ahead and check it out for yourself.
+[0:03:54] I'll make sure all of this is um below
+[0:03:57] in the
+[0:03:59] it's all in the GitHub. It's all in the
+[0:04:00] GitHub. I just wanted to make sure to
+[0:04:02] make this short concise video here so
+[0:04:04] you can understand how to get around the
+[0:04:06] GitHub and where to um get all the code
+[0:04:09] and what types of things we're going to
+[0:04:11] be building. It's going to be mostly for
+[0:04:12] trading. It says Mundev AI agents,
+[0:04:16] autonomous AI agents and Python for
+[0:04:18] trading for the most part. Now, I am a
+[0:04:21] builder and I build things that I need
+[0:04:23] for my life. So, you can see there's
+[0:04:25] actually a little bit more than just
+[0:04:26] trading in here, but um I'm an
+[0:04:28] algorithmic trader and that's where most
+[0:04:31] of my focus is going to be, but I'm also
+[0:04:33] a builder and I love to ship. So, I will
+[0:04:36] just keep shipping and updating this
+[0:04:38] GitHub. All you have to do is hit the
+[0:04:40] star to save it to your GitHub and then
+[0:04:42] the fork in order to get the actual
+[0:04:45] code. So, yeah, that's about it. I just
+[0:04:47] wanted to give you this short concise
+[0:04:50] update video here. And now we're going
+[0:04:52] to dive in and update this code. So
+[0:04:54] inside of the SRC will have Twitter's
+[0:04:57] Grock in here. Next.

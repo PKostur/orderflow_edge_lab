@@ -15,10 +15,24 @@ on:
       - "src/orderflow_edge_lab/prop_paper_forward.py"
       - "config/prop_paper_forward_v1.json"
       - "src/orderflow_edge_lab/paper_account.py"
+      - "src/orderflow_edge_lab/paper_fill_scenarios.py"
       - "config/paper_account_blend_v1.json"
       - "src/orderflow_edge_lab/fast_gates.py"
       - "config/fast_gates_v1.json"
       - "research/fast_gates/venue_replication.json"
+      - "src/orderflow_edge_lab/tom_forward.py"
+      - "config/turn_of_month_forward_v1.json"
+      - "src/orderflow_edge_lab/near_miss_forward.py"
+      - "config/near_miss_forward_v1.json"
+      - "research/near_miss_forward/reference_daily_v1.json"
+      - "tests/test_near_miss_forward.py"
+      - "src/orderflow_edge_lab/tradfi_perps_forward.py"
+      - "config/tradfi_perps_forward_v1.json"
+      - "research/tradfi_perps_forward/universe_v1.json"
+      - "tests/test_tradfi_perps_forward.py"
+      - "src/orderflow_edge_lab/fade24_forward.py"
+      - "config/fade24_forward_v1.json"
+      - "tests/test_fade24_forward.py"
       - ".github/workflows/multi-premia-blend-v1.yml"
 
 permissions:
@@ -40,7 +54,7 @@ jobs:
       - name: Install
         run: python -m pip install -e ".[research]"
       - name: Tests
-        run: python -m unittest tests.test_xs_premia tests.test_multi_premia_forward tests.test_multi_premia_human_forward tests.test_zoo_mirror_forward tests.test_prop_paper_forward tests.test_paper_account tests.test_fast_gates -v
+        run: python -m unittest tests.test_xs_premia tests.test_multi_premia_forward tests.test_multi_premia_human_forward tests.test_zoo_mirror_forward tests.test_prop_paper_forward tests.test_paper_account tests.test_paper_fill_scenarios tests.test_fast_gates tests.test_tom_forward tests.test_review_methods_dsr -v
       - name: Run forward watch
         run: python -m orderflow_edge_lab.multi_premia_forward --output artifacts/multi_premia_blend/report.json
       - name: Run human-constrained forward watch (multi-premia-human-v1)
@@ -51,13 +65,17 @@ jobs:
         run: python -m orderflow_edge_lab.prop_paper_forward --output artifacts/multi_premia_blend/prop_paper_report.json
       - name: Replay the paper account (paper-account-blend-v1, paper only)
         run: python -m orderflow_edge_lab.paper_account --output artifacts/multi_premia_blend/paper_account_report.json
+      - name: Fill-realism sensitivity (descriptive only)
+        run: python -m orderflow_edge_lab.paper_fill_scenarios --output artifacts/multi_premia_blend/paper_fill_scenarios.json
       - name: Evaluate fast decision gates (fast-gates-v1)
         run: python -m orderflow_edge_lab.fast_gates --output artifacts/multi_premia_blend/fast_gates_report.json
+      - name: Run turn-of-month SPY forward watch (turn-of-month-forward-v1)
+        run: python -m orderflow_edge_lab.tom_forward --output artifacts/multi_premia_blend/tom_forward_report.json
       - name: Enforce frozen boundary
         run: |
           python - <<'PY'
           import json
-          starts={"report.json":"2026-09-29T00:00:00+00:00","human_report.json":"2026-09-29T00:00:00+00:00","zoo_mirror_report.json":"2026-10-03T00:00:00+00:00","prop_paper_report.json":"2026-10-05T00:00:00+00:00","paper_account_report.json":"2026-10-05T00:00:00+00:00","fast_gates_report.json":"2026-10-05T00:00:00+00:00"}
+          starts={"report.json":"2026-09-29T00:00:00+00:00","human_report.json":"2026-09-29T00:00:00+00:00","zoo_mirror_report.json":"2026-10-03T00:00:00+00:00","prop_paper_report.json":"2026-10-05T00:00:00+00:00","paper_account_report.json":"2026-10-05T00:00:00+00:00","fast_gates_report.json":"2026-10-05T00:00:00+00:00","tom_forward_report.json":"2026-10-13T00:00:00+00:00"}
           for name, start in starts.items():
             r=json.load(open("artifacts/multi_premia_blend/"+name,encoding="utf-8"))
             if r["prospective_start_utc"] != start:
@@ -81,5 +99,189 @@ jobs:
             artifacts/multi_premia_blend/zoo_mirror_report.json
             artifacts/multi_premia_blend/prop_paper_report.json
             artifacts/multi_premia_blend/paper_account_report.json
+            artifacts/multi_premia_blend/paper_fill_scenarios.json
             artifacts/multi_premia_blend/fast_gates_report.json
+            artifacts/multi_premia_blend/tom_forward_report.json
+          if-no-files-found: error
+
+  near_miss:
+    # near-miss-forward-v1: descriptive paper watch (cascade 1x/2x, CTREND 1x, trend core 1x/2x); data.binance.vision only
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e ".[research]"
+      - name: Tests
+        run: python -m unittest tests.test_near_miss_forward tests.test_liquidation_cascade tests.test_leverage_sim -v
+      - name: Archive cache key (ISO week + UTC day)
+        id: cachekey
+        run: |
+          echo "week=$(date -u +%G-W%V)" >> "$GITHUB_OUTPUT"
+          echo "day=$(date -u +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
+      - name: Restore the archive caches (incremental downloads)
+        id: restore
+        uses: actions/cache/restore@v4
+        with:
+          path: nm_cache
+          key: near-miss-archive-${{ steps.cachekey.outputs.week }}-${{ steps.cachekey.outputs.day }}
+          restore-keys: |
+            near-miss-archive-${{ steps.cachekey.outputs.week }}-
+            near-miss-archive-
+      - name: Run near-miss forward watch (near-miss-forward-v1)
+        timeout-minutes: 75  # leaves time for the cache save below after a slow cold run
+        run: python -m orderflow_edge_lab.near_miss_forward --cache-root nm_cache --output artifacts/multi_premia_blend/near_miss_forward_report.json
+      - name: Save the archive caches (also after a failed or timed-out run)
+        if: always() && steps.restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: nm_cache
+          key: near-miss-archive-${{ steps.cachekey.outputs.week }}-${{ steps.cachekey.outputs.day }}
+      - name: Enforce frozen boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open("artifacts/multi_premia_blend/near_miss_forward_report.json",encoding="utf-8"))
+          if r["prospective_start_utc"] != "2026-10-15T00:00:00+00:00":
+              raise SystemExit("prospective start changed")
+          for key, flag in r["claims"].items():
+              if key.endswith("_authorized") and flag:
+                  raise SystemExit(f"watch exceeded authority: {key}")
+          if r["claims"].get("orders_sent"):
+              raise SystemExit("orders_sent")
+          stamps = [t for series in r.get("daily_returns", {}).values() for t in series]
+          if any(t <= r["prospective_start_utc"] for t in stamps):
+              raise SystemExit("pre-start day scored")
+          print(json.dumps({"report":"near_miss_forward_report.json","status":r["status"],"data_end":r["data_end_utc"],"days":{k:v["days"] for k,v in r["forward"].items()}}))
+          PY
+      - name: Upload
+        uses: actions/upload-artifact@v6
+        with:
+          name: near-miss-forward-v1
+          path: artifacts/multi_premia_blend/near_miss_forward_report.json
+          if-no-files-found: error
+
+  fade24:
+    # fade24-forward-v1: descriptive paper watch (fade the last 24h at 2x, TP +15% of margin, stop -50%, 7-day time stop;
+    # F1 / F2 fees plus a random-direction control); data.binance.vision daily 1m klines from start - 2 days only
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e ".[research]"
+      - name: Tests
+        run: python -m unittest tests.test_fade24_forward tests.test_leverage_bracket_v2 tests.test_leverage_bracket -v
+      - name: Archive cache key (ISO week + UTC day)
+        id: cachekey
+        run: |
+          echo "week=$(date -u +%G-W%V)" >> "$GITHUB_OUTPUT"
+          echo "day=$(date -u +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
+      - name: Restore the archive cache (incremental downloads)
+        id: restore
+        uses: actions/cache/restore@v4
+        with:
+          path: fade24_cache
+          key: fade24-archive-${{ steps.cachekey.outputs.week }}-${{ steps.cachekey.outputs.day }}
+          restore-keys: |
+            fade24-archive-${{ steps.cachekey.outputs.week }}-
+            fade24-archive-
+      - name: Run fade-24h forward watch (fade24-forward-v1)
+        timeout-minutes: 45  # leaves time for the cache save below after a slow cold run
+        run: python -m orderflow_edge_lab.fade24_forward --cache-root fade24_cache --output artifacts/multi_premia_blend/fade24_forward_report.json
+      - name: Save the archive cache (also after a failed or timed-out run)
+        if: always() && steps.restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: fade24_cache
+          key: fade24-archive-${{ steps.cachekey.outputs.week }}-${{ steps.cachekey.outputs.day }}
+      - name: Enforce frozen boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open("artifacts/multi_premia_blend/fade24_forward_report.json",encoding="utf-8"))
+          if r["prospective_start_utc"] != "2026-10-17T00:00:00+00:00":
+              raise SystemExit("prospective start changed")
+          for key, flag in r["claims"].items():
+              if key.endswith("_authorized") and flag:
+                  raise SystemExit(f"watch exceeded authority: {key}")
+          if r["claims"].get("orders_sent"):
+              raise SystemExit("orders_sent")
+          stamps = [t for series in r.get("daily_returns", {}).values() for t in series]
+          if any(t <= r["prospective_start_utc"] for t in stamps):
+              raise SystemExit("pre-start day scored")
+          print(json.dumps({"report":"fade24_forward_report.json","status":r["status"],"data_end":r["data_end_utc"],"days":{k:v["days"] for k,v in r["forward"].items()},"trades":{k:v["trades"] for k,v in r["forward"].items()}}))
+          PY
+      - name: Upload
+        uses: actions/upload-artifact@v6
+        with:
+          name: fade24-forward-v1
+          path: artifacts/multi_premia_blend/fade24_forward_report.json
+          if-no-files-found: error
+
+  tradfi:
+    # tradfi-perps-forward-v1: descriptive paper watch (Binance stock/commodity perps: 12-1 momentum, weekend fade,
+    # diagnostics); data.binance.vision 15m klines + Yahoo daily bars
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e ".[research]"
+      - name: Tests
+        run: python -m unittest tests.test_tradfi_perps_forward tests.test_leverage_sim -v
+      - name: Archive cache key (ISO week + UTC day)
+        id: cachekey
+        run: |
+          echo "week=$(date -u +%G-W%V)" >> "$GITHUB_OUTPUT"
+          echo "day=$(date -u +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
+      - name: Restore the archive caches (incremental downloads)
+        id: restore
+        uses: actions/cache/restore@v4
+        with:
+          path: tf_cache
+          key: tradfi-archive-${{ steps.cachekey.outputs.week }}-${{ steps.cachekey.outputs.day }}
+          restore-keys: |
+            tradfi-archive-${{ steps.cachekey.outputs.week }}-
+            tradfi-archive-
+      - name: Run TradFi perps forward watch (tradfi-perps-forward-v1)
+        timeout-minutes: 75  # leaves time for the cache save below after a slow cold run
+        run: python -m orderflow_edge_lab.tradfi_perps_forward --cache-root tf_cache --output artifacts/multi_premia_blend/tradfi_perps_forward_report.json
+      - name: Save the archive caches (also after a failed or timed-out run)
+        if: always() && steps.restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: tf_cache
+          key: tradfi-archive-${{ steps.cachekey.outputs.week }}-${{ steps.cachekey.outputs.day }}
+      - name: Enforce frozen boundary
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open("artifacts/multi_premia_blend/tradfi_perps_forward_report.json",encoding="utf-8"))
+          if r["prospective_start_utc"] != "2026-10-19T00:00:00+00:00":
+              raise SystemExit("prospective start changed")
+          for key, flag in r["claims"].items():
+              if key.endswith("_authorized") and flag:
+                  raise SystemExit(f"watch exceeded authority: {key}")
+          if r["claims"].get("orders_sent"):
+              raise SystemExit("orders_sent")
+          stamps = [t for series in r.get("daily_returns", {}).values() for t in series]
+          if any(t <= r["prospective_start_utc"] for t in stamps):
+              raise SystemExit("pre-start day scored")
+          print(json.dumps({"report":"tradfi_perps_forward_report.json","status":r["status"],"data_end":r["data_end_utc"],"days":{k:v["days"] for k,v in r["forward"].items()}}))
+          PY
+      - name: Upload
+        uses: actions/upload-artifact@v6
+        with:
+          name: tradfi-perps-forward-v1
+          path: artifacts/multi_premia_blend/tradfi_perps_forward_report.json
           if-no-files-found: error

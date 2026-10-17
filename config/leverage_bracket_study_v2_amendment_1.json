@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "study_id": "leverage-bracket-study-v2",
+  "amendment": 1,
+  "date_utc": "2026-10-13",
+  "before": "any study output was computed on real data. Data inspected before this amendment: download integrity only (checksums, OHLC validity, first/last bars, gaps, stale tails); no trade, return or statistic was computed.",
+  "changes": {
+    "archive_holes": "12 symbols' (XRP, LTC, YFI, SUSHI, XLM, YFII, FIL, TRX, WAVES, GRT, ZIL, ZEC; first written as 11, corrected before the run: YFIIUSDT was missed in the count) monthly 1m files for 2022-02 and 2022-04 miss 2022-02-26 00:01..2022-03-01 00:00 and 2022-04-01 00:01..2022-04-03 00:00; the daily archive has those days, so minutes missing from a monthly file are filled from the checksum-verified daily file for that day (monthly bars are never overwritten; conflicts counted); holes with no daily file stay missing under v1's rules",
+    "yfiiusdt": "delisted 2022-04-12 09:03 with no frozen tail; it simply stops trading (positions open at the last bar are dropped as unfinishable, as in v1)",
+    "v1_cache": "unchanged (v1 is final)"
+  },
+  "interpretations": {
+    "primary_days": "1095 days, halves split at exit day 546 (first half ends 2022-06-30)",
+    "f2_ambiguity": "same-bar ambiguity under F2 counted only when the adverse level and a through-fill of the take-profit both occur in the bar",
+    "f2_touch_then_time_stop": "a touch-only bar does not fill; a later time-stop close may lie slightly beyond the take-profit price",
+    "sentinel": "the single look is the existence of the result files; a crashed run does not count as a look"
+  }
+}

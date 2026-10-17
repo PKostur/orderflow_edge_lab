@@ -59,6 +59,7 @@ jobs:
             [multi-premia-blend-v1.yml]=research/payoff-geometry-v1-1
             [liquidation-flow-v1.yml]=research/payoff-geometry-v1-1
             [hyperliquid-vaults-v1.yml]=research/payoff-geometry-v1-1
+            [forward-artifact-archive-v1.yml]=research/payoff-geometry-v1-1
           )
           case "${SCHEDULE:-manual}" in
             "50 0,8,16 * * *") targets="canonical-v3-forward-companion-v1.yml liquidation-flow-v1.yml" ;;
@@ -68,7 +69,7 @@ jobs:
             "45 16 * * *") targets="crypto-trend-core-v1.yml" ;;
             "55 16 * * *") targets="crypto-trend-core-voltarget-v1.yml" ;;
             "0 3 13 3,6,9,12 *") targets="new-listing-holdout-v1.yml" ;;
-            "5 17 * * *") targets="multi-premia-blend-v1.yml hyperliquid-vaults-v1.yml" ;;
+            "5 17 * * *") targets="multi-premia-blend-v1.yml hyperliquid-vaults-v1.yml forward-artifact-archive-v1.yml" ;;
             "40 20 * * *"|"40 23 * * *")
               targets="trend-portfolio-forward-v1.yml cross-asset-trend-forward-v1.yml cross-asset-trend-invvol-forward-v1.yml crypto-trend-core-v1.yml crypto-trend-core-voltarget-v1.yml multi-premia-blend-v1.yml hyperliquid-vaults-v1.yml" ;;
             manual)

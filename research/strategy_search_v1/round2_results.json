@@ -1,0 +1,4015 @@
+{
+  "candidates": [
+    {
+      "cost_bps_round_trip": 20.0,
+      "descriptive": {
+        "coins_ever_eligible": 569,
+        "eligible_coins_per_week": {
+          "max": 347,
+          "median": 189.5,
+          "min": 0
+        },
+        "mean_daily_turnover_long": 0.061496469291149,
+        "mean_daily_turnover_short": 0.0649956107675883,
+        "mean_indicators_kept_per_week": 2.6580645161290324,
+        "note": "weekly buy-and-hold book, 0.5 gross per leg (paper: 1.0 per leg); costs = long-leg turnover x long bps + short-leg turnover x short bps, charged on the first day of the week; descriptive only",
+        "paper_cost_scenarios_one_way_bps_long_short": {
+          "30/40": {
+            "development": {
+              "cumulative_return": -0.47591584822551547,
+              "days": 583,
+              "max_drawdown": -0.47903215335072935,
+              "mean_daily": -0.0010756871942506313,
+              "newey_west_t": -2.7702426738215276,
+              "sharpe": -2.6169468326368737,
+              "sharpe_daily": -0.1369772576348828
+            },
+            "validation": {
+              "cumulative_return": 0.1783624455210442,
+              "days": 1583,
+              "max_drawdown": -0.4262324479078582,
+              "mean_daily": 0.00017117327013946253,
+              "newey_west_t": 0.5707991523249102,
+              "sharpe": 0.28140929417896143,
+              "sharpe_daily": 0.014729635661249539
+            }
+          },
+          "40/50": {
+            "development": {
+              "cumulative_return": -0.48731043754518677,
+              "days": 583,
+              "max_drawdown": -0.48983098246190593,
+              "mean_daily": -0.001112794464608129,
+              "newey_west_t": -2.8332717891547605,
+              "sharpe": -2.6842764211679024,
+              "sharpe_daily": -0.1405014493684124
+            },
+            "validation": {
+              "cumulative_return": -0.08548658064576486,
+              "days": 1583,
+              "max_drawdown": -0.5093542576356814,
+              "mean_daily": 1.1761831864791855e-05,
+              "newey_west_t": 0.03914319868264605,
+              "sharpe": 0.019236278191192977,
+              "sharpe_daily": 0.001006872818687081
+            }
+          }
+        },
+        "weeks_with_model": 310,
+        "weeks_without_kept_forecast": 112
+      },
+      "dev": {
+        "cumulative_return": -0.4465715176138638,
+        "days": 583,
+        "max_drawdown": -0.45253393283455046,
+        "mean_daily": -0.0009834998088231075,
+        "newey_west_t": -2.6046630401291893,
+        "pass": false,
+        "sharpe": -2.43671813471515,
+        "sharpe_daily": -0.12754365643193127
+      },
+      "gates": {
+        "G1": {
+          "dates_checked": 50,
+          "decision_date_diagnostic": {
+            "dates_checked": 50,
+            "gating": false,
+            "mismatches": [],
+            "n_mismatches": 0,
+            "pass": true
+          },
+          "mismatches": [],
+          "n_mismatches": 0,
+          "pass": true
+        },
+        "G2": {
+          "cumulative_return": -0.4465715176138638,
+          "days": 583,
+          "max_drawdown": -0.45253393283455046,
+          "mean_daily": -0.0009834998088231075,
+          "newey_west_t": -2.6046630401291893,
+          "pass": false,
+          "sharpe": -2.43671813471515,
+          "sharpe_daily": -0.12754365643193127
+        },
+        "G3": {
+          "cumulative_return": 1.2262563307639485,
+          "days": 1583,
+          "max_drawdown": -0.31655561583241687,
+          "mean_daily": 0.0005723096807729432,
+          "newey_west_t": 1.9125750809611175,
+          "pass": false,
+          "sharpe": 0.9467606049608541,
+          "sharpe_daily": 0.0495557149602494
+        },
+        "G4": {
+          "accounting": "weekly buy-and-hold, compounded spell returns",
+          "n_null": 999,
+          "n_spells": 84,
+          "null_mean": -2.0875138893896155e-06,
+          "null_p95": 0.0004540170958956223,
+          "null_type": "allocation",
+          "observed_mean_daily_gross": -0.000930025345340347,
+          "p": 0.999,
+          "pass": false
+        },
+        "G5": {
+          "expected_max_sharpe": 0.11640372326910282,
+          "kurtosis": 78.67763267387815,
+          "n_trials": 9,
+          "pass": false,
+          "probability": 0.0,
+          "sharpe": -0.12754365643193127,
+          "skew": -6.498363552255553,
+          "trial_sharpe_std": 0.06179670650142636
+        },
+        "G6": {
+          "half_mean_daily": [
+            -0.000634226245902039,
+            -0.0013315772294054053
+          ],
+          "halves_positive": false,
+          "pass": false,
+          "variants": [
+            {
+              "days": 583,
+              "first_signal_day": "2020-08-17",
+              "params": {
+                "indicator_window_scale": 1.0,
+                "l1_ratio": 0.5,
+                "quantiles": 5,
+                "rolling_window_weeks": 42
+              },
+              "sharpe": 0.012772165679144588
+            },
+            {
+              "days": 513,
+              "first_signal_day": "2021-01-04",
+              "params": {
+                "indicator_window_scale": 1.0,
+                "l1_ratio": 0.5,
+                "quantiles": 5,
+                "rolling_window_weeks": 62
+              },
+              "sharpe": -1.429603187607087
+            },
+            {
+              "days": 583,
+              "first_signal_day": "2020-10-26",
+              "params": {
+                "indicator_window_scale": 1.0,
+                "l1_ratio": 0.5,
+                "quantiles": 4,
+                "rolling_window_weeks": 52
+              },
+              "sharpe": -2.3028833202156402
+            },
+            {
+              "days": 583,
+              "first_signal_day": "2020-10-26",
+              "params": {
+                "indicator_window_scale": 1.0,
+                "l1_ratio": 0.5,
+                "quantiles": 6,
+                "rolling_window_weeks": 52
+              },
+              "sharpe": -2.462483843458919
+            },
+            {
+              "days": 583,
+              "first_signal_day": "2020-10-26",
+              "params": {
+                "indicator_window_scale": 1.0,
+                "l1_ratio": 0.4,
+                "quantiles": 5,
+                "rolling_window_weeks": 52
+              },
+              "sharpe": -1.960106560831273
+            },
+            {
+              "days": 583,
+              "first_signal_day": "2020-10-26",
+              "params": {
+                "indicator_window_scale": 1.0,
+                "l1_ratio": 0.6,
+                "quantiles": 5,
+                "rolling_window_weeks": 52
+              },
+              "sharpe": -1.9855326295159748
+            },
+            {
+              "days": 583,
+              "first_signal_day": "2020-10-26",
+              "params": {
+                "indicator_window_scale": 0.8,
+                "l1_ratio": 0.5,
+                "quantiles": 5,
+                "rolling_window_weeks": 52
+              },
+              "sharpe": -0.049165568800867754
+            },
+            {
+              "days": 583,
+              "first_signal_day": "2020-10-26",
+              "params": {
+                "indicator_window_scale": 1.2,
+                "l1_ratio": 0.5,
+                "quantiles": 5,
+                "rolling_window_weeks": 52
+              },
+              "sharpe": -1.733787228864077
+            }
+          ],
+          "variants_ok": false
+        },
+        "G7": {
+          "assumed_cost_bps": 20.0,
+          "cost_wall_bps": null,
+          "pass": false,
+          "required_bps": 60.0
+        },
+        "G8": {
+          "crypto_core": {
+            "corr": -0.046762515905740834,
+            "limit": 0.5,
+            "overlap_days": 2146
+          },
+          "pass": true,
+          "spy_buy_and_hold": {
+            "corr": -0.022107224454586683,
+            "note": "descriptive only (not required for a crypto candidate)",
+            "overlap_days": 1489
+          }
+        }
+      },
+      "id": "R2C1_CTREND",
+      "null": "allocation",
+      "params": {
+        "indicator_window_scale": 1.0,
+        "l1_ratio": 0.5,
+        "quantiles": 5,
+        "rolling_window_weeks": 52
+      },
+      "periods_per_year": 365,
+      "return_days": 2166,
+      "return_series_sha256": "7bb78fe194a3307265cf37f2afbabf065bf7644bd313a8f3e7542133a5e80261",
+      "validation": {
+        "cumulative_return": 1.2262563307639485,
+        "days": 1583,
+        "max_drawdown": -0.31655561583241687,
+        "mean_daily": 0.0005723096807729432,
+        "newey_west_t": 1.9125750809611175,
+        "pass": false,
+        "sharpe": 0.9467606049608541,
+        "sharpe_daily": 0.0495557149602494
+      },
+      "windows": {
+        "development": [
+          "2020-10-26",
+          "2022-05-31"
+        ],
+        "first_return_date": "2020-10-26",
+        "validation": [
+          "2022-06-01",
+          "2026-09-30"
+        ]
+      }
+    },
+    {
+      "cost_bps_round_trip": 10.0,
+      "dev": {
+        "cumulative_return": 4.880442018660798,
+        "days": 5013,
+        "max_drawdown": -0.4173302431155148,
+        "mean_daily": 0.00039753388246474504,
+        "newey_west_t": 3.243071054405003,
+        "pass": true,
+        "sharpe": 0.6708980493901557,
+        "sharpe_daily": 0.04226260461344478
+      },
+      "gates": {
+        "G1": {
+          "dates_checked": 50,
+          "decision_date_diagnostic": {
+            "dates_checked": 50,
+            "gating": false,
+            "mismatches": [],
+            "n_mismatches": 0,
+            "pass": true
+          },
+          "mismatches": [],
+          "n_mismatches": 0,
+          "pass": true
+        },
+        "G2": {
+          "cumulative_return": 4.880442018660798,
+          "days": 5013,
+          "max_drawdown": -0.4173302431155148,
+          "mean_daily": 0.00039753388246474504,
+          "newey_west_t": 3.243071054405003,
+          "pass": true,
+          "sharpe": 0.6708980493901557,
+          "sharpe_daily": 0.04226260461344478
+        },
+        "G3": {
+          "cumulative_return": 0.12276872136858619,
+          "days": 1695,
+          "max_drawdown": -0.26824398221776247,
+          "mean_daily": 0.0001085474313019876,
+          "newey_west_t": 0.556133059969875,
+          "pass": false,
+          "sharpe": 0.19325025484221509,
+          "sharpe_daily": 0.012173621788389447
+        },
+        "G4": {
+          "n_null": 999,
+          "null_mean": 0.00021943669723091435,
+          "null_p95": 0.00037264461848449647,
+          "null_type": "timing",
+          "observed_mean_daily_gross": 0.0004971748160374561,
+          "p": 0.003,
+          "pass": true
+        },
+        "G5": {
+          "expected_max_sharpe": 0.11640372326910282,
+          "kurtosis": 31.333078340303082,
+          "n_trials": 9,
+          "pass": false,
+          "probability": 5.89491381819407e-08,
+          "sharpe": 0.04226260461344478,
+          "skew": 0.7462338866723095,
+          "trial_sharpe_std": 0.06179670650142636
+        },
+        "G6": {
+          "half_mean_daily": [
+            0.0004987438735014813,
+            0.00029636426238574185
+          ],
+          "halves_positive": true,
+          "pass": true,
+          "variants": [
+            {
+              "days": 5013,
+              "first_signal_day": "1994-02-02",
+              "params": {
+                "window_shift_days": -1
+              },
+              "sharpe": 0.4686201847071581
+            },
+            {
+              "days": 5012,
+              "first_signal_day": "1994-02-04",
+              "params": {
+                "window_shift_days": 1
+              },
+              "sharpe": 0.7356025954648844
+            }
+          ],
+          "variants_ok": true
+        },
+        "G7": {
+          "assumed_cost_bps": 10.0,
+          "cost_wall_bps": 49.89664369961496,
+          "pass": true,
+          "required_bps": 30.0
+        },
+        "G8": {
+          "crypto_core": {
+            "corr": 0.04121394185613468,
+            "limit": 0.5,
+            "overlap_days": 1533
+          },
+          "pass": false,
+          "spy_buy_and_hold": {
+            "corr": 0.741891336580055,
+            "limit": 0.7,
+            "overlap_days": 8218
+          }
+        }
+      },
+      "id": "R2C2_FOMC_cycle_even_weeks",
+      "null": "timing",
+      "params": {
+        "window_shift_days": 0
+      },
+      "periods_per_year": 252,
+      "return_days": 8218,
+      "return_series_sha256": "91bf088f326855a6909c0aaef458638bb0b29dbc70906721f3aa9a644b4a7bec",
+      "validation": {
+        "cumulative_return": 0.12276872136858619,
+        "days": 1695,
+        "max_drawdown": -0.26824398221776247,
+        "mean_daily": 0.0001085474313019876,
+        "newey_west_t": 0.556133059969875,
+        "pass": false,
+        "sharpe": 0.19325025484221509,
+        "sharpe_daily": 0.012173621788389447
+      },
+      "windows": {
+        "development": [
+          "1994-02-03",
+          "2013-12-31"
+        ],
+        "first_return_date": "1994-02-03",
+        "validation": [
+          "2020-01-01",
+          "2026-09-30"
+        ]
+      }
+    }
+  ],
+  "claims": {
+    "live_trading_authorized": false,
+    "strategy_promotion_authorized": false
+  },
+  "cost_bps_round_trip": {
+    "R2C1_CTREND": 20.0,
+    "R2C2_FOMC_cycle_even_weeks": 10.0
+  },
+  "ctrend_constants": {
+    "accounting": "weekly buy-and-hold, turnover charged once per week on its first day",
+    "dollar_volume_min_periods": 20,
+    "dollar_volume_window": 30,
+    "gross_per_leg": 0.5,
+    "min_bars": 200,
+    "min_cross_section": 20,
+    "min_dollar_volume": 1000000.0,
+    "relisting_gap_days": 30
+  },
+  "data_provenance": {
+    "binance_spot": {
+      "close_frame_sha256": "805f8860b48d596e9730328eb33171199a93e446b9b4bc58cf3b377cbd080907",
+      "dollar_volume_frame_sha256": "6bb40a2e2c2b429a84b370bd2be30867c108903600b66fc5530aef278bf5bc82",
+      "end": "2026-09-30",
+      "frame_first_date": "2017-08-17",
+      "frame_last_date": "2026-09-30",
+      "frame_rows": 3332,
+      "high_frame_sha256": "8bbb0b42800e98a59130c2ce406876163297feea7d6d944ceb397bebdbd16795",
+      "low_frame_sha256": "d6b597a5c4e8ecff395f11b80fd88d549ca821b089940025e26930d8a52922d9",
+      "per_symbol": {
+        "0GUSDT": {
+          "first_date": "2025-09-22",
+          "last_date": "2026-09-30",
+          "rows": 374
+        },
+        "1000CATUSDT": {
+          "first_date": "2024-12-17",
+          "last_date": "2026-09-30",
+          "rows": 653
+        },
+        "1000CHEEMSUSDT": {
+          "first_date": "2025-02-09",
+          "last_date": "2026-09-30",
+          "rows": 599
+        },
+        "1000SATSUSDT": {
+          "first_date": "2023-12-12",
+          "last_date": "2026-09-30",
+          "rows": 1024
+        },
+        "1INCHUSDT": {
+          "first_date": "2020-12-25",
+          "last_date": "2026-09-30",
+          "rows": 2106
+        },
+        "1MBABYDOGEUSDT": {
+          "first_date": "2024-09-16",
+          "last_date": "2026-09-30",
+          "rows": 745
+        },
+        "2ZUSDT": {
+          "first_date": "2025-10-02",
+          "last_date": "2026-09-30",
+          "rows": 364
+        },
+        "A2ZUSDT": {
+          "first_date": "2025-07-30",
+          "last_date": "2026-04-01",
+          "rows": 246
+        },
+        "AAOIBUSDT": {
+          "first_date": "2026-07-15",
+          "last_date": "2026-09-30",
+          "rows": 78
+        },
+        "AAPLBUSDT": {
+          "first_date": "2026-07-29",
+          "last_date": "2026-09-30",
+          "rows": 64
+        },
+        "AAVEUSDT": {
+          "first_date": "2020-10-15",
+          "last_date": "2026-09-30",
+          "rows": 2177
+        },
+        "ACAUSDT": {
+          "first_date": "2022-01-25",
+          "last_date": "2026-02-13",
+          "rows": 1481
+        },
+        "ACEUSDT": {
+          "first_date": "2023-12-18",
+          "last_date": "2026-09-30",
+          "rows": 1018
+        },
+        "ACHUSDT": {
+          "first_date": "2022-01-10",
+          "last_date": "2026-09-30",
+          "rows": 1725
+        },
+        "ACMUSDT": {
+          "first_date": "2021-02-24",
+          "last_date": "2026-09-30",
+          "rows": 2045
+        },
+        "ACTUSDT": {
+          "first_date": "2024-11-11",
+          "last_date": "2026-09-30",
+          "rows": 689
+        },
+        "ACXUSDT": {
+          "first_date": "2024-12-06",
+          "last_date": "2026-08-17",
+          "rows": 620
+        },
+        "ADAUSDT": {
+          "first_date": "2018-04-17",
+          "last_date": "2026-09-30",
+          "rows": 3089
+        },
+        "ADBEBUSDT": {
+          "first_date": "2026-09-30",
+          "last_date": "2026-09-30",
+          "rows": 1
+        },
+        "ADXUSDT": {
+          "first_date": "2021-10-29",
+          "last_date": "2026-09-30",
+          "rows": 1798
+        },
+        "AERGOUSDT": {
+          "first_date": "2023-05-05",
+          "last_date": "2025-03-28",
+          "rows": 694
+        },
+        "AEROUSDT": {
+          "first_date": "2026-07-17",
+          "last_date": "2026-09-30",
+          "rows": 76
+        },
+        "AEVOUSDT": {
+          "first_date": "2024-03-13",
+          "last_date": "2026-09-30",
+          "rows": 932
+        },
+        "AGIXUSDT": {
+          "first_date": "2023-02-17",
+          "last_date": "2024-07-01",
+          "rows": 501
+        },
+        "AGLDUSDT": {
+          "first_date": "2021-10-05",
+          "last_date": "2026-09-30",
+          "rows": 1822
+        },
+        "AGPUBUSDT": {
+          "first_date": "2026-09-23",
+          "last_date": "2026-09-30",
+          "rows": 8
+        },
+        "AIGENSYNUSDT": {
+          "first_date": "2026-05-14",
+          "last_date": "2026-09-30",
+          "rows": 140
+        },
+        "AIONUSDT": {
+          "first_date": "2020-02-19",
+          "last_date": "2023-02-27",
+          "rows": 1105
+        },
+        "AIUSDT": {
+          "first_date": "2024-01-04",
+          "last_date": "2026-09-30",
+          "rows": 1001
+        },
+        "AIXBTUSDT": {
+          "first_date": "2025-01-10",
+          "last_date": "2026-09-30",
+          "rows": 629
+        },
+        "AKROUSDT": {
+          "first_date": "2020-11-02",
+          "last_date": "2024-12-25",
+          "rows": 1515
+        },
+        "ALABBUSDT": {
+          "first_date": "2026-08-05",
+          "last_date": "2026-09-30",
+          "rows": 57
+        },
+        "ALCXUSDT": {
+          "first_date": "2021-11-30",
+          "last_date": "2026-07-10",
+          "rows": 1684
+        },
+        "ALGOUSDT": {
+          "first_date": "2019-06-22",
+          "last_date": "2026-09-30",
+          "rows": 2658
+        },
+        "ALICEUSDT": {
+          "first_date": "2021-03-15",
+          "last_date": "2026-09-30",
+          "rows": 2026
+        },
+        "ALLOUSDT": {
+          "first_date": "2025-11-11",
+          "last_date": "2026-09-30",
+          "rows": 324
+        },
+        "ALPACAUSDT": {
+          "first_date": "2021-08-11",
+          "last_date": "2025-05-02",
+          "rows": 1361
+        },
+        "ALPHAUSDT": {
+          "first_date": "2020-10-10",
+          "last_date": "2025-07-04",
+          "rows": 1729
+        },
+        "ALPINEUSDT": {
+          "first_date": "2022-02-21",
+          "last_date": "2026-09-30",
+          "rows": 1683
+        },
+        "ALTUSDT": {
+          "first_date": "2024-01-25",
+          "last_date": "2026-09-30",
+          "rows": 980
+        },
+        "AMATBUSDT": {
+          "first_date": "2026-07-29",
+          "last_date": "2026-09-30",
+          "rows": 64
+        },
+        "AMBUSDT": {
+          "first_date": "2023-03-03",
+          "last_date": "2025-02-24",
+          "rows": 725
+        },
+        "AMCBUSDT": {
+          "first_date": "2026-09-23",
+          "last_date": "2026-09-30",
+          "rows": 8
+        },
+        "AMDBUSDT": {
+          "first_date": "2026-06-23",
+          "last_date": "2026-09-30",
+          "rows": 100
+        },
+        "AMPUSDT": {
+          "first_date": "2021-11-23",
+          "last_date": "2026-09-30",
+          "rows": 1773
+        },
+        "AMZNBUSDT": {
+          "first_date": "2026-07-29",
+          "last_date": "2026-09-30",
+          "rows": 64
+        },
+        "ANCUSDT": {
+          "first_date": "2022-01-25",
+          "last_date": "2022-12-27",
+          "rows": 337
+        },
+        "ANIMEUSDT": {
+          "first_date": "2025-01-23",
+          "last_date": "2026-09-30",
+          "rows": 616
+        },
+        "ANKRUSDT": {
+          "first_date": "2019-07-23",
+          "last_date": "2026-09-30",
+          "rows": 2627
+        },
+        "ANTUSDT": {
+          "first_date": "2020-08-13",
+          "last_date": "2024-02-20",
+          "rows": 1287
+        },
+        "ANYUSDT": {
+          "first_date": "2021-12-04",
+          "last_date": "2022-03-30",
+          "rows": 117
+        },
+        "APEUSDT": {
+          "first_date": "2022-03-17",
+          "last_date": "2026-09-30",
+          "rows": 1659
+        },
+        "API3USDT": {
+          "first_date": "2022-01-21",
+          "last_date": "2026-09-30",
+          "rows": 1714
+        },
+        "APTUSDT": {
+          "first_date": "2022-10-19",
+          "last_date": "2026-09-30",
+          "rows": 1443
+        },
+        "ARBUSDT": {
+          "first_date": "2023-03-23",
+          "last_date": "2026-09-30",
+          "rows": 1288
+        },
+        "ARDRUSDT": {
+          "first_date": "2020-05-15",
+          "last_date": "2026-07-10",
+          "rows": 2248
+        },
+        "ARKMUSDT": {
+          "first_date": "2023-07-18",
+          "last_date": "2026-09-30",
+          "rows": 1171
+        },
+        "ARKUSDT": {
+          "first_date": "2023-09-22",
+          "last_date": "2026-09-30",
+          "rows": 1105
+        },
+        "ARMBUSDT": {
+          "first_date": "2026-07-15",
+          "last_date": "2026-09-30",
+          "rows": 78
+        },
+        "ARPAUSDT": {
+          "first_date": "2019-11-06",
+          "last_date": "2026-09-30",
+          "rows": 2521
+        },
+        "ARUSDT": {
+          "first_date": "2021-05-14",
+          "last_date": "2026-09-30",
+          "rows": 1966
+        },
+        "ASMLBUSDT": {
+          "first_date": "2026-08-05",
+          "last_date": "2026-09-30",
+          "rows": 57
+        },
+        "ASRUSDT": {
+          "first_date": "2020-12-30",
+          "last_date": "2026-09-30",
+          "rows": 2101
+        },
+        "ASTERUSDT": {
+          "first_date": "2025-10-06",
+          "last_date": "2026-09-30",
+          "rows": 360
+        },
+        "ASTRUSDT": {
+          "first_date": "2022-02-28",
+          "last_date": "2026-09-30",
+          "rows": 1676
+        },
+        "ASTSBUSDT": {
+          "first_date": "2026-08-05",
+          "last_date": "2026-09-30",
+          "rows": 57
+        },
+        "ASTUSDT": {
+          "first_date": "2023-05-19",
+          "last_date": "2025-03-28",
+          "rows": 680
+        },
+        "ATAUSDT": {
+          "first_date": "2021-06-07",
+          "last_date": "2026-05-27",
+          "rows": 1816
+        },
+        "ATMUSDT": {
+          "first_date": "2020-12-30",
+          "last_date": "2026-09-30",
+          "rows": 2101
+        },
+        "ATOMUSDT": {
+          "first_date": "2019-04-29",
+          "last_date": "2026-09-30",
+          "rows": 2712
+        },
+        "ATUSDT": {
+          "first_date": "2025-11-27",
+          "last_date": "2026-09-30",
+          "rows": 308
+        },
+        "AUCTIONUSDT": {
+          "first_date": "2021-10-29",
+          "last_date": "2026-09-30",
+          "rows": 1798
+        },
+        "AUDIOUSDT": {
+          "first_date": "2020-10-23",
+          "last_date": "2026-09-30",
+          "rows": 2169
+        },
+        "AUSDT": {
+          "first_date": "2025-05-28",
+          "last_date": "2026-09-30",
+          "rows": 491
+        },
+        "AUTOUSDT": {
+          "first_date": "2021-04-02",
+          "last_date": "2023-04-18",
+          "rows": 747
+        },
+        "AVAUSDT": {
+          "first_date": "2020-11-24",
+          "last_date": "2026-09-30",
+          "rows": 2137
+        },
+        "AVAXUSDT": {
+          "first_date": "2020-09-22",
+          "last_date": "2026-09-30",
+          "rows": 2200
+        },
+        "AVGOBUSDT": {
+          "first_date": "2026-07-15",
+          "last_date": "2026-09-30",
+          "rows": 78
+        },
+        "AVNTUSDT": {
+          "first_date": "2025-09-15",
+          "last_date": "2026-09-30",
+          "rows": 381
+        },
+        "AWEUSDT": {
+          "first_date": "2025-05-21",
+          "last_date": "2026-09-30",
+          "rows": 498
+        },
+        "AXLUSDT": {
+          "first_date": "2024-03-01",
+          "last_date": "2026-09-30",
+          "rows": 944
+        },
+        "AXSUSDT": {
+          "first_date": "2020-11-04",
+          "last_date": "2026-09-30",
+          "rows": 2157
+        },
+        "AXTIBUSDT": {
+          "first_date": "2026-07-22",
+          "last_date": "2026-09-30",
+          "rows": 71
+        },
+        "BABABUSDT": {
+          "first_date": "2026-07-15",
+          "last_date": "2026-09-30",
+          "rows": 78
+        },
+        "BABYUSDT": {
+          "first_date": "2025-04-10",
+          "last_date": "2026-09-30",
+          "rows": 539
+        },
+        "BADGERUSDT": {
+          "first_date": "2021-03-02",
+          "last_date": "2025-04-16",
+          "rows": 1507
+        },
+        "BAKEUSDT": {
+          "first_date": "2021-04-30",
+          "last_date": "2025-09-17",
+          "rows": 1602
+        },
+        "BALUSDT": {
+          "first_date": "2020-08-11",
+          "last_date": "2025-04-16",
+          "rows": 1710
+        },
+        "BANANAS31USDT": {
+          "first_date": "2025-03-27",
+          "last_date": "2026-09-30",
+          "rows": 553
+        },
+        "BANANAUSDT": {
+          "first_date": "2024-07-20",
+          "last_date": "2026-09-30",
+          "rows": 803
+        },
+        "BANDUSDT": {
+          "first_date": "2019-09-18",
+          "last_date": "2026-09-30",
+          "rows": 2570
+        },
+        "BANKUSDT": {
+          "first_date": "2025-11-13",
+          "last_date": "2026-09-30",
+          "rows": 322
+        },
+        "BARDUSDT": {
+          "first_date": "2025-09-18",
+          "last_date": "2026-09-30",
+          "rows": 378
+        },
+        "BARUSDT": {
+          "first_date": "2021-04-21",
+          "last_date": "2026-09-30",
+          "rows": 1989
+        },
+        "BATUSDT": {
+          "first_date": "2019-03-04",
+          "last_date": "2026-09-30",
+          "rows": 2768
+        },
+        "BBUSDT": {
+          "first_date": "2024-05-13",
+          "last_date": "2026-09-30",
+          "rows": 871
+        },
+        "BCCUSDT": {
+          "first_date": "2017-11-11",
+          "last_date": "2018-11-20",
+          "rows": 371
+        },
+        "BCHABCUSDT": {
+          "first_date": "2018-11-16",
+          "last_date": "2019-11-28",
+          "rows": 378
+        },
+        "BCHSVUSDT": {
+          "first_date": "2018-11-16",
+          "last_date": "2019-04-22",
+          "rows": 158
+        },
+        "BCHUSDT": {
+          "first_date": "2019-11-28",
+          "last_date": "2026-09-30",
+          "rows": 2499
+        },
+        "BEAMUSDT": {
+          "first_date": "2019-09-21",
+          "last_date": "2023-01-26",
+          "rows": 1224
+        },
+        "BEAMXUSDT": {
+          "first_date": "2023-11-14",
+          "last_date": "2026-09-30",
+          "rows": 1052
+        },
+        "BEARUSDT": {
+          "first_date": "2020-01-17",
+          "last_date": "2020-03-31",
+          "rows": 75
+        },
+        "BEBUSDT": {
+          "first_date": "2026-07-29",
+          "last_date": "2026-09-30",
+          "rows": 64
+        },
+        "BELUSDT": {
+          "first_date": "2020-09-15",
+          "last_date": "2026-09-30",
+          "rows": 2207
+        },
+        "BERAUSDT": {
+          "first_date": "2025-02-06",
+          "last_date": "2026-09-30",
+          "rows": 602
+        },
+        "BETAUSDT": {
+          "first_date": "2021-10-08",
+          "last_date": "2025-04-16",
+          "rows": 1287
+        },
+        "BETHUSDT": {
+          "first_date": "2023-03-03",
+          "last_date": "2023-10-11",
+          "rows": 223
+        },
+        "BICOUSDT": {
+          "first_date": "2021-12-09",
+          "last_date": "2026-09-30",
+          "rows": 1757
+        },
+        "BIFIUSDT": {
+          "first_date": "2022-04-01",
+          "last_date": "2026-04-23",
+          "rows": 1484
+        },
+        "BIGTIMEUSDT": {
+          "first_date": "2025-04-11",
+          "last_date": "2026-09-30",
+          "rows": 538
+        },
+        "BIOUSDT": {
+          "first_date": "2025-01-03",
+          "last_date": "2026-09-30",
+          "rows": 636
+        },
+        "BLURUSDT": {
+          "first_date": "2023-11-24",
+          "last_date": "2026-09-30",
+          "rows": 1042
+        },
+        "BLZUSDT": {
+          "first_date": "2020-08-11",
+          "last_date": "2024-12-25",
+          "rows": 1598
+        },
+        "BMNRBUSDT": {
+          "first_date": "2026-08-05",
+          "last_date": "2026-09-30",
+          "rows": 57
+        },
+        "BMTUSDT": {
+          "first_date": "2025-03-18",
+          "last_date": "2026-09-30",
+          "rows": 562
+        },
+        "BNBUSDT": {
+          "first_date": "2017-11-06",
+          "last_date": "2026-09-30",
+          "rows": 3251
+        },
+        "BNCBUSDT": {
+          "first_date": "2026-09-14",
+          "last_date": "2026-09-30",
+          "rows": 17
+        },
+        "BNSOLUSDT": {
+          "first_date": "2024-10-17",
+          "last_date": "2026-09-30",
+          "rows": 714
+        },
+        "BNTUSDT": {
+          "first_date": "2020-02-06",
+          "last_date": "2026-09-30",
+          "rows": 2429
+        },
+        "BNXUSDT": {
+          "first_date": "2021-11-04",
+          "last_date": "2025-03-18",
+          "rows": 1226
+        },
+        "BOMEUSDT": {
+          "first_date": "2024-03-16",
+          "last_date": "2026-09-30",
+          "rows": 929
+        },
+        "BONDUSDT": {
+          "first_date": "2021-07-05",
+          "last_date": "2024-07-22",
+          "rows": 1114
+        },
+        "BONKUSDT": {
+          "first_date": "2023-12-15",
+          "last_date": "2026-09-30",
+          "rows": 1021
+        },
+        "BREVUSDT": {
+          "first_date": "2026-01-06",
+          "last_date": "2026-09-30",
+          "rows": 268
+        },
+        "BROCCOLI714USDT": {
+          "first_date": "2025-03-27",
+          "last_date": "2026-09-30",
+          "rows": 553
+        },
+        "BSWUSDT": {
+          "first_date": "2022-03-21",
+          "last_date": "2025-07-04",
+          "rows": 1202
+        },
+        "BTCSTUSDT": {
+          "first_date": "2021-01-13",
+          "last_date": "2022-11-28",
+          "rows": 682
+        },
+        "BTCUSDT": {
+          "first_date": "2017-08-17",
+          "last_date": "2026-09-30",
+          "rows": 3332
+        },
+        "BTGUSDT": {
+          "first_date": "2021-04-16",
+          "last_date": "2022-10-24",
+          "rows": 557
+        },
+        "BTSUSDT": {
+          "first_date": "2020-02-06",
+          "last_date": "2023-12-07",
+          "rows": 1401
+        },
+        "BTTCUSDT": {
+          "first_date": "2022-01-25",
+          "last_date": "2026-09-30",
+          "rows": 1710
+        },
+        "BTTUSDT": {
+          "first_date": "2019-01-31",
+          "last_date": "2022-01-17",
+          "rows": 1083
+        },
+        "BULLUSDT": {
+          "first_date": "2020-01-17",
+          "last_date": "2020-03-31",
+          "rows": 75
+        },
+        "BURGERUSDT": {
+          "first_date": "2021-04-30",
+          "last_date": "2025-03-28",
+          "rows": 1429
+        },
+        "BZRXUSDT": {
+          "first_date": "2020-08-31",
+          "last_date": "2021-12-20",
+          "rows": 477
+        },
+        "C98USDT": {
+          "first_date": "2021-07-23",
+          "last_date": "2026-09-30",
+          "rows": 1896
+        },
+        "CAKEUSDT": {
+          "first_date": "2021-02-19",
+          "last_date": "2026-09-30",
+          "rows": 2050
+        },
+        "CATIUSDT": {
+          "first_date": "2024-09-20",
+          "last_date": "2026-09-30",
+          "rows": 741
+        },
+        "CBRSBUSDT": {
+          "first_date": "2026-07-07",
+          "last_date": "2026-09-30",
+          "rows": 86
+        },
+        "CELOUSDT": {
+          "first_date": "2021-01-05",
+          "last_date": "2026-09-30",
+          "rows": 2095
+        },
+        "CELRUSDT": {
+          "first_date": "2019-03-25",
+          "last_date": "2026-09-30",
+          "rows": 2747
+        },
+        "CETUSUSDT": {
+          "first_date": "2024-11-06",
+          "last_date": "2026-09-30",
+          "rows": 694
+        },
+        "CFGUSDT": {
+          "first_date": "2026-03-16",
+          "last_date": "2026-09-30",
+          "rows": 199
+        },
+        "CFXUSDT": {
+          "first_date": "2021-03-29",
+          "last_date": "2026-09-30",
+          "rows": 2012
+        },
+        "CGPTUSDT": {
+          "first_date": "2025-01-10",
+          "last_date": "2026-09-30",
+          "rows": 629
+        },
+        "CHESSUSDT": {
+          "first_date": "2021-10-22",
+          "last_date": "2026-02-13",
+          "rows": 1576
+        },
+        "CHIPUSDT": {
+          "first_date": "2026-04-21",
+          "last_date": "2026-09-30",
+          "rows": 163
+        },
+        "CHRUSDT": {
+          "first_date": "2020-05-07",
+          "last_date": "2026-09-30",
+          "rows": 2338
+        },
+        "CHZUSDT": {
+          "first_date": "2019-09-06",
+          "last_date": "2026-09-30",
+          "rows": 2582
+        },
+        "CITYUSDT": {
+          "first_date": "2021-11-10",
+          "last_date": "2026-09-30",
+          "rows": 1786
+        },
+        "CKBUSDT": {
+          "first_date": "2021-01-26",
+          "last_date": "2026-09-30",
+          "rows": 2074
+        },
+        "CLVUSDT": {
+          "first_date": "2021-07-29",
+          "last_date": "2025-02-24",
+          "rows": 1307
+        },
+        "COCOSUSDT": {
+          "first_date": "2019-08-21",
+          "last_date": "2023-05-29",
+          "rows": 1375
+        },
+        "COHRBUSDT": {
+          "first_date": "2026-08-05",
+          "last_date": "2026-09-30",
+          "rows": 57
+        },
+        "COINBUSDT": {
+          "first_date": "2026-07-07",
+          "last_date": "2026-09-30",
+          "rows": 86
+        },
+        "COMBOUSDT": {
+          "first_date": "2023-06-02",
+          "last_date": "2025-03-28",
+          "rows": 666
+        },
+        "COMPUSDT": {
+          "first_date": "2020-06-25",
+          "last_date": "2026-09-30",
+          "rows": 2289
+        },
+        "COOKIEUSDT": {
+          "first_date": "2025-01-10",
+          "last_date": "2026-09-30",
+          "rows": 629
+        },
+        "COSUSDT": {
+          "first_date": "2019-08-03",
+          "last_date": "2026-06-19",
+          "rows": 2513
+        },
+        "COTIUSDT": {
+          "first_date": "2020-02-26",
+          "last_date": "2026-09-30",
+          "rows": 2409
+        },
+        "COWUSDT": {
+          "first_date": "2024-11-06",
+          "last_date": "2026-09-30",
+          "rows": 694
+        },
+        "CRCLBUSDT": {
+          "first_date": "2026-06-11",
+          "last_date": "2026-09-30",
+          "rows": 112
+        },
+        "CRDOBUSDT": {
+          "first_date": "2026-08-05",
+          "last_date": "2026-09-30",
+          "rows": 57
+        },
+        "CREAMUSDT": {
+          "first_date": "2023-09-22",
+          "last_date": "2025-04-16",
+          "rows": 573
+        },
+        "CRMBUSDT": {
+          "first_date": "2026-09-09",
+          "last_date": "2026-09-30",
+          "rows": 22
+        },
+        "CRVUSDT": {
+          "first_date": "2020-08-15",
+          "last_date": "2026-09-30",
+          "rows": 2238
+        },
+        "CRWDBUSDT": {
+          "first_date": "2026-09-02",
+          "last_date": "2026-09-30",
+          "rows": 29
+        },
+        "CRWVBUSDT": {
+          "first_date": "2026-07-22",
+          "last_date": "2026-09-30",
+          "rows": 71
+        },
+        "CTKUSDT": {
+          "first_date": "2020-10-27",
+          "last_date": "2026-09-30",
+          "rows": 2165
+        },
+        "CTSIUSDT": {
+          "first_date": "2020-04-23",
+          "last_date": "2026-09-30",
+          "rows": 2352
+        },
+        "CTXCUSDT": {
+          "first_date": "2019-11-22",
+          "last_date": "2025-04-16",
+          "rows": 1973
+        },
+        "CUSDT": {
+          "first_date": "2025-07-18",
+          "last_date": "2026-09-30",
+          "rows": 440
+        },
+        "CVCUSDT": {
+          "first_date": "2019-08-27",
+          "last_date": "2022-12-09",
+          "rows": 1201
+        },
+        "CVCUSDT#2": {
+          "first_date": "2023-05-12",
+          "last_date": "2026-09-30",
+          "rows": 1238
+        },
+        "CVPUSDT": {
+          "first_date": "2021-10-04",
+          "last_date": "2024-08-26",
+          "rows": 1058
+        },
+        "CVXUSDT": {
+          "first_date": "2021-12-23",
+          "last_date": "2026-09-30",
+          "rows": 1743
+        },
+        "CYBERUSDT": {
+          "first_date": "2023-08-15",
+          "last_date": "2026-09-30",
+          "rows": 1143
+        },
+        "CYPHBUSDT": {
+          "first_date": "2026-09-23",
+          "last_date": "2026-09-30",
+          "rows": 8
+        },
+        "DARUSDT": {
+          "first_date": "2021-11-04",
+          "last_date": "2025-01-06",
+          "rows": 1160
+        },
+        "DASHUSDT": {
+          "first_date": "2019-03-28",
+          "last_date": "2026-09-30",
+          "rows": 2744
+        },
+        "DATAUSDT": {
+          "first_date": "2020-04-07",
+          "last_date": "2026-02-13",
+          "rows": 2139
+        },
+        "DCRUSDT": {
+          "first_date": "2020-07-30",
+          "last_date": "2026-09-30",
+          "rows": 2254
+        },
+        "DEGOUSDT": {
+          "first_date": "2021-03-10",
+          "last_date": "2026-04-28",
+          "rows": 1876
+        },
+        "DELLBUSDT": {
+          "first_date": "2026-07-29",
+          "last_date": "2026-09-30",
+          "rows": 64
+        },
+        "DENTUSDT": {
+          "first_date": "2019-08-27",
+          "last_date": "2026-04-28",
+          "rows": 2437
+        },
+        "DEXEUSDT": {
+          "first_date": "2021-07-23",
+          "last_date": "2026-09-30",
+          "rows": 1896
+        },
+        "DFUSDT": {
+          "first_date": "2021-09-24",
+          "last_date": "2026-02-13",
+          "rows": 1604
+        },
+        "DGBUSDT": {
+          "first_date": "2020-07-20",
+          "last_date": "2026-09-30",
+          "rows": 2264
+        },
+        "DIAUSDT": {
+          "first_date": "2020-09-04",
+          "last_date": "2026-09-30",
+          "rows": 2218
+        },
+        "DJTBUSDT": {
+          "first_date": "2026-08-26",
+          "last_date": "2026-09-30",
+          "rows": 36
+        },
+        "DNTUSDT": {
+          "first_date": "2020-11-10",
+          "last_date": "2022-10-24",
+          "rows": 714
+        },
+        "DOCKUSDT": {
+          "first_date": "2019-08-27",
+          "last_date": "2024-07-22",
+          "rows": 1792
+        },
+        "DODOUSDT": {
+          "first_date": "2021-02-19",
+          "last_date": "2026-09-30",
+          "rows": 2050
+        },
+        "DOGEUSDT": {
+          "first_date": "2019-07-05",
+          "last_date": "2026-09-30",
+          "rows": 2645
+        },
+        "DOGSUSDT": {
+          "first_date": "2024-08-26",
+          "last_date": "2026-09-30",
+          "rows": 766
+        },
+        "DOLOUSDT": {
+          "first_date": "2025-08-27",
+          "last_date": "2026-09-30",
+          "rows": 400
+        },
+        "DOTUSDT": {
+          "first_date": "2020-08-18",
+          "last_date": "2026-09-30",
+          "rows": 2235
+        },
+        "DRAMBUSDT": {
+          "first_date": "2026-07-07",
+          "last_date": "2026-09-30",
+          "rows": 86
+        },
+        "DREPUSDT": {
+          "first_date": "2020-01-16",
+          "last_date": "2024-04-03",
+          "rows": 1537
+        },
+        "DUSDT": {
+          "first_date": "2025-01-09",
+          "last_date": "2026-06-19",
+          "rows": 527
+        },
+        "DUSKUSDT": {
+          "first_date": "2019-07-22",
+          "last_date": "2026-09-30",
+          "rows": 2628
+        },
+        "DYDXUSDT": {
+          "first_date": "2021-09-09",
+          "last_date": "2026-09-30",
+          "rows": 1848
+        },
+        "DYMUSDT": {
+          "first_date": "2024-02-06",
+          "last_date": "2026-09-30",
+          "rows": 968
+        },
+        "EDENUSDT": {
+          "first_date": "2025-09-30",
+          "last_date": "2026-09-30",
+          "rows": 366
+        },
+        "EDUUSDT": {
+          "first_date": "2023-04-28",
+          "last_date": "2026-09-30",
+          "rows": 1252
+        },
+        "EGLDUSDT": {
+          "first_date": "2020-09-03",
+          "last_date": "2026-09-30",
+          "rows": 2219
+        },
+        "EIGENUSDT": {
+          "first_date": "2024-10-01",
+          "last_date": "2026-09-30",
+          "rows": 730
+        },
+        "ELFUSDT": {
+          "first_date": "2021-09-08",
+          "last_date": "2025-04-16",
+          "rows": 1317
+        },
+        "ENAUSDT": {
+          "first_date": "2024-04-02",
+          "last_date": "2026-09-30",
+          "rows": 912
+        },
+        "ENJUSDT": {
+          "first_date": "2019-04-18",
+          "last_date": "2026-09-30",
+          "rows": 2723
+        },
+        "ENSOUSDT": {
+          "first_date": "2025-10-14",
+          "last_date": "2026-09-30",
+          "rows": 352
+        },
+        "ENSUSDT": {
+          "first_date": "2021-11-10",
+          "last_date": "2026-09-30",
+          "rows": 1786
+        },
+        "EOSUSDT": {
+          "first_date": "2018-05-28",
+          "last_date": "2025-05-26",
+          "rows": 2556
+        },
+        "EPICUSDT": {
+          "first_date": "2025-03-13",
+          "last_date": "2026-09-30",
+          "rows": 567
+        },
+        "EPSUSDT": {
+          "first_date": "2021-04-02",
+          "last_date": "2022-05-09",
+          "rows": 403
+        },
+        "EPXUSDT": {
+          "first_date": "2022-05-23",
+          "last_date": "2024-08-26",
+          "rows": 827
+        },
+        "ERAUSDT": {
+          "first_date": "2025-07-17",
+          "last_date": "2026-09-30",
+          "rows": 441
+        },
+        "ERDUSDT": {
+          "first_date": "2019-07-04",
+          "last_date": "2020-08-31",
+          "rows": 425
+        },
+        "ERNUSDT": {
+          "first_date": "2021-06-22",
+          "last_date": "2025-03-10",
+          "rows": 1358
+        },
+        "ESPUSDT": {
+          "first_date": "2026-02-12",
+          "last_date": "2026-09-30",
+          "rows": 231
+        },
+        "ETCUSDT": {
+          "first_date": "2018-06-12",
+          "last_date": "2026-09-30",
+          "rows": 3033
+        },
+        "ETHFIUSDT": {
+          "first_date": "2024-03-18",
+          "last_date": "2026-09-30",
+          "rows": 927
+        },
+        "ETHUSDT": {
+          "first_date": "2017-08-17",
+          "last_date": "2026-09-30",
+          "rows": 3332
+        },
+        "EULUSDT": {
+          "first_date": "2025-10-13",
+          "last_date": "2026-09-30",
+          "rows": 353
+        },
+        "EWYBUSDT": {
+          "first_date": "2026-06-23",
+          "last_date": "2026-09-30",
+          "rows": 100
+        },
+        "FARMUSDT": {
+          "first_date": "2021-08-11",
+          "last_date": "2026-05-27",
+          "rows": 1751
+        },
+        "FETUSDT": {
+          "first_date": "2019-02-28",
+          "last_date": "2026-09-30",
+          "rows": 2772
+        },
+        "FFUSDT": {
+          "first_date": "2025-09-29",
+          "last_date": "2026-09-30",
+          "rows": 367
+        },
+        "FIDAUSDT": {
+          "first_date": "2021-09-30",
+          "last_date": "2026-09-30",
+          "rows": 1827
+        },
+        "FILUSDT": {
+          "first_date": "2020-10-15",
+          "last_date": "2026-09-30",
+          "rows": 2177
+        },
+        "FIOUSDT": {
+          "first_date": "2020-09-04",
+          "last_date": "2026-04-23",
+          "rows": 2058
+        },
+        "FIROUSDT": {
+          "first_date": "2021-01-29",
+          "last_date": "2025-04-16",
+          "rows": 1539
+        },
+        "FISUSDT": {
+          "first_date": "2021-03-03",
+          "last_date": "2025-12-17",
+          "rows": 1751
+        },
+        "FLMUSDT": {
+          "first_date": "2020-09-28",
+          "last_date": "2025-11-12",
+          "rows": 1872
+        },
+        "FLNCBUSDT": {
+          "first_date": "2026-07-29",
+          "last_date": "2026-09-30",
+          "rows": 64
+        },
+        "FLOKIUSDT": {
+          "first_date": "2023-05-05",
+          "last_date": "2026-09-30",
+          "rows": 1245
+        },
+        "FLOWUSDT": {
+          "first_date": "2021-07-30",
+          "last_date": "2026-09-30",
+          "rows": 1889
+        },
+        "FLUXUSDT": {
+          "first_date": "2021-12-10",
+          "last_date": "2026-09-30",
+          "rows": 1756
+        },
+        "FOGOUSDT": {
+          "first_date": "2026-01-15",
+          "last_date": "2026-09-30",
+          "rows": 259
+        },
+        "FORMUSDT": {
+          "first_date": "2025-03-19",
+          "last_date": "2026-09-30",
+          "rows": 561
+        },
+        "FORTHUSDT": {
+          "first_date": "2021-04-23",
+          "last_date": "2026-04-01",
+          "rows": 1805
+        },
+        "FORUSDT": {
+          "first_date": "2021-08-20",
+          "last_date": "2024-08-26",
+          "rows": 1103
+        },
+        "FRONTUSDT": {
+          "first_date": "2021-10-04",
+          "last_date": "2024-08-27",
+          "rows": 1059
+        },
+        "FTMUSDT": {
+          "first_date": "2019-06-11",
+          "last_date": "2025-01-13",
+          "rows": 2044
+        },
+        "FTTUSDT": {
+          "first_date": "2019-12-20",
+          "last_date": "2022-11-15",
+          "rows": 1062
+        },
+        "FTTUSDT#2": {
+          "first_date": "2023-09-22",
+          "last_date": "2026-09-30",
+          "rows": 1105
+        },
+        "FUNUSDT": {
+          "first_date": "2019-08-27",
+          "last_date": "2026-04-23",
+          "rows": 2432
+        },
+        "FUSDT": {
+          "first_date": "2025-10-25",
+          "last_date": "2026-09-30",
+          "rows": 341
+        },
+        "FWDIBUSDT": {
+          "first_date": "2026-09-30",
+          "last_date": "2026-09-30",
+          "rows": 1
+        },
+        "FXSUSDT": {
+          "first_date": "2021-12-10",
+          "last_date": "2026-01-13",
+          "rows": 1496
+        },
+        "GALAUSDT": {
+          "first_date": "2021-09-13",
+          "last_date": "2026-09-30",
+          "rows": 1844
+        },
+        "GALUSDT": {
+          "first_date": "2022-05-05",
+          "last_date": "2024-07-15",
+          "rows": 803
+        },
+        "GASUSDT": {
+          "first_date": "2023-03-17",
+          "last_date": "2026-09-30",
+          "rows": 1294
+        },
+        "GENIUSUSDT": {
+          "first_date": "2026-05-22",
+          "last_date": "2026-09-30",
+          "rows": 132
+        },
+        "GFTUSDT": {
+          "first_date": "2023-09-22",
+          "last_date": "2024-12-03",
+          "rows": 439
+        },
+        "GHSTUSDT": {
+          "first_date": "2021-08-20",
+          "last_date": "2026-02-13",
+          "rows": 1639
+        },
+        "GIGGLEUSDT": {
+          "first_date": "2025-10-25",
+          "last_date": "2026-09-30",
+          "rows": 341
+        },
+        "GLMRUSDT": {
+          "first_date": "2022-01-11",
+          "last_date": "2026-09-30",
+          "rows": 1724
+        },
+        "GLMUSDT": {
+          "first_date": "2023-03-17",
+          "last_date": "2026-09-30",
+          "rows": 1294
+        },
+        "GLWBUSDT": {
+          "first_date": "2026-07-07",
+          "last_date": "2026-09-30",
+          "rows": 86
+        },
+        "GMEBUSDT": {
+          "first_date": "2026-08-12",
+          "last_date": "2026-09-30",
+          "rows": 50
+        },
+        "GMTUSDT": {
+          "first_date": "2022-03-09",
+          "last_date": "2026-09-30",
+          "rows": 1667
+        },
+        "GMXUSDT": {
+          "first_date": "2022-10-05",
+          "last_date": "2026-09-30",
+          "rows": 1457
+        },
+        "GNOUSDT": {
+          "first_date": "2021-08-30",
+          "last_date": "2026-09-30",
+          "rows": 1858
+        },
+        "GNSUSDT": {
+          "first_date": "2023-02-17",
+          "last_date": "2026-09-30",
+          "rows": 1322
+        },
+        "GOOGLBUSDT": {
+          "first_date": "2026-07-07",
+          "last_date": "2026-09-30",
+          "rows": 86
+        },
+        "GPROBUSDT": {
+          "first_date": "2026-09-16",
+          "last_date": "2026-09-30",
+          "rows": 15
+        },
+        "GPSUSDT": {
+          "first_date": "2025-03-04",
+          "last_date": "2026-09-30",
+          "rows": 576
+        },
+        "GRAMUSDT": {
+          "first_date": "2026-07-02",
+          "last_date": "2026-09-30",
+          "rows": 91
+        },
+        "GRTUSDT": {
+          "first_date": "2020-12-17",
+          "last_date": "2026-09-30",
+          "rows": 2114
+        },
+        "GSBUSDT": {
+          "first_date": "2026-07-29",
+          "last_date": "2026-09-30",
+          "rows": 64
+        },
+        "GTCUSDT": {
+          "first_date": "2021-06-10",
+          "last_date": "2026-09-30",
+          "rows": 1939
+        },
+        "GTOUSDT": {
+          "first_date": "2019-07-01",
+          "last_date": "2022-11-28",
+          "rows": 1247
+        },
+        "GUNUSDT": {
+          "first_date": "2025-03-31",
+          "last_date": "2026-09-30",
+          "rows": 549
+        },
+        "GUSDT": {
+          "first_date": "2024-07-19",
+          "last_date": "2026-09-30",
+          "rows": 804
+        },
+        "GXSUSDT": {
+          "first_date": "2020-05-13",
+          "last_date": "2022-04-25",
+          "rows": 713
+        },
+        "HAEDALUSDT": {
+          "first_date": "2025-05-21",
+          "last_date": "2026-09-30",
+          "rows": 498
+        },
+        "HARDUSDT": {
+          "first_date": "2020-11-06",
+          "last_date": "2025-04-16",
+          "rows": 1623
+        },
+        "HBARUSDT": {
+          "first_date": "2019-09-29",
+          "last_date": "2026-09-30",
+          "rows": 2559
+        },
+        "HCUSDT": {
+          "first_date": "2019-09-25",
+          "last_date": "2020-11-10",
+          "rows": 413
+        },
+        "HEIUSDT": {
+          "first_date": "2025-02-13",
+          "last_date": "2026-09-30",
+          "rows": 595
+        },
+        "HEMIUSDT": {
+          "first_date": "2025-09-23",
+          "last_date": "2026-09-30",
+          "rows": 373
+        },
+        "HFTUSDT": {
+          "first_date": "2022-11-07",
+          "last_date": "2026-08-17",
+          "rows": 1380
+        },
+        "HIFIUSDT": {
+          "first_date": "2023-01-12",
+          "last_date": "2025-09-17",
+          "rows": 980
+        },
+        "HIGHUSDT": {
+          "first_date": "2021-12-17",
+          "last_date": "2026-06-19",
+          "rows": 1646
+        },
+        "HIMSBUSDT": {
+          "first_date": "2026-09-09",
+          "last_date": "2026-09-30",
+          "rows": 22
+        },
+        "HIVEUSDT": {
+          "first_date": "2020-04-27",
+          "last_date": "2026-09-30",
+          "rows": 2348
+        },
+        "HMSTRUSDT": {
+          "first_date": "2024-09-26",
+          "last_date": "2026-09-30",
+          "rows": 735
+        },
+        "HNTUSDT": {
+          "first_date": "2020-09-24",
+          "last_date": "2022-10-14",
+          "rows": 751
+        },
+        "HOLOUSDT": {
+          "first_date": "2025-09-11",
+          "last_date": "2026-09-30",
+          "rows": 385
+        },
+        "HOMEUSDT": {
+          "first_date": "2025-06-12",
+          "last_date": "2026-09-30",
+          "rows": 476
+        },
+        "HOODBUSDT": {
+          "first_date": "2026-07-15",
+          "last_date": "2026-09-30",
+          "rows": 78
+        },
+        "HOOKUSDT": {
+          "first_date": "2022-12-01",
+          "last_date": "2026-04-01",
+          "rows": 1218
+        },
+        "HOTUSDT": {
+          "first_date": "2019-02-18",
+          "last_date": "2026-09-30",
+          "rows": 2782
+        },
+        "HPEBUSDT": {
+          "first_date": "2026-09-30",
+          "last_date": "2026-09-30",
+          "rows": 1
+        },
+        "HUMAUSDT": {
+          "first_date": "2025-05-26",
+          "last_date": "2026-09-30",
+          "rows": 493
+        },
+        "HYPERUSDT": {
+          "first_date": "2025-04-22",
+          "last_date": "2026-09-30",
+          "rows": 527
+        },
+        "HYPEUSDT": {
+          "first_date": "2026-09-24",
+          "last_date": "2026-09-30",
+          "rows": 7
+        },
+        "IBMBUSDT": {
+          "first_date": "2026-07-15",
+          "last_date": "2026-09-30",
+          "rows": 78
+        },
+        "ICPUSDT": {
+          "first_date": "2021-05-11",
+          "last_date": "2026-09-30",
+          "rows": 1969
+        },
+        "ICXUSDT": {
+          "first_date": "2018-06-13",
+          "last_date": "2026-09-03",
+          "rows": 3005
+        },
+        "IDEXUSDT": {
+          "first_date": "2021-09-09",
+          "last_date": "2026-04-01",
+          "rows": 1666
+        },
+        "IDUSDT": {
+          "first_date": "2023-03-22",
+          "last_date": "2026-09-30",
+          "rows": 1289
+        },
+        "ILVUSDT": {
+          "first_date": "2021-09-22",
+          "last_date": "2026-09-30",
+          "rows": 1835
+        },
+        "IMXUSDT": {
+          "first_date": "2022-01-10",
+          "last_date": "2026-09-30",
+          "rows": 1725
+        },
+        "INITUSDT": {
+          "first_date": "2025-04-24",
+          "last_date": "2026-09-30",
+          "rows": 525
+        },
+        "INJUSDT": {
+          "first_date": "2020-10-21",
+          "last_date": "2026-09-30",
+          "rows": 2171
+        },
+        "INTCBUSDT": {
+          "first_date": "2026-06-23",
+          "last_date": "2026-09-30",
+          "rows": 100
+        },
+        "INTWBUSDT": {
+          "first_date": "2026-07-22",
+          "last_date": "2026-09-30",
+          "rows": 71
+        },
+        "IOSTUSDT": {
+          "first_date": "2019-03-22",
+          "last_date": "2026-09-30",
+          "rows": 2750
+        },
+        "IOTAUSDT": {
+          "first_date": "2018-05-31",
+          "last_date": "2026-09-30",
+          "rows": 3045
+        },
+        "IOTXUSDT": {
+          "first_date": "2019-11-14",
+          "last_date": "2026-09-30",
+          "rows": 2513
+        },
+        "IOUSDT": {
+          "first_date": "2024-06-11",
+          "last_date": "2026-09-30",
+          "rows": 842
+        },
+        "IQUSDT": {
+          "first_date": "2023-09-22",
+          "last_date": "2026-09-30",
+          "rows": 1105
+        },
+        "IRENBUSDT": {
+          "first_date": "2026-08-05",
+          "last_date": "2026-09-30",
+          "rows": 57
+        },
+        "IRISUSDT": {
+          "first_date": "2020-08-11",
+          "last_date": "2024-12-10",
+          "rows": 1583
+        },
+        "JASMYUSDT": {
+          "first_date": "2021-11-22",
+          "last_date": "2026-09-30",
+          "rows": 1774
+        },
+        "JOEUSDT": {
+          "first_date": "2021-12-28",
+          "last_date": "2026-09-30",
+          "rows": 1738
+        },
+        "JSTUSDT": {
+          "first_date": "2020-08-11",
+          "last_date": "2026-09-30",
+          "rows": 2242
+        },
+        "JTOUSDT": {
+          "first_date": "2023-12-07",
+          "last_date": "2026-09-30",
+          "rows": 1029
+        },
+        "JUPUSDT": {
+          "first_date": "2024-01-31",
+          "last_date": "2026-09-30",
+          "rows": 974
+        },
+        "JUVUSDT": {
+          "first_date": "2020-12-21",
+          "last_date": "2026-09-30",
+          "rows": 2110
+        },
+        "KAIAUSDT": {
+          "first_date": "2024-10-31",
+          "last_date": "2026-09-30",
+          "rows": 700
+        },
+        "KAITOUSDT": {
+          "first_date": "2025-02-20",
+          "last_date": "2026-09-30",
+          "rows": 588
+        },
+        "KATUSDT": {
+          "first_date": "2026-03-18",
+          "last_date": "2026-09-30",
+          "rows": 197
+        },
+        "KAVAUSDT": {
+          "first_date": "2019-10-25",
+          "last_date": "2026-09-30",
+          "rows": 2533
+        },
+        "KDAUSDT": {
+          "first_date": "2022-03-11",
+          "last_date": "2025-11-12",
+          "rows": 1343
+        },
+        "KEEPUSDT": {
+          "first_date": "2021-06-17",
+          "last_date": "2022-02-16",
+          "rows": 245
+        },
+        "KERNELUSDT": {
+          "first_date": "2025-04-14",
+          "last_date": "2026-09-30",
+          "rows": 535
+        },
+        "KEYUSDT": {
+          "first_date": "2019-08-27",
+          "last_date": "2024-12-10",
+          "rows": 1906
+        },
+        "KGSTUSDT": {
+          "first_date": "2025-12-24",
+          "last_date": "2026-09-30",
+          "rows": 281
+        },
+        "KITEUSDT": {
+          "first_date": "2025-11-03",
+          "last_date": "2026-09-30",
+          "rows": 332
+        },
+        "KLAYUSDT": {
+          "first_date": "2021-06-24",
+          "last_date": "2024-10-30",
+          "rows": 1225
+        },
+        "KMDUSDT": {
+          "first_date": "2020-08-11",
+          "last_date": "2025-07-04",
+          "rows": 1789
+        },
+        "KMNOUSDT": {
+          "first_date": "2025-05-06",
+          "last_date": "2026-09-30",
+          "rows": 513
+        },
+        "KNCUSDT": {
+          "first_date": "2020-06-12",
+          "last_date": "2026-09-30",
+          "rows": 2302
+        },
+        "KORUBUSDT": {
+          "first_date": "2026-07-22",
+          "last_date": "2026-09-30",
+          "rows": 71
+        },
+        "KP3RUSDT": {
+          "first_date": "2021-11-12",
+          "last_date": "2024-11-06",
+          "rows": 1091
+        },
+        "KSMUSDT": {
+          "first_date": "2020-09-04",
+          "last_date": "2026-09-30",
+          "rows": 2218
+        },
+        "LAUSDT": {
+          "first_date": "2025-07-09",
+          "last_date": "2026-09-30",
+          "rows": 449
+        },
+        "LAYERUSDT": {
+          "first_date": "2025-02-11",
+          "last_date": "2026-09-30",
+          "rows": 597
+        },
+        "LAZIOUSDT": {
+          "first_date": "2021-10-21",
+          "last_date": "2026-09-30",
+          "rows": 1806
+        },
+        "LDOUSDT": {
+          "first_date": "2022-05-09",
+          "last_date": "2026-09-30",
+          "rows": 1606
+        },
+        "LENDUSDT": {
+          "first_date": "2020-05-15",
+          "last_date": "2020-10-12",
+          "rows": 151
+        },
+        "LEVERUSDT": {
+          "first_date": "2022-07-13",
+          "last_date": "2025-07-04",
+          "rows": 1088
+        },
+        "LINAUSDT": {
+          "first_date": "2021-03-18",
+          "last_date": "2025-03-28",
+          "rows": 1472
+        },
+        "LINEAUSDT": {
+          "first_date": "2025-09-10",
+          "last_date": "2026-09-30",
+          "rows": 386
+        },
+        "LINKUSDT": {
+          "first_date": "2019-01-16",
+          "last_date": "2026-09-30",
+          "rows": 2815
+        },
+        "LISTAUSDT": {
+          "first_date": "2024-06-20",
+          "last_date": "2026-09-30",
+          "rows": 833
+        },
+        "LITEBUSDT": {
+          "first_date": "2026-06-30",
+          "last_date": "2026-09-30",
+          "rows": 93
+        },
+        "LITUSDT": {
+          "first_date": "2021-02-04",
+          "last_date": "2025-02-10",
+          "rows": 1468
+        },
+        "LOKAUSDT": {
+          "first_date": "2022-01-20",
+          "last_date": "2025-07-28",
+          "rows": 1286
+        },
+        "LOOMUSDT": {
+          "first_date": "2023-03-24",
+          "last_date": "2024-08-26",
+          "rows": 522
+        },
+        "LPTUSDT": {
+          "first_date": "2021-05-28",
+          "last_date": "2026-09-30",
+          "rows": 1952
+        },
+        "LQTYUSDT": {
+          "first_date": "2023-02-28",
+          "last_date": "2026-09-30",
+          "rows": 1311
+        },
+        "LRCUSDT": {
+          "first_date": "2020-06-12",
+          "last_date": "2026-04-01",
+          "rows": 2120
+        },
+        "LSKUSDT": {
+          "first_date": "2020-02-06",
+          "last_date": "2026-09-30",
+          "rows": 2429
+        },
+        "LTCUSDT": {
+          "first_date": "2017-12-13",
+          "last_date": "2026-09-30",
+          "rows": 3214
+        },
+        "LTOUSDT": {
+          "first_date": "2020-02-07",
+          "last_date": "2025-07-04",
+          "rows": 1975
+        },
+        "LUMIAUSDT": {
+          "first_date": "2024-10-18",
+          "last_date": "2026-09-30",
+          "rows": 713
+        },
+        "LUNAUSDT": {
+          "first_date": "2020-08-21",
+          "last_date": "2026-09-30",
+          "rows": 2215
+        },
+        "LUNCUSDT": {
+          "first_date": "2022-09-09",
+          "last_date": "2026-09-30",
+          "rows": 1483
+        },
+        "MAGICUSDT": {
+          "first_date": "2022-12-12",
+          "last_date": "2026-09-30",
+          "rows": 1389
+        },
+        "MANAUSDT": {
+          "first_date": "2020-08-06",
+          "last_date": "2026-09-30",
+          "rows": 2247
+        },
+        "MANTAUSDT": {
+          "first_date": "2024-01-18",
+          "last_date": "2026-09-30",
+          "rows": 987
+        },
+        "MANTRAUSDT": {
+          "first_date": "2026-03-04",
+          "last_date": "2026-09-30",
+          "rows": 211
+        },
+        "MARSCOINUSDT": {
+          "first_date": "2026-09-04",
+          "last_date": "2026-09-30",
+          "rows": 27
+        },
+        "MASKUSDT": {
+          "first_date": "2021-05-25",
+          "last_date": "2026-09-30",
+          "rows": 1955
+        },
+        "MATICUSDT": {
+          "first_date": "2019-04-26",
+          "last_date": "2024-09-10",
+          "rows": 1965
+        },
+        "MAVUSDT": {
+          "first_date": "2023-06-28",
+          "last_date": "2026-09-30",
+          "rows": 1191
+        },
+        "MBLUSDT": {
+          "first_date": "2020-02-21",
+          "last_date": "2026-09-30",
+          "rows": 2414
+        },
+        "MBOXUSDT": {
+          "first_date": "2021-08-19",
+          "last_date": "2026-06-19",
+          "rows": 1766
+        },
+        "MCOUSDT": {
+          "first_date": "2019-11-19",
+          "last_date": "2020-10-23",
+          "rows": 340
+        },
+        "MCUSDT": {
+          "first_date": "2021-12-02",
+          "last_date": "2023-11-07",
+          "rows": 706
+        },
+        "MDTUSDT": {
+          "first_date": "2020-06-05",
+          "last_date": "2026-04-23",
+          "rows": 2149
+        },
+        "MDXUSDT": {
+          "first_date": "2021-05-24",
+          "last_date": "2024-07-22",
+          "rows": 1156
+        },
+        "MEGAUSDT": {
+          "first_date": "2026-04-30",
+          "last_date": "2026-09-30",
+          "rows": 154
+        },
+        "MEMEUSDT": {
+          "first_date": "2023-11-03",
+          "last_date": "2026-09-30",
+          "rows": 1063
+        },
+        "METABUSDT": {
+          "first_date": "2026-06-30",
+          "last_date": "2026-09-30",
+          "rows": 93
+        },
+        "METISUSDT": {
+          "first_date": "2024-03-11",
+          "last_date": "2026-09-30",
+          "rows": 934
+        },
+        "METUSDT": {
+          "first_date": "2025-11-13",
+          "last_date": "2026-09-30",
+          "rows": 322
+        },
+        "MEUSDT": {
+          "first_date": "2024-12-10",
+          "last_date": "2026-09-30",
+          "rows": 660
+        },
+        "MFTUSDT": {
+          "first_date": "2019-08-27",
+          "last_date": "2023-01-03",
+          "rows": 1226
+        },
+        "MINAUSDT": {
+          "first_date": "2021-08-10",
+          "last_date": "2026-09-30",
+          "rows": 1878
+        },
+        "MIRAUSDT": {
+          "first_date": "2025-09-26",
+          "last_date": "2026-09-30",
+          "rows": 370
+        },
+        "MIRUSDT": {
+          "first_date": "2021-04-19",
+          "last_date": "2022-12-27",
+          "rows": 618
+        },
+        "MITHUSDT": {
+          "first_date": "2019-04-19",
+          "last_date": "2022-12-22",
+          "rows": 1344
+        },
+        "MITOUSDT": {
+          "first_date": "2025-08-29",
+          "last_date": "2026-09-30",
+          "rows": 398
+        },
+        "MKRUSDT": {
+          "first_date": "2020-07-23",
+          "last_date": "2025-09-15",
+          "rows": 1881
+        },
+        "MLNUSDT": {
+          "first_date": "2021-07-05",
+          "last_date": "2026-05-27",
+          "rows": 1788
+        },
+        "MMTUSDT": {
+          "first_date": "2025-11-04",
+          "last_date": "2026-09-30",
+          "rows": 331
+        },
+        "MOBUSDT": {
+          "first_date": "2022-04-29",
+          "last_date": "2024-04-03",
+          "rows": 706
+        },
+        "MORPHOUSDT": {
+          "first_date": "2025-10-03",
+          "last_date": "2026-09-30",
+          "rows": 363
+        },
+        "MOVEUSDT": {
+          "first_date": "2024-12-09",
+          "last_date": "2026-09-30",
+          "rows": 661
+        },
+        "MOVRUSDT": {
+          "first_date": "2021-11-08",
+          "last_date": "2026-09-30",
+          "rows": 1788
+        },
+        "MRNABUSDT": {
+          "first_date": "2026-09-02",
+          "last_date": "2026-09-30",
+          "rows": 29
+        },
+        "MRVLBUSDT": {
+          "first_date": "2026-07-15",
+          "last_date": "2026-09-30",
+          "rows": 78
+        },
+        "MSFTBUSDT": {
+          "first_date": "2026-06-30",
+          "last_date": "2026-09-30",
+          "rows": 93
+        },
+        "MSTRBUSDT": {
+          "first_date": "2026-06-23",
+          "last_date": "2026-09-30",
+          "rows": 100
+        },
+        "MTLUSDT": {
+          "first_date": "2019-08-23",
+          "last_date": "2026-09-30",
+          "rows": 2596
+        },
+        "MUBARAKUSDT": {
+          "first_date": "2025-03-27",
+          "last_date": "2026-09-30",
+          "rows": 553
+        },
+        "MUBUSDT": {
+          "first_date": "2026-06-11",
+          "last_date": "2026-09-30",
+          "rows": 112
+        },
+        "MULTIUSDT": {
+          "first_date": "2022-04-06",
+          "last_date": "2024-02-20",
+          "rows": 686
+        },
+        "MUUBUSDT": {
+          "first_date": "2026-07-22",
+          "last_date": "2026-09-30",
+          "rows": 71
+        },
+        "MVLLBUSDT": {
+          "first_date": "2026-07-22",
+          "last_date": "2026-09-30",
+          "rows": 71
+        },
+        "NANOUSDT": {
+          "first_date": "2019-04-03",
+          "last_date": "2022-01-24",
+          "rows": 1028
+        },
+        "NBISBUSDT": {
+          "first_date": "2026-07-07",
+          "last_date": "2026-09-30",
+          "rows": 86
+        },
+        "NBSUSDT": {
+          "first_date": "2020-09-21",
+          "last_date": "2022-10-24",
+          "rows": 764
+        },
+        "NBTUSDT": {
+          "first_date": "2022-03-11",
+          "last_date": "2023-02-28",
+          "rows": 336
+        },
+        "NEARUSDT": {
+          "first_date": "2020-10-14",
+          "last_date": "2026-09-30",
+          "rows": 2178
+        },
+        "NEBLUSDT": {
+          "first_date": "2022-10-14",
+          "last_date": "2023-04-18",
+          "rows": 187
+        },
+        "NEIROUSDT": {
+          "first_date": "2024-09-16",
+          "last_date": "2026-09-30",
+          "rows": 745
+        },
+        "NEOUSDT": {
+          "first_date": "2017-11-20",
+          "last_date": "2026-09-30",
+          "rows": 3237
+        },
+        "NEWTUSDT": {
+          "first_date": "2025-06-24",
+          "last_date": "2026-09-30",
+          "rows": 464
+        },
+        "NEXOUSDT": {
+          "first_date": "2022-04-29",
+          "last_date": "2026-09-30",
+          "rows": 1616
+        },
+        "NFLXBUSDT": {
+          "first_date": "2026-08-05",
+          "last_date": "2026-09-30",
+          "rows": 57
+        },
+        "NFPUSDT": {
+          "first_date": "2023-12-27",
+          "last_date": "2026-07-10",
+          "rows": 927
+        },
+        "NIGHTUSDT": {
+          "first_date": "2026-03-11",
+          "last_date": "2026-09-30",
+          "rows": 204
+        },
+        "NILUSDT": {
+          "first_date": "2025-03-24",
+          "last_date": "2026-09-30",
+          "rows": 556
+        },
+        "NKNUSDT": {
+          "first_date": "2019-10-11",
+          "last_date": "2026-02-13",
+          "rows": 2318
+        },
+        "NMRUSDT": {
+          "first_date": "2020-08-19",
+          "last_date": "2026-09-30",
+          "rows": 2234
+        },
+        "NOKBUSDT": {
+          "first_date": "2026-07-15",
+          "last_date": "2026-09-30",
+          "rows": 78
+        },
+        "NOMUSDT": {
+          "first_date": "2025-10-01",
+          "last_date": "2026-09-30",
+          "rows": 365
+        },
+        "NOTUSDT": {
+          "first_date": "2024-05-16",
+          "last_date": "2026-09-30",
+          "rows": 868
+        },
+        "NPXSUSDT": {
+          "first_date": "2019-08-13",
+          "last_date": "2021-04-05",
+          "rows": 602
+        },
+        "NTRNUSDT": {
+          "first_date": "2023-10-10",
+          "last_date": "2026-04-01",
+          "rows": 905
+        },
+        "NULSUSDT": {
+          "first_date": "2018-07-23",
+          "last_date": "2025-04-16",
+          "rows": 2460
+        },
+        "NUUSDT": {
+          "first_date": "2021-06-04",
+          "last_date": "2022-02-16",
+          "rows": 258
+        },
+        "NVDABUSDT": {
+          "first_date": "2026-06-11",
+          "last_date": "2026-09-30",
+          "rows": 112
+        },
+        "NXPCUSDT": {
+          "first_date": "2025-05-15",
+          "last_date": "2026-09-30",
+          "rows": 504
+        },
+        "OAXUSDT": {
+          "first_date": "2023-03-24",
+          "last_date": "2024-12-10",
+          "rows": 628
+        },
+        "OCEANUSDT": {
+          "first_date": "2020-08-19",
+          "last_date": "2024-07-01",
+          "rows": 1413
+        },
+        "OGNUSDT": {
+          "first_date": "2020-01-09",
+          "last_date": "2026-09-30",
+          "rows": 2457
+        },
+        "OGUSDT": {
+          "first_date": "2020-12-30",
+          "last_date": "2026-09-30",
+          "rows": 2101
+        },
+        "OMGUSDT": {
+          "first_date": "2019-04-03",
+          "last_date": "2024-06-17",
+          "rows": 1903
+        },
+        "OMNIUSDT": {
+          "first_date": "2024-04-17",
+          "last_date": "2025-09-29",
+          "rows": 531
+        },
+        "OMUSDT": {
+          "first_date": "2021-03-08",
+          "last_date": "2026-03-02",
+          "rows": 1821
+        },
+        "ONDOUSDT": {
+          "first_date": "2025-04-11",
+          "last_date": "2026-09-30",
+          "rows": 538
+        },
+        "ONEUSDT": {
+          "first_date": "2019-06-01",
+          "last_date": "2026-09-30",
+          "rows": 2679
+        },
+        "ONGUSDT": {
+          "first_date": "2019-02-16",
+          "last_date": "2026-09-30",
+          "rows": 2784
+        },
+        "ONTUSDT": {
+          "first_date": "2018-06-08",
+          "last_date": "2026-09-30",
+          "rows": 3037
+        },
+        "OOKIUSDT": {
+          "first_date": "2021-12-24",
+          "last_date": "2024-11-06",
+          "rows": 1049
+        },
+        "OPENUSDT": {
+          "first_date": "2025-09-08",
+          "last_date": "2026-09-30",
+          "rows": 388
+        },
+        "OPGUSDT": {
+          "first_date": "2026-05-22",
+          "last_date": "2026-09-30",
+          "rows": 132
+        },
+        "OPNUSDT": {
+          "first_date": "2026-03-05",
+          "last_date": "2026-09-30",
+          "rows": 210
+        },
+        "OPUSDT": {
+          "first_date": "2022-06-01",
+          "last_date": "2026-09-30",
+          "rows": 1583
+        },
+        "ORCAUSDT": {
+          "first_date": "2024-12-06",
+          "last_date": "2026-09-30",
+          "rows": 664
+        },
+        "ORCLBUSDT": {
+          "first_date": "2026-07-22",
+          "last_date": "2026-09-30",
+          "rows": 71
+        },
+        "ORDIUSDT": {
+          "first_date": "2023-11-07",
+          "last_date": "2026-09-30",
+          "rows": 1059
+        },
+        "ORNUSDT": {
+          "first_date": "2020-09-30",
+          "last_date": "2024-10-15",
+          "rows": 1477
+        },
+        "OSMOUSDT": {
+          "first_date": "2022-10-28",
+          "last_date": "2026-09-30",
+          "rows": 1434
+        },
+        "OXTUSDT": {
+          "first_date": "2020-09-21",
+          "last_date": "2026-04-23",
+          "rows": 2041
+        },
+        "PARTIUSDT": {
+          "first_date": "2025-03-25",
+          "last_date": "2026-09-30",
+          "rows": 555
+        },
+        "PAXGUSDT": {
+          "first_date": "2020-08-28",
+          "last_date": "2026-09-30",
+          "rows": 2225
+        },
+        "PDAUSDT": {
+          "first_date": "2024-03-01",
+          "last_date": "2025-05-02",
+          "rows": 428
+        },
+        "PDDBUSDT": {
+          "first_date": "2026-09-30",
+          "last_date": "2026-09-30",
+          "rows": 1
+        },
+        "PENDLEUSDT": {
+          "first_date": "2023-07-03",
+          "last_date": "2026-09-30",
+          "rows": 1186
+        },
+        "PENGUUSDT": {
+          "first_date": "2024-12-17",
+          "last_date": "2026-09-30",
+          "rows": 653
+        },
+        "PEOPLEUSDT": {
+          "first_date": "2021-12-23",
+          "last_date": "2026-09-30",
+          "rows": 1743
+        },
+        "PEPEUSDT": {
+          "first_date": "2023-05-05",
+          "last_date": "2026-09-30",
+          "rows": 1245
+        },
+        "PERLUSDT": {
+          "first_date": "2019-08-26",
+          "last_date": "2023-12-07",
+          "rows": 1565
+        },
+        "PERPUSDT": {
+          "first_date": "2021-03-19",
+          "last_date": "2025-11-12",
+          "rows": 1700
+        },
+        "PHAUSDT": {
+          "first_date": "2021-06-25",
+          "last_date": "2026-09-30",
+          "rows": 1924
+        },
+        "PHBUSDT": {
+          "first_date": "2022-11-18",
+          "last_date": "2026-05-27",
+          "rows": 1287
+        },
+        "PIVXUSDT": {
+          "first_date": "2023-11-16",
+          "last_date": "2026-08-17",
+          "rows": 1006
+        },
+        "PIXELUSDT": {
+          "first_date": "2024-02-19",
+          "last_date": "2026-09-30",
+          "rows": 955
+        },
+        "PLAUSDT": {
+          "first_date": "2021-11-23",
+          "last_date": "2024-02-26",
+          "rows": 826
+        },
+        "PLTRBUSDT": {
+          "first_date": "2026-06-30",
+          "last_date": "2026-09-30",
+          "rows": 93
+        },
+        "PLUMEUSDT": {
+          "first_date": "2025-08-18",
+          "last_date": "2026-09-30",
+          "rows": 409
+        },
+        "PNTUSDT": {
+          "first_date": "2020-06-22",
+          "last_date": "2024-04-03",
+          "rows": 1382
+        },
+        "PNUTUSDT": {
+          "first_date": "2024-11-11",
+          "last_date": "2026-09-30",
+          "rows": 689
+        },
+        "POLSUSDT": {
+          "first_date": "2021-05-19",
+          "last_date": "2024-07-22",
+          "rows": 1161
+        },
+        "POLUSDT": {
+          "first_date": "2024-09-13",
+          "last_date": "2026-09-30",
+          "rows": 748
+        },
+        "POLYUSDT": {
+          "first_date": "2021-09-09",
+          "last_date": "2022-10-10",
+          "rows": 397
+        },
+        "POLYXUSDT": {
+          "first_date": "2022-10-17",
+          "last_date": "2026-09-30",
+          "rows": 1445
+        },
+        "PONDUSDT": {
+          "first_date": "2021-03-09",
+          "last_date": "2026-07-10",
+          "rows": 1950
+        },
+        "PORTALUSDT": {
+          "first_date": "2024-02-29",
+          "last_date": "2026-09-30",
+          "rows": 945
+        },
+        "PORTOUSDT": {
+          "first_date": "2021-11-16",
+          "last_date": "2026-09-30",
+          "rows": 1780
+        },
+        "POWRUSDT": {
+          "first_date": "2021-11-17",
+          "last_date": "2026-09-30",
+          "rows": 1779
+        },
+        "PROMUSDT": {
+          "first_date": "2023-03-17",
+          "last_date": "2026-09-30",
+          "rows": 1294
+        },
+        "PROSUSDT": {
+          "first_date": "2023-01-27",
+          "last_date": "2025-04-16",
+          "rows": 811
+        },
+        "PROVEUSDT": {
+          "first_date": "2025-08-05",
+          "last_date": "2026-09-30",
+          "rows": 422
+        },
+        "PSGUSDT": {
+          "first_date": "2020-12-21",
+          "last_date": "2026-09-30",
+          "rows": 2110
+        },
+        "PUMPUSDT": {
+          "first_date": "2025-09-11",
+          "last_date": "2026-09-30",
+          "rows": 385
+        },
+        "PUNDIXUSDT": {
+          "first_date": "2021-04-09",
+          "last_date": "2026-09-30",
+          "rows": 2001
+        },
+        "PYPLBUSDT": {
+          "first_date": "2026-07-29",
+          "last_date": "2026-09-30",
+          "rows": 64
+        },
+        "PYRUSDT": {
+          "first_date": "2021-11-26",
+          "last_date": "2026-08-17",
+          "rows": 1726
+        },
+        "PYTHUSDT": {
+          "first_date": "2024-02-02",
+          "last_date": "2026-09-30",
+          "rows": 972
+        },
+        "QCOMBUSDT": {
+          "first_date": "2026-07-07",
+          "last_date": "2026-09-30",
+          "rows": 86
+        },
+        "QIUSDT": {
+          "first_date": "2021-11-15",
+          "last_date": "2026-09-30",
+          "rows": 1781
+        },
+        "QKCUSDT": {
+          "first_date": "2023-03-17",
+          "last_date": "2026-09-30",
+          "rows": 1294
+        },
+        "QNTBUSDT": {
+          "first_date": "2026-07-22",
+          "last_date": "2026-09-30",
+          "rows": 71
+        },
+        "QNTUSDT": {
+          "first_date": "2021-07-29",
+          "last_date": "2026-09-30",
+          "rows": 1890
+        },
+        "QQQBUSDT": {
+          "first_date": "2026-06-30",
+          "last_date": "2026-09-30",
+          "rows": 93
+        },
+        "QTUMUSDT": {
+          "first_date": "2018-03-19",
+          "last_date": "2026-09-30",
+          "rows": 3118
+        },
+        "QUICKUSDT": {
+          "first_date": "2021-08-13",
+          "last_date": "2026-09-30",
+          "rows": 1872
+        },
+        "RADUSDT": {
+          "first_date": "2021-10-07",
+          "last_date": "2026-09-30",
+          "rows": 1820
+        },
+        "RAMPUSDT": {
+          "first_date": "2021-03-22",
+          "last_date": "2022-07-04",
+          "rows": 470
+        },
+        "RAREUSDT": {
+          "first_date": "2021-10-11",
+          "last_date": "2026-09-30",
+          "rows": 1816
+        },
+        "RAYUSDT": {
+          "first_date": "2021-08-10",
+          "last_date": "2026-09-30",
+          "rows": 1878
+        },
+        "RDDTBUSDT": {
+          "first_date": "2026-09-16",
+          "last_date": "2026-09-30",
+          "rows": 15
+        },
+        "RDNTUSDT": {
+          "first_date": "2023-03-30",
+          "last_date": "2026-04-01",
+          "rows": 1099
+        },
+        "REDUSDT": {
+          "first_date": "2025-02-28",
+          "last_date": "2026-09-30",
+          "rows": 580
+        },
+        "REEFUSDT": {
+          "first_date": "2020-12-29",
+          "last_date": "2024-08-26",
+          "rows": 1337
+        },
+        "REIUSDT": {
+          "first_date": "2022-05-04",
+          "last_date": "2025-12-17",
+          "rows": 1324
+        },
+        "RENDERUSDT": {
+          "first_date": "2024-07-26",
+          "last_date": "2026-09-30",
+          "rows": 797
+        },
+        "RENUSDT": {
+          "first_date": "2019-09-25",
+          "last_date": "2024-12-10",
+          "rows": 1904
+        },
+        "REPUSDT": {
+          "first_date": "2020-06-12",
+          "last_date": "2022-12-22",
+          "rows": 924
+        },
+        "REQUSDT": {
+          "first_date": "2021-08-20",
+          "last_date": "2026-09-30",
+          "rows": 1868
+        },
+        "RESOLVUSDT": {
+          "first_date": "2025-06-11",
+          "last_date": "2026-09-30",
+          "rows": 477
+        },
+        "REUSDT": {
+          "first_date": "2026-06-18",
+          "last_date": "2026-09-30",
+          "rows": 105
+        },
+        "REZUSDT": {
+          "first_date": "2024-04-30",
+          "last_date": "2026-09-30",
+          "rows": 884
+        },
+        "RGTUSDT": {
+          "first_date": "2021-11-05",
+          "last_date": "2022-03-14",
+          "rows": 130
+        },
+        "RIFUSDT": {
+          "first_date": "2021-01-07",
+          "last_date": "2026-09-30",
+          "rows": 2093
+        },
+        "RKLBBUSDT": {
+          "first_date": "2026-07-15",
+          "last_date": "2026-09-30",
+          "rows": 78
+        },
+        "RLCUSDT": {
+          "first_date": "2019-11-14",
+          "last_date": "2026-09-30",
+          "rows": 2513
+        },
+        "RNDRUSDT": {
+          "first_date": "2021-11-27",
+          "last_date": "2024-07-22",
+          "rows": 969
+        },
+        "ROBOUSDT": {
+          "first_date": "2026-03-04",
+          "last_date": "2026-09-30",
+          "rows": 211
+        },
+        "RONINUSDT": {
+          "first_date": "2024-02-05",
+          "last_date": "2026-09-30",
+          "rows": 969
+        },
+        "ROSEUSDT": {
+          "first_date": "2020-11-19",
+          "last_date": "2026-09-30",
+          "rows": 2142
+        },
+        "RPLUSDT": {
+          "first_date": "2023-01-18",
+          "last_date": "2026-09-30",
+          "rows": 1352
+        },
+        "RSRUSDT": {
+          "first_date": "2020-08-27",
+          "last_date": "2026-09-30",
+          "rows": 2226
+        },
+        "RUNEUSDT": {
+          "first_date": "2020-09-04",
+          "last_date": "2026-09-30",
+          "rows": 2218
+        },
+        "RVNUSDT": {
+          "first_date": "2019-09-25",
+          "last_date": "2026-09-30",
+          "rows": 2563
+        },
+        "SAGAUSDT": {
+          "first_date": "2024-04-09",
+          "last_date": "2026-09-30",
+          "rows": 905
+        },
+        "SAHARAUSDT": {
+          "first_date": "2025-06-26",
+          "last_date": "2026-09-30",
+          "rows": 462
+        },
+        "SANDUSDT": {
+          "first_date": "2020-08-14",
+          "last_date": "2026-09-30",
+          "rows": 2239
+        },
+        "SANTOSUSDT": {
+          "first_date": "2021-12-01",
+          "last_date": "2026-09-30",
+          "rows": 1765
+        },
+        "SAPIENUSDT": {
+          "first_date": "2025-11-06",
+          "last_date": "2026-09-30",
+          "rows": 329
+        },
+        "SCRTUSDT": {
+          "first_date": "2022-01-21",
+          "last_date": "2026-09-03",
+          "rows": 1687
+        },
+        "SCRUSDT": {
+          "first_date": "2024-10-11",
+          "last_date": "2026-09-30",
+          "rows": 720
+        },
+        "SCUSDT": {
+          "first_date": "2020-07-06",
+          "last_date": "2026-09-30",
+          "rows": 2278
+        },
+        "SEIUSDT": {
+          "first_date": "2023-08-15",
+          "last_date": "2026-09-30",
+          "rows": 1143
+        },
+        "SENTUSDT": {
+          "first_date": "2026-01-22",
+          "last_date": "2026-09-30",
+          "rows": 252
+        },
+        "SFPUSDT": {
+          "first_date": "2021-02-08",
+          "last_date": "2026-09-30",
+          "rows": 2061
+        },
+        "SHAZBUSDT": {
+          "first_date": "2026-09-30",
+          "last_date": "2026-09-30",
+          "rows": 1
+        },
+        "SHELLUSDT": {
+          "first_date": "2025-02-27",
+          "last_date": "2026-09-30",
+          "rows": 581
+        },
+        "SHIBUSDT": {
+          "first_date": "2021-05-10",
+          "last_date": "2026-09-30",
+          "rows": 1970
+        },
+        "SIGNUSDT": {
+          "first_date": "2025-04-28",
+          "last_date": "2026-09-30",
+          "rows": 521
+        },
+        "SKHYBUSDT": {
+          "first_date": "2026-07-13",
+          "last_date": "2026-09-30",
+          "rows": 80
+        },
+        "SKLUSDT": {
+          "first_date": "2020-12-01",
+          "last_date": "2026-09-30",
+          "rows": 2130
+        },
+        "SKYUSDT": {
+          "first_date": "2025-09-17",
+          "last_date": "2026-09-30",
+          "rows": 379
+        },
+        "SLFUSDT": {
+          "first_date": "2024-08-30",
+          "last_date": "2025-09-17",
+          "rows": 384
+        },
+        "SLPUSDT": {
+          "first_date": "2021-04-30",
+          "last_date": "2026-09-30",
+          "rows": 1980
+        },
+        "SMCIBUSDT": {
+          "first_date": "2026-08-05",
+          "last_date": "2026-09-30",
+          "rows": 57
+        },
+        "SMHBUSDT": {
+          "first_date": "2026-07-29",
+          "last_date": "2026-09-30",
+          "rows": 64
+        },
+        "SNDKBUSDT": {
+          "first_date": "2026-06-11",
+          "last_date": "2026-09-30",
+          "rows": 112
+        },
+        "SNTUSDT": {
+          "first_date": "2023-05-19",
+          "last_date": "2025-04-16",
+          "rows": 699
+        },
+        "SNXUSDT": {
+          "first_date": "2020-07-09",
+          "last_date": "2026-09-30",
+          "rows": 2275
+        },
+        "SNXXBUSDT": {
+          "first_date": "2026-07-22",
+          "last_date": "2026-09-30",
+          "rows": 71
+        },
+        "SOLUSDT": {
+          "first_date": "2020-08-11",
+          "last_date": "2026-09-30",
+          "rows": 2242
+        },
+        "SOLVUSDT": {
+          "first_date": "2025-01-17",
+          "last_date": "2026-09-30",
+          "rows": 622
+        },
+        "SOMIUSDT": {
+          "first_date": "2025-09-02",
+          "last_date": "2026-09-30",
+          "rows": 394
+        },
+        "SOPHUSDT": {
+          "first_date": "2025-05-28",
+          "last_date": "2026-09-30",
+          "rows": 491
+        },
+        "SOXLBUSDT": {
+          "first_date": "2026-07-07",
+          "last_date": "2026-09-30",
+          "rows": 86
+        },
+        "SOXSBUSDT": {
+          "first_date": "2026-07-29",
+          "last_date": "2026-09-30",
+          "rows": 64
+        },
+        "SPCXBUSDT": {
+          "first_date": "2026-06-12",
+          "last_date": "2026-09-30",
+          "rows": 111
+        },
+        "SPELLUSDT": {
+          "first_date": "2021-12-24",
+          "last_date": "2026-09-30",
+          "rows": 1742
+        },
+        "SPKUSDT": {
+          "first_date": "2025-06-17",
+          "last_date": "2026-09-30",
+          "rows": 471
+        },
+        "SPYBUSDT": {
+          "first_date": "2026-07-07",
+          "last_date": "2026-09-30",
+          "rows": 86
+        },
+        "SQQQBUSDT": {
+          "first_date": "2026-09-02",
+          "last_date": "2026-09-30",
+          "rows": 29
+        },
+        "SRMUSDT": {
+          "first_date": "2020-08-11",
+          "last_date": "2022-11-28",
+          "rows": 840
+        },
+        "SSVUSDT": {
+          "first_date": "2023-02-24",
+          "last_date": "2026-09-30",
+          "rows": 1315
+        },
+        "STEEMUSDT": {
+          "first_date": "2022-04-22",
+          "last_date": "2026-09-30",
+          "rows": 1623
+        },
+        "STGUSDT": {
+          "first_date": "2022-08-19",
+          "last_date": "2026-09-30",
+          "rows": 1504
+        },
+        "STMXUSDT": {
+          "first_date": "2020-06-11",
+          "last_date": "2025-02-24",
+          "rows": 1720
+        },
+        "STORJUSDT": {
+          "first_date": "2020-07-30",
+          "last_date": "2026-09-03",
+          "rows": 2227
+        },
+        "STORMUSDT": {
+          "first_date": "2019-08-27",
+          "last_date": "2020-06-08",
+          "rows": 287
+        },
+        "STOUSDT": {
+          "first_date": "2025-05-02",
+          "last_date": "2026-09-30",
+          "rows": 517
+        },
+        "STPTUSDT": {
+          "first_date": "2020-03-25",
+          "last_date": "2025-05-19",
+          "rows": 1882
+        },
+        "STRATUSDT": {
+          "first_date": "2020-02-19",
+          "last_date": "2020-11-12",
+          "rows": 268
+        },
+        "STRAXUSDT": {
+          "first_date": "2020-11-18",
+          "last_date": "2026-09-30",
+          "rows": 2136
+        },
+        "STRKUSDT": {
+          "first_date": "2024-02-20",
+          "last_date": "2026-09-30",
+          "rows": 954
+        },
+        "STXBUSDT": {
+          "first_date": "2026-09-02",
+          "last_date": "2026-09-30",
+          "rows": 29
+        },
+        "STXUSDT": {
+          "first_date": "2019-10-25",
+          "last_date": "2026-09-30",
+          "rows": 2533
+        },
+        "SUIUSDT": {
+          "first_date": "2023-05-03",
+          "last_date": "2026-09-30",
+          "rows": 1247
+        },
+        "SUNUSDT": {
+          "first_date": "2020-09-21",
+          "last_date": "2026-09-30",
+          "rows": 2198
+        },
+        "SUPERUSDT": {
+          "first_date": "2021-03-25",
+          "last_date": "2026-09-30",
+          "rows": 2016
+        },
+        "SUSDT": {
+          "first_date": "2025-01-16",
+          "last_date": "2026-09-30",
+          "rows": 623
+        },
+        "SUSHIUSDT": {
+          "first_date": "2020-09-01",
+          "last_date": "2026-09-30",
+          "rows": 2221
+        },
+        "SXPUSDT": {
+          "first_date": "2020-07-20",
+          "last_date": "2026-04-01",
+          "rows": 2082
+        },
+        "SXTUSDT": {
+          "first_date": "2025-05-08",
+          "last_date": "2026-09-30",
+          "rows": 511
+        },
+        "SYNUSDT": {
+          "first_date": "2023-02-22",
+          "last_date": "2026-09-30",
+          "rows": 1317
+        },
+        "SYRUPUSDT": {
+          "first_date": "2025-05-06",
+          "last_date": "2026-09-30",
+          "rows": 513
+        },
+        "SYSUSDT": {
+          "first_date": "2021-09-24",
+          "last_date": "2026-05-27",
+          "rows": 1707
+        },
+        "TAOUSDT": {
+          "first_date": "2024-04-11",
+          "last_date": "2026-09-30",
+          "rows": 903
+        },
+        "TCTUSDT": {
+          "first_date": "2020-01-21",
+          "last_date": "2022-10-24",
+          "rows": 1008
+        },
+        "TFUELUSDT": {
+          "first_date": "2019-05-24",
+          "last_date": "2026-09-30",
+          "rows": 2687
+        },
+        "THETAUSDT": {
+          "first_date": "2019-04-10",
+          "last_date": "2026-09-30",
+          "rows": 2731
+        },
+        "THEUSDT": {
+          "first_date": "2024-11-27",
+          "last_date": "2026-09-30",
+          "rows": 673
+        },
+        "TIAUSDT": {
+          "first_date": "2023-10-31",
+          "last_date": "2026-09-30",
+          "rows": 1066
+        },
+        "TKOUSDT": {
+          "first_date": "2021-04-07",
+          "last_date": "2026-09-30",
+          "rows": 2003
+        },
+        "TLMUSDT": {
+          "first_date": "2021-04-13",
+          "last_date": "2026-09-30",
+          "rows": 1997
+        },
+        "TNSRUSDT": {
+          "first_date": "2024-04-08",
+          "last_date": "2026-09-30",
+          "rows": 906
+        },
+        "TOMOUSDT": {
+          "first_date": "2019-08-24",
+          "last_date": "2023-11-20",
+          "rows": 1550
+        },
+        "TONUSDT": {
+          "first_date": "2024-08-08",
+          "last_date": "2026-06-30",
+          "rows": 692
+        },
+        "TORNUSDT": {
+          "first_date": "2021-06-11",
+          "last_date": "2022-12-27",
+          "rows": 565
+        },
+        "TOWNSUSDT": {
+          "first_date": "2025-08-05",
+          "last_date": "2026-09-30",
+          "rows": 422
+        },
+        "TQQQBUSDT": {
+          "first_date": "2026-07-22",
+          "last_date": "2026-09-30",
+          "rows": 71
+        },
+        "TRBUSDT": {
+          "first_date": "2020-08-29",
+          "last_date": "2026-09-30",
+          "rows": 2224
+        },
+        "TREEUSDT": {
+          "first_date": "2025-07-29",
+          "last_date": "2026-09-30",
+          "rows": 429
+        },
+        "TRIBEUSDT": {
+          "first_date": "2021-08-24",
+          "last_date": "2022-11-28",
+          "rows": 462
+        },
+        "TROYUSDT": {
+          "first_date": "2019-12-05",
+          "last_date": "2025-04-16",
+          "rows": 1960
+        },
+        "TRUMPUSDT": {
+          "first_date": "2025-01-19",
+          "last_date": "2026-09-30",
+          "rows": 620
+        },
+        "TRUUSDT": {
+          "first_date": "2021-01-19",
+          "last_date": "2026-04-28",
+          "rows": 1926
+        },
+        "TRXUSDT": {
+          "first_date": "2018-06-11",
+          "last_date": "2026-09-30",
+          "rows": 3034
+        },
+        "TSLABUSDT": {
+          "first_date": "2026-06-11",
+          "last_date": "2026-09-30",
+          "rows": 112
+        },
+        "TSMBUSDT": {
+          "first_date": "2026-07-15",
+          "last_date": "2026-09-30",
+          "rows": 78
+        },
+        "TSTUSDT": {
+          "first_date": "2025-02-09",
+          "last_date": "2026-09-30",
+          "rows": 599
+        },
+        "TURBOUSDT": {
+          "first_date": "2024-09-16",
+          "last_date": "2026-09-30",
+          "rows": 745
+        },
+        "TURTLEUSDT": {
+          "first_date": "2025-10-22",
+          "last_date": "2026-09-30",
+          "rows": 344
+        },
+        "TUSDT": {
+          "first_date": "2022-02-25",
+          "last_date": "2026-09-30",
+          "rows": 1679
+        },
+        "TUTUSDT": {
+          "first_date": "2025-03-27",
+          "last_date": "2026-09-30",
+          "rows": 553
+        },
+        "TVKUSDT": {
+          "first_date": "2021-08-06",
+          "last_date": "2023-11-27",
+          "rows": 844
+        },
+        "TWTUSDT": {
+          "first_date": "2021-01-27",
+          "last_date": "2026-09-30",
+          "rows": 2073
+        },
+        "UFTUSDT": {
+          "first_date": "2023-03-17",
+          "last_date": "2025-04-16",
+          "rows": 762
+        },
+        "UMAUSDT": {
+          "first_date": "2020-09-09",
+          "last_date": "2026-09-30",
+          "rows": 2213
+        },
+        "UNFIUSDT": {
+          "first_date": "2020-11-19",
+          "last_date": "2024-11-06",
+          "rows": 1449
+        },
+        "UNIUSDT": {
+          "first_date": "2020-09-17",
+          "last_date": "2026-09-30",
+          "rows": 2205
+        },
+        "USARBUSDT": {
+          "first_date": "2026-08-05",
+          "last_date": "2026-09-30",
+          "rows": 57
+        },
+        "USUALUSDT": {
+          "first_date": "2024-11-19",
+          "last_date": "2026-09-30",
+          "rows": 681
+        },
+        "UTKUSDT": {
+          "first_date": "2020-10-02",
+          "last_date": "2026-04-14",
+          "rows": 2021
+        },
+        "UUSDT": {
+          "first_date": "2026-01-13",
+          "last_date": "2026-09-30",
+          "rows": 261
+        },
+        "VANAUSDT": {
+          "first_date": "2024-12-16",
+          "last_date": "2026-09-30",
+          "rows": 654
+        },
+        "VANRYUSDT": {
+          "first_date": "2023-12-01",
+          "last_date": "2026-08-17",
+          "rows": 991
+        },
+        "VELODROMEUSDT": {
+          "first_date": "2024-12-13",
+          "last_date": "2026-09-30",
+          "rows": 657
+        },
+        "VENUSDT": {
+          "first_date": "2018-06-22",
+          "last_date": "2018-07-23",
+          "rows": 32
+        },
+        "VENUSDT#2": {
+          "first_date": "2018-10-19",
+          "last_date": "2018-10-19",
+          "rows": 1
+        },
+        "VETUSDT": {
+          "first_date": "2018-07-25",
+          "last_date": "2026-09-30",
+          "rows": 2990
+        },
+        "VGXUSDT": {
+          "first_date": "2021-11-22",
+          "last_date": "2024-08-26",
+          "rows": 1009
+        },
+        "VIBUSDT": {
+          "first_date": "2023-02-24",
+          "last_date": "2025-05-02",
+          "rows": 799
+        },
+        "VICUSDT": {
+          "first_date": "2023-11-24",
+          "last_date": "2026-08-17",
+          "rows": 998
+        },
+        "VIDTUSDT": {
+          "first_date": "2021-09-09",
+          "last_date": "2025-04-16",
+          "rows": 1308
+        },
+        "VIRTUALUSDT": {
+          "first_date": "2025-04-11",
+          "last_date": "2026-09-30",
+          "rows": 538
+        },
+        "VITEUSDT": {
+          "first_date": "2019-12-13",
+          "last_date": "2025-02-24",
+          "rows": 1901
+        },
+        "VOXELUSDT": {
+          "first_date": "2021-12-14",
+          "last_date": "2025-12-17",
+          "rows": 1465
+        },
+        "VTHOUSDT": {
+          "first_date": "2020-07-17",
+          "last_date": "2026-09-30",
+          "rows": 2267
+        },
+        "WALUSDT": {
+          "first_date": "2025-10-10",
+          "last_date": "2026-09-30",
+          "rows": 356
+        },
+        "WANUSDT": {
+          "first_date": "2019-08-27",
+          "last_date": "2026-04-23",
+          "rows": 2432
+        },
+        "WAVESUSDT": {
+          "first_date": "2019-01-18",
+          "last_date": "2024-06-17",
+          "rows": 1978
+        },
+        "WAXPUSDT": {
+          "first_date": "2021-08-23",
+          "last_date": "2026-09-30",
+          "rows": 1865
+        },
+        "WBETHUSDT": {
+          "first_date": "2023-07-19",
+          "last_date": "2026-09-30",
+          "rows": 1170
+        },
+        "WBTCUSDT": {
+          "first_date": "2023-04-28",
+          "last_date": "2026-09-30",
+          "rows": 1252
+        },
+        "WCTUSDT": {
+          "first_date": "2025-04-15",
+          "last_date": "2026-09-30",
+          "rows": 534
+        },
+        "WDCBUSDT": {
+          "first_date": "2026-07-07",
+          "last_date": "2026-09-30",
+          "rows": 86
+        },
+        "WENBUSDT": {
+          "first_date": "2026-09-30",
+          "last_date": "2026-09-30",
+          "rows": 1
+        },
+        "WIFUSDT": {
+          "first_date": "2024-03-05",
+          "last_date": "2026-09-30",
+          "rows": 940
+        },
+        "WINGUSDT": {
+          "first_date": "2020-09-16",
+          "last_date": "2025-05-02",
+          "rows": 1690
+        },
+        "WINUSDT": {
+          "first_date": "2019-08-01",
+          "last_date": "2026-09-30",
+          "rows": 2618
+        },
+        "WLDUSDT": {
+          "first_date": "2023-07-24",
+          "last_date": "2026-09-30",
+          "rows": 1165
+        },
+        "WLFIUSDT": {
+          "first_date": "2025-09-01",
+          "last_date": "2026-09-30",
+          "rows": 395
+        },
+        "WNXMUSDT": {
+          "first_date": "2020-08-28",
+          "last_date": "2024-06-17",
+          "rows": 1390
+        },
+        "WOOUSDT": {
+          "first_date": "2022-02-08",
+          "last_date": "2026-09-30",
+          "rows": 1696
+        },
+        "WRXUSDT": {
+          "first_date": "2020-02-05",
+          "last_date": "2024-12-25",
+          "rows": 1786
+        },
+        "WTCUSDT": {
+          "first_date": "2020-04-07",
+          "last_date": "2023-12-07",
+          "rows": 1340
+        },
+        "WUSDT": {
+          "first_date": "2024-04-03",
+          "last_date": "2026-09-30",
+          "rows": 911
+        },
+        "XAIUSDT": {
+          "first_date": "2024-01-09",
+          "last_date": "2026-09-30",
+          "rows": 996
+        },
+        "XAUTUSDT": {
+          "first_date": "2026-03-26",
+          "last_date": "2026-09-30",
+          "rows": 189
+        },
+        "XECUSDT": {
+          "first_date": "2021-09-03",
+          "last_date": "2026-09-30",
+          "rows": 1854
+        },
+        "XEMUSDT": {
+          "first_date": "2020-11-24",
+          "last_date": "2024-06-17",
+          "rows": 1302
+        },
+        "XLMUSDT": {
+          "first_date": "2018-05-31",
+          "last_date": "2026-09-30",
+          "rows": 3045
+        },
+        "XMRUSDT": {
+          "first_date": "2019-03-15",
+          "last_date": "2024-02-20",
+          "rows": 1804
+        },
+        "XNOUSDT": {
+          "first_date": "2022-01-28",
+          "last_date": "2026-09-30",
+          "rows": 1707
+        },
+        "XPLUSDT": {
+          "first_date": "2025-09-25",
+          "last_date": "2026-09-30",
+          "rows": 371
+        },
+        "XRPUSDT": {
+          "first_date": "2018-05-04",
+          "last_date": "2026-09-30",
+          "rows": 3072
+        },
+        "XTZUSDT": {
+          "first_date": "2019-09-24",
+          "last_date": "2026-09-30",
+          "rows": 2564
+        },
+        "XVGUSDT": {
+          "first_date": "2021-06-06",
+          "last_date": "2026-09-30",
+          "rows": 1943
+        },
+        "XVSUSDT": {
+          "first_date": "2020-10-06",
+          "last_date": "2026-09-30",
+          "rows": 2186
+        },
+        "XZCUSDT": {
+          "first_date": "2020-04-07",
+          "last_date": "2021-01-25",
+          "rows": 294
+        },
+        "YBUSDT": {
+          "first_date": "2025-10-15",
+          "last_date": "2026-09-30",
+          "rows": 351
+        },
+        "YFIIUSDT": {
+          "first_date": "2020-09-01",
+          "last_date": "2023-08-22",
+          "rows": 1086
+        },
+        "YFIUSDT": {
+          "first_date": "2020-08-10",
+          "last_date": "2026-09-30",
+          "rows": 2243
+        },
+        "YGGUSDT": {
+          "first_date": "2021-09-24",
+          "last_date": "2026-09-30",
+          "rows": 1833
+        },
+        "ZAMAUSDT": {
+          "first_date": "2026-02-02",
+          "last_date": "2026-09-30",
+          "rows": 241
+        },
+        "ZBTUSDT": {
+          "first_date": "2025-10-17",
+          "last_date": "2026-09-30",
+          "rows": 349
+        },
+        "ZECUSDT": {
+          "first_date": "2019-03-21",
+          "last_date": "2026-09-30",
+          "rows": 2751
+        },
+        "ZENUSDT": {
+          "first_date": "2020-07-06",
+          "last_date": "2026-09-30",
+          "rows": 2278
+        },
+        "ZILUSDT": {
+          "first_date": "2019-02-19",
+          "last_date": "2026-09-30",
+          "rows": 2781
+        },
+        "ZKCUSDT": {
+          "first_date": "2025-09-15",
+          "last_date": "2026-09-30",
+          "rows": 381
+        },
+        "ZKPUSDT": {
+          "first_date": "2026-01-07",
+          "last_date": "2026-09-30",
+          "rows": 267
+        },
+        "ZKUSDT": {
+          "first_date": "2024-06-17",
+          "last_date": "2026-09-30",
+          "rows": 836
+        },
+        "ZMBUSDT": {
+          "first_date": "2026-09-30",
+          "last_date": "2026-09-30",
+          "rows": 1
+        },
+        "ZROUSDT": {
+          "first_date": "2024-06-20",
+          "last_date": "2026-09-30",
+          "rows": 833
+        },
+        "ZRXUSDT": {
+          "first_date": "2019-02-28",
+          "last_date": "2026-09-30",
+          "rows": 2772
+        },
+        "\u5e01\u5b89\u4eba\u751fUSDT": {
+          "first_date": "2026-01-07",
+          "last_date": "2026-09-30",
+          "rows": 267
+        },
+        "\u725b\u6765USDT": {
+          "first_date": "2026-09-09",
+          "last_date": "2026-09-30",
+          "rows": 22
+        }
+      },
+      "symbols_excluded": {
+        "1INCHDOWNUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "1INCHUPUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "AAVEDOWNUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "AAVEUPUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "ADADOWNUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "ADAUPUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "AEURUSDT": "stablecoin or fiat base",
+        "AUDUSDT": "stablecoin or fiat base",
+        "BCHDOWNUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "BCHUPUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "BFUSDUSDT": "stablecoin or fiat base",
+        "BKRWUSDT": "stablecoin or fiat base",
+        "BNBBEARUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "BNBBULLUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "BNBDOWNUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "BNBUPUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "BTCDOWNUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "BTCUPUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "BUSDUSDT": "stablecoin or fiat base",
+        "DAIUSDT": "stablecoin or fiat base",
+        "DOTDOWNUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "DOTUPUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "EOSBEARUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "EOSBULLUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "EOSDOWNUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "EOSUPUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "ETHBEARUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "ETHBULLUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "ETHDOWNUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "ETHUPUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "EURIUSDT": "stablecoin or fiat base",
+        "EURUSDT": "stablecoin or fiat base",
+        "FDUSDUSDT": "stablecoin or fiat base",
+        "FILDOWNUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "FILUPUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "FRAXUSDT": "stablecoin or fiat base",
+        "GBPUSDT": "stablecoin or fiat base",
+        "LINKDOWNUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "LINKUPUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "LTCDOWNUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "LTCUPUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "PAXUSDT": "stablecoin or fiat base",
+        "RLUSDUSDT": "stablecoin or fiat base",
+        "SUSDUSDT": "stablecoin or fiat base",
+        "SUSHIDOWNUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "SUSHIUPUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "SXPDOWNUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "SXPUPUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "TRXDOWNUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "TRXUPUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "TUSDUSDT": "stablecoin or fiat base",
+        "UNIDOWNUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "UNIUPUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "USD1USDT": "stablecoin or fiat base",
+        "USDCUSDT": "stablecoin or fiat base",
+        "USDEUSDT": "stablecoin or fiat base",
+        "USDPUSDT": "stablecoin or fiat base",
+        "USDSBUSDT": "stablecoin or fiat base",
+        "USDSUSDT": "stablecoin or fiat base",
+        "USTCUSDT": "stablecoin or fiat base",
+        "USTUSDT": "stablecoin or fiat base",
+        "XLMDOWNUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "XLMUPUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "XRPBEARUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "XRPBULLUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "XRPDOWNUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "XRPUPUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "XTZDOWNUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "XTZUPUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "XUSDUSDT": "stablecoin or fiat base",
+        "YFIDOWNUSDT": "leveraged token (UP/DOWN/BULL/BEAR)",
+        "YFIUPUSDT": "leveraged token (UP/DOWN/BULL/BEAR)"
+      },
+      "symbols_listed": 757,
+      "symbols_used": 687
+    },
+    "fomc_meetings": {
+      "count": 263,
+      "file": "config/fomc_scheduled_meetings_1994_2026.json",
+      "first": "1994-02-04",
+      "last": "2026-12-09"
+    },
+    "spy": {
+      "calendar": "SPY trading days",
+      "fred": {},
+      "price_frame_rows": 8475,
+      "price_frame_sha256": "09b04ff409fefe5698ac77841a955bb54e70ae8298ca23fd1a38a24e1762831d",
+      "tickers": {
+        "SPY": {
+          "first_date": "1993-01-29",
+          "last_date": "2026-09-30",
+          "rows": 8475,
+          "sha256": "09b04ff409fefe5698ac77841a955bb54e70ae8298ca23fd1a38a24e1762831d"
+        }
+      }
+    }
+  },
+  "g5_note": "trial set = ledger trials before this round + both round-2 candidates (order-free)",
+  "g8_reference": {
+    "book": "crypto-trend-core-v1 (DON8+EMA8, 17 coins, canonical v3.1, 20 bps)",
+    "first_date": "2020-08-05",
+    "last_date": "2026-09-11",
+    "rows": 2229,
+    "sha256": "b35ec95978ecebcb08df7277c92c8d1a2668913dfd303d8ab514f3637fd70ae9",
+    "source": "MEXC 8h prices + Binance funding (venue substitution: MEXC funding history starts 2025-04)"
+  },
+  "generated_utc": "2026-10-11T20:13:12.137710+00:00",
+  "n_trials_cumulative": 9,
+  "null_draws": 999,
+  "periods_per_year": {
+    "R2C1_CTREND": 365,
+    "R2C2_FOMC_cycle_even_weeks": 252
+  },
+  "round": 2,
+  "schema_version": 1,
+  "search_id": "strategy-search-v1",
+  "summary": [
+    {
+      "first_failing_gate": "G2",
+      "id": "R2C1_CTREND",
+      "pass": false
+    },
+    {
+      "first_failing_gate": "G3",
+      "id": "R2C2_FOMC_cycle_even_weeks",
+      "pass": false
+    }
+  ]
+}

@@ -1,0 +1,197 @@
+# I Tried JEV AI on Polymarket 5 Minute Markets (Felt Like Cheating Incorrectly)
+# channel: Moon Dev
+# url: https://www.youtube.com/watch?v=EpVAJG3EF5s
+
+[0:00:00] I just added Jev AI to my Polymarket
+[0:00:02] 5-minute bot. I'm going to give you all
+[0:00:04] the code, but you can see she picked
+[0:00:05] down here and in 1 minute and 25 seconds
+[0:00:07] we're going to know if that's a truth or
+[0:00:09] not.
+[0:00:10] This is the first test with Jev I've
+[0:00:12] ever done.
+[0:00:13] With a live bot? Yes. So, Jev AI is a
+[0:00:16] faster AI essentially. Think uh system
+[0:00:19] one thinking versus system two system
+[0:00:21] two thinking if you read uh thinking
+[0:00:22] fast and slow by uh Daniel Kahneman, I
+[0:00:25] think his name is. Anyways,
+[0:00:27] >> [snorts]
+[0:00:27] >> think of it like that. Fast decisions,
+[0:00:30] boom boom.
+[0:00:31] And it's much cheaper. So,
+[0:00:34] I did a test earlier today. It was like
+[0:00:35] $1,500 for uh Astra to do it. It cost $5
+[0:00:39] for Jev. So, I said, "Hey, why not apply
+[0:00:41] it to my Polymarket 5-minute bot?" Let's
+[0:00:44] go ahead and see if it wins. It has to
+[0:00:45] be under 8672. It's at 8693. This is the
+[0:00:48] first one. Obviously, it doesn't matter
+[0:00:51] too much if it wins or loses off the
+[0:00:52] first one, but that'd be cool if it won
+[0:00:54] the first one. We'll see in 36 seconds.
+[0:00:56] It has to be It has to go down a bit.
+[0:00:58] I'm going to get you all the code here
+[0:01:00] and walk you through all the code and
+[0:01:01] this is going to keep trading the entire
+[0:01:03] time. So, let's go ahead and keep an eye
+[0:01:05] on that while I pull over the code.
+[0:01:08] So, here's the Jev 5-minute bot right
+[0:01:10] here.
+[0:01:12] No, I just probably the worst way in the
+[0:01:13] world to show you the code.
+[0:01:16] I'm not going to do it that way.
+[0:01:18] I'm My eyes are peeled here. I got to
+[0:01:19] see it go under 72. Needs Let's go, Jev.
+[0:01:22] This is your first shot, Jev. Looks like
+[0:01:24] Jev lost its first one. So, is Jev trash
+[0:01:27] for trading? I don't know. I think we'll
+[0:01:28] see that throughout the day.
+[0:01:30] Let me go ahead and get you all of the
+[0:01:31] code because at the end of the day,
+[0:01:34] Okay.
+[0:01:35] It lost.
+[0:01:37] It lost.
+[0:01:39] Jev lost. Jev AI lost the first one.
+[0:01:42] But, I am going to get you all the code
+[0:01:45] because most people don't have access
+[0:01:47] to Jev AI.
+[0:01:50] >> Down.
+[0:01:51] >> Excuse me. They don't have access to the
+[0:01:52] 5-minute markets.
+[0:01:55] Bots for the 5-minute Polymarket.
+[0:01:57] >> Order filled.
+[0:01:58] >> very hard to build.
+[0:02:01] But, I built it here for you. So, we're
+[0:02:02] moving on to the second one here. And
+[0:02:04] let's see by the end of this, she picked
+[0:02:06] down again. This crazy bear. Anyways, I
+[0:02:10] think by the end of this, we'll see if
+[0:02:11] she it goes over two or one for one.
+[0:02:14] But, regardless, you'll have all the
+[0:02:15] infrastructure here needed in order to
+[0:02:17] build out your own Polymarket 5-minute
+[0:02:19] bot. Now, Polymarket market 5-minute
+[0:02:21] bots, I haven't cracked it yet. So,
+[0:02:24] please don't ever try to plug and play
+[0:02:25] something. You're not going to be a you
+[0:02:27] know, overnight I'm sorry. But, [snorts]
+[0:02:30] here's the infrastructure. Let's go
+[0:02:32] ahead and dive into this code.
+[0:02:34] Let's open my cursor here. And by the
+[0:02:37] way, um if you join
+[0:02:39] my uh community, I already have all of
+[0:02:41] this code on the roadmap
+[0:02:43] moondab.com/roadmap.
+[0:02:46] So, there should be a link in the
+[0:02:47] description, but all of this code when
+[0:02:49] you come to a Zoom,
+[0:02:50] you're going to have so much 5-minute
+[0:02:52] market bot code here, Polymarket weather
+[0:02:55] scanner, weather bot, uh 5-minute 95
+[0:02:58] cent
+[0:03:00] bid sniper. Everybody already has that
+[0:03:01] that's in the Zoom right now. The
+[0:03:03] 5-minute bot CVD, 5-minute bot CVD. This
+[0:03:06] is all the code
+[0:03:08] for the base of what I'm showing you
+[0:03:10] here right now.
+[0:03:11] I just added Jev to it. I thought that'd
+[0:03:13] be fun.
+[0:03:14] So, let me go ahead and scroll through
+[0:03:16] this code as well, open a cursor.
+[0:03:22] Okay, so I'm going to scroll through
+[0:03:24] this code while she we have 3 minutes.
+[0:03:26] We've got 3 minutes to see if we
+[0:03:29] actually get it up.
+[0:03:31] So, let's go over to Polymarket.
+[0:03:34] A lot of you already have access to my
+[0:03:36] GitHub here. Not everybody, of course.
+[0:03:39] And let's scroll through the Jev
+[0:03:40] 5-minute bot.
+[0:03:42] Just so you can see it all. Because if
+[0:03:44] you can see it all, then you can beat it
+[0:03:45] all. Just pause and rewind what you need
+[0:03:47] to do. You can see I'm going to have to
+[0:03:48] show you open router brain. I'm using
+[0:03:50] open router. I'm going to also have to
+[0:03:51] show you the AI 5-minute core here.
+[0:03:55] The AI 5-minute core is the thing that
+[0:03:57] you're going to want, but at the end of
+[0:03:58] the day, you have the road map as well
+[0:04:01] if you're inside of the community. It's
+[0:04:03] very inexpensive to join.
+[0:04:05] I try to make it as powerful as
+[0:04:06] possible. Here's all the code. You're
+[0:04:08] going to have to pause and rewind,
+[0:04:09] whatever you need to do. Okay, there's
+[0:04:10] the first part of code. Let's go ahead
+[0:04:12] to the imports now. So, I need to send
+[0:04:14] you AI 5-minute core here.
+[0:04:16] AI 5-minute core.
+[0:04:19] Here's all the code. I'm going to scroll
+[0:04:20] through fast. You have the pause button.
+[0:04:22] You have the rewind button.
+[0:04:24] I use open router for this. She's about
+[0:04:25] to take another L. Don't know why you'd
+[0:04:27] want to use Jev for trading at this
+[0:04:29] point because she's trash.
+[0:04:33] But, did you expect her to just print
+[0:04:34] money? No, of course not.
+[0:04:37] I think there's interesting ways
+[0:04:39] to use
+[0:04:40] Jev as it's faster.
+[0:04:43] But, just cuz it's faster and cheaper
+[0:04:44] does not mean there's edge to it. I will
+[0:04:46] let it run for probably like five, 10
+[0:04:49] different markets here. You can see
+[0:04:50] she's pretty much over, too.
+[0:04:53] I set this up in a way that you can use
+[0:04:54] Fable or any other AIs as you please as
+[0:04:57] well.
+[0:05:02] So, this is the AI 5-minute core.py.
+[0:05:05] This is a lot of the functions you'll
+[0:05:06] need. You can see she's down 97%, so
+[0:05:09] you know, Jev AI for poly market so far
+[0:05:11] is trash, but hey, maybe by the time you
+[0:05:13] watch this, she just went on a
+[0:05:16] five winning streak. I don't know.
+[0:05:18] I doubt it.
+[0:05:20] But, I think this is very um helpful to
+[0:05:23] get all this code regardless.
+[0:05:25] Cuz at the end of the day, I believe
+[0:05:26] code is great equalizer, and if you are
+[0:05:28] motivated to code based off of your
+[0:05:31] trading, which I was because I had to
+[0:05:33] fix the problem I was having,
+[0:05:36] which was emotional trading,
+[0:05:38] well, then I just changed your life. All
+[0:05:40] right, now I need to show you the open
+[0:05:41] router brain. That's the last thing I'll
+[0:05:43] show you here, and you'll have all the
+[0:05:44] code, and you can see I took two L's
+[0:05:46] here on Jeff. And we'll see if it turns
+[0:05:49] around by the end. But you know how to
+[0:05:52] get into the my next Zoom call. If you
+[0:05:53] join the Zoom call, you essentially get
+[0:05:55] the road map. The road map I already
+[0:05:57] showed you
+[0:05:58] that it has a ton of 5-minute bot code.
+[0:06:01] Everybody wants my 5-minute bot code.
+[0:06:03] Boom, boom, boom. You have it all in the
+[0:06:04] road map. Everybody in the road map
+[0:06:06] right now has it. I'm going to let Jeff
+[0:06:08] trade for probably 10 trades total.
+[0:06:11] See if she can break the
+[0:06:14] break even.
+[0:06:16] But uh so far she's over two. I'll let
+[0:06:18] it roll for this last 15 seconds. You
+[0:06:20] just saw all of the code. If you want
+[0:06:22] your own 5-minute
+[0:06:24] market Polymarket bot, remember this is
+[0:06:26] sketch. 5-minute bots turn over so much
+[0:06:29] the effective leverage is like 5,000x.
+[0:06:31] So now you see all the code and she went
+[0:06:33] over two. Can Jeff AI trade on
+[0:06:35] Polymarket? I guess you'll have to come
+[0:06:36] back tomorrow to see.
