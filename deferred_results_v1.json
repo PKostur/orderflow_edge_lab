@@ -1,0 +1,1628 @@
+{
+ "B1_family": {
+  "bh_q010": {
+   "Cross-asset trend": {
+    "p": 0.9896106780008669,
+    "q_value": 0.9999883406604965,
+    "reject": false
+   },
+   "Cross-asset trend, inverse-vol": {
+    "p": 0.9825983882165228,
+    "q_value": 0.9999883406604965,
+    "reject": false
+   },
+   "Crypto trend core": {
+    "p": 0.9834030047580098,
+    "q_value": 0.9999883406604965,
+    "reject": false
+   },
+   "Crypto trend core + vol target": {
+    "p": 0.9821925531347798,
+    "q_value": 0.9999883406604965,
+    "reject": false
+   },
+   "Multi-premia blend": {
+    "p": 0.9938984703175755,
+    "q_value": 0.9999883406604965,
+    "reject": false
+   },
+   "Multi-premia, 5-coin human book": {
+    "p": 0.9534373918909281,
+    "q_value": 0.9999883406604965,
+    "reject": false
+   },
+   "Paper account: 70-coin blend, 10,000 USDT": {
+    "p": 0.9999883406604964,
+    "q_value": 0.9999883406604965,
+    "reject": false
+   },
+   "Trend portfolio (10 coins)": {
+    "p": 0.995093608454644,
+    "q_value": 0.9999883406604965,
+    "reject": false
+   },
+   "Zoo mirrors (BTC shock reversal, lottery momentum)": {
+    "p": 0.9948460379891653,
+    "q_value": 0.9999883406604965,
+    "reject": false
+   }
+  },
+  "common_days": 0,
+  "excluded_from_n_eff": {
+   "Turn-of-month SPY (search-v1 near miss)": "fewer than 10 scored days"
+  },
+  "included": [
+   "Multi-premia blend",
+   "Multi-premia, 5-coin human book",
+   "Crypto trend core",
+   "Crypto trend core + vol target",
+   "Trend portfolio (10 coins)",
+   "Cross-asset trend",
+   "Cross-asset trend, inverse-vol",
+   "Zoo mirrors (BTC shock reversal, lottery momentum)",
+   "Paper account: 70-coin blend, 10,000 USDT"
+  ],
+  "n_eff": null,
+  "note": "fewer than 5 common days or fewer than 2 included watches: N_eff not estimable",
+  "watches": {
+   "Cross-asset trend": {
+    "annualized_sharpe": -7.521873245979485,
+    "cumulative_return": -0.060809407718181774,
+    "days": 18,
+    "newey_west_t": -2.311982567528283
+   },
+   "Cross-asset trend, inverse-vol": {
+    "annualized_sharpe": -6.841319851397827,
+    "cumulative_return": -0.018944151920318508,
+    "days": 18,
+    "newey_west_t": -2.1106405024701553
+   },
+   "Crypto trend core": {
+    "annualized_sharpe": -7.3905226360722,
+    "cumulative_return": -0.042379648537002046,
+    "days": 17,
+    "newey_west_t": -2.129729034464734
+   },
+   "Crypto trend core + vol target": {
+    "annualized_sharpe": -7.331046442702955,
+    "cumulative_return": -0.032470039896197345,
+    "days": 17,
+    "newey_west_t": -2.101297105055965
+   },
+   "Multi-premia blend": {
+    "annualized_sharpe": -7.341672215046366,
+    "cumulative_return": -0.028318634322454184,
+    "days": 17,
+    "newey_west_t": -2.50621731188926
+   },
+   "Multi-premia, 5-coin human book": {
+    "annualized_sharpe": -4.721652859239494,
+    "cumulative_return": -0.028609491522605945,
+    "days": 17,
+    "newey_west_t": -1.6791376695772293
+   },
+   "Paper account: 70-coin blend, 10,000 USDT": {
+    "annualized_sharpe": -11.279453158477981,
+    "cumulative_return": -0.02109338967625196,
+    "days": 11,
+    "newey_west_t": -4.230486161157821
+   },
+   "Trend portfolio (10 coins)": {
+    "annualized_sharpe": -8.104720728440881,
+    "cumulative_return": -0.0939101598314408,
+    "days": 18,
+    "newey_west_t": -2.5823576619682207
+   },
+   "Turn-of-month SPY (search-v1 near miss)": {
+    "annualized_sharpe": null,
+    "cumulative_return": 0.0,
+    "days": 3,
+    "newey_west_t": null
+   },
+   "Zoo mirrors (BTC shock reversal, lottery momentum)": {
+    "annualized_sharpe": -7.192895673194127,
+    "cumulative_return": -0.03007456808099007,
+    "days": 13,
+    "newey_west_t": -2.5653248779861273
+   }
+  }
+ },
+ "C1_revisions": {
+  "Cross-asset trend": {
+   "artifacts_with_series": 40,
+   "revised_stamps": 0,
+   "revisions": [],
+   "stamps": 18
+  },
+  "Cross-asset trend, inverse-vol": {
+   "artifacts_with_series": 40,
+   "revised_stamps": 0,
+   "revisions": [],
+   "stamps": 18
+  },
+  "Crypto trend core": {
+   "artifacts_with_series": 38,
+   "revised_stamps": 0,
+   "revisions": [],
+   "stamps": 17
+  },
+  "Crypto trend core + vol target": {
+   "artifacts_with_series": 38,
+   "revised_stamps": 0,
+   "revisions": [],
+   "stamps": 17
+  },
+  "Fade-24h bracket 2x (paper)": {
+   "artifacts_with_series": 0,
+   "revised_stamps": 0,
+   "revisions": [],
+   "stamps": 0
+  },
+  "Multi-premia blend": {
+   "artifacts_with_series": 49,
+   "revised_stamps": 15,
+   "revisions": [
+    {
+     "first": {
+      "artifact": 11129903636,
+      "created_at": "2026-09-30T22:49:32Z",
+      "value": -0.0035333700422633847
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": -0.0035333700422633847
+     },
+     "max": -0.0035333700422633847,
+     "min": -0.0035630124390728666,
+     "n_obs": 49,
+     "stamp": "2026-09-30T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11196400346,
+      "created_at": "2026-10-01T21:48:47Z",
+      "value": 0.004913533705254205
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": 0.004913533705254205
+     },
+     "max": 0.004913533705254207,
+     "min": 0.004891382063618126,
+     "n_obs": 48,
+     "stamp": "2026-10-01T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11252249179,
+      "created_at": "2026-10-02T21:19:30Z",
+      "value": -0.005266302405019998
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": -0.005266302405019998
+     },
+     "max": -0.005232802853919249,
+     "min": -0.005266302405019998,
+     "n_obs": 47,
+     "stamp": "2026-10-02T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11282468947,
+      "created_at": "2026-10-03T19:51:12Z",
+      "value": -0.0019625760479939384
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": -0.0019625760479939384
+     },
+     "max": -0.001864034642047609,
+     "min": -0.0019625760479939384,
+     "n_obs": 44,
+     "stamp": "2026-10-03T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11313821371,
+      "created_at": "2026-10-04T20:08:57Z",
+      "value": 0.004119520561916112
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": 0.004119520561916112
+     },
+     "max": 0.004119520561916112,
+     "min": 0.004006248992415919,
+     "n_obs": 41,
+     "stamp": "2026-10-04T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11370778185,
+      "created_at": "2026-10-05T20:57:55Z",
+      "value": 0.0025185208463332437
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": 0.0025185208463332407
+     },
+     "max": 0.0025185208463332437,
+     "min": 0.002277397042291622,
+     "n_obs": 40,
+     "stamp": "2026-10-05T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11446172026,
+      "created_at": "2026-10-06T21:38:27Z",
+      "value": 0.0004937633386807245
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": 0.0004937633386807245
+     },
+     "max": 0.0004937633386807245,
+     "min": 0.0004390065206527445,
+     "n_obs": 38,
+     "stamp": "2026-10-06T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11513623966,
+      "created_at": "2026-10-07T21:59:44Z",
+      "value": -0.003802582833465506
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": -0.0038025828334655063
+     },
+     "max": -0.0035536119678291934,
+     "min": -0.0038025828334655063,
+     "n_obs": 35,
+     "stamp": "2026-10-07T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11581099205,
+      "created_at": "2026-10-08T22:03:47Z",
+      "value": -0.008639775409170072
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": -0.008639775409170072
+     },
+     "max": -0.008639775409170072,
+     "min": -0.008673340282337917,
+     "n_obs": 32,
+     "stamp": "2026-10-08T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11647140054,
+      "created_at": "2026-10-09T21:41:35Z",
+      "value": -0.008549706602125553
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": -0.008549706602125553
+     },
+     "max": -0.008382302378743755,
+     "min": -0.008549706602125553,
+     "n_obs": 29,
+     "stamp": "2026-10-09T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11681354130,
+      "created_at": "2026-10-10T20:35:51Z",
+      "value": 0.003974885932846539
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": 0.003974885932846539
+     },
+     "max": 0.003974885932846539,
+     "min": 0.003928301053642105,
+     "n_obs": 26,
+     "stamp": "2026-10-10T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11714633088,
+      "created_at": "2026-10-11T20:58:34Z",
+      "value": 9.298181427066371e-05
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": 9.298181427066371e-05
+     },
+     "max": 0.0010415132640827038,
+     "min": 9.298181427066371e-05,
+     "n_obs": 23,
+     "stamp": "2026-10-11T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11779338077,
+      "created_at": "2026-10-12T23:39:20Z",
+      "value": 0.0007464769353438751
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": 0.0007464769353438751
+     },
+     "max": 0.0009636307268752931,
+     "min": 0.0007464769353438751,
+     "n_obs": 18,
+     "stamp": "2026-10-12T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11852958425,
+      "created_at": "2026-10-13T21:51:22Z",
+      "value": -0.008448666923043293
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": -0.008448666923043293
+     },
+     "max": -0.008448666923043293,
+     "min": -0.008547816462942483,
+     "n_obs": 12,
+     "stamp": "2026-10-13T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11927037469,
+      "created_at": "2026-10-14T20:41:18Z",
+      "value": -0.0020223885736068282
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": -0.0020223885736068282
+     },
+     "max": -0.0020223885736068265,
+     "min": -0.002240176284667553,
+     "n_obs": 8,
+     "stamp": "2026-10-14T00:00:00+00:00"
+    }
+   ],
+   "stamps": 17
+  },
+  "Multi-premia, 5-coin human book": {
+   "artifacts_with_series": 49,
+   "revised_stamps": 14,
+   "revisions": [
+    {
+     "first": {
+      "artifact": 11129903636,
+      "created_at": "2026-09-30T22:49:32Z",
+      "value": 0.0088257865219849
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": 0.0088257865219849
+     },
+     "max": 0.008825786521984904,
+     "min": 0.008531336298811464,
+     "n_obs": 49,
+     "stamp": "2026-09-30T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11196400346,
+      "created_at": "2026-10-01T21:48:47Z",
+      "value": -0.005861292243688548
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": -0.005861292243688548
+     },
+     "max": -0.005662503096451954,
+     "min": -0.005861292243688549,
+     "n_obs": 48,
+     "stamp": "2026-10-01T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11252249179,
+      "created_at": "2026-10-02T21:19:30Z",
+      "value": -0.017623801186987163
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": -0.017623801186987163
+     },
+     "max": -0.017140934750797032,
+     "min": -0.017623801186987167,
+     "n_obs": 47,
+     "stamp": "2026-10-02T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11282468947,
+      "created_at": "2026-10-03T19:51:12Z",
+      "value": 0.009696244892956517
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": 0.009696244892956517
+     },
+     "max": 0.009696244892956517,
+     "min": 0.009431844493352333,
+     "n_obs": 44,
+     "stamp": "2026-10-03T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11313821371,
+      "created_at": "2026-10-04T20:08:57Z",
+      "value": 0.002402459304473885
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": 0.002402459304473885
+     },
+     "max": 0.002402459304473886,
+     "min": 0.002328993559368862,
+     "n_obs": 41,
+     "stamp": "2026-10-04T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11370778185,
+      "created_at": "2026-10-05T20:57:55Z",
+      "value": -0.001675464496725013
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": -0.0016754644967250127
+     },
+     "max": -0.001623144662271279,
+     "min": -0.001675464496725013,
+     "n_obs": 40,
+     "stamp": "2026-10-05T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11446172026,
+      "created_at": "2026-10-06T21:38:27Z",
+      "value": -0.006259050669844407
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": -0.006259050669844407
+     },
+     "max": -0.006060284437296489,
+     "min": -0.006259050669844407,
+     "n_obs": 38,
+     "stamp": "2026-10-06T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11513623966,
+      "created_at": "2026-10-07T21:59:44Z",
+      "value": -0.008003423787546331
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": -0.00800342378754633
+     },
+     "max": -0.007748917743259424,
+     "min": -0.008003423787546331,
+     "n_obs": 35,
+     "stamp": "2026-10-07T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11581099205,
+      "created_at": "2026-10-08T22:03:47Z",
+      "value": -0.008964280877820445
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": -0.008964280877820445
+     },
+     "max": -0.008696978842008969,
+     "min": -0.008964280877820445,
+     "n_obs": 32,
+     "stamp": "2026-10-08T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11647140054,
+      "created_at": "2026-10-09T21:41:35Z",
+      "value": 0.00039666840969268785
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": 0.00039666840969268785
+     },
+     "max": 0.00039666840969268785,
+     "min": 0.00036307788688225325,
+     "n_obs": 29,
+     "stamp": "2026-10-09T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11681354130,
+      "created_at": "2026-10-10T20:35:51Z",
+      "value": 0.0004147191842183216
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": 0.0004147191842183216
+     },
+     "max": 0.0005190700351342747,
+     "min": 0.0004147191842183215,
+     "n_obs": 26,
+     "stamp": "2026-10-10T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11714633088,
+      "created_at": "2026-10-11T20:58:34Z",
+      "value": -0.003766780844122201
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": -0.003766780844122201
+     },
+     "max": -0.0037667808441222005,
+     "min": -0.0039088532325499935,
+     "n_obs": 23,
+     "stamp": "2026-10-11T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11779338077,
+      "created_at": "2026-10-12T23:39:20Z",
+      "value": 0.000613806039550232
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": 0.000613806039550232
+     },
+     "max": 0.0026931100558542126,
+     "min": 0.0006138060395502317,
+     "n_obs": 18,
+     "stamp": "2026-10-12T00:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11852958425,
+      "created_at": "2026-10-13T21:51:22Z",
+      "value": -0.002737087371342199
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": -0.002737087371342199
+     },
+     "max": -0.002737087371342199,
+     "min": -0.005312796333719978,
+     "n_obs": 12,
+     "stamp": "2026-10-13T00:00:00+00:00"
+    }
+   ],
+   "stamps": 17
+  },
+  "Near-miss paper (cascade/CTREND/trend 2x)": {
+   "artifacts_with_series": 0,
+   "revised_stamps": 0,
+   "revisions": [],
+   "stamps": 0
+  },
+  "News sentiment (news momentum, attention, tone, panic pause)": {
+   "artifacts_with_series": 0,
+   "revised_stamps": 0,
+   "revisions": [],
+   "stamps": 0
+  },
+  "Paper account: 70-coin blend, 10,000 USDT": {
+   "artifacts_with_series": 38,
+   "revised_stamps": 11,
+   "revisions": [
+    {
+     "first": {
+      "artifact": 11446172026,
+      "created_at": "2026-10-06T21:38:27Z",
+      "value": -0.0009751787759433306
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": -0.0009777048239432151
+     },
+     "max": -0.0009751787759433306,
+     "min": -0.0010123564241424354,
+     "n_obs": 38,
+     "stamp": "2026-10-06T08:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11513623966,
+      "created_at": "2026-10-07T21:59:44Z",
+      "value": -0.0067951203054028575
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": -0.006793265399650417
+     },
+     "max": -0.006793248222785375,
+     "min": -0.006795317593358385,
+     "n_obs": 35,
+     "stamp": "2026-10-07T08:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11581099205,
+      "created_at": "2026-10-08T22:03:47Z",
+      "value": -0.0038768510622343433
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": -0.0038768609319781433
+     },
+     "max": -0.0038768510622343433,
+     "min": -0.003878629086495833,
+     "n_obs": 32,
+     "stamp": "2026-10-08T08:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11647140054,
+      "created_at": "2026-10-09T21:41:35Z",
+      "value": 0.0006593623515074309
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": 0.0006592173798094514
+     },
+     "max": 0.0006593627150741632,
+     "min": 0.0006348269968743381,
+     "n_obs": 29,
+     "stamp": "2026-10-09T08:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11681354130,
+      "created_at": "2026-10-10T20:35:51Z",
+      "value": -0.0006572758324216998
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": -0.0006573267844163233
+     },
+     "max": -0.0006572758324216998,
+     "min": -0.0006662624831108577,
+     "n_obs": 26,
+     "stamp": "2026-10-10T08:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11714633088,
+      "created_at": "2026-10-11T20:58:34Z",
+      "value": -0.0031721792990602182
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": -0.003170547311062699
+     },
+     "max": -0.003170538587056515,
+     "min": -0.00317241510559485,
+     "n_obs": 23,
+     "stamp": "2026-10-11T08:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11779338077,
+      "created_at": "2026-10-12T23:39:20Z",
+      "value": 0.002760527260251111
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": 0.0027604392462674543
+     },
+     "max": 0.002760527260251111,
+     "min": 0.0027590983769336663,
+     "n_obs": 18,
+     "stamp": "2026-10-12T08:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11852958425,
+      "created_at": "2026-10-13T21:51:22Z",
+      "value": -0.004839724387688427
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": -0.004839763270636621
+     },
+     "max": -0.004839724387688427,
+     "min": -0.0048421221028225325,
+     "n_obs": 12,
+     "stamp": "2026-10-13T08:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 11927037469,
+      "created_at": "2026-10-14T20:41:18Z",
+      "value": -0.0029805340172514017
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": -0.002977525762114186
+     },
+     "max": -0.002977378056481683,
+     "min": -0.0029817186837653997,
+     "n_obs": 8,
+     "stamp": "2026-10-14T08:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 12003209346,
+      "created_at": "2026-10-15T20:21:11Z",
+      "value": -0.004817224917219365
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": -0.0048174062054655575
+     },
+     "max": -0.004817224917219365,
+     "min": -0.004829698665638871,
+     "n_obs": 5,
+     "stamp": "2026-10-15T08:00:00+00:00"
+    },
+    {
+     "first": {
+      "artifact": 12071841973,
+      "created_at": "2026-10-16T19:58:26Z",
+      "value": 0.0034319074446138575
+     },
+     "last": {
+      "artifact": 12079938227,
+      "created_at": "2026-10-16T23:05:05Z",
+      "value": 0.003445931085730658
+     },
+     "max": 0.003445931085730658,
+     "min": 0.0034319074446138575,
+     "n_obs": 2,
+     "stamp": "2026-10-16T08:00:00+00:00"
+    }
+   ],
+   "stamps": 11
+  },
+  "TradFi perps (momentum / weekend fade)": {
+   "artifacts_with_series": 0,
+   "revised_stamps": 0,
+   "revisions": [],
+   "stamps": 0
+  },
+  "Trend portfolio (10 coins)": {
+   "artifacts_with_series": 39,
+   "revised_stamps": 0,
+   "revisions": [],
+   "stamps": 18
+  },
+  "Turn-of-month SPY (search-v1 near miss)": {
+   "artifacts_with_series": 8,
+   "revised_stamps": 0,
+   "revisions": [],
+   "stamps": 3
+  },
+  "Zoo mirrors (BTC shock reversal, lottery momentum)": {
+   "artifacts_with_series": 41,
+   "revised_stamps": 0,
+   "revisions": [],
+   "stamps": 13
+  }
+ },
+ "C2_determinism": {
+  "crypto-trend-core-v1/report.json": {
+   "artifact": 12080536392,
+   "artifact_head_sha": "d0517bc2fb6f3d51ce4db83e2919a29ea7a5ae36",
+   "as_of": "2026-10-16T23:01:29.930599+00:00",
+   "books": {
+    "combined": {
+     "max_abs_gap": 0.0,
+     "n_new": 17,
+     "n_ref": 17,
+     "same_stamps": true
+    },
+    "crypto": {
+     "max_abs_gap": 0.0,
+     "n_new": 17,
+     "n_ref": 17,
+     "same_stamps": true
+    }
+   },
+   "coins_with_data": {
+    "new": null,
+    "ref": null
+   },
+   "missing_symbols": {
+    "new": null,
+    "ref": null
+   },
+   "pass": true
+  },
+  "crypto-trend-core-voltarget-v1/report.json": {
+   "artifact": 12080168409,
+   "artifact_head_sha": "d0517bc2fb6f3d51ce4db83e2919a29ea7a5ae36",
+   "as_of": "2026-10-16T23:01:38.020133+00:00",
+   "books": {
+    "core": {
+     "max_abs_gap": 6.938893903907228e-18,
+     "n_new": 17,
+     "n_ref": 17,
+     "same_stamps": true
+    },
+    "core_voltarget": {
+     "max_abs_gap": 6.938893903907228e-18,
+     "n_new": 17,
+     "n_ref": 17,
+     "same_stamps": true
+    }
+   },
+   "coins_with_data": {
+    "new": null,
+    "ref": null
+   },
+   "missing_symbols": {
+    "new": null,
+    "ref": null
+   },
+   "pass": true
+  },
+  "multi-premia-blend-v1/human_report.json": {
+   "artifact": 12079938227,
+   "artifact_head_sha": "d0517bc2fb6f3d51ce4db83e2919a29ea7a5ae36",
+   "as_of": "2026-10-16T23:02:16.625449+00:00",
+   "books": {
+    "H10": {
+     "max_abs_gap": 3.469446951953614e-18,
+     "n_new": 17,
+     "n_ref": 17,
+     "same_stamps": true
+    },
+    "H5": {
+     "max_abs_gap": 3.469446951953614e-18,
+     "n_new": 17,
+     "n_ref": 17,
+     "same_stamps": true
+    },
+    "V_ALL": {
+     "max_abs_gap": 1.0842021724855044e-18,
+     "n_new": 17,
+     "n_ref": 17,
+     "same_stamps": true
+    }
+   },
+   "coins_with_data": {
+    "new": 70,
+    "ref": 70
+   },
+   "missing_symbols": {
+    "new": [],
+    "ref": []
+   },
+   "pass": true
+  },
+  "multi-premia-blend-v1/report.json": {
+   "artifact": 12079938227,
+   "artifact_head_sha": "d0517bc2fb6f3d51ce4db83e2919a29ea7a5ae36",
+   "as_of": "2026-10-16T23:01:43.356637+00:00",
+   "books": {
+    "S1": {
+     "max_abs_gap": 4.7704895589362195e-18,
+     "n_new": 17,
+     "n_ref": 17,
+     "same_stamps": true
+    },
+    "S2": {
+     "max_abs_gap": 0.0,
+     "n_new": 17,
+     "n_ref": 17,
+     "same_stamps": true
+    },
+    "S3": {
+     "max_abs_gap": 0.0,
+     "n_new": 17,
+     "n_ref": 17,
+     "same_stamps": true
+    },
+    "S4_blend": {
+     "max_abs_gap": 3.0357660829594124e-18,
+     "n_new": 17,
+     "n_ref": 17,
+     "same_stamps": true
+    }
+   },
+   "coins_with_data": {
+    "new": 70,
+    "ref": 70
+   },
+   "missing_symbols": {
+    "new": [],
+    "ref": []
+   },
+   "pass": true
+  },
+  "multi-premia-blend-v1/zoo_mirror_report.json": {
+   "artifact": 12079938227,
+   "artifact_head_sha": "d0517bc2fb6f3d51ce4db83e2919a29ea7a5ae36",
+   "as_of": "2026-10-16T23:02:51.444773+00:00",
+   "books": {
+    "M2_btc_shock_reversal": {
+     "max_abs_gap": 0.0010515886820849658,
+     "n_new": 13,
+     "n_ref": 13,
+     "same_stamps": true
+    },
+    "M4_lottery_momentum": {
+     "max_abs_gap": 0.00269419605184611,
+     "n_new": 13,
+     "n_ref": 13,
+     "same_stamps": true
+    }
+   },
+   "coins_with_data": {
+    "new": 69,
+    "ref": 70
+   },
+   "missing_symbols": {
+    "new": [
+     "PHA_USDT"
+    ],
+    "ref": []
+   },
+   "pass": false
+  },
+  "paper_account_report.json": {
+   "not_testable": "paper_account has no --as-of option"
+  }
+ },
+ "C3_reconciliation": {
+  "coins_compared": 70,
+  "contracts": {
+   "AAVE_USDT": "AAVEUSDT",
+   "ADA_USDT": "ADAUSDT",
+   "AERO_USDT": "AEROUSDT",
+   "AKE_USDT": "AKEUSDT",
+   "APT_USDT": "APTUSDT",
+   "AR_USDT": "ARUSDT",
+   "ATOM_USDT": "ATOMUSDT",
+   "AVAX_USDT": "AVAXUSDT",
+   "BCH_USDT": "BCHUSDT",
+   "BNB_USDT": "BNBUSDT",
+   "BR_USDT": "BRUSDT",
+   "BTC_USDT": "BTCUSDT",
+   "CFX_USDT": "CFXUSDT",
+   "CRV_USDT": "CRVUSDT",
+   "DASH_USDT": "DASHUSDT",
+   "DOGE_USDT": "DOGEUSDT",
+   "DOT_USDT": "DOTUSDT",
+   "EIGEN_USDT": "EIGENUSDT",
+   "ENA_USDT": "ENAUSDT",
+   "ETC_USDT": "ETCUSDT",
+   "ETHFI_USDT": "ETHFIUSDT",
+   "ETH_USDT": "ETHUSDT",
+   "FARTCOIN_USDT": "FARTCOINUSDT",
+   "FET_USDT": "FETUSDT",
+   "GALA_USDT": "GALAUSDT",
+   "GRASS_USDT": "GRASSUSDT",
+   "HBAR_USDT": "HBARUSDT",
+   "HYPE_USDT": "HYPEUSDT",
+   "ICP_USDT": "ICPUSDT",
+   "INJ_USDT": "INJUSDT",
+   "JTO_USDT": "JTOUSDT",
+   "JUP_USDT": "JUPUSDT",
+   "KAS_USDT": "KASUSDT",
+   "LDO_USDT": "LDOUSDT",
+   "LINK_USDT": "LINKUSDT",
+   "LSK_USDT": "LSKUSDT",
+   "LTC_USDT": "LTCUSDT",
+   "NIL_USDT": "NILUSDT",
+   "ONDO_USDT": "ONDOUSDT",
+   "OP_USDT": "OPUSDT",
+   "ORDI_USDT": "ORDIUSDT",
+   "PENGU_USDT": "PENGUUSDT",
+   "PEPE_USDT": "1000PEPEUSDT",
+   "PHA_USDT": "PHAUSDT",
+   "POL_USDT": "POLUSDT",
+   "PUMPFUN_USDT": "PUMPUSDT",
+   "PYTH_USDT": "PYTHUSDT",
+   "QNT_USDT": "QNTUSDT",
+   "RARE_USDT": "RAREUSDT",
+   "RENDER_USDT": "RENDERUSDT",
+   "RUNE_USDT": "RUNEUSDT",
+   "SEI_USDT": "SEIUSDT",
+   "SHIB_USDT": "1000SHIBUSDT",
+   "SOL_USDT": "SOLUSDT",
+   "SUI_USDT": "SUIUSDT",
+   "TAO_USDT": "TAOUSDT",
+   "TIA_USDT": "TIAUSDT",
+   "TRUMPOFFICIAL_USDT": "TRUMPUSDT",
+   "UNI_USDT": "UNIUSDT",
+   "VIRTUAL_USDT": "VIRTUALUSDT",
+   "WIF_USDT": "WIFUSDT",
+   "WLD_USDT": "WLDUSDT",
+   "WLFI_USDT": "WLFIUSDT",
+   "XLM_USDT": "XLMUSDT",
+   "XMR_USDT": "XMRUSDT",
+   "XPL_USDT": "XPLUSDT",
+   "XRP_USDT": "XRPUSDT",
+   "ZEC_USDT": "ZECUSDT",
+   "ZEN_USDT": "ZENUSDT",
+   "ZRO_USDT": "ZROUSDT"
+  },
+  "funding": {
+   "reason": "data.binance.vision publishes fundingRate monthly only; the 2026-10 file is needed (addendum 0.9)",
+   "status": "DEFERRED"
+  },
+  "problems": {},
+  "returns": {
+   "coin_days": 770,
+   "exception_rate": 0.0,
+   "exceptions": [],
+   "exceptions_gt_50bps": 0,
+   "median_gap_bps": 2.0896673587333936,
+   "p95_gap_bps": 10.255201623564014
+  },
+  "stamp_convention": "d = open(d) to open(d+1), one day earlier than the watches' stamps",
+  "window": [
+   "2026-10-04",
+   "2026-10-16"
+  ]
+ },
+ "C4_btc_beta": {
+  "Cross-asset trend": {
+   "alpha_daily": -0.0029293301478770643,
+   "alpha_t": -3.1373460025469533,
+   "beta": 0.3670991498634595,
+   "beta_t": 2.3281755055581046,
+   "btc_cum_return": -0.026489987788975045,
+   "n": 18,
+   "r2": 0.3392592057157445,
+   "report_cost_funding_fields": [
+    "funding_contribution"
+   ],
+   "watch_cum_return": -0.060809407718181774
+  },
+  "Cross-asset trend, inverse-vol": {
+   "alpha_daily": -0.0008671504766184224,
+   "alpha_t": -2.937241648181991,
+   "beta": 0.13630009151866554,
+   "beta_t": 3.0277897633313624,
+   "btc_cum_return": -0.026489987788975045,
+   "n": 18,
+   "r2": 0.4098230118563295,
+   "report_cost_funding_fields": [
+    "funding_contribution"
+   ],
+   "watch_cum_return": -0.018944151920318508
+  },
+  "Crypto trend core": {
+   "alpha_daily": -0.00225919408953776,
+   "alpha_t": -3.5724860632301016,
+   "beta": 0.328771334179117,
+   "beta_t": 2.9799538171251565,
+   "btc_cum_return": -0.015165166964210997,
+   "n": 17,
+   "r2": 0.5022691894717961,
+   "report_cost_funding_fields": [
+    "funding_contribution"
+   ],
+   "watch_cum_return": -0.042379648537002046
+  },
+  "Crypto trend core + vol target": {
+   "alpha_daily": -0.0017268902817230264,
+   "alpha_t": -3.4278468326786826,
+   "beta": 0.24965590669777743,
+   "beta_t": 2.8793202790296877,
+   "btc_cum_return": -0.015165166964210997,
+   "n": 17,
+   "r2": 0.4884165008207343,
+   "report_cost_funding_fields": [],
+   "watch_cum_return": -0.032470039896197345
+  },
+  "Multi-premia blend": {
+   "alpha_daily": -0.0015246770890691896,
+   "alpha_t": -4.085429819007422,
+   "beta": 0.19220960901036832,
+   "beta_t": 3.2039785350715078,
+   "btc_cum_return": -0.015165166964210997,
+   "n": 17,
+   "r2": 0.3826098872576599,
+   "report_cost_funding_fields": [],
+   "watch_cum_return": -0.028318634322454184
+  },
+  "Multi-premia, 5-coin human book": {
+   "alpha_daily": -0.001686727796885275,
+   "alpha_t": -1.7033270747190021,
+   "beta": -0.003291680863936874,
+   "beta_t": -0.032325774094486275,
+   "btc_cum_return": -0.015165166964210997,
+   "n": 17,
+   "r2": 4.615595754198232e-05,
+   "report_cost_funding_fields": [],
+   "watch_cum_return": -0.028609491522605945
+  },
+  "Paper account: 70-coin blend, 10,000 USDT": {
+   "n": 0,
+   "note": "fewer than 8 aligned days",
+   "report_cost_funding_fields": []
+  },
+  "Trend portfolio (10 coins)": {
+   "alpha_daily": -0.004560400373362047,
+   "alpha_t": -3.861522707697277,
+   "beta": 0.5906388709791168,
+   "beta_t": 2.558995194452401,
+   "btc_cum_return": -0.026489987788975045,
+   "n": 18,
+   "r2": 0.4165198527702031,
+   "report_cost_funding_fields": [],
+   "watch_cum_return": -0.0939101598314408
+  },
+  "Turn-of-month SPY (search-v1 near miss)": {
+   "n": 3,
+   "note": "fewer than 8 aligned days",
+   "report_cost_funding_fields": []
+  },
+  "Zoo mirrors (BTC shock reversal, lottery momentum)": {
+   "alpha_daily": -0.0021001347138678034,
+   "alpha_t": -2.3207587636334504,
+   "beta": 0.11423704868116302,
+   "beta_t": 1.0364874145160665,
+   "btc_cum_return": -0.027075365725763856,
+   "n": 13,
+   "r2": 0.0818544694602974,
+   "report_cost_funding_fields": [],
+   "watch_cum_return": -0.03007456808099007
+  }
+ },
+ "D4_D5_mask_size": {
+  "coins": 70,
+  "construction": "MEXC 8h prices + Binance funding (data.binance.vision monthly files)",
+  "diff_open_only_minus_original": {
+   "S2": {
+    "mean_daily": 3.9839783434617373e-07,
+    "sharpe": 0.0001289782584756871
+   },
+   "S3": {
+    "mean_daily": -9.629921022495831e-06,
+    "sharpe": -0.011007211277689555
+   },
+   "S4": {
+    "mean_daily": -2.8486161426546485e-06,
+    "sharpe": -0.007808051348766387
+   }
+  },
+  "diff_pit_successor_minus_original": {
+   "S2": {
+    "mean_daily": -1.862673145370218e-06,
+    "sharpe": -0.0021798382918908343
+   },
+   "S3": {
+    "mean_daily": -1.0394706062092198e-05,
+    "sharpe": -0.011833750143344313
+   },
+   "S4": {
+    "mean_daily": -3.1382972165300022e-06,
+    "sharpe": -0.008659035439277707
+   }
+  },
+  "dropped_by_mask_per_rebalance": {
+   "S2": {
+    "as_specified_open_d_none_d1": {
+     "mean": 0.012232415902140673,
+     "total": 4
+    },
+    "rebalances": 327,
+    "with_score": {
+     "mean": 0.012232415902140673,
+     "total": 4
+    }
+   },
+   "S3": {
+    "as_specified_open_d_none_d1": {
+     "mean": 0.012232415902140673,
+     "total": 4
+    },
+    "rebalances": 327,
+    "with_score": {
+     "mean": 0.012232415902140673,
+     "total": 4
+    }
+   }
+  },
+  "open_only": {
+   "S1": {
+    "days": 2229,
+    "mean_daily": 0.0003790995500632476,
+    "sharpe": 1.1755832734075127,
+    "t": 2.785772363617298
+   },
+   "S2": {
+    "days": 2229,
+    "mean_daily": 0.000844345846299734,
+    "mean_turnover_per_rebalance": 0.7659368513114277,
+    "sharpe": 0.8832574394487984,
+    "t": 2.1920958186439665
+   },
+   "S3": {
+    "days": 2229,
+    "mean_daily": 0.0011399156998382627,
+    "mean_turnover_per_rebalance": 0.8885251099155572,
+    "sharpe": 1.3025341445380665,
+    "t": 2.78215051092618
+   },
+   "S4": {
+    "days": 2168,
+    "mean_daily": 0.0007157456602418358,
+    "sharpe": 1.9385279278266498,
+    "t": 4.135473300957937
+   }
+  },
+  "original": {
+   "S1": {
+    "days": 2229,
+    "mean_daily": 0.0003790995500632476,
+    "sharpe": 1.1755832734075127,
+    "t": 2.785772363617298
+   },
+   "S2": {
+    "days": 2229,
+    "mean_daily": 0.0008439474484653878,
+    "mean_turnover_per_rebalance": 0.7664679368201787,
+    "sharpe": 0.8831284611903227,
+    "t": 2.1913800737737867
+   },
+   "S3": {
+    "days": 2229,
+    "mean_daily": 0.0011495456208607585,
+    "mean_turnover_per_rebalance": 0.8882034095653045,
+    "sharpe": 1.313541355815756,
+    "t": 2.805605833810004
+   },
+   "S4": {
+    "days": 2168,
+    "mean_daily": 0.0007185942763844904,
+    "sharpe": 1.9463359791754162,
+    "t": 4.153462174792522
+   }
+  },
+  "pit_successor": {
+   "S1": {
+    "days": 2229,
+    "mean_daily": 0.0003790995500632476,
+    "sharpe": 1.1755832734075127,
+    "t": 2.785772363617298
+   },
+   "S2": {
+    "days": 2229,
+    "mean_daily": 0.0008420847753200176,
+    "mean_turnover_per_rebalance": 0.7632090018595219,
+    "settlements": 4,
+    "settlements_without_price": 0,
+    "sharpe": 0.8809486228984319,
+    "t": 2.1866461140957725
+   },
+   "S3": {
+    "days": 2229,
+    "mean_daily": 0.0011391509147986663,
+    "mean_turnover_per_rebalance": 0.884807393798178,
+    "settlements": 6,
+    "settlements_without_price": 0,
+    "sharpe": 1.3017076056724117,
+    "t": 2.7803889664579193
+   },
+   "S4": {
+    "days": 2168,
+    "mean_daily": 0.0007154559791679604,
+    "sharpe": 1.9376769437361385,
+    "t": 4.133748878229395
+   }
+  },
+  "sanity_original_S2_matches_leg_returns_max_abs": 0.0,
+  "window": [
+   "2020-06-01",
+   "2026-09-12"
+  ]
+ },
+ "S1_hyperliquid_common": {
+  "coins": 8,
+  "common_days": 203,
+  "daily_correlation": 0.9951380190139492,
+  "fetch_errors": [
+   "fail BTC_USDT BTC <HTTPError 429: 'Too Many Requests'>",
+   "fail BNB_USDT BNB <HTTPError 429: 'Too Many Requests'>",
+   "fail ADA_USDT ADA <HTTPError 429: 'Too Many Requests'>",
+   "fail DOGE_USDT DOGE <HTTPError 429: 'Too Many Requests'>",
+   "fail LINK_USDT LINK <HTTPError 429: 'Too Many Requests'>",
+   "fail ETH_USDT ETH <HTTPError 429: 'Too Many Requests'>",
+   "fail SOL_USDT SOL <HTTPError 429: 'Too Many Requests'>",
+   "fail SUI_USDT SUI <HTTPError 429: 'Too Many Requests'>",
+   "fail LTC_USDT LTC <HTTPError 429: 'Too Many Requests'>",
+   "fail UNI_USDT UNI <HTTPError 429: 'Too Many Requests'>",
+   "fail XRP_USDT XRP <HTTPError 429: 'Too Many Requests'>",
+   "fail BCH_USDT BCH <HTTPError 429: 'Too Many Requests'>",
+   "fail DOT_USDT DOT <HTTPError 429: 'Too Many Requests'>",
+   "fail ETC_USDT ETC <HTTPError 429: 'Too Many Requests'>",
+   "fail TAO_USDT TAO <HTTPError 429: 'Too Many Requests'>",
+   "fail PEPE_USDT kPEPE <HTTPError 429: 'Too Many Requests'>",
+   "fail WLD_USDT WLD <HTTPError 429: 'Too Many Requests'>",
+   "fail AVAX_USDT AVAX <HTTPError 429: 'Too Many Requests'>",
+   "fail ONDO_USDT ONDO <HTTPError 429: 'Too Many Requests'>",
+   "fail HYPE_USDT HYPE <HTTPError 429: 'Too Many Requests'>",
+   "fail AAVE_USDT AAVE <HTTPError 429: 'Too Many Requests'>",
+   "fail SEI_USDT SEI <HTTPError 429: 'Too Many Requests'>",
+   "fail PUMPFUN_USDT PUMP <HTTPError 429: 'Too Many Requests'>",
+   "fail XLM_USDT XLM <HTTPError 429: 'Too Many Requests'>",
+   "fail FET_USDT FET <HTTPError 429: 'Too Many Requests'>",
+   "fail TIA_USDT TIA <HTTPError 429: 'Too Many Requests'>",
+   "fail INJ_USDT INJ <HTTPError 429: 'Too Many Requests'>",
+   "fail HBAR_USDT HBAR <HTTPError 429: 'Too Many Requests'>",
+   "fail ATOM_USDT ATOM <HTTPError 429: 'Too Many Requests'>",
+   "fail FARTCOIN_USDT FARTCOIN <HTTPError 429: 'Too Many Requests'>",
+   "fail ORDI_USDT ORDI <HTTPError 429: 'Too Many Requests'>",
+   "fail SHIB_USDT kSHIB <HTTPError 429: 'Too Many Requests'>",
+   "fail VIRTUAL_USDT VIRTUAL <HTTPError 429: 'Too Many Requests'>",
+   "fail JUP_USDT JUP <HTTPError 429: 'Too Many Requests'>",
+   "fail APT_USDT APT <HTTPError 429: 'Too Many Requests'>",
+   "fail OP_USDT OP <HTTPError 429: 'Too Many Requests'>",
+   "fail RENDER_USDT RENDER <HTTPError 429: 'Too Many Requests'>",
+   "fail TRUMPOFFICIAL_USDT TRUMP <HTTPError 429: 'Too Many Requests'>",
+   "fail PENGU_USDT PENGU <HTTPError 429: 'Too Many Requests'>",
+   "fail GRASS_USDT GRASS <HTTPError 429: 'Too Many Requests'>",
+   "fail LDO_USDT LDO <HTTPError 429: 'Too Many Requests'>",
+   "fail PYTH_USDT PYTH <HTTPError 429: 'Too Many Requests'>",
+   "fail XMR_USDT XMR <HTTPError 429: 'Too Many Requests'>",
+   "fail JTO_USDT JTO <HTTPError 429: 'Too Many Requests'>",
+   "fail ZRO_USDT ZRO <HTTPError 429: 'Too Many Requests'>",
+   "fail WLFI_USDT WLFI <HTTPError 429: 'Too Many Requests'>",
+   "fail RUNE_USDT RUNE <HTTPError 429: 'Too Many Requests'>",
+   "fail ZEN_USDT ZEN <HTTPError 429: 'Too Many Requests'>",
+   "fail NIL_USDT NIL <HTTPError 429: 'Too Many Requests'>",
+   "fail GALA_USDT GALA <HTTPError 429: 'Too Many Requests'>",
+   "fail CRV_USDT CRV <HTTPError 429: 'Too Many Requests'>",
+   "fail WIF_USDT WIF <HTTPError 429: 'Too Many Requests'>",
+   "fail CFX_USDT CFX <HTTPError 429: 'Too Many Requests'>",
+   "fail EIGEN_USDT EIGEN <HTTPError 429: 'Too Many Requests'>",
+   "fail ETHFI_USDT ETHFI <HTTPError 429: 'Too Many Requests'>",
+   "fail AERO_USDT AERO <HTTPError 429: 'Too Many Requests'>"
+  ],
+  "first": "2026-02-21 00:00:00+00:00",
+  "hyperliquid_S1": {
+   "days": 203,
+   "mean_daily": -4.4352030100801603e-05,
+   "sharpe": -0.16410447625740995,
+   "t": -0.09853142888654612
+  },
+  "last": "2026-09-11 00:00:00+00:00",
+  "reference_S1": {
+   "days": 203,
+   "mean_daily": 6.023138149825985e-06,
+   "sharpe": 0.02225764295761338,
+   "t": 0.013262177724070023
+  },
+  "window": [
+   "2023-05-12",
+   "2026-09-12"
+  ]
+ },
+ "artifacts_meta": {
+  "count": 373,
+  "download_errors": [],
+  "first": "2026-09-26T13:03:42Z",
+  "last": "2026-10-16T23:05:05Z"
+ },
+ "audit": "deeper-branch-evidence-audit-2026-10-16",
+ "descriptive_only": true,
+ "dev_data_meta": {
+  "binance_funding_contracts": {
+   "AAVE_USDT": "AAVEUSDT",
+   "ADA_USDT": "ADAUSDT",
+   "AERO_USDT": "AEROUSDT",
+   "AKE_USDT": "AKEUSDT",
+   "APT_USDT": "APTUSDT",
+   "AR_USDT": "ARUSDT",
+   "ATOM_USDT": "ATOMUSDT",
+   "AVAX_USDT": "AVAXUSDT",
+   "BCH_USDT": "BCHUSDT",
+   "BNB_USDT": "BNBUSDT",
+   "BR_USDT": "BRUSDT",
+   "BTC_USDT": "BTCUSDT",
+   "CFX_USDT": "CFXUSDT",
+   "CRV_USDT": "CRVUSDT",
+   "DASH_USDT": "DASHUSDT",
+   "DOGE_USDT": "DOGEUSDT",
+   "DOT_USDT": "DOTUSDT",
+   "EIGEN_USDT": "EIGENUSDT",
+   "ENA_USDT": "ENAUSDT",
+   "ETC_USDT": "ETCUSDT",
+   "ETHFI_USDT": "ETHFIUSDT",
+   "ETH_USDT": "ETHUSDT",
+   "FARTCOIN_USDT": "FARTCOINUSDT",
+   "FET_USDT": "FETUSDT",
+   "GALA_USDT": "GALAUSDT",
+   "GRASS_USDT": "GRASSUSDT",
+   "HBAR_USDT": "HBARUSDT",
+   "HYPE_USDT": "HYPEUSDT",
+   "ICP_USDT": "ICPUSDT",
+   "INJ_USDT": "INJUSDT",
+   "JTO_USDT": "JTOUSDT",
+   "JUP_USDT": "JUPUSDT",
+   "KAS_USDT": "KASUSDT",
+   "LDO_USDT": "LDOUSDT",
+   "LINK_USDT": "LINKUSDT",
+   "LSK_USDT": "LSKUSDT",
+   "LTC_USDT": "LTCUSDT",
+   "NIL_USDT": "NILUSDT",
+   "ONDO_USDT": "ONDOUSDT",
+   "OP_USDT": "OPUSDT",
+   "ORDI_USDT": "ORDIUSDT",
+   "PENGU_USDT": "PENGUUSDT",
+   "PEPE_USDT": "1000PEPEUSDT",
+   "PHA_USDT": "PHAUSDT",
+   "POL_USDT": "POLUSDT",
+   "PUMPFUN_USDT": "PUMPUSDT",
+   "PYTH_USDT": "PYTHUSDT",
+   "QNT_USDT": "QNTUSDT",
+   "RARE_USDT": "RAREUSDT",
+   "RENDER_USDT": "RENDERUSDT",
+   "RUNE_USDT": "RUNEUSDT",
+   "SEI_USDT": "SEIUSDT",
+   "SHIB_USDT": "1000SHIBUSDT",
+   "SOL_USDT": "SOLUSDT",
+   "SUI_USDT": "SUIUSDT",
+   "TAO_USDT": "TAOUSDT",
+   "TIA_USDT": "TIAUSDT",
+   "TRUMPOFFICIAL_USDT": "TRUMPUSDT",
+   "UNI_USDT": "UNIUSDT",
+   "VIRTUAL_USDT": "VIRTUALUSDT",
+   "WIF_USDT": "WIFUSDT",
+   "WLD_USDT": "WLDUSDT",
+   "WLFI_USDT": "WLFIUSDT",
+   "XLM_USDT": "XLMUSDT",
+   "XMR_USDT": "XMRUSDT",
+   "XPL_USDT": "XPLUSDT",
+   "XRP_USDT": "XRPUSDT",
+   "ZEC_USDT": "ZECUSDT",
+   "ZEN_USDT": "ZENUSDT",
+   "ZRO_USDT": "ZROUSDT"
+  },
+  "coins": 70,
+  "empty_funding": [],
+  "empty_funding_share": 0.0,
+  "errors": {},
+  "missing_or_short": []
+ },
+ "git_head": "2efaf03286e6683a56cb271ea840f1e85c6df904",
+ "run_utc": "2026-10-17T00:00:00+00:00",
+ "watch_list": [
+  [
+   "Multi-premia blend",
+   "multi-premia-blend-v1",
+   "report.json",
+   "S4_blend"
+  ],
+  [
+   "Multi-premia, 5-coin human book",
+   "multi-premia-blend-v1",
+   "human_report.json",
+   "H5"
+  ],
+  [
+   "Crypto trend core",
+   "crypto-trend-core-v1",
+   "report.json",
+   "combined"
+  ],
+  [
+   "Crypto trend core + vol target",
+   "crypto-trend-core-voltarget-v1",
+   "report.json",
+   "core_voltarget"
+  ],
+  [
+   "Trend portfolio (10 coins)",
+   "trend-portfolio-forward-v1",
+   "report.json",
+   "plain"
+  ],
+  [
+   "Cross-asset trend",
+   "cross-asset-trend-forward-v1",
+   "report.json",
+   "combined"
+  ],
+  [
+   "Cross-asset trend, inverse-vol",
+   "cross-asset-trend-invvol-forward-v1",
+   "report.json",
+   "combined"
+  ],
+  [
+   "Zoo mirrors (BTC shock reversal, lottery momentum)",
+   "multi-premia-blend-v1",
+   "zoo_mirror_report.json",
+   "M4_lottery_momentum"
+  ],
+  [
+   "News sentiment (news momentum, attention, tone, panic pause)",
+   "news-sentiment-ledger-v1",
+   "forward_report.json",
+   "N1_news_momentum"
+  ],
+  [
+   "Paper account: 70-coin blend, 10,000 USDT",
+   "multi-premia-blend-v1",
+   "paper_account_report.json",
+   "paper"
+  ],
+  [
+   "Turn-of-month SPY (search-v1 near miss)",
+   "multi-premia-blend-v1",
+   "tom_forward_report.json",
+   "tom"
+  ],
+  [
+   "Near-miss paper (cascade/CTREND/trend 2x)",
+   "near-miss-forward-v1",
+   "near_miss_forward_report.json",
+   "cascade_1x"
+  ],
+  [
+   "Fade-24h bracket 2x (paper)",
+   "fade24-forward-v1",
+   "fade24_forward_report.json",
+   "fade24_F1"
+  ],
+  [
+   "TradFi perps (momentum / weekend fade)",
+   "tradfi-perps-forward-v1",
+   "tradfi_perps_forward_report.json",
+   "B2_weekend_fade_1x"
+  ]
+ ]
+}
