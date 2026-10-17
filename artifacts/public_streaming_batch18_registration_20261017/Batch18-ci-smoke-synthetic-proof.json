@@ -1,0 +1,36 @@
+{
+  "status": "SYNTHETIC_ONLY_UNREGISTERED_PROTOTYPE_PASS",
+  "full_production_count_synthetic_proof": false,
+  "tests": 15,
+  "failures": 0,
+  "errors": 0,
+  "registered": false,
+  "market_data_loaded": false,
+  "market_pnl_evaluated": false,
+  "new_trading_cells": 0,
+  "residuals": {
+    "native_fills_compared": 74,
+    "native_fixtures_compared": 18,
+    "native_max_absolute_fill_price_difference": 1.4210854715202004e-14,
+    "scalar_max_absolute_cash_difference": 0.0,
+    "scalar_fixtures_compared": 18,
+    "btc_manual_max_absolute_cash_difference": 0.0,
+    "unmocked_btc_negative_rounding_abort_verified": true,
+    "full_pipeline_candidates": 2,
+    "full_pipeline_placebo_repetitions_per_candidate": 3,
+    "full_pipeline_bootstrap_replicates_per_case": 64
+  },
+  "artifacts": {
+    "draft_test_public_streaming_batch18.py": "0f7f95868cc5ff2cb1720f3e4be7afa2cb9e06f40c791f009f4289c7c60ef9fc",
+    "draft_public_streaming_batch18.py": "9cbb9f232fc8772045d502c0cdd171cca39fb8fc998a61bd2cc4376d1c0637cb",
+    "draft_public_streaming_batch18_config.json": "1f8fce100cdf014d863e5921c089ffff334bef2f9835ffcb0e4fe7a3f92cb31f",
+    "Quickstart-UpDown-selected-synthetic-fixtures.json": "6f26da594180c33c00bc94b7eeefbf700f42328cef79e3e9e8d8adfb912aa2f8",
+    "Quickstart-UpDown-selected-native-output.json": "287d6ffa2ceec4fe1e08a741988c4cf81815ee92f240edb19ac80ae1105a828d"
+  },
+  "limitations": [
+    "Synthetic native source fills only, not publisher default/preloaded/exchange execution parity",
+    "BTC lifecycle independently checked reference owncash, not native hedge parity",
+    "Atomic nextOPEN all-or-reject only; partial/delayed/asynchronous external orders unmodeled failclosed",
+    "No immutable study registration, committed independent review or market loader exists"
+  ]
+}

@@ -1,0 +1,173 @@
+{
+  "synthetic_only": true,
+  "market_data": false,
+  "cash": 10000,
+  "fee_per_side": 0.002,
+  "quantity": 1,
+  "source": "quickstart06",
+  "runtime": "Backtrader1.9.78.123,streaming,origin239",
+  "cases": [
+    {
+      "case": "gapdown",
+      "checksubmit": true,
+      "events": [
+        {
+          "bar": 240,
+          "status": "Submitted",
+          "created_price": 10050.0,
+          "filled_price": null
+        },
+        {
+          "bar": 240,
+          "status": "Margin",
+          "created_price": 10050.0,
+          "filled_price": null
+        }
+      ]
+    },
+    {
+      "case": "gapdown",
+      "checksubmit": false,
+      "events": [
+        {
+          "bar": 240,
+          "status": "Accepted",
+          "created_price": 10050.0,
+          "filled_price": null
+        },
+        {
+          "bar": 240,
+          "status": "Completed",
+          "created_price": 10050.0,
+          "filled_price": 9000.0
+        },
+        {
+          "bar": 246,
+          "status": "Accepted",
+          "created_price": 12000.0,
+          "filled_price": null
+        },
+        {
+          "bar": 246,
+          "status": "Completed",
+          "created_price": 12000.0,
+          "filled_price": 12000.0
+        }
+      ]
+    },
+    {
+      "case": "gapup",
+      "checksubmit": true,
+      "events": [
+        {
+          "bar": 240,
+          "status": "Submitted",
+          "created_price": 9000.0,
+          "filled_price": null
+        },
+        {
+          "bar": 240,
+          "status": "Accepted",
+          "created_price": 9000.0,
+          "filled_price": null
+        },
+        {
+          "bar": 240,
+          "status": "Margin",
+          "created_price": 9000.0,
+          "filled_price": null
+        }
+      ]
+    },
+    {
+      "case": "gapup",
+      "checksubmit": false,
+      "events": [
+        {
+          "bar": 240,
+          "status": "Accepted",
+          "created_price": 9000.0,
+          "filled_price": null
+        },
+        {
+          "bar": 240,
+          "status": "Margin",
+          "created_price": 9000.0,
+          "filled_price": null
+        }
+      ]
+    },
+    {
+      "case": "funded",
+      "checksubmit": true,
+      "events": [
+        {
+          "bar": 240,
+          "status": "Submitted",
+          "created_price": 9000.0,
+          "filled_price": null
+        },
+        {
+          "bar": 240,
+          "status": "Accepted",
+          "created_price": 9000.0,
+          "filled_price": null
+        },
+        {
+          "bar": 240,
+          "status": "Completed",
+          "created_price": 9000.0,
+          "filled_price": 9000.0
+        },
+        {
+          "bar": 246,
+          "status": "Submitted",
+          "created_price": 12000.0,
+          "filled_price": null
+        },
+        {
+          "bar": 246,
+          "status": "Accepted",
+          "created_price": 12000.0,
+          "filled_price": null
+        },
+        {
+          "bar": 246,
+          "status": "Completed",
+          "created_price": 12000.0,
+          "filled_price": 12000.0
+        }
+      ]
+    },
+    {
+      "case": "funded",
+      "checksubmit": false,
+      "events": [
+        {
+          "bar": 240,
+          "status": "Accepted",
+          "created_price": 9000.0,
+          "filled_price": null
+        },
+        {
+          "bar": 240,
+          "status": "Completed",
+          "created_price": 9000.0,
+          "filled_price": 9000.0
+        },
+        {
+          "bar": 246,
+          "status": "Accepted",
+          "created_price": 12000.0,
+          "filled_price": null
+        },
+        {
+          "bar": 246,
+          "status": "Completed",
+          "created_price": 12000.0,
+          "filled_price": 12000.0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,665 @@
+{
+  "kind": "SYNTHETIC_ONLY_EXPLICIT_STREAMING_RUNTIME_AND_CASH_ORIGIN_AUDIT",
+  "market_data_loaded": false,
+  "pnl_evaluated": false,
+  "registered": false,
+  "new_trading_cells": 0,
+  "wheel_sha256": "9a07a516b0de9155539a35c56e9404d8711dd7020b3d37b30495e83e1b9d5dfd",
+  "framework": "Backtrader1.9.78.123,preload=False,runonce=False",
+  "fixture": "320 synthetic8hOHLCV bars; only final319 changes; separate300bar prefix run.",
+  "source_execution": "Hash-pinned unmodified class bodies; AST extraction excludes upstream market readers/tests. Logging suppressed; state/notification instrumentation only. cloudQuant fork runtime not executed.",
+  "cash_origin_contract": "Separately declared admission wrapper refuses all buy/sell/close submissions before zero-based index240,returningNone. Source next/state/indicator calculations continue; no startup position/pending order carried. This is a runtime adapter,not unchanged default source execution.",
+  "state_scope": "All source persistent scalar state listed in harness plus position/pending and current indicator outputs,not merely signal flags. No future final state forced/reset to match.",
+  "limitations": [
+    "Synthetic prefix evidence is bounded,not an all-input mathematical proof.",
+    "Streaming early unavailable negative indexing may wrap to currently known array tail; causal does not mean intended textbook initialization.",
+    "TD delayed/rejected/partial fills,pending-order semantics and cloudQuant-native scope remain unresolved; TD not admitted.",
+    "Full long/short source execution retained for fixtures; a Spot-long adapter remains unfrozen.",
+    "No native-default parity,market performance or future confirmation claim."
+  ],
+  "results": {
+    "quickstart06": {
+      "source_sha256": "47b82d6ae2e3940bff80450e8c17a7074204c1f7ff70f7e56a25fe0e988e0d4c",
+      "variants": {
+        "streaming_source_no_cash_gate": {
+          "origin_index_inclusive": -1,
+          "all_source_scalars_and_indicator_outputs_prefix_equal": true,
+          "fill_events_before_mutated_bar_equal": true,
+          "shorter_300bar_prefix_state_equal": true,
+          "eligible_state_comparisons": 319,
+          "first_fills": [
+            {
+              "bar": 3,
+              "side": "BUY",
+              "size": 1
+            },
+            {
+              "bar": 9,
+              "side": "SELL",
+              "size": -1
+            },
+            {
+              "bar": 19,
+              "side": "BUY",
+              "size": 1
+            },
+            {
+              "bar": 25,
+              "side": "SELL",
+              "size": -1
+            },
+            {
+              "bar": 29,
+              "side": "BUY",
+              "size": 1
+            },
+            {
+              "bar": 35,
+              "side": "SELL",
+              "size": -1
+            }
+          ],
+          "no_pre_origin_fill": true,
+          "pre_origin_attempts_denied": 0,
+          "admission_state": null,
+          "last_pre_origin_state": null,
+          "first_source_states": [
+            {
+              "bar": 0,
+              "position": 0,
+              "pending": false
+            },
+            {
+              "bar": 1,
+              "position": 0,
+              "pending": false
+            },
+            {
+              "bar": 2,
+              "position": 0,
+              "pending": true
+            }
+          ],
+          "full_trace_sha256_baseline": "e2c1030b7c062ef89b6406fc8f64f3db0bdc5cef1c1f67097fad23b89fcef1de",
+          "full_trace_sha256_mutated": "b9027d961e49e83fd033b67b0217c5375d7369a1eed88f87e94c2aa35752f088",
+          "full_trace_sha256_300bar_prefix": "59c2aea1b30177e03919c13b69314cd95d14c23f3c996c41b0bfa97f0bceabb8",
+          "completed_fills_baseline": 48
+        },
+        "streaming_explicit_cash_origin_240": {
+          "origin_index_inclusive": 240,
+          "all_source_scalars_and_indicator_outputs_prefix_equal": true,
+          "fill_events_before_mutated_bar_equal": true,
+          "shorter_300bar_prefix_state_equal": true,
+          "eligible_state_comparisons": 79,
+          "first_fills": [
+            {
+              "bar": 241,
+              "side": "BUY",
+              "size": 1
+            },
+            {
+              "bar": 247,
+              "side": "SELL",
+              "size": -1
+            },
+            {
+              "bar": 248,
+              "side": "BUY",
+              "size": 1
+            },
+            {
+              "bar": 254,
+              "side": "SELL",
+              "size": -1
+            },
+            {
+              "bar": 256,
+              "side": "BUY",
+              "size": 1
+            },
+            {
+              "bar": 262,
+              "side": "SELL",
+              "size": -1
+            }
+          ],
+          "no_pre_origin_fill": true,
+          "pre_origin_attempts_denied": 108,
+          "admission_state": {
+            "bar": 240,
+            "position": 0,
+            "pending": true
+          },
+          "last_pre_origin_state": {
+            "bar": 239,
+            "position": 0,
+            "pending": false
+          },
+          "first_source_states": [
+            {
+              "bar": 0,
+              "position": 0,
+              "pending": false
+            },
+            {
+              "bar": 1,
+              "position": 0,
+              "pending": false
+            },
+            {
+              "bar": 2,
+              "position": 0,
+              "pending": false
+            }
+          ],
+          "full_trace_sha256_baseline": "468482181d39f39f2a5d935757b55182a2ac85ed98ab79b07e19f7ec48a17e7c",
+          "full_trace_sha256_mutated": "d8d08a8f442ffde787c944002ad4807136945abf1b6a8e96b0885f8d44aea335",
+          "full_trace_sha256_300bar_prefix": "4792cddab5794d2cc7a781d8101901cfec3337bf1cda749225438b37f7efb2ff",
+          "completed_fills_baseline": 12
+        }
+      }
+    },
+    "TD": {
+      "source_sha256": "a38ab281291b200216229a6efbe86c88d0b2e179ecba962e09ca33f3776a9b87",
+      "variants": {
+        "streaming_source_no_cash_gate": {
+          "origin_index_inclusive": -1,
+          "all_source_scalars_and_indicator_outputs_prefix_equal": true,
+          "fill_events_before_mutated_bar_equal": true,
+          "shorter_300bar_prefix_state_equal": true,
+          "eligible_state_comparisons": 319,
+          "first_fills": [
+            {
+              "bar": 58,
+              "side": "BUY",
+              "size": 10
+            },
+            {
+              "bar": 88,
+              "side": "SELL",
+              "size": -10
+            },
+            {
+              "bar": 120,
+              "side": "BUY",
+              "size": 10
+            },
+            {
+              "bar": 151,
+              "side": "SELL",
+              "size": -10
+            },
+            {
+              "bar": 259,
+              "side": "BUY",
+              "size": 10
+            },
+            {
+              "bar": 289,
+              "side": "SELL",
+              "size": -10
+            }
+          ],
+          "no_pre_origin_fill": true,
+          "pre_origin_attempts_denied": 0,
+          "admission_state": null,
+          "last_pre_origin_state": null,
+          "first_source_states": [
+            {
+              "bar": 0,
+              "position": 0,
+              "pending": false,
+              "buyTrig": false,
+              "sellTrig": false,
+              "tdsl": 0,
+              "tdss": 0,
+              "buySetup": false,
+              "sellSetup": false,
+              "buyCountdown": 0,
+              "sellCountdown": 0,
+              "buyVal": 0,
+              "sellVal": 0,
+              "buySig": false,
+              "idealBuySig": false,
+              "sellSig": false,
+              "idealSellSig": false,
+              "buy_nine": false,
+              "sell_nine": false,
+              "buy_high": 999999,
+              "buy_low": 0,
+              "sell_high": 999999,
+              "sell_low": 0,
+              "bar_num": 1,
+              "buy_count": 0,
+              "sell_count": 0,
+              "setup_buy_count": 0,
+              "setup_sell_count": 0
+            },
+            {
+              "bar": 1,
+              "position": 0,
+              "pending": false,
+              "buyTrig": false,
+              "sellTrig": false,
+              "tdsl": 0,
+              "tdss": 0,
+              "buySetup": false,
+              "sellSetup": false,
+              "buyCountdown": 0,
+              "sellCountdown": 0,
+              "buyVal": 0,
+              "sellVal": 0,
+              "buySig": false,
+              "idealBuySig": false,
+              "sellSig": false,
+              "idealSellSig": false,
+              "buy_nine": false,
+              "sell_nine": false,
+              "buy_high": 999999,
+              "buy_low": 0,
+              "sell_high": 999999,
+              "sell_low": 0,
+              "bar_num": 2,
+              "buy_count": 0,
+              "sell_count": 0,
+              "setup_buy_count": 0,
+              "setup_sell_count": 0
+            },
+            {
+              "bar": 2,
+              "position": 0,
+              "pending": false,
+              "buyTrig": false,
+              "sellTrig": false,
+              "tdsl": 0,
+              "tdss": 0,
+              "buySetup": false,
+              "sellSetup": false,
+              "buyCountdown": 0,
+              "sellCountdown": 0,
+              "buyVal": 0,
+              "sellVal": 0,
+              "buySig": false,
+              "idealBuySig": false,
+              "sellSig": false,
+              "idealSellSig": false,
+              "buy_nine": false,
+              "sell_nine": false,
+              "buy_high": 999999,
+              "buy_low": 0,
+              "sell_high": 999999,
+              "sell_low": 0,
+              "bar_num": 3,
+              "buy_count": 0,
+              "sell_count": 0,
+              "setup_buy_count": 0,
+              "setup_sell_count": 0
+            }
+          ],
+          "full_trace_sha256_baseline": "15b094af3f454c82d58ff492046a86f58338c20a72c38694923c1c1321f173aa",
+          "full_trace_sha256_mutated": "3b466a086cc9018f24bba9e7d054f955e8a182b9d7b3929f8f50538f843fa0cb",
+          "full_trace_sha256_300bar_prefix": "8612b00cec699a67aba4d965c0a064d281395df662a509458219fa2f9c7bb0bf",
+          "completed_fills_baseline": 6
+        },
+        "streaming_explicit_cash_origin_240": {
+          "origin_index_inclusive": 240,
+          "all_source_scalars_and_indicator_outputs_prefix_equal": true,
+          "fill_events_before_mutated_bar_equal": true,
+          "shorter_300bar_prefix_state_equal": true,
+          "eligible_state_comparisons": 79,
+          "first_fills": [
+            {
+              "bar": 259,
+              "side": "BUY",
+              "size": 10
+            },
+            {
+              "bar": 289,
+              "side": "SELL",
+              "size": -10
+            }
+          ],
+          "no_pre_origin_fill": true,
+          "pre_origin_attempts_denied": 2,
+          "admission_state": {
+            "bar": 240,
+            "position": 0,
+            "pending": false,
+            "buyTrig": false,
+            "sellTrig": false,
+            "tdsl": 0,
+            "tdss": 0,
+            "buySetup": true,
+            "sellSetup": false,
+            "buyCountdown": 0,
+            "sellCountdown": 0,
+            "buyVal": 80.62667352439533,
+            "sellVal": 116.94251115179439,
+            "buySig": false,
+            "idealBuySig": false,
+            "sellSig": false,
+            "idealSellSig": false,
+            "buy_nine": false,
+            "sell_nine": false,
+            "buy_high": 119.7536008342762,
+            "buy_low": 104.83356181142817,
+            "sell_high": 100.42939252881047,
+            "sell_low": 82.66781418506072,
+            "bar_num": 241,
+            "buy_count": 0,
+            "sell_count": 0,
+            "setup_buy_count": 4,
+            "setup_sell_count": 4
+          },
+          "last_pre_origin_state": {
+            "bar": 239,
+            "position": 0,
+            "pending": false,
+            "buyTrig": false,
+            "sellTrig": false,
+            "tdsl": 0,
+            "tdss": 0,
+            "buySetup": true,
+            "sellSetup": false,
+            "buyCountdown": 0,
+            "sellCountdown": 0,
+            "buyVal": 80.62667352439533,
+            "sellVal": 116.94251115179439,
+            "buySig": true,
+            "idealBuySig": false,
+            "sellSig": false,
+            "idealSellSig": false,
+            "buy_nine": true,
+            "sell_nine": false,
+            "buy_high": 119.7536008342762,
+            "buy_low": 104.83356181142817,
+            "sell_high": 100.42939252881047,
+            "sell_low": 82.66781418506072,
+            "bar_num": 240,
+            "buy_count": 0,
+            "sell_count": 0,
+            "setup_buy_count": 4,
+            "setup_sell_count": 4
+          },
+          "first_source_states": [
+            {
+              "bar": 0,
+              "position": 0,
+              "pending": false,
+              "buyTrig": false,
+              "sellTrig": false,
+              "tdsl": 0,
+              "tdss": 0,
+              "buySetup": false,
+              "sellSetup": false,
+              "buyCountdown": 0,
+              "sellCountdown": 0,
+              "buyVal": 0,
+              "sellVal": 0,
+              "buySig": false,
+              "idealBuySig": false,
+              "sellSig": false,
+              "idealSellSig": false,
+              "buy_nine": false,
+              "sell_nine": false,
+              "buy_high": 999999,
+              "buy_low": 0,
+              "sell_high": 999999,
+              "sell_low": 0,
+              "bar_num": 1,
+              "buy_count": 0,
+              "sell_count": 0,
+              "setup_buy_count": 0,
+              "setup_sell_count": 0
+            },
+            {
+              "bar": 1,
+              "position": 0,
+              "pending": false,
+              "buyTrig": false,
+              "sellTrig": false,
+              "tdsl": 0,
+              "tdss": 0,
+              "buySetup": false,
+              "sellSetup": false,
+              "buyCountdown": 0,
+              "sellCountdown": 0,
+              "buyVal": 0,
+              "sellVal": 0,
+              "buySig": false,
+              "idealBuySig": false,
+              "sellSig": false,
+              "idealSellSig": false,
+              "buy_nine": false,
+              "sell_nine": false,
+              "buy_high": 999999,
+              "buy_low": 0,
+              "sell_high": 999999,
+              "sell_low": 0,
+              "bar_num": 2,
+              "buy_count": 0,
+              "sell_count": 0,
+              "setup_buy_count": 0,
+              "setup_sell_count": 0
+            },
+            {
+              "bar": 2,
+              "position": 0,
+              "pending": false,
+              "buyTrig": false,
+              "sellTrig": false,
+              "tdsl": 0,
+              "tdss": 0,
+              "buySetup": false,
+              "sellSetup": false,
+              "buyCountdown": 0,
+              "sellCountdown": 0,
+              "buyVal": 0,
+              "sellVal": 0,
+              "buySig": false,
+              "idealBuySig": false,
+              "sellSig": false,
+              "idealSellSig": false,
+              "buy_nine": false,
+              "sell_nine": false,
+              "buy_high": 999999,
+              "buy_low": 0,
+              "sell_high": 999999,
+              "sell_low": 0,
+              "bar_num": 3,
+              "buy_count": 0,
+              "sell_count": 0,
+              "setup_buy_count": 0,
+              "setup_sell_count": 0
+            }
+          ],
+          "full_trace_sha256_baseline": "5c26103ee5aed7c592783d783eaad7a0208df8bd0936c13159054eee5fc1813e",
+          "full_trace_sha256_mutated": "b4efe54398caeea60d38e9709b54f06e236f7e7bfa0752c1d7540053794aba4a",
+          "full_trace_sha256_300bar_prefix": "2ac78a0079ddfbdfc4e6159b4f86c9520606dff6b4727b86c76d17e2daed48a6",
+          "completed_fills_baseline": 2
+        }
+      }
+    },
+    "UpDown": {
+      "source_sha256": "35b643f11fb5aba0041fae5ae19ab3a8bf312865ef9be126ab8cfb2c181b45e4",
+      "variants": {
+        "streaming_source_no_cash_gate": {
+          "origin_index_inclusive": -1,
+          "all_source_scalars_and_indicator_outputs_prefix_equal": true,
+          "fill_events_before_mutated_bar_equal": true,
+          "shorter_300bar_prefix_state_equal": true,
+          "eligible_state_comparisons": 280,
+          "first_fills": [
+            {
+              "bar": 41,
+              "side": "SELL",
+              "size": -10
+            },
+            {
+              "bar": 46,
+              "side": "BUY",
+              "size": 10
+            },
+            {
+              "bar": 47,
+              "side": "BUY",
+              "size": 10
+            },
+            {
+              "bar": 74,
+              "side": "SELL",
+              "size": -10
+            },
+            {
+              "bar": 75,
+              "side": "SELL",
+              "size": -10
+            },
+            {
+              "bar": 108,
+              "side": "BUY",
+              "size": 10
+            }
+          ],
+          "no_pre_origin_fill": true,
+          "pre_origin_attempts_denied": 0,
+          "admission_state": null,
+          "last_pre_origin_state": null,
+          "first_source_states": [
+            {
+              "bar": 39,
+              "position": 0,
+              "pending": false,
+              "bar_num": 1,
+              "buy_count": 0,
+              "sell_count": 0,
+              "returns": 0.0,
+              "strength": 0.5
+            },
+            {
+              "bar": 40,
+              "position": 0,
+              "pending": true,
+              "bar_num": 2,
+              "buy_count": 0,
+              "sell_count": 0,
+              "returns": 6.7701861279781745,
+              "strength": 0.5
+            },
+            {
+              "bar": 41,
+              "position": -10,
+              "pending": false,
+              "bar_num": 3,
+              "buy_count": 0,
+              "sell_count": 1,
+              "returns": 7.357742234368552,
+              "strength": 0.5
+            }
+          ],
+          "full_trace_sha256_baseline": "39ac6b5f5caf75bf175af45897b31f12006f80f374521b8e92262ef374f4cfe2",
+          "full_trace_sha256_mutated": "a638623c0c10c614751542732184951f0aed8d0525f666be32d9836552f14c32",
+          "full_trace_sha256_300bar_prefix": "cccb6960ce6716c312108bc547bc0e3d650005fa3568516fae555845271f0bdb",
+          "completed_fills_baseline": 19
+        },
+        "streaming_explicit_cash_origin_240": {
+          "origin_index_inclusive": 240,
+          "all_source_scalars_and_indicator_outputs_prefix_equal": true,
+          "fill_events_before_mutated_bar_equal": true,
+          "shorter_300bar_prefix_state_equal": true,
+          "eligible_state_comparisons": 79,
+          "first_fills": [
+            {
+              "bar": 241,
+              "side": "SELL",
+              "size": -10
+            },
+            {
+              "bar": 246,
+              "side": "BUY",
+              "size": 10
+            },
+            {
+              "bar": 247,
+              "side": "BUY",
+              "size": 10
+            },
+            {
+              "bar": 280,
+              "side": "SELL",
+              "size": -10
+            },
+            {
+              "bar": 281,
+              "side": "SELL",
+              "size": -10
+            },
+            {
+              "bar": 316,
+              "side": "BUY",
+              "size": 10
+            }
+          ],
+          "no_pre_origin_fill": true,
+          "pre_origin_attempts_denied": 198,
+          "admission_state": {
+            "bar": 240,
+            "position": 0,
+            "pending": true,
+            "bar_num": 202,
+            "buy_count": 0,
+            "sell_count": 0,
+            "returns": 0.2216957294016744,
+            "strength": 0.5
+          },
+          "last_pre_origin_state": {
+            "bar": 239,
+            "position": 0,
+            "pending": false,
+            "bar_num": 201,
+            "buy_count": 0,
+            "sell_count": 0,
+            "returns": 0.2618241574798413,
+            "strength": 0.5
+          },
+          "first_source_states": [
+            {
+              "bar": 39,
+              "position": 0,
+              "pending": false,
+              "bar_num": 1,
+              "buy_count": 0,
+              "sell_count": 0,
+              "returns": 0.0,
+              "strength": 0.5
+            },
+            {
+              "bar": 40,
+              "position": 0,
+              "pending": false,
+              "bar_num": 2,
+              "buy_count": 0,
+              "sell_count": 0,
+              "returns": 6.7701861279781745,
+              "strength": 0.5
+            },
+            {
+              "bar": 41,
+              "position": 0,
+              "pending": false,
+              "bar_num": 3,
+              "buy_count": 0,
+              "sell_count": 0,
+              "returns": 7.357742234368552,
+              "strength": 0.5
+            }
+          ],
+          "full_trace_sha256_baseline": "99e7c6402b03766be30763938f8032da590af71eb2a815017036f389b26bf643",
+          "full_trace_sha256_mutated": "d1dedc12d18ac951f69e8d28d78f9d8af0f2c57f1b4e711695f2f4668b859a8f",
+          "full_trace_sha256_300bar_prefix": "cf1be3d2540e875b094f6befde6712fdee9158934f14c1b9706f586dbb0346aa",
+          "completed_fills_baseline": 7
+        }
+      }
+    }
+  }
+}

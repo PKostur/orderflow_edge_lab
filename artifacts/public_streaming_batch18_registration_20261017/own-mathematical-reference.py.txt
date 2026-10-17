@@ -1,0 +1,159 @@
+"""Own mathematical readiness helper; synthetic/paper draft only, outside Git.
+
+No market adapter, order API, upstream framework implementation or source copy.
+"""
+from dataclasses import dataclass
+import math
+import numpy as np
+
+FEE_SIDE = 20 / 10000
+
+
+def quickstart_scalar(closes, index):
+    if index < 2:
+        return False
+    return bool(closes[index] < closes[index - 1] and
+                closes[index - 1] < closes[index - 2])
+
+
+def quickstart_array(closes):
+    x = np.asarray(closes, dtype=np.float64)
+    result = np.zeros(len(x), dtype=bool)
+    result[2:] = (x[2:] < x[1:-1]) & (x[1:-1] < x[:-2])
+    return result
+
+
+def updown_scalar(closes, index):
+    if index < 40:
+        return math.nan
+    previous = closes[index - 40]
+    return 0.0 if previous == 0 else (closes[index] - previous) / previous
+
+
+def updown_array(closes):
+    x = np.asarray(closes, dtype=np.float64)
+    result = np.full(len(x), np.nan)
+    if len(x) > 40:
+        den = x[:-40]
+        tail = np.zeros(len(den), dtype=np.float64)
+        np.divide(x[40:] - den, den, out=tail, where=den != 0)
+        result[40:] = tail
+    return result
+
+
+def btc_same_fraction_units(source_units, source_price, source_equity,
+                            btc_price, btc_own_equity):
+    fraction = source_units * source_price / source_equity
+    return btc_own_equity * fraction / btc_price
+
+
+def debit_after_fee(cash, quantity, price, fee):
+    # Separately round notional subtraction and transaction charge.
+    notional = quantity * price
+    remaining = cash - notional
+    return remaining - notional * fee
+
+
+@dataclass
+class Pending:
+    intent: str
+    created_bar: int
+    created_price: float
+    quantity: float
+    due_bar: int
+
+
+class MathematicalSleeve:
+    def __init__(self, kind, origin=239, cash=10000.0, fee=FEE_SIDE,
+                 delivery_delay=1):
+        if kind not in {'quickstart', 'updown'}:
+            raise ValueError(kind)
+        self.kind = kind
+        self.origin = origin
+        self.cash = cash
+        self.fee = fee
+        self.units = 1 if kind == 'quickstart' else 10
+        self.quantity = 0.0
+        self.entry_bar = None
+        self.pending = None
+        self.delivery_delay = delivery_delay
+        self.events = []
+
+    def cancel_pending(self, bar, reason='ADMIN_CANCEL'):
+        if self.pending is not None:
+            self.events.append({'bar': bar, 'status': reason,
+                                'intent': self.pending.intent})
+            self.pending = None
+
+    def opening(self, index, price):
+        order = self.pending
+        if order is None or index < order.due_bar:
+            return
+        if not math.isfinite(price) or price <= 0:
+            self.events.append({'bar': index, 'status': 'INVALID_OPEN_REJECT',
+                                'intent': order.intent})
+            self.pending = None
+            return
+        if order.intent == 'ENTRY':
+            # Source-compatible two-stage checksubmit and opening funding.
+            if debit_after_fee(self.cash, order.quantity,
+                               order.created_price, self.fee) < 0:
+                status = 'SUBMISSION_MARGIN'
+            elif debit_after_fee(self.cash, order.quantity, price, self.fee) < 0:
+                status = 'EXECUTION_MARGIN'
+            else:
+                self.cash = debit_after_fee(self.cash, order.quantity, price,
+                                            self.fee)
+                self.quantity = order.quantity
+                self.entry_bar = index
+                status = 'FILLED_ENTRY'
+        else:
+            if self.quantity != order.quantity:
+                status = 'EXIT_QUANTITY_REJECT'
+            else:
+                notional = self.quantity * price
+                self.cash += notional
+                self.cash -= notional * self.fee
+                self.quantity = 0.0
+                status = 'FILLED_EXIT'
+        self.events.append({'bar': index, 'status': status,
+                            'intent': order.intent, 'quantity': order.quantity,
+                            'price': price if status.startswith('FILLED') else None,
+                            'created_bar': order.created_bar})
+        self.pending = None
+
+    def completed_close(self, index, closes):
+        if index < self.origin or self.pending is not None:
+            return
+        price = float(closes[index])
+        if not math.isfinite(price) or price <= 0:
+            return
+        if self.kind == 'quickstart':
+            enter = quickstart_scalar(closes, index)
+            leave = self.entry_bar is not None and index >= self.entry_bar + 5
+        else:
+            value = updown_scalar(closes, index)
+            enter = value < -0.01
+            leave = value >= 0.01
+        intent = 'ENTRY' if self.quantity == 0 and enter else (
+                 'EXIT' if self.quantity > 0 and leave else None)
+        if intent:
+            self.pending = Pending(intent, index, price,
+                                   self.units if intent == 'ENTRY' else self.quantity,
+                                   index + self.delivery_delay)
+            self.events.append({'bar': index, 'status': 'CREATED',
+                                'intent': intent})
+
+
+def simulate(kind, opens, closes, origin=239, final_cancel=True, **kwargs):
+    sleeve = MathematicalSleeve(kind, origin=origin, **kwargs)
+    states = []
+    for index, opening in enumerate(opens):
+        sleeve.opening(index, float(opening))
+        sleeve.completed_close(index, closes)
+        states.append({'bar': index, 'quantity': sleeve.quantity,
+                       'pending': sleeve.pending.intent if sleeve.pending else None,
+                       'entry_bar': sleeve.entry_bar})
+    if final_cancel:
+        sleeve.cancel_pending(len(opens) - 1, 'FINAL_CUTOFF_NO_FILL')
+    return sleeve, states

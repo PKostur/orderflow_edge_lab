@@ -1,0 +1,118 @@
+{
+  "kind": "QUICKSTART_UPDOWN_INDEPENDENT_BOUNDED_READINESS_REVIEW",
+  "status": "PASS_BOUNDED_FEATURE_AND_UNIT_ORDER_SYNTHETICS_NOT_READY_FOR_REGISTRATION",
+  "blocking_findings": [
+    {
+      "id": "PAIRED_BTC_LIFECYCLE",
+      "scope": "Before actual candidate registration/evaluator approval",
+      "finding": "Only BTC own-equity same-fraction sizing scalar is proved. Full paired funding, rejected-asset/BTC-entry handling, source/BTC own cash, costs, matched exit/censor/pending and NAV conservation remain unimplemented/unproved."
+    },
+    {
+      "id": "COMPLETE_EXECUTION_FREEZE",
+      "scope": "Before actual candidate registration/evaluator approval",
+      "finding": "Final friction/price-impact convention and explicit exceptional-order scope must be frozen; genericRejected callback distinct fromMargin/partial/asynchronous lifecycle not natively proved. A bounded all-or-reject adapter may explicitly exclude those behaviors without native parity claim."
+    }
+  ],
+  "index_exact_sha256": "f25e889d5c420c7ff6a3fd5042e3a07cf4524fce9b0400ba61eb45d104de47c8",
+  "helper_exact_sha256": "c71abc35003eb3011ea1f33c2f79e8883eb5d3a87bcb30616f16b89b61124729",
+  "root_proof_exact_sha256": "eee419b0fafb07f7bb17b0090cdd763784f230342f24336927b5037848f9b7a5",
+  "independent_evidence_exact_sha256": "ebef7daf1ef6d61706dfe9c4ecbf7236fd1b4874481654bb75fdf5ade4628427",
+  "sources": [
+    {
+      "kind": "quickstart",
+      "url": "https://raw.githubusercontent.com/backtrader/backtrader-docs/e20cea18b88e1693b65e408f8778cc076ab21a67/docs/quickstart/quickstart06.py",
+      "sha256": "47b82d6ae2e3940bff80450e8c17a7074204c1f7ff70f7e56a25fe0e988e0d4c"
+    },
+    {
+      "kind": "updown",
+      "url": "https://raw.githubusercontent.com/cloudQuant/backtrader/b418caf7364e1134983a4c4b394768686e1916aa/tests/strategies/test_85_up_down_candles_strategy.py",
+      "sha256": "35b643f11fb5aba0041fae5ae19ab3a8bf312865ef9be126ab8cfb2c181b45e4"
+    }
+  ],
+  "validations": {
+    "index_artifacts_all_exact": true,
+    "original_pinned_native_fixtures_independently_reexecuted": 18,
+    "source_cash_from_fills_reconciled": true,
+    "scalar_array_feature_rows": 360,
+    "prefix_lengths": [
+      0,
+      1,
+      2,
+      3,
+      39,
+      40,
+      41,
+      239,
+      240,
+      319
+    ],
+    "future_tail_invariance": true,
+    "threshold_sign_and_zero_denominator_semantics_verified": true,
+    "source_unit_quantities": [
+      1,
+      10
+    ],
+    "standard_decision239_fill240_and_comparator240_fill241_distinct": true,
+    "quickstart_entry_E_exit_Eplus6": true,
+    "created_close_then_actual_open_funding_stage_cases": [
+      {
+        "kind": "quickstart",
+        "case": "gapdown",
+        "status": "SUBMISSION_MARGIN"
+      },
+      {
+        "kind": "quickstart",
+        "case": "gapup",
+        "status": "EXECUTION_MARGIN"
+      },
+      {
+        "kind": "quickstart",
+        "case": "funded",
+        "status": "FILLED_ENTRY"
+      },
+      {
+        "kind": "updown",
+        "case": "gapdown",
+        "status": "SUBMISSION_MARGIN"
+      },
+      {
+        "kind": "updown",
+        "case": "gapup",
+        "status": "EXECUTION_MARGIN"
+      },
+      {
+        "kind": "updown",
+        "case": "funded",
+        "status": "FILLED_ENTRY"
+      }
+    ],
+    "final_pending_no_fabricated_fill_censor_contract": true,
+    "default_preloaded_Quickstart_firstbar_future_leak_independently_reproduced": true,
+    "native_and_mathematical_fill_bar_and_quantity_exact": 74,
+    "maximum_native_execution_average_price_vs_open_difference": 1.4210854715202004e-14,
+    "execution_price_comparison_absolute_tolerance": 1e-10,
+    "source_cash_reconciliation_absolute_tolerance": 1e-08
+  },
+  "mechanics": [
+    "Quickstart enters after two strict declining comparisons across three closes, defaultunit1. Actual fill notification atE schedules sourceexit closeE+5, ordinaryopenE+6. No invented timeout/stop/target.",
+    "UpDown actual40bar return preserves subtract-then-divide, zero denominator0, validhistorydomain>=40; strengthunused. Longentry strict<-.01; sourceouterdeadzone pluslongexit means>=+.01. Flat upstreamshorts explicitlyrefused; unit10 fixed.",
+    "StreamingpreloadFalse/runonceFalse plusflat/no-pending warmupcashorigin239 is a declaredadaptation, not defaultpreloaded sourceparity. Defaultstartupfailure retained, no silentrepair/sourceclaim.",
+    "Created-close funding precheck and followingOPENcheck bothmandatory withchecksubmitTrue; noresize/cashincrease/pairfundingselection. Laterentry onlyunderlater sourcecondition.",
+    "SourceGPL/framework/ownharness remainoutsideGit; any futureengine mustbe independentlyauthoredfrommathematicalspecification withprovenance/numericreceipts."
+  ],
+  "limits": [
+    "No marketdata/PnL/registration/trial, no candidateproductionapproval or viablepromotion. Selection-before-EMV-outcome is retaineddeclared timing, not performancecomparison.",
+    "PinnedstandardBacktrader1.9.78.123 executesoriginalclassbodies underexplicit wrappers; cloudQuantpublisherfork/defaultwholebot andexchangeparity unproved.",
+    "Independent feature/unit-order evidence is bounded toselectedfixtures; genericRejected/cancel/delay/partial callbacks onlywhereexplicitlytested, not assumed.",
+    "Full researchpairedBTCcash/NAV lifecycle remainsmandatory evenwithout upstreamBTCnativeclaim. Existingfrozen costs/gates/controls anduntouchedfutureconfirmation cannotbeweakened.",
+    "TD remainsunadmitted; this proof doesnotresolveitsstartup/state/order semantics.",
+    "Native executed.price is broker quantity-weighted execution accounting and can differ from the opening reference by one floating-point rounding step. Fill bars/quantities are exact; prices compared at absolute1e-10 and cash at1e-8, not falsely claimed bit-exact."
+  ],
+  "market_data_loaded": false,
+  "market_outcomes_inspected": false,
+  "market_pnl_evaluated": false,
+  "new_registered_trials": 0,
+  "new_attempted_trials": 0,
+  "repository_modified": false,
+  "candidate_production_approved": false
+}
