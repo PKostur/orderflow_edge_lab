@@ -215,7 +215,7 @@ These tests ran once as GitHub run 38985075006, on source commit `2efaf03`, with
   - Human H5: 14 of 17 (median 2.6 bp, max 25.8 bp on 2026-10-13).
   - Paper account: 11 of 11 (median 0.04 bp, max 0.4 bp).
   - In most cases the first and latest values agree and only intermediate runs differ.
-  - Reading (not a test): the likely cause is runs that silently lacked a coin. C2 shows exactly this happening (next item), and the monitor's one visible revision (C5) is one of these. The latest reported values are not affected. But any single run's report, and so any single monitor line, can be off by up to about 26 bp on a day.
+  - Reading (not a test), corrected 2026-10-17: runs that silently lack a coin are one cause (C2 shows it), but the integrity checker below finds far fewer recorded drops than revisions, so a second, unidentified cause exists. The latest reported values are not affected. But any single run's report, and so any single monitor line, can be off by up to about 26 bp on a day.
 - C2, determinism:
   - Pass for the blend, human, trend core and vol-target modules: identical stamps, max gap at or below 5e-18.
   - Fail for the zoo: the re-run lacked `PHA_USDT` (69 coins against 70), with gaps of 1.1e-3 and 2.7e-3.
@@ -240,6 +240,26 @@ These tests ran once as GitHub run 38985075006, on source commit `2efaf03`, with
   - On those 8 coins the two venues track almost identically: daily correlation 0.995, S1 Sharpe -0.16 on Hyperliquid against +0.02 on the reference.
   - This cannot settle the 64-coin question, so "the trend leg is weaker on other venues" stays not established (E6 unchanged).
 
+### B1 version 2 result (registered in 0.10, computed once on 2026-10-17)
+
+Computed from archive commit `2a7916b` (448 artifacts); the result is in `research/audit_2026_10_16/b1_v2_result.json`. VERIFIED by run.
+
+- Included: 9 watches. Excluded: turn-of-month and near-miss (fewer than 10 days).
+- Primary: 12 common dates (2026-10-06 to 2026-10-17). N_eff = 2.08. The largest eigenvalue is 5.86 of 9, the second 1.97, and the rest are below 0.78. Expected maximum z at N_eff 2: 0.52.
+- Sensitivity without the paper account: 14 common dates, N_eff = 1.77.
+- Reading: the 9 watches with enough data carry about two independent bets, one of them a dominant common factor. A "best watch" among them is picked from about two draws, not nine. Twelve days is a very small sample, so the number is indicative only.
+
+### Report integrity checker (tooling, not a registered test)
+
+`orderflow_edge_lab.forward_integrity` now runs after every archive pass and writes `archive/integrity_report.json` on the archive branch. It lists every revised stamp per watch, every run whose `coins_with_data` fell below the most seen or that listed `missing_symbols`, and each watch's stamp time.
+
+First output, on archive commit `2a7916b`:
+- Revised stamps: blend 15 (max 9.5 bp), human 14 (max 25.8 bp), paper account 12 (max 0.4 bp). The other watches have none.
+- Coverage drops: only 4 runs in total. Blend 1 (CFX), human 2 (CRV, DOT, ETC, KAS, NIL, RARE), zoo 1 (UNI, with no revision).
+- Stamp times: 00:00 UTC for every watch except the paper account, at 08:00.
+
+Correction to the C1 reading above: dropped coins explain only part of the revisions. Revisions are far more frequent than recorded drops, so a second cause is at work, for example a coin with partial bar history in one run, or MEXC revising bars. That cause is unidentified; the checker makes it visible but does not explain it. The next step is to store each run's per-coin bar counts, which needs a successor version of the watch code.
+
 ## 2. Findings
 
 What the live claims actually support. The forward watches can detect breakage but cannot confirm an edge before about 2029. Two of them already sit below the 5th percentile of their own backtest envelopes. The headline historical numbers they were built on are superseded and still drive the G2 calibration and the dashboard. The blend's cross-sectional legs share a confirmed one-day survivorship look-ahead, of unknown size, that the repo's look-ahead test cannot detect. Every forward config and watch module was in place before its start.
@@ -255,6 +275,7 @@ What the live claims actually support. The forward watches can detect breakage b
 9. G2's false-alarm statement holds only at Sharpe 1.39 (E5).
 10. Correction to my earlier report: "trend robust" refers to funding, and that holds. A cross-venue weakness of the trend leg is not established (E6).
 12. Deferred tests (run once): the forward MEXC prices reconcile with Binance's archive (C3: 0 exceptions in 770 coin-days). The frozen modules are deterministic given the same inputs (C2). But runs silently drop coins, which revises already-reported days by up to about 26 bp (C1, C2). The early losses are mostly not BTC beta (C4). Watch stamps are not aligned across watches: the paper account uses 08:00, the rest 00:00 (B1).
+13. B1 v2 (date-aligned): about 2 independent bets across 9 watches (N_eff 2.08 on 12 days). The integrity checker now publishes revisions and coverage drops after every archive pass. Revisions outnumber recorded coin drops, so their cause is only partly known.
 11. Repo test suite on the audit commit (Python 3.13.16, pandas 2.3.3, numpy 2.4.6, `.[research]` extras with `requirements/constraints.txt`): 1569 tests, OK. A first run without the `[research]` extra gave 20 errors: 15 from the missing scikit-learn, 4 modules that failed to import for the same reason, and 2 in `test_universal_existing_validation` that passed on the re-run in the corrected environment. No production file was changed by the audit.
 
 Unresolved: C3 funding (needs the 2026-10 monthly archive file), B1 (not estimable as registered; a new version must align stamps by date first), S1 on Hyperliquid's 64 coins (the run fetched only 8), and C7 items 3 and 5 beyond C3. The remaining items need new data or a new registered version; none can be re-run under this audit's single look.

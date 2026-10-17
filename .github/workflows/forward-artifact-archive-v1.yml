@@ -27,7 +27,9 @@ jobs:
         with:
           python-version: "3.12"
       - name: Test the archiver
-        run: python -m unittest tests.test_archive_forward_artifacts -v
+        env:
+          PYTHONPATH: src
+        run: python -m unittest tests.test_archive_forward_artifacts tests.test_forward_integrity -v
       - name: Prepare archive branch
         run: |
           set -euo pipefail
@@ -47,6 +49,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: python scripts/archive_forward_artifacts.py --archive-root archive_wt/archive
+      - name: Integrity report (revised days, coin-coverage drops, stamp times)
+        env:
+          PYTHONPATH: src
+        run: python -m orderflow_edge_lab.forward_integrity --archive-root archive_wt/archive
       - name: Commit and push
         run: |
           set -euo pipefail
