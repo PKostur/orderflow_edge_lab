@@ -46,7 +46,7 @@ jobs:
       - name: Install (as the forward workflows install) plus statsmodels
         run: |
           python -m pip install -e ".[research]"
-          python -m pip install "statsmodels==0.14.4"
+          python -m pip install "statsmodels==0.15.0"
           mkdir -p audit_out
           python -m pip freeze > audit_out/pip_freeze.txt
       - name: Tests of the code under audit

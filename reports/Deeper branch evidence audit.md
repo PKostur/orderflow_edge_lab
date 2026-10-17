@@ -89,7 +89,7 @@ A read-only review of the runner found three blockers and several issues that wo
 - B1 inclusion: watches with at least 10 scored days whose stamps are calendar-daily. This excludes turn-of-month SPY (weekday stamps only) and watches started after 2026-10-06. Constant series are listed and excluded. The correlation diagonal is 1.
 - The mask-drop count is reported two ways: as specified (open on d, none on d+1), and restricted to coins with a score.
 - C3 return stamps follow the run_xs convention (d = open d to open d+1), one day earlier than the watches' stamps. Both venues use the same convention, so gaps are unaffected.
-- Install: `pip install -e ".[research]"`, without the constraints file, exactly as the forward workflows install, plus `statsmodels==0.14.4`. `pip freeze` is recorded. The runner is pinned to ubuntu-24.04.
+- Install: `pip install -e ".[research]"`, without the constraints file, exactly as the forward workflows install, plus `statsmodels` (pinned `0.15.0`; see the run log). `pip freeze` is recorded. The runner is pinned to ubuntu-24.04.
 - Single look:
   - A network preflight (MEXC, data.binance.vision, Hyperliquid, GitHub API) runs before anything else. Failing it uses no look.
   - The look counts from the moment the run step starts: a marker branch `audit/deferred-started-2026-10-16` is pushed just before it, and the guard refuses to start if either the marker or the results branch exists. A missing branch means `git ls-remote` exit code 2; any other code fails the guard.
@@ -102,6 +102,7 @@ A read-only review of the runner found three blockers and several issues that wo
   - The archive rounds funding settlement times to the minute, so `daily_funding_panel` may assign a 00:00 settlement to the previous day where the development fapi timestamps carried millisecond jitter. This shifts absolute S3 and funding P&L slightly against development. It does not affect the D4/D5 variant differences, which share identical inputs.
   - D4 records which Binance contract supplied each coin's funding.
 - Run log: run 38980878407 (2026-10-16 23:20Z) stopped at the single-look guard itself. GitHub runs steps under `bash -e`, so the "branch absent" exit code 2 ended the shell before it was tested. No marker was pushed, no data was fetched and no look was used. The guard was fixed (`|| rc=$?`) and the run re-triggered.
+- Run log: run 38980961540 (2026-10-16 23:21Z) stopped in the pre-look test step. `statsmodels==0.14.4` does not import with the runner's scipy 1.18.1 (`_lazywhere` was removed). No marker was pushed, no data was fetched and no look was used. The pin was changed to `statsmodels==0.15.0`, which was verified locally against scipy 1.18.1 with the same HAC fit, and the run re-triggered.
 
 ## 1. Results
 
