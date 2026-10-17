@@ -1,0 +1,131 @@
+"""Post-screen descriptive backfill only; preserve every baseline gap/history."""
+from pathlib import Path
+import ast
+import hashlib
+import importlib
+import json
+import platform
+import subprocess
+import sys
+import numpy as np
+import pandas as pd
+
+base=Path(__file__).resolve().parent.parent
+root=base/'work/orderflow_edge_lab'
+sys.path.insert(0,str(root/'src'))
+from orderflow_edge_lab import public_screen_supplement as method
+from orderflow_edge_lab import public_protective_batch5 as shared
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def committed(path):
+    blob=subprocess.check_output(['git','show','HEAD:'+path.relative_to(root).as_posix()],cwd=root)
+    assert blob.replace(b'\r\n',b'\n')==path.read_bytes().replace(b'\r\n',b'\n'),path
+
+
+review_path=base/'outputs/Public-screen-supplement-draft-independent-review.json'
+review=json.loads(review_path.read_text())
+assert not review['blocking_findings']
+assert review['status']=='PASS_DESCRIPTIVE_DRAFT_METHOD_BEFORE_RAW_APPLICATION'
+method_path=root/'src/orderflow_edge_lab/public_screen_supplement.py'
+tests_path=root/'tests/test_public_screen_supplement.py'
+description=base/'outputs/Public-screen-descriptive-supplement-method-draft.md'
+assert sha(method_path)==review['draft_evaluator_exact_sha256']
+assert sha(tests_path)==review['draft_test_exact_sha256']
+assert sha(description)==review['method_exact_sha256']
+committed(method_path)
+committed(tests_path)
+
+# Reuse exactly the already independently reviewed population aggregator.
+caller=base/'work/apply_kama_supplement.py'
+assert sha(caller)==json.loads((base/'outputs/KAMA-batch15-supplement-independent-review.json').read_text())['application_exact_sha256']
+tree=ast.parse(caller.read_text())
+population_node=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='population')
+scope={'method':method,'calendar':172}
+exec(compile(ast.Module(body=[population_node],type_ignores=[]),str(caller),'exec'),scope)
+population=scope['population']
+
+cases={5:('Protective','protective'),6:('Protective','protective'),7:('Candle','candle'),
+       8:('Trend','trend'),9:('DualThrust','dual_thrust'),10:('Vortex','vortex')}
+assert len(sys.argv)==2 and int(sys.argv[1]) in cases
+number=int(sys.argv[1])
+title,slug=cases[number]
+module_name=f'public_{slug}_batch{number}'
+frozen=importlib.import_module('orderflow_edge_lab.'+module_name)
+target=base/f'outputs/{title}-batch{number}-descriptive-supplement.json'
+assert not target.exists(),'retain existing application'
+artifact=root/f'artifacts/{module_name}_20261011'
+index_path=artifact/'result_index.json'
+assert subprocess.check_output(['git','show','HEAD:'+index_path.relative_to(root).as_posix()],cwd=root)==index_path.read_bytes()
+index=json.loads(index_path.read_text())
+input_path=base/f'outputs/{title}-batch{number}-results.json'
+assert sha(input_path)==index['decompressed_sha256' if number==5 else 'raw_sha256']
+original=json.loads(input_path.read_text())
+source_path=root/f'src/orderflow_edge_lab/{module_name}.py'
+committed(source_path)
+assert sha(source_path)==original['evaluator_source_sha256']
+config_path=root/f'config/{module_name}_v1.json'
+spec=frozen.checked_spec(root,config_path)
+runtime=dict(python=platform.python_version(),numpy=np.__version__,pandas=pd.__version__,platform=sys.platform)
+contract=spec.get('runtime',original['runtime'])
+assert all(runtime[k]==contract[k] for k in runtime if k in contract)
+assert all(runtime[k]==original['runtime'][k] for k in runtime if k in original['runtime'])
+native=None
+if number in (5,9):
+    wheel=base/'work/magen_native_wheels/jesse_rust-1.3.0-cp313-cp313-win_amd64.whl'
+    native=shared.native_kernel(base/'work/magen_native_runtime',wheel,spec)
+    runtime['native_wheel_sha256']=sha(wheel)
+    if 'native_wheel_sha256' in original['runtime']:
+        assert runtime['native_wheel_sha256']==original['runtime']['native_wheel_sha256']
+panel,evidence=shared.retained_panel(root,base/'outputs/Minute-continuous-source-data',base/'work/protective_batch5_cache',spec)
+assert evidence==original['source']
+frames={symbol:shared.bars8h(data) for symbol,data in panel.items()}
+reports=[]
+for candidate in original['results']:
+    assert candidate['decision']=='REJECTED_AS_ADAPTED'
+    features={symbol:frozen.source_features(frames[symbol],candidate['candidate'],spec, native)
+              if number in (5,9) else frozen.source_features(frames[symbol],candidate['candidate'],spec)
+              for symbol in spec['symbols']}
+    cases_out={}
+    for key,case in candidate['cost_and_gap_cases'].items():
+        if not key.startswith('40:'):
+            continue
+        # Every retained state and its full Cartesian combination; never choose a favorable branch.
+        histories={}
+        combinations=list(shared.joint_histories(case['symbols'],spec))
+        assert len(combinations)==len(case['joint_histories'])
+        for joint,states in zip(case['joint_histories'],combinations,strict=True):
+            events=[event for state in states for event in state['events']]
+            assert len(events)==joint['summary']['admitted']
+            assert joint['diagnostics']['calendar_weeks_with_zeros']==172
+            details=[method.excursion_details(event,panel[event['symbol']]) for event in events]
+            indexes=[i for i,event in enumerate(events) if event['status']=='COMPLETED']
+            assert len(indexes)==joint['summary']['completed']
+            clocks={}
+            for symbol,state in zip(spec['symbols'],states,strict=True):
+                clock=method.source_signal_clock(frames[symbol],features[symbol]['long'],spec['warmup_bars'])
+                assert clock['completion_clock']['n']==state['counts']['raw_entry_flags'],(number,symbol)
+                clocks[symbol]=clock
+            histories[str(joint['joint_id'])]=dict(all_admissions=population(events,details),
+                completed_only=population([events[i] for i in indexes],[details[i] for i in indexes]),
+                event_path_details=details,raw_signal_availability_clocks=clocks,original_portfolio=joint['portfolio'])
+        cases_out[key]=histories
+    reports.append(dict(candidate=candidate['candidate'],original_decision=candidate['decision'],
+                        original_failed_gates=candidate['failed_gates'],baseline_cost_gap_histories=cases_out))
+report=dict(kind='EARLIER_MINUTE_POST_SCREEN_DESCRIPTIVE_SUPPLEMENT_V1',
+    timing='Method defined/reviewed after these screens, before this supplemental raw-path application.',
+    original_screen_execution_git_commit=original['evaluator_git_commit'],
+    supplement_execution_git_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),
+    runtime=runtime,input_results_sha256=sha(input_path),frozen_evaluator_sha256=sha(source_path),
+    input_config_sha256=sha(config_path),committed_result_index_sha256=sha(index_path),
+    method_bindings=dict(draft_evaluator_exact_sha256=sha(method_path),draft_test_exact_sha256=sha(tests_path),method_exact_sha256=sha(description)),
+    independent_method_review_sha256=sha(review_path),application_source_sha256=sha(Path(__file__)),
+    reviewed_population_source_sha256=sha(caller),source=evidence,results=reports,
+    scope='Every original40bps gap model and every joint history; no pooling across histories, sources or datasets.',
+    new_strategy_trials=0,changed_strategy_rules=False,changed_gates=False,viable=False,future_confirmation_started=False,orders=False)
+assert sha(input_path)==report['input_results_sha256']
+target.write_text(json.dumps(report,indent=2,allow_nan=False)+'\n',encoding='utf-8')
+print(json.dumps(dict(output=str(target),sha256=sha(target),new_strategy_trials=0)))

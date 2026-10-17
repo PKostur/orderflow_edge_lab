@@ -1,0 +1,148 @@
+{
+  "study_id": "PSR23-PUBLIC-EASE-OF-MOVEMENT-STATE-BATCH17",
+  "version": 1,
+  "candidates": [
+    "EaseOfMovement8hCashSourceIntent"
+  ],
+  "source_sha256": {
+    "EaseOfMovement8hCashSourceIntent": "804f722a2e58204d5928eb35a08cc422f65b8c6c74201a811f8db4134e8f871b"
+  },
+  "source_manifest": "artifacts/minute_continuity_20261010/source_manifest.json",
+  "source_manifest_sha256": "3fcadef5dea9086425111b12b74f9df84f86b2d0932ca918871fc47b66f7179b",
+  "quality_csv": "artifacts/minute_continuity_20261010/daily_quality.csv",
+  "quality_csv_sha256": "69403a31a4f7f5c234ebbca98e32ba9b2919253f453515c76da964f93e10ed29",
+  "source_policy": "Longest shared complete-day segment chosen solely by previously audited quality; no repairs, imputation or source replacement.",
+  "data_start": "2023-04-01T00:00:00Z",
+  "data_end_exclusive": "2026-10-01T00:00:00Z",
+  "signal_minutes": 480,
+  "execution_minutes": 1,
+  "warmup_bars": 240,
+  "symbols": [
+    "ETHUSDT",
+    "SOLUSDT",
+    "LINKUSDT"
+  ],
+  "benchmark": "BTCUSDT",
+  "episode_initial_cash_per_symbol": 10000,
+  "max_hold_bars": null,
+  "baseline_round_trip_bps": 40,
+  "cost_cases_bps": [
+    20,
+    40,
+    60,
+    80
+  ],
+  "cost_policy": "Each side charges half nominal roundtrip bps on actual modeled notional, including fee plus assumed spread/slippage; reserve in fixed signal-close quantity.",
+  "gap_target_models": [
+    "conservative_limit",
+    "opening_price_improvement"
+  ],
+  "touch_policy": "No source protection; no invented stop/target/timeout. Both registered gap labels intentionally identical, onehistory. Shared no-pruning/failclosed caps retained.",
+  "max_symbol_histories": 64,
+  "max_joint_histories": 4096,
+  "entry_policy": "Three independent10000USDT sleeves. Decimal(str(cash/(signalclose*(1+sidecost)))) floor8; fixed quantity before nextminuteOPEN, all-or-reject without resize. HeldBUY countedignored before SELL; no sameboundaryreentry. No target/stop/timeout/trailing/short/borrow/pyramid/orders.",
+  "clock_policy": "Use completed8h features, action at next1mOPEN. Fixedwarmup240. No day/session reset or timeframe-derived parameter changes.",
+  "endpoint_policy": "Completed events use modeled exit reference; still-held events retain statusCENSORED_MTM and cutoff close mark with hypothetical liquidation burden, never a fictitious order or completed trade.",
+  "principal_return_estimand": "All admitted entry-to-exit-or-fixed-cutoff net reference returns; completed-only means separately descriptive. Per-unit return=(exit/entry)*(1-sidecost)/(1+sidecost)-1.",
+  "funded_btc_benchmark": "At each accepted alt entry allocate the same alt notional/preentry-cash fraction from a separate BTC cash account. Exact BTC open entry; open exit uses BTCopen, intraminute exit uses BTCminute low/high bounds; own costs and remaining inventory; cutoff uses known final close.",
+  "portfolio_policy": "Equal three10000USDT cash sleeves; source fullbalance illustrative intent with explicit fee-reserved fixedsignal-close quantity. FundedBTC owncash; gates unchanged.",
+  "seed": 20261027,
+  "bootstrap_replicates": 2000,
+  "bootstrap_calendar_block_weeks": 4,
+  "bootstrap_policy": "Moving contiguous4calendar-week blocks incl zero-event weeks; retain fixed alpha0.025,97.5% two-sided intervals from prior comparator. One newly registered cell; conservative fixed carryover, not two cells or global repeated-search inference.",
+  "placebo_replicates": 500,
+  "placebo_policy": "500 eligibleentryweek rawBUY-state randomizations preservingweekflagcount; same originalSELL-state exits, ownacceptedentries/quantities/cash/durations. No observed endogenous lengths reused.",
+  "lag_control_bars": 7,
+  "lag_policy": "Shift rawBUY-state flags7bars after zeroingprewarmup; same sourceSELL cash exit and causalengine.",
+  "gates": {
+    "min_completed_events": 100,
+    "min_entry_weeks": 52,
+    "min_all_admitted_net40_bps": 5,
+    "require_all_admitted_net80_positive": true,
+    "require_all_symbols_net40_positive": true,
+    "min_positive_year_fraction": 0.6666666666666666,
+    "max_portfolio_drawdown_pct": 30,
+    "require_leave_one_entry_week_out_net40_positive": true,
+    "require_net40_descriptive_lower_ci_positive": true,
+    "require_btc_excess40_descriptive_lower_ci_positive": true,
+    "max_placebo_at_least_observed_fraction": 0.05,
+    "require_no_history_overflow": true
+  },
+  "diagnostics": [
+    "completed/pending/unexecuted/overlap/invalid/cash rejection accounting",
+    "all-admission and completed-only returns/PF",
+    "gross MFE/MAE uncertainty",
+    "calendar entry weeks and4week bootstrap",
+    "fixed UTC sessions and overlap memberships",
+    "symbol/year/month/weekday/hour and causalBTC30bar state",
+    "leave-week and leave-symbol sensitivity",
+    "40/80 costs and20/60 cases",
+    "funded BTC wealth and same-exit reference bounds",
+    "full branch and gap-model sensitivity",
+    "500 randomized-entry controls and7bar lag control"
+  ],
+  "claim": "Spent historical hypothetical development only; SCREEN_SURVIVOR permits separate future preregistration, never viable/untouched/positive-edge/deployment claim.",
+  "future_confirmation": "User completion requires a separate immutable and adequately powered future-only protocol, calibrated costs/quotes/execution, controls and approval-bound paper reliability, frozen before observations start. No viable candidate until that confirmation passes.",
+  "bollinger_bands_excluded": true,
+  "frozen_lanes_modified": false,
+  "authorizes_orders": false,
+  "retuning_permitted": false,
+  "minimum_preexisting_trading_cells": 29,
+  "minimum_preexisting_signal_model_cells": 30,
+  "new_registered_trading_cells": 1,
+  "minimum_registered_trading_cells_after_freeze": 30,
+  "minimum_registered_signal_model_cells_after_freeze": 31,
+  "source_urls": {
+    "EaseOfMovement8hCashSourceIntent": "https://github.com/Hulme-Labs/indicatorgo/blob/35bd387db11de8e544ad545c68f198677ce4c6b7/strategy/volume/ease_of_movement_strategy.go"
+  },
+  "runtime": {
+    "python": "3.13.14",
+    "numpy": "2.2.4",
+    "pandas": "2.2.3",
+    "platform": "win32",
+    "precision": "float64 scalar operation order"
+  },
+  "dependency_hash_policy": "Python dependency bytes normalize CRLF to LF solely for cross-platform checkout; all data/audit fingerprints remain exact bytes",
+  "dependency_source_sha256": {
+    "src/orderflow_edge_lab/public_protective_batch5.py": "ea1a2f5564a4261fe3c53e4d3f584b782913222f43228f0843c9d94917eab6d8",
+    "src/orderflow_edge_lab/protective_minute.py": "32345cbe229e734129f063e161f77989c3e2d0facb604dade40b469de31f03bf",
+    "src/orderflow_edge_lab/public_strategy_completion.py": "2a5327410bb5b7acef4dc6959d95b8ea309df0f0cf9f6e692c946b7500a1719a"
+  },
+  "source_mechanics_audit_sha256": {
+    "artifacts/public_emv_batch17_registration_20261016/EMV-source-bounded-readiness-review.json": "ea4b47cd88d061142dbac488cd841cbf2bc21845b81b35394c8f844ea7d38d5d",
+    "artifacts/public_emv_batch17_registration_20261016/EMV-feature-helper-synthetic-proof.json": "ba7c3bc2ce6cbfb1e3014e651a7f8702f91369a5154fef47c8e28803dbea86a3",
+    "artifacts/public_emv_batch17_registration_20261016/EMV-feature-helper-synthetic-review.json": "a41dd06ff51a8818a6d7d86cc429f0cfe2b1a3d3c08d0fbb08d511e7114c555a",
+    "artifacts/public_emv_batch17_registration_20261016/EMV-batch17-draft-mechanics-review.json": "25d3091673ccb95709c9674be68c0b81700c2d5c21781da7303d116ca90e43ed",
+    "artifacts/public_emv_batch17_registration_20261016/EMV-mathematical-specification-draft.md": "f48598ed1b11604fbca3f9f82e5c1079d18e9f1f1db850e34b18f8a089ec2428",
+    "artifacts/public_emv_batch17_registration_20261016/Public-screen-descriptive-supplement-method-draft.md": "ac705594c926c9ea238fc7393271223c5c698f4faa14a00f1ebf0d3ef10b7ad1",
+    "artifacts/public_emv_batch17_registration_20261016/Public-screen-supplement-draft-independent-review.json": "22ac3cc5a1cf0f5b10c955b3c3d43ffd9d4ad2ece2f95cd8b24151ff267be26c",
+    "artifacts/public_emv_batch17_registration_20261016/Public-screen-supplement-line-ending-bridge-independent-review.json": "8ea90ec22194d7c6cd6bcaf879279ec67d920fb34a355a9a4e81c69b95f84011",
+    "artifacts/public_emv_batch17_registration_20261016/emv-synthetic-input.json": "bcfd9bf00526f6b7bb425fec3cf839225afdfd0ebd3c4ac1ccc00b0ab5a5c6d3",
+    "artifacts/public_emv_batch17_registration_20261016/emv-native-synthetic-output.json": "683581b2a8592b8fa082a853812a5598d9645f35fd65cb75658844b10ad37139",
+    "artifacts/public_emv_batch17_registration_20261016/emv-selected-native-source-receipt.json": "2b6dc6568a6942a43433300d2c368725a543901acdc2509b21f49c51a4fce7f1"
+  },
+  "family_disclosure": "Price-range/volume oscillator overlaps prior trend and volume families; no orthogonality or incremental-information claim. Source prepared after KAMA rejection and before any Aroon market data, no publisher return or parameter search.",
+  "native_runtime_status": "Pinned original Go source98files independently rebuilt offline;23syntheticfixtures2507values incl390NaNs/2829native actions.30unattached short-input HOLDpadding excluded gives2799actualbar actions.11prefix/3future checks; previousbox/NaNrecovery equations exact. Not native bot/exchange execution parity.",
+  "required_pre_outcome_review": {
+    "path": "artifacts/public_emv_batch17_registration_20261016/pre-outcome-review.json",
+    "required_status": "PASS_PRE_OUTCOME_INDEPENDENT_REVIEW_WITH_DECLARED_PARITY_LIMITS",
+    "must_bind": [
+      "evaluator_exact_sha256",
+      "canonical_config_sha256"
+    ],
+    "before_any_raw_market_load": true
+  },
+  "source_attribution": "Hulme-Labs/indicatorgo fork of cinar/indicator pinned35bd387db11de8e544ad545c68f198677ce4c6b7, AGPLv3. No original Go/helper/harness/build copied into Git; independently authored equations implementation, URI/hash/numeric provenance only.",
+  "ease_of_movement": {
+    "period": 14,
+    "volume_scale": 100000000,
+    "history_anchor": "2023-04-01T00:00:00Z initialize once and carry arithmetic; no240/day/session/trade resets",
+    "formula": "M=(H+L)/2. Distance startsraw1 but boxratio startsraw0; positionalDivide yields raw[i]=(M[i]-M[i-1])/((V[i-1]/100000000)/(H[i-1]-L[i-1])). SMA14 via Neumaier incoming before outgoing and physical-ring nonfinite recovery, firstoutputraw14.",
+    "actions": "BUY everySMA>0, SELL everySMA<0, HOLDequality/unordered, notcrossings. Preserve IEEE0divisions and movingbufferrecovery; no substitution or currentbox repair. Firstmin(14,n)actualbarsHOLD, no phantomslots.",
+    "source_accounting": "Educational Outcome balance1/shares0 BUYflat fullcash/sameclose SELLheldallshares costfree illustration, not deployedbot.",
+    "declared_cash_adapter": "Three independent10000USDT sleeves. Decimal(str(cash/(signalclose*(1+sidecost)))) floor8; fixed quantity before nextminuteOPEN, all-or-reject without resize. HeldBUY countedignored before SELL; no sameboundaryreentry. No target/stop/timeout/trailing/short/borrow/pyramid/orders.",
+    "clock": "Use completed8h features, action at next1mOPEN. Fixedwarmup240. No day/session reset or timeframe-derived parameter changes.",
+    "source_domain": "Positive finite high/low with high>=low and finite nonnegative basevolume, including zeroRange/V without repair. Sharedloader separately validates minuteOHLCV.",
+    "controls": "Whole randomized/lagged BUY replacement keeps original SELL, own funding/quantity/admissions/duration; may enter while undefined/zero and hold until later sourceSELL or cutoff."
+  }
+}

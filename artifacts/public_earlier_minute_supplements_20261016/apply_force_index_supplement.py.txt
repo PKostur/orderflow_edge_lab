@@ -1,0 +1,117 @@
+"""Apply independently reviewed descriptive math; never rerun or change screening."""
+from pathlib import Path
+import hashlib
+import importlib.util
+import json
+import platform
+import numpy as np
+import pandas as pd
+import subprocess
+import sys
+
+base = Path(__file__).resolve().parent.parent
+root = base / 'work/orderflow_edge_lab'
+sys.path.insert(0, str(root / 'src'))
+from orderflow_edge_lab import public_force_index_batch12 as frozen
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+target = base / 'outputs/ForceIndex-batch12-descriptive-supplement.json'
+assert not target.exists(), 'retain previous application'
+review_path = base / 'outputs/Public-screen-supplement-draft-independent-review.json'
+review = json.loads(review_path.read_text())
+assert not review['blocking_findings']
+assert review['status'] == 'PASS_DESCRIPTIVE_DRAFT_METHOD_BEFORE_RAW_APPLICATION'
+bindings = {
+    'draft_evaluator_exact_sha256': base / 'work/draft_public_screen_supplement.py',
+    'draft_test_exact_sha256': base / 'work/draft_test_public_screen_supplement.py',
+    'method_exact_sha256': base / 'outputs/Public-screen-descriptive-supplement-method-draft.md',
+}
+for key, path in bindings.items():
+    assert sha(path) == review[key], key
+source_path = root / 'src/orderflow_edge_lab/public_force_index_batch12.py'
+result_path = base / 'outputs/ForceIndex-batch12-results.json'
+artifact=root/'artifacts/public_force_index_batch12_20261015'
+index_path=artifact/'result_index.json'
+assert subprocess.check_output(['git','show','HEAD:'+index_path.relative_to(root).as_posix()],cwd=root)==index_path.read_bytes()
+index=json.loads(index_path.read_text())
+assert sha(result_path)==index['raw_sha256']
+original=json.loads(result_path.read_text())
+assert sha(source_path)==original['evaluator_source_sha256']
+assert subprocess.check_output(['git','show','HEAD:'+source_path.relative_to(root).as_posix()],cwd=root).replace(b'\r\n',b'\n')==source_path.read_bytes().replace(b'\r\n',b'\n')
+candidate = original['results'][0]
+assert candidate['decision'] == 'REJECTED_AS_ADAPTED'
+config_path = root / 'config/public_force_index_batch12_v1.json'
+config = frozen.checked_spec(root, config_path)
+runtime=dict(python=platform.python_version(),numpy=np.__version__,pandas=pd.__version__,platform=sys.platform)
+if 'scipy' in config['runtime']:
+    import scipy
+    runtime['scipy']=scipy.__version__
+assert all(runtime[k]==config['runtime'][k] for k in runtime), 'runtime differs from original screen'
+panel, evidence = frozen.shared.retained_panel(
+    root, base / 'outputs/Minute-continuous-source-data',
+    base / 'work/protective_batch5_cache', config)
+assert evidence == original['source']
+loader = importlib.util.spec_from_file_location(
+    'orderflow_edge_lab.public_screen_supplement', bindings['draft_evaluator_exact_sha256'])
+method = importlib.util.module_from_spec(loader)
+loader.loader.exec_module(method)
+case = candidate['cost_and_gap_cases']['40:conservative_limit']
+assert len(case['joint_histories']) == 1
+assert all(len(states) == 1 for states in case['symbols'].values())
+events = [event for states in case['symbols'].values() for event in states[0]['events']]
+assert len(events)==case['joint_histories'][0]['summary']['admitted']
+assert sum(e['status']=='COMPLETED' for e in events)==case['joint_histories'][0]['summary']['completed']
+detail = [method.excursion_details(event, panel[event['symbol']]) for event in events]
+calendar = case['joint_histories'][0]['diagnostics']['calendar_weeks_with_zeros']
+assert calendar == 172
+
+
+def population(items, paths):
+    result = method.event_summary(items, calendar)
+    fields = ('pre_first_mfe_mae_bps_bounds', 'mae_through_endpoint_bps_bounds',
+              'hypothetical_peak_net_after_cost_bps_bounds', 'mfe_giveback_to_endpoint_bps_bounds')
+    result['path_metrics'] = {
+        key: {stat: [function([p[key][i] for p in paths]) for i in (0, 1)]
+              for stat, function in [('mean', method.average), ('median', method.middle)]}
+        for key in fields}
+    result['path_fractions'] = {
+        key: sum(p[key] for p in paths) / len(paths) if paths else None
+        for key in ('endpoint_correct_direction', 'definite_positive_excursion', 'possible_positive_excursion')}
+    result['hypothetical_peak_clears_baseline_cost_fraction_bounds'] = [
+        sum(p['hypothetical_peak_net_after_cost_bps_bounds'][i] > 0 for p in paths) / len(paths)
+        if paths else None for i in (0, 1)]
+    return result
+
+
+clocks = {}
+for symbol in config['symbols']:
+    frame = frozen.shared.bars8h(panel[symbol])
+    feature = frozen.source_features(frame, frozen.CANDIDATES[0], config)
+    clock = method.source_signal_clock(frame, feature['long'], config['warmup_bars'])
+    expected = case['symbols'][symbol][0]['counts']['raw_entry_flags']
+    assert clock['completion_clock']['n'] == expected, symbol
+    clocks[symbol] = dict(raw_entry_flags=expected, **clock)
+completed = [i for i, event in enumerate(events) if event['status'] == 'COMPLETED']
+report = dict(
+    kind='FORCEINDEX_POST_SCREEN_DESCRIPTIVE_SUPPLEMENT_V1',
+    timing='Method defined and independently reviewed after ForceIndex screening; before supplement raw-path application.',
+    original_screen_execution_git_commit=original['evaluator_git_commit'], runtime=runtime,
+    supplement_execution_git_commit=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip(),
+    input_results_sha256=sha(result_path), frozen_evaluator_sha256=sha(source_path),
+    input_config_sha256=sha(config_path), method_bindings={k: sha(p) for k, p in bindings.items()},
+    independent_method_review_sha256=sha(review_path), application_source_sha256=sha(Path(__file__)),
+    source=evidence, original_decision=candidate['decision'], original_failed_gates=candidate['failed_gates'],
+    original_portfolio=case['joint_histories'][0]['portfolio'],
+    scope='40:conservative_limit sole joint history; no-protection alternative gap label has identical events. All baseline admissions and completed-only populations reported separately.',
+    all_admissions=population(events, detail),
+    completed_only=population([events[i] for i in completed], [detail[i] for i in completed]),
+    raw_signal_availability_clocks=clocks, event_path_details=detail,
+    new_strategy_trials=0, changed_strategy_rules=False, changed_gates=False,
+    viable=False, future_confirmation_started=False, orders=False)
+assert sha(result_path) == report['input_results_sha256']
+target.write_text(json.dumps(report, indent=2, allow_nan=False) + '\n', encoding='utf-8')
+print(json.dumps(dict(output=str(target), sha256=sha(target), n=len(events), completed=len(completed))))

@@ -1,0 +1,64 @@
+{
+  "status": "PASS_ADDITIVE_DESCRIPTIVE_SUPPLEMENT_INDEPENDENT_AUDIT",
+  "blocking_findings": [],
+  "supplement_exact_sha256": "df3c17e5d25a7ffef30ee8ae2d4380614ef6b9e47ba871c927c49265a288346d",
+  "input_results_exact_sha256": "21e2c3df65f17eae737eb488c91c744ac62934e7790f88c6e59d5e675c98d3b3",
+  "frozen_evaluator_exact_sha256": "6f5f402f45af45be1d37596096f3bb842fc9fe51288eb4113b6a1b5acb796961",
+  "input_config_exact_sha256": "62bf6c63bc2176fac840217a122bf6515b0a128f81b22be6715247d470686afe",
+  "method_bindings": {
+    "draft_evaluator_exact_sha256": "078d55ae6098740cf586d30b0de7b26f32aba0a503a77910675259147267baf1",
+    "draft_test_exact_sha256": "9b3be393de2d44cf917129d567b516d380f7c16059ad25ae4c32f50b41acc61c",
+    "method_exact_sha256": "ac705594c926c9ea238fc7393271223c5c698f4faa14a00f1ebf0d3ef10b7ad1"
+  },
+  "method_review_exact_sha256": "22ac3cc5a1cf0f5b10c955b3c3d43ffd9d4ad2ece2f95cd8b24151ff267be26c",
+  "application_exact_sha256": "2a1400f2d238bdc17a6f4db94a2b048631eeaa14b93ee8dfda7945bdd6b75bf8",
+  "original_screen_execution_git_commit": "076e74010406b40f9fb36e58e38dfba2f84bc68e",
+  "supplement_execution_git_commit": "076e74010406b40f9fb36e58e38dfba2f84bc68e",
+  "validations": {
+    "raw_and_cache_receipts_rehashed": true,
+    "reviewed_primitive_detail_reexecution": 514,
+    "separate_first_peak_fullminute_oracle": 514,
+    "all_admission_population": 514,
+    "completed_only_population": 513,
+    "calendar_denominator": 172,
+    "medians_extreme_direction_week_concentration_OLS_cost_path_aggregates_recomputed": true,
+    "raw_signal_times_and_session_clock_recomputed": {
+      "ETHUSDT": {
+        "n": 1844,
+        "hours": {
+          "0": 610,
+          "8": 608,
+          "16": 626
+        }
+      },
+      "SOLUSDT": {
+        "n": 1877,
+        "hours": {
+          "0": 623,
+          "8": 621,
+          "16": 633
+        }
+      },
+      "LINKUSDT": {
+        "n": 1854,
+        "hours": {
+          "8": 606,
+          "16": 631,
+          "0": 617
+        }
+      }
+    },
+    "original_result_and_decision_unchanged": true
+  },
+  "limits": [
+    "Reviewed primitive replay plus separate source-path/statistical arithmetic checks; not independent market/exchange fills.",
+    "Method was frozen before EMV outcome; descriptive only, no gate rescue, strategy change, new trial or futureconfirmation.",
+    "Peak metrics are retrospective OHLC partial bounds, not executable fills. Matched BTC scenario OLS is descriptive sensitivity, not causal alpha or confidence bounds.",
+    "Fixed reference10/30 costs retain baseline admissions/prices and are not funded resimulations. All original rejection gates/verdicts preserved."
+  ],
+  "new_strategy_trials": 0,
+  "repository_modified": false,
+  "original_decision": "REJECTED_AS_ADAPTED",
+  "viable": false,
+  "future_confirmation_started": false
+}

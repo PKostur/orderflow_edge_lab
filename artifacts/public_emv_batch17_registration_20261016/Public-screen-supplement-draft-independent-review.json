@@ -1,0 +1,45 @@
+{
+  "kind": "PUBLIC_SCREEN_DESCRIPTIVE_SUPPLEMENT_DRAFT_INDEPENDENT_REVIEW",
+  "status": "PASS_DESCRIPTIVE_DRAFT_METHOD_BEFORE_RAW_APPLICATION",
+  "blocking_findings": [],
+  "market_data_loaded": false,
+  "market_outcomes_inspected": false,
+  "draft_evaluator_exact_sha256": "078d55ae6098740cf586d30b0de7b26f32aba0a503a77910675259147267baf1",
+  "draft_test_exact_sha256": "9b3be393de2d44cf917129d567b516d380f7c16059ad25ae4c32f50b41acc61c",
+  "method_exact_sha256": "ac705594c926c9ea238fc7393271223c5c698f4faa14a00f1ebf0d3ef10b7ad1",
+  "validations": {
+    "synthetic_tests_independently_reexecuted": 14,
+    "independent_OHLC_order_enumeration_cases": 200,
+    "random_paths": 100,
+    "enumerated_extreme_orders_per_case": "8 completed-OPEN /16 final-CLOSE",
+    "pre_first_peak_bounds_equal_enumerated_attainable_bounds": true,
+    "no_strategy_gate_result_changes": true,
+    "entry_price_exact_minute_open_guard_and_consistent_envelope_intraminute_regression": true
+  },
+  "method_findings": [
+    "Completed OPEN excludes exit-minute H/L; cutoff includes full final minute. First tied peak and entry-first maximum are respected. Peak at minute OPEN excludes that minute later LOW; other peak-minute LOW is bounded.",
+    "Unresolved intraminute protective endpoint conservatively reports full-MAE-lower tozero, not exact peak timing. Bound source event MFE and MAE envelopes before reporting. Prior strictly larger peak may remain identified.",
+    "Retrospective peak cost burden and giveback are movement descriptions, never fills or optimized exits. Median bound endpoints, gross-positive direction and best/worst per-unit net admissions preserve endpoint status.",
+    "Caller must report all-admission and completed-only populations separately. Active-week/calendar-zero denominators, absolute individualcashPnL concentration and matched-event OLS endpoint scenarios are defined with dependence/noncausal limits.",
+    "10/30 reference-cost rows condition on existing admissions/prices, not funded simulations. Existing20/40/60/80 funded screens/gates/verdicts remain authoritative. Raw eligibleBUY availability clocks include warmup indexwarmup-1 and final no-nextopen flag under existing fixedUTC labels."
+  ],
+  "limits": [
+    "Read-only descriptive augmentation defined after existing KAMA outcome; no new strategy, threshold/filter, gate, trial or route to rescue/promotion. Timing must be disclosed.",
+    "OHLC enumeration covers admissible two-extreme order paths for fullminutes and confirms these200 bounds; intraminute exit envelope intentionally broader. No tick/executable peak or common joint attainment of separate bounds is inferred.",
+    "Module assumes original validated retained OHLCV panel and immutable eventledger; its envelope check is not full source-receipt/timestamp validation. Application must bind exact result/data/receipt/module/method hashes.",
+    "event_summary does not automatically split completed-only events; caller is responsible for both populations and for aggregating per-event positive/pre-MFE metrics.",
+    "OLS endpoint scenarios are sensitivities, not confidence intervals or causal alpha. Absolute eventcash concentration reflects source sizing. Fixed reference-price cost arithmetic changes no funding/admissions.",
+    "No raw path application performed here; final integration/source/test binding and outputs still require review before claims."
+  ],
+  "new_registered_trials": 0,
+  "new_attempted_trials": 0,
+  "repository_modified": false,
+  "frozen_results_modified": false,
+  "candidate_promoted": false,
+  "resolved_findings": [
+    {
+      "id": "ENTRY_OPEN_CONTRACT",
+      "resolution": "Exact minute OPEN equality now enforced before excursion calculation. The101versus100 regression uses internally consistent MFE/MAE envelopes and is rejected. Method explicitly refuses intraminute/legacy eight-hour entry adapters."
+    }
+  ]
+}

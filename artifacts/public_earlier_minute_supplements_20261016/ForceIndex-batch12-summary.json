@@ -1,0 +1,4995 @@
+{
+  "kind": "FORCEINDEX_POST_SCREEN_DESCRIPTIVE_SUPPLEMENT_V1",
+  "timing": "Method defined and independently reviewed after ForceIndex screening; before supplement raw-path application.",
+  "original_screen_execution_git_commit": "4148cc37d39ea569e044913b65b9d4b4b087ca68",
+  "runtime": {
+    "python": "3.13.14",
+    "numpy": "2.2.4",
+    "pandas": "2.2.3",
+    "platform": "win32"
+  },
+  "supplement_execution_git_commit": "2bf73fe8a53e5d6a3041c52735d8c3a3cc64cde4",
+  "input_results_sha256": "be866b58c6bdd51ee990cb89532f926b035c93ed0d13268e8e03110568c021d1",
+  "frozen_evaluator_sha256": "2af8543d6ef01e75c53b275e3087e25b53f10f3b60a9a6ee54dc11a1afa94eb8",
+  "input_config_sha256": "5e6c4f2a864cb8b932b5b058f9ce68fcba8156043c45f8bf36946948b84f106a",
+  "method_bindings": {
+    "draft_evaluator_exact_sha256": "078d55ae6098740cf586d30b0de7b26f32aba0a503a77910675259147267baf1",
+    "draft_test_exact_sha256": "9b3be393de2d44cf917129d567b516d380f7c16059ad25ae4c32f50b41acc61c",
+    "method_exact_sha256": "ac705594c926c9ea238fc7393271223c5c698f4faa14a00f1ebf0d3ef10b7ad1"
+  },
+  "independent_method_review_sha256": "22ac3cc5a1cf0f5b10c955b3c3d43ffd9d4ad2ece2f95cd8b24151ff267be26c",
+  "application_source_sha256": "e086f105347839250f5b3883d0028bd485a270b86f8532301a08955174e812aa",
+  "original_decision": "REJECTED_AS_ADAPTED",
+  "original_failed_gates": [
+    "all_symbols_positive",
+    "excess_descriptive_ci",
+    "net_descriptive_ci",
+    "placebo_tail",
+    "portfolio_drawdown"
+  ],
+  "original_portfolio": {
+    "roi_pct": 63.78249723163718,
+    "drawdown_pct": -62.3754175210834,
+    "funded_btc_roi_lower_pct": -21.131185163422085,
+    "funded_btc_roi_upper_pct": -21.131185163422085,
+    "note": "8h-close hypothetical liquidation-value marks; drawdown is not an intrabar bound. Funded BTC intervals are reference bounds, not executed fills."
+  },
+  "scope": "40:conservative_limit sole joint history; no-protection alternative gap label has identical events. All baseline admissions and completed-only populations reported separately.",
+  "all_admissions": {
+    "n": 585,
+    "completed": 584,
+    "trade_extreme_ordering": "Per-unit net bps; all-admission summary retains cutoff marks with their status. Completed-only summary must be reported separately.",
+    "worst_net_trade": {
+      "symbol": "LINKUSDT",
+      "entry_time": "2025-03-03T00:00:00Z",
+      "status": "COMPLETED",
+      "net_bps": -1732.3332668761216,
+      "gross_bps": -1699.196326061998,
+      "net_cash_profit_or_cutoff_mark": -3821.0096589336567
+    },
+    "best_net_trade": {
+      "symbol": "SOLUSDT",
+      "entry_time": "2023-10-16T08:00:00Z",
+      "status": "COMPLETED",
+      "net_bps": 12521.477640687073,
+      "gross_bps": 12611.744084136722,
+      "net_cash_profit_or_cutoff_mark": 13998.975305093112
+    },
+    "median_mfe_bps_bounds": [
+      264.143094841931,
+      264.143094841931
+    ],
+    "median_mae_bps_bounds": [
+      -234.9517319704708,
+      -234.9517319704708
+    ],
+    "correct_direction_endpoint_fraction": 0.28717948717948716,
+    "weekly_means_active": [
+      {
+        "entry_week": "2023-06-19",
+        "n": 3,
+        "mean_net_bps": 672.45281310228
+      },
+      {
+        "entry_week": "2023-06-26",
+        "n": 4,
+        "mean_net_bps": 66.94476478754318
+      },
+      {
+        "entry_week": "2023-07-03",
+        "n": 1,
+        "mean_net_bps": 2988.5508171474307
+      },
+      {
+        "entry_week": "2023-07-10",
+        "n": 3,
+        "mean_net_bps": 114.68856656685288
+      },
+      {
+        "entry_week": "2023-07-24",
+        "n": 3,
+        "mean_net_bps": -183.54523860498887
+      },
+      {
+        "entry_week": "2023-07-31",
+        "n": 2,
+        "mean_net_bps": -125.11748491636277
+      },
+      {
+        "entry_week": "2023-08-07",
+        "n": 4,
+        "mean_net_bps": 72.49197469674174
+      },
+      {
+        "entry_week": "2023-08-14",
+        "n": 3,
+        "mean_net_bps": -205.8177010116136
+      },
+      {
+        "entry_week": "2023-08-21",
+        "n": 2,
+        "mean_net_bps": -284.312206198159
+      },
+      {
+        "entry_week": "2023-08-28",
+        "n": 6,
+        "mean_net_bps": -372.2813569376604
+      },
+      {
+        "entry_week": "2023-09-04",
+        "n": 4,
+        "mean_net_bps": -304.44683926436875
+      },
+      {
+        "entry_week": "2023-09-11",
+        "n": 3,
+        "mean_net_bps": 955.9972205493114
+      },
+      {
+        "entry_week": "2023-09-25",
+        "n": 2,
+        "mean_net_bps": 635.3961830360066
+      },
+      {
+        "entry_week": "2023-10-02",
+        "n": 1,
+        "mean_net_bps": -161.00348322962031
+      },
+      {
+        "entry_week": "2023-10-09",
+        "n": 1,
+        "mean_net_bps": -107.58374555237316
+      },
+      {
+        "entry_week": "2023-10-16",
+        "n": 6,
+        "mean_net_bps": 3000.5872860421737
+      },
+      {
+        "entry_week": "2023-10-30",
+        "n": 2,
+        "mean_net_bps": 1898.7876462301147
+      },
+      {
+        "entry_week": "2023-11-13",
+        "n": 5,
+        "mean_net_bps": -151.35270983125992
+      },
+      {
+        "entry_week": "2023-11-20",
+        "n": 5,
+        "mean_net_bps": -130.53602839707332
+      },
+      {
+        "entry_week": "2023-11-27",
+        "n": 5,
+        "mean_net_bps": 245.9899993181567
+      },
+      {
+        "entry_week": "2023-12-04",
+        "n": 3,
+        "mean_net_bps": -67.50069085804478
+      },
+      {
+        "entry_week": "2023-12-11",
+        "n": 2,
+        "mean_net_bps": -342.83586326264384
+      },
+      {
+        "entry_week": "2023-12-18",
+        "n": 7,
+        "mean_net_bps": 414.0389505800541
+      },
+      {
+        "entry_week": "2023-12-25",
+        "n": 2,
+        "mean_net_bps": -425.9245808166439
+      },
+      {
+        "entry_week": "2024-01-01",
+        "n": 3,
+        "mean_net_bps": -410.34687948556393
+      },
+      {
+        "entry_week": "2024-01-08",
+        "n": 6,
+        "mean_net_bps": -208.69457644637325
+      },
+      {
+        "entry_week": "2024-01-15",
+        "n": 4,
+        "mean_net_bps": -381.51458854217725
+      },
+      {
+        "entry_week": "2024-01-22",
+        "n": 2,
+        "mean_net_bps": 72.88102543017649
+      },
+      {
+        "entry_week": "2024-01-29",
+        "n": 5,
+        "mean_net_bps": 369.5209505260348
+      },
+      {
+        "entry_week": "2024-02-05",
+        "n": 3,
+        "mean_net_bps": 1289.4799788667187
+      },
+      {
+        "entry_week": "2024-02-12",
+        "n": 2,
+        "mean_net_bps": -135.85822671265737
+      },
+      {
+        "entry_week": "2024-02-19",
+        "n": 1,
+        "mean_net_bps": 1941.2622931810963
+      },
+      {
+        "entry_week": "2024-02-26",
+        "n": 2,
+        "mean_net_bps": 954.137000802765
+      },
+      {
+        "entry_week": "2024-03-04",
+        "n": 3,
+        "mean_net_bps": -73.62425442853073
+      },
+      {
+        "entry_week": "2024-03-11",
+        "n": 6,
+        "mean_net_bps": 237.59585638205053
+      },
+      {
+        "entry_week": "2024-03-18",
+        "n": 4,
+        "mean_net_bps": -268.4458745732179
+      },
+      {
+        "entry_week": "2024-03-25",
+        "n": 9,
+        "mean_net_bps": -164.02303654346005
+      },
+      {
+        "entry_week": "2024-04-01",
+        "n": 2,
+        "mean_net_bps": -295.3171839676355
+      },
+      {
+        "entry_week": "2024-04-08",
+        "n": 4,
+        "mean_net_bps": -137.10933294143356
+      },
+      {
+        "entry_week": "2024-04-15",
+        "n": 2,
+        "mean_net_bps": 212.57758058507767
+      },
+      {
+        "entry_week": "2024-04-22",
+        "n": 3,
+        "mean_net_bps": -221.22010042052463
+      },
+      {
+        "entry_week": "2024-04-29",
+        "n": 3,
+        "mean_net_bps": 319.4774964194624
+      },
+      {
+        "entry_week": "2024-05-06",
+        "n": 3,
+        "mean_net_bps": -238.02831334337728
+      },
+      {
+        "entry_week": "2024-05-13",
+        "n": 5,
+        "mean_net_bps": 980.8608366528017
+      },
+      {
+        "entry_week": "2024-05-20",
+        "n": 2,
+        "mean_net_bps": -12.658844822762148
+      },
+      {
+        "entry_week": "2024-05-27",
+        "n": 5,
+        "mean_net_bps": -112.62483305959981
+      },
+      {
+        "entry_week": "2024-06-03",
+        "n": 5,
+        "mean_net_bps": -121.00439439475608
+      },
+      {
+        "entry_week": "2024-06-10",
+        "n": 1,
+        "mean_net_bps": -76.56726481973686
+      },
+      {
+        "entry_week": "2024-06-17",
+        "n": 1,
+        "mean_net_bps": -190.6986446148806
+      },
+      {
+        "entry_week": "2024-06-24",
+        "n": 5,
+        "mean_net_bps": 28.378982284098733
+      },
+      {
+        "entry_week": "2024-07-01",
+        "n": 2,
+        "mean_net_bps": -379.5839385586081
+      },
+      {
+        "entry_week": "2024-07-08",
+        "n": 5,
+        "mean_net_bps": 710.3589228940046
+      },
+      {
+        "entry_week": "2024-07-15",
+        "n": 1,
+        "mean_net_bps": -376.4917747184493
+      },
+      {
+        "entry_week": "2024-07-22",
+        "n": 2,
+        "mean_net_bps": 90.87658776001152
+      },
+      {
+        "entry_week": "2024-07-29",
+        "n": 4,
+        "mean_net_bps": -275.5376707911117
+      },
+      {
+        "entry_week": "2024-08-05",
+        "n": 1,
+        "mean_net_bps": -776.0730096469581
+      },
+      {
+        "entry_week": "2024-08-12",
+        "n": 6,
+        "mean_net_bps": -253.75974940938886
+      },
+      {
+        "entry_week": "2024-08-19",
+        "n": 7,
+        "mean_net_bps": -25.84010199406222
+      },
+      {
+        "entry_week": "2024-08-26",
+        "n": 1,
+        "mean_net_bps": -442.3401420678863
+      },
+      {
+        "entry_week": "2024-09-02",
+        "n": 2,
+        "mean_net_bps": -296.48227487417967
+      },
+      {
+        "entry_week": "2024-09-09",
+        "n": 7,
+        "mean_net_bps": -240.55294675618703
+      },
+      {
+        "entry_week": "2024-09-16",
+        "n": 6,
+        "mean_net_bps": 364.63820720712556
+      },
+      {
+        "entry_week": "2024-09-23",
+        "n": 1,
+        "mean_net_bps": -9.583160851467376
+      },
+      {
+        "entry_week": "2024-09-30",
+        "n": 2,
+        "mean_net_bps": -495.6837694171851
+      },
+      {
+        "entry_week": "2024-10-07",
+        "n": 6,
+        "mean_net_bps": -199.87782403002606
+      },
+      {
+        "entry_week": "2024-10-14",
+        "n": 4,
+        "mean_net_bps": 258.02248895470365
+      },
+      {
+        "entry_week": "2024-10-21",
+        "n": 1,
+        "mean_net_bps": -451.35202916026685
+      },
+      {
+        "entry_week": "2024-10-28",
+        "n": 4,
+        "mean_net_bps": -131.41677488174878
+      },
+      {
+        "entry_week": "2024-11-04",
+        "n": 3,
+        "mean_net_bps": 1683.3704351064282
+      },
+      {
+        "entry_week": "2024-11-11",
+        "n": 4,
+        "mean_net_bps": 107.38603779963276
+      },
+      {
+        "entry_week": "2024-11-18",
+        "n": 4,
+        "mean_net_bps": 306.37236809216563
+      },
+      {
+        "entry_week": "2024-11-25",
+        "n": 3,
+        "mean_net_bps": 659.1636127714063
+      },
+      {
+        "entry_week": "2024-12-02",
+        "n": 3,
+        "mean_net_bps": -164.834583676046
+      },
+      {
+        "entry_week": "2024-12-09",
+        "n": 4,
+        "mean_net_bps": -224.53977262192836
+      },
+      {
+        "entry_week": "2024-12-16",
+        "n": 3,
+        "mean_net_bps": -181.61316818046558
+      },
+      {
+        "entry_week": "2024-12-23",
+        "n": 3,
+        "mean_net_bps": -450.95019429704945
+      },
+      {
+        "entry_week": "2024-12-30",
+        "n": 5,
+        "mean_net_bps": 65.80096780129142
+      },
+      {
+        "entry_week": "2025-01-13",
+        "n": 5,
+        "mean_net_bps": 485.0557531276074
+      },
+      {
+        "entry_week": "2025-01-20",
+        "n": 5,
+        "mean_net_bps": -291.21632705031004
+      },
+      {
+        "entry_week": "2025-01-27",
+        "n": 3,
+        "mean_net_bps": -314.1231909683473
+      },
+      {
+        "entry_week": "2025-02-03",
+        "n": 1,
+        "mean_net_bps": -199.11735657925368
+      },
+      {
+        "entry_week": "2025-02-10",
+        "n": 7,
+        "mean_net_bps": -237.36781215107206
+      },
+      {
+        "entry_week": "2025-02-17",
+        "n": 4,
+        "mean_net_bps": -263.730491830696
+      },
+      {
+        "entry_week": "2025-02-24",
+        "n": 1,
+        "mean_net_bps": -469.3105722378266
+      },
+      {
+        "entry_week": "2025-03-03",
+        "n": 5,
+        "mean_net_bps": -545.7378698368329
+      },
+      {
+        "entry_week": "2025-03-10",
+        "n": 2,
+        "mean_net_bps": 104.85329989153024
+      },
+      {
+        "entry_week": "2025-03-17",
+        "n": 3,
+        "mean_net_bps": -258.3329110364463
+      },
+      {
+        "entry_week": "2025-03-24",
+        "n": 1,
+        "mean_net_bps": -779.1199430952555
+      },
+      {
+        "entry_week": "2025-03-31",
+        "n": 4,
+        "mean_net_bps": -639.9359684753824
+      },
+      {
+        "entry_week": "2025-04-07",
+        "n": 6,
+        "mean_net_bps": 177.32465115867717
+      },
+      {
+        "entry_week": "2025-04-14",
+        "n": 4,
+        "mean_net_bps": 240.40187189664243
+      },
+      {
+        "entry_week": "2025-04-21",
+        "n": 4,
+        "mean_net_bps": 186.5499305382129
+      },
+      {
+        "entry_week": "2025-04-28",
+        "n": 8,
+        "mean_net_bps": -249.9401410716266
+      },
+      {
+        "entry_week": "2025-05-05",
+        "n": 6,
+        "mean_net_bps": 922.4614925042879
+      },
+      {
+        "entry_week": "2025-05-12",
+        "n": 6,
+        "mean_net_bps": -220.7215100915531
+      },
+      {
+        "entry_week": "2025-05-19",
+        "n": 5,
+        "mean_net_bps": -108.68108688409441
+      },
+      {
+        "entry_week": "2025-05-26",
+        "n": 3,
+        "mean_net_bps": -276.36840031466716
+      },
+      {
+        "entry_week": "2025-06-02",
+        "n": 1,
+        "mean_net_bps": -835.4874118083899
+      },
+      {
+        "entry_week": "2025-06-09",
+        "n": 3,
+        "mean_net_bps": -169.59355901024006
+      },
+      {
+        "entry_week": "2025-06-16",
+        "n": 2,
+        "mean_net_bps": -277.5740118569964
+      },
+      {
+        "entry_week": "2025-06-23",
+        "n": 4,
+        "mean_net_bps": 49.22252182650355
+      },
+      {
+        "entry_week": "2025-06-30",
+        "n": 3,
+        "mean_net_bps": 22.461841810053443
+      },
+      {
+        "entry_week": "2025-07-07",
+        "n": 4,
+        "mean_net_bps": 1432.9826526712523
+      },
+      {
+        "entry_week": "2025-07-14",
+        "n": 2,
+        "mean_net_bps": 1634.0308519603996
+      },
+      {
+        "entry_week": "2025-07-21",
+        "n": 2,
+        "mean_net_bps": -11.448269544005463
+      },
+      {
+        "entry_week": "2025-07-28",
+        "n": 2,
+        "mean_net_bps": -175.6720797764716
+      },
+      {
+        "entry_week": "2025-08-04",
+        "n": 5,
+        "mean_net_bps": 881.8105957106902
+      },
+      {
+        "entry_week": "2025-08-11",
+        "n": 2,
+        "mean_net_bps": 685.9138478344162
+      },
+      {
+        "entry_week": "2025-08-18",
+        "n": 3,
+        "mean_net_bps": -564.0126412684584
+      },
+      {
+        "entry_week": "2025-08-25",
+        "n": 5,
+        "mean_net_bps": -251.44320474791758
+      },
+      {
+        "entry_week": "2025-09-01",
+        "n": 6,
+        "mean_net_bps": -323.4282591855712
+      },
+      {
+        "entry_week": "2025-09-08",
+        "n": 7,
+        "mean_net_bps": 77.14630065911933
+      },
+      {
+        "entry_week": "2025-09-15",
+        "n": 4,
+        "mean_net_bps": -279.7481980779387
+      },
+      {
+        "entry_week": "2025-09-29",
+        "n": 9,
+        "mean_net_bps": -3.3896779269105903
+      },
+      {
+        "entry_week": "2025-10-06",
+        "n": 1,
+        "mean_net_bps": -628.0635135377532
+      },
+      {
+        "entry_week": "2025-10-13",
+        "n": 3,
+        "mean_net_bps": -388.46055001782105
+      },
+      {
+        "entry_week": "2025-10-20",
+        "n": 9,
+        "mean_net_bps": -291.4369010275109
+      },
+      {
+        "entry_week": "2025-10-27",
+        "n": 2,
+        "mean_net_bps": -626.4343312243332
+      },
+      {
+        "entry_week": "2025-11-03",
+        "n": 1,
+        "mean_net_bps": -399.46705701958905
+      },
+      {
+        "entry_week": "2025-11-10",
+        "n": 6,
+        "mean_net_bps": -207.3937103303168
+      },
+      {
+        "entry_week": "2025-11-17",
+        "n": 2,
+        "mean_net_bps": -580.0809300039912
+      },
+      {
+        "entry_week": "2025-11-24",
+        "n": 5,
+        "mean_net_bps": -355.3219499459195
+      },
+      {
+        "entry_week": "2025-12-01",
+        "n": 3,
+        "mean_net_bps": -12.942602801498944
+      },
+      {
+        "entry_week": "2025-12-08",
+        "n": 8,
+        "mean_net_bps": -298.0756489279311
+      },
+      {
+        "entry_week": "2025-12-15",
+        "n": 2,
+        "mean_net_bps": -293.8101414979494
+      },
+      {
+        "entry_week": "2025-12-22",
+        "n": 8,
+        "mean_net_bps": -149.38734397021562
+      },
+      {
+        "entry_week": "2025-12-29",
+        "n": 6,
+        "mean_net_bps": 193.7686794297002
+      },
+      {
+        "entry_week": "2026-01-12",
+        "n": 6,
+        "mean_net_bps": -147.48306761819708
+      },
+      {
+        "entry_week": "2026-01-26",
+        "n": 1,
+        "mean_net_bps": -706.1477767348113
+      },
+      {
+        "entry_week": "2026-02-02",
+        "n": 1,
+        "mean_net_bps": -129.1940052495799
+      },
+      {
+        "entry_week": "2026-02-09",
+        "n": 4,
+        "mean_net_bps": -73.06799460966269
+      },
+      {
+        "entry_week": "2026-02-16",
+        "n": 4,
+        "mean_net_bps": -251.76668385485044
+      },
+      {
+        "entry_week": "2026-02-23",
+        "n": 6,
+        "mean_net_bps": -274.3397957600128
+      },
+      {
+        "entry_week": "2026-03-02",
+        "n": 1,
+        "mean_net_bps": -377.2044935834984
+      },
+      {
+        "entry_week": "2026-03-09",
+        "n": 3,
+        "mean_net_bps": 631.4730873773004
+      },
+      {
+        "entry_week": "2026-03-23",
+        "n": 3,
+        "mean_net_bps": -478.59151020632135
+      },
+      {
+        "entry_week": "2026-03-30",
+        "n": 6,
+        "mean_net_bps": -174.05379864881812
+      },
+      {
+        "entry_week": "2026-04-06",
+        "n": 5,
+        "mean_net_bps": -322.95272280775214
+      },
+      {
+        "entry_week": "2026-04-13",
+        "n": 3,
+        "mean_net_bps": -64.2569014855717
+      },
+      {
+        "entry_week": "2026-04-20",
+        "n": 4,
+        "mean_net_bps": -72.18218558794149
+      },
+      {
+        "entry_week": "2026-04-27",
+        "n": 3,
+        "mean_net_bps": -7.703716323106032
+      },
+      {
+        "entry_week": "2026-05-04",
+        "n": 3,
+        "mean_net_bps": 536.5481138085952
+      },
+      {
+        "entry_week": "2026-05-11",
+        "n": 2,
+        "mean_net_bps": -526.5206070915863
+      },
+      {
+        "entry_week": "2026-05-18",
+        "n": 5,
+        "mean_net_bps": -197.77205382558205
+      },
+      {
+        "entry_week": "2026-05-25",
+        "n": 1,
+        "mean_net_bps": -143.0553668695178
+      },
+      {
+        "entry_week": "2026-06-08",
+        "n": 2,
+        "mean_net_bps": 345.5293953297623
+      },
+      {
+        "entry_week": "2026-06-15",
+        "n": 4,
+        "mean_net_bps": -289.0504313900308
+      },
+      {
+        "entry_week": "2026-06-22",
+        "n": 2,
+        "mean_net_bps": 210.06311202235227
+      },
+      {
+        "entry_week": "2026-06-29",
+        "n": 3,
+        "mean_net_bps": 101.7613809270105
+      },
+      {
+        "entry_week": "2026-07-06",
+        "n": 2,
+        "mean_net_bps": 50.90330138033727
+      },
+      {
+        "entry_week": "2026-07-13",
+        "n": 4,
+        "mean_net_bps": -135.68173617612393
+      },
+      {
+        "entry_week": "2026-07-20",
+        "n": 1,
+        "mean_net_bps": 28.27925571898593
+      },
+      {
+        "entry_week": "2026-07-27",
+        "n": 6,
+        "mean_net_bps": -206.21222618705804
+      },
+      {
+        "entry_week": "2026-08-03",
+        "n": 4,
+        "mean_net_bps": -81.3382795261275
+      },
+      {
+        "entry_week": "2026-08-10",
+        "n": 4,
+        "mean_net_bps": 832.8417441166443
+      },
+      {
+        "entry_week": "2026-08-17",
+        "n": 2,
+        "mean_net_bps": 3085.4301280829222
+      },
+      {
+        "entry_week": "2026-08-24",
+        "n": 2,
+        "mean_net_bps": -259.02889557656016
+      },
+      {
+        "entry_week": "2026-08-31",
+        "n": 6,
+        "mean_net_bps": -130.33260975523396
+      },
+      {
+        "entry_week": "2026-09-07",
+        "n": 8,
+        "mean_net_bps": -192.07077757197322
+      },
+      {
+        "entry_week": "2026-09-14",
+        "n": 5,
+        "mean_net_bps": 563.0378246995766
+      },
+      {
+        "entry_week": "2026-09-21",
+        "n": 1,
+        "mean_net_bps": 823.4876691397841
+      },
+      {
+        "entry_week": "2026-09-28",
+        "n": 1,
+        "mean_net_bps": -53.97913852124403
+      }
+    ],
+    "positive_active_week_fraction": 0.3395061728395062,
+    "positive_calendar_week_fraction_including_zeros": 0.31976744186046513,
+    "calendar_weeks": 172,
+    "zero_event_calendar_weeks": 10,
+    "concentration": {
+      "symbol": {
+        "rows": [
+          {
+            "group": "ETHUSDT",
+            "n": 203,
+            "signed_cash_pnl": -4257.252920192511,
+            "absolute_event_cash_pnl": 65485.91889724657,
+            "share_absolute_event_cash_pnl": 0.12822514095561902
+          },
+          {
+            "group": "LINKUSDT",
+            "n": 186,
+            "signed_cash_pnl": -1252.985764900201,
+            "absolute_event_cash_pnl": 152739.05209777516,
+            "share_absolute_event_cash_pnl": 0.2990717212870678
+          },
+          {
+            "group": "SOLUSDT",
+            "n": 196,
+            "signed_cash_pnl": 24644.987854583713,
+            "absolute_event_cash_pnl": 292485.4747818514,
+            "share_absolute_event_cash_pnl": 0.5727031377573132
+          }
+        ],
+        "hhi_absolute_event_cash_pnl": 0.43387446524377,
+        "note": "Shares allocate absolute individual-event cash PnL, not absolute group net PnL or an equal-risk ranking."
+      },
+      "month": {
+        "rows": [
+          {
+            "group": "2023-06",
+            "n": 6,
+            "signed_cash_pnl": 2421.2302027863325,
+            "absolute_event_cash_pnl": 2939.841636835597,
+            "share_absolute_event_cash_pnl": 0.005756376555728409
+          },
+          {
+            "group": "2023-07",
+            "n": 8,
+            "signed_cash_pnl": 2765.3087382354465,
+            "absolute_event_cash_pnl": 4874.43033556662,
+            "share_absolute_event_cash_pnl": 0.009544410880713089
+          },
+          {
+            "group": "2023-08",
+            "n": 16,
+            "signed_cash_pnl": -3978.0087487283545,
+            "absolute_event_cash_pnl": 5130.420639558045,
+            "share_absolute_event_cash_pnl": 0.010045654405509263
+          },
+          {
+            "group": "2023-09",
+            "n": 10,
+            "signed_cash_pnl": 3191.108564493086,
+            "absolute_event_cash_pnl": 5905.082458800142,
+            "share_absolute_event_cash_pnl": 0.011562486155570125
+          },
+          {
+            "group": "2023-10",
+            "n": 8,
+            "signed_cash_pnl": 20610.89016538389,
+            "absolute_event_cash_pnl": 21847.68539573908,
+            "share_absolute_event_cash_pnl": 0.042779006335978156
+          },
+          {
+            "group": "2023-11",
+            "n": 15,
+            "signed_cash_pnl": 3621.7966562551624,
+            "absolute_event_cash_pnl": 14673.820183492058,
+            "share_absolute_event_cash_pnl": 0.028732171634302108
+          },
+          {
+            "group": "2023-12",
+            "n": 16,
+            "signed_cash_pnl": 6609.221043236893,
+            "absolute_event_cash_pnl": 21699.574341697586,
+            "share_absolute_event_cash_pnl": 0.04248899649720112
+          },
+          {
+            "group": "2024-01",
+            "n": 17,
+            "signed_cash_pnl": -7104.014052645664,
+            "absolute_event_cash_pnl": 19767.88685974755,
+            "share_absolute_event_cash_pnl": 0.03870664291911515
+          },
+          {
+            "group": "2024-02",
+            "n": 11,
+            "signed_cash_pnl": 11937.147217255366,
+            "absolute_event_cash_pnl": 14890.813971266114,
+            "share_absolute_event_cash_pnl": 0.029157057770014438
+          },
+          {
+            "group": "2024-03",
+            "n": 22,
+            "signed_cash_pnl": -1187.9258176118058,
+            "absolute_event_cash_pnl": 21576.443489315105,
+            "share_absolute_event_cash_pnl": 0.04224789930915521
+          },
+          {
+            "group": "2024-04",
+            "n": 11,
+            "signed_cash_pnl": -2002.5954812890106,
+            "absolute_event_cash_pnl": 5817.789448563205,
+            "share_absolute_event_cash_pnl": 0.01139156149374115
+          },
+          {
+            "group": "2024-05",
+            "n": 18,
+            "signed_cash_pnl": 7148.1325495312885,
+            "absolute_event_cash_pnl": 22266.222425133055,
+            "share_absolute_event_cash_pnl": 0.043598525562293
+          },
+          {
+            "group": "2024-06",
+            "n": 12,
+            "signed_cash_pnl": -114.62735046365329,
+            "absolute_event_cash_pnl": 6158.291938833634,
+            "share_absolute_event_cash_pnl": 0.012058284669439015
+          },
+          {
+            "group": "2024-07",
+            "n": 14,
+            "signed_cash_pnl": 5756.08692974196,
+            "absolute_event_cash_pnl": 18087.410413251546,
+            "share_absolute_event_cash_pnl": 0.03541617478713926
+          },
+          {
+            "group": "2024-08",
+            "n": 15,
+            "signed_cash_pnl": -9893.651233914276,
+            "absolute_event_cash_pnl": 14419.503262448861,
+            "share_absolute_event_cash_pnl": 0.02823420468816624
+          },
+          {
+            "group": "2024-09",
+            "n": 16,
+            "signed_cash_pnl": 944.8724310434707,
+            "absolute_event_cash_pnl": 13994.098819673969,
+            "share_absolute_event_cash_pnl": 0.02740123867720521
+          },
+          {
+            "group": "2024-10",
+            "n": 17,
+            "signed_cash_pnl": -4251.129299434915,
+            "absolute_event_cash_pnl": 13667.634168475633,
+            "share_absolute_event_cash_pnl": 0.026762002386077993
+          },
+          {
+            "group": "2024-11",
+            "n": 14,
+            "signed_cash_pnl": 18950.932209133112,
+            "absolute_event_cash_pnl": 28880.415628902374,
+            "share_absolute_event_cash_pnl": 0.05654949074904978
+          },
+          {
+            "group": "2024-12",
+            "n": 15,
+            "signed_cash_pnl": -12928.962094178794,
+            "absolute_event_cash_pnl": 12928.962094178794,
+            "share_absolute_event_cash_pnl": 0.025315640596525794
+          },
+          {
+            "group": "2025-01",
+            "n": 16,
+            "signed_cash_pnl": 7097.539474181906,
+            "absolute_event_cash_pnl": 21535.31135578785,
+            "share_absolute_event_cash_pnl": 0.042167360260331396
+          },
+          {
+            "group": "2025-02",
+            "n": 13,
+            "signed_cash_pnl": -9528.61840849126,
+            "absolute_event_cash_pnl": 9737.437618427386,
+            "share_absolute_event_cash_pnl": 0.019066454776767234
+          },
+          {
+            "group": "2025-03",
+            "n": 11,
+            "signed_cash_pnl": -8607.26796095432,
+            "absolute_event_cash_pnl": 13492.365407399571,
+            "share_absolute_event_cash_pnl": 0.026418816217623087
+          },
+          {
+            "group": "2025-04",
+            "n": 22,
+            "signed_cash_pnl": -1135.515972248154,
+            "absolute_event_cash_pnl": 21734.23199159354,
+            "share_absolute_event_cash_pnl": 0.042556858140099844
+          },
+          {
+            "group": "2025-05",
+            "n": 24,
+            "signed_cash_pnl": 212.23140588912054,
+            "absolute_event_cash_pnl": 19062.876353268915,
+            "share_absolute_event_cash_pnl": 0.03732619238729531
+          },
+          {
+            "group": "2025-06",
+            "n": 10,
+            "signed_cash_pnl": -3006.0801543599855,
+            "absolute_event_cash_pnl": 7082.242187632044,
+            "share_absolute_event_cash_pnl": 0.013867431626268795
+          },
+          {
+            "group": "2025-07",
+            "n": 13,
+            "signed_cash_pnl": 13317.463619546877,
+            "absolute_event_cash_pnl": 17206.49802012774,
+            "share_absolute_event_cash_pnl": 0.03369129839111451
+          },
+          {
+            "group": "2025-08",
+            "n": 15,
+            "signed_cash_pnl": 5217.943082848248,
+            "absolute_event_cash_pnl": 19926.149286101867,
+            "share_absolute_event_cash_pnl": 0.039016529720262476
+          },
+          {
+            "group": "2025-09",
+            "n": 22,
+            "signed_cash_pnl": -5845.281747548786,
+            "absolute_event_cash_pnl": 15331.3879962485,
+            "share_absolute_event_cash_pnl": 0.030019726682752657
+          },
+          {
+            "group": "2025-10",
+            "n": 19,
+            "signed_cash_pnl": -11897.864164471868,
+            "absolute_event_cash_pnl": 20085.11563924399,
+            "share_absolute_event_cash_pnl": 0.03932779484995903
+          },
+          {
+            "group": "2025-11",
+            "n": 14,
+            "signed_cash_pnl": -8269.519875931603,
+            "absolute_event_cash_pnl": 8281.458163206948,
+            "share_absolute_event_cash_pnl": 0.01621556447824268
+          },
+          {
+            "group": "2025-12",
+            "n": 25,
+            "signed_cash_pnl": -6644.113863969158,
+            "absolute_event_cash_pnl": 8119.2675575100975,
+            "share_absolute_event_cash_pnl": 0.0158979860792927
+          },
+          {
+            "group": "2026-01",
+            "n": 9,
+            "signed_cash_pnl": -426.94265778177163,
+            "absolute_event_cash_pnl": 4035.7111147712812,
+            "share_absolute_event_cash_pnl": 0.007902151107624817
+          },
+          {
+            "group": "2026-02",
+            "n": 12,
+            "signed_cash_pnl": -2120.6955304190715,
+            "absolute_event_cash_pnl": 3953.6011021856784,
+            "share_absolute_event_cash_pnl": 0.007741375048970484
+          },
+          {
+            "group": "2026-03",
+            "n": 15,
+            "signed_cash_pnl": -913.3344961141327,
+            "absolute_event_cash_pnl": 6062.937387313655,
+            "share_absolute_event_cash_pnl": 0.011871575052848091
+          },
+          {
+            "group": "2026-04",
+            "n": 13,
+            "signed_cash_pnl": -2134.078817678719,
+            "absolute_event_cash_pnl": 3864.3464968641583,
+            "share_absolute_event_cash_pnl": 0.007566609472782299
+          },
+          {
+            "group": "2026-05",
+            "n": 14,
+            "signed_cash_pnl": -1012.66482009719,
+            "absolute_event_cash_pnl": 7488.429884857484,
+            "share_absolute_event_cash_pnl": 0.014662770160235067
+          },
+          {
+            "group": "2026-06",
+            "n": 9,
+            "signed_cash_pnl": 2972.496102015639,
+            "absolute_event_cash_pnl": 4810.741682755609,
+            "share_absolute_event_cash_pnl": 0.009419704888623717
+          },
+          {
+            "group": "2026-07",
+            "n": 14,
+            "signed_cash_pnl": -1773.110929346967,
+            "absolute_event_cash_pnl": 2555.5059206064893,
+            "share_absolute_event_cash_pnl": 0.005003825439127551
+          },
+          {
+            "group": "2026-08",
+            "n": 14,
+            "signed_cash_pnl": 9191.339649826463,
+            "absolute_event_cash_pnl": 14899.74989310992,
+            "share_absolute_event_cash_pnl": 0.02917455481147442
+          },
+          {
+            "group": "2026-09",
+            "n": 20,
+            "signed_cash_pnl": 1945.0126057661994,
+            "absolute_event_cash_pnl": 11918.753206381396,
+            "share_absolute_event_cash_pnl": 0.02333759433537931
+          }
+        ],
+        "hhi_absolute_event_cash_pnl": 0.03238846737214738,
+        "note": "Shares allocate absolute individual-event cash PnL, not absolute group net PnL or an equal-risk ranking."
+      },
+      "entry_week": {
+        "rows": [
+          {
+            "group": "2023-06-19",
+            "n": 3,
+            "signed_cash_pnl": 2017.3546456777729,
+            "absolute_event_cash_pnl": 2017.3546456777729,
+            "share_absolute_event_cash_pnl": 0.003950094740296628
+          },
+          {
+            "group": "2023-06-26",
+            "n": 4,
+            "signed_cash_pnl": 270.2737111035259,
+            "absolute_event_cash_pnl": 1056.0888371628575,
+            "share_absolute_event_cash_pnl": 0.002067881802488641
+          },
+          {
+            "group": "2023-07-03",
+            "n": 1,
+            "signed_cash_pnl": 3150.352731630402,
+            "absolute_event_cash_pnl": 3150.352731630402,
+            "share_absolute_event_cash_pnl": 0.006168569211147046
+          },
+          {
+            "group": "2023-07-10",
+            "n": 3,
+            "signed_cash_pnl": 425.02957027618123,
+            "absolute_event_cash_pnl": 914.0040402650811,
+            "share_absolute_event_cash_pnl": 0.0017896717167684584
+          },
+          {
+            "group": "2023-07-24",
+            "n": 3,
+            "signed_cash_pnl": -676.471717666103,
+            "absolute_event_cash_pnl": 676.471717666103,
+            "share_absolute_event_cash_pnl": 0.0013245699657407246
+          },
+          {
+            "group": "2023-07-31",
+            "n": 2,
+            "signed_cash_pnl": -244.0494115476286,
+            "absolute_event_cash_pnl": 244.0494115476286,
+            "share_absolute_event_cash_pnl": 0.00047786258057907945
+          },
+          {
+            "group": "2023-08-07",
+            "n": 4,
+            "signed_cash_pnl": 403.4587028954689,
+            "absolute_event_cash_pnl": 748.9531879342217,
+            "share_absolute_event_cash_pnl": 0.0014664927927897438
+          },
+          {
+            "group": "2023-08-14",
+            "n": 3,
+            "signed_cash_pnl": -796.663158721663,
+            "absolute_event_cash_pnl": 796.663158721663,
+            "share_absolute_event_cash_pnl": 0.0015599116198021163
+          },
+          {
+            "group": "2023-08-21",
+            "n": 2,
+            "signed_cash_pnl": -738.7119216842201,
+            "absolute_event_cash_pnl": 738.7119216842201,
+            "share_absolute_event_cash_pnl": 0.001446439812995248
+          },
+          {
+            "group": "2023-08-28",
+            "n": 6,
+            "signed_cash_pnl": -2552.394679712749,
+            "absolute_event_cash_pnl": 2651.6912396278744,
+            "share_absolute_event_cash_pnl": 0.005192161745574292
+          },
+          {
+            "group": "2023-09-04",
+            "n": 4,
+            "signed_cash_pnl": -1305.4521920499449,
+            "absolute_event_cash_pnl": 1305.4521920499449,
+            "share_absolute_event_cash_pnl": 0.002556149385321738
+          },
+          {
+            "group": "2023-09-11",
+            "n": 3,
+            "signed_cash_pnl": 3190.5104008129833,
+            "absolute_event_cash_pnl": 3293.57991102015,
+            "share_absolute_event_cash_pnl": 0.006449016146536974
+          },
+          {
+            "group": "2023-09-25",
+            "n": 2,
+            "signed_cash_pnl": 1256.4020757724845,
+            "absolute_event_cash_pnl": 1256.4020757724845,
+            "share_absolute_event_cash_pnl": 0.0024601064774801974
+          },
+          {
+            "group": "2023-10-02",
+            "n": 1,
+            "signed_cash_pnl": -226.9981941332301,
+            "absolute_event_cash_pnl": 226.9981941332301,
+            "share_absolute_event_cash_pnl": 0.00044447533041531816
+          },
+          {
+            "group": "2023-10-09",
+            "n": 1,
+            "signed_cash_pnl": -121.58638408861198,
+            "absolute_event_cash_pnl": 121.58638408861198,
+            "share_absolute_event_cash_pnl": 0.00023807303158575392
+          },
+          {
+            "group": "2023-10-16",
+            "n": 6,
+            "signed_cash_pnl": 20959.474743605733,
+            "absolute_event_cash_pnl": 21499.10081751724,
+            "share_absolute_event_cash_pnl": 0.04209645797397708
+          },
+          {
+            "group": "2023-10-30",
+            "n": 2,
+            "signed_cash_pnl": 6863.757090363096,
+            "absolute_event_cash_pnl": 6863.757090363096,
+            "share_absolute_event_cash_pnl": 0.01343962542203775
+          },
+          {
+            "group": "2023-11-13",
+            "n": 5,
+            "signed_cash_pnl": -1512.9293465642506,
+            "absolute_event_cash_pnl": 3721.538807661643,
+            "share_absolute_event_cash_pnl": 0.007286983922955759
+          },
+          {
+            "group": "2023-11-20",
+            "n": 5,
+            "signed_cash_pnl": -1671.7736150929936,
+            "absolute_event_cash_pnl": 2291.6331442529086,
+            "share_absolute_event_cash_pnl": 0.0044871475866661865
+          },
+          {
+            "group": "2023-11-27",
+            "n": 5,
+            "signed_cash_pnl": 1884.3968843562006,
+            "absolute_event_cash_pnl": 3738.545498021301,
+            "share_absolute_event_cash_pnl": 0.007320283986622536
+          },
+          {
+            "group": "2023-12-04",
+            "n": 3,
+            "signed_cash_pnl": -535.6041229665441,
+            "absolute_event_cash_pnl": 4250.450941836232,
+            "share_absolute_event_cash_pnl": 0.008322623860513778
+          },
+          {
+            "group": "2023-12-11",
+            "n": 2,
+            "signed_cash_pnl": -1444.9063605439524,
+            "absolute_event_cash_pnl": 1444.9063605439524,
+            "share_absolute_event_cash_pnl": 0.0028292085515228033
+          },
+          {
+            "group": "2023-12-18",
+            "n": 7,
+            "signed_cash_pnl": 8132.691437110158,
+            "absolute_event_cash_pnl": 12577.948415340854,
+            "share_absolute_event_cash_pnl": 0.0246283359178365
+          },
+          {
+            "group": "2023-12-25",
+            "n": 2,
+            "signed_cash_pnl": -1484.6142671696593,
+            "absolute_event_cash_pnl": 1484.6142671696593,
+            "share_absolute_event_cash_pnl": 0.0029069588833479237
+          },
+          {
+            "group": "2024-01-01",
+            "n": 3,
+            "signed_cash_pnl": -3189.2963981421076,
+            "absolute_event_cash_pnl": 3189.2963981421076,
+            "share_absolute_event_cash_pnl": 0.006244823117511671
+          },
+          {
+            "group": "2024-01-08",
+            "n": 6,
+            "signed_cash_pnl": -5182.410075215822,
+            "absolute_event_cash_pnl": 6826.001749199757,
+            "share_absolute_event_cash_pnl": 0.013365698324059743
+          },
+          {
+            "group": "2024-01-15",
+            "n": 4,
+            "signed_cash_pnl": -3155.3533697829816,
+            "absolute_event_cash_pnl": 3155.3533697829816,
+            "share_absolute_event_cash_pnl": 0.006178360744086954
+          },
+          {
+            "group": "2024-01-22",
+            "n": 2,
+            "signed_cash_pnl": 345.69258745441175,
+            "absolute_event_cash_pnl": 1934.3947107995432,
+            "share_absolute_event_cash_pnl": 0.0037876544856195694
+          },
+          {
+            "group": "2024-01-29",
+            "n": 5,
+            "signed_cash_pnl": 3278.747483442727,
+            "absolute_event_cash_pnl": 5461.4463514212675,
+            "share_absolute_event_cash_pnl": 0.010693821511940147
+          },
+          {
+            "group": "2024-02-05",
+            "n": 3,
+            "signed_cash_pnl": 5775.995259147916,
+            "absolute_event_cash_pnl": 5775.995259147916,
+            "share_absolute_event_cash_pnl": 0.011309726101963107
+          },
+          {
+            "group": "2024-02-12",
+            "n": 2,
+            "signed_cash_pnl": -678.2276574072661,
+            "absolute_event_cash_pnl": 678.2276574072661,
+            "share_absolute_event_cash_pnl": 0.001328008195280933
+          },
+          {
+            "group": "2024-02-19",
+            "n": 1,
+            "signed_cash_pnl": 2376.6995713447486,
+            "absolute_event_cash_pnl": 2376.6995713447486,
+            "share_absolute_event_cash_pnl": 0.0046537124724938895
+          },
+          {
+            "group": "2024-02-26",
+            "n": 2,
+            "signed_cash_pnl": 5261.2857637680745,
+            "absolute_event_cash_pnl": 5261.2857637680745,
+            "share_absolute_event_cash_pnl": 0.010301895736173575
+          },
+          {
+            "group": "2024-03-04",
+            "n": 3,
+            "signed_cash_pnl": -510.4613032059171,
+            "absolute_event_cash_pnl": 510.4613032059171,
+            "share_absolute_event_cash_pnl": 0.000999512164724618
+          },
+          {
+            "group": "2024-03-11",
+            "n": 6,
+            "signed_cash_pnl": 6354.453509041208,
+            "absolute_event_cash_pnl": 12107.526352685765,
+            "share_absolute_event_cash_pnl": 0.023707222855542463
+          },
+          {
+            "group": "2024-03-18",
+            "n": 4,
+            "signed_cash_pnl": -3335.5461758966285,
+            "absolute_event_cash_pnl": 4831.33888145671,
+            "share_absolute_event_cash_pnl": 0.00946003537113376
+          },
+          {
+            "group": "2024-03-25",
+            "n": 9,
+            "signed_cash_pnl": -3696.371847550469,
+            "absolute_event_cash_pnl": 4127.116951966715,
+            "share_absolute_event_cash_pnl": 0.00808112891775437
+          },
+          {
+            "group": "2024-04-01",
+            "n": 2,
+            "signed_cash_pnl": -1631.0741149505072,
+            "absolute_event_cash_pnl": 1631.0741149505072,
+            "share_absolute_event_cash_pnl": 0.0031937355666759077
+          },
+          {
+            "group": "2024-04-08",
+            "n": 4,
+            "signed_cash_pnl": -1113.5561081934509,
+            "absolute_event_cash_pnl": 1195.8383899489422,
+            "share_absolute_event_cash_pnl": 0.0023415193478760333
+          },
+          {
+            "group": "2024-04-15",
+            "n": 2,
+            "signed_cash_pnl": 1736.3401887810041,
+            "absolute_event_cash_pnl": 1996.5714967376985,
+            "share_absolute_event_cash_pnl": 0.003909400156678978
+          },
+          {
+            "group": "2024-04-22",
+            "n": 3,
+            "signed_cash_pnl": -994.3054469260567,
+            "absolute_event_cash_pnl": 994.3054469260567,
+            "share_absolute_event_cash_pnl": 0.0019469064225102297
+          },
+          {
+            "group": "2024-04-29",
+            "n": 3,
+            "signed_cash_pnl": 2707.8160545908227,
+            "absolute_event_cash_pnl": 2707.8160545908227,
+            "share_absolute_event_cash_pnl": 0.005302057314437336
+          },
+          {
+            "group": "2024-05-06",
+            "n": 3,
+            "signed_cash_pnl": -1330.430409522837,
+            "absolute_event_cash_pnl": 1330.430409522837,
+            "share_absolute_event_cash_pnl": 0.0026050581509039577
+          },
+          {
+            "group": "2024-05-13",
+            "n": 5,
+            "signed_cash_pnl": 9265.021974114887,
+            "absolute_event_cash_pnl": 12213.170645555527,
+            "share_absolute_event_cash_pnl": 0.02391408036892083
+          },
+          {
+            "group": "2024-05-20",
+            "n": 2,
+            "signed_cash_pnl": -1407.3189312555032,
+            "absolute_event_cash_pnl": 3767.319129240117,
+            "share_absolute_event_cash_pnl": 0.007376624387444075
+          },
+          {
+            "group": "2024-05-27",
+            "n": 5,
+            "signed_cash_pnl": -2086.95613839608,
+            "absolute_event_cash_pnl": 2247.486186223753,
+            "share_absolute_event_cash_pnl": 0.004400705340586805
+          },
+          {
+            "group": "2024-06-03",
+            "n": 5,
+            "signed_cash_pnl": -1647.7366859959359,
+            "absolute_event_cash_pnl": 1647.7366859959359,
+            "share_absolute_event_cash_pnl": 0.003226361825220673
+          },
+          {
+            "group": "2024-06-10",
+            "n": 1,
+            "signed_cash_pnl": -108.15461014970609,
+            "absolute_event_cash_pnl": 108.15461014970609,
+            "share_absolute_event_cash_pnl": 0.00021177285689777788
+          },
+          {
+            "group": "2024-06-17",
+            "n": 1,
+            "signed_cash_pnl": -267.30768214036783,
+            "absolute_event_cash_pnl": 267.30768214036783,
+            "share_absolute_event_cash_pnl": 0.0005234035926830313
+          },
+          {
+            "group": "2024-06-24",
+            "n": 5,
+            "signed_cash_pnl": 1908.5716278223565,
+            "absolute_event_cash_pnl": 4135.092960547625,
+            "share_absolute_event_cash_pnl": 0.008096746394637535
+          },
+          {
+            "group": "2024-07-01",
+            "n": 2,
+            "signed_cash_pnl": -2030.3882115503739,
+            "absolute_event_cash_pnl": 2030.3882115503739,
+            "share_absolute_event_cash_pnl": 0.003975615201020267
+          },
+          {
+            "group": "2024-07-08",
+            "n": 5,
+            "signed_cash_pnl": 10289.278324233159,
+            "absolute_event_cash_pnl": 11681.477564349701,
+            "share_absolute_event_cash_pnl": 0.022872995179451024
+          },
+          {
+            "group": "2024-07-15",
+            "n": 1,
+            "signed_cash_pnl": -794.5178133633927,
+            "absolute_event_cash_pnl": 794.5178133633927,
+            "share_absolute_event_cash_pnl": 0.0015557109119920247
+          },
+          {
+            "group": "2024-07-22",
+            "n": 2,
+            "signed_cash_pnl": 900.1819073540576,
+            "absolute_event_cash_pnl": 972.559547056587,
+            "share_absolute_event_cash_pnl": 0.001904326718003911
+          },
+          {
+            "group": "2024-07-29",
+            "n": 4,
+            "signed_cash_pnl": -2608.4672769314884,
+            "absolute_event_cash_pnl": 2608.4672769314884,
+            "share_absolute_event_cash_pnl": 0.005107526776672031
+          },
+          {
+            "group": "2024-08-05",
+            "n": 1,
+            "signed_cash_pnl": -3637.4777426612713,
+            "absolute_event_cash_pnl": 3637.4777426612713,
+            "share_absolute_event_cash_pnl": 0.007122387593087273
+          },
+          {
+            "group": "2024-08-12",
+            "n": 6,
+            "signed_cash_pnl": -3969.02432970231,
+            "absolute_event_cash_pnl": 3969.02432970231,
+            "share_absolute_event_cash_pnl": 0.007771574602639628
+          },
+          {
+            "group": "2024-08-19",
+            "n": 7,
+            "signed_cash_pnl": -1726.3983574960234,
+            "absolute_event_cash_pnl": 6252.250386030609,
+            "share_absolute_event_cash_pnl": 0.012242260634634025
+          },
+          {
+            "group": "2024-08-26",
+            "n": 1,
+            "signed_cash_pnl": -560.7508040546716,
+            "absolute_event_cash_pnl": 560.7508040546716,
+            "share_absolute_event_cash_pnl": 0.0010979818578053147
+          },
+          {
+            "group": "2024-09-02",
+            "n": 2,
+            "signed_cash_pnl": -1446.358645947665,
+            "absolute_event_cash_pnl": 1446.358645947665,
+            "share_absolute_event_cash_pnl": 0.0028320522086590963
+          },
+          {
+            "group": "2024-09-09",
+            "n": 7,
+            "signed_cash_pnl": -3125.0501396047407,
+            "absolute_event_cash_pnl": 3125.0501396047407,
+            "share_absolute_event_cash_pnl": 0.00611902530180489
+          },
+          {
+            "group": "2024-09-16",
+            "n": 6,
+            "signed_cash_pnl": 5526.982810020204,
+            "absolute_event_cash_pnl": 9411.988440697234,
+            "share_absolute_event_cash_pnl": 0.018429206840247958
+          },
+          {
+            "group": "2024-09-23",
+            "n": 1,
+            "signed_cash_pnl": -10.701593424327559,
+            "absolute_event_cash_pnl": 10.701593424327559,
+            "share_absolute_event_cash_pnl": 2.0954326493261178e-05
+          },
+          {
+            "group": "2024-09-30",
+            "n": 2,
+            "signed_cash_pnl": -2540.1492588984765,
+            "absolute_event_cash_pnl": 2540.1492588984765,
+            "share_absolute_event_cash_pnl": 0.004973756225084645
+          },
+          {
+            "group": "2024-10-07",
+            "n": 6,
+            "signed_cash_pnl": -1715.7164692035205,
+            "absolute_event_cash_pnl": 4517.521487589657,
+            "share_absolute_event_cash_pnl": 0.008845563126710239
+          },
+          {
+            "group": "2024-10-14",
+            "n": 4,
+            "signed_cash_pnl": 2724.9589199062993,
+            "absolute_event_cash_pnl": 3158.526730420611,
+            "share_absolute_event_cash_pnl": 0.006184574364082139
+          },
+          {
+            "group": "2024-10-21",
+            "n": 1,
+            "signed_cash_pnl": -817.2374697466527,
+            "absolute_event_cash_pnl": 817.2374697466527,
+            "share_absolute_event_cash_pnl": 0.0016001972869450565
+          },
+          {
+            "group": "2024-10-28",
+            "n": 4,
+            "signed_cash_pnl": -1902.9850214925652,
+            "absolute_event_cash_pnl": 2634.199221820236,
+            "share_absolute_event_cash_pnl": 0.005157911383255913
+          },
+          {
+            "group": "2024-11-04",
+            "n": 3,
+            "signed_cash_pnl": 10513.51585539017,
+            "absolute_event_cash_pnl": 10513.51585539017,
+            "share_absolute_event_cash_pnl": 0.020586059953008037
+          },
+          {
+            "group": "2024-11-11",
+            "n": 4,
+            "signed_cash_pnl": 2877.6863560897136,
+            "absolute_event_cash_pnl": 6808.926181125214,
+            "share_absolute_event_cash_pnl": 0.013332263393923217
+          },
+          {
+            "group": "2024-11-18",
+            "n": 4,
+            "signed_cash_pnl": 2187.8569004954543,
+            "absolute_event_cash_pnl": 4697.605540141345,
+            "share_absolute_event_cash_pnl": 0.009198177908806091
+          },
+          {
+            "group": "2024-11-25",
+            "n": 3,
+            "signed_cash_pnl": 3371.873097157775,
+            "absolute_event_cash_pnl": 6860.368052245645,
+            "share_absolute_event_cash_pnl": 0.013432989493312434
+          },
+          {
+            "group": "2024-12-02",
+            "n": 3,
+            "signed_cash_pnl": -2133.6368475748714,
+            "absolute_event_cash_pnl": 2133.6368475748714,
+            "share_absolute_event_cash_pnl": 0.004177781882509305
+          },
+          {
+            "group": "2024-12-09",
+            "n": 4,
+            "signed_cash_pnl": -2343.324329047359,
+            "absolute_event_cash_pnl": 2343.324329047359,
+            "share_absolute_event_cash_pnl": 0.004588361856360279
+          },
+          {
+            "group": "2024-12-16",
+            "n": 3,
+            "signed_cash_pnl": -1702.3387006377436,
+            "absolute_event_cash_pnl": 1702.3387006377436,
+            "share_absolute_event_cash_pnl": 0.0033332756647423013
+          },
+          {
+            "group": "2024-12-23",
+            "n": 3,
+            "signed_cash_pnl": -4382.8441633399825,
+            "absolute_event_cash_pnl": 4382.8441633399825,
+            "share_absolute_event_cash_pnl": 0.008581857292292052
+          },
+          {
+            "group": "2024-12-30",
+            "n": 5,
+            "signed_cash_pnl": 839.8742490904847,
+            "absolute_event_cash_pnl": 5573.51035624816,
+            "share_absolute_event_cash_pnl": 0.010913249185201118
+          },
+          {
+            "group": "2025-01-13",
+            "n": 5,
+            "signed_cash_pnl": 10106.87681413676,
+            "absolute_event_cash_pnl": 12112.589410494353,
+            "share_absolute_event_cash_pnl": 0.023717136609706792
+          },
+          {
+            "group": "2025-01-20",
+            "n": 5,
+            "signed_cash_pnl": -4182.271648882103,
+            "absolute_event_cash_pnl": 4182.271648882103,
+            "share_absolute_event_cash_pnl": 0.00818912494049381
+          },
+          {
+            "group": "2025-01-27",
+            "n": 3,
+            "signed_cash_pnl": -2033.7579937420721,
+            "absolute_event_cash_pnl": 2033.7579937420721,
+            "share_absolute_event_cash_pnl": 0.0039822134255515325
+          },
+          {
+            "group": "2025-02-03",
+            "n": 1,
+            "signed_cash_pnl": -873.3594164753987,
+            "absolute_event_cash_pnl": 873.3594164753987,
+            "share_absolute_event_cash_pnl": 0.0017100872396429603
+          },
+          {
+            "group": "2025-02-10",
+            "n": 7,
+            "signed_cash_pnl": -4330.806542560614,
+            "absolute_event_cash_pnl": 4330.806542560614,
+            "share_absolute_event_cash_pnl": 0.008479964681303428
+          },
+          {
+            "group": "2025-02-17",
+            "n": 4,
+            "signed_cash_pnl": -2404.27058181502,
+            "absolute_event_cash_pnl": 2613.089791751146,
+            "share_absolute_event_cash_pnl": 0.005116577922693973
+          },
+          {
+            "group": "2025-02-24",
+            "n": 1,
+            "signed_cash_pnl": -1920.1818676402274,
+            "absolute_event_cash_pnl": 1920.1818676402274,
+            "share_absolute_event_cash_pnl": 0.0037598249331268732
+          },
+          {
+            "group": "2025-03-03",
+            "n": 5,
+            "signed_cash_pnl": -4438.140317099434,
+            "absolute_event_cash_pnl": 5631.259412345709,
+            "share_absolute_event_cash_pnl": 0.011026325110268019
+          },
+          {
+            "group": "2025-03-10",
+            "n": 2,
+            "signed_cash_pnl": -406.34488542977897,
+            "absolute_event_cash_pnl": 2674.0092429439032,
+            "share_absolute_event_cash_pnl": 0.00523586166105591
+          },
+          {
+            "group": "2025-03-17",
+            "n": 3,
+            "signed_cash_pnl": -2213.515013833286,
+            "absolute_event_cash_pnl": 3637.8290075181394,
+            "share_absolute_event_cash_pnl": 0.007123075389586782
+          },
+          {
+            "group": "2025-03-24",
+            "n": 1,
+            "signed_cash_pnl": -1549.2677445918202,
+            "absolute_event_cash_pnl": 1549.2677445918202,
+            "share_absolute_event_cash_pnl": 0.003033554056712378
+          },
+          {
+            "group": "2025-03-31",
+            "n": 4,
+            "signed_cash_pnl": -6350.781087763418,
+            "absolute_event_cash_pnl": 6350.781087763418,
+            "share_absolute_event_cash_pnl": 0.012435189333366492
+          },
+          {
+            "group": "2025-04-07",
+            "n": 6,
+            "signed_cash_pnl": 3834.8006094396756,
+            "absolute_event_cash_pnl": 7131.046685425841,
+            "share_absolute_event_cash_pnl": 0.013962993599197619
+          },
+          {
+            "group": "2025-04-14",
+            "n": 4,
+            "signed_cash_pnl": 2161.8307942720658,
+            "absolute_event_cash_pnl": 3263.1209840116626,
+            "share_absolute_event_cash_pnl": 0.00638937584103636
+          },
+          {
+            "group": "2025-04-21",
+            "n": 4,
+            "signed_cash_pnl": 1368.6220577809827,
+            "absolute_event_cash_pnl": 2839.294888415159,
+            "share_absolute_event_cash_pnl": 0.005559500323311643
+          },
+          {
+            "group": "2025-04-28",
+            "n": 8,
+            "signed_cash_pnl": -4258.585308257413,
+            "absolute_event_cash_pnl": 4258.585308257413,
+            "share_absolute_event_cash_pnl": 0.008338551411023945
+          },
+          {
+            "group": "2025-05-05",
+            "n": 6,
+            "signed_cash_pnl": 7501.943425339697,
+            "absolute_event_cash_pnl": 10437.20510321853,
+            "share_absolute_event_cash_pnl": 0.02043663917494747
+          },
+          {
+            "group": "2025-05-12",
+            "n": 6,
+            "signed_cash_pnl": -2933.5020587909953,
+            "absolute_event_cash_pnl": 3722.5069719207213,
+            "share_absolute_event_cash_pnl": 0.007288879643450775
+          },
+          {
+            "group": "2025-05-19",
+            "n": 5,
+            "signed_cash_pnl": -571.2620751636149,
+            "absolute_event_cash_pnl": 1118.2163926336975,
+            "share_absolute_event_cash_pnl": 0.002189531077502654
+          },
+          {
+            "group": "2025-05-26",
+            "n": 3,
+            "signed_cash_pnl": -1676.350923216012,
+            "absolute_event_cash_pnl": 1676.350923216012,
+            "share_absolute_event_cash_pnl": 0.0032823901235581963
+          },
+          {
+            "group": "2025-06-02",
+            "n": 1,
+            "signed_cash_pnl": -663.5132236322551,
+            "absolute_event_cash_pnl": 663.5132236322551,
+            "share_absolute_event_cash_pnl": 0.0012991964999324505
+          },
+          {
+            "group": "2025-06-09",
+            "n": 3,
+            "signed_cash_pnl": -1079.450625383151,
+            "absolute_event_cash_pnl": 1079.450625383151,
+            "share_absolute_event_cash_pnl": 0.002113625507974743
+          },
+          {
+            "group": "2025-06-16",
+            "n": 2,
+            "signed_cash_pnl": -1865.4067924168057,
+            "absolute_event_cash_pnl": 1865.4067924168057,
+            "share_absolute_event_cash_pnl": 0.003652572231177337
+          },
+          {
+            "group": "2025-06-23",
+            "n": 4,
+            "signed_cash_pnl": 602.2904870722263,
+            "absolute_event_cash_pnl": 3473.871546199832,
+            "share_absolute_event_cash_pnl": 0.006802037387184263
+          },
+          {
+            "group": "2025-06-30",
+            "n": 3,
+            "signed_cash_pnl": -533.9276355443557,
+            "absolute_event_cash_pnl": 982.2103705849516,
+            "share_absolute_event_cash_pnl": 0.0019232235774830314
+          },
+          {
+            "group": "2025-07-07",
+            "n": 4,
+            "signed_cash_pnl": 6268.390829102736,
+            "absolute_event_cash_pnl": 7097.599062387215,
+            "share_absolute_event_cash_pnl": 0.01389750125747011
+          },
+          {
+            "group": "2025-07-14",
+            "n": 2,
+            "signed_cash_pnl": 8342.670131837876,
+            "absolute_event_cash_pnl": 8342.670131837876,
+            "share_absolute_event_cash_pnl": 0.016335420982328503
+          },
+          {
+            "group": "2025-07-21",
+            "n": 2,
+            "signed_cash_pnl": -66.94693061532827,
+            "absolute_event_cash_pnl": 91.29568008364448,
+            "share_absolute_event_cash_pnl": 0.0001787621162609451
+          },
+          {
+            "group": "2025-07-28",
+            "n": 2,
+            "signed_cash_pnl": -692.7227752340514,
+            "absolute_event_cash_pnl": 692.7227752340514,
+            "share_absolute_event_cash_pnl": 0.0013563904575719186
+          },
+          {
+            "group": "2025-08-04",
+            "n": 5,
+            "signed_cash_pnl": 7068.034593898376,
+            "absolute_event_cash_pnl": 9129.735566830403,
+            "share_absolute_event_cash_pnl": 0.017876539715068095
+          },
+          {
+            "group": "2025-08-11",
+            "n": 2,
+            "signed_cash_pnl": 4473.161104110668,
+            "absolute_event_cash_pnl": 4473.161104110668,
+            "share_absolute_event_cash_pnl": 0.008758702981503086
+          },
+          {
+            "group": "2025-08-18",
+            "n": 3,
+            "signed_cash_pnl": -3600.8102293901984,
+            "absolute_event_cash_pnl": 3600.8102293901984,
+            "share_absolute_event_cash_pnl": 0.007050590523780622
+          },
+          {
+            "group": "2025-08-25",
+            "n": 5,
+            "signed_cash_pnl": -2722.442385770598,
+            "absolute_event_cash_pnl": 2722.442385770598,
+            "share_absolute_event_cash_pnl": 0.005330696499910675
+          },
+          {
+            "group": "2025-09-01",
+            "n": 6,
+            "signed_cash_pnl": -4238.104980936456,
+            "absolute_event_cash_pnl": 4238.104980936456,
+            "share_absolute_event_cash_pnl": 0.008298449769300515
+          },
+          {
+            "group": "2025-09-08",
+            "n": 7,
+            "signed_cash_pnl": 3161.054160710467,
+            "absolute_event_cash_pnl": 6325.0520879892465,
+            "share_absolute_event_cash_pnl": 0.012384810493483877
+          },
+          {
+            "group": "2025-09-15",
+            "n": 4,
+            "signed_cash_pnl": -3116.5234115255053,
+            "absolute_event_cash_pnl": 3116.5234115255053,
+            "share_absolute_event_cash_pnl": 0.006102329484929116
+          },
+          {
+            "group": "2025-09-29",
+            "n": 9,
+            "signed_cash_pnl": 29.312490499648206,
+            "absolute_event_cash_pnl": 6724.807268571886,
+            "share_absolute_event_cash_pnl": 0.013167553795267234
+          },
+          {
+            "group": "2025-10-06",
+            "n": 1,
+            "signed_cash_pnl": -1322.327865020624,
+            "absolute_event_cash_pnl": 1322.327865020624,
+            "share_absolute_event_cash_pnl": 0.0025891929095148026
+          },
+          {
+            "group": "2025-10-13",
+            "n": 3,
+            "signed_cash_pnl": -3938.767184066643,
+            "absolute_event_cash_pnl": 3938.767184066643,
+            "share_absolute_event_cash_pnl": 0.007712329396504005
+          },
+          {
+            "group": "2025-10-20",
+            "n": 9,
+            "signed_cash_pnl": -6091.338437142496,
+            "absolute_event_cash_pnl": 7524.470152843086,
+            "share_absolute_event_cash_pnl": 0.01473333904772038
+          },
+          {
+            "group": "2025-10-27",
+            "n": 2,
+            "signed_cash_pnl": -2226.450684539046,
+            "absolute_event_cash_pnl": 2226.450684539046,
+            "share_absolute_event_cash_pnl": 0.00435951663599176
+          },
+          {
+            "group": "2025-11-03",
+            "n": 1,
+            "signed_cash_pnl": -641.4941196281037,
+            "absolute_event_cash_pnl": 641.4941196281037,
+            "share_absolute_event_cash_pnl": 0.0012560818462451606
+          },
+          {
+            "group": "2025-11-10",
+            "n": 6,
+            "signed_cash_pnl": -1504.048318104665,
+            "absolute_event_cash_pnl": 1515.98660538001,
+            "share_absolute_event_cash_pnl": 0.002968387699754113
+          },
+          {
+            "group": "2025-11-17",
+            "n": 2,
+            "signed_cash_pnl": -3092.9292650389034,
+            "absolute_event_cash_pnl": 3092.9292650389034,
+            "share_absolute_event_cash_pnl": 0.006056130808787469
+          },
+          {
+            "group": "2025-11-24",
+            "n": 5,
+            "signed_cash_pnl": -3031.048173159931,
+            "absolute_event_cash_pnl": 3031.048173159931,
+            "share_absolute_event_cash_pnl": 0.005934964123455938
+          },
+          {
+            "group": "2025-12-01",
+            "n": 3,
+            "signed_cash_pnl": -452.3629655502036,
+            "absolute_event_cash_pnl": 967.5039839007227,
+            "share_absolute_event_cash_pnl": 0.0018944276387944108
+          },
+          {
+            "group": "2025-12-08",
+            "n": 8,
+            "signed_cash_pnl": -3807.534655866297,
+            "absolute_event_cash_pnl": 3965.4850205632615,
+            "share_absolute_event_cash_pnl": 0.007764644434736631
+          },
+          {
+            "group": "2025-12-15",
+            "n": 2,
+            "signed_cash_pnl": -427.4843621930695,
+            "absolute_event_cash_pnl": 427.4843621930695,
+            "share_absolute_event_cash_pnl": 0.0008370386110720659
+          },
+          {
+            "group": "2025-12-22",
+            "n": 8,
+            "signed_cash_pnl": -1929.8851835792282,
+            "absolute_event_cash_pnl": 1929.8851835792282,
+            "share_absolute_event_cash_pnl": 0.0037788245757212993
+          },
+          {
+            "group": "2025-12-29",
+            "n": 6,
+            "signed_cash_pnl": 1655.6512376818037,
+            "absolute_event_cash_pnl": 2511.4069417359788,
+            "share_absolute_event_cash_pnl": 0.004917477138960263
+          },
+          {
+            "group": "2026-01-12",
+            "n": 6,
+            "signed_cash_pnl": -1610.2658764911266,
+            "absolute_event_cash_pnl": 1854.0384645563092,
+            "share_absolute_event_cash_pnl": 0.0036303124008674175
+          },
+          {
+            "group": "2026-01-26",
+            "n": 1,
+            "signed_cash_pnl": -499.1747157528085,
+            "absolute_event_cash_pnl": 499.1747157528085,
+            "share_absolute_event_cash_pnl": 0.0009774123867654265
+          },
+          {
+            "group": "2026-02-02",
+            "n": 1,
+            "signed_cash_pnl": -84.87759192432024,
+            "absolute_event_cash_pnl": 84.87759192432024,
+            "share_absolute_event_cash_pnl": 0.0001661951358664844
+          },
+          {
+            "group": "2026-02-09",
+            "n": 4,
+            "signed_cash_pnl": 438.3225722057666,
+            "absolute_event_cash_pnl": 1280.4071517295527,
+            "share_absolute_event_cash_pnl": 0.0025071097768165807
+          },
+          {
+            "group": "2026-02-16",
+            "n": 4,
+            "signed_cash_pnl": -1294.9699406001507,
+            "absolute_event_cash_pnl": 1294.9699406001507,
+            "share_absolute_event_cash_pnl": 0.0025356245428469594
+          },
+          {
+            "group": "2026-02-23",
+            "n": 6,
+            "signed_cash_pnl": -1383.0502586609941,
+            "absolute_event_cash_pnl": 1497.2261064922823,
+            "share_absolute_event_cash_pnl": 0.0029316535795831616
+          },
+          {
+            "group": "2026-03-02",
+            "n": 1,
+            "signed_cash_pnl": -216.8026036142247,
+            "absolute_event_cash_pnl": 216.8026036142247,
+            "share_absolute_event_cash_pnl": 0.00042451178629102234
+          },
+          {
+            "group": "2026-03-09",
+            "n": 3,
+            "signed_cash_pnl": 2574.801445599761,
+            "absolute_event_cash_pnl": 2574.801445599761,
+            "share_absolute_event_cash_pnl": 0.005041607170738542
+          },
+          {
+            "group": "2026-03-23",
+            "n": 3,
+            "signed_cash_pnl": -2105.4198140543,
+            "absolute_event_cash_pnl": 2105.4198140543,
+            "share_absolute_event_cash_pnl": 0.0041225313315289966
+          },
+          {
+            "group": "2026-03-30",
+            "n": 6,
+            "signed_cash_pnl": -1201.4860921719926,
+            "absolute_event_cash_pnl": 1201.4860921719926,
+            "share_absolute_event_cash_pnl": 0.002352577868941643
+          },
+          {
+            "group": "2026-04-06",
+            "n": 5,
+            "signed_cash_pnl": -2152.933738614992,
+            "absolute_event_cash_pnl": 2223.551173362123,
+            "share_absolute_event_cash_pnl": 0.0043538392287624786
+          },
+          {
+            "group": "2026-04-13",
+            "n": 3,
+            "signed_cash_pnl": 451.45580846939504,
+            "absolute_event_cash_pnl": 1208.194435968913,
+            "share_absolute_event_cash_pnl": 0.0023657131863262636
+          },
+          {
+            "group": "2026-04-20",
+            "n": 4,
+            "signed_cash_pnl": -193.14863084587188,
+            "absolute_event_cash_pnl": 193.14863084587188,
+            "share_absolute_event_cash_pnl": 0.00037819596689874163
+          },
+          {
+            "group": "2026-04-27",
+            "n": 3,
+            "signed_cash_pnl": -21.760265205128356,
+            "absolute_event_cash_pnl": 177.72063889344665,
+            "share_absolute_event_cash_pnl": 0.0003479870841942636
+          },
+          {
+            "group": "2026-05-04",
+            "n": 3,
+            "signed_cash_pnl": 3013.111941460163,
+            "absolute_event_cash_pnl": 3306.692749611813,
+            "share_absolute_event_cash_pnl": 0.006474691827737729
+          },
+          {
+            "group": "2026-05-11",
+            "n": 2,
+            "signed_cash_pnl": -1874.7328727872825,
+            "absolute_event_cash_pnl": 1874.7328727872825,
+            "share_absolute_event_cash_pnl": 0.003670833225146807
+          },
+          {
+            "group": "2026-05-18",
+            "n": 5,
+            "signed_cash_pnl": -1769.640233074433,
+            "absolute_event_cash_pnl": 1769.640233074433,
+            "share_absolute_event_cash_pnl": 0.003465055879917483
+          },
+          {
+            "group": "2026-05-25",
+            "n": 1,
+            "signed_cash_pnl": -359.6433904905091,
+            "absolute_event_cash_pnl": 359.6433904905091,
+            "share_absolute_event_cash_pnl": 0.0007042021432387846
+          },
+          {
+            "group": "2026-06-08",
+            "n": 2,
+            "signed_cash_pnl": 1693.1668210460036,
+            "absolute_event_cash_pnl": 1693.1668210460036,
+            "share_absolute_event_cash_pnl": 0.0033153166046377283
+          },
+          {
+            "group": "2026-06-15",
+            "n": 4,
+            "signed_cash_pnl": -621.8098255097901,
+            "absolute_event_cash_pnl": 668.2235416909979,
+            "share_absolute_event_cash_pnl": 0.0013084195696732262
+          },
+          {
+            "group": "2026-06-22",
+            "n": 2,
+            "signed_cash_pnl": 1979.3692608335327,
+            "absolute_event_cash_pnl": 2371.1211656644996,
+            "share_absolute_event_cash_pnl": 0.004642789637986827
+          },
+          {
+            "group": "2026-06-29",
+            "n": 3,
+            "signed_cash_pnl": 111.66611683672494,
+            "absolute_event_cash_pnl": 459.5096153664918,
+            "share_absolute_event_cash_pnl": 0.0008997458719832986
+          },
+          {
+            "group": "2026-07-06",
+            "n": 2,
+            "signed_cash_pnl": 58.997347082222916,
+            "absolute_event_cash_pnl": 58.997347082222916,
+            "share_absolute_event_cash_pnl": 0.00011552014956827135
+          },
+          {
+            "group": "2026-07-13",
+            "n": 4,
+            "signed_cash_pnl": -1185.7138735831024,
+            "absolute_event_cash_pnl": 1250.9529389637107,
+            "share_absolute_event_cash_pnl": 0.002449436758750468
+          },
+          {
+            "group": "2026-07-20",
+            "n": 1,
+            "signed_cash_pnl": 13.99274975562595,
+            "absolute_event_cash_pnl": 13.99274975562595,
+            "share_absolute_event_cash_pnl": 2.739859713333397e-05
+          },
+          {
+            "group": "2026-07-27",
+            "n": 6,
+            "signed_cash_pnl": -1069.757538552025,
+            "absolute_event_cash_pnl": 1069.757538552025,
+            "share_absolute_event_cash_pnl": 0.0020946458945533234
+          },
+          {
+            "group": "2026-08-03",
+            "n": 4,
+            "signed_cash_pnl": -852.2108858375879,
+            "absolute_event_cash_pnl": 852.2108858375879,
+            "share_absolute_event_cash_pnl": 0.0016686772179512353
+          },
+          {
+            "group": "2026-08-10",
+            "n": 4,
+            "signed_cash_pnl": 1193.1048635661018,
+            "absolute_event_cash_pnl": 3189.5421061967536,
+            "share_absolute_event_cash_pnl": 0.0062453042278094485
+          },
+          {
+            "group": "2026-08-17",
+            "n": 2,
+            "signed_cash_pnl": 9854.221286586764,
+            "absolute_event_cash_pnl": 9854.221286586764,
+            "share_absolute_event_cash_pnl": 0.019295123818344664
+          },
+          {
+            "group": "2026-08-24",
+            "n": 2,
+            "signed_cash_pnl": -377.54898054437456,
+            "absolute_event_cash_pnl": 377.54898054437456,
+            "share_absolute_event_cash_pnl": 0.000739262303456632
+          },
+          {
+            "group": "2026-08-31",
+            "n": 6,
+            "signed_cash_pnl": -1896.2889946568055,
+            "absolute_event_cash_pnl": 2176.5078271352368,
+            "share_absolute_event_cash_pnl": 0.004261725690424085
+          },
+          {
+            "group": "2026-09-07",
+            "n": 8,
+            "signed_cash_pnl": -2392.458001552498,
+            "absolute_event_cash_pnl": 2392.458001552498,
+            "share_absolute_event_cash_pnl": 0.0046845683720315974
+          },
+          {
+            "group": "2026-09-14",
+            "n": 5,
+            "signed_cash_pnl": 5192.718040101019,
+            "absolute_event_cash_pnl": 7059.916905701335,
+            "share_absolute_event_cash_pnl": 0.01382371745884708
+          },
+          {
+            "group": "2026-09-21",
+            "n": 1,
+            "signed_cash_pnl": 665.4560169334054,
+            "absolute_event_cash_pnl": 665.4560169334054,
+            "share_absolute_event_cash_pnl": 0.0013030005993340107
+          },
+          {
+            "group": "2026-09-28",
+            "n": 1,
+            "signed_cash_pnl": -31.166974243882702,
+            "absolute_event_cash_pnl": 31.166974243882702,
+            "share_absolute_event_cash_pnl": 6.102670211977493e-05
+          }
+        ],
+        "hhi_absolute_event_cash_pnl": 0.01231442853135727,
+        "note": "Shares allocate absolute individual-event cash PnL, not absolute group net PnL or an equal-risk ranking."
+      }
+    },
+    "matched_btc_beta_sensitivity": {
+      "btc_net_lower_bps": {
+        "n": 585,
+        "beta": 1.3602505714540674,
+        "intercept_bps": 47.19582506717728,
+        "note": "Unweighted paired-event descriptive OLS sensitivity; overlapping durations and sleeves are dependent. Not causal alpha, a tradable hedge, or a statistical confidence interval."
+      },
+      "btc_net_upper_bps": {
+        "n": 585,
+        "beta": 1.3602505714540674,
+        "intercept_bps": 47.19582506717728,
+        "note": "Unweighted paired-event descriptive OLS sensitivity; overlapping durations and sleeves are dependent. Not causal alpha, a tradable hedge, or a statistical confidence interval."
+      }
+    },
+    "reference_price_cost_curve": {
+      "cases": {
+        "10": {
+          "n": 585,
+          "mean_net_bps": 70.38444146887569,
+          "median_net_bps": -125.19416415900153,
+          "worst_net_bps": -1707.4929814082618,
+          "best_net_bps": 12589.143640274517,
+          "per_unit_profit_factor": 1.3821924846760651,
+          "win_fraction": 0.27350427350427353
+        },
+        "20": {
+          "n": 585,
+          "mean_net_bps": 60.31908467312626,
+          "median_net_bps": -135.06403999186344,
+          "worst_net_bps": -1715.7813483875484,
+          "best_net_bps": 12566.56577427831,
+          "per_unit_profit_factor": 1.3154154597739962,
+          "win_fraction": 0.27350427350427353
+        },
+        "30": {
+          "n": 585,
+          "mean_net_bps": 50.26377815874949,
+          "median_net_bps": -144.92406073153495,
+          "worst_net_bps": -1724.0614394137842,
+          "best_net_bps": 12544.010452332022,
+          "per_unit_profit_factor": 1.2534302483644875,
+          "win_fraction": 0.26837606837606837
+        },
+        "40": {
+          "n": 585,
+          "mean_net_bps": 40.218506880415994,
+          "median_net_bps": -154.7742411311448,
+          "worst_net_bps": -1732.3332668761216,
+          "best_net_bps": 12521.477640687073,
+          "per_unit_profit_factor": 1.1956841330800434,
+          "win_fraction": 0.2512820512820513
+        },
+        "60": {
+          "n": 585,
+          "mean_net_bps": 20.158010000554864,
+          "median_net_bps": -174.44513977562858,
+          "worst_net_bps": -1748.8521805421854,
+          "best_net_bps": 12476.479413643387,
+          "per_unit_profit_factor": 1.0915357817969629,
+          "win_fraction": 0.2376068376068376
+        },
+        "80": {
+          "n": 585,
+          "mean_net_bps": 0.1374742698545708,
+          "median_net_bps": -194.07685336305326,
+          "worst_net_bps": -1765.3381880057273,
+          "best_net_bps": 12431.570824502165,
+          "per_unit_profit_factor": 1.0005846841180024,
+          "win_fraction": 0.22735042735042735
+        }
+      },
+      "note": "Conditional reference-return burden on the unchanged baseline admissions, prices and durations. The10/30bps rows are descriptive arithmetic, not new funded simulations, changed admission sets, screening gates or a rescue of the rejected candidate."
+    },
+    "path_metrics": {
+      "pre_first_mfe_mae_bps_bounds": {
+        "mean": [
+          -104.66326970106128,
+          -104.54796008556912
+        ],
+        "median": [
+          -59.683033565760546,
+          -59.683033565760546
+        ]
+      },
+      "mae_through_endpoint_bps_bounds": {
+        "mean": [
+          -294.2409411562944,
+          -294.2409411562944
+        ],
+        "median": [
+          -234.9517319704708,
+          -234.9517319704708
+        ]
+      },
+      "hypothetical_peak_net_after_cost_bps_bounds": {
+        "mean": [
+          620.5160555927636,
+          620.5160555927636
+        ],
+        "median": [
+          223.1684717088278,
+          223.1684717088278
+        ]
+      },
+      "mfe_giveback_to_endpoint_bps_bounds": {
+        "mean": [
+          582.6233905909542,
+          582.6233905909542
+        ],
+        "median": [
+          479.5040350595903,
+          479.5040350595903
+        ]
+      }
+    },
+    "path_fractions": {
+      "endpoint_correct_direction": 0.28717948717948716,
+      "definite_positive_excursion": 0.9982905982905983,
+      "possible_positive_excursion": 0.9982905982905983
+    },
+    "hypothetical_peak_clears_baseline_cost_fraction_bounds": [
+      0.8803418803418803,
+      0.8803418803418803
+    ]
+  },
+  "completed_only": {
+    "n": 584,
+    "completed": 584,
+    "trade_extreme_ordering": "Per-unit net bps; all-admission summary retains cutoff marks with their status. Completed-only summary must be reported separately.",
+    "worst_net_trade": {
+      "symbol": "LINKUSDT",
+      "entry_time": "2025-03-03T00:00:00Z",
+      "status": "COMPLETED",
+      "net_bps": -1732.3332668761216,
+      "gross_bps": -1699.196326061998,
+      "net_cash_profit_or_cutoff_mark": -3821.0096589336567
+    },
+    "best_net_trade": {
+      "symbol": "SOLUSDT",
+      "entry_time": "2023-10-16T08:00:00Z",
+      "status": "COMPLETED",
+      "net_bps": 12521.477640687073,
+      "gross_bps": 12611.744084136722,
+      "net_cash_profit_or_cutoff_mark": 13998.975305093112
+    },
+    "median_mfe_bps_bounds": [
+      264.0013143313513,
+      264.0013143313513
+    ],
+    "median_mae_bps_bounds": [
+      -235.78386960579735,
+      -235.78386960579735
+    ],
+    "correct_direction_endpoint_fraction": 0.285958904109589,
+    "weekly_means_active": [
+      {
+        "entry_week": "2023-06-19",
+        "n": 3,
+        "mean_net_bps": 672.45281310228
+      },
+      {
+        "entry_week": "2023-06-26",
+        "n": 4,
+        "mean_net_bps": 66.94476478754318
+      },
+      {
+        "entry_week": "2023-07-03",
+        "n": 1,
+        "mean_net_bps": 2988.5508171474307
+      },
+      {
+        "entry_week": "2023-07-10",
+        "n": 3,
+        "mean_net_bps": 114.68856656685288
+      },
+      {
+        "entry_week": "2023-07-24",
+        "n": 3,
+        "mean_net_bps": -183.54523860498887
+      },
+      {
+        "entry_week": "2023-07-31",
+        "n": 2,
+        "mean_net_bps": -125.11748491636277
+      },
+      {
+        "entry_week": "2023-08-07",
+        "n": 4,
+        "mean_net_bps": 72.49197469674174
+      },
+      {
+        "entry_week": "2023-08-14",
+        "n": 3,
+        "mean_net_bps": -205.8177010116136
+      },
+      {
+        "entry_week": "2023-08-21",
+        "n": 2,
+        "mean_net_bps": -284.312206198159
+      },
+      {
+        "entry_week": "2023-08-28",
+        "n": 6,
+        "mean_net_bps": -372.2813569376604
+      },
+      {
+        "entry_week": "2023-09-04",
+        "n": 4,
+        "mean_net_bps": -304.44683926436875
+      },
+      {
+        "entry_week": "2023-09-11",
+        "n": 3,
+        "mean_net_bps": 955.9972205493114
+      },
+      {
+        "entry_week": "2023-09-25",
+        "n": 2,
+        "mean_net_bps": 635.3961830360066
+      },
+      {
+        "entry_week": "2023-10-02",
+        "n": 1,
+        "mean_net_bps": -161.00348322962031
+      },
+      {
+        "entry_week": "2023-10-09",
+        "n": 1,
+        "mean_net_bps": -107.58374555237316
+      },
+      {
+        "entry_week": "2023-10-16",
+        "n": 6,
+        "mean_net_bps": 3000.5872860421737
+      },
+      {
+        "entry_week": "2023-10-30",
+        "n": 2,
+        "mean_net_bps": 1898.7876462301147
+      },
+      {
+        "entry_week": "2023-11-13",
+        "n": 5,
+        "mean_net_bps": -151.35270983125992
+      },
+      {
+        "entry_week": "2023-11-20",
+        "n": 5,
+        "mean_net_bps": -130.53602839707332
+      },
+      {
+        "entry_week": "2023-11-27",
+        "n": 5,
+        "mean_net_bps": 245.9899993181567
+      },
+      {
+        "entry_week": "2023-12-04",
+        "n": 3,
+        "mean_net_bps": -67.50069085804478
+      },
+      {
+        "entry_week": "2023-12-11",
+        "n": 2,
+        "mean_net_bps": -342.83586326264384
+      },
+      {
+        "entry_week": "2023-12-18",
+        "n": 7,
+        "mean_net_bps": 414.0389505800541
+      },
+      {
+        "entry_week": "2023-12-25",
+        "n": 2,
+        "mean_net_bps": -425.9245808166439
+      },
+      {
+        "entry_week": "2024-01-01",
+        "n": 3,
+        "mean_net_bps": -410.34687948556393
+      },
+      {
+        "entry_week": "2024-01-08",
+        "n": 6,
+        "mean_net_bps": -208.69457644637325
+      },
+      {
+        "entry_week": "2024-01-15",
+        "n": 4,
+        "mean_net_bps": -381.51458854217725
+      },
+      {
+        "entry_week": "2024-01-22",
+        "n": 2,
+        "mean_net_bps": 72.88102543017649
+      },
+      {
+        "entry_week": "2024-01-29",
+        "n": 5,
+        "mean_net_bps": 369.5209505260348
+      },
+      {
+        "entry_week": "2024-02-05",
+        "n": 3,
+        "mean_net_bps": 1289.4799788667187
+      },
+      {
+        "entry_week": "2024-02-12",
+        "n": 2,
+        "mean_net_bps": -135.85822671265737
+      },
+      {
+        "entry_week": "2024-02-19",
+        "n": 1,
+        "mean_net_bps": 1941.2622931810963
+      },
+      {
+        "entry_week": "2024-02-26",
+        "n": 2,
+        "mean_net_bps": 954.137000802765
+      },
+      {
+        "entry_week": "2024-03-04",
+        "n": 3,
+        "mean_net_bps": -73.62425442853073
+      },
+      {
+        "entry_week": "2024-03-11",
+        "n": 6,
+        "mean_net_bps": 237.59585638205053
+      },
+      {
+        "entry_week": "2024-03-18",
+        "n": 4,
+        "mean_net_bps": -268.4458745732179
+      },
+      {
+        "entry_week": "2024-03-25",
+        "n": 9,
+        "mean_net_bps": -164.02303654346005
+      },
+      {
+        "entry_week": "2024-04-01",
+        "n": 2,
+        "mean_net_bps": -295.3171839676355
+      },
+      {
+        "entry_week": "2024-04-08",
+        "n": 4,
+        "mean_net_bps": -137.10933294143356
+      },
+      {
+        "entry_week": "2024-04-15",
+        "n": 2,
+        "mean_net_bps": 212.57758058507767
+      },
+      {
+        "entry_week": "2024-04-22",
+        "n": 3,
+        "mean_net_bps": -221.22010042052463
+      },
+      {
+        "entry_week": "2024-04-29",
+        "n": 3,
+        "mean_net_bps": 319.4774964194624
+      },
+      {
+        "entry_week": "2024-05-06",
+        "n": 3,
+        "mean_net_bps": -238.02831334337728
+      },
+      {
+        "entry_week": "2024-05-13",
+        "n": 5,
+        "mean_net_bps": 980.8608366528017
+      },
+      {
+        "entry_week": "2024-05-20",
+        "n": 2,
+        "mean_net_bps": -12.658844822762148
+      },
+      {
+        "entry_week": "2024-05-27",
+        "n": 5,
+        "mean_net_bps": -112.62483305959981
+      },
+      {
+        "entry_week": "2024-06-03",
+        "n": 5,
+        "mean_net_bps": -121.00439439475608
+      },
+      {
+        "entry_week": "2024-06-10",
+        "n": 1,
+        "mean_net_bps": -76.56726481973686
+      },
+      {
+        "entry_week": "2024-06-17",
+        "n": 1,
+        "mean_net_bps": -190.6986446148806
+      },
+      {
+        "entry_week": "2024-06-24",
+        "n": 5,
+        "mean_net_bps": 28.378982284098733
+      },
+      {
+        "entry_week": "2024-07-01",
+        "n": 2,
+        "mean_net_bps": -379.5839385586081
+      },
+      {
+        "entry_week": "2024-07-08",
+        "n": 5,
+        "mean_net_bps": 710.3589228940046
+      },
+      {
+        "entry_week": "2024-07-15",
+        "n": 1,
+        "mean_net_bps": -376.4917747184493
+      },
+      {
+        "entry_week": "2024-07-22",
+        "n": 2,
+        "mean_net_bps": 90.87658776001152
+      },
+      {
+        "entry_week": "2024-07-29",
+        "n": 4,
+        "mean_net_bps": -275.5376707911117
+      },
+      {
+        "entry_week": "2024-08-05",
+        "n": 1,
+        "mean_net_bps": -776.0730096469581
+      },
+      {
+        "entry_week": "2024-08-12",
+        "n": 6,
+        "mean_net_bps": -253.75974940938886
+      },
+      {
+        "entry_week": "2024-08-19",
+        "n": 7,
+        "mean_net_bps": -25.84010199406222
+      },
+      {
+        "entry_week": "2024-08-26",
+        "n": 1,
+        "mean_net_bps": -442.3401420678863
+      },
+      {
+        "entry_week": "2024-09-02",
+        "n": 2,
+        "mean_net_bps": -296.48227487417967
+      },
+      {
+        "entry_week": "2024-09-09",
+        "n": 7,
+        "mean_net_bps": -240.55294675618703
+      },
+      {
+        "entry_week": "2024-09-16",
+        "n": 6,
+        "mean_net_bps": 364.63820720712556
+      },
+      {
+        "entry_week": "2024-09-23",
+        "n": 1,
+        "mean_net_bps": -9.583160851467376
+      },
+      {
+        "entry_week": "2024-09-30",
+        "n": 2,
+        "mean_net_bps": -495.6837694171851
+      },
+      {
+        "entry_week": "2024-10-07",
+        "n": 6,
+        "mean_net_bps": -199.87782403002606
+      },
+      {
+        "entry_week": "2024-10-14",
+        "n": 4,
+        "mean_net_bps": 258.02248895470365
+      },
+      {
+        "entry_week": "2024-10-21",
+        "n": 1,
+        "mean_net_bps": -451.35202916026685
+      },
+      {
+        "entry_week": "2024-10-28",
+        "n": 4,
+        "mean_net_bps": -131.41677488174878
+      },
+      {
+        "entry_week": "2024-11-04",
+        "n": 3,
+        "mean_net_bps": 1683.3704351064282
+      },
+      {
+        "entry_week": "2024-11-11",
+        "n": 4,
+        "mean_net_bps": 107.38603779963276
+      },
+      {
+        "entry_week": "2024-11-18",
+        "n": 4,
+        "mean_net_bps": 306.37236809216563
+      },
+      {
+        "entry_week": "2024-11-25",
+        "n": 3,
+        "mean_net_bps": 659.1636127714063
+      },
+      {
+        "entry_week": "2024-12-02",
+        "n": 3,
+        "mean_net_bps": -164.834583676046
+      },
+      {
+        "entry_week": "2024-12-09",
+        "n": 4,
+        "mean_net_bps": -224.53977262192836
+      },
+      {
+        "entry_week": "2024-12-16",
+        "n": 3,
+        "mean_net_bps": -181.61316818046558
+      },
+      {
+        "entry_week": "2024-12-23",
+        "n": 3,
+        "mean_net_bps": -450.95019429704945
+      },
+      {
+        "entry_week": "2024-12-30",
+        "n": 5,
+        "mean_net_bps": 65.80096780129142
+      },
+      {
+        "entry_week": "2025-01-13",
+        "n": 5,
+        "mean_net_bps": 485.0557531276074
+      },
+      {
+        "entry_week": "2025-01-20",
+        "n": 5,
+        "mean_net_bps": -291.21632705031004
+      },
+      {
+        "entry_week": "2025-01-27",
+        "n": 3,
+        "mean_net_bps": -314.1231909683473
+      },
+      {
+        "entry_week": "2025-02-03",
+        "n": 1,
+        "mean_net_bps": -199.11735657925368
+      },
+      {
+        "entry_week": "2025-02-10",
+        "n": 7,
+        "mean_net_bps": -237.36781215107206
+      },
+      {
+        "entry_week": "2025-02-17",
+        "n": 4,
+        "mean_net_bps": -263.730491830696
+      },
+      {
+        "entry_week": "2025-02-24",
+        "n": 1,
+        "mean_net_bps": -469.3105722378266
+      },
+      {
+        "entry_week": "2025-03-03",
+        "n": 5,
+        "mean_net_bps": -545.7378698368329
+      },
+      {
+        "entry_week": "2025-03-10",
+        "n": 2,
+        "mean_net_bps": 104.85329989153024
+      },
+      {
+        "entry_week": "2025-03-17",
+        "n": 3,
+        "mean_net_bps": -258.3329110364463
+      },
+      {
+        "entry_week": "2025-03-24",
+        "n": 1,
+        "mean_net_bps": -779.1199430952555
+      },
+      {
+        "entry_week": "2025-03-31",
+        "n": 4,
+        "mean_net_bps": -639.9359684753824
+      },
+      {
+        "entry_week": "2025-04-07",
+        "n": 6,
+        "mean_net_bps": 177.32465115867717
+      },
+      {
+        "entry_week": "2025-04-14",
+        "n": 4,
+        "mean_net_bps": 240.40187189664243
+      },
+      {
+        "entry_week": "2025-04-21",
+        "n": 4,
+        "mean_net_bps": 186.5499305382129
+      },
+      {
+        "entry_week": "2025-04-28",
+        "n": 8,
+        "mean_net_bps": -249.9401410716266
+      },
+      {
+        "entry_week": "2025-05-05",
+        "n": 6,
+        "mean_net_bps": 922.4614925042879
+      },
+      {
+        "entry_week": "2025-05-12",
+        "n": 6,
+        "mean_net_bps": -220.7215100915531
+      },
+      {
+        "entry_week": "2025-05-19",
+        "n": 5,
+        "mean_net_bps": -108.68108688409441
+      },
+      {
+        "entry_week": "2025-05-26",
+        "n": 3,
+        "mean_net_bps": -276.36840031466716
+      },
+      {
+        "entry_week": "2025-06-02",
+        "n": 1,
+        "mean_net_bps": -835.4874118083899
+      },
+      {
+        "entry_week": "2025-06-09",
+        "n": 3,
+        "mean_net_bps": -169.59355901024006
+      },
+      {
+        "entry_week": "2025-06-16",
+        "n": 2,
+        "mean_net_bps": -277.5740118569964
+      },
+      {
+        "entry_week": "2025-06-23",
+        "n": 4,
+        "mean_net_bps": 49.22252182650355
+      },
+      {
+        "entry_week": "2025-06-30",
+        "n": 3,
+        "mean_net_bps": 22.461841810053443
+      },
+      {
+        "entry_week": "2025-07-07",
+        "n": 4,
+        "mean_net_bps": 1432.9826526712523
+      },
+      {
+        "entry_week": "2025-07-14",
+        "n": 2,
+        "mean_net_bps": 1634.0308519603996
+      },
+      {
+        "entry_week": "2025-07-21",
+        "n": 2,
+        "mean_net_bps": -11.448269544005463
+      },
+      {
+        "entry_week": "2025-07-28",
+        "n": 2,
+        "mean_net_bps": -175.6720797764716
+      },
+      {
+        "entry_week": "2025-08-04",
+        "n": 5,
+        "mean_net_bps": 881.8105957106902
+      },
+      {
+        "entry_week": "2025-08-11",
+        "n": 2,
+        "mean_net_bps": 685.9138478344162
+      },
+      {
+        "entry_week": "2025-08-18",
+        "n": 3,
+        "mean_net_bps": -564.0126412684584
+      },
+      {
+        "entry_week": "2025-08-25",
+        "n": 5,
+        "mean_net_bps": -251.44320474791758
+      },
+      {
+        "entry_week": "2025-09-01",
+        "n": 6,
+        "mean_net_bps": -323.4282591855712
+      },
+      {
+        "entry_week": "2025-09-08",
+        "n": 7,
+        "mean_net_bps": 77.14630065911933
+      },
+      {
+        "entry_week": "2025-09-15",
+        "n": 4,
+        "mean_net_bps": -279.7481980779387
+      },
+      {
+        "entry_week": "2025-09-29",
+        "n": 9,
+        "mean_net_bps": -3.3896779269105903
+      },
+      {
+        "entry_week": "2025-10-06",
+        "n": 1,
+        "mean_net_bps": -628.0635135377532
+      },
+      {
+        "entry_week": "2025-10-13",
+        "n": 3,
+        "mean_net_bps": -388.46055001782105
+      },
+      {
+        "entry_week": "2025-10-20",
+        "n": 9,
+        "mean_net_bps": -291.4369010275109
+      },
+      {
+        "entry_week": "2025-10-27",
+        "n": 2,
+        "mean_net_bps": -626.4343312243332
+      },
+      {
+        "entry_week": "2025-11-03",
+        "n": 1,
+        "mean_net_bps": -399.46705701958905
+      },
+      {
+        "entry_week": "2025-11-10",
+        "n": 6,
+        "mean_net_bps": -207.3937103303168
+      },
+      {
+        "entry_week": "2025-11-17",
+        "n": 2,
+        "mean_net_bps": -580.0809300039912
+      },
+      {
+        "entry_week": "2025-11-24",
+        "n": 5,
+        "mean_net_bps": -355.3219499459195
+      },
+      {
+        "entry_week": "2025-12-01",
+        "n": 3,
+        "mean_net_bps": -12.942602801498944
+      },
+      {
+        "entry_week": "2025-12-08",
+        "n": 8,
+        "mean_net_bps": -298.0756489279311
+      },
+      {
+        "entry_week": "2025-12-15",
+        "n": 2,
+        "mean_net_bps": -293.8101414979494
+      },
+      {
+        "entry_week": "2025-12-22",
+        "n": 8,
+        "mean_net_bps": -149.38734397021562
+      },
+      {
+        "entry_week": "2025-12-29",
+        "n": 6,
+        "mean_net_bps": 193.7686794297002
+      },
+      {
+        "entry_week": "2026-01-12",
+        "n": 6,
+        "mean_net_bps": -147.48306761819708
+      },
+      {
+        "entry_week": "2026-01-26",
+        "n": 1,
+        "mean_net_bps": -706.1477767348113
+      },
+      {
+        "entry_week": "2026-02-02",
+        "n": 1,
+        "mean_net_bps": -129.1940052495799
+      },
+      {
+        "entry_week": "2026-02-09",
+        "n": 4,
+        "mean_net_bps": -73.06799460966269
+      },
+      {
+        "entry_week": "2026-02-16",
+        "n": 4,
+        "mean_net_bps": -251.76668385485044
+      },
+      {
+        "entry_week": "2026-02-23",
+        "n": 6,
+        "mean_net_bps": -274.3397957600128
+      },
+      {
+        "entry_week": "2026-03-02",
+        "n": 1,
+        "mean_net_bps": -377.2044935834984
+      },
+      {
+        "entry_week": "2026-03-09",
+        "n": 3,
+        "mean_net_bps": 631.4730873773004
+      },
+      {
+        "entry_week": "2026-03-23",
+        "n": 3,
+        "mean_net_bps": -478.59151020632135
+      },
+      {
+        "entry_week": "2026-03-30",
+        "n": 6,
+        "mean_net_bps": -174.05379864881812
+      },
+      {
+        "entry_week": "2026-04-06",
+        "n": 5,
+        "mean_net_bps": -322.95272280775214
+      },
+      {
+        "entry_week": "2026-04-13",
+        "n": 3,
+        "mean_net_bps": -64.2569014855717
+      },
+      {
+        "entry_week": "2026-04-20",
+        "n": 4,
+        "mean_net_bps": -72.18218558794149
+      },
+      {
+        "entry_week": "2026-04-27",
+        "n": 3,
+        "mean_net_bps": -7.703716323106032
+      },
+      {
+        "entry_week": "2026-05-04",
+        "n": 3,
+        "mean_net_bps": 536.5481138085952
+      },
+      {
+        "entry_week": "2026-05-11",
+        "n": 2,
+        "mean_net_bps": -526.5206070915863
+      },
+      {
+        "entry_week": "2026-05-18",
+        "n": 5,
+        "mean_net_bps": -197.77205382558205
+      },
+      {
+        "entry_week": "2026-05-25",
+        "n": 1,
+        "mean_net_bps": -143.0553668695178
+      },
+      {
+        "entry_week": "2026-06-08",
+        "n": 2,
+        "mean_net_bps": 345.5293953297623
+      },
+      {
+        "entry_week": "2026-06-15",
+        "n": 4,
+        "mean_net_bps": -289.0504313900308
+      },
+      {
+        "entry_week": "2026-06-22",
+        "n": 2,
+        "mean_net_bps": 210.06311202235227
+      },
+      {
+        "entry_week": "2026-06-29",
+        "n": 3,
+        "mean_net_bps": 101.7613809270105
+      },
+      {
+        "entry_week": "2026-07-06",
+        "n": 2,
+        "mean_net_bps": 50.90330138033727
+      },
+      {
+        "entry_week": "2026-07-13",
+        "n": 4,
+        "mean_net_bps": -135.68173617612393
+      },
+      {
+        "entry_week": "2026-07-20",
+        "n": 1,
+        "mean_net_bps": 28.27925571898593
+      },
+      {
+        "entry_week": "2026-07-27",
+        "n": 6,
+        "mean_net_bps": -206.21222618705804
+      },
+      {
+        "entry_week": "2026-08-03",
+        "n": 4,
+        "mean_net_bps": -81.3382795261275
+      },
+      {
+        "entry_week": "2026-08-10",
+        "n": 4,
+        "mean_net_bps": 832.8417441166443
+      },
+      {
+        "entry_week": "2026-08-17",
+        "n": 2,
+        "mean_net_bps": 3085.4301280829222
+      },
+      {
+        "entry_week": "2026-08-24",
+        "n": 2,
+        "mean_net_bps": -259.02889557656016
+      },
+      {
+        "entry_week": "2026-08-31",
+        "n": 6,
+        "mean_net_bps": -130.33260975523396
+      },
+      {
+        "entry_week": "2026-09-07",
+        "n": 8,
+        "mean_net_bps": -192.07077757197322
+      },
+      {
+        "entry_week": "2026-09-14",
+        "n": 5,
+        "mean_net_bps": 563.0378246995766
+      },
+      {
+        "entry_week": "2026-09-28",
+        "n": 1,
+        "mean_net_bps": -53.97913852124403
+      }
+    ],
+    "positive_active_week_fraction": 0.33540372670807456,
+    "positive_calendar_week_fraction_including_zeros": 0.313953488372093,
+    "calendar_weeks": 172,
+    "zero_event_calendar_weeks": 11,
+    "concentration": {
+      "symbol": {
+        "rows": [
+          {
+            "group": "ETHUSDT",
+            "n": 203,
+            "signed_cash_pnl": -4257.252920192511,
+            "absolute_event_cash_pnl": 65485.91889724657,
+            "share_absolute_event_cash_pnl": 0.1283924363771684
+          },
+          {
+            "group": "LINKUSDT",
+            "n": 185,
+            "signed_cash_pnl": -1918.4417818336065,
+            "absolute_event_cash_pnl": 152073.59608084173,
+            "share_absolute_event_cash_pnl": 0.29815721972372955
+          },
+          {
+            "group": "SOLUSDT",
+            "n": 196,
+            "signed_cash_pnl": 24644.987854583713,
+            "absolute_event_cash_pnl": 292485.4747818514,
+            "share_absolute_event_cash_pnl": 0.5734503438991021
+          }
+        ],
+        "hhi_absolute_event_cash_pnl": 0.434227642310248,
+        "note": "Shares allocate absolute individual-event cash PnL, not absolute group net PnL or an equal-risk ranking."
+      },
+      "month": {
+        "rows": [
+          {
+            "group": "2023-06",
+            "n": 6,
+            "signed_cash_pnl": 2421.2302027863325,
+            "absolute_event_cash_pnl": 2939.841636835597,
+            "share_absolute_event_cash_pnl": 0.005763886903818578
+          },
+          {
+            "group": "2023-07",
+            "n": 8,
+            "signed_cash_pnl": 2765.3087382354465,
+            "absolute_event_cash_pnl": 4874.43033556662,
+            "share_absolute_event_cash_pnl": 0.009556863479554702
+          },
+          {
+            "group": "2023-08",
+            "n": 16,
+            "signed_cash_pnl": -3978.0087487283545,
+            "absolute_event_cash_pnl": 5130.420639558045,
+            "share_absolute_event_cash_pnl": 0.01005876097709097
+          },
+          {
+            "group": "2023-09",
+            "n": 10,
+            "signed_cash_pnl": 3191.108564493086,
+            "absolute_event_cash_pnl": 5905.082458800142,
+            "share_absolute_event_cash_pnl": 0.011577571738484203
+          },
+          {
+            "group": "2023-10",
+            "n": 8,
+            "signed_cash_pnl": 20610.89016538389,
+            "absolute_event_cash_pnl": 21847.68539573908,
+            "share_absolute_event_cash_pnl": 0.04283482013228288
+          },
+          {
+            "group": "2023-11",
+            "n": 15,
+            "signed_cash_pnl": 3621.7966562551624,
+            "absolute_event_cash_pnl": 14673.820183492058,
+            "share_absolute_event_cash_pnl": 0.028769658516591863
+          },
+          {
+            "group": "2023-12",
+            "n": 16,
+            "signed_cash_pnl": 6609.221043236893,
+            "absolute_event_cash_pnl": 21699.574341697586,
+            "share_absolute_event_cash_pnl": 0.04254443191748794
+          },
+          {
+            "group": "2024-01",
+            "n": 17,
+            "signed_cash_pnl": -7104.014052645664,
+            "absolute_event_cash_pnl": 19767.88685974755,
+            "share_absolute_event_cash_pnl": 0.03875714350032455
+          },
+          {
+            "group": "2024-02",
+            "n": 11,
+            "signed_cash_pnl": 11937.147217255366,
+            "absolute_event_cash_pnl": 14890.813971266114,
+            "share_absolute_event_cash_pnl": 0.029195099001511023
+          },
+          {
+            "group": "2024-03",
+            "n": 22,
+            "signed_cash_pnl": -1187.9258176118058,
+            "absolute_event_cash_pnl": 21576.443489315105,
+            "share_absolute_event_cash_pnl": 0.04230302016979008
+          },
+          {
+            "group": "2024-04",
+            "n": 11,
+            "signed_cash_pnl": -2002.5954812890106,
+            "absolute_event_cash_pnl": 5817.789448563205,
+            "share_absolute_event_cash_pnl": 0.011406424071142106
+          },
+          {
+            "group": "2024-05",
+            "n": 18,
+            "signed_cash_pnl": 7148.1325495312885,
+            "absolute_event_cash_pnl": 22266.222425133055,
+            "share_absolute_event_cash_pnl": 0.04365540858584453
+          },
+          {
+            "group": "2024-06",
+            "n": 12,
+            "signed_cash_pnl": -114.62735046365329,
+            "absolute_event_cash_pnl": 6158.291938833634,
+            "share_absolute_event_cash_pnl": 0.012074017120984026
+          },
+          {
+            "group": "2024-07",
+            "n": 14,
+            "signed_cash_pnl": 5756.08692974196,
+            "absolute_event_cash_pnl": 18087.410413251546,
+            "share_absolute_event_cash_pnl": 0.03546238229252023
+          },
+          {
+            "group": "2024-08",
+            "n": 15,
+            "signed_cash_pnl": -9893.651233914276,
+            "absolute_event_cash_pnl": 14419.503262448861,
+            "share_absolute_event_cash_pnl": 0.028271041872670127
+          },
+          {
+            "group": "2024-09",
+            "n": 16,
+            "signed_cash_pnl": 944.8724310434707,
+            "absolute_event_cash_pnl": 13994.098819673969,
+            "share_absolute_event_cash_pnl": 0.027436989090433968
+          },
+          {
+            "group": "2024-10",
+            "n": 17,
+            "signed_cash_pnl": -4251.129299434915,
+            "absolute_event_cash_pnl": 13667.634168475633,
+            "share_absolute_event_cash_pnl": 0.026796918787318175
+          },
+          {
+            "group": "2024-11",
+            "n": 14,
+            "signed_cash_pnl": 18950.932209133112,
+            "absolute_event_cash_pnl": 28880.415628902374,
+            "share_absolute_event_cash_pnl": 0.056623270904975216
+          },
+          {
+            "group": "2024-12",
+            "n": 15,
+            "signed_cash_pnl": -12928.962094178794,
+            "absolute_event_cash_pnl": 12928.962094178794,
+            "share_absolute_event_cash_pnl": 0.025348669928635128
+          },
+          {
+            "group": "2025-01",
+            "n": 16,
+            "signed_cash_pnl": 7097.539474181906,
+            "absolute_event_cash_pnl": 21535.31135578785,
+            "share_absolute_event_cash_pnl": 0.04222237604161893
+          },
+          {
+            "group": "2025-02",
+            "n": 13,
+            "signed_cash_pnl": -9528.61840849126,
+            "absolute_event_cash_pnl": 9737.437618427386,
+            "share_absolute_event_cash_pnl": 0.019091330792231596
+          },
+          {
+            "group": "2025-03",
+            "n": 11,
+            "signed_cash_pnl": -8607.26796095432,
+            "absolute_event_cash_pnl": 13492.365407399571,
+            "share_absolute_event_cash_pnl": 0.026453284863654784
+          },
+          {
+            "group": "2025-04",
+            "n": 22,
+            "signed_cash_pnl": -1135.515972248154,
+            "absolute_event_cash_pnl": 21734.23199159354,
+            "share_absolute_event_cash_pnl": 0.04261238209951456
+          },
+          {
+            "group": "2025-05",
+            "n": 24,
+            "signed_cash_pnl": 212.23140588912054,
+            "absolute_event_cash_pnl": 19062.876353268915,
+            "share_absolute_event_cash_pnl": 0.03737489189383302
+          },
+          {
+            "group": "2025-06",
+            "n": 10,
+            "signed_cash_pnl": -3006.0801543599855,
+            "absolute_event_cash_pnl": 7082.242187632044,
+            "share_absolute_event_cash_pnl": 0.013885524472979154
+          },
+          {
+            "group": "2025-07",
+            "n": 13,
+            "signed_cash_pnl": 13317.463619546877,
+            "absolute_event_cash_pnl": 17206.49802012774,
+            "share_absolute_event_cash_pnl": 0.03373525544918349
+          },
+          {
+            "group": "2025-08",
+            "n": 15,
+            "signed_cash_pnl": 5217.943082848248,
+            "absolute_event_cash_pnl": 19926.149286101867,
+            "share_absolute_event_cash_pnl": 0.03906743461097502
+          },
+          {
+            "group": "2025-09",
+            "n": 22,
+            "signed_cash_pnl": -5845.281747548786,
+            "absolute_event_cash_pnl": 15331.3879962485,
+            "share_absolute_event_cash_pnl": 0.030058893438918887
+          },
+          {
+            "group": "2025-10",
+            "n": 19,
+            "signed_cash_pnl": -11897.864164471868,
+            "absolute_event_cash_pnl": 20085.11563924399,
+            "share_absolute_event_cash_pnl": 0.039379105848480846
+          },
+          {
+            "group": "2025-11",
+            "n": 14,
+            "signed_cash_pnl": -8269.519875931603,
+            "absolute_event_cash_pnl": 8281.458163206948,
+            "share_absolute_event_cash_pnl": 0.016236720935352663
+          },
+          {
+            "group": "2025-12",
+            "n": 25,
+            "signed_cash_pnl": -6644.113863969158,
+            "absolute_event_cash_pnl": 8119.2675575100975,
+            "share_absolute_event_cash_pnl": 0.015918728191667078
+          },
+          {
+            "group": "2026-01",
+            "n": 9,
+            "signed_cash_pnl": -426.94265778177163,
+            "absolute_event_cash_pnl": 4035.7111147712812,
+            "share_absolute_event_cash_pnl": 0.00791246104911402
+          },
+          {
+            "group": "2026-02",
+            "n": 12,
+            "signed_cash_pnl": -2120.6955304190715,
+            "absolute_event_cash_pnl": 3953.6011021856784,
+            "share_absolute_event_cash_pnl": 0.00775147522583547
+          },
+          {
+            "group": "2026-03",
+            "n": 15,
+            "signed_cash_pnl": -913.3344961141327,
+            "absolute_event_cash_pnl": 6062.937387313655,
+            "share_absolute_event_cash_pnl": 0.011887063904239638
+          },
+          {
+            "group": "2026-04",
+            "n": 13,
+            "signed_cash_pnl": -2134.078817678719,
+            "absolute_event_cash_pnl": 3864.3464968641583,
+            "share_absolute_event_cash_pnl": 0.007576481632890798
+          },
+          {
+            "group": "2026-05",
+            "n": 14,
+            "signed_cash_pnl": -1012.66482009719,
+            "absolute_event_cash_pnl": 7488.429884857484,
+            "share_absolute_event_cash_pnl": 0.014681900685627802
+          },
+          {
+            "group": "2026-06",
+            "n": 9,
+            "signed_cash_pnl": 2972.496102015639,
+            "absolute_event_cash_pnl": 4810.741682755609,
+            "share_absolute_event_cash_pnl": 0.009431994783479506
+          },
+          {
+            "group": "2026-07",
+            "n": 14,
+            "signed_cash_pnl": -1773.110929346967,
+            "absolute_event_cash_pnl": 2555.5059206064893,
+            "share_absolute_event_cash_pnl": 0.0050103539333055235
+          },
+          {
+            "group": "2026-08",
+            "n": 14,
+            "signed_cash_pnl": 9191.339649826463,
+            "absolute_event_cash_pnl": 14899.74989310992,
+            "share_absolute_event_cash_pnl": 0.029212618871371936
+          },
+          {
+            "group": "2026-09",
+            "n": 19,
+            "signed_cash_pnl": 1279.556588832794,
+            "absolute_event_cash_pnl": 11253.29718944799,
+            "share_absolute_event_cash_pnl": 0.02206334228426501
+          }
+        ],
+        "hhi_absolute_event_cash_pnl": 0.032413762655802994,
+        "note": "Shares allocate absolute individual-event cash PnL, not absolute group net PnL or an equal-risk ranking."
+      },
+      "entry_week": {
+        "rows": [
+          {
+            "group": "2023-06-19",
+            "n": 3,
+            "signed_cash_pnl": 2017.3546456777729,
+            "absolute_event_cash_pnl": 2017.3546456777729,
+            "share_absolute_event_cash_pnl": 0.0039552484313732225
+          },
+          {
+            "group": "2023-06-26",
+            "n": 4,
+            "signed_cash_pnl": 270.2737111035259,
+            "absolute_event_cash_pnl": 1056.0888371628575,
+            "share_absolute_event_cash_pnl": 0.0020705797691688366
+          },
+          {
+            "group": "2023-07-03",
+            "n": 1,
+            "signed_cash_pnl": 3150.352731630402,
+            "absolute_event_cash_pnl": 3150.352731630402,
+            "share_absolute_event_cash_pnl": 0.006176617347252372
+          },
+          {
+            "group": "2023-07-10",
+            "n": 3,
+            "signed_cash_pnl": 425.02957027618123,
+            "absolute_event_cash_pnl": 914.0040402650811,
+            "share_absolute_event_cash_pnl": 0.0017920067025759255
+          },
+          {
+            "group": "2023-07-24",
+            "n": 3,
+            "signed_cash_pnl": -676.471717666103,
+            "absolute_event_cash_pnl": 676.471717666103,
+            "share_absolute_event_cash_pnl": 0.0013262981330029232
+          },
+          {
+            "group": "2023-07-31",
+            "n": 2,
+            "signed_cash_pnl": -244.0494115476286,
+            "absolute_event_cash_pnl": 244.0494115476286,
+            "share_absolute_event_cash_pnl": 0.00047848604818663965
+          },
+          {
+            "group": "2023-08-07",
+            "n": 4,
+            "signed_cash_pnl": 403.4587028954689,
+            "absolute_event_cash_pnl": 748.9531879342217,
+            "share_absolute_event_cash_pnl": 0.0014684061268530992
+          },
+          {
+            "group": "2023-08-14",
+            "n": 3,
+            "signed_cash_pnl": -796.663158721663,
+            "absolute_event_cash_pnl": 796.663158721663,
+            "share_absolute_event_cash_pnl": 0.0015619468374674643
+          },
+          {
+            "group": "2023-08-21",
+            "n": 2,
+            "signed_cash_pnl": -738.7119216842201,
+            "absolute_event_cash_pnl": 738.7119216842201,
+            "share_absolute_event_cash_pnl": 0.001448326983923332
+          },
+          {
+            "group": "2023-08-28",
+            "n": 6,
+            "signed_cash_pnl": -2552.394679712749,
+            "absolute_event_cash_pnl": 2651.6912396278744,
+            "share_absolute_event_cash_pnl": 0.005198935962249003
+          },
+          {
+            "group": "2023-09-04",
+            "n": 4,
+            "signed_cash_pnl": -1305.4521920499449,
+            "absolute_event_cash_pnl": 1305.4521920499449,
+            "share_absolute_event_cash_pnl": 0.0025594843950224383
+          },
+          {
+            "group": "2023-09-11",
+            "n": 3,
+            "signed_cash_pnl": 3190.5104008129833,
+            "absolute_event_cash_pnl": 3293.57991102015,
+            "share_absolute_event_cash_pnl": 0.006457430181934192
+          },
+          {
+            "group": "2023-09-25",
+            "n": 2,
+            "signed_cash_pnl": 1256.4020757724845,
+            "absolute_event_cash_pnl": 1256.4020757724845,
+            "share_absolute_event_cash_pnl": 0.002463316179939007
+          },
+          {
+            "group": "2023-10-02",
+            "n": 1,
+            "signed_cash_pnl": -226.9981941332301,
+            "absolute_event_cash_pnl": 226.9981941332301,
+            "share_absolute_event_cash_pnl": 0.00044505523765672164
+          },
+          {
+            "group": "2023-10-09",
+            "n": 1,
+            "signed_cash_pnl": -121.58638408861198,
+            "absolute_event_cash_pnl": 121.58638408861198,
+            "share_absolute_event_cash_pnl": 0.00023838364561886674
+          },
+          {
+            "group": "2023-10-16",
+            "n": 6,
+            "signed_cash_pnl": 20959.474743605733,
+            "absolute_event_cash_pnl": 21499.10081751724,
+            "share_absolute_event_cash_pnl": 0.042151381249007296
+          },
+          {
+            "group": "2023-10-30",
+            "n": 2,
+            "signed_cash_pnl": 6863.757090363096,
+            "absolute_event_cash_pnl": 6863.757090363096,
+            "share_absolute_event_cash_pnl": 0.013457160109726057
+          },
+          {
+            "group": "2023-11-13",
+            "n": 5,
+            "signed_cash_pnl": -1512.9293465642506,
+            "absolute_event_cash_pnl": 3721.538807661643,
+            "share_absolute_event_cash_pnl": 0.007296491255434626
+          },
+          {
+            "group": "2023-11-20",
+            "n": 5,
+            "signed_cash_pnl": -1671.7736150929936,
+            "absolute_event_cash_pnl": 2291.6331442529086,
+            "share_absolute_event_cash_pnl": 0.004493001970927114
+          },
+          {
+            "group": "2023-11-27",
+            "n": 5,
+            "signed_cash_pnl": 1884.3968843562006,
+            "absolute_event_cash_pnl": 3738.545498021301,
+            "share_absolute_event_cash_pnl": 0.007329834765715282
+          },
+          {
+            "group": "2023-12-04",
+            "n": 3,
+            "signed_cash_pnl": -535.6041229665441,
+            "absolute_event_cash_pnl": 4250.450941836232,
+            "share_absolute_event_cash_pnl": 0.008333482393066484
+          },
+          {
+            "group": "2023-12-11",
+            "n": 2,
+            "signed_cash_pnl": -1444.9063605439524,
+            "absolute_event_cash_pnl": 1444.9063605439524,
+            "share_absolute_event_cash_pnl": 0.0028328998216883166
+          },
+          {
+            "group": "2023-12-18",
+            "n": 7,
+            "signed_cash_pnl": 8132.691437110158,
+            "absolute_event_cash_pnl": 12577.948415340854,
+            "share_absolute_event_cash_pnl": 0.02466046852310196
+          },
+          {
+            "group": "2023-12-25",
+            "n": 2,
+            "signed_cash_pnl": -1484.6142671696593,
+            "absolute_event_cash_pnl": 1484.6142671696593,
+            "share_absolute_event_cash_pnl": 0.0029107515944199656
+          },
+          {
+            "group": "2024-01-01",
+            "n": 3,
+            "signed_cash_pnl": -3189.2963981421076,
+            "absolute_event_cash_pnl": 3189.2963981421076,
+            "share_absolute_event_cash_pnl": 0.006252970742136293
+          },
+          {
+            "group": "2024-01-08",
+            "n": 6,
+            "signed_cash_pnl": -5182.410075215822,
+            "absolute_event_cash_pnl": 6826.001749199757,
+            "share_absolute_event_cash_pnl": 0.013383136559017112
+          },
+          {
+            "group": "2024-01-15",
+            "n": 4,
+            "signed_cash_pnl": -3155.3533697829816,
+            "absolute_event_cash_pnl": 3155.3533697829816,
+            "share_absolute_event_cash_pnl": 0.006186421655211428
+          },
+          {
+            "group": "2024-01-22",
+            "n": 2,
+            "signed_cash_pnl": 345.69258745441175,
+            "absolute_event_cash_pnl": 1934.3947107995432,
+            "share_absolute_event_cash_pnl": 0.0037925962407943563
+          },
+          {
+            "group": "2024-01-29",
+            "n": 5,
+            "signed_cash_pnl": 3278.747483442727,
+            "absolute_event_cash_pnl": 5461.4463514212675,
+            "share_absolute_event_cash_pnl": 0.010707773747550739
+          },
+          {
+            "group": "2024-02-05",
+            "n": 3,
+            "signed_cash_pnl": 5775.995259147916,
+            "absolute_event_cash_pnl": 5775.995259147916,
+            "share_absolute_event_cash_pnl": 0.011324481908677261
+          },
+          {
+            "group": "2024-02-12",
+            "n": 2,
+            "signed_cash_pnl": -678.2276574072661,
+            "absolute_event_cash_pnl": 678.2276574072661,
+            "share_absolute_event_cash_pnl": 0.0013297408484033617
+          },
+          {
+            "group": "2024-02-19",
+            "n": 1,
+            "signed_cash_pnl": 2376.6995713447486,
+            "absolute_event_cash_pnl": 2376.6995713447486,
+            "share_absolute_event_cash_pnl": 0.0046597841740654644
+          },
+          {
+            "group": "2024-02-26",
+            "n": 2,
+            "signed_cash_pnl": 5261.2857637680745,
+            "absolute_event_cash_pnl": 5261.2857637680745,
+            "share_absolute_event_cash_pnl": 0.010315336625979558
+          },
+          {
+            "group": "2024-03-04",
+            "n": 3,
+            "signed_cash_pnl": -510.4613032059171,
+            "absolute_event_cash_pnl": 510.4613032059171,
+            "share_absolute_event_cash_pnl": 0.0010008162288706597
+          },
+          {
+            "group": "2024-03-11",
+            "n": 6,
+            "signed_cash_pnl": 6354.453509041208,
+            "absolute_event_cash_pnl": 12107.526352685765,
+            "share_absolute_event_cash_pnl": 0.023738153684019825
+          },
+          {
+            "group": "2024-03-18",
+            "n": 4,
+            "signed_cash_pnl": -3335.5461758966285,
+            "absolute_event_cash_pnl": 4831.33888145671,
+            "share_absolute_event_cash_pnl": 0.009472377885195287
+          },
+          {
+            "group": "2024-03-25",
+            "n": 9,
+            "signed_cash_pnl": -3696.371847550469,
+            "absolute_event_cash_pnl": 4127.116951966715,
+            "share_absolute_event_cash_pnl": 0.008091672371704316
+          },
+          {
+            "group": "2024-04-01",
+            "n": 2,
+            "signed_cash_pnl": -1631.0741149505072,
+            "absolute_event_cash_pnl": 1631.0741149505072,
+            "share_absolute_event_cash_pnl": 0.003197902435465932
+          },
+          {
+            "group": "2024-04-08",
+            "n": 4,
+            "signed_cash_pnl": -1113.5561081934509,
+            "absolute_event_cash_pnl": 1195.8383899489422,
+            "share_absolute_event_cash_pnl": 0.002344574329632728
+          },
+          {
+            "group": "2024-04-15",
+            "n": 2,
+            "signed_cash_pnl": 1736.3401887810041,
+            "absolute_event_cash_pnl": 1996.5714967376985,
+            "share_absolute_event_cash_pnl": 0.003914500753506891
+          },
+          {
+            "group": "2024-04-22",
+            "n": 3,
+            "signed_cash_pnl": -994.3054469260567,
+            "absolute_event_cash_pnl": 994.3054469260567,
+            "share_absolute_event_cash_pnl": 0.0019494465525365546
+          },
+          {
+            "group": "2024-04-29",
+            "n": 3,
+            "signed_cash_pnl": 2707.8160545908227,
+            "absolute_event_cash_pnl": 2707.8160545908227,
+            "share_absolute_event_cash_pnl": 0.00530897491192943
+          },
+          {
+            "group": "2024-05-06",
+            "n": 3,
+            "signed_cash_pnl": -1330.430409522837,
+            "absolute_event_cash_pnl": 1330.430409522837,
+            "share_absolute_event_cash_pnl": 0.0026084569719016827
+          },
+          {
+            "group": "2024-05-13",
+            "n": 5,
+            "signed_cash_pnl": 9265.021974114887,
+            "absolute_event_cash_pnl": 12213.170645555527,
+            "share_absolute_event_cash_pnl": 0.023945281084525188
+          },
+          {
+            "group": "2024-05-20",
+            "n": 2,
+            "signed_cash_pnl": -1407.3189312555032,
+            "absolute_event_cash_pnl": 3767.319129240117,
+            "share_absolute_event_cash_pnl": 0.007386248673892988
+          },
+          {
+            "group": "2024-05-27",
+            "n": 5,
+            "signed_cash_pnl": -2086.95613839608,
+            "absolute_event_cash_pnl": 2247.486186223753,
+            "share_absolute_event_cash_pnl": 0.004406446943595243
+          },
+          {
+            "group": "2024-06-03",
+            "n": 5,
+            "signed_cash_pnl": -1647.7366859959359,
+            "absolute_event_cash_pnl": 1647.7366859959359,
+            "share_absolute_event_cash_pnl": 0.003230571261510613
+          },
+          {
+            "group": "2024-06-10",
+            "n": 1,
+            "signed_cash_pnl": -108.15461014970609,
+            "absolute_event_cash_pnl": 108.15461014970609,
+            "share_absolute_event_cash_pnl": 0.00021204915707653688
+          },
+          {
+            "group": "2024-06-17",
+            "n": 1,
+            "signed_cash_pnl": -267.30768214036783,
+            "absolute_event_cash_pnl": 267.30768214036783,
+            "share_absolute_event_cash_pnl": 0.000524086477677548
+          },
+          {
+            "group": "2024-06-24",
+            "n": 5,
+            "signed_cash_pnl": 1908.5716278223565,
+            "absolute_event_cash_pnl": 4135.092960547625,
+            "share_absolute_event_cash_pnl": 0.00810731022471933
+          },
+          {
+            "group": "2024-07-01",
+            "n": 2,
+            "signed_cash_pnl": -2030.3882115503739,
+            "absolute_event_cash_pnl": 2030.3882115503739,
+            "share_absolute_event_cash_pnl": 0.0039808021886579194
+          },
+          {
+            "group": "2024-07-08",
+            "n": 5,
+            "signed_cash_pnl": 10289.278324233159,
+            "absolute_event_cash_pnl": 11681.477564349701,
+            "share_absolute_event_cash_pnl": 0.02290283759055797
+          },
+          {
+            "group": "2024-07-15",
+            "n": 1,
+            "signed_cash_pnl": -794.5178133633927,
+            "absolute_event_cash_pnl": 794.5178133633927,
+            "share_absolute_event_cash_pnl": 0.0015577406489912674
+          },
+          {
+            "group": "2024-07-22",
+            "n": 2,
+            "signed_cash_pnl": 900.1819073540576,
+            "absolute_event_cash_pnl": 972.559547056587,
+            "share_absolute_event_cash_pnl": 0.0019068112942631527
+          },
+          {
+            "group": "2024-07-29",
+            "n": 4,
+            "signed_cash_pnl": -2608.4672769314884,
+            "absolute_event_cash_pnl": 2608.4672769314884,
+            "share_absolute_event_cash_pnl": 0.005114190570049914
+          },
+          {
+            "group": "2024-08-05",
+            "n": 1,
+            "signed_cash_pnl": -3637.4777426612713,
+            "absolute_event_cash_pnl": 3637.4777426612713,
+            "share_absolute_event_cash_pnl": 0.007131680176631683
+          },
+          {
+            "group": "2024-08-12",
+            "n": 6,
+            "signed_cash_pnl": -3969.02432970231,
+            "absolute_event_cash_pnl": 3969.02432970231,
+            "share_absolute_event_cash_pnl": 0.007781714180881163
+          },
+          {
+            "group": "2024-08-19",
+            "n": 7,
+            "signed_cash_pnl": -1726.3983574960234,
+            "absolute_event_cash_pnl": 6252.250386030609,
+            "share_absolute_event_cash_pnl": 0.012258233119735819
+          },
+          {
+            "group": "2024-08-26",
+            "n": 1,
+            "signed_cash_pnl": -560.7508040546716,
+            "absolute_event_cash_pnl": 560.7508040546716,
+            "share_absolute_event_cash_pnl": 0.0010994143954214653
+          },
+          {
+            "group": "2024-09-02",
+            "n": 2,
+            "signed_cash_pnl": -1446.358645947665,
+            "absolute_event_cash_pnl": 1446.358645947665,
+            "share_absolute_event_cash_pnl": 0.0028357471889458525
+          },
+          {
+            "group": "2024-09-09",
+            "n": 7,
+            "signed_cash_pnl": -3125.0501396047407,
+            "absolute_event_cash_pnl": 3125.0501396047407,
+            "share_absolute_event_cash_pnl": 0.0061270087979407315
+          },
+          {
+            "group": "2024-09-16",
+            "n": 6,
+            "signed_cash_pnl": 5526.982810020204,
+            "absolute_event_cash_pnl": 9411.988440697234,
+            "share_absolute_event_cash_pnl": 0.018453251437931247
+          },
+          {
+            "group": "2024-09-23",
+            "n": 1,
+            "signed_cash_pnl": -10.701593424327559,
+            "absolute_event_cash_pnl": 10.701593424327559,
+            "share_absolute_event_cash_pnl": 2.098166561613403e-05
+          },
+          {
+            "group": "2024-09-30",
+            "n": 2,
+            "signed_cash_pnl": -2540.1492588984765,
+            "absolute_event_cash_pnl": 2540.1492588984765,
+            "share_absolute_event_cash_pnl": 0.0049802454879402614
+          },
+          {
+            "group": "2024-10-07",
+            "n": 6,
+            "signed_cash_pnl": -1715.7164692035205,
+            "absolute_event_cash_pnl": 4517.521487589657,
+            "share_absolute_event_cash_pnl": 0.008857103938450404
+          },
+          {
+            "group": "2024-10-14",
+            "n": 4,
+            "signed_cash_pnl": 2724.9589199062993,
+            "absolute_event_cash_pnl": 3158.526730420611,
+            "share_absolute_event_cash_pnl": 0.006192643382120505
+          },
+          {
+            "group": "2024-10-21",
+            "n": 1,
+            "signed_cash_pnl": -817.2374697466527,
+            "absolute_event_cash_pnl": 817.2374697466527,
+            "share_absolute_event_cash_pnl": 0.0016022850653455056
+          },
+          {
+            "group": "2024-10-28",
+            "n": 4,
+            "signed_cash_pnl": -1902.9850214925652,
+            "absolute_event_cash_pnl": 2634.199221820236,
+            "share_absolute_event_cash_pnl": 0.005164640913461499
+          },
+          {
+            "group": "2024-11-04",
+            "n": 3,
+            "signed_cash_pnl": 10513.51585539017,
+            "absolute_event_cash_pnl": 10513.51585539017,
+            "share_absolute_event_cash_pnl": 0.02061291859829564
+          },
+          {
+            "group": "2024-11-11",
+            "n": 4,
+            "signed_cash_pnl": 2877.6863560897136,
+            "absolute_event_cash_pnl": 6808.926181125214,
+            "share_absolute_event_cash_pnl": 0.01334965800630634
+          },
+          {
+            "group": "2024-11-18",
+            "n": 4,
+            "signed_cash_pnl": 2187.8569004954543,
+            "absolute_event_cash_pnl": 4697.605540141345,
+            "share_absolute_event_cash_pnl": 0.009210178777272851
+          },
+          {
+            "group": "2024-11-25",
+            "n": 3,
+            "signed_cash_pnl": 3371.873097157775,
+            "absolute_event_cash_pnl": 6860.368052245645,
+            "share_absolute_event_cash_pnl": 0.013450515523100384
+          },
+          {
+            "group": "2024-12-02",
+            "n": 3,
+            "signed_cash_pnl": -2133.6368475748714,
+            "absolute_event_cash_pnl": 2133.6368475748714,
+            "share_absolute_event_cash_pnl": 0.004183232637142656
+          },
+          {
+            "group": "2024-12-09",
+            "n": 4,
+            "signed_cash_pnl": -2343.324329047359,
+            "absolute_event_cash_pnl": 2343.324329047359,
+            "share_absolute_event_cash_pnl": 0.004594348294942137
+          },
+          {
+            "group": "2024-12-16",
+            "n": 3,
+            "signed_cash_pnl": -1702.3387006377436,
+            "absolute_event_cash_pnl": 1702.3387006377436,
+            "share_absolute_event_cash_pnl": 0.0033376245915854893
+          },
+          {
+            "group": "2024-12-23",
+            "n": 3,
+            "signed_cash_pnl": -4382.8441633399825,
+            "absolute_event_cash_pnl": 4382.8441633399825,
+            "share_absolute_event_cash_pnl": 0.008593054046865226
+          },
+          {
+            "group": "2024-12-30",
+            "n": 5,
+            "signed_cash_pnl": 839.8742490904847,
+            "absolute_event_cash_pnl": 5573.51035624816,
+            "share_absolute_event_cash_pnl": 0.010927487708234162
+          },
+          {
+            "group": "2025-01-13",
+            "n": 5,
+            "signed_cash_pnl": 10106.87681413676,
+            "absolute_event_cash_pnl": 12112.589410494353,
+            "share_absolute_event_cash_pnl": 0.02374808037266541
+          },
+          {
+            "group": "2025-01-20",
+            "n": 5,
+            "signed_cash_pnl": -4182.271648882103,
+            "absolute_event_cash_pnl": 4182.271648882103,
+            "share_absolute_event_cash_pnl": 0.008199809296922125
+          },
+          {
+            "group": "2025-01-27",
+            "n": 3,
+            "signed_cash_pnl": -2033.7579937420721,
+            "absolute_event_cash_pnl": 2033.7579937420721,
+            "share_absolute_event_cash_pnl": 0.003987409021896854
+          },
+          {
+            "group": "2025-02-03",
+            "n": 1,
+            "signed_cash_pnl": -873.3594164753987,
+            "absolute_event_cash_pnl": 873.3594164753987,
+            "share_absolute_event_cash_pnl": 0.001712318391533379
+          },
+          {
+            "group": "2025-02-10",
+            "n": 7,
+            "signed_cash_pnl": -4330.806542560614,
+            "absolute_event_cash_pnl": 4330.806542560614,
+            "share_absolute_event_cash_pnl": 0.008491028496523362
+          },
+          {
+            "group": "2025-02-17",
+            "n": 4,
+            "signed_cash_pnl": -2404.27058181502,
+            "absolute_event_cash_pnl": 2613.089791751146,
+            "share_absolute_event_cash_pnl": 0.0051232535251077285
+          },
+          {
+            "group": "2025-02-24",
+            "n": 1,
+            "signed_cash_pnl": -1920.1818676402274,
+            "absolute_event_cash_pnl": 1920.1818676402274,
+            "share_absolute_event_cash_pnl": 0.003764730379067129
+          },
+          {
+            "group": "2025-03-03",
+            "n": 5,
+            "signed_cash_pnl": -4438.140317099434,
+            "absolute_event_cash_pnl": 5631.259412345709,
+            "share_absolute_event_cash_pnl": 0.011040711163531175
+          },
+          {
+            "group": "2025-03-10",
+            "n": 2,
+            "signed_cash_pnl": -406.34488542977897,
+            "absolute_event_cash_pnl": 2674.0092429439032,
+            "share_absolute_event_cash_pnl": 0.005242692893037663
+          },
+          {
+            "group": "2025-03-17",
+            "n": 3,
+            "signed_cash_pnl": -2213.515013833286,
+            "absolute_event_cash_pnl": 3637.8290075181394,
+            "share_absolute_event_cash_pnl": 0.007132368870499715
+          },
+          {
+            "group": "2025-03-24",
+            "n": 1,
+            "signed_cash_pnl": -1549.2677445918202,
+            "absolute_event_cash_pnl": 1549.2677445918202,
+            "share_absolute_event_cash_pnl": 0.003037511936586234
+          },
+          {
+            "group": "2025-03-31",
+            "n": 4,
+            "signed_cash_pnl": -6350.781087763418,
+            "absolute_event_cash_pnl": 6350.781087763418,
+            "share_absolute_event_cash_pnl": 0.012451413532662107
+          },
+          {
+            "group": "2025-04-07",
+            "n": 6,
+            "signed_cash_pnl": 3834.8006094396756,
+            "absolute_event_cash_pnl": 7131.046685425841,
+            "share_absolute_event_cash_pnl": 0.013981211125673788
+          },
+          {
+            "group": "2025-04-14",
+            "n": 4,
+            "signed_cash_pnl": 2161.8307942720658,
+            "absolute_event_cash_pnl": 3263.1209840116626,
+            "share_absolute_event_cash_pnl": 0.006397712063689714
+          },
+          {
+            "group": "2025-04-21",
+            "n": 4,
+            "signed_cash_pnl": 1368.6220577809827,
+            "absolute_event_cash_pnl": 2839.294888415159,
+            "share_absolute_event_cash_pnl": 0.005566753806858325
+          },
+          {
+            "group": "2025-04-28",
+            "n": 8,
+            "signed_cash_pnl": -4258.585308257413,
+            "absolute_event_cash_pnl": 4258.585308257413,
+            "share_absolute_event_cash_pnl": 0.008349430724261756
+          },
+          {
+            "group": "2025-05-05",
+            "n": 6,
+            "signed_cash_pnl": 7501.943425339697,
+            "absolute_event_cash_pnl": 10437.20510321853,
+            "share_absolute_event_cash_pnl": 0.020463302870852546
+          },
+          {
+            "group": "2025-05-12",
+            "n": 6,
+            "signed_cash_pnl": -2933.5020587909953,
+            "absolute_event_cash_pnl": 3722.5069719207213,
+            "share_absolute_event_cash_pnl": 0.007298389449277357
+          },
+          {
+            "group": "2025-05-19",
+            "n": 5,
+            "signed_cash_pnl": -571.2620751636149,
+            "absolute_event_cash_pnl": 1118.2163926336975,
+            "share_absolute_event_cash_pnl": 0.0021923877600679947
+          },
+          {
+            "group": "2025-05-26",
+            "n": 3,
+            "signed_cash_pnl": -1676.350923216012,
+            "absolute_event_cash_pnl": 1676.350923216012,
+            "share_absolute_event_cash_pnl": 0.0032866726600039964
+          },
+          {
+            "group": "2025-06-02",
+            "n": 1,
+            "signed_cash_pnl": -663.5132236322551,
+            "absolute_event_cash_pnl": 663.5132236322551,
+            "share_absolute_event_cash_pnl": 0.0013008915624179497
+          },
+          {
+            "group": "2025-06-09",
+            "n": 3,
+            "signed_cash_pnl": -1079.450625383151,
+            "absolute_event_cash_pnl": 1079.450625383151,
+            "share_absolute_event_cash_pnl": 0.002116383156496078
+          },
+          {
+            "group": "2025-06-16",
+            "n": 2,
+            "signed_cash_pnl": -1865.4067924168057,
+            "absolute_event_cash_pnl": 1865.4067924168057,
+            "share_absolute_event_cash_pnl": 0.0036573377444503227
+          },
+          {
+            "group": "2025-06-23",
+            "n": 4,
+            "signed_cash_pnl": 602.2904870722263,
+            "absolute_event_cash_pnl": 3473.871546199832,
+            "share_absolute_event_cash_pnl": 0.006810912009614803
+          },
+          {
+            "group": "2025-06-30",
+            "n": 3,
+            "signed_cash_pnl": -533.9276355443557,
+            "absolute_event_cash_pnl": 982.2103705849516,
+            "share_absolute_event_cash_pnl": 0.0019257328084866469
+          },
+          {
+            "group": "2025-07-07",
+            "n": 4,
+            "signed_cash_pnl": 6268.390829102736,
+            "absolute_event_cash_pnl": 7097.599062387215,
+            "share_absolute_event_cash_pnl": 0.013915633336047093
+          },
+          {
+            "group": "2025-07-14",
+            "n": 2,
+            "signed_cash_pnl": 8342.670131837876,
+            "absolute_event_cash_pnl": 8342.670131837876,
+            "share_absolute_event_cash_pnl": 0.016356733816294284
+          },
+          {
+            "group": "2025-07-21",
+            "n": 2,
+            "signed_cash_pnl": -66.94693061532827,
+            "absolute_event_cash_pnl": 91.29568008364448,
+            "share_absolute_event_cash_pnl": 0.0001789953473057625
+          },
+          {
+            "group": "2025-07-28",
+            "n": 2,
+            "signed_cash_pnl": -692.7227752340514,
+            "absolute_event_cash_pnl": 692.7227752340514,
+            "share_absolute_event_cash_pnl": 0.001358160141049698
+          },
+          {
+            "group": "2025-08-04",
+            "n": 5,
+            "signed_cash_pnl": 7068.034593898376,
+            "absolute_event_cash_pnl": 9129.735566830403,
+            "share_absolute_event_cash_pnl": 0.017899863247607724
+          },
+          {
+            "group": "2025-08-11",
+            "n": 2,
+            "signed_cash_pnl": 4473.161104110668,
+            "absolute_event_cash_pnl": 4473.161104110668,
+            "share_absolute_event_cash_pnl": 0.008770130466757509
+          },
+          {
+            "group": "2025-08-18",
+            "n": 3,
+            "signed_cash_pnl": -3600.8102293901984,
+            "absolute_event_cash_pnl": 3600.8102293901984,
+            "share_absolute_event_cash_pnl": 0.007059789433643832
+          },
+          {
+            "group": "2025-08-25",
+            "n": 5,
+            "signed_cash_pnl": -2722.442385770598,
+            "absolute_event_cash_pnl": 2722.442385770598,
+            "share_absolute_event_cash_pnl": 0.005337651462965956
+          },
+          {
+            "group": "2025-09-01",
+            "n": 6,
+            "signed_cash_pnl": -4238.104980936456,
+            "absolute_event_cash_pnl": 4238.104980936456,
+            "share_absolute_event_cash_pnl": 0.008309276761901305
+          },
+          {
+            "group": "2025-09-08",
+            "n": 7,
+            "signed_cash_pnl": 3161.054160710467,
+            "absolute_event_cash_pnl": 6325.0520879892465,
+            "share_absolute_event_cash_pnl": 0.012400968963475608
+          },
+          {
+            "group": "2025-09-15",
+            "n": 4,
+            "signed_cash_pnl": -3116.5234115255053,
+            "absolute_event_cash_pnl": 3116.5234115255053,
+            "share_absolute_event_cash_pnl": 0.006110291198022245
+          },
+          {
+            "group": "2025-09-29",
+            "n": 9,
+            "signed_cash_pnl": 29.312490499648206,
+            "absolute_event_cash_pnl": 6724.807268571886,
+            "share_absolute_event_cash_pnl": 0.01318473351093404
+          },
+          {
+            "group": "2025-10-06",
+            "n": 1,
+            "signed_cash_pnl": -1322.327865020624,
+            "absolute_event_cash_pnl": 1322.327865020624,
+            "share_absolute_event_cash_pnl": 0.002592571031122171
+          },
+          {
+            "group": "2025-10-13",
+            "n": 3,
+            "signed_cash_pnl": -3938.767184066643,
+            "absolute_event_cash_pnl": 3938.767184066643,
+            "share_absolute_event_cash_pnl": 0.007722391677488064
+          },
+          {
+            "group": "2025-10-20",
+            "n": 9,
+            "signed_cash_pnl": -6091.338437142496,
+            "absolute_event_cash_pnl": 7524.470152843086,
+            "share_absolute_event_cash_pnl": 0.014752561644384725
+          },
+          {
+            "group": "2025-10-27",
+            "n": 2,
+            "signed_cash_pnl": -2226.450684539046,
+            "absolute_event_cash_pnl": 2226.450684539046,
+            "share_absolute_event_cash_pnl": 0.004365204500071569
+          },
+          {
+            "group": "2025-11-03",
+            "n": 1,
+            "signed_cash_pnl": -641.4941196281037,
+            "absolute_event_cash_pnl": 641.4941196281037,
+            "share_absolute_event_cash_pnl": 0.001257720657015046
+          },
+          {
+            "group": "2025-11-10",
+            "n": 6,
+            "signed_cash_pnl": -1504.048318104665,
+            "absolute_event_cash_pnl": 1515.98660538001,
+            "share_absolute_event_cash_pnl": 0.0029722605570413146
+          },
+          {
+            "group": "2025-11-17",
+            "n": 2,
+            "signed_cash_pnl": -3092.9292650389034,
+            "absolute_event_cash_pnl": 3092.9292650389034,
+            "share_absolute_event_cash_pnl": 0.00606403224643896
+          },
+          {
+            "group": "2025-11-24",
+            "n": 5,
+            "signed_cash_pnl": -3031.048173159931,
+            "absolute_event_cash_pnl": 3031.048173159931,
+            "share_absolute_event_cash_pnl": 0.005942707474857345
+          },
+          {
+            "group": "2025-12-01",
+            "n": 3,
+            "signed_cash_pnl": -452.3629655502036,
+            "absolute_event_cash_pnl": 967.5039839007227,
+            "share_absolute_event_cash_pnl": 0.0018968992997188208
+          },
+          {
+            "group": "2025-12-08",
+            "n": 8,
+            "signed_cash_pnl": -3807.534655866297,
+            "absolute_event_cash_pnl": 3965.4850205632615,
+            "share_absolute_event_cash_pnl": 0.0077747749711837705
+          },
+          {
+            "group": "2025-12-15",
+            "n": 2,
+            "signed_cash_pnl": -427.4843621930695,
+            "absolute_event_cash_pnl": 427.4843621930695,
+            "share_absolute_event_cash_pnl": 0.0008381306958711063
+          },
+          {
+            "group": "2025-12-22",
+            "n": 8,
+            "signed_cash_pnl": -1929.8851835792282,
+            "absolute_event_cash_pnl": 1929.8851835792282,
+            "share_absolute_event_cash_pnl": 0.0037837548105071235
+          },
+          {
+            "group": "2025-12-29",
+            "n": 6,
+            "signed_cash_pnl": 1655.6512376818037,
+            "absolute_event_cash_pnl": 2511.4069417359788,
+            "share_absolute_event_cash_pnl": 0.004923892974457038
+          },
+          {
+            "group": "2026-01-12",
+            "n": 6,
+            "signed_cash_pnl": -1610.2658764911266,
+            "absolute_event_cash_pnl": 1854.0384645563092,
+            "share_absolute_event_cash_pnl": 0.003635048871725885
+          },
+          {
+            "group": "2026-01-26",
+            "n": 1,
+            "signed_cash_pnl": -499.1747157528085,
+            "absolute_event_cash_pnl": 499.1747157528085,
+            "share_absolute_event_cash_pnl": 0.000978687617317352
+          },
+          {
+            "group": "2026-02-02",
+            "n": 1,
+            "signed_cash_pnl": -84.87759192432024,
+            "absolute_event_cash_pnl": 84.87759192432024,
+            "share_absolute_event_cash_pnl": 0.00016641197076412644
+          },
+          {
+            "group": "2026-02-09",
+            "n": 4,
+            "signed_cash_pnl": 438.3225722057666,
+            "absolute_event_cash_pnl": 1280.4071517295527,
+            "share_absolute_event_cash_pnl": 0.002510380804509413
+          },
+          {
+            "group": "2026-02-16",
+            "n": 4,
+            "signed_cash_pnl": -1294.9699406001507,
+            "absolute_event_cash_pnl": 1294.9699406001507,
+            "share_absolute_event_cash_pnl": 0.002538932773772854
+          },
+          {
+            "group": "2026-02-23",
+            "n": 6,
+            "signed_cash_pnl": -1383.0502586609941,
+            "absolute_event_cash_pnl": 1497.2261064922823,
+            "share_absolute_event_cash_pnl": 0.0029354785098408167
+          },
+          {
+            "group": "2026-03-02",
+            "n": 1,
+            "signed_cash_pnl": -216.8026036142247,
+            "absolute_event_cash_pnl": 216.8026036142247,
+            "share_absolute_event_cash_pnl": 0.000425065647083929
+          },
+          {
+            "group": "2026-03-09",
+            "n": 3,
+            "signed_cash_pnl": 2574.801445599761,
+            "absolute_event_cash_pnl": 2574.801445599761,
+            "share_absolute_event_cash_pnl": 0.005048184958765363
+          },
+          {
+            "group": "2026-03-23",
+            "n": 3,
+            "signed_cash_pnl": -2105.4198140543,
+            "absolute_event_cash_pnl": 2105.4198140543,
+            "share_absolute_event_cash_pnl": 0.00412791000073395
+          },
+          {
+            "group": "2026-03-30",
+            "n": 6,
+            "signed_cash_pnl": -1201.4860921719926,
+            "absolute_event_cash_pnl": 1201.4860921719926,
+            "share_absolute_event_cash_pnl": 0.002355647278757684
+          },
+          {
+            "group": "2026-04-06",
+            "n": 5,
+            "signed_cash_pnl": -2152.933738614992,
+            "absolute_event_cash_pnl": 2223.551173362123,
+            "share_absolute_event_cash_pnl": 0.004359519685525527
+          },
+          {
+            "group": "2026-04-13",
+            "n": 3,
+            "signed_cash_pnl": 451.45580846939504,
+            "absolute_event_cash_pnl": 1208.194435968913,
+            "share_absolute_event_cash_pnl": 0.0023687997337991065
+          },
+          {
+            "group": "2026-04-20",
+            "n": 4,
+            "signed_cash_pnl": -193.14863084587188,
+            "absolute_event_cash_pnl": 193.14863084587188,
+            "share_absolute_event_cash_pnl": 0.0003786893994131384
+          },
+          {
+            "group": "2026-04-27",
+            "n": 3,
+            "signed_cash_pnl": -21.760265205128356,
+            "absolute_event_cash_pnl": 177.72063889344665,
+            "share_absolute_event_cash_pnl": 0.0003484411031605144
+          },
+          {
+            "group": "2026-05-04",
+            "n": 3,
+            "signed_cash_pnl": 3013.111941460163,
+            "absolute_event_cash_pnl": 3306.692749611813,
+            "share_absolute_event_cash_pnl": 0.006483139362212258
+          },
+          {
+            "group": "2026-05-11",
+            "n": 2,
+            "signed_cash_pnl": -1874.7328727872825,
+            "absolute_event_cash_pnl": 1874.7328727872825,
+            "share_absolute_event_cash_pnl": 0.0036756225635500386
+          },
+          {
+            "group": "2026-05-18",
+            "n": 5,
+            "signed_cash_pnl": -1769.640233074433,
+            "absolute_event_cash_pnl": 1769.640233074433,
+            "share_absolute_event_cash_pnl": 0.0034695767404897765
+          },
+          {
+            "group": "2026-05-25",
+            "n": 1,
+            "signed_cash_pnl": -359.6433904905091,
+            "absolute_event_cash_pnl": 359.6433904905091,
+            "share_absolute_event_cash_pnl": 0.0007051209162152159
+          },
+          {
+            "group": "2026-06-08",
+            "n": 2,
+            "signed_cash_pnl": 1693.1668210460036,
+            "absolute_event_cash_pnl": 1693.1668210460036,
+            "share_absolute_event_cash_pnl": 0.0033196421002839732
+          },
+          {
+            "group": "2026-06-15",
+            "n": 4,
+            "signed_cash_pnl": -621.8098255097901,
+            "absolute_event_cash_pnl": 668.2235416909979,
+            "share_absolute_event_cash_pnl": 0.001310126665503581
+          },
+          {
+            "group": "2026-06-22",
+            "n": 2,
+            "signed_cash_pnl": 1979.3692608335327,
+            "absolute_event_cash_pnl": 2371.1211656644996,
+            "share_absolute_event_cash_pnl": 0.004648847088529393
+          },
+          {
+            "group": "2026-06-29",
+            "n": 3,
+            "signed_cash_pnl": 111.66611683672494,
+            "absolute_event_cash_pnl": 459.5096153664918,
+            "share_absolute_event_cash_pnl": 0.0009009197709848437
+          },
+          {
+            "group": "2026-07-06",
+            "n": 2,
+            "signed_cash_pnl": 58.997347082222916,
+            "absolute_event_cash_pnl": 58.997347082222916,
+            "share_absolute_event_cash_pnl": 0.00011567086877961668
+          },
+          {
+            "group": "2026-07-13",
+            "n": 4,
+            "signed_cash_pnl": -1185.7138735831024,
+            "absolute_event_cash_pnl": 1250.9529389637107,
+            "share_absolute_event_cash_pnl": 0.002452632540420582
+          },
+          {
+            "group": "2026-07-20",
+            "n": 1,
+            "signed_cash_pnl": 13.99274975562595,
+            "absolute_event_cash_pnl": 13.99274975562595,
+            "share_absolute_event_cash_pnl": 2.743434410013879e-05
+          },
+          {
+            "group": "2026-07-27",
+            "n": 6,
+            "signed_cash_pnl": -1069.757538552025,
+            "absolute_event_cash_pnl": 1069.757538552025,
+            "share_absolute_event_cash_pnl": 0.0020973787803611646
+          },
+          {
+            "group": "2026-08-03",
+            "n": 4,
+            "signed_cash_pnl": -852.2108858375879,
+            "absolute_event_cash_pnl": 852.2108858375879,
+            "share_absolute_event_cash_pnl": 0.0016708543421604704
+          },
+          {
+            "group": "2026-08-10",
+            "n": 4,
+            "signed_cash_pnl": 1193.1048635661018,
+            "absolute_event_cash_pnl": 3189.5421061967536,
+            "share_absolute_event_cash_pnl": 0.006253452480138977
+          },
+          {
+            "group": "2026-08-17",
+            "n": 2,
+            "signed_cash_pnl": 9854.221286586764,
+            "absolute_event_cash_pnl": 9854.221286586764,
+            "share_absolute_event_cash_pnl": 0.019320298178450497
+          },
+          {
+            "group": "2026-08-24",
+            "n": 2,
+            "signed_cash_pnl": -377.54898054437456,
+            "absolute_event_cash_pnl": 377.54898054437456,
+            "share_absolute_event_cash_pnl": 0.0007402268194460133
+          },
+          {
+            "group": "2026-08-31",
+            "n": 6,
+            "signed_cash_pnl": -1896.2889946568055,
+            "absolute_event_cash_pnl": 2176.5078271352368,
+            "share_absolute_event_cash_pnl": 0.00426728596659609
+          },
+          {
+            "group": "2026-09-07",
+            "n": 8,
+            "signed_cash_pnl": -2392.458001552498,
+            "absolute_event_cash_pnl": 2392.458001552498,
+            "share_absolute_event_cash_pnl": 0.004690680331314585
+          },
+          {
+            "group": "2026-09-14",
+            "n": 5,
+            "signed_cash_pnl": 5192.718040101019,
+            "absolute_event_cash_pnl": 7059.916905701335,
+            "share_absolute_event_cash_pnl": 0.01384175327165588
+          },
+          {
+            "group": "2026-09-28",
+            "n": 1,
+            "signed_cash_pnl": -31.166974243882702,
+            "absolute_event_cash_pnl": 31.166974243882702,
+            "share_absolute_event_cash_pnl": 6.110632369617415e-05
+          }
+        ],
+        "hhi_absolute_event_cash_pnl": 0.012344880534998466,
+        "note": "Shares allocate absolute individual-event cash PnL, not absolute group net PnL or an equal-risk ranking."
+      }
+    },
+    "matched_btc_beta_sensitivity": {
+      "btc_net_lower_bps": {
+        "n": 584,
+        "beta": 1.361337291954553,
+        "intercept_bps": 45.562716070235915,
+        "note": "Unweighted paired-event descriptive OLS sensitivity; overlapping durations and sleeves are dependent. Not causal alpha, a tradable hedge, or a statistical confidence interval."
+      },
+      "btc_net_upper_bps": {
+        "n": 584,
+        "beta": 1.361337291954553,
+        "intercept_bps": 45.562716070235915,
+        "note": "Unweighted paired-event descriptive OLS sensitivity; overlapping durations and sleeves are dependent. Not causal alpha, a tradable hedge, or a statistical confidence interval."
+      }
+    },
+    "reference_price_cost_curve": {
+      "cases": {
+        "10": {
+          "n": 584,
+          "mean_net_bps": 69.03919745841463,
+          "median_net_bps": -125.59780165956047,
+          "worst_net_bps": -1707.4929814082618,
+          "best_net_bps": 12589.143640274517,
+          "per_unit_profit_factor": 1.3742468810559698,
+          "win_fraction": 0.2722602739726027
+        },
+        "20": {
+          "n": 584,
+          "mean_net_bps": 58.97518523506176,
+          "median_net_bps": -135.46727405643833,
+          "worst_net_bps": -1715.7813483875484,
+          "best_net_bps": 12566.56577427831,
+          "per_unit_profit_factor": 1.3078608953432305,
+          "win_fraction": 0.2722602739726027
+        },
+        "30": {
+          "n": 584,
+          "mean_net_bps": 48.92122195052297,
+          "median_net_bps": -145.32689176295688,
+          "worst_net_bps": -1724.0614394137842,
+          "best_net_bps": 12544.010452332022,
+          "per_unit_profit_factor": 1.2462394296544523,
+          "win_fraction": 0.2671232876712329
+        },
+        "40": {
+          "n": 584,
+          "mean_net_bps": 38.877292561478725,
+          "median_net_bps": -155.17666953164257,
+          "worst_net_bps": -1732.3332668761216,
+          "best_net_bps": 12521.477640687073,
+          "per_unit_profit_factor": 1.188835074138445,
+          "win_fraction": 0.25
+        },
+        "60": {
+          "n": 584,
+          "mean_net_bps": 18.819475446569104,
+          "median_net_bps": -174.84676411855915,
+          "worst_net_bps": -1748.8521805421854,
+          "best_net_bps": 12476.479413643387,
+          "per_unit_profit_factor": 1.085311530646182,
+          "win_fraction": 0.2363013698630137
+        },
+        "80": {
+          "n": 584,
+          "mean_net_bps": -1.198385857356869,
+          "median_net_bps": -194.47767525012426,
+          "worst_net_bps": -1765.3381880057273,
+          "best_net_bps": 12431.570824502165,
+          "per_unit_profit_factor": 0.994911924682275,
+          "win_fraction": 0.22602739726027396
+        }
+      },
+      "note": "Conditional reference-return burden on the unchanged baseline admissions, prices and durations. The10/30bps rows are descriptive arithmetic, not new funded simulations, changed admission sets, screening gates or a rescue of the rejected candidate."
+    },
+    "path_metrics": {
+      "pre_first_mfe_mae_bps_bounds": {
+        "mean": [
+          -104.81010622229417,
+          -104.69459915883024
+        ],
+        "median": [
+          -59.691806101069275,
+          -59.691806101069275
+        ]
+      },
+      "mae_through_endpoint_bps_bounds": {
+        "mean": [
+          -294.7123969779643,
+          -294.7123969779643
+        ],
+        "median": [
+          -235.78386960579735,
+          -235.78386960579735
+        ]
+      },
+      "hypothetical_peak_net_after_cost_bps_bounds": {
+        "mean": [
+          618.3481907209185,
+          618.3481907209185
+        ],
+        "median": [
+          223.02725718831073,
+          223.02725718831073
+        ]
+      },
+      "mfe_giveback_to_endpoint_bps_bounds": {
+        "mean": [
+          581.7934268093774,
+          581.7934268093774
+        ],
+        "median": [
+          478.6338583294259,
+          478.6338583294259
+        ]
+      }
+    },
+    "path_fractions": {
+      "endpoint_correct_direction": 0.285958904109589,
+      "definite_positive_excursion": 0.9982876712328768,
+      "possible_positive_excursion": 0.9982876712328768
+    },
+    "hypothetical_peak_clears_baseline_cost_fraction_bounds": [
+      0.8801369863013698,
+      0.8801369863013698
+    ]
+  },
+  "raw_signal_availability_clocks": {
+    "ETHUSDT": {
+      "raw_entry_flags": 1732,
+      "completion_clock": {
+        "n": 1732,
+        "utc_hour_counts": {
+          "0": 570,
+          "8": 595,
+          "16": 567
+        },
+        "nonexclusive_session_counts": {
+          "Asia": 1165,
+          "London": 595,
+          "New_York": 567
+        },
+        "exclusive_membership_counts": {
+          "Asia": 570,
+          "Asia+London": 595,
+          "New_York": 567
+        }
+      },
+      "session_windows_utc": {
+        "Asia": [
+          0,
+          9
+        ],
+        "London": [
+          7,
+          16
+        ],
+        "New_York": [
+          13,
+          22
+        ]
+      },
+      "includes_last_available_signal_with_no_next_open": true,
+      "note": "Eligible raw BUY flags, including ignored/rejected/final-unexecuted flags; completed-candle availability clock. Fixed UTC point labels, no DST, intrabar-time or session-filter claim."
+    },
+    "SOLUSDT": {
+      "raw_entry_flags": 1839,
+      "completion_clock": {
+        "n": 1839,
+        "utc_hour_counts": {
+          "0": 603,
+          "8": 617,
+          "16": 619
+        },
+        "nonexclusive_session_counts": {
+          "Asia": 1220,
+          "London": 617,
+          "New_York": 619
+        },
+        "exclusive_membership_counts": {
+          "Asia": 603,
+          "Asia+London": 617,
+          "New_York": 619
+        }
+      },
+      "session_windows_utc": {
+        "Asia": [
+          0,
+          9
+        ],
+        "London": [
+          7,
+          16
+        ],
+        "New_York": [
+          13,
+          22
+        ]
+      },
+      "includes_last_available_signal_with_no_next_open": true,
+      "note": "Eligible raw BUY flags, including ignored/rejected/final-unexecuted flags; completed-candle availability clock. Fixed UTC point labels, no DST, intrabar-time or session-filter claim."
+    },
+    "LINKUSDT": {
+      "raw_entry_flags": 1772,
+      "completion_clock": {
+        "n": 1772,
+        "utc_hour_counts": {
+          "0": 591,
+          "8": 600,
+          "16": 581
+        },
+        "nonexclusive_session_counts": {
+          "Asia": 1191,
+          "London": 600,
+          "New_York": 581
+        },
+        "exclusive_membership_counts": {
+          "Asia": 591,
+          "Asia+London": 600,
+          "New_York": 581
+        }
+      },
+      "session_windows_utc": {
+        "Asia": [
+          0,
+          9
+        ],
+        "London": [
+          7,
+          16
+        ],
+        "New_York": [
+          13,
+          22
+        ]
+      },
+      "includes_last_available_signal_with_no_next_open": true,
+      "note": "Eligible raw BUY flags, including ignored/rejected/final-unexecuted flags; completed-candle availability clock. Fixed UTC point labels, no DST, intrabar-time or session-filter claim."
+    }
+  },
+  "new_strategy_trials": 0,
+  "changed_strategy_rules": false,
+  "changed_gates": false,
+  "viable": false,
+  "future_confirmation_started": false,
+  "orders": false
+}

@@ -1,0 +1,138 @@
+{
+  "kind": "PSR23_EMV_BATCH17_FINAL_PRE_OUTCOME_INDEPENDENT_REVIEW",
+  "status": "PASS_PRE_OUTCOME_INDEPENDENT_REVIEW_WITH_DECLARED_PARITY_LIMITS",
+  "blocking_findings": [],
+  "market_outcomes_inspected": false,
+  "market_data_loaded": false,
+  "evaluator_exact_sha256": "6f5f402f45af45be1d37596096f3bb842fc9fe51288eb4113b6a1b5acb796961",
+  "canonical_config_sha256": "d5705ac1cf267187baa29be55e1de22dff0dcfdf6e59e68f0c801fcb9fca3569",
+  "design_commit": "8aa49ae9286dc83378a944184a4406ae733d8c96",
+  "source_commit": "d38be65768360a2b23c3d35b60f18fce0ee48b57",
+  "evaluator_git_commit": "d38be65768360a2b23c3d35b60f18fce0ee48b57",
+  "config_exact_sha256": "62bf6c63bc2176fac840217a122bf6515b0a128f81b22be6715247d470686afe",
+  "test_exact_sha256": "80964d2b7c983a8b15393ea251048891d88069899ba969a050e3e24c0dc38004",
+  "baseline_main": "6d873b0f2e1f11e5cf65ee1833a3a199a3c695be",
+  "validations": {
+    "registered_tests_independently_reexecuted": 17,
+    "registered_original_native_emv_values_and_nonfinite_classes_exact": 2507,
+    "registered_available_bar_actions_exact": 2799,
+    "native_fixtures": 23,
+    "prefix_checks": 11,
+    "future_mutation_checks": 3,
+    "real_git_design_checked_spec_and_dependency_provenance_binding": true,
+    "evaluator_exact_working_and_head_git_blob_match": true,
+    "test_git_blob_matches_LF_normalized_working_bytes": true,
+    "source_audit_native_metadata_numeric_working_and_head_git_blobs_exact_paths": [
+      "artifacts/public_emv_batch17_registration_20261016/EMV-source-bounded-readiness-review.json",
+      "artifacts/public_emv_batch17_registration_20261016/EMV-feature-helper-synthetic-proof.json",
+      "artifacts/public_emv_batch17_registration_20261016/EMV-feature-helper-synthetic-review.json",
+      "artifacts/public_emv_batch17_registration_20261016/EMV-batch17-draft-mechanics-review.json",
+      "artifacts/public_emv_batch17_registration_20261016/EMV-mathematical-specification-draft.md",
+      "artifacts/public_emv_batch17_registration_20261016/Public-screen-descriptive-supplement-method-draft.md",
+      "artifacts/public_emv_batch17_registration_20261016/Public-screen-supplement-draft-independent-review.json",
+      "artifacts/public_emv_batch17_registration_20261016/Public-screen-supplement-line-ending-bridge-independent-review.json",
+      "artifacts/public_emv_batch17_registration_20261016/emv-synthetic-input.json",
+      "artifacts/public_emv_batch17_registration_20261016/emv-native-synthetic-output.json",
+      "artifacts/public_emv_batch17_registration_20261016/emv-selected-native-source-receipt.json"
+    ],
+    "actual_engine_ast_unchanged_from_reviewed_draft_except_binding_constants_and_docstring": true,
+    "config_delta_only_filled_audit_map": true,
+    "frozen_paths_rehashed": 14,
+    "prior_paths_rehashed": 308,
+    "actual_production_cold_cli_missing_review_blocks_before_raw_data": true,
+    "cold_probe_created_no_raw_cache_or_output": true,
+    "AGPL_source_harness_build_not_copied": true,
+    "restored_supplement_raw_and_Git_hashes_exact_and_bridge_retained": true,
+    "earlier_packaged_supplements": [
+      {
+        "study": "Protective-batch5",
+        "raw_sha256": "0a34fed88c4ce8d258d8dde04b5022f7e5ccb17e007fb9d2127b6c3e4eb02756",
+        "compressed_sha256": "cff8ac9c92500334f0ece87adcede9ca50758288eb7c84cce148464c26c999c1",
+        "adaptations": 2
+      },
+      {
+        "study": "Protective-batch6",
+        "raw_sha256": "1fcdd6c66f7eb921b2a587a697090397033fef09a990235c93aaccc2e5fc4641",
+        "compressed_sha256": "c37c0daa4b0ce4c776787fb31f7bc3626f6f4769dff138f4c7c0d64db5e20af2",
+        "adaptations": 2
+      },
+      {
+        "study": "Candle-batch7",
+        "raw_sha256": "619bd86f84d89a9d92eeb7fab25f4486264d345797882ca6c9ff891ec8f507f4",
+        "compressed_sha256": "f0ce29cc597077acf3a83f896c03031fa696ac8ac90932a8c8ac562650f6fa72",
+        "adaptations": 1
+      },
+      {
+        "study": "Trend-batch8",
+        "raw_sha256": "5b001178074e51d625043598c0036815d752b47a6c6e8158aed1ec7e0e098824",
+        "compressed_sha256": "0b02df9dcd0aa1b7ace625c52c53f65076b679b841f139e7eb65e4b5a98490b2",
+        "adaptations": 1
+      },
+      {
+        "study": "DualThrust-batch9",
+        "raw_sha256": "a9c806cc7bb5a4bc0ace9d64e3a075c4f2c8dd90215b96fcbcb134e7515ad9f1",
+        "compressed_sha256": "b8be4dee1fdd4fb8bdb3cb03c74bdb32b4b282d0d28aedea768a4136bcaa293d",
+        "adaptations": 1
+      },
+      {
+        "study": "Vortex-batch10",
+        "raw_sha256": "adced7b019205813a7e20cd5b8d6f3dbad32e76ad0736d55305252c7695b36bd",
+        "compressed_sha256": "f6ae56e1bd7f4654ad546122b3252473ce4e0d15e8af0254348125f6943b5394",
+        "adaptations": 1
+      },
+      {
+        "study": "NVI-batch11",
+        "raw_sha256": "c4ab7279fc56585ff6bd33f554d34db7b0a671366b039426908beeeba4aeedb6",
+        "compressed_sha256": "6bbaed0dcf2f28bca4a074ce8a850ef1dc136b2bd69c4548cad9796de9add29f",
+        "adaptations": 1
+      },
+      {
+        "study": "ForceIndex-batch12",
+        "raw_sha256": "5beacb86fdc2a479d3c67e65c40ce35bb8f1e2ad0a013ebfa3bd949f0a79051e",
+        "compressed_sha256": "f18e4e81fda03fe0dbd6eecc4b1b5e6e65f4cb6eab20ec86f329a5668ad1404b",
+        "adaptations": 1
+      },
+      {
+        "study": "OU-batch13",
+        "raw_sha256": "fc23f8fa83768f50e60e50062de0a2bf1d61ba916c70deba8fbc3e1eff2ed19e",
+        "compressed_sha256": "bda573ed572f0df742f1e1e74bee729a3907d9521c109e1f155d2e85fb55fe23",
+        "adaptations": 1
+      },
+      {
+        "study": "Keltner-batch14",
+        "raw_sha256": "af2561c51a1d550cede99bd5eb564d66479457f52385ee5c1cbee767e2e7c3f9",
+        "compressed_sha256": "42dd5af785fecade7d95a9e5e8a66d0eebb2d31b69b026cf073e668b21fd80f2",
+        "adaptations": 1
+      }
+    ],
+    "prior_independent_fullcash_paths": 80,
+    "prior_independent_events": 96,
+    "prior_maximum_cash_btc_nav_residual": 0.0,
+    "prior_control_enters_flat_source_hold_and_remains_censored": true,
+    "draft_review_exact_sha256": "25d3091673ccb95709c9674be68c0b81700c2d5c21781da7303d116ca90e43ed",
+    "helper_review_exact_sha256": "a41dd06ff51a8818a6d7d86cc429f0cfe2b1a3d3c08d0fbb08d511e7114c555a",
+    "full_suite_scope": "Reviewer reran17 registered tests; root1209-test suite and Ruff are separate gates."
+  },
+  "mechanics": [
+    "Source midpoint distance rawi pairs with previousboxrawi-1, preservesbothdivisions andNeumaier14incoming/removalphysicalringnonfinite recovery. FirstEMV raw14, no currentbox/algebraiczero repair.",
+    "RepeatedsignBUY/SELL/HOLDzeroorNaN, onlynavailablebarstartupmin14HOLD, positivefiniteorderedhighlow/nonnegativefinitebaseV withzerorange/zeroV allowed. Fullhistory noresets.",
+    "Educational fullcash intent,fee-reservedsignalcloseDecimalfloor8fixedqty before nextOPEN,allorreject,noresize; heldsnapshot preventsreentry, ownBTC/cash/NAV/censor/pending remainfixed. WholecontrolBUYreplacement keepsoriginalSELL.",
+    "Exact oldsupplementauditedCRLFbytes restored under-text withadditiveLFbridge;14+308priorpathpreservation excludesonlythose2declaredrestorations, no logicchange. Tenpackagedsupplements/twelveadaptations rawgziphashes/oldrejections verified; no outcome re-audit needed."
+  ],
+  "limits": [
+    "Actualpre-outcomeimmutableEMVevaluatorreview only; noEMVmarketdata/outcome inspected.17registeredtests/native23fixtures repeated; prior80cashpaths retained; root1209/Ruff separate gates.",
+    "Sourceeducationalsignal/fullcashintent notdeployednativebot/exchangeparity; finitevalues/nonfiniteclasses exactonthesefixtures, notNaNpayloadbits/allinputs/platforms.",
+    "AGPL Go/helpers/harness/build remainoutsideGit; independentmathematicalimplementation withURI/hash/numericreceipts only.",
+    "Spenthistoricaldata,noviabilityorconfirmationstart. Registered30trading31signal; attempted29/30untilfirstEMVload. Commitexactreviewbeforeanyraw/cacheload."
+  ],
+  "registered": true,
+  "minimum_registered_trading_cells": 30,
+  "minimum_registered_signal_model_cells": 31,
+  "minimum_attempted_trading_cells": 29,
+  "minimum_attempted_signal_model_cells": 30,
+  "new_registered_trials_in_this_audit": 0,
+  "repository_modified": false,
+  "orders_authorized": false,
+  "viable": false,
+  "future_confirmation_started": false
+}
