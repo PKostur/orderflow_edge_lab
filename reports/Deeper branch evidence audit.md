@@ -192,6 +192,41 @@ X4 checklist for a human reviewer (scope: the blend, paper account and trend cor
 4. Fee side and size: taker on every rebalance, 20 bps round trip in development against `max(taker, 2bp) + 5bp` in the paper account.
 5. Delisting settlement: what return a held coin gets on its last day.
 
+### Deferred tests, run once (2026-10-17)
+
+These tests ran once as GitHub run 38985075006, on source commit `2efaf03`, with results at run time 2026-10-17T00:00Z. They are published on branch `audit/deferred-results-2026-10-16` (`deferred_results_v1.json`, `pip_freeze.txt`), and the single-look marker `audit/deferred-started-2026-10-16` points at the same commit. Runs 1 and 2 stopped before the look (see the run log in 0.9). Every section completed without an error. 373 report artifacts (2026-09-26 to 2026-10-16) downloaded with no download errors. All labels below are VERIFIED by run, and the rules are applied unchanged.
+
+- C1, revisions (rule: any change above 1e-9 on a stamp already reported):
+  - Trend core, vol-target, trend portfolio, both cross-asset watches and the zoo: 0 revised stamps.
+  - Blend S4: 15 of 17 stamps revised (median range 1.0 bp, max 9.5 bp on 2026-10-11).
+  - Human H5: 14 of 17 (median 2.6 bp, max 25.8 bp on 2026-10-13).
+  - Paper account: 11 of 11 (median 0.04 bp, max 0.4 bp).
+  - In most cases the first and latest values agree and only intermediate runs differ.
+  - Reading (not a test): the likely cause is runs that silently lacked a coin. C2 shows exactly this happening (next item), and the monitor's one visible revision (C5) is one of these. The latest reported values are not affected. But any single run's report, and so any single monitor line, can be off by up to about 26 bp on a day.
+- C2, determinism:
+  - Pass for the blend, human, trend core and vol-target modules: identical stamps, max gap at or below 5e-18.
+  - Fail for the zoo: the re-run lacked `PHA_USDT` (69 coins against 70), with gaps of 1.1e-3 and 2.7e-3.
+  - The modules are deterministic given identical inputs. The failure mode is a transient missing coin that the report does not flag as an error.
+  - The paper account was not testable (no `--as-of` option).
+- B1, family: not estimable under the registered rule. The 9 included watches (at least 10 calendar-daily days) share 0 common stamps, because the paper account stamps its days at 08:00 UTC and every other watch at 00:00 UTC. No substitute is computed after the look.
+  - BH at q = 0.10 across the 9: no rejection. Every one-sided p is at least 0.95, since every watch has a negative t.
+  - Annualized Sharpe over 11 to 18 days runs from -11.3 (paper account) to -4.7 (human). As Part A says, these numbers carry no information about the edge.
+- C3, reconciliation of prices: all 70 coins, 770 coin-days from 2026-10-04 to 2026-10-16. No exception above 50 bp; median gap 2.1 bp, p95 10.3 bp. The MEXC daily prices the forward watches use agree with Binance's checksummed archive. Funding is still DEFERRED (monthly archive file).
+- C4, BTC beta (HAC 5 lags, 13 to 18 days):
+  - Betas: blend 0.19 (t 3.2), trend core 0.33 (t 3.0), trend portfolio 0.59 (t 2.6), cross-asset 0.37 (t 2.3). The zoo is 0.11 (t 1.0) and the human book 0.00.
+  - BTC fell only 1.5% to 2.7% over the windows, so beta explains a small part of the -2% to -9% drawdowns. Intercepts are negative with t from -1.7 to -4.1.
+  - With 13 to 18 days and 5 HAC lags these t values are unreliable. The reading is only that the early losses are not mainly BTC beta.
+  - The paper account did not align with the 00:00 BTC series (0 days), for the same stamp reason as B1.
+- D4/D5, the size of the next-day-open mask, on the rebuilt development data (70 coins, 2020-06-01 to 2026-09-12, MEXC prices plus Binance archive funding, no fetch errors). The sanity check passed: the rebuilt S2 equals `leg_returns` exactly.
+  - The mask dropped 4 coins in 327 rebalances (mean 0.012 per rebalance), identically for S2 and S3.
+  - Open-only mask against original: S2 Sharpe +0.0001, S3 -0.011, S4 -0.008 (mean daily -0.03 bp).
+  - Successor `run_xs_pit` against original: S2 -0.002, S3 -0.012, S4 -0.009. Its 10 settlements (4 in S2, 6 in S3) all found a last-close price.
+  - Conclusion: the mask uses future information (D2), but it is worth about 0.01 Sharpe. It is not material to any finding.
+  - On the same rebuild, S4 is 1.95 (t 4.15) against the recorded 2.09 and S1 1.18 against 1.17 to 1.19. Archive funding against fapi funding is the likely cause (addendum 0.9), and this does not change the funding-source conclusions already on record.
+- S1 on Hyperliquid common days: degraded. The Hyperliquid fetch returned 56 errors, leaving 8 coins and 203 common days (2026-02-21 to 2026-09-11).
+  - On those 8 coins the two venues track almost identically: daily correlation 0.995, S1 Sharpe -0.16 on Hyperliquid against +0.02 on the reference.
+  - This cannot settle the 64-coin question, so "the trend leg is weaker on other venues" stays not established (E6 unchanged).
+
 ## 2. Findings
 
 What the live claims actually support. The forward watches can detect breakage but cannot confirm an edge before about 2029. Two of them already sit below the 5th percentile of their own backtest envelopes. The headline historical numbers they were built on are superseded and still drive the G2 calibration and the dashboard. The blend's cross-sectional legs share a confirmed one-day survivorship look-ahead, of unknown size, that the repo's look-ahead test cannot detect. Every forward config and watch module was in place before its start.
@@ -199,16 +234,17 @@ What the live claims actually support. The forward watches can detect breakage b
 1. No watch can test a Sharpe-1 edge in its review window. All 16 are monitors (A1).
 2. Blend and trend core are below the as-backtested p5 at day 16, and trend core is below the zero-edge p5 too (C6).
 3. One silent revision of an already reported day exists, and nothing in the monitoring chain surfaces revisions (C5).
-4. The next-day-open mask is in `run_xs`, so it affects the blend's development, holdout and forward series. It uses future information (D2), the truncation check is blind to it (D3), and a simple removal would credit delisting coins 0% (D2).
+4. The next-day-open mask is in `run_xs`, so it affects the blend's development, holdout and forward series. It uses future information (D2), the truncation check is blind to it (D3), and a simple removal would credit delisting coins 0% (D2). Its measured size is about -0.01 Sharpe on S4 (4 drops in 327 rebalances), so it is immaterial (D4/D5).
 5. Trial accounting: 11 ledgered trials, against at least 21 unledgered families and at least about 760 configurations (B3).
 6. Five reference books carry about 2.8 independent bets (B2).
 7. Frozen-before-start holds for every watch config and code path (E2). The formal-review amendment is mis-stamped but still precedes the first scorable day (E4).
 8. Most forward reports carry no provenance hash, the frozen manifest omits every forward config, and artifacts expire after 90 days (E1, E3, E7).
 9. G2's false-alarm statement holds only at Sharpe 1.39 (E5).
 10. Correction to my earlier report: "trend robust" refers to funding, and that holds. A cross-venue weakness of the trend leg is not established (E6).
+12. Deferred tests (run once): the forward MEXC prices reconcile with Binance's archive (C3: 0 exceptions in 770 coin-days). The frozen modules are deterministic given the same inputs (C2). But runs silently drop coins, which revises already-reported days by up to about 26 bp (C1, C2). The early losses are mostly not BTC beta (C4). Watch stamps are not aligned across watches: the paper account uses 08:00, the rest 00:00 (B1).
 11. Repo test suite on the audit commit (Python 3.13.16, pandas 2.3.3, numpy 2.4.6, `.[research]` extras with `requirements/constraints.txt`): 1569 tests, OK. A first run without the `[research]` extra gave 20 errors: 15 from the missing scikit-learn, 4 modules that failed to import for the same reason, and 2 in `test_universal_existing_validation` that passed on the re-run in the corrected environment. No production file was changed by the audit.
 
-Unresolved (DEFERRED, rules fixed in Section 0): B1, C1 to C4, D4, X1, and S1 on Hyperliquid common days. They need `data.binance.vision`, `fapi.binance.com`, `api.mexc.com`, `contract.mexc.com`, `api.hyperliquid.xyz` and the GitHub artifact storage host (`*.blob.core.windows.net`) to be allowed, or a run on your machine. Each runs once, unchanged.
+Unresolved: C3 funding (needs the 2026-10 monthly archive file), B1 (not estimable as registered; a new version must align stamps by date first), S1 on Hyperliquid's 64 coins (the run fetched only 8), and C7 items 3 and 5 beyond C3. The remaining items need new data or a new registered version; none can be re-run under this audit's single look.
 
 Decisions for you (none acted on):
 1. Merge main into this branch (clean merge, 101 commits behind).
@@ -226,9 +262,11 @@ Decisions for you (none acted on):
 | Forward results in line with backtest | monitor history, committed envelopes | Blend and trend core below as-backtested p5 at day 16 | envelope file (pre-committed) | VERIFIED |
 | Reported forward days are stable | 29 monitor commits | One silent revision (human book, 14d) | git history | VERIFIED |
 | Mask is "not a lookahead" | code, synthetic run | Refuted: future information used; truncation test blind | positive/negative controls | VERIFIED |
-| Mask size | none available | Unknown | paired replay | DEFERRED |
+| Mask size | rebuilt development data | About -0.01 Sharpe on S4; immaterial | paired replay, run once | VERIFIED |
 | Cumulative N = 11 | ledgers, result folders | Floor; at least 21 families, at least about 760 configurations | file reading | VERIFIED (config count heuristic) |
 | Frozen before start | full git history | Pass for all configs and code closures | git (author-controlled dates) | VERIFIED |
 | G2 false alarm <= 5% | registered thresholds | Only at Sharpe 1.39; 1.4x to 3.3x higher below | iid approximation within 20% | ARITHMETIC |
 | Trend leg robust | committed venue tables | Robust to funding; cross-venue weakness not established | file reading | VERIFIED |
-| Prices, funding, P&L correct | none available | Not testable here | independent vendor | DEFERRED |
+| Forward prices correct | Binance archive vs MEXC, 770 coin-days | 0 exceptions above 50 bp; median 2.1 bp | independent venue, run once | VERIFIED |
+| Forward funding correct | none available yet | Needs the 2026-10 monthly file | independent venue | DEFERRED |
+| Reports stable across runs | 373 artifacts | Blend, human and paper days revised by up to about 26 bp; trend watches 0 | artifact vintages, run once | VERIFIED |
