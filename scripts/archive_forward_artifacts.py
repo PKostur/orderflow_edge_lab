@@ -4,7 +4,7 @@ Runs inside GitHub Actions (``forward-artifact-archive-v1.yml``) with the workfl
 archived report artifact, extracted, under ``<archive_root>/<artifact name>/<created date>/<run id>-<artifact id>/``
 and appends one line per artifact to ``<archive_root>/manifest.jsonl`` (artifact id, run id, head SHA, created
 time, GitHub's zip digest and the sha256 of every extracted file).  Chained ledger artifacts, which carry their
-whole history in every run, keep only the newest artifact per UTC day.
+whole history in every run, keep only the newest artifact of each completed ISO week.
 
 Read-only towards the watches: it never changes a report, a config or a workflow.
 """
@@ -12,6 +12,7 @@ Read-only towards the watches: it never changes a report, a config or a workflow
 from __future__ import annotations
 
 import argparse
+import datetime
 import hashlib
 import io
 import json
@@ -38,8 +39,19 @@ LEDGER_ARTIFACTS = ("liquidation-flow-ledger-v1", "news-sentiment-ledger-v1", "h
 API = "https://api.github.com"
 
 
-def select(artifacts: Iterable[Mapping[str, Any]], archived_ids: set[int]) -> list[Mapping[str, Any]]:
-    """Artifacts to download: unexpired, allow-listed, not archived yet; ledgers newest per UTC day only."""
+def _iso_week(created_at: str) -> tuple[int, int]:
+    y, w, _ = datetime.date.fromisoformat(str(created_at)[:10]).isocalendar()
+    return int(y), int(w)
+
+
+def select(artifacts: Iterable[Mapping[str, Any]], archived_ids: set[int],
+           today: datetime.date | None = None) -> list[Mapping[str, Any]]:
+    """Artifacts to download: unexpired, allow-listed, not archived yet.
+
+    Ledger artifacts carry their whole history, so only the newest one of each completed ISO week is kept (one
+    download per ledger per week); the running week is left to GitHub's 90-day artifacts until it is complete.
+    """
+    cur = (today or datetime.datetime.now(datetime.timezone.utc).date()).isocalendar()[:2]
     out: list[Mapping[str, Any]] = []
     newest_ledger: dict[tuple[str, str], Mapping[str, Any]] = {}
     seen: set[int] = set()
@@ -52,7 +64,10 @@ def select(artifacts: Iterable[Mapping[str, Any]], archived_ids: set[int]) -> li
             if int(a["id"]) not in archived_ids:
                 out.append(a)
         elif name in LEDGER_ARTIFACTS:
-            key = (name, str(a["created_at"])[:10])   # newest of the day over all unexpired, then skip if archived
+            week = _iso_week(a["created_at"])
+            if week >= tuple(cur):
+                continue                               # running week: wait until it is complete
+            key = (name, "%d-W%02d" % week)            # newest of the week over all unexpired, then skip if archived
             if key not in newest_ledger or str(a["created_at"]) > str(newest_ledger[key]["created_at"]):
                 newest_ledger[key] = a
     out.extend(a for a in newest_ledger.values() if int(a["id"]) not in archived_ids)
@@ -68,7 +83,7 @@ def archived_ids_from(manifest: Path) -> set[int]:
 def target_dir(root: Path, a: Mapping[str, Any]) -> Path:
     day = str(a["created_at"])[:10]
     if a["name"] in LEDGER_ARTIFACTS:
-        return root / a["name"] / day
+        return root / a["name"] / ("%d-W%02d" % _iso_week(a["created_at"]))
     return root / a["name"] / day / f"{a['workflow_run']['id']}-{a['id']}"
 
 

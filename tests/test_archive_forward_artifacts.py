@@ -1,3 +1,4 @@
+import datetime
 import importlib.util
 import io
 import json
@@ -17,21 +18,25 @@ def art(i, name, created, expired=False):
 
 
 class SelectTests(unittest.TestCase):
-    def test_reports_kept_every_run_ledgers_newest_per_day(self):
+    def test_reports_kept_every_run_ledgers_newest_per_completed_week(self):
+        # 2026-10-12..18 is ISO week 42, 2026-10-19..25 week 43; "today" is in week 43
         arts = [art(1, "multi-premia-blend-v1", "2026-10-16T01:00:00Z"),
                 art(2, "multi-premia-blend-v1", "2026-10-16T20:00:00Z"),
                 art(3, "liquidation-flow-ledger-v1", "2026-10-16T01:00:00Z"),
-                art(4, "liquidation-flow-ledger-v1", "2026-10-16T09:00:00Z"),
-                art(5, "liquidation-flow-ledger-v1", "2026-10-17T01:00:00Z"),
+                art(4, "liquidation-flow-ledger-v1", "2026-10-18T09:00:00Z"),
+                art(5, "liquidation-flow-ledger-v1", "2026-10-20T01:00:00Z"),
                 art(6, "capture-health-watch", "2026-10-16T01:00:00Z"),
                 art(7, "fade24-forward-v1", "2026-10-16T01:00:00Z", expired=True)]
-        self.assertEqual([a["id"] for a in arch.select(arts, set())], [1, 4, 2, 5])
+        today = datetime.date(2026, 10, 22)
+        self.assertEqual([a["id"] for a in arch.select(arts, set(), today)], [1, 2, 4])
+        self.assertEqual(arch.target_dir(Path("r"), arts[3]), Path("r/liquidation-flow-ledger-v1/2026-W42"))
 
     def test_ledger_never_falls_back_to_an_older_same_day_artifact(self):
         arts = [art(3, "liquidation-flow-ledger-v1", "2026-10-16T01:00:00Z"),
                 art(4, "liquidation-flow-ledger-v1", "2026-10-16T20:00:00Z")]
-        self.assertEqual([a["id"] for a in arch.select(arts, set())], [4])
-        self.assertEqual(arch.select(arts, {4}), [])
+        today = datetime.date(2026, 10, 22)
+        self.assertEqual([a["id"] for a in arch.select(arts, set(), today)], [4])
+        self.assertEqual(arch.select(arts, {4}, today), [])
 
     def test_token_is_not_forwarded_on_redirect(self):
         import unittest.mock as mock
