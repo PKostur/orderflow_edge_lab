@@ -1,0 +1,43 @@
+{
+  "as_of_utc": "2026-10-20T20:33:16.823008+00:00",
+  "claims": {
+    "live_trading_authorized": false,
+    "paper_trading_authorized": false,
+    "strategy_promotion_authorized": false
+  },
+  "daily_returns": {
+    "tom": {
+      "2026-10-14T00:00:00+00:00": 0.0,
+      "2026-10-15T00:00:00+00:00": 0.0,
+      "2026-10-16T00:00:00+00:00": 0.0,
+      "2026-10-19T00:00:00+00:00": 0.0,
+      "2026-10-20T00:00:00+00:00": 0.0
+    }
+  },
+  "forward": {
+    "spy": {
+      "annualized_sharpe": -4.592866798685978,
+      "cumulative_return": -0.011516589581354486,
+      "days": 5,
+      "max_drawdown": -0.011065157971047346,
+      "mean_daily_bps": -22.888633429278826,
+      "minimum_detectable_sharpe": 14.198591479439079,
+      "newey_west_t": null
+    },
+    "tom": {
+      "annualized_sharpe": null,
+      "cumulative_return": 0.0,
+      "days": 5,
+      "max_drawdown": 0.0,
+      "mean_daily_bps": 0.0,
+      "minimum_detectable_sharpe": 14.198591479439079,
+      "newey_west_t": null
+    }
+  },
+  "invested_days": 0,
+  "prospective_start_utc": "2026-10-13T00:00:00+00:00",
+  "review_window_open": false,
+  "schema_version": 1,
+  "status": "COLLECTING",
+  "watch_id": "turn-of-month-forward-v1"
+}

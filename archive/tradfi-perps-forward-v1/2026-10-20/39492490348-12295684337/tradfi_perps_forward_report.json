@@ -1,0 +1,2737 @@
+{
+  "as_of_utc": "2026-10-20T20:30:43.997014+00:00",
+  "b2_null_inputs": [
+    {
+      "long": [
+        "ADBEUSDT",
+        "APPUSDT",
+        "CBRSUSDT",
+        "CYPHUSDT",
+        "IONQUSDT",
+        "JPMUSDT",
+        "LLYUSDT",
+        "METAUSDT",
+        "NFLXUSDT",
+        "NKEUSDT",
+        "RDDTUSDT",
+        "SECZUSDT",
+        "SOFIUSDT",
+        "TTWOUSDT",
+        "USARUSDT",
+        "VSTUSDT"
+      ],
+      "returns": {
+        "AAOIUSDT": 0.02032573,
+        "AAPLUSDT": -0.0044938,
+        "ADBEUSDT": 0.01276074,
+        "ALABUSDT": -0.00918413,
+        "AMATUSDT": -0.02064492,
+        "AMDUSDT": -0.01639105,
+        "AMZNUSDT": 0.02236658,
+        "APPUSDT": 0.02140395,
+        "ARMUSDT": -0.0132797,
+        "ASMLUSDT": -0.00938499,
+        "ASTSUSDT": -0.02668833,
+        "AVGOUSDT": -0.0011029,
+        "AXTIUSDT": 0.01359327,
+        "BABAUSDT": -0.00766563,
+        "BEUSDT": -0.00987849,
+        "BMNRUSDT": -0.00506446,
+        "BNCUSDT": 0.00171123,
+        "BOTUSDT": -0.06803279,
+        "BSPUSDT": -0.06296144,
+        "CBRSUSDT": -0.01111747,
+        "CIENUSDT": 0.0031974,
+        "COHRUSDT": -0.01307689,
+        "COINUSDT": -0.02750389,
+        "CRCLUSDT": -0.01854975,
+        "CRDOUSDT": 0.00586357,
+        "CRWDUSDT": 0.002106,
+        "CRWVUSDT": -0.02142286,
+        "CYPHUSDT": -0.00666405,
+        "DELLUSDT": -0.01635171,
+        "FLNCUSDT": 0.01380977,
+        "GLWUSDT": -0.01137208,
+        "GMEUSDT": -0.01158879,
+        "GOOGLUSDT": 0.0024705,
+        "HIMSUSDT": -0.00035448,
+        "HOODUSDT": -0.02441731,
+        "HPEUSDT": -0.01584507,
+        "IBMUSDT": 0.0143928,
+        "INTCUSDT": -0.01915913,
+        "IONQUSDT": 0.00162285,
+        "IRENUSDT": -0.01068757,
+        "JPMUSDT": -0.0115388,
+        "KLACUSDT": -0.02451439,
+        "LITEUSDT": -0.0131436,
+        "LLYUSDT": -0.01108494,
+        "LRCXUSDT": -0.00764415,
+        "METAUSDT": 0.01015897,
+        "MRNAUSDT": 0.02140095,
+        "MRVLUSDT": 0.00194093,
+        "MSFTUSDT": 0.00383221,
+        "MSTRUSDT": -0.02604278,
+        "MUUSDT": -0.00606014,
+        "NBISUSDT": 0.00082184,
+        "NFLXUSDT": 0.00749172,
+        "NKEUSDT": 0.01085776,
+        "NOKUSDT": -0.00868621,
+        "NOWUSDT": 0.02228001,
+        "NVDAUSDT": 0.0077408,
+        "ONDSUSDT": -0.01315789,
+        "ORCLUSDT": 0.00084785,
+        "PENGUSDT": -0.0251594,
+        "PLTRUSDT": 0.01946178,
+        "QCOMUSDT": -0.01518672,
+        "RDDTUSDT": 0.01022668,
+        "RKLBUSDT": -0.01265823,
+        "SECZUSDT": -0.01368421,
+        "SHAZUSDT": -0.01561932,
+        "SKHYUSDT": 0.00273588,
+        "SMCIUSDT": -0.02399028,
+        "SNDKUSDT": -0.01188617,
+        "SNOWUSDT": 0.00479868,
+        "SOFIUSDT": -0.00554785,
+        "SPCXUSDT": -0.0001349,
+        "STRCUSDT": 0.00131859,
+        "TERUSDT": -0.00311314,
+        "TSLAUSDT": 0.01746496,
+        "TSMUSDT": 0.00662093,
+        "TTWOUSDT": 0.00239083,
+        "USARUSDT": -0.02036857,
+        "VRTUSDT": -0.01087998,
+        "VSTUSDT": -0.00925131,
+        "WDCUSDT": 0.00409871,
+        "WMTUSDT": 0.00058937
+      },
+      "returns_basis": "price return entry to exit, funding excluded",
+      "short": [
+        "AMDUSDT",
+        "ASTSUSDT",
+        "AXTIUSDT",
+        "BNCUSDT",
+        "CIENUSDT",
+        "INTCUSDT",
+        "IRENUSDT",
+        "LRCXUSDT",
+        "MRNAUSDT",
+        "MRVLUSDT",
+        "MUUSDT",
+        "SKHYUSDT",
+        "SMCIUSDT",
+        "SNDKUSDT",
+        "TERUSDT",
+        "WDCUSDT"
+      ],
+      "week": "2026-10-19"
+    }
+  ],
+  "books": {
+    "B0_equal_weight_long_1x": {
+      "delisted_exit_at_last_close": [],
+      "delisted_exit_count": 0,
+      "ffilled_marks": 0,
+      "funding_paid_equity_fraction": 0.0,
+      "leverage_sim_period_check_max_abs_diff": 0.0,
+      "liquidated_positions": [],
+      "min_equity": 0.9993,
+      "periods": 1,
+      "ruin": false,
+      "scored_through": "2026-10-20T00:00:00+00:00",
+      "turnover_notional_over_equity": 1.0
+    },
+    "B1_xs_momentum_12_1_1x": {
+      "delisted_exit_at_last_close": [],
+      "delisted_exit_count": 0,
+      "ffilled_marks": 0,
+      "funding_paid_equity_fraction": 0.0,
+      "leverage_sim_period_check_max_abs_diff": 1.1102230246251565e-16,
+      "liquidated_positions": [],
+      "min_equity": 0.9993,
+      "periods": 1,
+      "ruin": false,
+      "scored_through": "2026-10-20T00:00:00+00:00",
+      "turnover_notional_over_equity": 1.0
+    },
+    "B1_xs_momentum_12_1_2x": {
+      "delisted_exit_at_last_close": [],
+      "delisted_exit_count": 0,
+      "ffilled_marks": 0,
+      "funding_paid_equity_fraction": 0.0,
+      "leverage_sim_period_check_max_abs_diff": 1.1102230246251565e-16,
+      "liquidated_positions": [],
+      "min_equity": 0.9986,
+      "periods": 1,
+      "ruin": false,
+      "scored_through": "2026-10-20T00:00:00+00:00",
+      "turnover_notional_over_equity": 2.0
+    },
+    "B2_weekend_fade_1x": {
+      "delisted_exit_at_last_close": [],
+      "delisted_exit_count": 0,
+      "ffilled_marks": 0,
+      "funding_paid_equity_fraction": 0.0,
+      "leverage_sim_period_check_max_abs_diff": 0.0,
+      "liquidated_positions": [],
+      "min_equity": 0.9986,
+      "periods": 1,
+      "ruin": false,
+      "scored_through": "2026-10-20T00:00:00+00:00",
+      "turnover_notional_over_equity": 2.0
+    },
+    "B2_weekend_fade_2x": {
+      "delisted_exit_at_last_close": [],
+      "delisted_exit_count": 0,
+      "ffilled_marks": 0,
+      "funding_paid_equity_fraction": 0.0,
+      "leverage_sim_period_check_max_abs_diff": 0.0,
+      "liquidated_positions": [],
+      "min_equity": 0.9972,
+      "periods": 1,
+      "ruin": false,
+      "scored_through": "2026-10-20T00:00:00+00:00",
+      "turnover_notional_over_equity": 4.0
+    },
+    "B2_weekend_fade_5x": {
+      "delisted_exit_at_last_close": [],
+      "delisted_exit_count": 0,
+      "ffilled_marks": 0,
+      "funding_paid_equity_fraction": 0.0,
+      "leverage_sim_period_check_max_abs_diff": 0.0,
+      "liquidated_positions": [],
+      "min_equity": 0.993,
+      "periods": 1,
+      "ruin": false,
+      "scored_through": "2026-10-20T00:00:00+00:00",
+      "turnover_notional_over_equity": 10.0
+    }
+  },
+  "calendar_check": {
+    "bars_on_closed_days": [],
+    "checked_from": "2026-10-19",
+    "checked_through": "2026-10-20",
+    "early_closes_checked": false,
+    "sessions_expected": 2,
+    "sessions_without_bar": [],
+    "spy_bars": 2,
+    "status": "checked",
+    "unscored_sessions": []
+  },
+  "claims": {
+    "live_trading_authorized": false,
+    "orders_sent": false,
+    "paper_trading_authorized": false,
+    "strategy_promotion_authorized": false
+  },
+  "cost_convention": "7 bps per side on traded notional x leverage; B0/B1 turnover is netted between consecutive TARGET weights (sum |w_new - w_old|), not drifted holdings; B2 pays 14 bps on gross 1.0; counters (trades, turnover, funding, liquidations) cover scored periods only",
+  "coverage": {
+    "archive": {
+      "latest_published_day": "2026-10-19",
+      "probe_symbol": "BZUSDT"
+    },
+    "funding_symbols_total": 186,
+    "funding_symbols_with_rows": 0,
+    "mark_15m_symbols_with_data": 141,
+    "perp_15m_lagging_symbols": [],
+    "perp_15m_last_bar_max": "2026-10-20T00:00:00+00:00",
+    "perp_15m_last_bar_min": "2026-10-20T00:00:00+00:00",
+    "perp_15m_stale_symbols": [],
+    "perp_15m_symbols_with_data": 178,
+    "stock_book_symbols": 141,
+    "universe_symbols": 221,
+    "yahoo_stock_symbols_with_253_closes": 133,
+    "yahoo_symbols_loaded": 178
+  },
+  "daily_returns": {
+    "B0_equal_weight_long_1x": {
+      "2026-10-20T00:00:00+00:00": 0.00027805268582170584
+    },
+    "B1_xs_momentum_12_1_1x": {
+      "2026-10-20T00:00:00+00:00": -0.0003391495076261464
+    },
+    "B1_xs_momentum_12_1_2x": {
+      "2026-10-20T00:00:00+00:00": -0.0006782990152521817
+    },
+    "B2_weekend_fade_1x": {
+      "2026-10-20T00:00:00+00:00": 0.000618683190684699
+    },
+    "B2_weekend_fade_2x": {
+      "2026-10-20T00:00:00+00:00": 0.001237366381369398
+    },
+    "B2_weekend_fade_5x": {
+      "2026-10-20T00:00:00+00:00": 0.003093415953423717
+    }
+  },
+  "data": {
+    "elapsed_seconds": 30.1,
+    "http_megabytes": 29.05,
+    "http_requests": 1650,
+    "latest_published_day": "2026-10-19",
+    "yahoo_requests": 178
+  },
+  "data_end_utc": "2026-10-20T00:00:00+00:00",
+  "diagnostics": {
+    "D1_funding": {
+      "equal_weighted_by_month": {},
+      "note": "annualized = sum of settlement rates / days observed in the month * 365; positive = longs pay",
+      "per_symbol": {
+        "AAOIUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "AAPLUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "ACNUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "ADBEUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "AGPUUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "AKAMUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "ALABUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "AMATUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "AMCUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "AMDUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "AMZNUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "ANETUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "APLDUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "APPUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "ARMUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "ASMLUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "ASTSUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "AVGOUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "AXTIUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "BABAUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "BEUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "BITOUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "BMNRUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "BNCUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "BOTUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "BRKBUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "BSPUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "BWETUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "BXUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "BZUSDT": {
+          "funding_pending_months": [],
+          "group": "commodity",
+          "months": {}
+        },
+        "CATUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "CBRSUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "CIENUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "CLUSDT": {
+          "funding_pending_months": [],
+          "group": "commodity",
+          "months": {}
+        },
+        "COHRUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "COINUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "COPPERUSDT": {
+          "funding_pending_months": [],
+          "group": "commodity",
+          "months": {}
+        },
+        "COSTUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "CRCLUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "CRDOUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "CRMLUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "CRMUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "CRWDUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "CRWVUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "CSCOUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "CVNAUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "CYPHUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "DDOGUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "DELLUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "DISUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "DJTUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "DKNGUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "DRAMUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "EBAYUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "EWJUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "EWTUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "EWYUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "EWZUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "FLEXUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "FLNCUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "FWDIUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "GDXUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "GEVUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "GLWUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "GMEUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "GOOGLUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "GPROUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "GSUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "GTLBUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "HDUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "HIMSUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "HOODUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "HPEUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "HUTUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "IBMUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "INTCUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "INTWUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "IONQUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "IRENUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "IWMUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "JPMUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "KLACUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "KORUUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "KOUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "KSTRUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "LITEUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "LLYUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "LRCXUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "LYTEUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "MARAUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "MCDUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "MDBUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "METAUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "MPUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "MRKUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "MRNAUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "MRVLUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "MSFTUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "MSTRUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "MSTUUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "MUUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "MUUUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "MVLLUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "NATGASUSDT": {
+          "funding_pending_months": [],
+          "group": "commodity",
+          "months": {}
+        },
+        "NBISUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "NETUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "NFLXUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "NKEUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "NOKUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "NOWUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "NVDAUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "NVDLUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "NVOUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "OKLOUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "ONDSUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "ORCLUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "PANWUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "PATHUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "PAYPUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "PDDUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "PENGUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "PLTRUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "PYPLUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "QCOMUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "QQQUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "RAMUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "RDDTUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "RDWUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "RIVNUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "RKLBUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "RUMUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "SECZUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "SHAZUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "SHOPUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "SKDDUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "SKHYUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "SKUUUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "SMCIUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "SMHUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "SNDKUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "SNOWUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "SNPSUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "SNXXUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "SOFIUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "SONYUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "SOXLUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "SOXSUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "SPCXUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "SPYUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "SQQQUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "STRCUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "STXXUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "TBTUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "TEAMUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "TEMUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "TERUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "TMFUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "TQQQUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "TSLAUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "TSLLUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "TSMUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "TTWOUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "TWSTUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "TXNUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "TZAUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "UBERUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "UNHUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "URNMUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "USARUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "UVXYUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "VKTXUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "VRTUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "VSTUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "VUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "WDCUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "WENUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "WMTUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "XAGUSDT": {
+          "funding_pending_months": [],
+          "group": "commodity",
+          "months": {}
+        },
+        "XAUUSDT": {
+          "funding_pending_months": [],
+          "group": "commodity",
+          "months": {}
+        },
+        "XBIUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "XOMUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "XPDUSDT": {
+          "funding_pending_months": [],
+          "group": "commodity",
+          "months": {}
+        },
+        "XPTUSDT": {
+          "funding_pending_months": [],
+          "group": "commodity",
+          "months": {}
+        },
+        "ZCSHUSDT": {
+          "funding_pending_months": [],
+          "group": "etf",
+          "months": {}
+        },
+        "ZMUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        },
+        "ZSUSDT": {
+          "funding_pending_months": [],
+          "group": "stock",
+          "months": {}
+        }
+      }
+    },
+    "D2_tracking": {
+      "per_symbol": {
+        "AAOIUSDT": {
+          "group": "stock",
+          "median_abs_bps": 14.06688696300451,
+          "n": 1,
+          "p95_abs_bps": 14.06688696300451
+        },
+        "AAPLUSDT": {
+          "group": "stock",
+          "median_abs_bps": 12.538565216440034,
+          "n": 1,
+          "p95_abs_bps": 12.538565216440034
+        },
+        "ACNUSDT": {
+          "group": "stock",
+          "median_abs_bps": 15.194670803513333,
+          "n": 1,
+          "p95_abs_bps": 15.194670803513333
+        },
+        "ADBEUSDT": {
+          "group": "stock",
+          "median_abs_bps": 21.449822735220003,
+          "n": 1,
+          "p95_abs_bps": 21.449822735220003
+        },
+        "AGPUUSDT": {
+          "group": "stock",
+          "median_abs_bps": 61.80450737830468,
+          "n": 1,
+          "p95_abs_bps": 61.80450737830468
+        },
+        "AKAMUSDT": {
+          "group": "stock",
+          "median_abs_bps": 19.4842406876794,
+          "n": 1,
+          "p95_abs_bps": 19.4842406876794
+        },
+        "ALABUSDT": {
+          "group": "stock",
+          "median_abs_bps": 13.60923462937036,
+          "n": 1,
+          "p95_abs_bps": 13.60923462937036
+        },
+        "AMATUSDT": {
+          "group": "stock",
+          "median_abs_bps": 13.314000337452114,
+          "n": 1,
+          "p95_abs_bps": 13.314000337452114
+        },
+        "AMCUSDT": {
+          "group": "stock",
+          "median_abs_bps": 3.355640671520721,
+          "n": 1,
+          "p95_abs_bps": 3.355640671520721
+        },
+        "AMDUSDT": {
+          "group": "stock",
+          "median_abs_bps": 15.42630286891944,
+          "n": 1,
+          "p95_abs_bps": 15.42630286891944
+        },
+        "AMZNUSDT": {
+          "group": "stock",
+          "median_abs_bps": 14.478482579340923,
+          "n": 1,
+          "p95_abs_bps": 14.478482579340923
+        },
+        "ANETUSDT": {
+          "group": "stock",
+          "median_abs_bps": 19.131077212144465,
+          "n": 1,
+          "p95_abs_bps": 19.131077212144465
+        },
+        "APLDUSDT": {
+          "group": "stock",
+          "median_abs_bps": 20.77922077922123,
+          "n": 1,
+          "p95_abs_bps": 20.77922077922123
+        },
+        "APPUSDT": {
+          "group": "stock",
+          "median_abs_bps": 18.57925430605034,
+          "n": 1,
+          "p95_abs_bps": 18.57925430605034
+        },
+        "ARMUSDT": {
+          "group": "stock",
+          "median_abs_bps": 2.630868118365104,
+          "n": 1,
+          "p95_abs_bps": 2.630868118365104
+        },
+        "ASMLUSDT": {
+          "group": "stock",
+          "median_abs_bps": 22.645617161287657,
+          "n": 1,
+          "p95_abs_bps": 22.645617161287657
+        },
+        "ASTSUSDT": {
+          "group": "stock",
+          "median_abs_bps": 16.718669668254194,
+          "n": 1,
+          "p95_abs_bps": 16.718669668254194
+        },
+        "AVGOUSDT": {
+          "group": "stock",
+          "median_abs_bps": 15.541518509245567,
+          "n": 1,
+          "p95_abs_bps": 15.541518509245567
+        },
+        "AXTIUSDT": {
+          "group": "stock",
+          "median_abs_bps": 21.130641590557666,
+          "n": 1,
+          "p95_abs_bps": 21.130641590557666
+        },
+        "BABAUSDT": {
+          "group": "stock",
+          "median_abs_bps": 15.658128917162006,
+          "n": 1,
+          "p95_abs_bps": 15.658128917162006
+        },
+        "BEUSDT": {
+          "group": "stock",
+          "median_abs_bps": 13.261372897093171,
+          "n": 1,
+          "p95_abs_bps": 13.261372897093171
+        },
+        "BITOUSDT": {
+          "group": "etf",
+          "median_abs_bps": 27.472597146837032,
+          "n": 1,
+          "p95_abs_bps": 27.472597146837032
+        },
+        "BMNRUSDT": {
+          "group": "stock",
+          "median_abs_bps": 18.54441619921765,
+          "n": 1,
+          "p95_abs_bps": 18.54441619921765
+        },
+        "BNCUSDT": {
+          "group": "stock",
+          "median_abs_bps": 27.837095275533574,
+          "n": 1,
+          "p95_abs_bps": 27.837095275533574
+        },
+        "BOTUSDT": {
+          "group": "stock",
+          "median_abs_bps": 13.210443301099328,
+          "n": 1,
+          "p95_abs_bps": 13.210443301099328
+        },
+        "BRKBUSDT": {
+          "group": "stock",
+          "median_abs_bps": 12.401021277845814,
+          "n": 1,
+          "p95_abs_bps": 12.401021277845814
+        },
+        "BSPUSDT": {
+          "group": "stock",
+          "median_abs_bps": 8.761987466401333,
+          "n": 1,
+          "p95_abs_bps": 8.761987466401333
+        },
+        "BWETUSDT": {
+          "group": "etf",
+          "median_abs_bps": 60.36709772706428,
+          "n": 1,
+          "p95_abs_bps": 60.36709772706428
+        },
+        "BXUSDT": {
+          "group": "stock",
+          "median_abs_bps": 18.67622270509184,
+          "n": 1,
+          "p95_abs_bps": 18.67622270509184
+        },
+        "CATUSDT": {
+          "group": "stock",
+          "median_abs_bps": 23.423056588309787,
+          "n": 1,
+          "p95_abs_bps": 23.423056588309787
+        },
+        "CBRSUSDT": {
+          "group": "stock",
+          "median_abs_bps": 25.69172289756727,
+          "n": 1,
+          "p95_abs_bps": 25.69172289756727
+        },
+        "CIENUSDT": {
+          "group": "stock",
+          "median_abs_bps": 27.018819290725027,
+          "n": 1,
+          "p95_abs_bps": 27.018819290725027
+        },
+        "COHRUSDT": {
+          "group": "stock",
+          "median_abs_bps": 18.532700612923225,
+          "n": 1,
+          "p95_abs_bps": 18.532700612923225
+        },
+        "COINUSDT": {
+          "group": "stock",
+          "median_abs_bps": 12.466788694709408,
+          "n": 1,
+          "p95_abs_bps": 12.466788694709408
+        },
+        "COSTUSDT": {
+          "group": "stock",
+          "median_abs_bps": 11.551341187940878,
+          "n": 1,
+          "p95_abs_bps": 11.551341187940878
+        },
+        "CRCLUSDT": {
+          "group": "stock",
+          "median_abs_bps": 13.518157761471805,
+          "n": 1,
+          "p95_abs_bps": 13.518157761471805
+        },
+        "CRDOUSDT": {
+          "group": "stock",
+          "median_abs_bps": 26.040301357777018,
+          "n": 1,
+          "p95_abs_bps": 26.040301357777018
+        },
+        "CRMLUSDT": {
+          "group": "stock",
+          "median_abs_bps": 1.5357466712950796,
+          "n": 1,
+          "p95_abs_bps": 1.5357466712950796
+        },
+        "CRMUSDT": {
+          "group": "stock",
+          "median_abs_bps": 12.786267505047189,
+          "n": 1,
+          "p95_abs_bps": 12.786267505047189
+        },
+        "CRWDUSDT": {
+          "group": "stock",
+          "median_abs_bps": 13.151858327800081,
+          "n": 1,
+          "p95_abs_bps": 13.151858327800081
+        },
+        "CRWVUSDT": {
+          "group": "stock",
+          "median_abs_bps": 14.725305904461639,
+          "n": 1,
+          "p95_abs_bps": 14.725305904461639
+        },
+        "CSCOUSDT": {
+          "group": "stock",
+          "median_abs_bps": 11.267605633802358,
+          "n": 1,
+          "p95_abs_bps": 11.267605633802358
+        },
+        "CVNAUSDT": {
+          "group": "stock",
+          "median_abs_bps": 13.626454909705377,
+          "n": 1,
+          "p95_abs_bps": 13.626454909705377
+        },
+        "CYPHUSDT": {
+          "group": "stock",
+          "median_abs_bps": 15.810389942543246,
+          "n": 1,
+          "p95_abs_bps": 15.810389942543246
+        },
+        "DDOGUSDT": {
+          "group": "stock",
+          "median_abs_bps": 20.35699332682883,
+          "n": 1,
+          "p95_abs_bps": 20.35699332682883
+        },
+        "DELLUSDT": {
+          "group": "stock",
+          "median_abs_bps": 11.8566124121533,
+          "n": 1,
+          "p95_abs_bps": 11.8566124121533
+        },
+        "DISUSDT": {
+          "group": "stock",
+          "median_abs_bps": 3.6503023493161812,
+          "n": 1,
+          "p95_abs_bps": 3.6503023493161812
+        },
+        "DJTUSDT": {
+          "group": "stock",
+          "median_abs_bps": 48.21177681024524,
+          "n": 1,
+          "p95_abs_bps": 48.21177681024524
+        },
+        "DKNGUSDT": {
+          "group": "stock",
+          "median_abs_bps": 15.174274932576726,
+          "n": 1,
+          "p95_abs_bps": 15.174274932576726
+        },
+        "DRAMUSDT": {
+          "group": "etf",
+          "median_abs_bps": 4.1378374069211965,
+          "n": 1,
+          "p95_abs_bps": 4.1378374069211965
+        },
+        "EBAYUSDT": {
+          "group": "stock",
+          "median_abs_bps": 7.470638199131852,
+          "n": 1,
+          "p95_abs_bps": 7.470638199131852
+        },
+        "EWJUSDT": {
+          "group": "etf",
+          "median_abs_bps": 9.474906648545556,
+          "n": 1,
+          "p95_abs_bps": 9.474906648545556
+        },
+        "EWTUSDT": {
+          "group": "etf",
+          "median_abs_bps": 2.7971411181182404,
+          "n": 1,
+          "p95_abs_bps": 2.7971411181182404
+        },
+        "EWYUSDT": {
+          "group": "etf",
+          "median_abs_bps": 16.604813252323325,
+          "n": 1,
+          "p95_abs_bps": 16.604813252323325
+        },
+        "EWZUSDT": {
+          "group": "etf",
+          "median_abs_bps": 11.924563429599466,
+          "n": 1,
+          "p95_abs_bps": 11.924563429599466
+        },
+        "FLEXUSDT": {
+          "group": "stock",
+          "median_abs_bps": 27.415933511840684,
+          "n": 1,
+          "p95_abs_bps": 27.415933511840684
+        },
+        "FLNCUSDT": {
+          "group": "stock",
+          "median_abs_bps": 22.184071995574595,
+          "n": 1,
+          "p95_abs_bps": 22.184071995574595
+        },
+        "FWDIUSDT": {
+          "group": "stock",
+          "median_abs_bps": 27.900231101476436,
+          "n": 1,
+          "p95_abs_bps": 27.900231101476436
+        },
+        "GDXUSDT": {
+          "group": "etf",
+          "median_abs_bps": 15.033974495393121,
+          "n": 1,
+          "p95_abs_bps": 15.033974495393121
+        },
+        "GEVUSDT": {
+          "group": "stock",
+          "median_abs_bps": 15.961401465114378,
+          "n": 1,
+          "p95_abs_bps": 15.961401465114378
+        },
+        "GLWUSDT": {
+          "group": "stock",
+          "median_abs_bps": 20.34010062247793,
+          "n": 1,
+          "p95_abs_bps": 20.34010062247793
+        },
+        "GMEUSDT": {
+          "group": "stock",
+          "median_abs_bps": 0.00020198850370078958,
+          "n": 1,
+          "p95_abs_bps": 0.00020198850370078958
+        },
+        "GOOGLUSDT": {
+          "group": "stock",
+          "median_abs_bps": 21.21004531795867,
+          "n": 1,
+          "p95_abs_bps": 21.21004531795867
+        },
+        "GPROUSDT": {
+          "group": "stock",
+          "median_abs_bps": 67.30806157435154,
+          "n": 1,
+          "p95_abs_bps": 67.30806157435154
+        },
+        "GSUSDT": {
+          "group": "stock",
+          "median_abs_bps": 10.276218605345111,
+          "n": 1,
+          "p95_abs_bps": 10.276218605345111
+        },
+        "GTLBUSDT": {
+          "group": "stock",
+          "median_abs_bps": 3.7528774871598003,
+          "n": 1,
+          "p95_abs_bps": 3.7528774871598003
+        },
+        "HDUSDT": {
+          "group": "stock",
+          "median_abs_bps": 3.2268980125182978,
+          "n": 1,
+          "p95_abs_bps": 3.2268980125182978
+        },
+        "HIMSUSDT": {
+          "group": "stock",
+          "median_abs_bps": 17.762125096729697,
+          "n": 1,
+          "p95_abs_bps": 17.762125096729697
+        },
+        "HOODUSDT": {
+          "group": "stock",
+          "median_abs_bps": 17.613278371970686,
+          "n": 1,
+          "p95_abs_bps": 17.613278371970686
+        },
+        "HPEUSDT": {
+          "group": "stock",
+          "median_abs_bps": 5.369799299943523,
+          "n": 1,
+          "p95_abs_bps": 5.369799299943523
+        },
+        "HUTUSDT": {
+          "group": "stock",
+          "median_abs_bps": 13.202557352522959,
+          "n": 1,
+          "p95_abs_bps": 13.202557352522959
+        },
+        "IBMUSDT": {
+          "group": "stock",
+          "median_abs_bps": 17.76727490316876,
+          "n": 1,
+          "p95_abs_bps": 17.76727490316876
+        },
+        "INTCUSDT": {
+          "group": "stock",
+          "median_abs_bps": 13.039359154063401,
+          "n": 1,
+          "p95_abs_bps": 13.039359154063401
+        },
+        "INTWUSDT": {
+          "group": "etf",
+          "median_abs_bps": 39.040543018848965,
+          "n": 1,
+          "p95_abs_bps": 39.040543018848965
+        },
+        "IONQUSDT": {
+          "group": "stock",
+          "median_abs_bps": 25.990679522369664,
+          "n": 1,
+          "p95_abs_bps": 25.990679522369664
+        },
+        "IRENUSDT": {
+          "group": "stock",
+          "median_abs_bps": 14.424975991342848,
+          "n": 1,
+          "p95_abs_bps": 14.424975991342848
+        },
+        "IWMUSDT": {
+          "group": "etf",
+          "median_abs_bps": 11.795975454993446,
+          "n": 1,
+          "p95_abs_bps": 11.795975454993446
+        },
+        "JPMUSDT": {
+          "group": "stock",
+          "median_abs_bps": 16.790130505581757,
+          "n": 1,
+          "p95_abs_bps": 16.790130505581757
+        },
+        "KLACUSDT": {
+          "group": "stock",
+          "median_abs_bps": 19.83209829448107,
+          "n": 1,
+          "p95_abs_bps": 19.83209829448107
+        },
+        "KORUUSDT": {
+          "group": "etf",
+          "median_abs_bps": 25.167721068826143,
+          "n": 1,
+          "p95_abs_bps": 25.167721068826143
+        },
+        "KOUSDT": {
+          "group": "stock",
+          "median_abs_bps": 8.563672941848122,
+          "n": 1,
+          "p95_abs_bps": 8.563672941848122
+        },
+        "KSTRUSDT": {
+          "group": "etf",
+          "median_abs_bps": 26.041268267580353,
+          "n": 1,
+          "p95_abs_bps": 26.041268267580353
+        },
+        "LITEUSDT": {
+          "group": "stock",
+          "median_abs_bps": 13.90025548885454,
+          "n": 1,
+          "p95_abs_bps": 13.90025548885454
+        },
+        "LLYUSDT": {
+          "group": "stock",
+          "median_abs_bps": 19.269186235619795,
+          "n": 1,
+          "p95_abs_bps": 19.269186235619795
+        },
+        "LRCXUSDT": {
+          "group": "stock",
+          "median_abs_bps": 15.429381856504332,
+          "n": 1,
+          "p95_abs_bps": 15.429381856504332
+        },
+        "LYTEUSDT": {
+          "group": "etf",
+          "median_abs_bps": 25.012621037683314,
+          "n": 1,
+          "p95_abs_bps": 25.012621037683314
+        },
+        "MARAUSDT": {
+          "group": "stock",
+          "median_abs_bps": 13.549980222242741,
+          "n": 1,
+          "p95_abs_bps": 13.549980222242741
+        },
+        "MCDUSDT": {
+          "group": "stock",
+          "median_abs_bps": 16.48336564358477,
+          "n": 1,
+          "p95_abs_bps": 16.48336564358477
+        },
+        "MDBUSDT": {
+          "group": "stock",
+          "median_abs_bps": 1.4340084618480464,
+          "n": 1,
+          "p95_abs_bps": 1.4340084618480464
+        },
+        "METAUSDT": {
+          "group": "stock",
+          "median_abs_bps": 7.796517870979347,
+          "n": 1,
+          "p95_abs_bps": 7.796517870979347
+        },
+        "MPUSDT": {
+          "group": "stock",
+          "median_abs_bps": 25.673744570422485,
+          "n": 1,
+          "p95_abs_bps": 25.673744570422485
+        },
+        "MRKUSDT": {
+          "group": "stock",
+          "median_abs_bps": 14.620560471250155,
+          "n": 1,
+          "p95_abs_bps": 14.620560471250155
+        },
+        "MRNAUSDT": {
+          "group": "stock",
+          "median_abs_bps": 12.78155102171441,
+          "n": 1,
+          "p95_abs_bps": 12.78155102171441
+        },
+        "MRVLUSDT": {
+          "group": "stock",
+          "median_abs_bps": 15.60604276116706,
+          "n": 1,
+          "p95_abs_bps": 15.60604276116706
+        },
+        "MSFTUSDT": {
+          "group": "stock",
+          "median_abs_bps": 15.931557160624443,
+          "n": 1,
+          "p95_abs_bps": 15.931557160624443
+        },
+        "MSTRUSDT": {
+          "group": "stock",
+          "median_abs_bps": 8.086731663288216,
+          "n": 1,
+          "p95_abs_bps": 8.086731663288216
+        },
+        "MSTUUSDT": {
+          "group": "etf",
+          "median_abs_bps": 66.44505514803889,
+          "n": 1,
+          "p95_abs_bps": 66.44505514803889
+        },
+        "MUUSDT": {
+          "group": "stock",
+          "median_abs_bps": 23.09620432699999,
+          "n": 1,
+          "p95_abs_bps": 23.09620432699999
+        },
+        "MUUUSDT": {
+          "group": "etf",
+          "median_abs_bps": 11.62820303357126,
+          "n": 1,
+          "p95_abs_bps": 11.62820303357126
+        },
+        "MVLLUSDT": {
+          "group": "etf",
+          "median_abs_bps": 7.132993892403627,
+          "n": 1,
+          "p95_abs_bps": 7.132993892403627
+        },
+        "NBISUSDT": {
+          "group": "stock",
+          "median_abs_bps": 14.684827230342368,
+          "n": 1,
+          "p95_abs_bps": 14.684827230342368
+        },
+        "NETUSDT": {
+          "group": "stock",
+          "median_abs_bps": 14.114303605305967,
+          "n": 1,
+          "p95_abs_bps": 14.114303605305967
+        },
+        "NFLXUSDT": {
+          "group": "stock",
+          "median_abs_bps": 11.453332516329073,
+          "n": 1,
+          "p95_abs_bps": 11.453332516329073
+        },
+        "NKEUSDT": {
+          "group": "stock",
+          "median_abs_bps": 8.062595072695355,
+          "n": 1,
+          "p95_abs_bps": 8.062595072695355
+        },
+        "NOKUSDT": {
+          "group": "stock",
+          "median_abs_bps": 55.06616378201379,
+          "n": 1,
+          "p95_abs_bps": 55.06616378201379
+        },
+        "NOWUSDT": {
+          "group": "stock",
+          "median_abs_bps": 6.19148247595902,
+          "n": 1,
+          "p95_abs_bps": 6.19148247595902
+        },
+        "NVDAUSDT": {
+          "group": "stock",
+          "median_abs_bps": 14.740599175804281,
+          "n": 1,
+          "p95_abs_bps": 14.740599175804281
+        },
+        "NVDLUSDT": {
+          "group": "etf",
+          "median_abs_bps": 30.4232039442609,
+          "n": 1,
+          "p95_abs_bps": 30.4232039442609
+        },
+        "NVOUSDT": {
+          "group": "stock",
+          "median_abs_bps": 13.01453238878647,
+          "n": 1,
+          "p95_abs_bps": 13.01453238878647
+        },
+        "OKLOUSDT": {
+          "group": "stock",
+          "median_abs_bps": 18.35544394344968,
+          "n": 1,
+          "p95_abs_bps": 18.35544394344968
+        },
+        "ONDSUSDT": {
+          "group": "stock",
+          "median_abs_bps": 24.752569904447075,
+          "n": 1,
+          "p95_abs_bps": 24.752569904447075
+        },
+        "ORCLUSDT": {
+          "group": "stock",
+          "median_abs_bps": 20.063559646334994,
+          "n": 1,
+          "p95_abs_bps": 20.063559646334994
+        },
+        "PANWUSDT": {
+          "group": "stock",
+          "median_abs_bps": 21.040143170052428,
+          "n": 1,
+          "p95_abs_bps": 21.040143170052428
+        },
+        "PATHUSDT": {
+          "group": "stock",
+          "median_abs_bps": 15.24381534568131,
+          "n": 1,
+          "p95_abs_bps": 15.24381534568131
+        },
+        "PAYPUSDT": {
+          "group": "stock",
+          "median_abs_bps": 19.329601386268713,
+          "n": 1,
+          "p95_abs_bps": 19.329601386268713
+        },
+        "PDDUSDT": {
+          "group": "stock",
+          "median_abs_bps": 22.115814191103755,
+          "n": 1,
+          "p95_abs_bps": 22.115814191103755
+        },
+        "PENGUSDT": {
+          "group": "stock",
+          "median_abs_bps": 5.305816057108448,
+          "n": 1,
+          "p95_abs_bps": 5.305816057108448
+        },
+        "PLTRUSDT": {
+          "group": "stock",
+          "median_abs_bps": 9.78656242538678,
+          "n": 1,
+          "p95_abs_bps": 9.78656242538678
+        },
+        "PYPLUSDT": {
+          "group": "stock",
+          "median_abs_bps": 17.69628055867223,
+          "n": 1,
+          "p95_abs_bps": 17.69628055867223
+        },
+        "QCOMUSDT": {
+          "group": "stock",
+          "median_abs_bps": 14.983070508389762,
+          "n": 1,
+          "p95_abs_bps": 14.983070508389762
+        },
+        "QQQUSDT": {
+          "group": "etf",
+          "median_abs_bps": 14.060007086045267,
+          "n": 1,
+          "p95_abs_bps": 14.060007086045267
+        },
+        "RAMUSDT": {
+          "group": "etf",
+          "median_abs_bps": 46.94781700378847,
+          "n": 1,
+          "p95_abs_bps": 46.94781700378847
+        },
+        "RDDTUSDT": {
+          "group": "stock",
+          "median_abs_bps": 3.2228561199654226,
+          "n": 1,
+          "p95_abs_bps": 3.2228561199654226
+        },
+        "RDWUSDT": {
+          "group": "stock",
+          "median_abs_bps": 35.4609476569201,
+          "n": 1,
+          "p95_abs_bps": 35.4609476569201
+        },
+        "RIVNUSDT": {
+          "group": "stock",
+          "median_abs_bps": 16.207331576016948,
+          "n": 1,
+          "p95_abs_bps": 16.207331576016948
+        },
+        "RKLBUSDT": {
+          "group": "stock",
+          "median_abs_bps": 23.36436686573018,
+          "n": 1,
+          "p95_abs_bps": 23.36436686573018
+        },
+        "RUMUSDT": {
+          "group": "stock",
+          "median_abs_bps": 39.24891802315145,
+          "n": 1,
+          "p95_abs_bps": 39.24891802315145
+        },
+        "SECZUSDT": {
+          "group": "stock",
+          "median_abs_bps": 0.00012213545286243743,
+          "n": 1,
+          "p95_abs_bps": 0.00012213545286243743
+        },
+        "SHAZUSDT": {
+          "group": "stock",
+          "median_abs_bps": 22.189009778548208,
+          "n": 1,
+          "p95_abs_bps": 22.189009778548208
+        },
+        "SHOPUSDT": {
+          "group": "stock",
+          "median_abs_bps": 1.1690376990047824,
+          "n": 1,
+          "p95_abs_bps": 1.1690376990047824
+        },
+        "SKDDUSDT": {
+          "group": "etf",
+          "median_abs_bps": 27.075743603452995,
+          "n": 1,
+          "p95_abs_bps": 27.075743603452995
+        },
+        "SKHYUSDT": {
+          "group": "stock",
+          "median_abs_bps": 4.899900973265314,
+          "n": 1,
+          "p95_abs_bps": 4.899900973265314
+        },
+        "SKUUUSDT": {
+          "group": "etf",
+          "median_abs_bps": 30.450623309217217,
+          "n": 1,
+          "p95_abs_bps": 30.450623309217217
+        },
+        "SMCIUSDT": {
+          "group": "stock",
+          "median_abs_bps": 12.461535134076218,
+          "n": 1,
+          "p95_abs_bps": 12.461535134076218
+        },
+        "SMHUSDT": {
+          "group": "etf",
+          "median_abs_bps": 24.249315794433457,
+          "n": 1,
+          "p95_abs_bps": 24.249315794433457
+        },
+        "SNDKUSDT": {
+          "group": "stock",
+          "median_abs_bps": 16.118245599821,
+          "n": 1,
+          "p95_abs_bps": 16.118245599821
+        },
+        "SNOWUSDT": {
+          "group": "stock",
+          "median_abs_bps": 26.319767890283785,
+          "n": 1,
+          "p95_abs_bps": 26.319767890283785
+        },
+        "SNPSUSDT": {
+          "group": "stock",
+          "median_abs_bps": 7.479727171850747,
+          "n": 1,
+          "p95_abs_bps": 7.479727171850747
+        },
+        "SNXXUSDT": {
+          "group": "etf",
+          "median_abs_bps": 9.891536758013242,
+          "n": 1,
+          "p95_abs_bps": 9.891536758013242
+        },
+        "SOFIUSDT": {
+          "group": "stock",
+          "median_abs_bps": 27.971894217913018,
+          "n": 1,
+          "p95_abs_bps": 27.971894217913018
+        },
+        "SONYUSDT": {
+          "group": "stock",
+          "median_abs_bps": 16.148381710583415,
+          "n": 1,
+          "p95_abs_bps": 16.148381710583415
+        },
+        "SOXLUSDT": {
+          "group": "etf",
+          "median_abs_bps": 23.314594076386808,
+          "n": 1,
+          "p95_abs_bps": 23.314594076386808
+        },
+        "SOXSUSDT": {
+          "group": "etf",
+          "median_abs_bps": 10.722481393841132,
+          "n": 1,
+          "p95_abs_bps": 10.722481393841132
+        },
+        "SPCXUSDT": {
+          "group": "stock",
+          "median_abs_bps": 18.923578901579585,
+          "n": 1,
+          "p95_abs_bps": 18.923578901579585
+        },
+        "SPYUSDT": {
+          "group": "etf",
+          "median_abs_bps": 19.831170676114507,
+          "n": 1,
+          "p95_abs_bps": 19.831170676114507
+        },
+        "SQQQUSDT": {
+          "group": "etf",
+          "median_abs_bps": 15.99134901500543,
+          "n": 1,
+          "p95_abs_bps": 15.99134901500543
+        },
+        "STRCUSDT": {
+          "group": "stock",
+          "median_abs_bps": 10.1396522645536,
+          "n": 1,
+          "p95_abs_bps": 10.1396522645536
+        },
+        "STXXUSDT": {
+          "group": "etf",
+          "median_abs_bps": 281283.63377930404,
+          "n": 1,
+          "p95_abs_bps": 281283.63377930404
+        },
+        "TBTUSDT": {
+          "group": "etf",
+          "median_abs_bps": 17.233153608058327,
+          "n": 1,
+          "p95_abs_bps": 17.233153608058327
+        },
+        "TEAMUSDT": {
+          "group": "stock",
+          "median_abs_bps": 12.572759022120295,
+          "n": 1,
+          "p95_abs_bps": 12.572759022120295
+        },
+        "TEMUSDT": {
+          "group": "stock",
+          "median_abs_bps": 12.4345145575111,
+          "n": 1,
+          "p95_abs_bps": 12.4345145575111
+        },
+        "TERUSDT": {
+          "group": "stock",
+          "median_abs_bps": 20.86255247667479,
+          "n": 1,
+          "p95_abs_bps": 20.86255247667479
+        },
+        "TMFUSDT": {
+          "group": "etf",
+          "median_abs_bps": 10.937041502737666,
+          "n": 1,
+          "p95_abs_bps": 10.937041502737666
+        },
+        "TQQQUSDT": {
+          "group": "etf",
+          "median_abs_bps": 16.987629018745398,
+          "n": 1,
+          "p95_abs_bps": 16.987629018745398
+        },
+        "TSLAUSDT": {
+          "group": "stock",
+          "median_abs_bps": 19.290399557567728,
+          "n": 1,
+          "p95_abs_bps": 19.290399557567728
+        },
+        "TSLLUSDT": {
+          "group": "etf",
+          "median_abs_bps": 31.34828227006725,
+          "n": 1,
+          "p95_abs_bps": 31.34828227006725
+        },
+        "TSMUSDT": {
+          "group": "stock",
+          "median_abs_bps": 21.893264876120533,
+          "n": 1,
+          "p95_abs_bps": 21.893264876120533
+        },
+        "TTWOUSDT": {
+          "group": "stock",
+          "median_abs_bps": 25.375845974093814,
+          "n": 1,
+          "p95_abs_bps": 25.375845974093814
+        },
+        "TWSTUSDT": {
+          "group": "stock",
+          "median_abs_bps": 16.455299456865635,
+          "n": 1,
+          "p95_abs_bps": 16.455299456865635
+        },
+        "TXNUSDT": {
+          "group": "stock",
+          "median_abs_bps": 9.053272099992515,
+          "n": 1,
+          "p95_abs_bps": 9.053272099992515
+        },
+        "TZAUSDT": {
+          "group": "etf",
+          "median_abs_bps": 11.75333277887658,
+          "n": 1,
+          "p95_abs_bps": 11.75333277887658
+        },
+        "UBERUSDT": {
+          "group": "stock",
+          "median_abs_bps": 20.011566232054356,
+          "n": 1,
+          "p95_abs_bps": 20.011566232054356
+        },
+        "UNHUSDT": {
+          "group": "stock",
+          "median_abs_bps": 0.9829708195918663,
+          "n": 1,
+          "p95_abs_bps": 0.9829708195918663
+        },
+        "URNMUSDT": {
+          "group": "etf",
+          "median_abs_bps": 9.291698873021836,
+          "n": 1,
+          "p95_abs_bps": 9.291698873021836
+        },
+        "USARUSDT": {
+          "group": "stock",
+          "median_abs_bps": 9.910651398299386,
+          "n": 1,
+          "p95_abs_bps": 9.910651398299386
+        },
+        "UVXYUSDT": {
+          "group": "etf",
+          "median_abs_bps": 0.0004828730948425175,
+          "n": 1,
+          "p95_abs_bps": 0.0004828730948425175
+        },
+        "VKTXUSDT": {
+          "group": "stock",
+          "median_abs_bps": 35.928449373483495,
+          "n": 1,
+          "p95_abs_bps": 35.928449373483495
+        },
+        "VRTUSDT": {
+          "group": "stock",
+          "median_abs_bps": 14.072115992267431,
+          "n": 1,
+          "p95_abs_bps": 14.072115992267431
+        },
+        "VSTUSDT": {
+          "group": "stock",
+          "median_abs_bps": 15.364265627697549,
+          "n": 1,
+          "p95_abs_bps": 15.364265627697549
+        },
+        "VUSDT": {
+          "group": "stock",
+          "median_abs_bps": 10.919948317349437,
+          "n": 1,
+          "p95_abs_bps": 10.919948317349437
+        },
+        "WDCUSDT": {
+          "group": "stock",
+          "median_abs_bps": 15.899848343550183,
+          "n": 1,
+          "p95_abs_bps": 15.899848343550183
+        },
+        "WENUSDT": {
+          "group": "stock",
+          "median_abs_bps": 25.44935942850879,
+          "n": 1,
+          "p95_abs_bps": 25.44935942850879
+        },
+        "WMTUSDT": {
+          "group": "stock",
+          "median_abs_bps": 11.794697165734558,
+          "n": 1,
+          "p95_abs_bps": 11.794697165734558
+        },
+        "XBIUSDT": {
+          "group": "etf",
+          "median_abs_bps": 19.613106212048592,
+          "n": 1,
+          "p95_abs_bps": 19.613106212048592
+        },
+        "XOMUSDT": {
+          "group": "stock",
+          "median_abs_bps": 25.802177689746575,
+          "n": 1,
+          "p95_abs_bps": 25.802177689746575
+        },
+        "ZCSHUSDT": {
+          "group": "etf",
+          "median_abs_bps": 23.497510010539457,
+          "n": 1,
+          "p95_abs_bps": 23.497510010539457
+        },
+        "ZMUSDT": {
+          "group": "stock",
+          "median_abs_bps": 0.0003752545874036173,
+          "n": 1,
+          "p95_abs_bps": 0.0003752545874036173
+        },
+        "ZSUSDT": {
+          "group": "stock",
+          "median_abs_bps": 22.114582571997055,
+          "n": 1,
+          "p95_abs_bps": 22.114582571997055
+        }
+      },
+      "pooled": {
+        "etf": {
+          "median_abs_bps": 17.233153608058327,
+          "n": 37,
+          "p95_abs_bps": 61.58268921125917
+        },
+        "stock": {
+          "median_abs_bps": 15.429381856504332,
+          "n": 141,
+          "p95_abs_bps": 27.971894217913018
+        }
+      },
+      "sessions_checked": 2
+    },
+    "D3_weekend_discovery": {
+      "observations": 82,
+      "weekend_perp_on_first_session_open_to_close": {
+        "correlation": 0.18344896917079995,
+        "n": 82,
+        "slope": 0.1495300411165719,
+        "slope_reverse": 0.22506196105164722
+      },
+      "weekend_perp_on_monday_open_gap": {
+        "correlation": 0.6566072226105611,
+        "n": 82,
+        "slope": 0.6608105064376406,
+        "slope_reverse": 0.6524306750335245
+      },
+      "weeks": 1
+    },
+    "note": "post-start data only; empty until sessions, settlements and weeks after the start are published"
+  },
+  "events": {
+    "B1": [
+      {
+        "b0_flat_min_names": false,
+        "b1_flat_min_names": false,
+        "b1_yahoo_blocked": [],
+        "eligible": 82,
+        "long": [
+          "AAOIUSDT",
+          "AMDUSDT",
+          "AXTIUSDT",
+          "COHRUSDT",
+          "CYPHUSDT",
+          "DELLUSDT",
+          "HPEUSDT",
+          "INTCUSDT",
+          "LITEUSDT",
+          "MRNAUSDT",
+          "MRVLUSDT",
+          "MUUSDT",
+          "SNDKUSDT",
+          "TERUSDT",
+          "WDCUSDT"
+        ],
+        "reason": null,
+        "session": "2026-10-19",
+        "short": [
+          "APPUSDT",
+          "ASTSUSDT",
+          "BMNRUSDT",
+          "COINUSDT",
+          "CRWVUSDT",
+          "FLNCUSDT",
+          "HIMSUSDT",
+          "IONQUSDT",
+          "MSTRUSDT",
+          "NFLXUSDT",
+          "NKEUSDT",
+          "ORCLUSDT",
+          "SOFIUSDT",
+          "USARUSDT",
+          "VSTUSDT"
+        ],
+        "status": "formed",
+        "with_signal": 75
+      }
+    ],
+    "B2": [
+      {
+        "eligible": 82,
+        "flat_min_names": false,
+        "long": [
+          "ADBEUSDT",
+          "APPUSDT",
+          "CBRSUSDT",
+          "CYPHUSDT",
+          "IONQUSDT",
+          "JPMUSDT",
+          "LLYUSDT",
+          "METAUSDT",
+          "NFLXUSDT",
+          "NKEUSDT",
+          "RDDTUSDT",
+          "SECZUSDT",
+          "SOFIUSDT",
+          "TTWOUSDT",
+          "USARUSDT",
+          "VSTUSDT"
+        ],
+        "reason": null,
+        "reference_bar": "2026-10-16T20:00:00+00:00",
+        "session": "2026-10-19",
+        "short": [
+          "AMDUSDT",
+          "ASTSUSDT",
+          "AXTIUSDT",
+          "BNCUSDT",
+          "CIENUSDT",
+          "INTCUSDT",
+          "IRENUSDT",
+          "LRCXUSDT",
+          "MRNAUSDT",
+          "MRVLUSDT",
+          "MUUSDT",
+          "SKHYUSDT",
+          "SMCIUSDT",
+          "SNDKUSDT",
+          "TERUSDT",
+          "WDCUSDT"
+        ],
+        "signal_bar": "2026-10-19T13:45:00+00:00",
+        "status": "formed"
+      }
+    ]
+  },
+  "forward": {
+    "B0_equal_weight_long_1x": {
+      "annualized_sharpe": null,
+      "cumulative_return": 0.00027805268582170584,
+      "cumulative_return_excluding_funding_pending": 0.0,
+      "days": 1,
+      "delisted_exit_count": 0,
+      "funding_gap_zero_filled_trades": 0,
+      "funding_paid_equity_fraction": 0.0,
+      "funding_pending_trades": 1,
+      "liquidations": 0,
+      "max_drawdown": 0.0,
+      "mean_daily_bps": 2.7805268582170584,
+      "min_equity": 0.9993,
+      "minimum_detectable_sharpe": 38.2099463490856,
+      "newey_west_t": null,
+      "pending_trades_contribution": 0.00027805268582170584,
+      "ruin": false,
+      "scored_through": "2026-10-20T00:00:00+00:00",
+      "trades": 82,
+      "turnover_notional_over_equity": 1.0
+    },
+    "B1_xs_momentum_12_1_1x": {
+      "annualized_sharpe": null,
+      "beta_to_b0": null,
+      "cumulative_return": -0.0003391495076261464,
+      "cumulative_return_excluding_funding_pending": 0.0,
+      "days": 1,
+      "delisted_exit_count": 0,
+      "funding_gap_zero_filled_trades": 0,
+      "funding_paid_equity_fraction": 0.0,
+      "funding_pending_trades": 1,
+      "liquidations": 0,
+      "max_drawdown": 0.0,
+      "mean_daily_bps": -3.3914950762614637,
+      "min_equity": 0.9993,
+      "minimum_detectable_sharpe": 38.2099463490856,
+      "newey_west_t": null,
+      "pending_trades_contribution": -0.0003391495076261464,
+      "ruin": false,
+      "scored_through": "2026-10-20T00:00:00+00:00",
+      "trades": 30,
+      "turnover_notional_over_equity": 1.0
+    },
+    "B1_xs_momentum_12_1_2x": {
+      "annualized_sharpe": null,
+      "beta_to_b0": null,
+      "cumulative_return": -0.0006782990152521817,
+      "cumulative_return_excluding_funding_pending": 0.0,
+      "days": 1,
+      "delisted_exit_count": 0,
+      "funding_gap_zero_filled_trades": 0,
+      "funding_paid_equity_fraction": 0.0,
+      "funding_pending_trades": 1,
+      "liquidations": 0,
+      "max_drawdown": 0.0,
+      "mean_daily_bps": -6.782990152521817,
+      "min_equity": 0.9986,
+      "minimum_detectable_sharpe": 38.2099463490856,
+      "newey_west_t": null,
+      "pending_trades_contribution": -0.0006782990152521817,
+      "ruin": false,
+      "scored_through": "2026-10-20T00:00:00+00:00",
+      "trades": 30,
+      "turnover_notional_over_equity": 2.0
+    },
+    "B2_weekend_fade_1x": {
+      "annualized_sharpe": null,
+      "beta_to_b0": null,
+      "cumulative_return": 0.000618683190684699,
+      "cumulative_return_excluding_funding_pending": 0.0,
+      "days": 1,
+      "delisted_exit_count": 0,
+      "funding_gap_zero_filled_trades": 0,
+      "funding_paid_equity_fraction": 0.0,
+      "funding_pending_trades": 1,
+      "liquidations": 0,
+      "max_drawdown": 0.0,
+      "mean_daily_bps": 6.18683190684699,
+      "min_equity": 0.9986,
+      "minimum_detectable_sharpe": 38.2099463490856,
+      "newey_west_t": null,
+      "pending_trades_contribution": 0.000618683190684699,
+      "ruin": false,
+      "scored_through": "2026-10-20T00:00:00+00:00",
+      "trades": 32,
+      "turnover_notional_over_equity": 2.0
+    },
+    "B2_weekend_fade_2x": {
+      "annualized_sharpe": null,
+      "beta_to_b0": null,
+      "cumulative_return": 0.001237366381369398,
+      "cumulative_return_excluding_funding_pending": 0.0,
+      "days": 1,
+      "delisted_exit_count": 0,
+      "funding_gap_zero_filled_trades": 0,
+      "funding_paid_equity_fraction": 0.0,
+      "funding_pending_trades": 1,
+      "liquidations": 0,
+      "max_drawdown": 0.0,
+      "mean_daily_bps": 12.37366381369398,
+      "min_equity": 0.9972,
+      "minimum_detectable_sharpe": 38.2099463490856,
+      "newey_west_t": null,
+      "pending_trades_contribution": 0.001237366381369398,
+      "ruin": false,
+      "scored_through": "2026-10-20T00:00:00+00:00",
+      "trades": 32,
+      "turnover_notional_over_equity": 4.0
+    },
+    "B2_weekend_fade_5x": {
+      "annualized_sharpe": null,
+      "beta_to_b0": null,
+      "cumulative_return": 0.003093415953423717,
+      "cumulative_return_excluding_funding_pending": 0.0,
+      "days": 1,
+      "delisted_exit_count": 0,
+      "funding_gap_zero_filled_trades": 0,
+      "funding_paid_equity_fraction": 0.0,
+      "funding_pending_trades": 1,
+      "liquidations": 0,
+      "max_drawdown": 0.0,
+      "mean_daily_bps": 30.93415953423717,
+      "min_equity": 0.993,
+      "minimum_detectable_sharpe": 38.2099463490856,
+      "newey_west_t": null,
+      "pending_trades_contribution": 0.003093415953423717,
+      "ruin": false,
+      "scored_through": "2026-10-20T00:00:00+00:00",
+      "trades": 32,
+      "turnover_notional_over_equity": 10.0
+    }
+  },
+  "freshness": {
+    "data_end": "2026-10-20T00:00:00+00:00",
+    "lag_window_days": 3,
+    "perp_last_bar": {
+      "AAOIUSDT": "2026-10-20T00:00:00+00:00",
+      "AAPLUSDT": "2026-10-20T00:00:00+00:00",
+      "ACNUSDT": "2026-10-20T00:00:00+00:00",
+      "ADBEUSDT": "2026-10-20T00:00:00+00:00",
+      "AGPUUSDT": "2026-10-20T00:00:00+00:00",
+      "AKAMUSDT": "2026-10-20T00:00:00+00:00",
+      "ALABUSDT": "2026-10-20T00:00:00+00:00",
+      "AMATUSDT": "2026-10-20T00:00:00+00:00",
+      "AMCUSDT": "2026-10-20T00:00:00+00:00",
+      "AMDUSDT": "2026-10-20T00:00:00+00:00",
+      "AMZNUSDT": "2026-10-20T00:00:00+00:00",
+      "ANETUSDT": "2026-10-20T00:00:00+00:00",
+      "APLDUSDT": "2026-10-20T00:00:00+00:00",
+      "APPUSDT": "2026-10-20T00:00:00+00:00",
+      "ARMUSDT": "2026-10-20T00:00:00+00:00",
+      "ASMLUSDT": "2026-10-20T00:00:00+00:00",
+      "ASTSUSDT": "2026-10-20T00:00:00+00:00",
+      "AVGOUSDT": "2026-10-20T00:00:00+00:00",
+      "AXTIUSDT": "2026-10-20T00:00:00+00:00",
+      "BABAUSDT": "2026-10-20T00:00:00+00:00",
+      "BEUSDT": "2026-10-20T00:00:00+00:00",
+      "BITOUSDT": "2026-10-20T00:00:00+00:00",
+      "BMNRUSDT": "2026-10-20T00:00:00+00:00",
+      "BNCUSDT": "2026-10-20T00:00:00+00:00",
+      "BOTUSDT": "2026-10-20T00:00:00+00:00",
+      "BRKBUSDT": "2026-10-20T00:00:00+00:00",
+      "BSPUSDT": "2026-10-20T00:00:00+00:00",
+      "BWETUSDT": "2026-10-20T00:00:00+00:00",
+      "BXUSDT": "2026-10-20T00:00:00+00:00",
+      "CATUSDT": "2026-10-20T00:00:00+00:00",
+      "CBRSUSDT": "2026-10-20T00:00:00+00:00",
+      "CIENUSDT": "2026-10-20T00:00:00+00:00",
+      "COHRUSDT": "2026-10-20T00:00:00+00:00",
+      "COINUSDT": "2026-10-20T00:00:00+00:00",
+      "COSTUSDT": "2026-10-20T00:00:00+00:00",
+      "CRCLUSDT": "2026-10-20T00:00:00+00:00",
+      "CRDOUSDT": "2026-10-20T00:00:00+00:00",
+      "CRMLUSDT": "2026-10-20T00:00:00+00:00",
+      "CRMUSDT": "2026-10-20T00:00:00+00:00",
+      "CRWDUSDT": "2026-10-20T00:00:00+00:00",
+      "CRWVUSDT": "2026-10-20T00:00:00+00:00",
+      "CSCOUSDT": "2026-10-20T00:00:00+00:00",
+      "CVNAUSDT": "2026-10-20T00:00:00+00:00",
+      "CYPHUSDT": "2026-10-20T00:00:00+00:00",
+      "DDOGUSDT": "2026-10-20T00:00:00+00:00",
+      "DELLUSDT": "2026-10-20T00:00:00+00:00",
+      "DISUSDT": "2026-10-20T00:00:00+00:00",
+      "DJTUSDT": "2026-10-20T00:00:00+00:00",
+      "DKNGUSDT": "2026-10-20T00:00:00+00:00",
+      "DRAMUSDT": "2026-10-20T00:00:00+00:00",
+      "EBAYUSDT": "2026-10-20T00:00:00+00:00",
+      "EWJUSDT": "2026-10-20T00:00:00+00:00",
+      "EWTUSDT": "2026-10-20T00:00:00+00:00",
+      "EWYUSDT": "2026-10-20T00:00:00+00:00",
+      "EWZUSDT": "2026-10-20T00:00:00+00:00",
+      "FLEXUSDT": "2026-10-20T00:00:00+00:00",
+      "FLNCUSDT": "2026-10-20T00:00:00+00:00",
+      "FWDIUSDT": "2026-10-20T00:00:00+00:00",
+      "GDXUSDT": "2026-10-20T00:00:00+00:00",
+      "GEVUSDT": "2026-10-20T00:00:00+00:00",
+      "GLWUSDT": "2026-10-20T00:00:00+00:00",
+      "GMEUSDT": "2026-10-20T00:00:00+00:00",
+      "GOOGLUSDT": "2026-10-20T00:00:00+00:00",
+      "GPROUSDT": "2026-10-20T00:00:00+00:00",
+      "GSUSDT": "2026-10-20T00:00:00+00:00",
+      "GTLBUSDT": "2026-10-20T00:00:00+00:00",
+      "HDUSDT": "2026-10-20T00:00:00+00:00",
+      "HIMSUSDT": "2026-10-20T00:00:00+00:00",
+      "HOODUSDT": "2026-10-20T00:00:00+00:00",
+      "HPEUSDT": "2026-10-20T00:00:00+00:00",
+      "HUTUSDT": "2026-10-20T00:00:00+00:00",
+      "IBMUSDT": "2026-10-20T00:00:00+00:00",
+      "INTCUSDT": "2026-10-20T00:00:00+00:00",
+      "INTWUSDT": "2026-10-20T00:00:00+00:00",
+      "IONQUSDT": "2026-10-20T00:00:00+00:00",
+      "IRENUSDT": "2026-10-20T00:00:00+00:00",
+      "IWMUSDT": "2026-10-20T00:00:00+00:00",
+      "JPMUSDT": "2026-10-20T00:00:00+00:00",
+      "KLACUSDT": "2026-10-20T00:00:00+00:00",
+      "KORUUSDT": "2026-10-20T00:00:00+00:00",
+      "KOUSDT": "2026-10-20T00:00:00+00:00",
+      "KSTRUSDT": "2026-10-20T00:00:00+00:00",
+      "LITEUSDT": "2026-10-20T00:00:00+00:00",
+      "LLYUSDT": "2026-10-20T00:00:00+00:00",
+      "LRCXUSDT": "2026-10-20T00:00:00+00:00",
+      "LYTEUSDT": "2026-10-20T00:00:00+00:00",
+      "MARAUSDT": "2026-10-20T00:00:00+00:00",
+      "MCDUSDT": "2026-10-20T00:00:00+00:00",
+      "MDBUSDT": "2026-10-20T00:00:00+00:00",
+      "METAUSDT": "2026-10-20T00:00:00+00:00",
+      "MPUSDT": "2026-10-20T00:00:00+00:00",
+      "MRKUSDT": "2026-10-20T00:00:00+00:00",
+      "MRNAUSDT": "2026-10-20T00:00:00+00:00",
+      "MRVLUSDT": "2026-10-20T00:00:00+00:00",
+      "MSFTUSDT": "2026-10-20T00:00:00+00:00",
+      "MSTRUSDT": "2026-10-20T00:00:00+00:00",
+      "MSTUUSDT": "2026-10-20T00:00:00+00:00",
+      "MUUSDT": "2026-10-20T00:00:00+00:00",
+      "MUUUSDT": "2026-10-20T00:00:00+00:00",
+      "MVLLUSDT": "2026-10-20T00:00:00+00:00",
+      "NBISUSDT": "2026-10-20T00:00:00+00:00",
+      "NETUSDT": "2026-10-20T00:00:00+00:00",
+      "NFLXUSDT": "2026-10-20T00:00:00+00:00",
+      "NKEUSDT": "2026-10-20T00:00:00+00:00",
+      "NOKUSDT": "2026-10-20T00:00:00+00:00",
+      "NOWUSDT": "2026-10-20T00:00:00+00:00",
+      "NVDAUSDT": "2026-10-20T00:00:00+00:00",
+      "NVDLUSDT": "2026-10-20T00:00:00+00:00",
+      "NVOUSDT": "2026-10-20T00:00:00+00:00",
+      "OKLOUSDT": "2026-10-20T00:00:00+00:00",
+      "ONDSUSDT": "2026-10-20T00:00:00+00:00",
+      "ORCLUSDT": "2026-10-20T00:00:00+00:00",
+      "PANWUSDT": "2026-10-20T00:00:00+00:00",
+      "PATHUSDT": "2026-10-20T00:00:00+00:00",
+      "PAYPUSDT": "2026-10-20T00:00:00+00:00",
+      "PDDUSDT": "2026-10-20T00:00:00+00:00",
+      "PENGUSDT": "2026-10-20T00:00:00+00:00",
+      "PLTRUSDT": "2026-10-20T00:00:00+00:00",
+      "PYPLUSDT": "2026-10-20T00:00:00+00:00",
+      "QCOMUSDT": "2026-10-20T00:00:00+00:00",
+      "QQQUSDT": "2026-10-20T00:00:00+00:00",
+      "RAMUSDT": "2026-10-20T00:00:00+00:00",
+      "RDDTUSDT": "2026-10-20T00:00:00+00:00",
+      "RDWUSDT": "2026-10-20T00:00:00+00:00",
+      "RIVNUSDT": "2026-10-20T00:00:00+00:00",
+      "RKLBUSDT": "2026-10-20T00:00:00+00:00",
+      "RUMUSDT": "2026-10-20T00:00:00+00:00",
+      "SECZUSDT": "2026-10-20T00:00:00+00:00",
+      "SHAZUSDT": "2026-10-20T00:00:00+00:00",
+      "SHOPUSDT": "2026-10-20T00:00:00+00:00",
+      "SKDDUSDT": "2026-10-20T00:00:00+00:00",
+      "SKHYUSDT": "2026-10-20T00:00:00+00:00",
+      "SKUUUSDT": "2026-10-20T00:00:00+00:00",
+      "SMCIUSDT": "2026-10-20T00:00:00+00:00",
+      "SMHUSDT": "2026-10-20T00:00:00+00:00",
+      "SNDKUSDT": "2026-10-20T00:00:00+00:00",
+      "SNOWUSDT": "2026-10-20T00:00:00+00:00",
+      "SNPSUSDT": "2026-10-20T00:00:00+00:00",
+      "SNXXUSDT": "2026-10-20T00:00:00+00:00",
+      "SOFIUSDT": "2026-10-20T00:00:00+00:00",
+      "SONYUSDT": "2026-10-20T00:00:00+00:00",
+      "SOXLUSDT": "2026-10-20T00:00:00+00:00",
+      "SOXSUSDT": "2026-10-20T00:00:00+00:00",
+      "SPCXUSDT": "2026-10-20T00:00:00+00:00",
+      "SPYUSDT": "2026-10-20T00:00:00+00:00",
+      "SQQQUSDT": "2026-10-20T00:00:00+00:00",
+      "STRCUSDT": "2026-10-20T00:00:00+00:00",
+      "STXXUSDT": "2026-10-20T00:00:00+00:00",
+      "TBTUSDT": "2026-10-20T00:00:00+00:00",
+      "TEAMUSDT": "2026-10-20T00:00:00+00:00",
+      "TEMUSDT": "2026-10-20T00:00:00+00:00",
+      "TERUSDT": "2026-10-20T00:00:00+00:00",
+      "TMFUSDT": "2026-10-20T00:00:00+00:00",
+      "TQQQUSDT": "2026-10-20T00:00:00+00:00",
+      "TSLAUSDT": "2026-10-20T00:00:00+00:00",
+      "TSLLUSDT": "2026-10-20T00:00:00+00:00",
+      "TSMUSDT": "2026-10-20T00:00:00+00:00",
+      "TTWOUSDT": "2026-10-20T00:00:00+00:00",
+      "TWSTUSDT": "2026-10-20T00:00:00+00:00",
+      "TXNUSDT": "2026-10-20T00:00:00+00:00",
+      "TZAUSDT": "2026-10-20T00:00:00+00:00",
+      "UBERUSDT": "2026-10-20T00:00:00+00:00",
+      "UNHUSDT": "2026-10-20T00:00:00+00:00",
+      "URNMUSDT": "2026-10-20T00:00:00+00:00",
+      "USARUSDT": "2026-10-20T00:00:00+00:00",
+      "UVXYUSDT": "2026-10-20T00:00:00+00:00",
+      "VKTXUSDT": "2026-10-20T00:00:00+00:00",
+      "VRTUSDT": "2026-10-20T00:00:00+00:00",
+      "VSTUSDT": "2026-10-20T00:00:00+00:00",
+      "VUSDT": "2026-10-20T00:00:00+00:00",
+      "WDCUSDT": "2026-10-20T00:00:00+00:00",
+      "WENUSDT": "2026-10-20T00:00:00+00:00",
+      "WMTUSDT": "2026-10-20T00:00:00+00:00",
+      "XBIUSDT": "2026-10-20T00:00:00+00:00",
+      "XOMUSDT": "2026-10-20T00:00:00+00:00",
+      "ZCSHUSDT": "2026-10-20T00:00:00+00:00",
+      "ZMUSDT": "2026-10-20T00:00:00+00:00",
+      "ZSUSDT": "2026-10-20T00:00:00+00:00"
+    }
+  },
+  "pending": [],
+  "prospective_start_utc": "2026-10-19T00:00:00+00:00",
+  "provenance": {
+    "config_sha256": "a7371952d1aaee380d133cfb6ff2844077888e5f0f26b26b260c86683aa1343f",
+    "universe_sha256": "99cd50e0befd6172683536c8ee1610f052226e62575fa347d91577dc5d8f8e14"
+  },
+  "review_window_open": false,
+  "schema_version": 1,
+  "stamp_convention": "a daily return is stamped at 00:00 UTC of the day AFTER the UTC day it covers, so that every stamp (including the first Monday, which is the start day) is after the start",
+  "status": "COLLECTING",
+  "watch_id": "tradfi-perps-forward-v1",
+  "yahoo_failed": {}
+}
