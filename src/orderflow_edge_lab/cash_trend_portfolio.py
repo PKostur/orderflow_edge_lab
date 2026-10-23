@@ -107,7 +107,7 @@ def simulate(times, panel, rate, mode="trend"):
         raise ValueError("insufficient eligible history")
     start = eligible[0]
     cash, holdings = INITIAL, dict.fromkeys(SYMBOLS, 0.0)
-    fills, marks = [], []
+    fills, marks, decisions = [], [], []
     peak, worst, low_bound = INITIAL, 0.0, 0.0
     year_start, year_end = {}, {}
     previous = INITIAL
@@ -122,6 +122,8 @@ def simulate(times, panel, rate, mode="trend"):
             if mode == "btc":
                 # Descriptive full-cash buy/hold benchmark, not a tradable signal target.
                 desired["BTCUSDT"] = cash / panel["BTCUSDT"]["open"][i]
+            decisions.append({"signal_close_utc": (times[j] + STEP).isoformat(), "fill_open_utc": t.isoformat(),
+                              "weights": w, "desired_quantities": desired, "signal_close_nav": decision_nav})
             cash, holdings, trades = rebalance(cash, holdings, desired, {s: panel[s]["open"][i] for s in SYMBOLS}, rate)
             for trade in trades:
                 fills.append({**trade, "fill_open_utc": t.isoformat(), "signal_close_utc": (times[j] + STEP).isoformat()})
@@ -141,7 +143,8 @@ def simulate(times, panel, rate, mode="trend"):
     omitted = {y: math.prod(1 + r for other, r in years.items() if other != y) - 1 for y in years}
     duration = (times[-1] + STEP - times[start]).total_seconds() / (365.25 * 86400)
     final = marks[-1]["net_liquidation_usdt"]
-    return {"mode": mode, "side_cost_bps": rate * 10000, "first_fill_open_utc": times[start].isoformat(),
+    return {"mode": mode, "side_cost_bps": rate * 10000, "evaluation_start_open_utc": times[start].isoformat(),
+            "first_fill_open_utc": fills[0]["fill_open_utc"] if fills else None,
             "end_exclusive_utc": (times[-1] + STEP).isoformat(), "initial_usdt": INITIAL,
             "final_net_liquidation_usdt": final, "net_profit_usdt": final - INITIAL,
             "net_return": final / INITIAL - 1, "cagr": (final / INITIAL) ** (1 / duration) - 1,
@@ -149,7 +152,7 @@ def simulate(times, panel, rate, mode="trend"):
             "calendar_returns": years, "leave_one_year_out_compounded": omitted,
             "mean_gross_exposure": statistics.mean(exposure), "fill_count": len(fills),
             "rebalance_costs_usdt": math.fsum(f["cost"] for f in fills),
-            "hypothetical_terminal_cost_usdt": inventory * rate, "fills": fills, "equity": marks}
+            "hypothetical_terminal_cost_usdt": inventory * rate, "fills": fills, "equity": marks, "decisions": decisions}
 
 
 def evaluate(folder):
@@ -182,7 +185,7 @@ def main():
         json.dump(report, stream, allow_nan=False, separators=(",", ":"))
     print(json.dumps({k: v for k, v in report.items() if k not in ("cases", "source_manifest")}, indent=2))
     for case in report["cases"]:
-        print(json.dumps({k: v for k, v in case.items() if k not in ("fills", "equity")}, indent=2))
+        print(json.dumps({k: v for k, v in case.items() if k not in ("fills", "equity", "decisions")}, indent=2))
 
 
 if __name__ == "__main__":
