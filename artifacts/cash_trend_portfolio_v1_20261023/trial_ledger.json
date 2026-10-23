@@ -1,0 +1,23 @@
+{
+  "candidate": "CASH_TREND_PORTFOLIO_V1",
+  "design_commit": "82551c6",
+  "executed_commit": "cc28b8200631524cc9658f8044ea7266342b36d3",
+  "baseline_main": "768875c483eabe857e833ad566b37ba183853226",
+  "new_own_strategy_attempts": 1,
+  "minimum_cumulative_trading_cells": 33,
+  "minimum_cumulative_signal_model_cells": 34,
+  "parameter_searches": 0,
+  "decision": "REJECTED_AS_DEFINED",
+  "failed_gates": [
+    "increment_over_matched_control_both_costs"
+  ],
+  "data_class": "all spent development; no untouched holdout or future observations",
+  "future_confirmation_started": false,
+  "orders": false,
+  "promotable": false,
+  "controls": [
+    "cash",
+    "always-long same per-asset volatility scale/cap (different realized exposure/risk)",
+    "full-capital BTC buy/hold"
+  ]
+}
