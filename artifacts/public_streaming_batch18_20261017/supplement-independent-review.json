@@ -1,0 +1,190 @@
+{
+  "status": "PASS_TWO_CANDIDATE_DESCRIPTIVE_SUPPLEMENT_INDEPENDENT_AUDIT",
+  "blocking_findings": [],
+  "supplement_exact_sha256": "6096539a56ba0ffcb3bb45c7d9f0c1c5c0f24514b086d94b11d999459d2a6a00",
+  "input_results_exact_sha256": "0c6dd23baa0b399e23bacfa895360e5931139d8923be2339d6db8da1f7bbfba8",
+  "frozen_evaluator_exact_sha256": "c88ca0b8ac93c73cec3adea572378e8d999ad9fac974f8b3108eff56219066db",
+  "config_exact_sha256": "55bcf7b585edd09bdb62213afef7c41af0c12153041206d99ddd33e121fb633f",
+  "method_bindings": {
+    "draft_evaluator_exact_sha256": "078d55ae6098740cf586d30b0de7b26f32aba0a503a77910675259147267baf1",
+    "draft_test_exact_sha256": "9b3be393de2d44cf917129d567b516d380f7c16059ad25ae4c32f50b41acc61c",
+    "method_exact_sha256": "ac705594c926c9ea238fc7393271223c5c698f4faa14a00f1ebf0d3ef10b7ad1"
+  },
+  "method_review_exact_sha256": "22ac3cc5a1cf0f5b10c955b3c3d43ffd9d4ad2ece2f95cd8b24151ff267be26c",
+  "application_source_exact_sha256": "e90c071ab3bc18f780a80693394828b4be22ba055af85f083630b553b038c259",
+  "runtime": {
+    "python": "3.13.14",
+    "numpy": "2.2.4",
+    "pandas": "2.2.3",
+    "platform": "win32"
+  },
+  "original_screen_execution_git_commit": "ef19474515a79c949294f026d5a38f5414b492f8",
+  "supplement_execution_git_commit": "ef19474515a79c949294f026d5a38f5414b492f8",
+  "validations": {
+    "all_candidate_populations_separate": true,
+    "literal_first_peak_event_oracles": 1131,
+    "all_admission_events": 1131,
+    "completed_only_events": 1130,
+    "medians_extremes_direction_positive_week_zero_calendar_concentration_OLS_reference_cost_path_aggregates_and_raw_signal_clocks_independently_verified": true,
+    "raw_source_cache_receipts_rehashed": true,
+    "frozen_paths_rehashed": 14,
+    "prior_paths_rehashed": 370,
+    "original_decisions_portfolios_gates_and_raw_results_unchanged": true
+  },
+  "candidates": [
+    {
+      "candidate": "Quickstart06TwoDown8hOneUnitLongCash",
+      "original_decision": "REJECTED_AS_ADAPTED",
+      "original_failed_gates": [
+        "all_symbols_positive",
+        "excess_descriptive_ci",
+        "leave_week_positive",
+        "net40_mean",
+        "net80_positive",
+        "net_descriptive_ci",
+        "positive_year_fraction"
+      ],
+      "literal_first_peak_event_oracle": 964,
+      "all_admissions": 964,
+      "completed_only": 963,
+      "raw_signal_clocks": {
+        "ETHUSDT": {
+          "n": 818,
+          "utc_hour_counts": {
+            "0": 287,
+            "8": 244,
+            "16": 287
+          },
+          "nonexclusive_session_counts": {
+            "Asia": 531,
+            "London": 244,
+            "New_York": 287
+          },
+          "exclusive_membership_counts": {
+            "Asia": 287,
+            "Asia+London": 244,
+            "New_York": 287
+          }
+        },
+        "SOLUSDT": {
+          "n": 845,
+          "utc_hour_counts": {
+            "16": 278,
+            "0": 305,
+            "8": 262
+          },
+          "nonexclusive_session_counts": {
+            "New_York": 278,
+            "Asia": 567,
+            "London": 262
+          },
+          "exclusive_membership_counts": {
+            "New_York": 278,
+            "Asia": 305,
+            "Asia+London": 262
+          }
+        },
+        "LINKUSDT": {
+          "n": 858,
+          "utc_hour_counts": {
+            "16": 305,
+            "0": 296,
+            "8": 257
+          },
+          "nonexclusive_session_counts": {
+            "New_York": 305,
+            "Asia": 553,
+            "London": 257
+          },
+          "exclusive_membership_counts": {
+            "New_York": 305,
+            "Asia": 296,
+            "Asia+London": 257
+          }
+        }
+      }
+    },
+    {
+      "candidate": "UpDown40Return8hTenUnitLongCash",
+      "original_decision": "REJECTED_AS_ADAPTED",
+      "original_failed_gates": [
+        "all_symbols_positive",
+        "excess_descriptive_ci",
+        "leave_week_positive",
+        "net40_mean",
+        "net80_positive",
+        "net_descriptive_ci",
+        "positive_year_fraction"
+      ],
+      "literal_first_peak_event_oracle": 167,
+      "all_admissions": 167,
+      "completed_only": 167,
+      "raw_signal_clocks": {
+        "ETHUSDT": {
+          "n": 1617,
+          "utc_hour_counts": {
+            "0": 540,
+            "8": 536,
+            "16": 541
+          },
+          "nonexclusive_session_counts": {
+            "Asia": 1076,
+            "London": 536,
+            "New_York": 541
+          },
+          "exclusive_membership_counts": {
+            "Asia": 540,
+            "Asia+London": 536,
+            "New_York": 541
+          }
+        },
+        "SOLUSDT": {
+          "n": 1591,
+          "utc_hour_counts": {
+            "0": 536,
+            "8": 527,
+            "16": 528
+          },
+          "nonexclusive_session_counts": {
+            "Asia": 1063,
+            "London": 527,
+            "New_York": 528
+          },
+          "exclusive_membership_counts": {
+            "Asia": 536,
+            "Asia+London": 527,
+            "New_York": 528
+          }
+        },
+        "LINKUSDT": {
+          "n": 1671,
+          "utc_hour_counts": {
+            "0": 567,
+            "8": 550,
+            "16": 554
+          },
+          "nonexclusive_session_counts": {
+            "Asia": 1117,
+            "London": 550,
+            "New_York": 554
+          },
+          "exclusive_membership_counts": {
+            "Asia": 567,
+            "Asia+London": 550,
+            "New_York": 554
+          }
+        }
+      }
+    }
+  ],
+  "limits": [
+    "Method was frozen before batch18 data/results; descriptive only, no new strategy/trial/filter/exit/gate or route to promotion.",
+    "Reviewed primitive replay plus separate literal first-peak/statistical/time arithmetic. Minute high/low ordering bounded, retrospective peak not executable fill.",
+    "MatchedBTC endpoint OLS descriptive, not causalalpha/hedge/CI. Conditional10/30cost burden retains baseline admissions/prices, not fundedresimulation.",
+    "Native/exchange/full500controlpaths not independently rerun by this supplement audit. Both immutable seven-gate rejections retained."
+  ],
+  "new_strategy_trials": 0,
+  "repository_modified": false,
+  "viable": false,
+  "future_confirmation_started": false
+}

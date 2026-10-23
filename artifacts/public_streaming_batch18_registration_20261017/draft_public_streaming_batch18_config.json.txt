@@ -1,0 +1,188 @@
+{
+  "study_id": "PSR24-PUBLIC-STREAMING-REVERSAL-BATCH18",
+  "version": 1,
+  "candidates": [
+    "Quickstart06TwoDown8hOneUnitLongCash",
+    "UpDown40Return8hTenUnitLongCash"
+  ],
+  "source_manifest": "artifacts/minute_continuity_20261010/source_manifest.json",
+  "source_manifest_sha256": "3fcadef5dea9086425111b12b74f9df84f86b2d0932ca918871fc47b66f7179b",
+  "quality_csv": "artifacts/minute_continuity_20261010/daily_quality.csv",
+  "quality_csv_sha256": "69403a31a4f7f5c234ebbca98e32ba9b2919253f453515c76da964f93e10ed29",
+  "source_policy": "Longest shared complete-day segment chosen solely by previously audited quality; no repairs, imputation or source replacement.",
+  "data_start": "2023-04-01T00:00:00Z",
+  "data_end_exclusive": "2026-10-01T00:00:00Z",
+  "signal_minutes": 480,
+  "execution_minutes": 1,
+  "warmup_bars": 240,
+  "symbols": [
+    "ETHUSDT",
+    "SOLUSDT",
+    "LINKUSDT"
+  ],
+  "benchmark": "BTCUSDT",
+  "episode_initial_cash_per_symbol": 10000,
+  "max_hold_bars": null,
+  "baseline_round_trip_bps": 40,
+  "cost_cases_bps": [
+    20,
+    40,
+    60,
+    80
+  ],
+  "cost_policy": "Half declared nominal roundtrip per side on actual reference notional, covering assumed fee/spread/slippage once; literal debit cash-qP-qP*side and credit cash+qP-qP*side.",
+  "gap_target_models": [
+    "conservative_limit",
+    "opening_price_improvement"
+  ],
+  "touch_policy": "No protection: two conditional gap labels intentionally identical, onehistory; no-pruning failclosed64/4096caps unchanged.",
+  "max_symbol_histories": 64,
+  "max_joint_histories": 4096,
+  "entry_policy": "Fixed1/10 source units; created-close checksubmit and execution OPEN checks, literal cash-qP-qP*side; all-or-reject no resize. Source flat guard enforced; no sameOPEN exit/reentry.",
+  "clock_policy": "Completed8h features; first eligible CLOSE index239 after240completebars, earliest nextminute OPEN index240. Flat/nopending before origin; no day/session/trade feature resets.",
+  "endpoint_policy": "Completed events use modeled exit reference; still-held events retain statusCENSORED_MTM and cutoff close mark with hypothetical liquidation burden, never a fictitious order or completed trade.",
+  "principal_return_estimand": "All admitted entry-to-exit-or-fixed-cutoff net reference returns; completed-only means separately descriptive. Per-unit return=(exit/entry)*(1-sidecost)/(1+sidecost)-1.",
+  "funded_btc_benchmark": "At each accepted alt entry allocate the same alt notional/preentry-cash fraction from a separate BTC cash account. Exact BTC open entry; open exit uses BTCopen, intraminute exit uses BTCminute low/high bounds; own costs and remaining inventory; cutoff uses known final close.",
+  "portfolio_policy": "Three10000USDT cash sleeves; fixedunits; separate BTCowncash same alt rawnotional/source prebuycash fraction. Hypothetical reference only.",
+  "seed": 20261028,
+  "bootstrap_replicates": 2000,
+  "bootstrap_calendar_block_weeks": 4,
+  "bootstrap_policy": "Two fixed conditional candidates; alpha0.025 each, descriptive97.5percent intervals, no global repeated-search correction;2000moving4calendarweek blocks inclzero weeks.",
+  "placebo_replicates": 500,
+  "placebo_policy": "500within-entryweek whole rawqualifier replacements; source flat guard, ownfunding/fixedunits/duration; Quickown entryOPEN E exitsOPEN E+6, UpDown originalexitflags, no observedhold reuse.",
+  "lag_control_bars": 7,
+  "lag_policy": "Shift whole rawentryqualifier7bars after zeroingpreorigin; Quick ownactual-entry E+6 exit and UpDown originalreturnexit; ownfunding/units/duration.",
+  "gates": {
+    "min_completed_events": 100,
+    "min_entry_weeks": 52,
+    "min_all_admitted_net40_bps": 5,
+    "require_all_admitted_net80_positive": true,
+    "require_all_symbols_net40_positive": true,
+    "min_positive_year_fraction": 0.6666666666666666,
+    "max_portfolio_drawdown_pct": 30,
+    "require_leave_one_entry_week_out_net40_positive": true,
+    "require_net40_descriptive_lower_ci_positive": true,
+    "require_btc_excess40_descriptive_lower_ci_positive": true,
+    "max_placebo_at_least_observed_fraction": 0.05,
+    "require_no_history_overflow": true
+  },
+  "diagnostics": [
+    "completed/pending/unexecuted/overlap/invalid/cash rejection accounting",
+    "all-admission and completed-only returns/PF",
+    "gross MFE/MAE uncertainty",
+    "calendar entry weeks and4week bootstrap",
+    "fixed UTC sessions and overlap memberships",
+    "symbol/year/month/weekday/hour and causalBTC30bar state",
+    "leave-week and leave-symbol sensitivity",
+    "40/80 costs and20/60 cases",
+    "funded BTC wealth and same-exit reference bounds",
+    "full branch and gap-model sensitivity",
+    "500 randomized-entry controls and7bar lag control"
+  ],
+  "claim": "Spent historical hypothetical development only; SCREEN_SURVIVOR permits separate future preregistration, never viable/untouched/positive-edge/deployment claim.",
+  "future_confirmation": "User completion requires a separate immutable and adequately powered future-only protocol, calibrated costs/quotes/execution, controls and approval-bound paper reliability, frozen before observations start. No viable candidate until that confirmation passes.",
+  "bollinger_bands_excluded": true,
+  "frozen_lanes_modified": false,
+  "authorizes_orders": false,
+  "retuning_permitted": false,
+  "minimum_preexisting_trading_cells": 30,
+  "minimum_preexisting_signal_model_cells": 31,
+  "new_registered_trading_cells": 0,
+  "minimum_registered_trading_cells_after_freeze": 32,
+  "minimum_registered_signal_model_cells_after_freeze": 33,
+  "runtime": {
+    "python": "3.13.14",
+    "numpy": "2.2.4",
+    "pandas": "2.2.3",
+    "platform": "win32",
+    "precision": "float64 scalar operation order"
+  },
+  "dependency_hash_policy": "Python dependency bytes normalize CRLF to LF solely for cross-platform checkout; all data/audit fingerprints remain exact bytes",
+  "dependency_source_sha256": {
+    "src/orderflow_edge_lab/public_protective_batch5.py": "ea1a2f5564a4261fe3c53e4d3f584b782913222f43228f0843c9d94917eab6d8",
+    "src/orderflow_edge_lab/protective_minute.py": "32345cbe229e734129f063e161f77989c3e2d0facb604dade40b469de31f03bf",
+    "src/orderflow_edge_lab/public_strategy_completion.py": "2a5327410bb5b7acef4dc6959d95b8ea309df0f0cf9f6e692c946b7500a1719a"
+  },
+  "family_disclosure": "Two fixed source candidates selected before EMV17 outcomes; simple price reversal family overlap disclosed; no orthogonality or feature-search claim.",
+  "registered": false,
+  "status": "UNREGISTERED_SYNTHETIC_ONLY_DRAFT",
+  "source_sha256": {
+    "Quickstart06TwoDown8hOneUnitLongCash": "47b82d6ae2e3940bff80450e8c17a7074204c1f7ff70f7e56a25fe0e988e0d4c",
+    "UpDown40Return8hTenUnitLongCash": "35b643f11fb5aba0041fae5ae19ab3a8bf312865ef9be126ab8cfb2c181b45e4"
+  },
+  "minimum_attempted_trading_cells": 30,
+  "minimum_attempted_signal_model_cells": 31,
+  "conditional_future_registered_cells": 2,
+  "registration_counts_are_conditional": true,
+  "source_runtime": {
+    "preload": false,
+    "runonce": false,
+    "checksubmit": true,
+    "source_initial_cash": 100000,
+    "research_initial_cash": 10000,
+    "quickstart_source_commission": "unset",
+    "updown_source_commission_per_side": 0.001,
+    "declared_research_baseline_side": 0.002,
+    "original_preload_failures_preserved": true,
+    "short_refusal": "UpDown source flat shorts explicitly refused; longcash adaptation",
+    "cash_operation_order": "BUYcash=cash-qP;cash=cash-qP*side; SELLcash=cash+qP;cash=cash-qP*side. side=nominalRTbps/20000. Preserve separately rounded operations, no clamp."
+  },
+  "streaming_reversal": {
+    "Quickstart06TwoDown8hOneUnitLongCash": {
+      "quantity": 1,
+      "entry": "C0<C-1<C-2",
+      "exit": "closeE+5 decision after actual fillOPEN E; nextOPEN E+6"
+    },
+    "UpDown40Return8hTenUnitLongCash": {
+      "quantity": 10,
+      "lag": 40,
+      "entry": "(C0-C-40)/C-40 < -0.01",
+      "exit": ">=+0.01",
+      "strength_unused": true
+    }
+  },
+  "required_pre_outcome_review": {
+    "path": "UNREGISTERED_INDEPENDENT_REVIEW_PLACEHOLDER",
+    "required_status": "PASS_PRE_OUTCOME_INDEPENDENT_REVIEW_WITH_DECLARED_PARITY_LIMITS",
+    "before_any_raw_market_load": true,
+    "must_bind": [
+      "evaluator_exact_sha256",
+      "canonical_config_sha256",
+      "all_final_audit_receipts",
+      "post_PR172_verified_baseline"
+    ]
+  },
+  "source_attribution": "Pinned GPL source/framework/native harness remain outsideGit; own equations/state implementation only. Not default-publisher-bot/exchange/nativeBTC parity.",
+  "native_runtime_status": "Selected synthetic streaming native receipts only; no market parity, partial/asynchronous orders or executable BTC hedge parity.",
+  "baseline_requirement": "Freeze only after PR172 checks/merge verified; no guessed final baseline. Draft does not register or authorize loading.",
+  "source_mechanics_audit_sha256": {
+    "outputs/Quickstart-UpDown-mathematical-readiness-index.json": "f25e889d5c420c7ff6a3fd5042e3a07cf4524fce9b0400ba61eb45d104de47c8",
+    "outputs/Quickstart-UpDown-mathematical-readiness-draft.md": "62452c120cf3bb0af6a83ce556f6fd07ac8479597b70fb94b7fd4bb1dccfcdf5",
+    "outputs/Quickstart-UpDown-funding-and-origin-clarification.md": "c0523546d7231a2c3dac2e64efba29e677a57272b28a10e4d0676b84e4632053",
+    "work/quickstart_updown_mathematical_draft.py": "c71abc35003eb3011ea1f33c2f79e8883eb5d3a87bcb30616f16b89b61124729",
+    "work/Quickstart-UpDown-selected-synthetic-fixtures.json": "6f26da594180c33c00bc94b7eeefbf700f42328cef79e3e9e8d8adfb912aa2f8",
+    "outputs/Quickstart-UpDown-selected-native-output.json": "287d6ffa2ceec4fe1e08a741988c4cf81815ee92f240edb19ac80ae1105a828d",
+    "outputs/Quickstart-UpDown-independent-readiness-review.json": "9fff664b5a4c4323d5961241b8e00b72b5363cece56ee7ede8702483cfaec588"
+  },
+  "market_data_loading_disabled": true,
+  "registration_bindings": {
+    "design_commit": "UNREGISTERED",
+    "canonical_config_sha256": "UNREGISTERED",
+    "evaluator_exact_sha256": "UNREGISTERED",
+    "final_independent_review": "UNREGISTERED",
+    "post_PR172_verified_baseline": "UNREGISTERED"
+  },
+  "source_urls": {
+    "Quickstart06TwoDown8hOneUnitLongCash": "https://github.com/backtrader/backtrader-docs/blob/e20cea18b88e1693b65e408f8778cc076ab21a67/docs/quickstart/quickstart06.py",
+    "UpDown40Return8hTenUnitLongCash": "https://github.com/cloudQuant/backtrader/blob/b418caf7364e1134983a4c4b394768686e1916aa/tests/strategies/test_85_up_down_candles_strategy.py"
+  },
+  "exceptional_order_scope": "Reference fullfills atomic nextOPEN only. Partialfills, delayed/asynchronous broker/exchangecallbacks/cancellation/races, lot/minimumrules, liquidity/depth and generic externalRejected notifications unmodeled/failclosed; no nativeparity claim. FundingMargin is native-supported two-stage; retry onlylater eligible sourceclose. Finalqueued order remains unfilled, heldinventory independentlyCENSORED_MTM; no forcedrealizedexit.",
+  "btc_reference_scope": "Shared frozen research own-equity samefraction sizing: qAlt*PAlt/sourcecashprebuy; BTCquantity=BTCowncash*fraction/PBTC. Literal both-side fees and owncash; cutoffmarkedwithhypotheticliquidationburden. Synthetic fullcycle checked, NOT upstreamnativeBTC or executablehedgeparity. Strict negative/nonfinite BTCdebit is an abort of complete evaluation including controls, not a skipped BTC leg or pruned history; no tolerance or clamp.",
+  "quantity_policy": {
+    "Quickstart06TwoDown8hOneUnitLongCash": 1,
+    "UpDown40Return8hTenUnitLongCash": 10,
+    "resize": false
+  },
+  "sleeves_are_per_candidate_not_combined": true,
+  "numeric_funding_boundary_policy": "Literal separately rounded float64 operations. Exactzero/signedzero accepted; every representable source debit<0 rejected at its native two-stage Margin check. Any negative/nonfinite BTCdebit (even rounding residual) raises and aborts the complete evaluation failclosed; never clamp/tolerate/resize, never discard only the benchmark and retain promotable source history. Deliberately stricter than prior shared reference1e-8 tolerance; fixed before data, no outcome-based repair."
+}

@@ -1,0 +1,117 @@
+{
+  "kind": "BOUNDED_PRIMARY_SOURCE_READINESS_FRONTIER",
+  "inspection_utc_date": "2026-10-17",
+  "registered": false,
+  "new_trading_cells": 0,
+  "new_market_attempts": 0,
+  "batch18_outcomes_loaded": false,
+  "market_datasets_or_caches_loaded": false,
+  "market_backtests_run": false,
+  "external_orders": false,
+  "repository_edits": false,
+  "bounded_scope": "Two calendar-related primary source leads inspected after five public discovery queries. No quota filled, no further source expansion and no performance-directed selection.",
+  "queries": [
+    "github Pine strategy weekend dayofweek strategy.close original license",
+    "github Turnaround Tuesday strategy Python algorithm",
+    "github strategy weekend strategy.entry -hasnocool -reddit -fmzquant",
+    "github TurnOfTheMonth algorithm strategy",
+    "github turnaround_tuesday.py"
+  ],
+  "extraction_incident": {
+    "publisher_performance_constants_inadvertently_printed": true,
+    "what_happened": "A notebook code-cell AST filter selected any top-level statement mentioning H22. It correctly printed the H22 detector but also matched a literal publisher performance-summary assignment containing H22. Those reported numbers were exposed in tool output; they are not repeated here.",
+    "notebook_output_objects_selected": false,
+    "no_market_calculation_or_validation": true,
+    "no_numbers_used_for_selection_or_parameters": true,
+    "response": "Quarantine the notebook lead from a clean source-only admission; stop this bounded expansion and preserve the incident. Do not claim zero exposure to publisher performance information or silently substitute another source.",
+    "future_prevention": "Use exact function-name extraction, excluding assignments, test invocations and output cells. A future clean source-only assessment of this notebook needs an independent blinded extraction/review."
+  },
+  "sources": [
+    {
+      "label": "Friday After Hours Market Short Strategy",
+      "publisher": "Cyril-the-Real",
+      "gist": "8da2ddd456523cd90424ccb2b160a048",
+      "immutable_revision": "d5e13bfe0e3f0bb00ec6004088b04ca613c3a989",
+      "path": "_strategy.md",
+      "source_url": "https://gist.github.com/Cyril-the-Real/8da2ddd456523cd90424ccb2b160a048/d5e13bfe0e3f0bb00ec6004088b04ca613c3a989",
+      "raw_url": "https://gist.githubusercontent.com/Cyril-the-Real/8da2ddd456523cd90424ccb2b160a048/raw/88bb2a209c0193590d4095aa533308347576ffc1/_strategy.md",
+      "sha256": "1b474a208a58b3ee15b50b9f7d414b06d124fffeec2232ba2fa577f734885016",
+      "utf8_bytes": 3781,
+      "license": "Embedded MPL-2.0 notice with blank copyright attribution; authorship and clean native source provenance are not established",
+      "provenance": "Publisher gist includes generated-code conversation links and a Markdown-escaped Pine block. No private QuantConnect projects were opened or treated as public executable source.",
+      "published_mechanics": {
+        "instrument_intent": "Short SPY during Friday equity after-hours",
+        "timezone": "America/New_York intended in escaped code",
+        "entry": "Friday,not skipped date,time exactly16:00,and enteredShort=false: request Short and set enteredShort=true",
+        "exit": "Time>=19:00 and<20:00 while enteredShort: request close Short and reset enteredShort=false",
+        "skip_date": "2024-11-29",
+        "position_tracking": "Local Boolean changes on order submission,not verified fill notification",
+        "sizing": "No explicit source quantity or capital; native framework defaults not frozen",
+        "protection": "No active stop,target or timeout beyond the published calendar close",
+        "friction": "Narrative asks to eliminate fees; that cannot replace the fixed research economics",
+        "timeframe": "Narrative one-hour intent; no enforced chart timeframe"
+      },
+      "runtime_blockers": [
+        "Published code block contains escaped operators and a Markdown-decorated version directive; unchanged native compilation is unverified and must not be claimed",
+        "Default next-tick order execution does not establish entry at the named16:00 open or cover at19:00; no on-close/on-fill settings are specified",
+        "Exact16:00 New York trigger does not align with ordinary00/08/16UTC8h bar openings; DST must not be silently discarded",
+        "The exit interval does not independently require Friday; Boolean submission/fill synchronization and missed-session behavior are unproved",
+        "Short-only source has no source-preserving Spot-long entry. Refusing shorts leaves no trading strategy; reversing direction would invent a new rule",
+        "Equity after-hours premise does not map to continuously open crypto without a declared new operational hypothesis"
+      ],
+      "family_overlap": "Calendar/session timing differs from tested trend/volume states, but overlaps the broader session-research family. It does not authorize changing existing session watches or claim an independent edge.",
+      "readiness": "REJECTED_FOR_THIS_LONG_CASH8H_FRONTIER_NO_ADAPTER_CREATED"
+    },
+    {
+      "label": "H22 Turnaround Tuesday detector",
+      "publisher": "Quantheus/EURUSD_45Hypotheses_Research",
+      "commit": "957a5ac471b8d5562a82d54c210ea64592beb3aa",
+      "path": "EURUSD_Hypothesis_Research.ipynb",
+      "source_url": "https://github.com/Quantheus/EURUSD_45Hypotheses_Research/blob/957a5ac471b8d5562a82d54c210ea64592beb3aa/EURUSD_Hypothesis_Research.ipynb",
+      "raw_url": "https://raw.githubusercontent.com/Quantheus/EURUSD_45Hypotheses_Research/957a5ac471b8d5562a82d54c210ea64592beb3aa/EURUSD_Hypothesis_Research.ipynb",
+      "sha256": "08da3cfe6201cdfa62d6d22e3d60ccf273d0755e8bcaed76847409b1521b799f",
+      "utf8_bytes": 189631,
+      "implementation_locator": "Code-cell source71,detect_h22; no notebook code executed",
+      "license": {
+        "name": "MIT",
+        "copyright": "2026 Matouš Hajner",
+        "url": "https://raw.githubusercontent.com/Quantheus/EURUSD_45Hypotheses_Research/957a5ac471b8d5562a82d54c210ea64592beb3aa/LICENSE",
+        "sha256": "98d7a90210bc87c6b73f9ef50a5ce5894e20d65ad1111ec4ffc2b68c38829a3f",
+        "utf8_bytes": 1071
+      },
+      "primary_tree_receipt": {
+        "url": "https://api.github.com/repos/Quantheus/EURUSD_45Hypotheses_Research/git/trees/957a5ac471b8d5562a82d54c210ea64592beb3aa?recursive=1",
+        "http_status": 200,
+        "truncated": false,
+        "utf8_bytes": 1186,
+        "sha256": "012a96142c2048beb3385e342013ba5f7f133d76a4758aefcd81e18a0e38cc8b",
+        "paths": [".gitattributes","EURUSD_Hypothesis_Research.ipynb","LICENSE","README.md"],
+        "correction": "No standalone.py files does not mean no implementation: executable source exists in the notebook. Earlier provisional inventory inference was corrected."
+      },
+      "detector_defaults": {"threshold": 0.003,"reward_risk_multiple": 3.0,"stop_buffer_pips": 5,"pip_value": 0.0001,"direction": "both","source_horizon": "EURUSD M5 research; detector itself uses daily aggregation plus intraday hour/minute"},
+      "published_detector_rules": {
+        "daily_state": "Group bydate;first open,last close,max high,min low. Daily return=(daily close-daily open)/daily open.",
+        "long_calendar_signal": "Monday return strictly below-0.003; signal and Monday extrema shift one observed date forward",
+        "short_calendar_signal": "Monday return strictly above+0.003; similarly shifted",
+        "entry_row": "Tuesday,hour8,minute0; use that row's close as detector entry reference",
+        "long_bracket": "Stop=prior observed day's low-0.0005; target=entry_reference+3*(entry_reference-stop)",
+        "short_bracket": "Stop=prior observed day's high+0.0005; target=entry_reference-3*(stop-entry_reference)",
+        "output": "Entry-row indexed stop/target/direction advice,not a complete standalone live bot"
+      },
+      "readiness_blockers": [
+        "Publisher performance constants were accidentally exposed by extraction; lead quarantined rather than admitted from a supposedly blind source-only process",
+        "Notebook also contains excluded and previously explored mechanisms. No such mechanism was selected,adapted or registered; the shared notebook is not accepted as a clean isolated candidate artifact",
+        "Only detector mechanics were retained; shared simulate_trades sizing,fees,timeout,entry fill,stop/target priority,overlap and endpoint rules were not established",
+        "Timezone/date derivation and complete-day admission are not frozen. Shifting an observed date is not a substitute for a proved complete Monday/calendar contract",
+        "EURUSD5-pip absolute buffer must not be changed to crypto ticks orATR to make a candidate qualify",
+        "M5 Tuesday08:00 row-close reference is not8h signal-close/next-open execution.8h daily aggregation and price anchoring would require declared adaptation and synthetic bracket/collision proof",
+        "No native/default simulator execution or Spot cash-sized order lifecycle was proved"
+      ],
+      "family_overlap": "Calendar-conditioned Monday exhaustion is distinct from a moving-average/volume-state alias, but its contrarian return premise overlaps Quickstart06/UpDown40 and prior price-reversion research. It is not statistically independent evidence.",
+      "readiness": "QUARANTINED_NOT_REGISTERED_COMPLETE_DEFAULT_LIFECYCLE_UNESTABLISHED"
+    }
+  ],
+  "decision": "NO_SOURCE_ADMITTED_FROM_THIS_BOUNDED_FRONTIER",
+  "next_step": "Continue already prepared work without adding these sources. A future source-only lane requires an isolated original implementation with a complete causal long-cash lifecycle. The Tuesday notebook would additionally need independently blinded exact-function extraction and full simulator/default review before any consideration. Do not reverse the short-only script,change absolute risk parameters,import excluded mechanisms,or infer viability from publisher numbers.",
+  "preserved": ["No prior rejection retuned","No frozen lane or session/prospective protocol changes","No Bollinger candidate","No batch18 outcome inspection","No new trials","No source/native runtime parity claim","No live orders"]
+}

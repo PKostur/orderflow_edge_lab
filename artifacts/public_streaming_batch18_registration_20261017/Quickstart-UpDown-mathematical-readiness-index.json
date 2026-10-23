@@ -1,0 +1,111 @@
+{
+  "kind": "TWO_SOURCE_MATHEMATICAL_READINESS_DRAFT_INDEX",
+  "design_recorded_utc": "2026-10-16T22:53:05Z",
+  "selection_before_EMV_outcome_inspection": true,
+  "EMV_outcomes_inspected": false,
+  "market_data_loaded": false,
+  "market_pnl_evaluated": false,
+  "registered": false,
+  "new_trading_cells": 0,
+  "repository_edits": false,
+  "TD_admitted": false,
+  "status": "BOUNDED_SYNTHETIC_DRAFT_PROOFS_PASSED_NOT_REGISTERED_NOT_VIABLE_CONFIRMED",
+  "sources": {
+    "Quickstart06": {
+      "units": 1,
+      "entry": "Two strict declining closes across three closes",
+      "endogenous_exit": "Signal at close E+5 after actual entry fill at open E; normal exit at open E+6"
+    },
+    "UpDown40": {
+      "units": 10,
+      "return_lag": 40,
+      "entry_long": "return<-0.01",
+      "exit_long": "return>=+0.01",
+      "strength_used": false,
+      "upstream_flat_shorts": "Explicitly refused"
+    }
+  },
+  "admission": {
+    "standard_decision_close_index": 239,
+    "standard_next_open_index": 240,
+    "retained_comparator_decision": 240,
+    "retained_comparator_fill": 241,
+    "prior_probe_artifacts": "Unchanged"
+  },
+  "research_wallet": {
+    "sleeves": [
+      "ETHUSDT",
+      "SOLUSDT",
+      "LINKUSDT"
+    ],
+    "USDT_each": 10000,
+    "source_initial_cash": 100000,
+    "quantity_policy": "Fixed source units, next-open all-or-reject, no resize",
+    "funding": "checksubmit=True: created-close precheck followed by opening execution check",
+    "friction": "20 bps per side in selected synthetic funding fixture; source friction differs and is disclosed",
+    "no_rescue": [
+      "No scaling",
+      "No cash increase",
+      "No pair selection based on funding or outcomes"
+    ]
+  },
+  "runtime_scope": "Unmodified pinned source class bodies; explicit streaming,warmup cash-origin and refusal of upstream flat shorts wrappers. Standard framework only,not full publisher harness/default-preloaded or exchange parity.",
+  "selected_checks": 62,
+  "all_selected_checks_pass": true,
+  "source_and_runtime_receipts": {
+    "quickstart": "47b82d6ae2e3940bff80450e8c17a7074204c1f7ff70f7e56a25fe0e988e0d4c",
+    "updown": "35b643f11fb5aba0041fae5ae19ab3a8bf312865ef9be126ab8cfb2c181b45e4"
+  },
+  "artifacts": [
+    {
+      "path": "outputs/Quickstart-UpDown-mathematical-readiness-draft.md",
+      "sha256": "62452c120cf3bb0af6a83ce556f6fd07ac8479597b70fb94b7fd4bb1dccfcdf5",
+      "bytes": 6869
+    },
+    {
+      "path": "outputs/Quickstart-UpDown-funding-and-origin-clarification.md",
+      "sha256": "c0523546d7231a2c3dac2e64efba29e677a57272b28a10e4d0676b84e4632053",
+      "bytes": 3088
+    },
+    {
+      "path": "outputs/Quickstart-UpDown-native-funding-probe.json",
+      "sha256": "629972e638b49e3c35910f41f18df6dd2a273193c181f456bf1e65a4b64ea959",
+      "bytes": 3915
+    },
+    {
+      "path": "outputs/Quickstart-UpDown-mathematical-synthetic-proof.json",
+      "sha256": "eee419b0fafb07f7bb17b0090cdd763784f230342f24336927b5037848f9b7a5",
+      "bytes": 6396
+    },
+    {
+      "path": "outputs/Quickstart-UpDown-selected-native-output.json",
+      "sha256": "287d6ffa2ceec4fe1e08a741988c4cf81815ee92f240edb19ac80ae1105a828d",
+      "bytes": 1061467
+    },
+    {
+      "path": "work/quickstart_updown_mathematical_draft.py",
+      "sha256": "c71abc35003eb3011ea1f33c2f79e8883eb5d3a87bcb30616f16b89b61124729",
+      "bytes": 5840
+    },
+    {
+      "path": "work/quickstart_updown_readiness_proof.py",
+      "sha256": "72252bbd73143650ef001370882d2746bbd160de61fb9e10c1483b1333b86d83",
+      "bytes": 18155
+    },
+    {
+      "path": "work/Quickstart-UpDown-selected-synthetic-fixtures.json",
+      "sha256": "6f26da594180c33c00bc94b7eeefbf700f42328cef79e3e9e8d8adfb912aa2f8",
+      "bytes": 137137
+    }
+  ],
+  "boundaries": [
+    "No active stop, target, new exit condition or holding timeout invented",
+    "Own helper returns NaN outside valid history; native numeric comparison starts at index 40",
+    "BTC own-equity same-fraction scalar sizing checked; full paired benchmark lifecycle not proved",
+    "All-or-reject full fills are declared; partial fills, asynchronous cancellation, rejection and exchange lot matching are not proved",
+    "Generic broker Rejected notification distinct from Margin was not separately exercised",
+    "No full publisher/default preloaded bot parity; source runtime proof is bounded to selected streaming, cash-origin and Spot-long fixtures",
+    "GPL source/framework and own harness remain outside Git"
+  ],
+  "next_step": "Independent source/runtime/specification review; root may then freeze a complete study including BTC lifecycle, remaining exceptional-order scope and friction convention before registration or market data. No readiness gate or future confirmation requirement is weakened."
+}
