@@ -1,0 +1,49 @@
+{
+ "schema_version": 1,
+ "study_id": "carry-study-v1",
+ "status": "FROZEN_BEFORE_COMPUTATION",
+ "registered_utc": "2026-10-23",
+ "question": "What did a delta-neutral funding carry (long spot, short the same notional of the USDT perpetual) actually earn on BTC and ETH, after fees, and how bad were its worst stretches?",
+ "why_this_is_not_a_search": "One construction, fixed before any number is computed. No parameter is chosen from the results. The single variant below is declared now and reported next to the primary, never instead of it.",
+ "assets": ["BTCUSDT", "ETHUSDT"],
+ "portfolio": "equal notional BTC and ETH, daily returns averaged",
+ "venues": {
+  "binance": {
+   "source": "data.binance.vision via binance_futures_archive.load_dataset: 'spot' and 'perp' 1h klines, 'funding' monthly fundingRate files",
+   "window": ["2020-01-01", "2026-09-30"]
+  },
+  "mexc": {
+   "source": "MEXC public API: fetch_mexc_spot_klines (60m), fetch_mexc_futures_klines (60m), fetch_mexc_funding_history",
+   "window": ["2025-05-01", "2026-10-22"],
+   "note": "MEXC funding history starts around 2025-04; this is the venue the forward tracker uses"
+  }
+ },
+ "construction": {
+  "daily_close": "close of the 1h bar ending at 00:00 UTC, for spot and perp",
+  "daily_return_per_unit_notional": "spot_ret(t) - perp_ret(t) + sum of funding rates settled in (t-1 00:00, t 00:00]; a positive rate is received by the short perp",
+  "rebalance": "both legs reset to equal notional at each month end; cost = 2 x per-leg cost x |cumulative spot-minus-perp drift since the last reset|",
+  "entry_and_exit": "one entry at the first day and one exit at the last day, each paying 2 legs x per-leg cost"
+ },
+ "costs": {
+  "spot_taker_bps": 10.0,
+  "perp_taker_bps": 5.0,
+  "slippage_bps_per_leg": 2.0,
+  "note": "conservative retail taker rates on both venues; no maker rebates, no fee discounts"
+ },
+ "capital": {
+  "split_50_50": "capital = spot notional + an equal amount of perp margin (1x short, no leverage); return on capital = return on notional / 2",
+  "unified_margin": "spot held as perp collateral with a 10% cash buffer; return on capital = return on notional / 1.1; shown for information, depends on the exchange offering it"
+ },
+ "variant_declared_now": {
+  "id": "funding_filter_7d",
+  "rule": "hold the hedge on day t only if the mean daily funding over the 7 days ending t-1 is above 0; every switch in or out pays the entry or exit cost"
+ },
+ "outputs": ["annual net return on notional and on capital", "annualized volatility and Sharpe", "max drawdown", "share of positive months", "longest run of days with negative funding", "per-year table", "worst 30-day and 90-day returns"],
+ "pass_rule": "none: this measures an income stream, it is not a test of a prediction. The forward tracker carry-forward-v1 is the check on what it earns from now on.",
+ "claims": {
+  "strategy_promotion_authorized": false,
+  "paper_trading_authorized": false,
+  "live_trading_authorized": false,
+  "orders_sent": false
+ }
+}
