@@ -1,7 +1,7 @@
 {
- "artifacts_in_manifest": 578,
+ "artifacts_in_manifest": 607,
  "descriptive_only": true,
- "last_artifact": "2026-10-22T14:08:46Z",
+ "last_artifact": "2026-10-23T05:27:47Z",
  "summary": {
   "runs_with_coverage_drops": 4,
   "stamp_times_utc": {
@@ -54,7 +54,7 @@
  "watches": {
   "Cross-asset trend": {
    "artifact": "cross-asset-trend-forward-v1",
-   "artifacts_with_series": 56,
+   "artifacts_with_series": 59,
    "book": "combined",
    "coverage_drops": [],
    "max_revision_bps": 0.0,
@@ -64,11 +64,25 @@
    "stamp_times_utc": [
     "00:00"
    ],
-   "stamps": 23
+   "stamps": 24
   },
   "Cross-asset trend, inverse-vol": {
    "artifact": "cross-asset-trend-invvol-forward-v1",
-   "artifacts_with_series": 56,
+   "artifacts_with_series": 59,
+   "book": "combined",
+   "coverage_drops": [],
+   "max_revision_bps": 0.0,
+   "report": "report.json",
+   "revised_stamps": 0,
+   "revisions": [],
+   "stamp_times_utc": [
+    "00:00"
+   ],
+   "stamps": 24
+  },
+  "Crypto trend core": {
+   "artifact": "crypto-trend-core-v1",
+   "artifacts_with_series": 57,
    "book": "combined",
    "coverage_drops": [],
    "max_revision_bps": 0.0,
@@ -80,23 +94,9 @@
    ],
    "stamps": 23
   },
-  "Crypto trend core": {
-   "artifact": "crypto-trend-core-v1",
-   "artifacts_with_series": 54,
-   "book": "combined",
-   "coverage_drops": [],
-   "max_revision_bps": 0.0,
-   "report": "report.json",
-   "revised_stamps": 0,
-   "revisions": [],
-   "stamp_times_utc": [
-    "00:00"
-   ],
-   "stamps": 22
-  },
   "Crypto trend core + vol target": {
    "artifact": "crypto-trend-core-voltarget-v1",
-   "artifacts_with_series": 54,
+   "artifacts_with_series": 57,
    "book": "core_voltarget",
    "coverage_drops": [],
    "max_revision_bps": 0.0,
@@ -106,11 +106,11 @@
    "stamp_times_utc": [
     "00:00"
    ],
-   "stamps": 22
+   "stamps": 23
   },
   "Fade-24h bracket 2x (paper)": {
    "artifact": "fade24-forward-v1",
-   "artifacts_with_series": 11,
+   "artifacts_with_series": 14,
    "book": "fade24_F1",
    "coverage_drops": [],
    "max_revision_bps": 0.0,
@@ -120,11 +120,11 @@
    "stamp_times_utc": [
     "00:00"
    ],
-   "stamps": 4
+   "stamps": 5
   },
   "Multi-premia blend": {
    "artifact": "multi-premia-blend-v1",
-   "artifacts_with_series": 64,
+   "artifacts_with_series": 67,
    "book": "S4_blend",
    "coverage_drops": [
     {
@@ -143,17 +143,17 @@
    "revisions": [
     {
      "first": -0.0035333700422633847,
-     "latest": -0.0035333700422633847,
+     "latest": -0.003533370042263385,
      "latest_equals_first": true,
-     "observations": 64,
+     "observations": 67,
      "range_bps": 0.29642396809481836,
      "stamp": "2026-09-30T00:00:00+00:00"
     },
     {
      "first": 0.004913533705254205,
-     "latest": 0.004913533705254205,
+     "latest": 0.004913533705254207,
      "latest_equals_first": true,
-     "observations": 63,
+     "observations": 66,
      "range_bps": 0.2215164163608084,
      "stamp": "2026-10-01T00:00:00+00:00"
     },
@@ -161,7 +161,7 @@
      "first": -0.005266302405019998,
      "latest": -0.005266302405019998,
      "latest_equals_first": true,
-     "observations": 62,
+     "observations": 65,
      "range_bps": 0.33499551100749436,
      "stamp": "2026-10-02T00:00:00+00:00"
     },
@@ -169,23 +169,23 @@
      "first": -0.0019625760479939384,
      "latest": -0.0019625760479939384,
      "latest_equals_first": true,
-     "observations": 59,
+     "observations": 62,
      "range_bps": 0.9854140594632945,
      "stamp": "2026-10-03T00:00:00+00:00"
     },
     {
      "first": 0.004119520561916112,
-     "latest": 0.004119520561916112,
+     "latest": 0.004119520561916111,
      "latest_equals_first": true,
-     "observations": 56,
+     "observations": 59,
      "range_bps": 1.132715695001934,
      "stamp": "2026-10-04T00:00:00+00:00"
     },
     {
      "first": 0.0025185208463332437,
-     "latest": 0.0025185208463332407,
+     "latest": 0.0025185208463332437,
      "latest_equals_first": true,
-     "observations": 55,
+     "observations": 58,
      "range_bps": 2.411238040416217,
      "stamp": "2026-10-05T00:00:00+00:00"
     },
@@ -193,15 +193,15 @@
      "first": 0.0004937633386807245,
      "latest": 0.0004937633386807245,
      "latest_equals_first": true,
-     "observations": 53,
+     "observations": 56,
      "range_bps": 0.5475681802797998,
      "stamp": "2026-10-06T00:00:00+00:00"
     },
     {
      "first": -0.003802582833465506,
-     "latest": -0.0038025828334655063,
+     "latest": -0.003802582833465506,
      "latest_equals_first": true,
-     "observations": 50,
+     "observations": 53,
      "range_bps": 2.489708656363129,
      "stamp": "2026-10-07T00:00:00+00:00"
     },
@@ -209,31 +209,31 @@
      "first": -0.008639775409170072,
      "latest": -0.008639775409170072,
      "latest_equals_first": true,
-     "observations": 47,
+     "observations": 50,
      "range_bps": 0.33564873167845133,
      "stamp": "2026-10-08T00:00:00+00:00"
     },
     {
      "first": -0.008549706602125553,
-     "latest": -0.008549706602125553,
+     "latest": -0.008549706602125551,
      "latest_equals_first": true,
-     "observations": 44,
+     "observations": 47,
      "range_bps": 1.6740422338179863,
      "stamp": "2026-10-09T00:00:00+00:00"
     },
     {
      "first": 0.003974885932846539,
-     "latest": 0.003974885932846539,
+     "latest": 0.003974885932846538,
      "latest_equals_first": true,
-     "observations": 41,
+     "observations": 44,
      "range_bps": 0.4658487920443377,
      "stamp": "2026-10-10T00:00:00+00:00"
     },
     {
      "first": 9.298181427066371e-05,
-     "latest": 9.298181427066371e-05,
+     "latest": 9.298181427066544e-05,
      "latest_equals_first": true,
-     "observations": 38,
+     "observations": 41,
      "range_bps": 9.4853144981204,
      "stamp": "2026-10-11T00:00:00+00:00"
     },
@@ -241,7 +241,7 @@
      "first": 0.0007464769353438751,
      "latest": 0.0007464769353438751,
      "latest_equals_first": true,
-     "observations": 33,
+     "observations": 36,
      "range_bps": 2.17153791531418,
      "stamp": "2026-10-12T00:00:00+00:00"
     },
@@ -249,15 +249,15 @@
      "first": -0.008448666923043293,
      "latest": -0.008448666923043293,
      "latest_equals_first": true,
-     "observations": 27,
+     "observations": 30,
      "range_bps": 0.9914953989918935,
      "stamp": "2026-10-13T00:00:00+00:00"
     },
     {
      "first": -0.0020223885736068282,
-     "latest": -0.0020223885736068282,
+     "latest": -0.0020223885736068265,
      "latest_equals_first": true,
-     "observations": 23,
+     "observations": 26,
      "range_bps": 2.1778771106072647,
      "stamp": "2026-10-14T00:00:00+00:00"
     }
@@ -265,11 +265,11 @@
    "stamp_times_utc": [
     "00:00"
    ],
-   "stamps": 22
+   "stamps": 23
   },
   "Multi-premia, 5-coin human book": {
    "artifact": "multi-premia-blend-v1",
-   "artifacts_with_series": 64,
+   "artifacts_with_series": 67,
    "book": "H5",
    "coverage_drops": [
     {
@@ -304,49 +304,49 @@
    "revisions": [
     {
      "first": 0.0088257865219849,
-     "latest": 0.0088257865219849,
+     "latest": 0.008825786521984904,
      "latest_equals_first": true,
-     "observations": 64,
+     "observations": 67,
      "range_bps": 2.944502231734397,
      "stamp": "2026-09-30T00:00:00+00:00"
     },
     {
      "first": -0.005861292243688548,
-     "latest": -0.005861292243688548,
+     "latest": -0.005861292243688549,
      "latest_equals_first": true,
-     "observations": 63,
+     "observations": 66,
      "range_bps": 1.9878914723659487,
      "stamp": "2026-10-01T00:00:00+00:00"
     },
     {
      "first": -0.017623801186987163,
-     "latest": -0.017623801186987163,
+     "latest": -0.017623801186987167,
      "latest_equals_first": true,
-     "observations": 62,
+     "observations": 65,
      "range_bps": 4.828664361901345,
      "stamp": "2026-10-02T00:00:00+00:00"
     },
     {
      "first": 0.009696244892956517,
-     "latest": 0.009696244892956517,
+     "latest": 0.009696244892956516,
      "latest_equals_first": true,
-     "observations": 59,
+     "observations": 62,
      "range_bps": 2.644003996041845,
      "stamp": "2026-10-03T00:00:00+00:00"
     },
     {
      "first": 0.002402459304473885,
-     "latest": 0.002402459304473885,
+     "latest": 0.002402459304473886,
      "latest_equals_first": true,
-     "observations": 56,
+     "observations": 59,
      "range_bps": 0.7346574510502367,
      "stamp": "2026-10-04T00:00:00+00:00"
     },
     {
      "first": -0.001675464496725013,
-     "latest": -0.0016754644967250127,
+     "latest": -0.001675464496725013,
      "latest_equals_first": true,
-     "observations": 55,
+     "observations": 58,
      "range_bps": 0.5231983445373408,
      "stamp": "2026-10-05T00:00:00+00:00"
     },
@@ -354,15 +354,15 @@
      "first": -0.006259050669844407,
      "latest": -0.006259050669844407,
      "latest_equals_first": true,
-     "observations": 53,
+     "observations": 56,
      "range_bps": 1.9876623254791794,
      "stamp": "2026-10-06T00:00:00+00:00"
     },
     {
      "first": -0.008003423787546331,
-     "latest": -0.00800342378754633,
+     "latest": -0.008003423787546331,
      "latest_equals_first": true,
-     "observations": 50,
+     "observations": 53,
      "range_bps": 2.545060442869073,
      "stamp": "2026-10-07T00:00:00+00:00"
     },
@@ -370,39 +370,39 @@
      "first": -0.008964280877820445,
      "latest": -0.008964280877820445,
      "latest_equals_first": true,
-     "observations": 47,
+     "observations": 50,
      "range_bps": 2.6730203581147585,
      "stamp": "2026-10-08T00:00:00+00:00"
     },
     {
      "first": 0.00039666840969268785,
-     "latest": 0.00039666840969268785,
+     "latest": 0.00039666840969268763,
      "latest_equals_first": true,
-     "observations": 44,
+     "observations": 47,
      "range_bps": 0.33590522810434603,
      "stamp": "2026-10-09T00:00:00+00:00"
     },
     {
      "first": 0.0004147191842183216,
-     "latest": 0.0004147191842183216,
+     "latest": 0.0004147191842183215,
      "latest_equals_first": true,
-     "observations": 41,
+     "observations": 44,
      "range_bps": 1.0435085091595317,
      "stamp": "2026-10-10T00:00:00+00:00"
     },
     {
      "first": -0.003766780844122201,
-     "latest": -0.003766780844122201,
+     "latest": -0.0037667808441222005,
      "latest_equals_first": true,
-     "observations": 38,
+     "observations": 41,
      "range_bps": 1.42072388427793,
      "stamp": "2026-10-11T00:00:00+00:00"
     },
     {
      "first": 0.000613806039550232,
-     "latest": 0.000613806039550232,
+     "latest": 0.0006138060395502317,
      "latest_equals_first": true,
-     "observations": 33,
+     "observations": 36,
      "range_bps": 20.79304016303981,
      "stamp": "2026-10-12T00:00:00+00:00"
     },
@@ -410,7 +410,7 @@
      "first": -0.002737087371342199,
      "latest": -0.002737087371342199,
      "latest_equals_first": true,
-     "observations": 27,
+     "observations": 30,
      "range_bps": 25.757089623777784,
      "stamp": "2026-10-13T00:00:00+00:00"
     }
@@ -418,11 +418,11 @@
    "stamp_times_utc": [
     "00:00"
    ],
-   "stamps": 22
+   "stamps": 23
   },
   "Near-miss paper (cascade/CTREND/trend 2x)": {
    "artifact": "near-miss-forward-v1",
-   "artifacts_with_series": 14,
+   "artifacts_with_series": 17,
    "book": "cascade_1x",
    "coverage_drops": [],
    "max_revision_bps": 0.0,
@@ -432,7 +432,7 @@
    "stamp_times_utc": [
     "00:00"
    ],
-   "stamps": 5
+   "stamps": 6
   },
   "News sentiment (news momentum, attention, tone, panic pause)": {
    "artifact": "news-sentiment-v1",
@@ -448,18 +448,18 @@
   },
   "Paper account: 70-coin blend, 10,000 USDT": {
    "artifact": "multi-premia-blend-v1",
-   "artifacts_with_series": 53,
+   "artifacts_with_series": 56,
    "book": "paper",
    "coverage_drops": [],
    "max_revision_bps": 0.3717764819910485,
    "report": "paper_account_report.json",
-   "revised_stamps": 15,
+   "revised_stamps": 17,
    "revisions": [
     {
      "first": -0.0009751787759433306,
      "latest": -0.0009751787759433306,
      "latest_equals_first": true,
-     "observations": 53,
+     "observations": 56,
      "range_bps": 0.3717764819910485,
      "stamp": "2026-10-06T08:00:00+00:00"
     },
@@ -467,7 +467,7 @@
      "first": -0.0067951203054028575,
      "latest": -0.006793248222785375,
      "latest_equals_first": false,
-     "observations": 50,
+     "observations": 53,
      "range_bps": 0.02069370573010154,
      "stamp": "2026-10-07T08:00:00+00:00"
     },
@@ -475,7 +475,7 @@
      "first": -0.0038768510622343433,
      "latest": -0.0038768510622343433,
      "latest_equals_first": true,
-     "observations": 47,
+     "observations": 50,
      "range_bps": 0.017780242614895414,
      "stamp": "2026-10-08T08:00:00+00:00"
     },
@@ -483,7 +483,7 @@
      "first": 0.0006593623515074309,
      "latest": 0.0006593623515074309,
      "latest_equals_first": true,
-     "observations": 44,
+     "observations": 47,
      "range_bps": 0.2453571819982514,
      "stamp": "2026-10-09T08:00:00+00:00"
     },
@@ -491,7 +491,7 @@
      "first": -0.0006572758324216998,
      "latest": -0.0006572758324216998,
      "latest_equals_first": true,
-     "observations": 41,
+     "observations": 44,
      "range_bps": 0.08986650689157827,
      "stamp": "2026-10-10T08:00:00+00:00"
     },
@@ -499,7 +499,7 @@
      "first": -0.0031721792990602182,
      "latest": -0.003170538587056515,
      "latest_equals_first": false,
-     "observations": 38,
+     "observations": 41,
      "range_bps": 0.01876518538335148,
      "stamp": "2026-10-11T08:00:00+00:00"
     },
@@ -507,7 +507,7 @@
      "first": 0.002760527260251111,
      "latest": 0.002760527260251111,
      "latest_equals_first": true,
-     "observations": 33,
+     "observations": 36,
      "range_bps": 0.015877758108295836,
      "stamp": "2026-10-12T08:00:00+00:00"
     },
@@ -515,7 +515,7 @@
      "first": -0.004839724387688427,
      "latest": -0.004839724387688427,
      "latest_equals_first": true,
-     "observations": 27,
+     "observations": 30,
      "range_bps": 0.024991061974288797,
      "stamp": "2026-10-13T08:00:00+00:00"
     },
@@ -523,7 +523,7 @@
      "first": -0.0029805340172514017,
      "latest": -0.002977378056481683,
      "latest_equals_first": false,
-     "observations": 23,
+     "observations": 26,
      "range_bps": 0.04340627283716536,
      "stamp": "2026-10-14T08:00:00+00:00"
     },
@@ -531,7 +531,7 @@
      "first": -0.004817224917219365,
      "latest": -0.004817197528879658,
      "latest_equals_first": false,
-     "observations": 20,
+     "observations": 23,
      "range_bps": 0.1250113675921316,
      "stamp": "2026-10-15T08:00:00+00:00"
     },
@@ -539,7 +539,7 @@
      "first": 0.0034319074446138575,
      "latest": 0.003446083286946955,
      "latest_equals_first": false,
-     "observations": 17,
+     "observations": 20,
      "range_bps": 0.1438325003322305,
      "stamp": "2026-10-16T08:00:00+00:00"
     },
@@ -547,7 +547,7 @@
      "first": -0.00020268771450271394,
      "latest": -0.00020268771450271394,
      "latest_equals_first": true,
-     "observations": 14,
+     "observations": 17,
      "range_bps": 0.05143153831377312,
      "stamp": "2026-10-17T08:00:00+00:00"
     },
@@ -555,7 +555,7 @@
      "first": -0.0016788522711848053,
      "latest": -0.001676887862245957,
      "latest_equals_first": false,
-     "observations": 11,
+     "observations": 14,
      "range_bps": 0.021397652733012862,
      "stamp": "2026-10-18T08:00:00+00:00"
     },
@@ -563,7 +563,7 @@
      "first": -0.000684122610668636,
      "latest": -0.0006839705507425409,
      "latest_equals_first": false,
-     "observations": 8,
+     "observations": 11,
      "range_bps": 0.011842529394900936,
      "stamp": "2026-10-19T08:00:00+00:00"
     },
@@ -571,19 +571,35 @@
      "first": -0.00010000128622300597,
      "latest": -9.997406785300367e-05,
      "latest_equals_first": false,
-     "observations": 5,
-     "range_bps": 0.00027218370002302095,
+     "observations": 8,
+     "range_bps": 0.0061460021494319506,
      "stamp": "2026-10-20T08:00:00+00:00"
+    },
+    {
+     "first": -0.00036227957227541463,
+     "latest": -0.00036227957227541463,
+     "latest_equals_first": true,
+     "observations": 5,
+     "range_bps": 0.0011944350974957274,
+     "stamp": "2026-10-21T08:00:00+00:00"
+    },
+    {
+     "first": -0.002414892497745069,
+     "latest": -0.002414892497745069,
+     "latest_equals_first": true,
+     "observations": 3,
+     "range_bps": 0.001335859600715139,
+     "stamp": "2026-10-22T08:00:00+00:00"
     }
    ],
    "stamp_times_utc": [
     "08:00"
    ],
-   "stamps": 16
+   "stamps": 17
   },
   "TradFi perps (momentum / weekend fade)": {
    "artifact": "tradfi-perps-forward-v1",
-   "artifacts_with_series": 5,
+   "artifacts_with_series": 8,
    "book": "B2_weekend_fade_1x",
    "coverage_drops": [],
    "max_revision_bps": 0.0,
@@ -593,11 +609,11 @@
    "stamp_times_utc": [
     "00:00"
    ],
-   "stamps": 2
+   "stamps": 3
   },
   "Trend portfolio (10 coins)": {
    "artifact": "trend-portfolio-forward-v1",
-   "artifacts_with_series": 55,
+   "artifacts_with_series": 58,
    "book": "plain",
    "coverage_drops": [],
    "max_revision_bps": 0.0,
@@ -607,11 +623,11 @@
    "stamp_times_utc": [
     "00:00"
    ],
-   "stamps": 23
+   "stamps": 24
   },
   "Turn-of-month SPY (search-v1 near miss)": {
    "artifact": "multi-premia-blend-v1",
-   "artifacts_with_series": 23,
+   "artifacts_with_series": 26,
    "book": "tom",
    "coverage_drops": [],
    "max_revision_bps": 0.0,
@@ -621,11 +637,11 @@
    "stamp_times_utc": [
     "00:00"
    ],
-   "stamps": 6
+   "stamps": 7
   },
   "Zoo mirrors (BTC shock reversal, lottery momentum)": {
    "artifact": "multi-premia-blend-v1",
-   "artifacts_with_series": 56,
+   "artifacts_with_series": 59,
    "book": "M4_lottery_momentum",
    "coverage_drops": [
     {
@@ -645,7 +661,7 @@
    "stamp_times_utc": [
     "00:00"
    ],
-   "stamps": 18
+   "stamps": 19
   }
  }
 }
