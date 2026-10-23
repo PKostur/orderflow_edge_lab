@@ -13,6 +13,8 @@ class OptionsIncomeTests(unittest.TestCase):
             depth_vwap([[10, 1]], 2, 'buy')
         with self.assertRaises(ValueError):
             depth_vwap([[12, 1], [10, 1]], 2, 'buy')
+        with self.assertRaises(ValueError):
+            depth_vwap([[10, 1], [10, 1]], 2, 'buy')
 
     def test_fees_capped_on_premium_not_premium_rate(self):
         self.assertAlmostEqual(trading_fee(100000, 1000, .01), .30)

@@ -7,6 +7,7 @@ import json
 import math
 import random
 import statistics
+import subprocess
 import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
@@ -96,7 +97,7 @@ def depth_vwap(levels, amount, side):
     if not levels or any(not math.isfinite(x) or x <= 0 for level in levels for x in level):
         raise ValueError("empty/nonpositive depth")
     prices = [p for p, _ in levels]
-    if prices != sorted(prices, reverse=side == "sell"):
+    if prices != sorted(prices, reverse=side == "sell") or len(set(prices)) != len(prices):
         raise ValueError("unsorted depth")
     remaining, notionals = amount, []
     for price, available in levels:
@@ -152,6 +153,15 @@ def describe(values):
 
 
 def snapshot(folder, history):
+    root = Path(__file__).resolve().parents[2]
+    design_commit = subprocess.check_output(["git", "rev-parse", "75915a5"], cwd=root, text=True).strip()
+    frozen_config = subprocess.check_output(["git", "show", design_commit + ":config/options_income_v1.json"], cwd=root)
+    if (root / "config/options_income_v1.json").read_bytes() != frozen_config:
+        raise ValueError("config differs from frozen design")
+    implementation_commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip()
+    committed_source = subprocess.check_output(["git", "show", "HEAD:src/orderflow_edge_lab/options_income.py"], cwd=root)
+    if Path(__file__).read_bytes().replace(b"\r\n", b"\n") != committed_source.replace(b"\r\n", b"\n"):
+        raise ValueError("evaluator source is not committed")
     folder = Path(folder)
     folder.mkdir(parents=True, exist_ok=False)
     receipts = []
@@ -191,6 +201,11 @@ def snapshot(folder, history):
                     raise ValueError("stale/future-dated quote")
                 if book.get("best_bid_price") and book.get("best_ask_price") and book["best_bid_price"] > book["best_ask_price"]:
                     raise ValueError("crossed book")
+                if book.get("bids") and book.get("asks") and book["bids"][0][0] > book["asks"][0][0]:
+                    raise ValueError("crossed depth arrays")
+                for field, levels in (("best_bid_price", "bids"), ("best_ask_price", "asks")):
+                    if book.get(levels) and book.get(field) is not None and book[field] != book[levels][0][0]:
+                        raise ValueError("best price/depth disagreement")
             sell = depth_vwap(sb["bids"], amount, "sell")
             buy = depth_vwap(lb["asks"], amount, "buy")
             credit = (sell - buy) * amount
@@ -220,7 +235,8 @@ def snapshot(folder, history):
     if all(results[a].get("cases") for a in ("BTC", "ETH")):
         for number in range(2):
             a, b = (results[s]["cases"][number]["scenario_pnl_usdc"] for s in ("BTC", "ETH"))
-            if len(a) == len(b) and results["BTC"]["historical_scenarios"]["scenario_horizon_bars"] == results["ETH"]["historical_scenarios"]["scenario_horizon_bars"]:
+            anchors_match = all(results["BTC"]["historical_scenarios"][k] == results["ETH"]["historical_scenarios"][k] for k in ("first_open_utc", "last_open_utc", "scenario_horizon_bars", "bars"))
+            if len(a) == len(b) and anchors_match:
                 joint = [x + y for x, y in zip(a, b)]
                 portfolio.append({"case": number, "metrics": describe(joint), "scenario_pnl_usdc": joint,
                                   "joint_blocks": "synchronous BTC/ETH blocks, preserving observed cross-asset dependence"})
@@ -231,6 +247,8 @@ def snapshot(folder, history):
               "results": results, "portfolio": portfolio, "raw_receipts": receipts,
               "actual_account_margin_verified": False, "atomic_execution_verified": False,
               "historical_options_backtest": False, "future_confirmation_started": False, "promotable": False, "orders": False,
+              "design_commit": design_commit, "implementation_commit": implementation_commit,
+              "config_sha256": hashlib.sha256(frozen_config).hexdigest(), "history_manifest_sha256": sha(Path(history) / "manifest.json"),
               "evaluator_sha256": sha(__file__)}
     save(folder / "report.json", report)
     return report
