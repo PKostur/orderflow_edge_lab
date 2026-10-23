@@ -47,7 +47,7 @@ def daily_funding(rates: pd.Series) -> pd.Series:
 
 
 def hedge_daily(spot_close: pd.Series, perp_close: pd.Series, funding: pd.Series, *,
-                costs: Costs = Costs(), active: pd.Series | None = None) -> pd.DataFrame:
+                costs: Costs = Costs(), active: pd.Series | None = None, exit_at_end: bool = True) -> pd.DataFrame:
     """Daily P&L per unit notional of the hedge, after costs.
 
     ``active`` (optional, bool by day) switches the hedge on/off; every switch pays the pair cost, as do the first
@@ -65,8 +65,8 @@ def hedge_daily(spot_close: pd.Series, perp_close: pd.Series, funding: pd.Series
     held = on.shift(1, fill_value=False)           # the hedge decided at t-1 earns day t
     switches = held.astype(int).diff().abs().fillna(held.astype(int))
     cost += switches * pair
-    if bool(held.iloc[-1]):
-        cost.iloc[-1] += pair                       # final exit
+    if exit_at_end and bool(held.iloc[-1]):
+        cost.iloc[-1] += pair                       # final exit (a running forward book leaves it open)
     drift, last_month = 0.0, None
     for i, t in enumerate(idx):
         if not held.iloc[i]:

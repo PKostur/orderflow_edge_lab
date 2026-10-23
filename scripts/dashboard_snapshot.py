@@ -38,6 +38,7 @@ WATCHES = [
     ("multi-premia-blend-v1.yml", "near_miss_forward_report.json", "Near-miss paper (cascade/CTREND/trend 2x)", "Forward-only candidates", "cascade_1x", 180),
     ("multi-premia-blend-v1.yml", "fade24_forward_report.json", "Fade-24h bracket 2x (paper)", "Forward-only candidates", "fade24_F1", 180),
     ("multi-premia-blend-v1.yml", "tradfi_perps_forward_report.json", "TradFi perps (momentum / weekend fade)", "Forward-only candidates", "B2_weekend_fade_1x", 365),
+    ("multi-premia-blend-v1.yml", "carry_forward_report.json", "Funding carry BTC/ETH (delta-neutral, MEXC, 10,000 USDT paper)", "Income", "portfolio", 90),
     ("canonical-v3-forward-companion-v1.yml", "report.json", "Canonical v3 companion", "Accounting", None, None),
 ]
 

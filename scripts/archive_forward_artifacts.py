@@ -28,6 +28,7 @@ REPORT_ARTIFACTS = (
     "fade24-forward-v1",
     "near-miss-forward-v1",
     "tradfi-perps-forward-v1",
+    "carry-forward-v1",
     "crypto-trend-core-v1",
     "crypto-trend-core-voltarget-v1",
     "trend-portfolio-forward-v1",

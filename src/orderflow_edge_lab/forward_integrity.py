@@ -16,7 +16,8 @@ from typing import Any, Iterable, Sequence
 REVISION_TOL = 1e-9
 REPORT_ARTIFACT_BY_FILE = {"near_miss_forward_report.json": "near-miss-forward-v1",
                            "fade24_forward_report.json": "fade24-forward-v1",
-                           "tradfi_perps_forward_report.json": "tradfi-perps-forward-v1"}
+                           "tradfi_perps_forward_report.json": "tradfi-perps-forward-v1",
+                           "carry_forward_report.json": "carry-forward-v1"}
 
 
 def dashboard_watches(dashboard_snapshot: Path) -> list[tuple[str, str, str, str]]:
