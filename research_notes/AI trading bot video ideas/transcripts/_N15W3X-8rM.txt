@@ -1,0 +1,352 @@
+# I Let JEV AI Predict Stock Prices and the Result Were Not Hard to Believe
+# channel: Moon Dev
+# url: https://www.youtube.com/watch?v=_N15W3X-8rM
+
+[0:00:00] Jev AI was just released, so I went
+[0:00:02] ahead and ran an entire study
+[0:00:04] backtesting with Jev. It's pretty cool
+[0:00:06] because backtesting with another AI
+[0:00:08] would have cost me $500 and probably
+[0:00:11] like 3 days of actual time, but Jev is
+[0:00:15] so fast and so inexpensive. It cost me
+[0:00:18] $5. I can actually open up my Open
+[0:00:20] Router here to show you. I use the Open
+[0:00:23] Router in order to do this. You can see
+[0:00:25] if I go to Open Router logs, it was $5
+[0:00:28] worth of Open Router.
+[0:00:30] Um and it was yesterday that I ran this
+[0:00:32] backtest. But anyways, I use Open Router
+[0:00:35] because that's It just It's so much
+[0:00:36] easier to connect um to all these AIs.
+[0:00:39] And I'm going to scroll back for a while
+[0:00:41] here in order to see how much I actually
+[0:00:43] spent, but I spent five bucks. Just
+[0:00:46] trust me, bro.
+[0:00:47] Um past 24 hours. I guess I could filter
+[0:00:49] here and say model here and say Jev. But
+[0:00:52] I think it's pretty interesting because
+[0:00:55] You capping, bro? Are you capping? I
+[0:00:57] think it's pretty interesting that Jev
+[0:00:59] was able to do this
+[0:01:00] backtest because at the end of the day
+[0:01:03] There we go. At the end of the day it
+[0:01:05] It's almost not impossible, but it would
+[0:01:06] have cost $500. So, the question is Can
+[0:01:09] Jev predict price? Well, I have the
+[0:01:11] answer for you and I'm going to explain
+[0:01:12] everything here for you and I'm going to
+[0:01:13] give you all the code. You can see type
+[0:01:15] safe. The cost is damn near nothing.
+[0:01:17] 0.0001
+[0:01:18] cents. Right now, I'm building a bot out
+[0:01:21] to see if it can predict Polymarket
+[0:01:24] prices live. So, that's a different
+[0:01:26] test. I already figured out if it can
+[0:01:27] test uh predict prices in the past, but
+[0:01:30] now I'm applying it to the 5-minute bot
+[0:01:32] on Polymarket. So, I want to go ahead
+[0:01:34] and answer that question. The answer is
+[0:01:36] no, it can't predict price. So, I tested
+[0:01:38] it 45 45,000 times on 5 years of data
+[0:01:42] for BTC price. And that's like I'm not
+[0:01:44] going to bury the lead here. The answer
+[0:01:45] is no, straight up off the rip. But that
+[0:01:48] was backtested data, which is very cool
+[0:01:50] because like I said, it would have cost
+[0:01:51] me $500 if I used like OpenAI models and
+[0:01:55] hundreds of hours just to do it. So, Jev
+[0:01:57] was able to do it in a few minutes and
+[0:01:59] it cost me five bucks. $4.95 spent, took
+[0:02:02] 42 minutes. Now, I ran this
+[0:02:04] against Hood, Robinhood data, Coinbase
+[0:02:07] data, and QQQ data. And I just gave it
+[0:02:10] the data 46 hours of bars and asked for
+[0:02:12] one word. And that's the incredible
+[0:02:13] thing about Jev is it's so fast. It can
+[0:02:15] tell you buy, sell, nothing. Okay, I did
+[0:02:17] that and it didn't work, but I'm very
+[0:02:19] excited to see how it does in live
+[0:02:22] production. Now, if you're using open
+[0:02:23] router, this is one quirk here. It's
+[0:02:25] like when I sent my AI off to Clarkcode
+[0:02:28] to go find it on open router, she
+[0:02:29] couldn't find it. So, I had to kind of
+[0:02:31] like push her be like, "Yo, Jev is
+[0:02:33] actually there and it's super
+[0:02:35] inexpensive." So, if you're using open
+[0:02:36] router for other LLMs, you can actually
+[0:02:38] use it for Jev as well. It shows missing
+[0:02:41] at the start probably cuz it's brand
+[0:02:42] new. I don't know why, but I was able to
+[0:02:44] figure it out and I used Jev latest
+[0:02:46] here. Now, I did three different tests
+[0:02:48] here. I did named, blind, and scaled.
+[0:02:50] So, I'm using Robinhood coin and
+[0:02:52] Coinbase. They're two stocks, And I
+[0:02:56] stripped out the date to see if that
+[0:02:58] would help and it didn't. Uh the price
+[0:03:00] level gives the period away anyways.
+[0:03:02] Hood at $8 in 2022, obviously you just
+[0:03:05] have to buy and hold there, but Jev
+[0:03:06] wasn't able to do that. And most of the
+[0:03:08] time it answered, "No, do nothing." So,
+[0:03:11] not buy or sell. Four times out of five
+[0:03:13] it said do nothing. You can see it acted
+[0:03:15] 19% of the times when it was named, when
+[0:03:18] it was blind it was 15% of the time, and
+[0:03:20] when it was scaled data it was 12% of
+[0:03:21] the time. 120 windows made 12 out of 25
+[0:03:25] trades, 15,000 windows. So, that was a
+[0:03:28] 5% lift. It was told to answer nothing
+[0:03:31] unless the chart gives a real reason to
+[0:03:33] act.
+[0:03:34] And it it obeyed. But, the thing is the
+[0:03:36] reason I'm showing you this even though
+[0:03:37] I
+[0:03:38] from my test it can't predict price, is
+[0:03:40] because you could look at this entirely
+[0:03:42] differently. There might be a piece of
+[0:03:43] trading that Jev can help out with.
+[0:03:46] Maybe other LLMs can too, but they take
+[0:03:49] 20 seconds to reproduce and it costs 200
+[0:03:52] x more or something like that. So, I
+[0:03:54] think this is going to be interesting,
+[0:03:56] and then today I'm going to be able to
+[0:03:57] kind of test this live in a gate on my
+[0:04:00] Polymarket 5-minute bots. So,
+[0:04:02] look out for that. I'll give you all the
+[0:04:04] code for that as well later. And this
+[0:04:05] was the impressive part to me. So, this
+[0:04:07] is where you guys start thinking like
+[0:04:08] how are you going to use a faster AI?
+[0:04:11] You can see that it went ahead and did
+[0:04:13] 40
+[0:04:14] 4,000 calls with zero errors, and there
+[0:04:17] was no throttling. So, you can go fast.
+[0:04:20] I put a $5 hard cap on it, and it was
+[0:04:22] able to do it under $5. This would have
+[0:04:24] cost $500 if I used Astra or something
+[0:04:27] like that. You can see 44,000 calls. It
+[0:04:29] took 42 minutes in order to go through
+[0:04:31] this 5 years of backtest data with Jev,
+[0:04:34] which is very impressive. I know it
+[0:04:36] can't predict price, but I hope you're
+[0:04:38] seeing how fast it is because at the end
+[0:04:41] of the day there are parts of trading
+[0:04:43] where you might need a yes no, do this
+[0:04:45] or that, but I just can't tell you
+[0:04:47] exactly what it is right now. And look
+[0:04:48] at this, the same 40 4,000 decisions
+[0:04:51] would have cost $1,356
+[0:04:54] with GPT-6 Astra. So, get your mind
+[0:04:56] going like where are little things where
+[0:04:58] AI can help that it's just a yes no, but
+[0:05:00] it's maybe just too expensive right now
+[0:05:03] if you're using Astra or something else.
+[0:05:04] I think that's where Jev comes into
+[0:05:06] play, and then also the speed of course.
+[0:05:08] You can see it cost me $5 first $1,300
+[0:05:12] and 42 minutes instead of 185 hours. To
+[0:05:15] match 43 minutes, Astra needs 83 calls
+[0:05:19] in flight at once at 5 seconds each or
+[0:05:21] 249 at 15 seconds. And you can see it
+[0:05:23] got a little deceiving here. At 2,396
+[0:05:26] calls, it looked like a real finding.
+[0:05:27] Two rows came back under 0.05 line. Both
+[0:05:30] of them were worth believing for about
+[0:05:33] an hour. So, you can see the scale frame
+[0:05:34] plus 10.1% P 0.05 0.045.
+[0:05:38] And on QQQ, the whole index, calling its
+[0:05:41] own hour plus 21% P of 0.02. This is the
+[0:05:45] moment you start building the bot, but
+[0:05:47] do not buy more data first.
+[0:05:50] So, the QQQ was only 32 trades.
+[0:05:53] Remember, it was saying nothing for most
+[0:05:55] of them. Do nothing. So, it hit its
+[0:05:57] lucky streak of 22 right out of 32
+[0:06:01] trades. Now, if you don't look at enough
+[0:06:03] trades, that is very deceiving, right?
+[0:06:06] You can see plus 21% but then once you
+[0:06:08] scaled it to 535 trades, it went to
+[0:06:10] 0.9%. So, 22 right out of the first 32
+[0:06:13] trades, a lucky 32 row looks exactly
+[0:06:16] like an edge until you buy more data.
+[0:06:18] So, that's why it's so important to
+[0:06:19] always have enough data if you're going
+[0:06:20] to test any hypothesis, any idea. Can
+[0:06:22] Jeff trade for me? Can Astro trade for
+[0:06:24] me? Well, Astro's going to cost you
+[0:06:26] $1,400 to do it. This cost me five and I
+[0:06:28] was able to see, oh, it looks like a
+[0:06:30] winner, but then it actually wasn't a
+[0:06:31] winner because I added more trades. And
+[0:06:33] this was really just because the next
+[0:06:35] bar was up 38.3% of the time. So, it
+[0:06:37] really was just a lucky guess. One's a
+[0:06:38] mistake. Four times in a row is a law.
+[0:06:41] The null has to match the actions
+[0:06:42] actually taken. The same count of buys
+[0:06:45] and sells scored on the real base rate.
+[0:06:48] Every framing lands on the null. Each
+[0:06:50] bar is the edge over an action match
+[0:06:53] null with a 95% interval. They're They
+[0:06:57] all straddle zero. You can see 2,812
+[0:06:59] trades for the name, 2,184 trades for
+[0:07:02] the blind. The scaled had 1,905 trades.
+[0:07:06] 50% versus 48.8% versus 50.5%.
+[0:07:10] You can see per symbol here, Coinbase,
+[0:07:12] Robinhood, and QQQ, the accuracy is
+[0:07:14] 50.7% on Coinbase, 46.6%
+[0:07:18] on Robinhood, and QQQ 49.9. Hood is the
+[0:07:22] only one that misses zero and it misses
+[0:07:25] on the wrong side. Now, you can see six
+[0:07:27] tests and nothing survives the count.
+[0:07:29] Run six tests at 0.05 and you expect one
+[0:07:31] to look significant on noise alone. So,
+[0:07:34] the bars move. You can see Hood here. We
+[0:07:37] have framing of the blind, we have the
+[0:07:38] named, and we have the scaled, and we
+[0:07:39] have the QQQ, and the coin.
+[0:07:42] Nothing survives. Robinhood's .0387
+[0:07:45] needed to be under .0083.
+[0:07:48] It was also negative. Question is
+[0:07:50] closed. This is an interesting finding.
+[0:07:52] It says never put a symbol or a date in
+[0:07:55] a backtest card. So, leave the date in
+[0:07:57] and it knows
+[0:07:59] what it's looking at.
+[0:08:00] This one is huge and it's real.
+[0:08:03] It is also the easiest thing in the
+[0:08:04] world to leave switched on. 97.7%
+[0:08:08] of the 14,828
+[0:08:10] paired windows named beat blind. Same
+[0:08:13] windows, same bars. The only difference
+[0:08:15] is the ticker in the date. Then
+[0:08:16] recognition made it confident, not
+[0:08:18] correct. The gap in what it recognizes
+[0:08:21] enormous.
+[0:08:22] The gap in what it got right is noise.
+[0:08:25] So, what it recognized zero to one here,
+[0:08:27] the .288 blind,
+[0:08:30] named .789.
+[0:08:32] What it got right, edge over the null,
+[0:08:34] minus 4% to 4%, negative 1% blind,
+[0:08:38] .7% named. A dated backtest inflates
+[0:08:40] your conviction, not your equity curve.
+[0:08:42] The inflated equity curve is the
+[0:08:44] one you would actually notice.
+[0:08:47] Now, its confidence says nothing about
+[0:08:49] the market. If P of I meant anything,
+[0:08:53] the line would climb
+[0:08:55] the diagonal. It's flat.
+[0:08:57] And it tips the wrong way, as you can
+[0:08:59] see here. What it actually does, blind
+[0:09:02] framing, probability buy bucket,
+[0:09:05] flat and slightly inverted. More
+[0:09:06] confident means very slightly more
+[0:09:10] wrong. So, I built out jev gate.py. I'll
+[0:09:12] give you the code for that. And then it
+[0:09:13] sets the arm
+[0:09:15] at .6. That assumed the number meant
+[0:09:17] something. On price bars it does not. On
+[0:09:20] FOMO token cards it might. That has to
+[0:09:22] be earned now. And it looks like we're
+[0:09:24] still cooking up down here, so I am
+[0:09:25] building out the polymarket bots as I
+[0:09:28] show you this. And those should be done
+[0:09:30] by the end of this, so I'm excited for
+[0:09:31] that. Now, this is the part that's
+[0:09:32] interesting. A free random forest,
+[0:09:35] random forest machine learning model
+[0:09:36] that you can run right now, says the
+[0:09:37] same thing as Jeff. So, okay. I just
+[0:09:40] spent five bucks. It's cool test. Five
+[0:09:43] bucks for 1,500, but a free random
+[0:09:45] forest would have done the same.
+[0:09:48] I walk forward on hood daily bars 871
+[0:09:50] out of sample days and it lands on a
+[0:09:52] coin flip. So, the random forest is
+[0:09:55] 0.49 AUC. Logistic regression is 0.499.
+[0:10:00] Moon dubs own bar for a trading model
+[0:10:02] from cloud.md is 0.65. So, nothing got
+[0:10:05] close to some of the models that I've
+[0:10:07] worked on, but I've been here for like
+[0:10:09] 5-6 years.
+[0:10:10] I show you everything live on YouTube,
+[0:10:12] but you're probably not here all the
+[0:10:13] time. So, just based off past testing,
+[0:10:16] testing I'm up here and random forest is
+[0:10:18] up here and Jeff is down here.
+[0:10:21] Two completely different models, same
+[0:10:23] answer. The data is the problem, not the
+[0:10:25] model. So, cheap inference did not buy
+[0:10:27] an edge, it bought a fast funeral. And I
+[0:10:29] think that's the interesting part,
+[0:10:30] right? Like, okay, it's fun that Jeff is
+[0:10:32] so fast.
+[0:10:33] It's fun that it's so expensive, but
+[0:10:35] just because it's fast and inexpensive
+[0:10:37] doesn't mean it's an edge.
+[0:10:39] That being said, I don't want to hold
+[0:10:40] you back because there might be parts of
+[0:10:42] a trading process that needs fast and
+[0:10:44] cheap. That's why I think it's super
+[0:10:46] interesting to work with Jeff and I'm
+[0:10:48] going to be working with it. Like I
+[0:10:50] said, I'm building out these poly market
+[0:10:51] bots here today.
+[0:10:52] How long a bad idea used to live
+[0:10:54] versus how long it lives today, 42
+[0:10:56] minutes. So,
+[0:10:57] >> AI approved. Hunting entry.
+[0:10:59] >> Now, the next test I want to run is the
+[0:11:01] FOMO shadow law. Token died. Token names
+[0:11:03] and messy launch dates are unstructured.
+[0:11:06] That's the one place this thing is
+[0:11:09] actually built to win. Price bars are
+[0:11:11] the most structured data there is and a
+[0:11:13] free random forest already lives there.
+[0:11:15] But what about like on a on a Robinhood
+[0:11:17] chain sniping bot? You got to use this
+[0:11:19] in different ways than like a random
+[0:11:20] forest can just look at open high low
+[0:11:22] close volume data, right? Now, here's
+[0:11:23] all the code, same thing line by line.
+[0:11:25] I'm going to fly through this part
+[0:11:26] because you can pause, rewind, do
+[0:11:27] whatever you need and this should get
+[0:11:29] you set up with Jeff. Um, like I said,
+[0:11:30] I'm going to go fast here. Here are all
+[0:11:32] the docstrings so you can understand
+[0:11:34] this. Screenshot it, send it to your AI.
+[0:11:36] Um, don't just run anything you find on
+[0:11:37] the internet, of course. Uh, I see a lot
+[0:11:39] of scams out there where it's like,
+[0:11:40] "Hey, download this code and then run it
+[0:11:42] on Remix and get absolutely smoked, lose
+[0:11:45] all your crypto." So, be careful.
+[0:11:47] Be careful. I'm not malicious, but there
+[0:11:49] are malicious people out there that try
+[0:11:51] to get you to run their code and deposit
+[0:11:54] something into a
+[0:11:55] contract and you get absolutely smoked.
+[0:11:57] Here's the main function, budget. So, go
+[0:12:00] ahead and track that. Here's the whole
+[0:12:02] experiment,
+[0:12:04] the one. Here's the queue, prime the
+[0:12:06] pool, do not flood it. Here's the drain,
+[0:12:08] one out, one in, till the money stops.
+[0:12:11] Here's the analyze probe.py, the two
+[0:12:13] laws. Here's the graded function, the
+[0:12:15] money function. Here's the main table,
+[0:12:17] the three firings, the three symbols.
+[0:12:18] So, I used Robinhood, I used uh Data
+[0:12:20] Mentor in order to get that.
+[0:12:22] Spent like $2 on Data Mentor. Here's the
+[0:12:25] leak paired with the same windows.
+[0:12:27] Here's the buckets, it does the
+[0:12:28] confidence, it means anything.
+[0:12:30] Here's the verdict, use Benjamin
+[0:12:32] Hochberg and the sign-off.
+[0:12:34] And then you just run it like this
+[0:12:35] yourself. So, now you have all the code.

@@ -34,11 +34,19 @@ WATCHES = [
     ("multi-premia-blend-v1.yml", "prop_paper_report.json", "Paper prop career (HyroTrader 1-step rules)", "Forward-only candidates", None, 365),
     ("multi-premia-blend-v1.yml", "paper_account_report.json", "Paper account: 70-coin blend, 10,000 USDT", "Lead candidate", "paper", 180),
     ("multi-premia-blend-v1.yml", "fast_gates_report.json", "Fast decision gates (implementation, breakage alarm, venues)", "Lead candidate", None, 60),
+    ("multi-premia-blend-v1.yml", "tom_forward_report.json", "Turn-of-month SPY (search-v1 near miss)", "Forward-only candidates", "tom", 365),
+    ("multi-premia-blend-v1.yml", "near_miss_forward_report.json", "Near-miss paper (cascade/CTREND/trend 2x)", "Forward-only candidates", "cascade_1x", 180),
+    ("multi-premia-blend-v1.yml", "fade24_forward_report.json", "Fade-24h bracket 2x (paper)", "Forward-only candidates", "fade24_F1", 180),
+    ("multi-premia-blend-v1.yml", "tradfi_perps_forward_report.json", "TradFi perps (momentum / weekend fade)", "Forward-only candidates", "B2_weekend_fade_1x", 365),
+    ("multi-premia-blend-v1.yml", "carry_forward_report.json", "Funding carry BTC/ETH (delta-neutral, MEXC, 10,000 USDT paper)", "Income", "portfolio", 90),
     ("canonical-v3-forward-companion-v1.yml", "report.json", "Canonical v3 companion", "Accounting", None, None),
 ]
 
 LEDGER = [
-    {"name": "Multi-premia blend, 60 untouched coins", "kind": "holdout", "verdict": "pass", "sharpe": 1.39, "t": 3.16, "note": "DD −11%, halves 1.41 / 1.37"},
+    {"name": "Multi-premia blend, 60 untouched coins", "kind": "holdout", "verdict": "pass", "sharpe": 1.39, "t": 3.16, "note": "not decision-grade: Binance funding on MEXC prices (funding-source-check-v1)"},
+    {"name": "Blend on Binance prices + funding (fast-gates G3)", "kind": "venue replication", "verdict": "mixed", "sharpe": 1.05, "t": 2.31, "note": "trend replicates, XS legs do not; Bybit 0.41"},
+    {"name": "Blend on Hyperliquid prices + funding, 2023-26", "kind": "venue replication", "verdict": "fail", "sharpe": 1.09, "t": 1.94, "note": "carry −0.19; reference 2.27 on same days"},
+    {"name": "Untouched blend with MEXC funding, 2025-06..2026-09", "kind": "integrity check", "verdict": "fail", "sharpe": 0.67, "t": None, "note": "carry 1.69 → −0.18 (MATERIAL)"},
     {"name": "Multi-premia blend, development (70 coins)", "kind": "development", "verdict": "pass", "sharpe": 2.09, "t": 4.48, "note": "robust to neighbours 1.6–2.2"},
     {"name": "5-coin human book, 60 untouched coins", "kind": "holdout", "verdict": "fail", "sharpe": 0.60, "t": 1.40, "note": "concentration is the weak link"},
     {"name": "Trend core, pre-window 2020–23", "kind": "holdout", "verdict": "pass", "sharpe": 1.76, "t": 3.13, "note": "2021-heavy"},
@@ -79,6 +87,20 @@ def cumulative(series: dict[str, float], keep: int = 400) -> list[list]:
     return out
 
 
+def envelope_position(watch_id, daily: dict) -> dict | None:
+    path = pathlib.Path("research/forward_envelopes/envelopes_v1.json")
+    if watch_id not in ("multi-premia-blend-v1", "crypto-trend-core-v1") or not path.exists() or not daily:
+        return None
+    import pandas as pd
+
+    from orderflow_edge_lab.drawdown_envelopes import position_in_envelope
+    w = json.loads(path.read_text(encoding="utf-8"))["watches"].get(watch_id)
+    if not w:
+        return None
+    rets = [float(v) for _, v in sorted(daily.items())]
+    return {name: position_in_envelope(rets, pd.DataFrame(v)) for name, v in w["variants"].items()}
+
+
 def watch_entry(spec, cache: dict[int, pathlib.Path]) -> dict:
     wf, fname, name, group, primary, horizon = spec
     e = {"id": wf.removesuffix(".yml") + ("" if fname == "report.json" else "-" + fname.removesuffix("_report.json")), "name": name, "group": group,
@@ -111,15 +133,46 @@ def watch_entry(spec, cache: dict[int, pathlib.Path]) -> dict:
                     "cum": s.get("cumulative_return"), "mdd": s.get("max_drawdown"), "mean_bps": s.get("mean_daily_bps"),
                     "series": cumulative((r.get("daily_returns") or {}).get(k) or {})}
     e["books"] = books
+    until = r.get("interim_biased_until")
+    if until:  # interim stats favour fast take-profits until this instant (descriptive flag only)
+        e["interim_biased_until"] = until
+        e["interim_biased"] = bool(r.get("as_of_utc") and r["as_of_utc"] < until)
+    if r.get("scored_day_digests") is not None:
+        e["scored_day_digests"] = r["scored_day_digests"]
     if "strategies" in r:
         e["days"] = r.get("calendar_days_elapsed")
         e["strategies"] = {str(s.get("audit_id") or s.get("strategy_id") or i): {kk: vv for kk, vv in s.items() if isinstance(vv, (int, float, str))}
                            for i, s in enumerate(r["strategies"])} if isinstance(r["strategies"], list) else {}
     else:
         e["days"] = (books.get(primary) or {}).get("days") or 0
+    try:  # descriptive drawdown envelope; guarded so a missing file or bad series never breaks the snapshot
+        env = envelope_position(e.get("watch_id"), (r.get("daily_returns") or {}).get(primary) or {})
+        if env:
+            e["envelope"] = env
+    except Exception:
+        pass
     if "latest_book" in r:
         e["latest_book"] = r["latest_book"]
     return e
+
+
+def track_revisions(items: list[dict], out: pathlib.Path, now: str) -> None:
+    """Compare fade24 scored-day digests with the previous snapshot's (stored next to the dashboard output) and expose
+    ``revised_days`` on the row; every revision is appended to a cumulative log file."""
+    from orderflow_edge_lab.fade24_forward import compare_digests
+    store = out / "fade24_digests.json"
+    previous = json.loads(store.read_text(encoding="utf-8")) if store.exists() else None
+    for e in items:
+        digests = e.pop("scored_day_digests", None)
+        if digests is None:
+            continue
+        revised = compare_digests(previous, digests)
+        e["revised_days"] = revised
+        flat = [f"{b}:{d}" for b, days in revised.items() for d in days]
+        if flat:
+            with (out / "fade24_revision_log.jsonl").open("a", encoding="utf-8") as fh:
+                fh.write(json.dumps({"detected_utc": now, "run_id": e.get("run_id"), "revised": revised}) + chr(10))
+        store.write_text(json.dumps(digests, allow_nan=False), encoding="utf-8")
 
 
 def main(out_dir: str = "artifacts/dashboard") -> int:
@@ -128,6 +181,7 @@ def main(out_dir: str = "artifacts/dashboard") -> int:
     now = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     cache: dict[int, pathlib.Path] = {}
     watches = [watch_entry(s, cache) for s in WATCHES]
+    track_revisions([w for w in watches if w.get("watch_id") == "fade24-forward-v1"], out, now)
     runs_raw = json.loads(gh("run", "list", "-L", "150", "--json", "workflowName,headBranch,createdAt,conclusion,status,url,event"))
     latest: dict[str, dict] = {}
     for r in runs_raw:

@@ -1,0 +1,291 @@
+# Andrej Karpathy’s AI Trading Loop Found 44,975% (and it never stops)
+# channel: Moon Dev
+# url: https://www.youtube.com/watch?v=nroZBpr30vA
+
+[0:00:00] The co-founder of OpenAI, Andre
+[0:00:02] Carpathy, changed trading forever with
+[0:00:04] his autonomous loop. You can see down
+[0:00:06] here in the bottom right, it's
+[0:00:08] autonomously looping through a bunch of
+[0:00:11] trading ideas and essentially just back
+[0:00:13] testing, coming up with a new one, back
+[0:00:15] testing. You can see the results here.
+[0:00:16] 44,975%
+[0:00:19] is the best one so far. Now, I'm going
+[0:00:21] to let this keep running 24/7. It is
+[0:00:24] using cloud code, so I'm not using the
+[0:00:26] API, which is pretty impressive. I want
+[0:00:28] to get you all of the code and all of
+[0:00:30] the setup for this so you can understand
+[0:00:32] how it works. But you can see 44,975%
+[0:00:36] down to 30,937%.
+[0:00:39] Max draw downs 12.54.
+[0:00:41] Sharp ratios aren't crazy, but this is
+[0:00:43] trading on crypto. So sharp actually
+[0:00:45] penalizes you for uh deviation on the
+[0:00:48] upside and downside. So I like using a
+[0:00:51] short better, but 1.8 is fine. Um, you
+[0:00:53] can see 100 trades, percents per trade,
+[0:00:56] and so on and so on. Let me go ahead and
+[0:00:58] walk you through how this all works. So,
+[0:01:00] let's go ahead and get through the code
+[0:01:02] and how you can set this up. Can you go
+[0:01:04] ahead and tell me step by step and
+[0:01:06] short, concise um, bullet points, how
+[0:01:09] this Carpathy loop actually works for
+[0:01:12] trading. Assume that some I'm trying to
+[0:01:14] teach a friend here. Um, short and
+[0:01:16] concise. Thank you. And then I'll go
+[0:01:17] ahead and show them all the files that
+[0:01:19] they need to see as well. So, if you
+[0:01:21] don't know who Andre Carpathi is, he was
+[0:01:23] the founder of OpenAI and he also worked
+[0:01:25] at Tesla AI. So, he's a pretty big deal
+[0:01:28] here. And he created this non-stop loop
+[0:01:31] and I just went ahead and applied it to
+[0:01:32] trading. So, I'm going to give you all
+[0:01:34] of the code here that you need. It's
+[0:01:36] actually pretty much a MD file. If you
+[0:01:38] don't know an MD file, it's an
+[0:01:39] instruction file. So, the idea is this.
+[0:01:42] One AI agent works on one file all night
+[0:01:45] and a [snorts] frozen score decides if
+[0:01:48] the change lives or dies. So
+[0:01:50] essentially, it's saying, "Oh, here's a
+[0:01:51] new idea. Let's go ahead and do it.
+[0:01:54] Let's test it. If it works, okay,
+[0:01:56] another independent will say, "Let's
+[0:01:57] keep it." If it doesn't, then it'll say,
+[0:01:59] "No, next one." And so on and so on. It
+[0:02:01] just keeps getting better and better.
+[0:02:02] So, one file the agent may edit is
+[0:02:05] strategy. py. Okay. One instruction file
+[0:02:08] the human owns is program.md. So, this
+[0:02:11] is where you, the human, will go ahead
+[0:02:12] and put your own ideas in. Now, I like
+[0:02:15] to share everything I build because I
+[0:02:18] believe code is a great equalizer. And
+[0:02:19] at the end of the day, AI allows us all
+[0:02:22] to code. So, that's quite beautiful. And
+[0:02:24] people ask me, why do I share this? How
+[0:02:26] do I share this without leaking
+[0:02:28] everything? Now, I'm able to share this
+[0:02:30] because I'm showing you the
+[0:02:31] infrastructure. I'm showing the things
+[0:02:32] I'm building, but you don't necessarily
+[0:02:35] you're not necessarily here for every
+[0:02:37] single idea. And I believe that I can't
+[0:02:39] come up with the ideas you come up with
+[0:02:41] and you can't come up with the ideas
+[0:02:42] that I come up with unless you're here
+[0:02:44] every single day. So I like to share
+[0:02:46] these things every day because I believe
+[0:02:48] code is a great equalizer. One number
+[0:02:49] that decides everything is K equals lin
+[0:02:52] lin one plus return time sharp. So it's
+[0:02:54] looking at the sharp and the return
+[0:02:57] keeper revert no middle ground here and
+[0:02:59] then a log of every try. So one loop
+[0:03:02] step by step it would be copy the
+[0:03:04] current best strategy over strategy. py.
+[0:03:07] So every try starts with the champ. So
+[0:03:09] it uses the best one and then builds
+[0:03:11] from there. It builds a prompt based off
+[0:03:12] your program MD, which I'll show you in
+[0:03:14] a second, the baseline to beat and the
+[0:03:17] last 30 tries. Then I, like I said, I'm
+[0:03:19] using Claude code as the agent. So it's
+[0:03:21] not costing me any API credits. It reads
+[0:03:24] the log, makes one change, writes what
+[0:03:26] it did in the pro proposal.
+[0:03:29] Then it runs the the frozen harness on
+[0:03:32] ETH 6h hour 2017 to 2022. same cash,
+[0:03:36] same fees, same margin every time. Then
+[0:03:38] it scores it, gets K, return, sharp, v
+[0:03:41] draw down and trade count, check the
+[0:03:43] first guard first at least 50 trades. So
+[0:03:46] it can't be like something that just
+[0:03:47] trades one or two times. Um, and there's
+[0:03:50] some other guards here. And then it gets
+[0:03:52] its verdict and then it writes one to
+[0:03:54] the results. TSV, the tool rules that
+[0:03:56] stop it from cheating. The VG guard,
+[0:03:58] bigger bets raises return and sharp on
+[0:04:00] the exact same trades. That is a
+[0:04:02] leverage dial, not an idea. So a try
+[0:04:05] only counts if the vault barely moved.
+[0:04:07] And then another guard is the lock
+[0:04:09] window. So the loop only ever sees from
+[0:04:12] 2017 to 2022.
+[0:04:15] That's our insample data that we're
+[0:04:17] testing against. Everything else is 2023
+[0:04:19] on stays in the drawer. Only morning.
+[0:04:22] Opens it once a day. A,000 tries on one
+[0:04:26] window is a,000 chances to curve fit. So
+[0:04:29] we keep some of the data away so it
+[0:04:32] can't see that while it's making the
+[0:04:33] ideas. So your job in the morning is run
+[0:04:35] morning. py on the lock data, read the
+[0:04:38] log, edit the program.md to point it
+[0:04:40] somewhere new. So for example, you look
+[0:04:42] at it, you see these results. Okay, let
+[0:04:44] me point it somewhere new. And then the
+[0:04:46] files to show your friend. I'm going to
+[0:04:47] go ahead and show you all of these
+[0:04:48] files. Okay, they're also in my GitHub
+[0:04:51] already. If you already have my GitHub,
+[0:04:52] a lot of you got the lifetime all
+[0:04:54] access. Um, it doesn't matter. It's 5.95
+[0:04:57] off for Labor Day, yada yada. Um, but a
+[0:05:00] lot of you guys have that GitHub, but
+[0:05:01] I'll show you the code here anyways.
+[0:05:03] There's a ton of other code, all that
+[0:05:04] good stuff, but um readme.md is the
+[0:05:06] whole thing explained. Programmd, you
+[0:05:09] own this. Loop py is the forever loop.
+[0:05:12] Strategy py the only file the agent ever
+[0:05:15] touches. Okay, so the harness py is the
+[0:05:17] frozen score. Nobody edits that. The
+[0:05:19] morning py the locked out sample check.
+[0:05:23] Results.tsv
+[0:05:25] one row per try. The keepers every
+[0:05:28] version that ever won. and then the
+[0:05:30] prompt.
+[0:05:32] So, I'm going to go ahead and show you
+[0:05:34] all that code. Now, let's go one by one
+[0:05:36] because I want you to have access to
+[0:05:38] this even if you're not part of, you
+[0:05:40] know, like the bigger thing. Uh, much
+[0:05:42] love to you. Let's go to auto research
+[0:05:43] here. And I'm going to scroll through
+[0:05:45] all that code step by step here so you
+[0:05:47] can see everything. Okay. So, let's go
+[0:05:50] ahead and start where she started, the
+[0:05:52] readme.md
+[0:05:54] just so you can take screenshots or
+[0:05:55] whatever you need to do. I'm going to
+[0:05:56] scroll through all of this very fast.
+[0:05:58] Yes, you'll have to rewind it if you're
+[0:06:01] watching this on video, but this is all
+[0:06:03] of the code that we're going to go
+[0:06:04] through. And like I said, the programm
+[0:06:07] is the only one you edit. So, the read
+[0:06:09] me just showed you kind of what's going
+[0:06:10] on here. The programm. And this is where
+[0:06:13] we all come up with different ideas. You
+[0:06:14] can see this is the this is where the
+[0:06:16] human edits. That's you and I. And you
+[0:06:19] can see these are the things that you
+[0:06:20] can change. So, it's going to be
+[0:06:21] entirely different than mine. And that's
+[0:06:23] the thing. We're all going to come up
+[0:06:24] with different ideas. Let's go to the
+[0:06:26] loop here. And this is the actual code.
+[0:06:28] So here you can see the full loop. And
+[0:06:30] again, you'll just have to pause,
+[0:06:31] rewind, do whatever you need to do in
+[0:06:33] order to get this loop. py. And then the
+[0:06:36] next one I'm going to show you is the
+[0:06:38] strategy. You can see this is the phase
+[0:06:40] one. The agent.
+[0:06:42] And I have it all print out. You can see
+[0:06:44] it printing out in the bottom right
+[0:06:45] here. This is phase two. The frozen
+[0:06:48] harness scores it. And then we have to
+[0:06:50] have the scoreboard here. Okay. And then
+[0:06:53] here's the main function. Let me scroll
+[0:06:55] over a little bit.
+[0:06:56] I'm using open router as well. I don't
+[0:06:59] No, I'm actually not using it. Says no
+[0:07:01] open a API key. No API key. I'm not
+[0:07:03] using open router, but when I do need to
+[0:07:05] use AI outside of cloud code, I do use
+[0:07:09] open router. If you don't know about
+[0:07:10] open router yet, Stripe just purchased
+[0:07:12] them. They're a pretty big deal. Um it
+[0:07:14] makes it way easier to use AIS. Let's go
+[0:07:16] to strategy. py now so you can see that
+[0:07:19] one as well. Strategy. py. Okay, so
+[0:07:22] let's just scroll through real quick.
+[0:07:24] Here's the full strategy. py file.
+[0:07:30] And this is one file that the agent
+[0:07:32] touches. So, you know, this is like
+[0:07:35] she's messing with it a lot. There's a
+[0:07:37] lot here, a lot of notes essentially.
+[0:07:40] This is just telling her how to do this
+[0:07:42] essentially. So, I can go through pretty
+[0:07:44] fast here. Let me go a little faster.
+[0:07:48] And you could realistically tell your
+[0:07:50] agent all this if you want to screenshot
+[0:07:52] it. Uh, I know a lot of you already have
+[0:07:54] this code, so it's in the GitHub.
+[0:07:58] So, just screenshot where you need to
+[0:08:00] and you can get all of this strategy.
+[0:08:02] py. It's mostly just variables as you
+[0:08:04] can see.
+[0:08:08] Okay. So, here's the init here.
+[0:08:12] Okay.
+[0:08:14] So, this is where she's touching. So,
+[0:08:15] this is different every time. Like, I
+[0:08:17] don't know why I'm even showing you
+[0:08:18] this, but I want to show you everything
+[0:08:20] I have at this moment. Um, this is I'm
+[0:08:22] pretty sure this is where she changes
+[0:08:24] every single time based on the strategy.
+[0:08:26] So, this is going to be different for
+[0:08:27] you. It's going to be different for me,
+[0:08:29] but I just want to make sure that you
+[0:08:30] see everything because if you see it
+[0:08:32] all, you can beat it all. And I believe
+[0:08:33] code is a great equalizer as long as you
+[0:08:36] actually put it into action. And any of
+[0:08:37] us can do it now. We all know how to
+[0:08:39] code because we all know how to use AI,
+[0:08:42] right? So, let's go to the harness now.
+[0:08:43] Harness.y is the next one. So, this is
+[0:08:46] the full harness here. You can see the
+[0:08:47] top part. Auto research. This is the
+[0:08:49] frozen harness. This is what you pass in
+[0:08:51] here. The args, import args, JSON. Okay,
+[0:08:55] this is the frozen settings here. I'm
+[0:08:57] using double um double the fees. I like
+[0:09:01] to do that just because there is
+[0:09:02] slippage. I'm using $10 million size
+[0:09:04] because I'm a baller. Let's go here and
+[0:09:06] see. You can load in the path, load in
+[0:09:08] the CSV, load in the asset. Here's the
+[0:09:11] window, the sign sharp here, the
+[0:09:14] Kmetrics. Okay, the summarize here, the
+[0:09:17] guard, the main function here as well.
+[0:09:20] And yeah, that's all of the code for
+[0:09:22] that. And now I want to show you a
+[0:09:24] couple more. I actually think I'm just
+[0:09:26] going to show you I'll give you the
+[0:09:28] results.tsv as well, but the morningpy
+[0:09:30] is the last piece of code. And you can
+[0:09:32] instruct your AI how to build this out
+[0:09:34] now that you have most of the
+[0:09:35] screenshots. Just send it to her. And
+[0:09:37] like I said, you know, everybody is
+[0:09:39] going to be a little bit different
+[0:09:40] because you have different experiences
+[0:09:41] in your life. Okay, boom. You got all
+[0:09:42] the code there. Now, let's give you the
+[0:09:44] results.ts. TSV just so you can see the
+[0:09:46] structure here. You can see you'll have
+[0:09:47] to have a logs folder, but the they'll
+[0:09:49] build build for you. The keepers are the
+[0:09:51] logs that like these are the strategies
+[0:09:53] that they've tested. You can see these
+[0:09:55] will be automatically built out. And
+[0:09:58] then the last thing you need to see, you
+[0:09:59] actually don't even need to see this,
+[0:10:00] but this is the results.tsv. So, it's
+[0:10:03] going to output something like this. So,
+[0:10:04] now you have all of the code and you
+[0:10:06] have Carpathy's loop to build um
+[0:10:08] unlimited trading systems for you. The
+[0:10:10] next step would to be incubate them. I
+[0:10:12] teach the process of research, back
+[0:10:13] test, and then incubate inside of my
+[0:10:15] lifetime all

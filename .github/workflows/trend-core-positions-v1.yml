@@ -1,0 +1,73 @@
+name: Trend Core Positions v1
+
+# Writes the positions a person would hold to copy the crypto trend core by hand (trend_core_positions.py) to the
+# branch signals/trend-core-positions (POSITIONS.md, positions.json, history/). Sends no orders. Dispatched after each
+# 8h bar by branch-forward-scheduler (from main), or by hand.
+
+on:
+  workflow_dispatch:
+    inputs:
+      leverage:
+        description: "Leverage applied to every weight"
+        required: false
+        default: "3"
+  push:
+    branches: [ops/run-trend-core-positions]   # one-off runs before the scheduler on main dispatches this
+
+permissions:
+  contents: write
+
+concurrency:
+  group: trend-core-positions
+  cancel-in-progress: false
+
+jobs:
+  sheet:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e ".[research]"
+      - name: Run tests
+        run: python -m unittest tests.test_trend_core_positions tests.test_vol_sizing -v
+      - name: Build the sheet
+        env:
+          LEVERAGE: ${{ inputs.leverage || '3' }}
+        run: |
+          python -m orderflow_edge_lab.trend_core_positions --output-dir out --leverage "$LEVERAGE" --equity 10000
+          cat out/POSITIONS.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Publish to signals/trend-core-positions
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin signals/trend-core-positions >/dev/null; then
+            git fetch --depth 1 origin signals/trend-core-positions
+            git worktree add sig_wt FETCH_HEAD
+            git -C sig_wt checkout -B signals/trend-core-positions
+          else
+            git worktree add --detach sig_wt
+            git -C sig_wt checkout --orphan signals/trend-core-positions
+            git -C sig_wt rm -rf --quiet .
+          fi
+          bar=$(python -c "import json;print(json.load(open('out/positions.json'))['signal_bar_close_utc'][:16].replace(':',''))")
+          mkdir -p sig_wt/history
+          cp out/POSITIONS.md sig_wt/POSITIONS.md
+          cp out/POSITIONS.md sig_wt/README.md
+          cp out/positions.json sig_wt/positions.json
+          cp out/positions.json "sig_wt/history/${bar}.json"
+          cd sig_wt
+          git add -A
+          if git diff --cached --quiet; then echo "nothing new"; exit 0; fi
+          git commit -q -m "positions: bar closing ${bar}Z"
+          git push origin HEAD:signals/trend-core-positions
+      - name: Upload sheet
+        uses: actions/upload-artifact@v6
+        with:
+          name: trend-core-positions-v1
+          path: out/
+          if-no-files-found: error

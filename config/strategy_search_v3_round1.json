@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "search_id": "strategy-search-v3-leveraged",
+  "round": 1,
+  "status": "DECLARED_BEFORE_TESTING",
+  "registration_note": "Declared 2026-10-12 before any round-1 data was loaded. Round-1 research (research_notes/Leveraged short horizon search/round1_*.md) found that published intraday edges at 15m-2h are 0.5-1.3 bp per trade, an order of magnitude below the 14 bp round-trip cost, so those are screened out a priori by the authors' own numbers rather than spent as trials. One candidate is eligible and codable.",
+  "screened_out": {
+    "15m_reversal_kitron_wengrowicz": "authors' own gross edge ~1.3 bp/trade vs >= 5 bp cheapest round trip; not exploitable by their numbers",
+    "quarter_hour_minutes_shanaev": "positive only at zero fees (Bitfinex 2021); out-of-sample coefficients a third of in-sample",
+    "first_vs_last_half_hour": "full text not obtained; windows/costs unverified",
+    "btc_altcoin_lead_lag": "rules only from an unreviewed repo with tuned thresholds and maker-fill assumption",
+    "quarter_hour_taker_imbalance": "authors decline to present a trading rule; effect ~1/20 of a round trip",
+    "taker_price_volume_imbalance_sort": "explained by the same two-factor model as the basis sort (thesis); not an independent candidate",
+    "category_momentum": "CoinMarketCap categories not point-in-time; category subset chosen after viewing overlap",
+    "adaptive_trend_6h": "key parameters unpublished; edge mostly from monthly re-optimisation; trend variant",
+    "vol_scaled_crypto_portfolios, semivolatility_timing, monday_asia_open": "full text not obtained; parameters unverified"
+  },
+  "candidates": [
+    {
+      "id": "V3R1C1_logbasis_quintile_8h",
+      "source": "Pengfei Luo, 'Three Essays on Futures Expected Returns', PhD thesis, University of Edinburgh 2024, ch. 3 (pp. 60-61, 81-85, Table 19)",
+      "universe": "every Binance USDT-M perpetual that has a matching Binance spot USDT pair, listed >= 1 day, with trailing 1-day perp dollar volume > 1,000,000 USD at the sort time; delisted contracts included; stablecoin bases excluded",
+      "data": "Binance archive 1h klines for perps (data/futures/um/.../klines/{SYM}/1h) and spot (data/spot/.../klines/{SYM}/1h), mark-price 1h klines for liquidation checks, fundingRate history",
+      "signal": "y_t = ln(F_t) - ln(S_t), with F_t and S_t the close of the 1h bar ending at the funding settlement time t in {00:00, 08:00, 16:00 UTC}",
+      "portfolio": "each settlement, quintiles on y_t; long the lowest quintile, short the highest, equal-weighted within each leg, gross 1.0 (0.5 per leg)",
+      "entry_exit": "enter at F_t (the same close used for the signal, as published), exit at the close of the 1h bar ending at t+8h; perp positions only (no spot leg)",
+      "returns": "perp price return of each position plus realized funding cash flows on held notional for settlements in (t, t+8h]; costs 14 bps round trip on traded notional per the search protocol",
+      "development": [
+        "2020-01-01",
+        "2023-07-01"
+      ],
+      "validation": [
+        "2023-07-02",
+        "2026-09-30"
+      ],
+      "perturb": {
+        "quantiles": [
+          4,
+          6
+        ],
+        "volume_filter_usd": [
+          800000,
+          1200000
+        ],
+        "entry_delay_hours": [
+          1
+        ]
+      },
+      "perturb_note": "entry_delay 1h = enter and exit one hour after the signal close (guards against bid-ask bounce / same-price execution); counts in G6 like the other perturbations",
+      "null": "allocation: each settlement the real long and short leg sizes are assigned to random distinct eligible contracts (999 draws, seed 20261012), same holding and accounting",
+      "annualization": "daily-aggregated returns, 365"
+    }
+  ],
+  "trials_after_round": "v1 9 + v3 1 = 10 cumulative (N for G5)",
+  "implementation_notes": {
+    "date_utc": "2026-10-12",
+    "before": "the single round-1 run; no real-data result computed",
+    "spot_matching": "exact-name spot USDT pair, plus scaled perps (1000X, 10000X, 1000000X ...) mapped to spot X with y = ln(F/k) - ln(S)",
+    "eligibility": "listed >= 1 day = 24 hourly bars ended; trailing 24h perp quote volume strictly > threshold; at least q eligible contracts per settlement, else no book",
+    "quintiles": "bucket = floor(rank*q/n), stable sort, ties by column order; weights +0.5/n_long, -0.5/n_short",
+    "funding": "cash flow -w * sum(rate) for settlements in (entry, exit], settlement times rounded to the minute; 4h/1h funding contracts contribute all their settlements; funding archive ends 2026-09-30 so the last kept period enters 2026-09-30 08:00",
+    "exits": "exit at the last perp close in (entry, exit] if the contract stops trading; a delayed-entry position with no entry price is not taken",
+    "costs": "7 bps per unit of sum|w_new - w_old| at each rebalance; first book against zero",
+    "daily_stamping": "period P&L, cost and turnover assigned to the UTC day of entry",
+    "entry_delay": "signal decided at t; entry at the close of the bar ending t+1h; exit 8h later; funding window shifted accordingly",
+    "null": "one random permutation of eligible contracts per settlement; 999 draws; seed 20261012; statistic = mean daily gross over development days",
+    "relisting": "perp split at gaps > 30 days; spot kept unsplit and used only where a spot bar exists at t",
+    "liquidation": "adverse mark move >= 1/L - 0.005 from the entry fill, measured on mark 1h high/low of bars ending in (entry, exit] => loss |w| * (1 + 0.005 L); period costs scale with L; period return floored at -100%; ruin = equity < 50% at a period end; stationary bootstrap mean block 10, 365 days, 5000 paths, common index matrix across L; max safe L = largest L with ruin <= 5% and zero historical liquidations",
+    "g8": "crypto trend core reference only (descriptive SPY omitted for a crypto candidate)",
+    "funding_integrity_activity": "a contract counts as trading only on bars with quote_volume > 0: the Binance archive keeps publishing flat zero-volume bars for delisted perps (e.g. AGIX through 2026), which the first run's integrity check (stopped before any statistic was computed) wrongly treated as active. Strategy eligibility (volume > 1M) was never affected."
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "watch_id": "tradfi-perps-forward-v1",
+  "amendment": 1,
+  "date_utc": "2026-10-13",
+  "before": "the prospective start (2026-10-19) and before any TradFi price, return or funding value was computed or viewed (the implementation's live checks report data coverage only)",
+  "implementation_choices": {
+    "b0_b1_costs": "7 bps per side on netted turnover between consecutive target weights (drift back to equal weight is not charged), times leverage; B2 pays 14 bps on gross 1.0 per week, times leverage",
+    "delisted_vs_lag": "a held symbol whose last published bar is more than 3 days before the data end is treated as delisted and exits at its last close (flagged delisted_exit_at_last_close); within 3 days it is lag and the book is pending (same convention as near-miss-forward-v1)",
+    "yahoo_failures": "a failed Yahoo fetch falls back to the cached series; a formation the cache cannot serve makes B1 pending from that formation on (never a silent drop); a failed SPY fetch makes the calendar check pending",
+    "daily_stamps": "a UTC day's return is stamped at 00:00Z of the next day",
+    "universe_file": "research/tradfi_perps_forward/universe_v1.json, protected by a sha256 check in the module (LF-normalised)"
+  },
+  "open_rule": "if a stock-book symbol stays unavailable on Yahoo (B1 pending because of it) the watch reports it and the user decides how to resolve it; any resolution applies only to formations after the decision date and is recorded as a further amendment",
+  "claims": {
+    "strategy_promotion_authorized": false,
+    "paper_trading_authorized": false,
+    "live_trading_authorized": false,
+    "orders_sent": false
+  }
+}

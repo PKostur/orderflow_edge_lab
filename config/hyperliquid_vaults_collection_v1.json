@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "collection_id": "hyperliquid-vaults-collection-v1",
+  "status": "DECLARED_COLLECTION_ONLY",
+  "purpose": "Build a survivorship-free daily panel of every Hyperliquid vault (open and closed) for a later, separately pre-registered study of vault return dispersion and persistence. Closed vaults drop out of listings over time, so collection starts before any study design.",
+  "registration_note": "Declared 2026-10-12. Collection only: no return statistic, ranking or persistence measure is computed until a study is registered in its own config. Free public data only.",
+  "source": "https://stats-data.hyperliquid.xyz/Mainnet/vaults (bulk snapshot; ~9,500 vaults, ~14 MB, verified 2026-10-12)",
+  "fields_per_vault_per_day": ["vaultAddress", "name", "leader", "tvl", "isClosed", "createTimeMillis", "apr", "relationship.type", "last value of each pnl series (day, week, month, allTime)"],
+  "schedule": "daily, via the Branch Forward Scheduler on main",
+  "storage": "compact gzip JSONL per snapshot date, carried forward in the artifact hyperliquid-vaults-panel-v1; the panel never shrinks",
+  "claims": {
+    "strategy_promotion_authorized": false,
+    "live_trading_authorized": false
+  }
+}

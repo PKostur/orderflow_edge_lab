@@ -1,0 +1,24 @@
+{
+ "schema_version": 1,
+ "study_id": "carry-rotation-v1",
+ "status": "FROZEN_BEFORE_COMPUTATION",
+ "registered_utc": "2026-10-23",
+ "question": "Does delta-neutral funding carry earn more when it rotates each week into the large-cap coins currently paying the most funding, after fees and basis risk?",
+ "universe": {
+  "symbols": ["BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT", "DOGEUSDT", "ADAUSDT", "AVAXUSDT", "LINKUSDT", "DOTUSDT",
+              "LTCUSDT", "TRXUSDT", "ATOMUSDT", "NEARUSDT", "FILUSDT", "ETCUSDT", "BCHUSDT", "UNIUSDT", "XLMUSDT", "AAVEUSDT"],
+  "rule": "20 large caps with both a Binance USDT spot pair and a USDT perpetual, chosen by size before any funding or return is looked at; a coin is eligible on a day only if both legs and funding have data"
+ },
+ "source": "data.binance.vision via binance_futures_archive.load_dataset ('spot', 'perp' 1h klines, 'funding' monthly)",
+ "window": ["2021-01-01", "2026-09-30"],
+ "rebalance": "every Monday 00:00 UTC",
+ "selection": "the 5 eligible coins with the highest mean daily funding over the 7 days ending at the rebalance; only coins whose mean is above 0; fewer than 5 if fewer qualify; equal notional; the rest of the book idle in cash",
+ "construction": "per coin, carry.hedge_daily daily P&L (spot return - perp return + funding received); a coin's daily P&L counts only while it is held; legs reset to equal notional at each weekly rebalance",
+ "costs": {"spot_taker_bps": 10.0, "perp_taker_bps": 5.0, "slippage_bps_per_leg": 2.0,
+           "rule": "every coin that enters or leaves the book pays the pair cost (both legs) on its notional share"},
+ "capital": "return on notional and on capital with a 50/50 spot/margin split (daily return / 2), as in carry-study-v1",
+ "benchmark": "carry-study-v1 always-on BTC/ETH over the same window",
+ "variants": "none",
+ "pass_rule": "none: descriptive. Any real-money use would first need a forward record, like carry-forward-v1.",
+ "claims": {"strategy_promotion_authorized": false, "paper_trading_authorized": false, "live_trading_authorized": false, "orders_sent": false}
+}

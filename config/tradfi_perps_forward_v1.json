@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "watch_id": "tradfi-perps-forward-v1",
+  "status": "FROZEN_BEFORE_PROSPECTIVE_START",
+  "question": "Binance now lists ~190 US-stock, ETF and commodity perpetuals that trade 24/7 and can be shorted and levered cheaply. (1) Does classic 12-1 cross-sectional stock momentum, now shortable through perps, earn after perp costs and funding? (2) Do weekend perp moves on single stocks overshoot, so that fading them over the Monday US session pays (a short-holding, leverageable repo hypothesis)? (3) What do funding, tracking and weekend price discovery actually cost and look like?",
+  "registration_note": "Registered 2026-10-13 at the user's request, as independent breadth outside the crypto factor (evidence-rate rule). Inputs seen before registration: Binance futures exchangeInfo metadata only (symbol, underlyingType, contractType, status, onboardDate; snapshot saved as research/tradfi_perps_forward/exchangeInfo_2026-10-13.json) and the archive listing start dates. No price, return or funding value of any TradFi perp or of its underlying was looked at. These perps have 5-10 months of history, too short for the search gates, so this is a descriptive forward watch, not a search trial (N unchanged). Paper only; no orders, no keys.",
+  "prospective_start_utc": "2026-10-19T00:00:00Z",
+  "universe": {
+    "source": "the exchangeInfo snapshot of 2026-10-13: contractType TRADIFI_PERPETUAL, quoteAsset USDT, status TRADING, underlyingType EQUITY (US listings) or COMMODITY; HK_EQUITY, KR_EQUITY, CN_EQUITY, PREMARKET and FX excluded; listings after the snapshot are ignored in v1",
+    "underlying_mapping": "Yahoo symbol = baseAsset, except BRKB -> BRK-B; commodities XAU GC=F, XAG SI=F, XPT PL=F, XPD PA=F, CL CL=F, BZ BZ=F, NATGAS NG=F, COPPER HG=F",
+    "single_stocks": "underlyings whose Yahoo quoteType is EQUITY, read from Yahoo quote metadata once before the start and frozen in research/tradfi_perps_forward/universe_v1.json (metadata only: quoteType, exchange, longName; no prices); ETFs (quoteType ETF, including leveraged and inverse ETFs) and unmapped symbols are excluded from the stock books",
+    "liquidity_at_each_formation": "median daily perp quote volume over the 7 UTC days before formation >= 1,000,000 USDT",
+    "minimum_names": "at least 20 eligible stocks, else the book stays flat that period"
+  },
+  "clock": {
+    "us_session": "NYSE regular session 09:30-16:00 America/New_York (DST-aware via zoneinfo), early closes 13:00 ET",
+    "nyse_holidays": ["2026-11-26", "2026-12-25", "2027-01-01", "2027-01-18", "2027-02-15", "2027-03-26", "2027-05-31", "2027-06-18", "2027-07-05", "2027-09-06", "2027-11-25", "2027-12-24"],
+    "nyse_early_closes": ["2026-11-27", "2026-12-24", "2027-11-26"],
+    "calendar_check": "the lists above are checked against realized Yahoo SPY daily bars; any mismatch is reported and the affected session is left unscored"
+  },
+  "books": {
+    "B0_equal_weight_long": {
+      "role": "benchmark and cost-of-carry measurement",
+      "rule": "long all eligible single stocks equally weighted, gross 1.0, rebalanced on the same monthly dates as B1",
+      "leverage_levels": [1]
+    },
+    "B1_xs_momentum_12_1": {
+      "source": "Jegadeesh & Titman (1993); the 12-1 month specification (Fama-French UMD convention)",
+      "formation": "first US trading day on or after the prospective start, then the first US trading day of each month",
+      "signal": "underlying Yahoo adjusted-close return from 252 to 21 US trading days before the formation day, using closes up to the previous US trading day only; a stock needs 253 such closes",
+      "portfolio": "quintiles of the eligible stocks: long the top, short the bottom, equal weight within each leg, 0.5 gross per leg",
+      "execution": "at the close of the 15-minute perp bar ending at the US close of the formation day; held until the next formation",
+      "leverage_levels": [1, 2]
+    },
+    "B2_weekend_fade": {
+      "source": "repo hypothesis (not published): perps trade over the weekend while the underlying is closed, and crypto-native flow may overshoot",
+      "signal": "for each eligible stock, perp return from the close of the 15-minute bar ending at the last US close of the previous week to the close of the 15-minute bar ending 09:45 ET on the first US trading day of the week",
+      "portfolio": "on that day, quintiles of the signal: short the top quintile, long the bottom, equal weight, 0.5 gross per leg",
+      "execution": "enter at the close of the next 15-minute bar (10:00 ET, one bar after the signal, so signal and entry prices differ); exit at the close of the 15-minute bar ending at that day's US close",
+      "leverage_levels": [1, 2, 5]
+    }
+  },
+  "economics": {
+    "costs": "Binance USDT-M taker 5 bps per side plus 2 bps slippage per side: 14 bps round trip on traded notional, scaled by leverage",
+    "funding": "realized Binance funding on held notional at each settlement (monthly fundingRate archive; unpublished months flagged funding_pending and replayed when published, as in near-miss-forward-v1)",
+    "leverage_model": "as strategy-search-v3 (leverage_sim): isolated margin per position, liquidation when the adverse mark-price move within a bar (15-minute or 1h mark high/low, perp high/low where mark bars are missing) reaches 1/L - 0.005, loss = margin + 0.5% of notional; equity ruin = below 50% of start",
+    "accounting": "positions marked on perp closes; daily account returns aggregated by UTC day of the mark"
+  },
+  "diagnostics": {
+    "D1_funding": "per symbol and equal-weighted: annualized realized funding paid by a long, monthly",
+    "D2_tracking": "on US trading days: perp close of the 15-minute bar ending at the US close vs the Yahoo unadjusted close; median and 95th percentile absolute deviation in bps, per symbol and pooled",
+    "D3_weekend_discovery": "pooled across stocks and weeks: slope and correlation of (a) the weekend perp return (B2 signal) on the underlying's Monday open gap (Yahoo open / previous close - 1) and (b) the weekend perp return on the underlying's first-session open-to-close return"
+  },
+  "data": {
+    "binance": "data.binance.vision only: futures um daily 15m and 1h klines, 15m/1h mark-price klines, monthly fundingRate; no REST",
+    "yahoo": "daily adjusted and unadjusted OHLC for the underlyings and SPY",
+    "lag": "a period is scored only when every bar it needs is published for every held symbol (per-symbol freshness, as near-miss-forward-v1); otherwise pending"
+  },
+  "scoring": "per book and leverage: daily net returns from the first scored day, cumulative return, annualized Sharpe (365), Newey-West t (5 lags), max drawdown, trades/turnover, liquidations, funding paid; B1 and B2 also net of B0 beta (regression on B0 daily returns, reported descriptively)",
+  "reporting": {
+    "review_after_days": 365,
+    "before_review": "descriptive only",
+    "at_review": "descriptive statistics, diagnostics and, for B2, the action-matched null: the same long/short counts drawn at random among the eligible stocks each week (999 draws, seed 20261013); no claim of an edge from one year"
+  },
+  "honest_power_note": "B1 rebalances 12 times a year: a one-year forward sample cannot distinguish a historical momentum Sharpe of ~0.5 from zero (expected t ~0.5). B2 trades ~50 Mondays a year: an edge clearing the 14 bp wall would need t ~2 within a year only if its per-week Sharpe is above ~0.28. Survivorship: the listed stocks were chosen by Binance in 2025-26, tilted to recent winners (AI, crypto-linked names); no backtest on their history is used because of that bias.",
+  "claims": {
+    "strategy_promotion_authorized": false,
+    "paper_trading_authorized": false,
+    "live_trading_authorized": false,
+    "orders_sent": false
+  }
+}

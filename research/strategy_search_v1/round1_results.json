@@ -1,0 +1,1301 @@
+{
+  "candidates": [
+    {
+      "dev": {
+        "cumulative_return": 1.3555383252298654,
+        "days": 2184,
+        "max_drawdown": -0.1323286134319982,
+        "mean_daily": 0.0004224697027563246,
+        "newey_west_t": 2.810026395924901,
+        "pass": true,
+        "sharpe": 0.8643164482193835,
+        "sharpe_daily": 0.05444681847740772
+      },
+      "gates": {
+        "G1": {
+          "dates_checked": 50,
+          "decision_date_diagnostic": {
+            "dates_checked": 50,
+            "gating": false,
+            "mismatches": [],
+            "n_mismatches": 0,
+            "pass": true
+          },
+          "mismatches": [],
+          "n_mismatches": 0,
+          "pass": true
+        },
+        "G2": {
+          "cumulative_return": 1.3555383252298654,
+          "days": 2184,
+          "max_drawdown": -0.1323286134319982,
+          "mean_daily": 0.0004224697027563246,
+          "newey_west_t": 2.810026395924901,
+          "pass": true,
+          "sharpe": 0.8643164482193835,
+          "sharpe_daily": 0.05444681847740772
+        },
+        "G3": {
+          "cumulative_return": 0.45675182320080876,
+          "days": 1695,
+          "max_drawdown": -0.3043531717593908,
+          "mean_daily": 0.00025269968577505935,
+          "newey_west_t": 1.455054907787939,
+          "pass": true,
+          "sharpe": 0.5125134651095405,
+          "sharpe_daily": 0.03228531362504341
+        },
+        "G4": {
+          "n_null": 999,
+          "null_mean": 0.00022750657539210694,
+          "null_p95": 0.0005085633391603867,
+          "null_type": "allocation",
+          "observed_mean_daily_gross": 0.0004524605452471672,
+          "p": 0.099,
+          "pass": false
+        },
+        "G5": {
+          "expected_max_sharpe": 0.08202625971700611,
+          "kurtosis": 11.355922605325553,
+          "n_trials": 7,
+          "pass": false,
+          "probability": 0.10011126238990437,
+          "sharpe": 0.05444681847740772,
+          "skew": -0.07950521087855104,
+          "trial_sharpe_std": 0.029573354399056565
+        },
+        "G6": {
+          "half_mean_daily": [
+            0.0007076936970487399,
+            0.00013724570846390937
+          ],
+          "halves_positive": true,
+          "pass": true,
+          "variants": [
+            {
+              "days": 2184,
+              "params": {
+                "B": 3,
+                "T": 2
+              },
+              "sharpe": 0.7890794166894872
+            },
+            {
+              "days": 2184,
+              "params": {
+                "B": 5,
+                "T": 2
+              },
+              "sharpe": 0.8643164482193835
+            },
+            {
+              "days": 2184,
+              "params": {
+                "B": 4,
+                "T": 1
+              },
+              "sharpe": 0.48171785995239447
+            },
+            {
+              "days": 2184,
+              "params": {
+                "B": 4,
+                "T": 3
+              },
+              "sharpe": 0.7989732330412943
+            }
+          ],
+          "variants_ok": true
+        },
+        "G7": {
+          "assumed_cost_bps": 10.0,
+          "cost_wall_bps": 150.86623371294857,
+          "pass": true,
+          "required_bps": 30.0
+        },
+        "G8": {
+          "crypto_core": {
+            "corr": 0.07291847758161607,
+            "limit": 0.5,
+            "overlap_days": 1533
+          },
+          "pass": true,
+          "spy_buy_and_hold": {
+            "corr": 0.2585651442761072,
+            "limit": 0.7,
+            "overlap_days": 4633
+          }
+        }
+      },
+      "id": "R1C1_VAA_G12",
+      "null": "allocation",
+      "params": {
+        "B": 4,
+        "T": 2
+      },
+      "return_days": 4633,
+      "return_series_sha256": "79f920cc0180f6d3061868085eeb3cfd64363cd9b7a6416dd544339311e17e40",
+      "validation": {
+        "cumulative_return": 0.45675182320080876,
+        "days": 1695,
+        "max_drawdown": -0.3043531717593908,
+        "mean_daily": 0.00025269968577505935,
+        "newey_west_t": 1.455054907787939,
+        "pass": true,
+        "sharpe": 0.5125134651095405,
+        "sharpe_daily": 0.03228531362504341
+      },
+      "windows": {
+        "development": [
+          "2008-05-01",
+          "2016-12-31"
+        ],
+        "first_return_date": "2008-05-01",
+        "validation": [
+          "2020-01-01",
+          "2026-09-30"
+        ]
+      }
+    },
+    {
+      "dev": {
+        "cumulative_return": 0.5593788093915602,
+        "days": 1954,
+        "max_drawdown": -0.12379357992136608,
+        "mean_daily": 0.0002457283512572627,
+        "newey_west_t": 1.8940980625568404,
+        "pass": false,
+        "sharpe": 0.6442770938211732,
+        "sharpe_daily": 0.040585642039672694
+      },
+      "gates": {
+        "G1": {
+          "dates_checked": 50,
+          "decision_date_diagnostic": {
+            "dates_checked": 50,
+            "gating": false,
+            "mismatches": [],
+            "n_mismatches": 0,
+            "pass": true
+          },
+          "mismatches": [],
+          "n_mismatches": 0,
+          "pass": true
+        },
+        "G2": {
+          "cumulative_return": 0.5593788093915602,
+          "days": 1954,
+          "max_drawdown": -0.12379357992136608,
+          "mean_daily": 0.0002457283512572627,
+          "newey_west_t": 1.8940980625568404,
+          "pass": false,
+          "sharpe": 0.6442770938211732,
+          "sharpe_daily": 0.040585642039672694
+        },
+        "G3": {
+          "cumulative_return": 0.5426871404061686,
+          "days": 1695,
+          "max_drawdown": -0.21737587357485377,
+          "mean_daily": 0.0002767055715171793,
+          "newey_west_t": 1.9075278105730191,
+          "pass": true,
+          "sharpe": 0.6793553823427841,
+          "sharpe_daily": 0.04279536651219541
+        },
+        "G4": {
+          "n_null": 999,
+          "null_mean": 0.00023097157112560412,
+          "null_p95": 0.00044842509447493223,
+          "null_type": "allocation",
+          "observed_mean_daily_gross": 0.0002567029901745833,
+          "p": 0.49,
+          "pass": false
+        },
+        "G5": {
+          "expected_max_sharpe": 0.08202625971700611,
+          "kurtosis": 8.667022139682619,
+          "n_trials": 7,
+          "pass": false,
+          "probability": 0.03416633234758154,
+          "sharpe": 0.040585642039672694,
+          "skew": -0.15439611343158532,
+          "trial_sharpe_std": 0.029573354399056565
+        },
+        "G6": {
+          "half_mean_daily": [
+            0.00034705152207545526,
+            0.0001444051804390701
+          ],
+          "halves_positive": true,
+          "pass": true,
+          "variants": [
+            {
+              "days": 1954,
+              "params": {
+                "lookback_months": 10,
+                "protection_divisor": 6,
+                "top_n": 6
+              },
+              "sharpe": 0.6891220579128676
+            },
+            {
+              "days": 1911,
+              "params": {
+                "lookback_months": 14,
+                "protection_divisor": 6,
+                "top_n": 6
+              },
+              "sharpe": 0.6788632147963916
+            },
+            {
+              "days": 1954,
+              "params": {
+                "lookback_months": 12,
+                "protection_divisor": 5,
+                "top_n": 6
+              },
+              "sharpe": 0.6113346893616364
+            },
+            {
+              "days": 1954,
+              "params": {
+                "lookback_months": 12,
+                "protection_divisor": 7,
+                "top_n": 6
+              },
+              "sharpe": 0.6842015130388418
+            },
+            {
+              "days": 1954,
+              "params": {
+                "lookback_months": 12,
+                "protection_divisor": 6,
+                "top_n": 5
+              },
+              "sharpe": 0.603213409027777
+            },
+            {
+              "days": 1954,
+              "params": {
+                "lookback_months": 12,
+                "protection_divisor": 6,
+                "top_n": 7
+              },
+              "sharpe": 0.5941303310734658
+            }
+          ],
+          "variants_ok": true
+        },
+        "G7": {
+          "assumed_cost_bps": 10.0,
+          "cost_wall_bps": 233.90563653938972,
+          "pass": true,
+          "required_bps": 30.0
+        },
+        "G8": {
+          "crypto_core": {
+            "corr": 0.06361170174765168,
+            "limit": 0.5,
+            "overlap_days": 1533
+          },
+          "pass": true,
+          "spy_buy_and_hold": {
+            "corr": 0.2440631286444136,
+            "limit": 0.7,
+            "overlap_days": 4655
+          }
+        }
+      },
+      "id": "R1C2_PAA2",
+      "null": "allocation",
+      "params": {
+        "lookback_months": 12,
+        "protection_divisor": 6,
+        "top_n": 6
+      },
+      "return_days": 4655,
+      "return_series_sha256": "9f82f0addc935d69cb5b8aa76a86131eec8d95f192c7003e4a6adce7dd01193b",
+      "validation": {
+        "cumulative_return": 0.5426871404061686,
+        "days": 1695,
+        "max_drawdown": -0.21737587357485377,
+        "mean_daily": 0.0002767055715171793,
+        "newey_west_t": 1.9075278105730191,
+        "pass": true,
+        "sharpe": 0.6793553823427841,
+        "sharpe_daily": 0.04279536651219541
+      },
+      "windows": {
+        "development": [
+          "2008-04-01",
+          "2015-12-31"
+        ],
+        "first_return_date": "2008-04-01",
+        "validation": [
+          "2020-01-01",
+          "2026-09-30"
+        ]
+      }
+    },
+    {
+      "dev": {
+        "cumulative_return": 1.6177623286439764,
+        "days": 2329,
+        "max_drawdown": -0.23896941259480697,
+        "mean_daily": 0.0004620208684688465,
+        "newey_west_t": 2.4872447439282386,
+        "pass": true,
+        "sharpe": 0.7437124924418581,
+        "sharpe_daily": 0.046849483379360964
+      },
+      "gates": {
+        "G1": {
+          "dates_checked": 50,
+          "decision_date_diagnostic": {
+            "dates_checked": 35,
+            "gating": false,
+            "mismatches": [],
+            "n_mismatches": 0,
+            "pass": true
+          },
+          "mismatches": [],
+          "n_mismatches": 0,
+          "pass": true
+        },
+        "G2": {
+          "cumulative_return": 1.6177623286439764,
+          "days": 2329,
+          "max_drawdown": -0.23896941259480697,
+          "mean_daily": 0.0004620208684688465,
+          "newey_west_t": 2.4872447439282386,
+          "pass": true,
+          "sharpe": 0.7437124924418581,
+          "sharpe_daily": 0.046849483379360964
+        },
+        "G3": {
+          "cumulative_return": 0.83054365859736,
+          "days": 1695,
+          "max_drawdown": -0.3371727532114974,
+          "mean_daily": 0.00042046627866192414,
+          "newey_west_t": 1.7047760833622823,
+          "pass": true,
+          "sharpe": 0.5924043970393479,
+          "sharpe_daily": 0.03731796928922102
+        },
+        "G4": {
+          "n_null": 999,
+          "null_mean": 0.00032411083843454023,
+          "null_p95": 0.0004987681388220064,
+          "null_type": "allocation",
+          "observed_mean_daily_gross": 0.00046781734764445834,
+          "p": 0.105,
+          "pass": false
+        },
+        "G5": {
+          "expected_max_sharpe": 0.08202625971700611,
+          "kurtosis": 7.389397855960298,
+          "n_trials": 7,
+          "pass": false,
+          "probability": 0.04680323461017882,
+          "sharpe": 0.046849483379360964,
+          "skew": -0.4524680260292979,
+          "trial_sharpe_std": 0.029573354399056565
+        },
+        "G6": {
+          "half_mean_daily": [
+            0.0005165023889488715,
+            0.0004075861132424523
+          ],
+          "halves_positive": true,
+          "pass": true,
+          "variants": [
+            {
+              "days": 2329,
+              "params": {
+                "lookback_months": 10
+              },
+              "sharpe": 0.7050710490222516
+            },
+            {
+              "days": 2287,
+              "params": {
+                "lookback_months": 14
+              },
+              "sharpe": 0.7218600438252083
+            }
+          ],
+          "variants_ok": true
+        },
+        "G7": {
+          "assumed_cost_bps": 10.0,
+          "cost_wall_bps": 807.071557528847,
+          "pass": true,
+          "required_bps": 30.0
+        },
+        "G8": {
+          "crypto_core": {
+            "corr": 0.03438968542865061,
+            "limit": 0.5,
+            "overlap_days": 1533
+          },
+          "pass": false,
+          "spy_buy_and_hold": {
+            "corr": 0.7193113822815436,
+            "limit": 0.7,
+            "overlap_days": 5534
+          }
+        }
+      },
+      "id": "R1C3_GEM",
+      "null": "allocation",
+      "params": {
+        "lookback_months": 12
+      },
+      "return_days": 5534,
+      "return_series_sha256": "b324486107093e1a312989bca84c8e312323c3528ba90fc51df08a9a110e195e",
+      "validation": {
+        "cumulative_return": 0.83054365859736,
+        "days": 1695,
+        "max_drawdown": -0.3371727532114974,
+        "mean_daily": 0.00042046627866192414,
+        "newey_west_t": 1.7047760833622823,
+        "pass": true,
+        "sharpe": 0.5924043970393479,
+        "sharpe_daily": 0.03731796928922102
+      },
+      "windows": {
+        "development": [
+          "2004-10-01",
+          "2013-12-31"
+        ],
+        "first_return_date": "2004-10-01",
+        "validation": [
+          "2020-01-01",
+          "2026-09-30"
+        ]
+      }
+    },
+    {
+      "dev": {
+        "cumulative_return": 0.6737496731491615,
+        "days": 3256,
+        "max_drawdown": -0.1885314709047563,
+        "mean_daily": 0.00017044458784445352,
+        "newey_west_t": 2.0007450182958584,
+        "pass": true,
+        "sharpe": 0.5473385276151201,
+        "sharpe_daily": 0.034479086357949204
+      },
+      "gates": {
+        "G1": {
+          "dates_checked": 50,
+          "decision_date_diagnostic": {
+            "dates_checked": 50,
+            "gating": false,
+            "mismatches": [],
+            "n_mismatches": 0,
+            "pass": true
+          },
+          "mismatches": [],
+          "n_mismatches": 0,
+          "pass": true
+        },
+        "G2": {
+          "cumulative_return": 0.6737496731491615,
+          "days": 3256,
+          "max_drawdown": -0.1885314709047563,
+          "mean_daily": 0.00017044458784445352,
+          "newey_west_t": 2.0007450182958584,
+          "pass": true,
+          "sharpe": 0.5473385276151201,
+          "sharpe_daily": 0.034479086357949204
+        },
+        "G3": {
+          "cumulative_return": 0.22437398453742396,
+          "days": 1695,
+          "max_drawdown": -0.10586305647343375,
+          "mean_daily": 0.00013237635950061766,
+          "newey_west_t": 1.1783333733265182,
+          "pass": true,
+          "sharpe": 0.41322811011670413,
+          "sharpe_daily": 0.0260309241454765
+        },
+        "G4": {
+          "n_null": 999,
+          "null_mean": 9.569832494832123e-05,
+          "null_p95": 0.000215178253943014,
+          "null_type": "timing",
+          "observed_mean_daily_gross": 0.0002182025731024388,
+          "p": 0.048,
+          "pass": true
+        },
+        "G5": {
+          "expected_max_sharpe": 0.08202625971700611,
+          "kurtosis": 37.600599801832395,
+          "n_trials": 7,
+          "pass": false,
+          "probability": 0.003776490468621274,
+          "sharpe": 0.034479086357949204,
+          "skew": -0.5874326984462267,
+          "trial_sharpe_std": 0.029573354399056565
+        },
+        "G6": {
+          "half_mean_daily": [
+            0.0001855564025310906,
+            0.00015533277315781638
+          ],
+          "halves_positive": true,
+          "pass": true,
+          "variants": [
+            {
+              "days": 3256,
+              "params": {
+                "days_after": 2,
+                "days_before": 1
+              },
+              "sharpe": 0.45691378706220487
+            },
+            {
+              "days": 3256,
+              "params": {
+                "days_after": 3,
+                "days_before": 2
+              },
+              "sharpe": 0.6028751451887545
+            }
+          ],
+          "variants_ok": true
+        },
+        "G7": {
+          "assumed_cost_bps": 10.0,
+          "cost_wall_bps": 45.68923331328235,
+          "pass": true,
+          "required_bps": 30.0
+        },
+        "G8": {
+          "crypto_core": {
+            "corr": 0.014406609885578965,
+            "limit": 0.5,
+            "overlap_days": 1533
+          },
+          "pass": true,
+          "spy_buy_and_hold": {
+            "corr": 0.42458982192496425,
+            "limit": 0.7,
+            "overlap_days": 8474
+          }
+        }
+      },
+      "id": "R1C4_turn_of_month",
+      "null": "timing",
+      "params": {
+        "days_after": 3,
+        "days_before": 1
+      },
+      "return_days": 8474,
+      "return_series_sha256": "0666c377243bcf702c2fab02a0dcadb3cf791852394654ab516cca507a16161f",
+      "validation": {
+        "cumulative_return": 0.22437398453742396,
+        "days": 1695,
+        "max_drawdown": -0.10586305647343375,
+        "mean_daily": 0.00013237635950061766,
+        "newey_west_t": 1.1783333733265182,
+        "pass": true,
+        "sharpe": 0.41322811011670413,
+        "sharpe_daily": 0.0260309241454765
+      },
+      "windows": {
+        "development": [
+          "1993-02-01",
+          "2005-12-31"
+        ],
+        "first_return_date": "1993-02-01",
+        "validation": [
+          "2020-01-01",
+          "2026-09-30"
+        ]
+      }
+    },
+    {
+      "dev": {
+        "cumulative_return": 16.361906831473654,
+        "days": 2073,
+        "max_drawdown": -0.4255440346863175,
+        "mean_daily": 0.0016461656333840006,
+        "newey_west_t": 3.6324655745172945,
+        "pass": true,
+        "sharpe": 1.1377685142257903,
+        "sharpe_daily": 0.07167267948097371
+      },
+      "gates": {
+        "G1": {
+          "dates_checked": 50,
+          "decision_date_diagnostic": {
+            "dates_checked": 50,
+            "gating": false,
+            "mismatches": [],
+            "n_mismatches": 0,
+            "pass": true
+          },
+          "mismatches": [],
+          "n_mismatches": 0,
+          "pass": true
+        },
+        "G2": {
+          "cumulative_return": 16.361906831473654,
+          "days": 2073,
+          "max_drawdown": -0.4255440346863175,
+          "mean_daily": 0.0016461656333840006,
+          "newey_west_t": 3.6324655745172945,
+          "pass": true,
+          "sharpe": 1.1377685142257903,
+          "sharpe_daily": 0.07167267948097371
+        },
+        "G3": {
+          "cumulative_return": 0.33536058781560807,
+          "days": 1695,
+          "max_drawdown": -0.40456247414892255,
+          "mean_daily": 0.0002583305545567604,
+          "newey_west_t": 0.9090950252974701,
+          "pass": false,
+          "sharpe": 0.31350024756517936,
+          "sharpe_daily": 0.019748659309872546
+        },
+        "G4": {
+          "n_null": 999,
+          "null_mean": 0.0009797889413646291,
+          "null_p95": 0.00176831269693544,
+          "null_type": "timing",
+          "observed_mean_daily_gross": 0.0017158713738567456,
+          "p": 0.062,
+          "pass": false
+        },
+        "G5": {
+          "expected_max_sharpe": 0.08202625971700611,
+          "kurtosis": 13.78953712497118,
+          "n_trials": 7,
+          "pass": false,
+          "probability": 0.3258496746359385,
+          "sharpe": 0.07167267948097371,
+          "skew": -1.0271068098659948,
+          "trial_sharpe_std": 0.029573354399056565
+        },
+        "G6": {
+          "half_mean_daily": [
+            0.0016133679365940253,
+            0.001678931702693947
+          ],
+          "halves_positive": true,
+          "pass": false,
+          "variants": [
+            {
+              "days": 2073,
+              "params": {
+                "lag_days": 2,
+                "sma_days": 60,
+                "threshold": 0.8
+              },
+              "sharpe": 0.4373351808369411
+            },
+            {
+              "days": 2073,
+              "params": {
+                "lag_days": 2,
+                "sma_days": 60,
+                "threshold": 1.2
+              },
+              "sharpe": 1.1851083681463919
+            },
+            {
+              "days": 2073,
+              "params": {
+                "lag_days": 2,
+                "sma_days": 48,
+                "threshold": 1.0
+              },
+              "sharpe": 0.963298045187277
+            },
+            {
+              "days": 2073,
+              "params": {
+                "lag_days": 2,
+                "sma_days": 72,
+                "threshold": 1.0
+              },
+              "sharpe": 1.031231401655995
+            }
+          ],
+          "variants_ok": false
+        },
+        "G7": {
+          "assumed_cost_bps": 10.0,
+          "cost_wall_bps": 246.1592635297601,
+          "pass": true,
+          "required_bps": 30.0
+        },
+        "G8": {
+          "crypto_core": {
+            "corr": 0.12574888225747366,
+            "limit": 0.5,
+            "overlap_days": 1533
+          },
+          "pass": true,
+          "spy_buy_and_hold": {
+            "corr": 0.3881270555130064,
+            "limit": 0.7,
+            "overlap_days": 3768
+          }
+        }
+      },
+      "id": "R1C5_vix_ratio_short_vol",
+      "null": "timing",
+      "params": {
+        "lag_days": 2,
+        "sma_days": 60,
+        "threshold": 1.0
+      },
+      "return_days": 3768,
+      "return_series_sha256": "611817fe3bbcbc3fd9b2ea6dd51928a333360647149e404273b3e0e641e4adbb",
+      "validation": {
+        "cumulative_return": 0.33536058781560807,
+        "days": 1695,
+        "max_drawdown": -0.40456247414892255,
+        "mean_daily": 0.0002583305545567604,
+        "newey_west_t": 0.9090950252974701,
+        "pass": false,
+        "sharpe": 0.31350024756517936,
+        "sharpe_daily": 0.019748659309872546
+      },
+      "windows": {
+        "development": [
+          "2011-10-05",
+          "2019-12-31"
+        ],
+        "first_return_date": "2011-10-05",
+        "validation": [
+          "2020-01-01",
+          "2026-09-30"
+        ]
+      }
+    },
+    {
+      "dev": {
+        "cumulative_return": 1.544107792305938,
+        "days": 2013,
+        "max_drawdown": -0.17308122267974801,
+        "mean_daily": 0.0004998395403243365,
+        "newey_west_t": 2.834430512160301,
+        "pass": true,
+        "sharpe": 0.9378402603991528,
+        "sharpe_daily": 0.05907838329810037
+      },
+      "gates": {
+        "G1": {
+          "dates_checked": 50,
+          "decision_date_diagnostic": {
+            "dates_checked": 50,
+            "gating": false,
+            "mismatches": [],
+            "n_mismatches": 0,
+            "pass": true
+          },
+          "mismatches": [],
+          "n_mismatches": 0,
+          "pass": true
+        },
+        "G2": {
+          "cumulative_return": 1.544107792305938,
+          "days": 2013,
+          "max_drawdown": -0.17308122267974801,
+          "mean_daily": 0.0004998395403243365,
+          "newey_west_t": 2.834430512160301,
+          "pass": true,
+          "sharpe": 0.9378402603991528,
+          "sharpe_daily": 0.05907838329810037
+        },
+        "G3": {
+          "cumulative_return": 1.2870038301122309,
+          "days": 1695,
+          "max_drawdown": -0.24496400799085827,
+          "mean_daily": 0.0005364966967133554,
+          "newey_west_t": 2.356773045306292,
+          "pass": true,
+          "sharpe": 0.8655539896106781,
+          "sharpe_daily": 0.05452477625737234
+        },
+        "G4": {
+          "n_null": 999,
+          "null_mean": 0.0005176142951993914,
+          "null_p95": 0.0005904451729844052,
+          "null_type": "timing",
+          "observed_mean_daily_gross": 0.0005030685517500692,
+          "p": 0.62,
+          "pass": false
+        },
+        "G5": {
+          "expected_max_sharpe": 0.08202625971700611,
+          "kurtosis": 9.008703883568572,
+          "n_trials": 7,
+          "pass": false,
+          "probability": 0.15565568150281495,
+          "sharpe": 0.05907838329810037,
+          "skew": -0.45014953044978184,
+          "trial_sharpe_std": 0.029573354399056565
+        },
+        "G6": {
+          "half_mean_daily": [
+            0.0005294252346279191,
+            0.00047028322605481874
+          ],
+          "halves_positive": true,
+          "pass": true,
+          "variants": [
+            {
+              "days": 2013,
+              "params": {
+                "window_months": 19
+              },
+              "sharpe": 0.8874695901734958
+            },
+            {
+              "days": 2013,
+              "params": {
+                "window_months": 29
+              },
+              "sharpe": 0.8146975162961183
+            }
+          ],
+          "variants_ok": true
+        },
+        "G7": {
+          "assumed_cost_bps": 10.0,
+          "cost_wall_bps": 1557.9646071890604,
+          "pass": true,
+          "required_bps": 30.0
+        },
+        "G8": {
+          "crypto_core": {
+            "corr": 0.01592849216940157,
+            "limit": 0.5,
+            "overlap_days": 1533
+          },
+          "pass": false,
+          "spy_buy_and_hold": {
+            "corr": 0.8056062749019941,
+            "limit": 0.7,
+            "overlap_days": 7949
+          }
+        }
+      },
+      "id": "R1C6_oil_spy",
+      "null": "timing",
+      "params": {
+        "window_months": 24
+      },
+      "return_days": 7949,
+      "return_series_sha256": "9028efcde78b2649d3dd438d261f52d08054d46a18c18873b8a981a9ef68f2dd",
+      "validation": {
+        "cumulative_return": 1.2870038301122309,
+        "days": 1695,
+        "max_drawdown": -0.24496400799085827,
+        "mean_daily": 0.0005364966967133554,
+        "newey_west_t": 2.356773045306292,
+        "pass": true,
+        "sharpe": 0.8655539896106781,
+        "sharpe_daily": 0.05452477625737234
+      },
+      "windows": {
+        "development": [
+          "2010-01-01",
+          "2017-12-31"
+        ],
+        "first_return_date": "1995-03-01",
+        "validation": [
+          "2020-01-01",
+          "2026-09-30"
+        ]
+      }
+    },
+    {
+      "dev": {
+        "cumulative_return": -0.2642687809975448,
+        "days": 4380,
+        "max_drawdown": -0.3688366459137502,
+        "mean_daily": -6.481412992003764e-05,
+        "newey_west_t": -1.417034541348678,
+        "pass": false,
+        "sharpe": -0.3176375256980018,
+        "sharpe_daily": -0.02000928333473335
+      },
+      "gates": {
+        "G1": {
+          "dates_checked": 50,
+          "decision_date_diagnostic": {
+            "dates_checked": 50,
+            "gating": false,
+            "mismatches": [],
+            "n_mismatches": 0,
+            "pass": true
+          },
+          "mismatches": [],
+          "n_mismatches": 0,
+          "pass": true
+        },
+        "G2": {
+          "cumulative_return": -0.2642687809975448,
+          "days": 4380,
+          "max_drawdown": -0.3688366459137502,
+          "mean_daily": -6.481412992003764e-05,
+          "newey_west_t": -1.417034541348678,
+          "pass": false,
+          "sharpe": -0.3176375256980018,
+          "sharpe_daily": -0.02000928333473335
+        },
+        "G3": {
+          "cumulative_return": -0.050408247757314006,
+          "days": 1695,
+          "max_drawdown": -0.2641345207548972,
+          "mean_daily": -1.2333653404270774e-05,
+          "newey_west_t": -0.0899931506757419,
+          "pass": false,
+          "sharpe": -0.03247853958378815,
+          "sharpe_daily": -0.0020459556829826356
+        },
+        "G4": {
+          "n_null": 999,
+          "null_mean": 7.886051600948347e-07,
+          "null_p95": 6.950072917764914e-05,
+          "null_type": "allocation",
+          "observed_mean_daily_gross": -5.088718928076822e-05,
+          "p": 0.892,
+          "pass": false
+        },
+        "G5": {
+          "expected_max_sharpe": 0.08202625971700611,
+          "kurtosis": 6.624161361832462,
+          "n_trials": 7,
+          "pass": false,
+          "probability": 6.206590796864475e-12,
+          "sharpe": -0.02000928333473335,
+          "skew": -0.3700696466101717,
+          "trial_sharpe_std": 0.029573354399056565
+        },
+        "G6": {
+          "half_mean_daily": [
+            -3.1660516129907807e-05,
+            -9.796774371016747e-05
+          ],
+          "halves_positive": false,
+          "pass": false,
+          "variants": [
+            {
+              "days": 4380,
+              "params": {
+                "lookback_days": 192
+              },
+              "sharpe": -0.331213748533409
+            },
+            {
+              "days": 4342,
+              "params": {
+                "lookback_days": 288
+              },
+              "sharpe": -0.29225256357370133
+            }
+          ],
+          "variants_ok": false
+        },
+        "G7": {
+          "assumed_cost_bps": 10.0,
+          "cost_wall_bps": null,
+          "pass": false,
+          "required_bps": 30.0
+        },
+        "G8": {
+          "crypto_core": {
+            "corr": 0.010860867377561097,
+            "limit": 0.5,
+            "overlap_days": 1533
+          },
+          "pass": true,
+          "spy_buy_and_hold": {
+            "corr": -0.021678418524974867,
+            "limit": 0.7,
+            "overlap_days": 6327
+          }
+        }
+      },
+      "id": "R1C7_style_momentum",
+      "null": "allocation",
+      "params": {
+        "lookback_days": 240
+      },
+      "return_days": 6327,
+      "return_series_sha256": "feda726a34a1ad2d435b5c0ae1f71bc94958faa8f8132e29b4acd9e8b17889be",
+      "validation": {
+        "cumulative_return": -0.050408247757314006,
+        "days": 1695,
+        "max_drawdown": -0.2641345207548972,
+        "mean_daily": -1.2333653404270774e-05,
+        "newey_west_t": -0.0899931506757419,
+        "pass": false,
+        "sharpe": -0.03247853958378815,
+        "sharpe_daily": -0.0020459556829826356
+      },
+      "windows": {
+        "development": [
+          "2001-08-02",
+          "2018-12-31"
+        ],
+        "first_return_date": "2001-08-02",
+        "validation": [
+          "2020-01-01",
+          "2026-09-30"
+        ]
+      }
+    }
+  ],
+  "claims": {
+    "live_trading_authorized": false,
+    "strategy_promotion_authorized": false
+  },
+  "cost_bps_round_trip": 10.0,
+  "data_last_date": "2026-09-30",
+  "data_provenance": {
+    "calendar": "SPY trading days",
+    "fred": {
+      "DCOILWTICO": {
+        "first_date": "1990-01-02",
+        "last_date": "2026-09-30",
+        "rows": 8551,
+        "sha256": "32a7a514ba895f73ea79906d8a4635518a5fb63dc4add25a5778029819984524"
+      },
+      "DTB3": {
+        "first_date": "1990-01-02",
+        "last_date": "2026-09-30",
+        "rows": 9193,
+        "sha256": "6c4149420ac0548892102980eac0adb16a839e86931257b2058ae2237d0cc9aa"
+      }
+    },
+    "price_frame_rows": 8475,
+    "price_frame_sha256": "f25b1c509300612661f39388937bf67f178c3e2ce5cf69e072557f29c19384ee",
+    "tickers": {
+      "AGG": {
+        "first_date": "2003-09-29",
+        "last_date": "2026-09-30",
+        "rows": 5788,
+        "sha256": "059c27e9dd1e0b05e01becf522877815c660215972f7b7429da935befae73d0f"
+      },
+      "EEM": {
+        "first_date": "2003-04-14",
+        "last_date": "2026-09-30",
+        "rows": 5904,
+        "sha256": "42b8080e2945306410b3f061c22a366f825b680dcfbc4155051ba7b6e44a3aab"
+      },
+      "EFA": {
+        "first_date": "2001-08-27",
+        "last_date": "2026-09-30",
+        "rows": 6310,
+        "sha256": "108c78d90413a6b95c470b081d77d7c5e45e1025a1e655e079a8da411848a37a"
+      },
+      "EWJ": {
+        "first_date": "1996-03-18",
+        "last_date": "2026-09-30",
+        "rows": 7684,
+        "sha256": "38c4eee89b4699ba0146204e5fb94c9708318c57eb176b97bd1afe9b4c03257d"
+      },
+      "GLD": {
+        "first_date": "2004-11-18",
+        "last_date": "2026-09-30",
+        "rows": 5500,
+        "sha256": "06567d05960d433875828f0a6a26199e040cd5a3547c94ff8f698100c36389fa"
+      },
+      "GSG": {
+        "first_date": "2006-07-21",
+        "last_date": "2026-09-30",
+        "rows": 5080,
+        "sha256": "395262f83a86b849cfe584a752855de8277084876aaaee9fc3ef1627acfe68a7"
+      },
+      "HYG": {
+        "first_date": "2007-04-11",
+        "last_date": "2026-09-30",
+        "rows": 4900,
+        "sha256": "717e98e3dfb0f0f070923433da616cb91ef354e9445678585878cdf98fa6c243"
+      },
+      "IEF": {
+        "first_date": "2002-07-30",
+        "last_date": "2026-09-30",
+        "rows": 6082,
+        "sha256": "c17553135940df7c03d4de44a41ce6b7c1e69ee20d70e8437e0beda34297488d"
+      },
+      "IJJ": {
+        "first_date": "2000-07-28",
+        "last_date": "2026-09-30",
+        "rows": 6582,
+        "sha256": "c49c4dd044590fea198184484f3a2d63e7a90af5581772cf75a645487880d378"
+      },
+      "IJK": {
+        "first_date": "2000-07-28",
+        "last_date": "2026-09-30",
+        "rows": 6582,
+        "sha256": "ae1fb6b15b4befc7df7ed49e9cb60a5d492e28ec5a275f96df044f4d9135251f"
+      },
+      "IJS": {
+        "first_date": "2000-07-28",
+        "last_date": "2026-09-30",
+        "rows": 6582,
+        "sha256": "4f21801bf802e2fe8d327cb2d26bfb82a27f223f5a5bb575d806d21707170bd4"
+      },
+      "IJT": {
+        "first_date": "2000-07-28",
+        "last_date": "2026-09-30",
+        "rows": 6582,
+        "sha256": "2330df3f0bb729aab1483058cfbe7dfb1e06903b3ffd7def315bea2e7e09c878"
+      },
+      "IVE": {
+        "first_date": "2000-05-26",
+        "last_date": "2026-09-30",
+        "rows": 6625,
+        "sha256": "c4aa43795c4eb4013bb8f50947cb241811ad97b2039d230ad779dae1a6d85d21"
+      },
+      "IVW": {
+        "first_date": "2000-05-26",
+        "last_date": "2026-09-30",
+        "rows": 6625,
+        "sha256": "786e79b17e42131a12d53e7d1d48fc3efbdcd4b2f44e07cd670e89119103910f"
+      },
+      "IWM": {
+        "first_date": "2000-05-26",
+        "last_date": "2026-09-30",
+        "rows": 6625,
+        "sha256": "4ef14297486f09cdbf3eb5f16a39cb867e923781be1246ebdf9bf388918733c5"
+      },
+      "IYR": {
+        "first_date": "2000-06-19",
+        "last_date": "2026-09-30",
+        "rows": 6610,
+        "sha256": "fbbff53ee5e4551aa5f068fa67093a26f0ac80185bd35464a7e54a2d67a3791e"
+      },
+      "LQD": {
+        "first_date": "2002-07-30",
+        "last_date": "2026-09-30",
+        "rows": 6082,
+        "sha256": "0cbccc5cf6dd136d8694e030ed74c8e47c2a5f6015c0a44624654b91b0c13fbf"
+      },
+      "QQQ": {
+        "first_date": "1999-03-10",
+        "last_date": "2026-09-30",
+        "rows": 6933,
+        "sha256": "9b94c56d0c5731823c82bfcf85474370ef06d04da194d0eac4488dd439e04d69"
+      },
+      "SHY": {
+        "first_date": "2002-07-30",
+        "last_date": "2026-09-30",
+        "rows": 6082,
+        "sha256": "a76970eed8abf900dabbbc2253caa805cdd37e6a7200f344e58093f6d26f5a32"
+      },
+      "SPY": {
+        "first_date": "1993-01-29",
+        "last_date": "2026-09-30",
+        "rows": 8475,
+        "sha256": "3ec516ce38bcee4fc73946fb59e9568cd04f72ab1e258272eeae5e96bd578a8c"
+      },
+      "SVXY": {
+        "first_date": "2011-10-04",
+        "last_date": "2026-09-30",
+        "rows": 3769,
+        "sha256": "6aecd3e7190ee870a4ba8353f0ba2747e4db24d86e0a8a98b53b16d1b9e53f46"
+      },
+      "TLT": {
+        "first_date": "2002-07-30",
+        "last_date": "2026-09-30",
+        "rows": 6082,
+        "sha256": "9ab84a92f4501bb02dce8ea7db9eb641045d0b346fd2c6c9607811a83c5296b8"
+      },
+      "VGK": {
+        "first_date": "2005-03-10",
+        "last_date": "2026-09-30",
+        "rows": 5424,
+        "sha256": "203be57351fe224a0984bab79a4b79648c80401858508ff2a82410494b9e4d06"
+      },
+      "VNQ": {
+        "first_date": "2004-09-29",
+        "last_date": "2026-09-30",
+        "rows": 5536,
+        "sha256": "ba535d94fd90b5176f940c89229aa413eccfa6a1858c74c2becb7e4b16cd23cb"
+      },
+      "VWO": {
+        "first_date": "2005-03-10",
+        "last_date": "2026-09-30",
+        "rows": 5424,
+        "sha256": "0a731f0ac8e8276a80966d3418a0a6462dccc30b9c2ed09caafa8c0d610cf929"
+      },
+      "^VIX": {
+        "first_date": "1993-01-29",
+        "last_date": "2026-09-30",
+        "rows": 8475,
+        "sha256": "4fe97ad626be2c88c9721b0fc07566729dc23e20f995394488948840815da739"
+      },
+      "^VIX3M": {
+        "first_date": "2006-07-17",
+        "last_date": "2026-09-30",
+        "rows": 5084,
+        "sha256": "6c8a5033c5fa3bc9815ea81f086ed168c0583b902f33515056034b9e1eb7c65d"
+      }
+    }
+  },
+  "g5_note": "trial set = ledger trials before this round + all seven candidates of this round (order-free)",
+  "g8_reference": {
+    "book": "crypto-trend-core-v1 (DON8+EMA8, 17 coins, canonical v3.1, 20 bps)",
+    "file": "multi_premia_data.pkl cached frames, data to 2026-09-11",
+    "first_date": "2020-08-05",
+    "last_date": "2026-09-11",
+    "rows": 2229,
+    "sha256": "b35ec95978ecebcb08df7277c92c8d1a2668913dfd303d8ab514f3637fd70ae9",
+    "source": "MEXC 8h prices + Binance funding (venue substitution: MEXC funding history starts 2025-04)"
+  },
+  "gem_tbill_scaling": "tbill_L = mean(DTB3 over last L months)/100 * L/12",
+  "generated_utc": "2026-10-11T16:05:30.092073+00:00",
+  "n_trials_cumulative": 7,
+  "null_draws": 999,
+  "round": 1,
+  "schema_version": 1,
+  "search_id": "strategy-search-v1",
+  "summary": [
+    {
+      "first_failing_gate": "G4",
+      "id": "R1C1_VAA_G12",
+      "pass": false
+    },
+    {
+      "first_failing_gate": "G2",
+      "id": "R1C2_PAA2",
+      "pass": false
+    },
+    {
+      "first_failing_gate": "G4",
+      "id": "R1C3_GEM",
+      "pass": false
+    },
+    {
+      "first_failing_gate": "G5",
+      "id": "R1C4_turn_of_month",
+      "pass": false
+    },
+    {
+      "first_failing_gate": "G3",
+      "id": "R1C5_vix_ratio_short_vol",
+      "pass": false
+    },
+    {
+      "first_failing_gate": "G4",
+      "id": "R1C6_oil_spy",
+      "pass": false
+    },
+    {
+      "first_failing_gate": "G2",
+      "id": "R1C7_style_momentum",
+      "pass": false
+    }
+  ]
+}

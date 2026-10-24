@@ -1,0 +1,44 @@
+name: Carry Rotation v1
+
+# Historical delta-neutral funding carry (config/carry_rotation_v1.json). Triggered by a push to ops/run-carry-rotation-v1;
+# results go to branch results/carry-rotation-v1. Descriptive only, sends no orders.
+
+on:
+  push:
+    branches: [ops/run-carry-rotation-v1]
+
+permissions:
+  contents: write
+
+jobs:
+  study:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e ".[research]"
+      - name: Tests
+        run: python -m unittest tests.test_carry tests.test_carry_rotation -v
+      - name: Run the study
+        env:
+          TEMP: ${{ runner.temp }}
+        run: python scripts/carry_rotation_v1.py --output out/carry_rotation_v1.json
+      - name: Publish results branch
+        if: always()
+        run: |
+          set -euo pipefail
+          test -f out/carry_rotation_v1.json || { echo "no results"; exit 1; }
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git worktree add --detach res_wt
+          cd res_wt
+          git checkout --orphan results/carry-rotation-v1
+          git rm -rf --quiet .
+          cp ../out/carry_rotation_v1.json .
+          git add -A
+          git commit -q -m "results: carry-rotation-v1 ($GITHUB_SHA)"
+          git push -f origin HEAD:results/carry-rotation-v1

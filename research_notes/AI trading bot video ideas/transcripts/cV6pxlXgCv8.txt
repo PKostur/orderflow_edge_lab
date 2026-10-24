@@ -1,0 +1,382 @@
+# Jev AI just changed Trading Forever (way better than gpt-6 astra & Fable)
+# channel: Moon Dev
+# url: https://www.youtube.com/watch?v=cV6pxlXgCv8
+
+[0:00:00] So, I'm going to apply Jev to trading,
+[0:00:02] and essentially here I'm going to show
+[0:00:04] you exactly how to do the same thing as
+[0:00:07] me, because the one thing Jev does is it
+[0:00:10] doesn't give you a bunch of rambo jambo.
+[0:00:12] There you to find all, like, what does
+[0:00:14] it actually say? Does it tell me long or
+[0:00:16] short? There's nothing to parse here.
+[0:00:18] You can see there's one option, zero to
+[0:00:20] one, boom, yes or no.
+[0:00:21] So,
+[0:00:23] I think that's the first interesting
+[0:00:24] part of Jev, and I'm going to get into
+[0:00:26] the other things that could be
+[0:00:27] absolutely game-changing for my actual
+[0:00:29] live bots right now. Now, I don't know
+[0:00:31] if you've read the book Thinking Fast or
+[0:00:33] Slow, but this is kind of modeled after
+[0:00:35] this. Most AI right now is system two
+[0:00:37] thinking. Jev is system one thinking.
+[0:00:40] One look, one answer. It reads the
+[0:00:42] state, it already knows, it hands back
+[0:00:44] the value with the odds attached. Every
+[0:00:47] single model until now has used system
+[0:00:49] two thinking. Jev is the first one built
+[0:00:52] to be system one. System two reasons in
+[0:00:54] words and shows its work. System one
+[0:00:57] just knows, and it knows it fast, and
+[0:00:59] that's the thing. It's just this fast.
+[0:01:02] You're going to see how fast this is and
+[0:01:03] how much cheaper it is as well. One
+[0:01:05] answer can take 700 runs of an LLM to
+[0:01:08] get the answer, but with Jev it's just
+[0:01:10] one forward pass, boom. The list of
+[0:01:12] answers is already known, so there's
+[0:01:13] nothing to generate. You can see it may
+[0:01:15] take this long if you're using like GPT,
+[0:01:17] whatever, Claude, whatever. It's not a
+[0:01:19] smaller model, it's a different shape of
+[0:01:21] a model. Each token waits for the token
+[0:01:24] before it.
+[0:01:26] On a regular model, Jev runs once runs
+[0:01:28] once, because the answer list is already
+[0:01:31] known.
+[0:01:32] >> Oh, I want to build that as well.
+[0:01:34] >> So, there's three answer shapes, and the
+[0:01:35] odd one out is the now. You can see
+[0:01:38] choice score and the now, 93%. There's
+[0:01:41] no confidence field, because the number
+[0:01:43] is
+[0:01:44] >> the belief.
+[0:01:45] >> Hunting entry.
+[0:01:46] Token approved. Token sniped.
+[0:01:48] >> Looks like we just sniped something, and
+[0:01:50] I am going to uh apply
+[0:01:52] this here to this sniper, that it just
+[0:01:55] sniped something, it's up 12%. So, let's
+[0:01:57] go ahead and see how that lands. And
+[0:01:59] this is pretty neat. You can ask six
+[0:02:01] questions with one request and it'll be
+[0:02:03] one clock tick. Instead of it going
+[0:02:05] through LLM and asking every single one,
+[0:02:08] every answer in a request is answered in
+[0:02:10] parallel.
+[0:02:11] So the sixth one is basically free. You
+[0:02:14] can see here if you use LLM you'd have
+[0:02:17] call one, call two, call three, call
+[0:02:18] four, call five, call six. But with one
+[0:02:21] Jev request it answers six questions. A
+[0:02:24] tenth question costs tokens but almost
+[0:02:26] no time. That's why the bot asks six
+[0:02:29] instead of one. You can see verdict,
+[0:02:32] move stage, bait name, distribution,
+[0:02:34] turnover shape, tooth in. Like I said, I
+[0:02:36] am going to apply this to my sniper.
+[0:02:39] And this is interesting. When Jev says
+[0:02:41] 80% it is right about 80% of the time.
+[0:02:45] That is what makes a threshold mean
+[0:02:47] something.
+[0:02:48] And it is it is the half of this that is
+[0:02:51] not about speed.
+[0:02:53] So you can see here 0% structured output
+[0:02:56] errors by construction. So instead of
+[0:02:59] looping in the typical LLM, you can see
+[0:03:01] the chart here where as Jev says 80 is
+[0:03:04] right about 80% of the time. And
+[0:03:06] everybody loves the cost. It's 238x
+[0:03:09] cheaper on input and it charges nothing
+[0:03:11] for the output. Astra only wins one of
+[0:03:13] these rows. You can see the input price
+[0:03:15] here is 0.042
+[0:03:17] per million tokens for Jev. It's $10 for
+[0:03:20] Astra. The output is free for Jev. It's
+[0:03:22] $50 for Astra. Latency 70 to 500
+[0:03:25] milliseconds.
+[0:03:27] Astra could be seconds or tens of
+[0:03:29] seconds.
+[0:03:30] Context is where it wins. You can see
+[0:03:32] here
+[0:03:34] 1 million verse 32K. You can see overall
+[0:03:37] it's 5.43x
+[0:03:39] faster and 238x
+[0:03:42] cheaper on input and there's nothing on
+[0:03:44] output. So in all honesty Astra only
+[0:03:46] wins here when you're looking at like
+[0:03:48] the whole order book or something with a
+[0:03:50] a of data. So I'm applying it for
+[0:03:51] trading so I'm looking at the whole
+[0:03:53] order book or a bunch of orders. Okay,
+[0:03:55] Jeff might not be able to do that. 32
+[0:03:56] 32K contacts versus a million, that is a
+[0:03:59] big difference.
+[0:04:01] Now, this is the catch, right? With the
+[0:04:03] cheapness, you can see Jeff's all the
+[0:04:04] way over here in accuracy 67.8% versus
+[0:04:07] GPT 5.6 Soul 74.1
+[0:04:10] Opus 73.1. AI has absolutely changed the
+[0:04:14] trading world forever.
+[0:04:16] It's not the strongest who survive, but
+[0:04:18] it's the ones who adapt. That is what
+[0:04:21] Charles Darwin once said.
+[0:04:23] There are two types of people in this
+[0:04:25] world. There's really the doers and the
+[0:04:26] dabblers. The dabblers are stuck on the
+[0:04:29] sideline while AI absolutely transforms
+[0:04:32] trading. The doers are the ones that are
+[0:04:35] adapting to using AI in trading and
+[0:04:38] seizing the massive opportunities. If
+[0:04:41] you're still stuck on the manual trading
+[0:04:43] grind
+[0:04:44] working harder instead of smarter,
+[0:04:47] watching your P&L go down because you
+[0:04:49] make an emotional move or you're just
+[0:04:51] not a friend of the computer, you're
+[0:04:52] probably part of the first group, but I
+[0:04:54] want to be
+[0:04:55] 100% clear. You are not the problem.
+[0:05:00] You're just approaching trading the old
+[0:05:02] way. There's a new way. And it's with
+[0:05:05] AI. You can literally have AI do the
+[0:05:08] hard part of trading, which is removing
+[0:05:10] all of your emotions and trading while
+[0:05:12] you're going living your actual life.
+[0:05:16] And AI is not the future. You can see
+[0:05:19] here I have AI cooking for me all day
+[0:05:22] long. AI is not the future. AI is now
+[0:05:25] when it comes to trading.
+[0:05:27] If you don't start using AI for your
+[0:05:29] trading, you're going to get left
+[0:05:31] behind, but it's not too late. AI has
+[0:05:34] absolutely flipped the trading world
+[0:05:36] upside down.
+[0:05:38] So, if you're still using the old hand
+[0:05:39] trading methods where you're standing at
+[0:05:41] the screen, blowing on the charts,
+[0:05:43] trying to get it to go up or down
+[0:05:46] staring until you fall asleep, it's no
+[0:05:48] wonder that you're losing money in
+[0:05:49] trading.
+[0:05:50] You don't need me to tell you the
+[0:05:53] solution is removing your emotions. You
+[0:05:56] know that.
+[0:05:57] You know you're an emotional, stressful
+[0:05:59] trader. You can remove your emotions
+[0:06:01] with AI. And what I want to do is I want
+[0:06:04] you want to offer you an invite to my
+[0:06:06] private Zoom calls. I do these Zoom
+[0:06:08] calls every single day. You're going to
+[0:06:10] see how I apply AI to building trading
+[0:06:13] bots, and you can ask any questions you
+[0:06:15] have.
+[0:06:16] Every single day I'm live, and only the
+[0:06:18] people inside this group will get Zoom
+[0:06:21] access. But not only that, you're
+[0:06:23] connected with others that are automated
+[0:06:26] trading using AI. You can ask questions
+[0:06:28] to them, build a community, and build
+[0:06:31] your own edge. And on top of that, you
+[0:06:33] get a road map. This road map here, I'll
+[0:06:35] go ahead and show you, actually. You get
+[0:06:38] this full road map where I show you
+[0:06:39] step-by-step
+[0:06:41] exactly
+[0:06:43] how to use AI to automate your trading.
+[0:06:46] So, this road map is years and years of
+[0:06:49] work. I take you through some of my best
+[0:06:51] videos. I invite you to my Discord. I
+[0:06:54] answer all your frequently asked
+[0:06:55] questions. I give you my actual
+[0:06:57] framework for automated trading. I give
+[0:06:59] you hundreds of ideas. I give you my
+[0:07:01] book list. I give you a bunch of data.
+[0:07:04] So, you get that just as a bonus for
+[0:07:06] joining here today. But not only that, I
+[0:07:09] give you my API key. This is
+[0:07:11] institutional-grade
+[0:07:13] data
+[0:07:15] others will have to spend thousands on.
+[0:07:17] You get it here just for joining.
+[0:07:19] moondab.com/docs if you want to learn
+[0:07:21] more about that.
+[0:07:23] I built out the Moon Dab API, and you
+[0:07:25] get access to that as well. So, not only
+[0:07:28] do you get the daily Zooms
+[0:07:31] and the connection to all the others in
+[0:07:33] the community,
+[0:07:34] and being able to ask me any question
+[0:07:37] every day live on Zoom while I'm
+[0:07:39] building,
+[0:07:41] but you get the road map,
+[0:07:43] and you get the API key. Now, we have
+[0:07:45] limited pricing for the first few people
+[0:07:47] to join. So, go ahead and sign up, and
+[0:07:50] I'll see you on tomorrow's Zoom call.
+[0:07:52] So, go ahead and look in the
+[0:07:53] description, or go to moondawg.com to
+[0:07:56] join the school community. This is where
+[0:07:58] I'll be placing the API key each day,
+[0:08:01] the Zoom call link each day. There's a
+[0:08:03] 90-day no questions asked money-back
+[0:08:05] guarantee. It is in the description
+[0:08:07] right now, or just go directly to
+[0:08:10] moondawg.com.
+[0:08:11] That is like right now, there's kind of
+[0:08:14] a meta going on where you like take the
+[0:08:15] actual like Apple or the NYSE, and you
+[0:08:17] make a really good meme out of it. So, I
+[0:08:19] don't know if I'm going to move forward
+[0:08:21] with this part, but this is a good
+[0:08:22] example of like yes, no, Jeff, quick,
+[0:08:25] fast, cheap. This is something Jeff
+[0:08:27] could do opposed to having GPT-6 Astro
+[0:08:30] or whatever the This is the one rug
+[0:08:32] question. A classifier beats a roulette
+[0:08:35] because it's pure language.
+[0:08:38] So, Jeff is a classification model. This
+[0:08:39] is actually interesting. We had a token
+[0:08:41] that
+[0:08:42] it fell 90.8%
+[0:08:44] in 16 seconds.
+[0:08:46] And Jeff would have been able to handle
+[0:08:49] that because it's so fast. But, if you
+[0:08:51] look at GPT, it could take like 10
+[0:08:53] seconds, 20 seconds. And if it fell that
+[0:08:56] fast in 16 seconds, the only thing that
+[0:08:59] could have handled it is Jeff. So, I'm
+[0:09:00] going to put that on my notes here
+[0:09:01] because I might have to have something
+[0:09:03] that looks at rug pulls. One of my
+[0:09:06] friends in the Zoom was just talking
+[0:09:07] about that today how he uses a model in
+[0:09:10] order to
+[0:09:11] filter out the rug pulls, and that's the
+[0:09:13] hardest part when sniping tokens. So,
+[0:09:15] maybe Jeff is fast enough to be able be
+[0:09:17] able to say like, "Hey, is this looking
+[0:09:19] like a rug? Yes or no?" Because Astro
+[0:09:21] would take 10, 11, 15 seconds, and it
+[0:09:23] could already be dumped by then. I think
+[0:09:25] this is a pretty good point though. You
+[0:09:26] know, Jeff is a classifier. It's not an
+[0:09:28] edge. A faster wrong answer is still a
+[0:09:31] wrong answer.
+[0:09:32] So, this Offit study did 199 and study
+[0:09:36] says pre-buy signals are noise.
+[0:09:38] So, what I'm looking what I'm sending
+[0:09:40] sending in is the symbol, the volume 24,
+[0:09:44] market cap, USD, turnover ratio, minutes
+[0:09:47] since found, trades in last 30 seconds.
+[0:09:49] But, then I have a rug gate that looks
+[0:09:51] at this stuff as well. And, I think this
+[0:09:53] is just a very solid point. Like, we
+[0:09:55] have all these new AIs, but it's not
+[0:09:56] edge.
+[0:09:57] It's not edge. It's like classifying
+[0:09:59] yes, no. Okay, if we all have access to
+[0:10:00] it, is that edge? No. If everybody knows
+[0:10:02] there's a million dollars in front of
+[0:10:04] the McDonald's
+[0:10:05] in New York on the Fifth Ave or whatever
+[0:10:07] it is, is it going to be there for long?
+[0:10:09] No. Of course not. That's why I always
+[0:10:11] preach you got to build your own ideas.
+[0:10:12] You got to come up with your own ideas
+[0:10:13] and then backtest to see if they
+[0:10:15] actually work in the past. If they work
+[0:10:17] in the past, they might work in the
+[0:10:18] future.
+[0:10:19] But, you incubate them and you keep them
+[0:10:21] to yourself.
+[0:10:22] It's off with the get.
+[0:10:24] >> AI approved. Hunting entry. Token
+[0:10:26] approved.
+[0:10:26] >> It lead It reads literally, it cannot
+[0:10:29] count and it cannot do date math. Never
+[0:10:32] ask it to divide. Hand it the number you
+[0:10:34] already computed.
+[0:10:36] >> That's interesting.
+[0:10:37] There's actually an interesting way to
+[0:10:38] do it. Just ship it as a shadow mode.
+[0:10:40] Buy nothing, settle it with an own its
+[0:10:41] own data. So, maybe I'll ship it with
+[0:10:44] Astra, have Astra keep trading this.
+[0:10:46] And, essentially have Jev do the answers
+[0:10:49] beside it and then you can stack it up.
+[0:10:50] So, you can see we'll still send it to
+[0:10:52] GBTC Astra. Uh the engine with real
+[0:10:55] money. I know that's kind of working,
+[0:10:56] but Jev we can have them on the same
+[0:10:58] card, same clock. And, it'll be a
+[0:10:59] shadow. It won't actually buy or sell
+[0:11:01] anything, but if it looks like it's
+[0:11:02] doing just as good, then you remember
+[0:11:05] from earlier, it's way faster and it's
+[0:11:06] way cheaper. So, one week of paired
+[0:11:08] decisions on real tokens with real
+[0:11:10] outcomes for about 2 cents a thousand.
+[0:11:13] Then, I can just swap it out. Buy
+[0:11:15] nothing, settle with its own data. That
+[0:11:19] is the RBI applied to the gate itself.
+[0:11:22] So, remember research, backtest,
+[0:11:24] incubate. You can see Jev's It shipped
+[0:11:26] September 15th. So, we're a few days
+[0:11:28] after the shipping. You get a credits of
+[0:11:30] $5. Yada yada. Here's terminology that
+[0:11:34] you may have missed here throughout
+[0:11:35] this. You want to screenshot, pause, do
+[0:11:37] whatever.
+[0:11:38] Now, I want to give you all the code
+[0:11:39] here. So, let's go ahead and go through
+[0:11:41] it really quickly.
+[0:11:42] I'm going to go fast here because you
+[0:11:44] can see Moon Dev's Jev Gate here. So,
+[0:11:46] this is a docstring.
+[0:11:48] So, you can learn about it. Here's more
+[0:11:50] of the docstring because I over
+[0:11:51] docstring because you guys are watching
+[0:11:52] me. Here's the imports here. Imports and
+[0:11:55] rate card. So, no printing cost to the
+[0:11:57] guess. Essentially, you're going to be
+[0:11:59] able to see the cost throughout all of
+[0:12:00] this. I'm just going to scroll through
+[0:12:01] this very fast cuz you got the pause
+[0:12:03] button, I don't. The decision itself
+[0:12:05] here. So, this is where it makes the
+[0:12:07] decision. Bay name now, turnover shape.
+[0:12:09] Questions four and five, how far along
+[0:12:11] and who is selling? So again, this is
+[0:12:14] for my sniper. If you're not building a
+[0:12:16] sniper, it is what it is. At least you
+[0:12:17] get to see some code. Six out six, is
+[0:12:19] this is the card even worth the judging?
+[0:12:22] Here's the state for the facts finish
+[0:12:24] before they go in.
+[0:12:25] Here's the judge, one round trip, six
+[0:12:27] answers. So, that's really nice because
+[0:12:29] you're able to get asked six questions
+[0:12:31] at one time. So, as I'm learning this
+[0:12:33] with you, my ideas are going off and I'm
+[0:12:36] going to go ahead and execute those
+[0:12:37] ideas. I do it live on Zoom every single
+[0:12:39] day.
+[0:12:40] >> Token sniped.
+[0:12:41] >> Here's the tape questions.
+[0:12:43] I really like the idea of sending six
+[0:12:45] different things to Jev and obviously
+[0:12:47] how fast it is. So, I'm learning this
+[0:12:49] with you and I'll just keep executing
+[0:12:52] live with you as well. Here's the tape
+[0:12:53] the tape read.
+[0:12:55] Here's loading the hits. It's tokens,
+[0:12:57] not a vendor's corpus.
+[0:12:58] >> Here's the replay, judge the backlog,
+[0:13:00] buy nothing. Here's the rest of the
+[0:13:02] replay. Here's judging every single line
+[0:13:04] and now you have all the code and you've
+[0:13:06] learned a little bit about Jevy Jevy Jev
+[0:13:08] Jev for trading.
