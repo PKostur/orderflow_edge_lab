@@ -1,0 +1,11 @@
+{
+  "candidate": "EQUITY_CALENDAR_CARRY_V1_2",
+  "inherits": "equity_calendar_carry_v1_1.json",
+  "pre_outcome_calendar_correction": "Plan using regular NYSE sessions only, removing knowledge of all ad-hoc closures. Actual closures cancel opening/prior-rotation orders; never backdate a sale. An equity exit on a closed date rolls forward to the next open session close; Treasury entry follows at next actual open. If previous asset was not sold, block buying the other asset rather than financing it.",
+  "surprise_closures_treated_as_unknown": ["2012-10-29", "2012-10-30", "2018-12-05", "2025-01-09"],
+  "old_v1_1_status": "CRITICAL_CALENDAR_CAUSALITY_DEFECT_CAUGHT_BEFORE_ANY_PNL",
+  "price_or_economic_outcomes_viewed_before_correction": false,
+  "new_alpha_parameters": false,
+  "orders": false,
+  "promotable": false
+}

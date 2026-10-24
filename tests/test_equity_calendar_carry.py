@@ -4,7 +4,7 @@ import random
 import unittest
 from datetime import date, timedelta
 
-from orderflow_edge_lab.equity_calendar_carry import cost, make_schedule, quantity, simulate
+from orderflow_edge_lab.equity_calendar_carry import cost, make_schedule, operational_schedule, quantity, simulate
 
 
 class EquityCalendarTests(unittest.TestCase):
@@ -88,6 +88,22 @@ class EquityCalendarTests(unittest.TestCase):
         after=simulate(days,future,div)
         self.assertEqual([x for x in before['equity'] if x['date']<'2009-03-01'],[x for x in after['equity'] if x['date']<'2009-03-01'])
         self.assertTrue(math.isfinite(after['net_return']))
+
+    def test_surprise_closure_never_backdates_exit(self):
+        first,last=date(2012,10,1),date(2012,11,15)
+        planned=[(first+timedelta(days=i)).isoformat() for i in range((last-first).days+1) if (first+timedelta(days=i)).weekday()<5]
+        actual=[d for d in planned if d not in ('2012-10-29','2012-10-30')]
+        buys,sells,_,closed=operational_schedule(planned,actual,'calendar',20261024)
+        self.assertEqual(sells['2012-10-30'],'SHV')
+        self.assertNotIn('2012-10-26',sells)
+        self.assertEqual(buys['2012-10-31'],'SPY')
+        self.assertTrue(any(x['date']=='2012-10-30' for x in closed))
+        frames={s:{d:dict(open=100.,high=101.,low=99.,close=100.,volume=100000.) for d in actual} for s in ('SPY','SHV')}
+        # Start-calendar alone initially carries cash; direct schedule asserts the canceled planned sale.
+        shifted=[d for d in planned if d!='2012-11-05']
+        b,s,_,_=operational_schedule(planned,shifted,'calendar',20261024)
+        self.assertEqual(s['2012-11-06'],'SPY')
+        self.assertEqual(b['2012-11-07'],'SHV')
 
 
 if __name__=='__main__':

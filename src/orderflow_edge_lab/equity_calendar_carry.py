@@ -5,6 +5,7 @@ import hashlib
 import json
 import math
 import random
+from bisect import bisect_left
 from collections import defaultdict
 from datetime import date, timedelta
 from pathlib import Path
@@ -53,7 +54,11 @@ def load_data(folder):
         if any(x["ex_date"] not in frame or not math.isfinite(x["amount"]) or x["amount"] < 0 for x in divs):
             raise ValueError("invalid dividend")
         dividends[asset] = {x["ex_date"]: x["amount"] for x in divs}
-    return calendar, frames, dividends, manifest
+    with (folder / "planned_calendar.csv").open(newline="", encoding="utf-8") as stream:
+        planned = [r["session"][:10] for r in csv.DictReader(stream)]
+    if planned != sorted(set(planned)) or not set(calendar).issubset(planned):
+        raise ValueError("invalid planned/actual calendar relation")
+    return calendar, frames, dividends, manifest, planned
 
 
 def make_schedule(calendar, mode="calendar", seed=20261024):
@@ -95,8 +100,25 @@ def make_schedule(calendar, mode="calendar", seed=20261024):
     return buys, sells, windows
 
 
-def simulate(calendar, frames, dividends, mode="calendar", multiplier=1, seed=20261024, retain=True):
-    buys, sells, windows = make_schedule(calendar, mode, seed)
+def operational_schedule(planned, actual, mode, seed):
+    buys, sells, windows = make_schedule(planned, mode, seed)
+    closed = [{"date": d, "asset": s, "side": side, "status": "CANCELLED_MARKET_CLOSED"}
+              for side, mapping in (("buy", buys), ("sell", sells)) for d, s in mapping.items() if d not in actual]
+    if mode not in ASSETS and mode != "cash":
+        buys = {d:s for d,s in buys.items() if s == "SPY"}
+        sells = {d:s for d,s in sells.items() if s == "SHV"}
+        for window in windows:
+            i = bisect_left(actual, window["exit_close"])
+            if i >= len(actual):
+                continue
+            sells[actual[i]] = "SPY"
+            if i + 1 < len(actual):
+                buys[actual[i+1]] = "SHV"
+    return buys, sells, windows, closed
+
+
+def simulate(calendar, frames, dividends, mode="calendar", multiplier=1, seed=20261024, retain=True, planning_calendar=None):
+    buys, sells, windows, closures = operational_schedule(planning_calendar or calendar, calendar, mode, seed)
     days = [d for d in calendar if "2009-01-01" <= d <= "2026-09-30"]
     positions = {s: 0 for s in ASSETS}
     cash, peak = 10000.0, 10000.0
@@ -119,7 +141,10 @@ def simulate(calendar, frames, dividends, mode="calendar", multiplier=1, seed=20
         asset = buys.get(day)
         if day == days[0] and mode in ASSETS:
             asset = mode
-        if asset:
+        blocked = asset and any(q and s != asset for s,q in positions.items())
+        if blocked:
+            ledger.append({"date":day,"side":"buy","asset":asset,"shares":0,"fee_usd":0.,"status":"BLOCKED_PREVIOUS_ASSET_NOT_SOLD","cash_after":cash})
+        if asset and not blocked:
             previous = calendar[calendar.index(day) - 1]
             limit = 1.02 * frames[asset][previous]["close"]
             q = quantity(cash, limit, multiplier)
@@ -178,14 +203,15 @@ def simulate(calendar, frames, dividends, mode="calendar", multiplier=1, seed=20
               "planned_equity_windows": sum("2009-01-01" <= x["entry_open"] <= "2026-09-30" for x in windows),
               "ending_inventory": positions}
     if retain:
-        result.update(equity=equity, ledger=ledger, distributions=distributions, planned_windows=windows)
+        result.update(equity=equity, ledger=ledger, distributions=distributions, planned_windows=windows,
+                      canceled_market_closed_orders=[x for x in closures if days[0] <= x["date"] <= days[-1]])
     return result
 
 
 def evaluate(folder):
-    calendar, frames, dividends, manifest = load_data(folder)
-    cases = [simulate(calendar, frames, dividends, mode, m) for m in (1,2) for mode in ("calendar","midmonth","SHV","SPY","cash")]
-    controls = [simulate(calendar, frames, dividends, "random", 1, 20261024+i, False) for i in range(100)]
+    calendar, frames, dividends, manifest, planned = load_data(folder)
+    cases = [simulate(calendar, frames, dividends, mode, m, planning_calendar=planned) for m in (1,2) for mode in ("calendar","midmonth","SHV","SPY","cash")]
+    controls = [simulate(calendar, frames, dividends, "random", 1, 20261024+i, False, planned) for i in range(100)]
     candidates = [c for c in cases if c["mode"] == "calendar"]
     bills = [c for c in cases if c["mode"] == "SHV"]
     tail = (1 + sum(c["net_return"] >= candidates[0]["net_return"] for c in controls)) / 101
@@ -194,7 +220,7 @@ def evaluate(folder):
              "drawdown_at_most_25pct": all(c["max_close_drawdown"] >= -.25 for c in candidates),
              "all_fixed_blocks_positive": all(all(x>0 for x in c["fixed_block_returns"].values()) for c in candidates),
              "random_window_tail_at_most_10pct": tail <= .10}
-    return {"candidate": "EQUITY_CALENDAR_CARRY_V1_1", "evidence": "RETROSPECTIVE_DEVELOPMENT_ONLY", "gates": gates,
+    return {"candidate": "EQUITY_CALENDAR_CARRY_V1_2", "evidence": "RETROSPECTIVE_DEVELOPMENT_ONLY", "gates": gates,
             "decision": "HISTORICAL_SCREEN_SURVIVOR_ONLY" if all(gates.values()) else "REJECTED_AS_DEFINED",
             "random_window_corrected_right_tail": tail, "cases": cases, "random_controls": controls, "source_manifest": manifest,
             "evaluator_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(), "orders": False,
@@ -213,7 +239,7 @@ def main():
     args.output.write_text(json.dumps(report,allow_nan=False,separators=(",",":")),encoding="utf-8")
     print(json.dumps({k:v for k,v in report.items() if k not in ("cases","random_controls","source_manifest")},indent=2))
     for c in report["cases"]:
-        print(json.dumps({k:v for k,v in c.items() if k not in ("equity","ledger","distributions","planned_windows")},indent=2))
+        print(json.dumps({k:v for k,v in c.items() if k not in ("equity","ledger","distributions","planned_windows","canceled_market_closed_orders")},indent=2))
 
 
 if __name__ == "__main__":
