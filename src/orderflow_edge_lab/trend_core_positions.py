@@ -123,7 +123,7 @@ def render_markdown(sheet: Mapping[str, Any]) -> str:
         f"{sheet['long_coins']} long, {sheet['short_coins']} short.",
         "",
         "Only coins marked OPEN, CLOSE, FLIP or RESIZE need a trade (their signal changed in the last 24h). "
-        "Leave HOLD coins as they are, even if the size has drifted.",
+        "Leave HOLD coins as they are, even if the size has drifted. Starting from an empty account, open every row once.",
         "",
         "| Coin | Action | Side | % of equity | Notional USDT | Quantity | Price |",
         "| --- | --- | --- | ---: | ---: | ---: | ---: |",
