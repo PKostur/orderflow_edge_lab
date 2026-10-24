@@ -13,6 +13,22 @@ from zoneinfo import ZoneInfo
 from .equity_calendar_carry import cost, quantity
 from .four_regime_allocation import ASSETS
 
+REGISTRATION_COMMIT = 'd4cb8bd61eb7e0a2c9c1f4cfe07101b7c3fb527c'
+REGISTERED_INTENT = '1d66bb284c0df54a6b1af65d6d0c6f925c1030c8bc08ca8879ebc88da30bfc60'
+REGISTERED_CALENDAR = '536bb309183b7d986c86206a17f0109d63d2010d86564239b17591b3c0b005c4'
+REGISTERED_HELPER = 'e225d2aeb2af6092fe3915b577442be2c97c5bf5001ab7917a339c9a849eb922'
+
+
+def verify_registration(intent, calendar_path):
+    verify_intent(intent)
+    if intent['intent_sha256'] != REGISTERED_INTENT:
+        raise ValueError('intent differs from published pre-open registration')
+    if hashlib.sha256(calendar_path.read_bytes()).hexdigest() != REGISTERED_CALENDAR:
+        raise ValueError('calendar differs from published registration')
+    helper = Path(__file__).with_name('equity_calendar_carry.py').read_bytes().replace(b'\r\n', b'\n')
+    if hashlib.sha256(helper).hexdigest() != REGISTERED_HELPER:
+        raise ValueError('wallet helper differs from registered execution rules')
+
 
 def canonical(value):
     return json.dumps(value,sort_keys=True,separators=(',',':'),allow_nan=False).encode()
@@ -81,6 +97,9 @@ def fetch_quotes(asset,start,end,folder):
 
 def observe(intent,calendar,frames,dividends,as_of):
     verify_intent(intent)
+    sessions=[x['session'] for x in calendar]
+    if sessions!=sorted(set(sessions)):
+        raise ValueError('calendar must have unique chronological sessions')
     p=intent['protocol']
     beginning=datetime.fromisoformat(p['initial_open_utc'])
     if as_of<beginning:
@@ -92,6 +111,8 @@ def observe(intent,calendar,frames,dividends,as_of):
     if days[0]!=p['initial_entry_session']:
         raise ValueError('missing registered opening session')
     for s in ASSETS:
+        if any(not math.isfinite(v) or v < 0 for v in dividends[s].values()):
+            raise ValueError('invalid prospective dividend amount')
         if any(d not in frames[s] for d in days):
             raise ValueError('missing prospective bar; no forward filling')
         for d in days:
@@ -145,7 +166,7 @@ def main():
     parser.add_argument('--output',type=Path,required=True)
     args=parser.parse_args()
     args.output.mkdir(parents=True,exist_ok=False)
-    intent=json.loads(args.intent.read_text());verify_intent(intent)
+    intent=json.loads(args.intent.read_text());verify_registration(intent,args.calendar)
     with args.calendar.open(newline='',encoding='utf-8') as stream:
         calendar=list(csv.DictReader(stream))
     now=datetime.now(timezone.utc)
@@ -155,7 +176,7 @@ def main():
         frames[asset],divs[asset],receipt=fetch_quotes(asset,intent['protocol']['reference_session'],end,args.output)
         receipts.append(receipt)
     report=observe(intent,calendar,frames,divs,now)
-    report.update(raw_receipts=receipts,evaluator_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
+    report.update(raw_receipts=receipts,evaluator_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),registration_commit=REGISTRATION_COMMIT)
     (args.output/'report.json').write_text(json.dumps(report,indent=2,allow_nan=False)+'\n',encoding='utf-8')
     print(json.dumps({k:v for k,v in report.items() if k not in ('accounts','raw_receipts')},indent=2))
 

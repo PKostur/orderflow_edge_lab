@@ -1,8 +1,10 @@
 import copy
 import unittest
+from pathlib import Path
+from tempfile import TemporaryDirectory
 from datetime import datetime,timezone
 
-from orderflow_edge_lab.four_regime_paper import make_intent,observe,verify_intent
+from orderflow_edge_lab.four_regime_paper import make_intent,observe,verify_intent,verify_registration
 
 
 class ForwardPaperTests(unittest.TestCase):
@@ -36,6 +38,25 @@ class ForwardPaperTests(unittest.TestCase):
             self.assertGreaterEqual(account['equity'][0]['cash_usd'],0)
         del p['SPY']['2026-10-26']
         with self.assertRaises(ValueError):
+            observe(i,c,p,d,datetime(2026,10,27,22,tzinfo=timezone.utc))
+
+    def test_resealed_backdated_substitution_is_not_registered(self):
+        i,_,_,_=self.fixture()
+        with TemporaryDirectory() as folder:
+            with self.assertRaisesRegex(ValueError,'published pre-open'):
+                verify_registration(i,Path(folder)/'calendar.csv')
+
+    def test_invalid_dividend_rejected(self):
+        i,c,p,d=self.fixture()
+        for invalid in (float('nan'),float('inf'),-1.):
+            d['SPY']['2026-10-27']=invalid
+            with self.assertRaisesRegex(ValueError,'dividend'):
+                observe(i,c,p,d,datetime(2026,10,27,22,tzinfo=timezone.utc))
+
+    def test_duplicate_calendar_cannot_duplicate_income(self):
+        i,c,p,d=self.fixture()
+        c.append(c[-1])
+        with self.assertRaisesRegex(ValueError,'unique chronological'):
             observe(i,c,p,d,datetime(2026,10,27,22,tzinfo=timezone.utc))
 
 
