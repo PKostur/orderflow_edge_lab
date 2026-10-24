@@ -1,0 +1,215 @@
+{
+  "status": "PASS_BOUNDED_INDEPENDENT_FOUR_CASE_WALLET_AND_REJECTION_REVIEW",
+  "results_exact_sha256": "e6fb8044c82dcfa4de8f33a0de6318bb73f40f55bab93f48badfeced503b7969",
+  "evaluator_exact_sha256": "e225d2aeb2af6092fe3915b577442be2c97c5bf5001ab7917a339c9a849eb922",
+  "executed_commit": "15bf7c4774a8f3e3e674db31bccce7e4e6da9c8b",
+  "source_manifest_exact_sha256": "c6a7b3d4a5967fe67b7e5000459c53e3b75bc80186f7731037acfe3ec9e7cd03",
+  "protocol_sha256": {
+    "equity_calendar_carry_v1.json": "a126b352d0725bec4f790f96295937e646e2e9fe6f2beb95cbdaa204eb72aa98",
+    "equity_calendar_carry_v1_1.json": "e9efb9d23d1151ca88c30e111d36c61453e85e0497673fd32101294969a25f46",
+    "equity_calendar_carry_v1_2.json": "3dfdfbf8b5d2100975534d44ac090be15374d06da168892748c7920e188bf7de"
+  },
+  "review_script_exact_sha256": "d653550f22cc464c02dd1f589dbebf021a8bf2641e2f34420a04baa267b5bd5a",
+  "blocking_findings": [],
+  "cases_checked": [
+    {
+      "mode": "calendar",
+      "cost_multiplier": 1,
+      "daily_wallet_marks": 4463,
+      "order_records": 848,
+      "dividend_receivable_events": 13,
+      "metrics": {
+        "final_net_liquidation_usd": 16136.698714727021,
+        "net_profit_usd": 6136.698714727021,
+        "net_return": 0.613669871472702,
+        "cagr": 0.027334378708393725,
+        "max_close_drawdown": -0.14764918110070968,
+        "low_vs_prior_close_high_water": -0.15661525477825855,
+        "paid_costs_usd": 2322.379221430206,
+        "terminal_hypothetical_liquidation_cost_usd": 3.287890014648437,
+        "dividends_entitled_usd": 256.744,
+        "terminal_unpaid_receivables_usd": 0.0,
+        "mean_equity_exposure": 0.13678791188210954,
+        "turnover_notional_usd": 9842528.142868042,
+        "maximum_trade_daily_volume_fraction": 0.0016993464052287581,
+        "filled_orders": 846,
+        "unfilled_orders": 2
+      },
+      "fixed_block_returns": {
+        "2009-13": 0.16052774526771652,
+        "2014-18": -0.09951647424614996,
+        "2019-23": 0.3888692706130412,
+        "2024-26": 0.11178810123366056
+      },
+      "ending_inventory": {
+        "SPY": 20,
+        "SHV": 0
+      }
+    },
+    {
+      "mode": "SHV",
+      "cost_multiplier": 1,
+      "daily_wallet_marks": 4463,
+      "order_records": 213,
+      "dividend_receivable_events": 159,
+      "metrics": {
+        "final_net_liquidation_usd": 12616.224882900236,
+        "net_profit_usd": 2616.2248829002365,
+        "net_return": 0.26162248829002355,
+        "cagr": 0.013183442291869074,
+        "max_close_drawdown": -0.00457988903503348,
+        "low_vs_prior_close_high_water": -0.005373905393763034,
+        "paid_costs_usd": 26.868344472122192,
+        "terminal_hypothetical_liquidation_cost_usd": 2.8699239948272703,
+        "dividends_entitled_usd": 2635.433,
+        "terminal_unpaid_receivables_usd": 76.274,
+        "mean_equity_exposure": 0.0,
+        "turnover_notional_usd": 12455.62981414795,
+        "maximum_trade_daily_volume_fraction": 0.00021712311867752283,
+        "filled_orders": 25,
+        "unfilled_orders": 188
+      },
+      "fixed_block_returns": {
+        "2009-13": 0.004401948154258761,
+        "2014-18": 0.027972717809993775,
+        "2019-23": 0.09075054054756171,
+        "2024-26": 0.12024973443050624
+      },
+      "ending_inventory": {
+        "SPY": 0,
+        "SHV": 113
+      }
+    },
+    {
+      "mode": "calendar",
+      "cost_multiplier": 2,
+      "daily_wallet_marks": 4463,
+      "order_records": 848,
+      "dividend_receivable_events": 13,
+      "metrics": {
+        "final_net_liquidation_usd": 13077.529385397353,
+        "net_profit_usd": 3077.5293853973526,
+        "net_return": 0.3077529385397353,
+        "cagr": 0.015236081569024895,
+        "max_close_drawdown": -0.21493188853054934,
+        "low_vs_prior_close_high_water": -0.22164718822444385,
+        "paid_costs_usd": 4333.247562844848,
+        "terminal_hypothetical_liquidation_cost_usd": 5.660624023437499,
+        "dividends_entitled_usd": 216.576,
+        "terminal_unpaid_receivables_usd": 0.0,
+        "mean_equity_exposure": 0.1365412891854208,
+        "turnover_notional_usd": 8804158.542816162,
+        "maximum_trade_daily_volume_fraction": 0.0016013071895424837,
+        "filled_orders": 846,
+        "unfilled_orders": 2
+      },
+      "fixed_block_returns": {
+        "2009-13": 0.09568360010040267,
+        "2014-18": -0.15320922033484197,
+        "2019-23": 0.3067882407462277,
+        "2024-26": 0.07859699242301188
+      },
+      "ending_inventory": {
+        "SPY": 16,
+        "SHV": 0
+      }
+    },
+    {
+      "mode": "SHV",
+      "cost_multiplier": 2,
+      "daily_wallet_marks": 4463,
+      "order_records": 213,
+      "dividend_receivable_events": 159,
+      "metrics": {
+        "final_net_liquidation_usd": 12583.302583464814,
+        "net_profit_usd": 2583.3025834648142,
+        "net_return": 0.2583302583464815,
+        "cagr": 0.013034254832816616,
+        "max_close_drawdown": -0.004681595659819848,
+        "low_vs_prior_close_high_water": -0.005378401109797926,
+        "paid_costs_usd": 53.73671594543457,
+        "terminal_hypothetical_liquidation_cost_usd": 5.739847989654541,
+        "dividends_entitled_usd": 2632.339,
+        "terminal_unpaid_receivables_usd": 75.936,
+        "mean_equity_exposure": 0.0,
+        "turnover_notional_usd": 12455.719818115234,
+        "maximum_trade_daily_volume_fraction": 0.00021712311867752283,
+        "filled_orders": 25,
+        "unfilled_orders": 188
+      },
+      "fixed_block_returns": {
+        "2009-13": 0.003693276579208593,
+        "2014-18": 0.027874227834922438,
+        "2019-23": 0.08995122449911364,
+        "2024-26": 0.11904250900429014
+      },
+      "ending_inventory": {
+        "SPY": 0,
+        "SHV": 113
+      }
+    }
+  ],
+  "max_absolute_residuals": {
+    "ledger_submitted_shares": 0.0,
+    "ledger_shares": 0.0,
+    "ledger_limit": 0.0,
+    "ledger_price": 0.0,
+    "ledger_fee_usd": 8.881784197001252e-16,
+    "ledger_cash_after": 0.0,
+    "daily_cash_usd": 0.0,
+    "daily_net_liquidation_usd": 0.0,
+    "daily_receivables_usd": 0.0,
+    "final_net_liquidation_usd": 0.0,
+    "net_profit_usd": 0.0,
+    "net_return": 0.0,
+    "cagr": 0.0,
+    "max_close_drawdown": 0.0,
+    "low_vs_prior_close_high_water": 0.0,
+    "paid_costs_usd": 2.7284841053187847e-12,
+    "terminal_hypothetical_liquidation_cost_usd": 0.0,
+    "dividends_entitled_usd": 0.0,
+    "terminal_unpaid_receivables_usd": 0.0,
+    "mean_equity_exposure": 0.0,
+    "turnover_notional_usd": 0.0,
+    "maximum_trade_daily_volume_fraction": 0.0,
+    "filled_orders": 0.0,
+    "unfilled_orders": 0.0,
+    "calendar_returns": 0.0,
+    "fixed_block_returns": 0.0,
+    "random_tail": 0.0
+  },
+  "random_tail": {
+    "stored_funded_controls": 100,
+    "independently_replayed_controls": 0,
+    "right_tail_exceedances": 21,
+    "corrected_tail": 0.21782178217821782,
+    "calculation": "(1+exceedances)/101 from stored control net returns only"
+  },
+  "gates": {
+    "positive_profit_both_costs": true,
+    "exceeds_Treasury_CAGR_both_costs": true,
+    "drawdown_at_most_25pct": true,
+    "all_fixed_blocks_positive": false,
+    "random_window_tail_at_most_10pct": false
+  },
+  "failed_gates": [
+    "all_fixed_blocks_positive",
+    "random_window_tail_at_most_10pct"
+  ],
+  "decision": "REJECTED_AS_DEFINED",
+  "validations": [
+    "Independent calendar/SHV baseline+stress wallets; no production evaluator functions imported or executed.",
+    "Every source manifest member rehashed; raw source metadata confirms no splits.",
+    "All four complete daily cash/inventory/receivable/NAV paths, order ledgers, fixed-limit quantities, fills,costs and dividend entitlements reconstructed.",
+    "Ninety-calendar-day dividend maturities are cash only on next available actual session on/after due; receivables never fund orders.",
+    "Calendar random plans use regular planned calendar; Sandy sale not backdated, held Treasury blocks October31 SPY entry.",
+    "Final September30 SPY position retained as censored ending inventory and marked net hypothetical liquidation.",
+    "Annual/fixed blocks,CAGR,drawdown,turnover,participation,exposure,initial/final positions and all reported four-case metrics reconciled."
+  ],
+  "limits": [
+    "Only calendar and SHV modes at both costs independently replayed; midmonth,SPY,cash and100 full random paths not independently replayed.",
+    "Tail arithmetic verified from100 stored control returns; empirical placebo comparison is not automatically a valid formal p-value.",
+    "Retrospective development; no tradable auction/broker/settlement access,exact payout-date,live or profitability/OOS promotion claim.",
+    "No candidate/rules/costs/controls/gates changed after outcomes."
+  ]
+}

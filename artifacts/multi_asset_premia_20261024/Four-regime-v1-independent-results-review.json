@@ -1,0 +1,679 @@
+{
+  "status": "PASS_INDEPENDENT_TEN_CASE_WALLET_AND_HISTORICAL_SCREEN_REVIEW",
+  "results_exact_sha256": "464607c46c75f8b7ebe45ecfa82c34215cd6e94d833c0e526b26c0fba68ae83f",
+  "evaluator_exact_sha256": "b3309541dd9d51864b9bd0816062ace49bdfbad7d516f138d724efd9930cf614",
+  "wallet_helper_exact_sha256": "e225d2aeb2af6092fe3915b577442be2c97c5bf5001ab7917a339c9a849eb922",
+  "config_exact_sha256": "3cbc69df7600826d7dbbaabd4eef9b5020fc408523d5a3e9113370eb51c53bdf",
+  "source_manifest_exact_sha256": "ea5c738007581cda81a5c93689bc2c67eb42eb4349c0cda463aff79b6be82813",
+  "executed_commit": "cf646c6df9ca225e7c3815fc7617692c4b81d554",
+  "review_script_exact_sha256": "fcdb1fe5d7119226c778d45bc3f105cdde0e70fd008a26cf3b478309b0c19a93",
+  "blocking_findings_for_historical_results": [],
+  "cases_checked": [
+    {
+      "name": "four_regime",
+      "cost_multiplier": 1,
+      "weights": {
+        "SPY": 0.25,
+        "TLT": 0.25,
+        "GLD": 0.25,
+        "SHV": 0.25
+      },
+      "daily_marks": 4463,
+      "orders": 564,
+      "receivable_events": 345,
+      "allocation_open_events": 71,
+      "metrics": {
+        "final_net_liquidation_usd": 28251.7600853943,
+        "net_profit_usd": 18251.7600853943,
+        "net_return": 1.82517600853943,
+        "cagr": 0.060277612485709176,
+        "max_close_drawdown": -0.1688010725182808,
+        "low_vs_prior_close_high_water": -0.1746015681386982,
+        "paid_costs_usd": 904.353222467041,
+        "turnover_notional_usd": 2295688.1497802734,
+        "maximum_trade_daily_volume_fraction": 0.0002862419205909511,
+        "terminal_hypothetical_liquidation_cost_usd": 0.0,
+        "terminal_unpaid_receivables_usd": 110.637,
+        "dividends_entitled_usd": 3756.104,
+        "filled_orders": 560,
+        "unfilled_orders": 4
+      },
+      "calendar_returns": {
+        "2009": 0.056557932080001816,
+        "2010": 0.12223322347398091,
+        "2011": 0.10677262848542712,
+        "2012": 0.050419228457715626,
+        "2013": -0.038008430840404395,
+        "2014": 0.08075994068174475,
+        "2015": -0.03251427789177186,
+        "2016": 0.04808567309593803,
+        "2017": 0.10238830084930584,
+        "2018": -0.01389100158405665,
+        "2019": 0.15697865599083838,
+        "2020": 0.16182280012885752,
+        "2021": 0.05832252830076068,
+        "2022": -0.12117833951983559,
+        "2023": 0.09065988767488631,
+        "2024": 0.10621844828750815,
+        "2025": 0.1857103083616567,
+        "2026": -0.00010646670408653858
+      },
+      "fixed_block_returns": {
+        "2009-13": 0.32607710131111145,
+        "2014-18": 0.19132458749430947,
+        "2019-23": 0.3635572491037644,
+        "2024-26": 0.3115149698903166
+      },
+      "ending_inventory": {
+        "SPY": 0,
+        "TLT": 0,
+        "GLD": 0,
+        "SHV": 0
+      }
+    },
+    {
+      "name": "Treasury_only",
+      "cost_multiplier": 1,
+      "weights": {
+        "SHV": 1.0
+      },
+      "daily_marks": 4463,
+      "orders": 142,
+      "receivable_events": 120,
+      "allocation_open_events": 71,
+      "metrics": {
+        "final_net_liquidation_usd": 12138.50549734914,
+        "net_profit_usd": 2138.5054973491406,
+        "net_return": 0.21385054973491413,
+        "cagr": 0.010981719876473228,
+        "max_close_drawdown": -0.009762344758597052,
+        "low_vs_prior_close_high_water": -0.009762344758597052,
+        "paid_costs_usd": 355.9279942890167,
+        "turnover_notional_usd": 1426186.6285934448,
+        "maximum_trade_daily_volume_fraction": 0.0008125577100646352,
+        "terminal_hypothetical_liquidation_cost_usd": 0.0,
+        "terminal_unpaid_receivables_usd": 71.868,
+        "dividends_entitled_usd": 1895.703,
+        "filled_orders": 142,
+        "unfilled_orders": 0
+      },
+      "calendar_returns": {
+        "2009": 0.0006497551278683567,
+        "2010": -0.00040598802482638696,
+        "2011": -0.0009078412853591455,
+        "2012": -0.001586516689045414,
+        "2013": -0.0019155773590188163,
+        "2014": -0.0020609538076351575,
+        "2015": -0.0018439673899084408,
+        "2016": 0.0023478628554631786,
+        "2017": 0.004883067384591655,
+        "2018": 0.01456101474546756,
+        "2019": 0.020299952893068074,
+        "2020": 0.00554810482950252,
+        "2021": -0.002738240894039512,
+        "2022": 0.007077993259753335,
+        "2023": 0.04594581632419037,
+        "2024": 0.046807897614346894,
+        "2025": 0.037651142362083334,
+        "2026": 0.022895009287167367
+      },
+      "fixed_block_returns": {
+        "2009-13": -0.004161288661500007,
+        "2014-18": 0.017922276376917345,
+        "2019-23": 0.07773547228680755,
+        "2024-26": 0.11109046008120771
+      },
+      "ending_inventory": {
+        "SPY": 0,
+        "TLT": 0,
+        "GLD": 0,
+        "SHV": 0
+      }
+    },
+    {
+      "name": "equity_only",
+      "cost_multiplier": 1,
+      "weights": {
+        "SPY": 1.0
+      },
+      "daily_marks": 4463,
+      "orders": 142,
+      "receivable_events": 71,
+      "allocation_open_events": 71,
+      "metrics": {
+        "final_net_liquidation_usd": 98008.17863965992,
+        "net_profit_usd": 88008.17863965992,
+        "net_return": 8.800817863965992,
+        "cagr": 0.1372726990697879,
+        "max_close_drawdown": -0.3285563904151504,
+        "low_vs_prior_close_high_water": -0.34207524510521325,
+        "paid_costs_usd": 904.9359604377746,
+        "turnover_notional_usd": 5086239.736251831,
+        "maximum_trade_daily_volume_fraction": 3.720260784182183e-06,
+        "terminal_hypothetical_liquidation_cost_usd": 0.0,
+        "terminal_unpaid_receivables_usd": 236.125,
+        "dividends_entitled_usd": 10204.012,
+        "filled_orders": 142,
+        "unfilled_orders": 0
+      },
+      "calendar_returns": {
+        "2009": 0.28638943753036505,
+        "2010": 0.11967297859761006,
+        "2011": 0.007922898313730276,
+        "2012": 0.12903908458704616,
+        "2013": 0.2822927365466805,
+        "2014": 0.12826672399002859,
+        "2015": -0.004928686563962059,
+        "2016": 0.1408250979989223,
+        "2017": 0.1949765763862199,
+        "2018": -0.04633149646056567,
+        "2019": 0.28854840060451337,
+        "2020": 0.1943676860215222,
+        "2021": 0.2597183562134777,
+        "2022": -0.19034003531477306,
+        "2023": 0.2512400405019082,
+        "2024": 0.24291737336315467,
+        "2025": 0.17554984766718218,
+        "2026": 0.11325448708131258
+      },
+      "fixed_block_returns": {
+        "2009-13": 1.101779410286483,
+        "2014-18": 0.4596269890210516,
+        "2019-23": 0.9640635586335391,
+        "2024-26": 0.6265887430454746
+      },
+      "ending_inventory": {
+        "SPY": 0,
+        "TLT": 0,
+        "GLD": 0,
+        "SHV": 0
+      }
+    },
+    {
+      "name": "sixty_forty",
+      "cost_multiplier": 1,
+      "weights": {
+        "SPY": 0.6,
+        "TLT": 0.4
+      },
+      "daily_marks": 4463,
+      "orders": 282,
+      "receivable_events": 225,
+      "allocation_open_events": 71,
+      "metrics": {
+        "final_net_liquidation_usd": 44323.09029475748,
+        "net_profit_usd": 34323.09029475748,
+        "net_return": 3.432309029475748,
+        "cagr": 0.08753228123380397,
+        "max_close_drawdown": -0.27764613660013415,
+        "low_vs_prior_close_high_water": -0.28860186369898944,
+        "paid_costs_usd": 781.5657745174408,
+        "turnover_notional_usd": 3343571.830116272,
+        "maximum_trade_daily_volume_fraction": 2.9234423533710946e-05,
+        "terminal_hypothetical_liquidation_cost_usd": 0.0,
+        "terminal_unpaid_receivables_usd": 197.05,
+        "dividends_entitled_usd": 7908.546,
+        "filled_orders": 280,
+        "unfilled_orders": 2
+      },
+      "calendar_returns": {
+        "2009": 0.06300399639640797,
+        "2010": 0.12434603096658181,
+        "2011": 0.14689831691115862,
+        "2012": 0.09109444235680608,
+        "2013": 0.10950045768380146,
+        "2014": 0.18138308605401177,
+        "2015": -0.008266745455948077,
+        "2016": 0.07636304960594753,
+        "2017": 0.1508945518827156,
+        "2018": -0.026758335415359324,
+        "2019": 0.2353893141132144,
+        "2020": 0.2204030017890677,
+        "2021": 0.1295881565423167,
+        "2022": -0.23636953134116534,
+        "2023": 0.12994312999051072,
+        "2024": 0.11361179368368934,
+        "2025": 0.11298141178104082,
+        "2026": 0.03822375637001141
+      },
+      "fixed_block_returns": {
+        "2009-13": 0.6593944498237989,
+        "2014-18": 0.41253960150971514,
+        "2019-23": 0.46949147933278357,
+        "2024-26": 0.2868048670944383
+      },
+      "ending_inventory": {
+        "SPY": 0,
+        "TLT": 0,
+        "GLD": 0,
+        "SHV": 0
+      }
+    },
+    {
+      "name": "three_risk_assets",
+      "cost_multiplier": 1,
+      "weights": {
+        "SPY": 0.3333333333333333,
+        "TLT": 0.3333333333333333,
+        "GLD": 0.3333333333333333
+      },
+      "daily_marks": 4463,
+      "orders": 422,
+      "receivable_events": 225,
+      "allocation_open_events": 71,
+      "metrics": {
+        "final_net_liquidation_usd": 37912.734297349925,
+        "net_profit_usd": 27912.734297349925,
+        "net_return": 2.7912734297349924,
+        "cagr": 0.07799964432913287,
+        "max_close_drawdown": -0.22296140866309144,
+        "low_vs_prior_close_high_water": -0.23032572556188646,
+        "paid_costs_usd": 834.2581017589569,
+        "turnover_notional_usd": 2775054.0117263794,
+        "maximum_trade_daily_volume_fraction": 2.466654485656861e-05,
+        "terminal_hypothetical_liquidation_cost_usd": 0.0,
+        "terminal_unpaid_receivables_usd": 123.104,
+        "dividends_entitled_usd": 4550.6630000000005,
+        "filled_orders": 418,
+        "unfilled_orders": 4
+      },
+      "calendar_returns": {
+        "2009": 0.07824267935916907,
+        "2010": 0.1666218100031327,
+        "2011": 0.14701274814154375,
+        "2012": 0.06940460056858178,
+        "2013": -0.05033014229691102,
+        "2014": 0.1126941733696718,
+        "2015": -0.04190321619620485,
+        "2016": 0.0628587028604215,
+        "2017": 0.13989971492875086,
+        "2018": -0.021333676802513746,
+        "2019": 0.2098163267061448,
+        "2020": 0.21704326897048243,
+        "2021": 0.08088660620915555,
+        "2022": -0.1654328966524935,
+        "2023": 0.10305532400213169,
+        "2024": 0.12647977843699287,
+        "2025": 0.2439982360625068,
+        "2026": -0.0030205285935184234
+      },
+      "fixed_block_returns": {
+        "2009-13": 0.465310144258384,
+        "2014-18": 0.26404349577523845,
+        "2019-23": 0.4650894875742455,
+        "2024-26": 0.3971060732479117
+      },
+      "ending_inventory": {
+        "SPY": 0,
+        "TLT": 0,
+        "GLD": 0,
+        "SHV": 0
+      }
+    },
+    {
+      "name": "four_regime",
+      "cost_multiplier": 2,
+      "weights": {
+        "SPY": 0.25,
+        "TLT": 0.25,
+        "GLD": 0.25,
+        "SHV": 0.25
+      },
+      "daily_marks": 4463,
+      "orders": 564,
+      "receivable_events": 345,
+      "allocation_open_events": 71,
+      "metrics": {
+        "final_net_liquidation_usd": 26380.817694622794,
+        "net_profit_usd": 16380.817694622794,
+        "net_return": 1.6380817694622793,
+        "cagr": 0.05619123831037354,
+        "max_close_drawdown": -0.17278981237630409,
+        "low_vs_prior_close_high_water": -0.17858310440595737,
+        "paid_costs_usd": 1780.0547469055175,
+        "turnover_notional_usd": 2200182.4896850586,
+        "maximum_trade_daily_volume_fraction": 0.0002770083102493075,
+        "terminal_hypothetical_liquidation_cost_usd": 0.0,
+        "terminal_unpaid_receivables_usd": 102.811,
+        "dividends_entitled_usd": 3591.523,
+        "filled_orders": 560,
+        "unfilled_orders": 4
+      },
+      "calendar_returns": {
+        "2009": 0.05156297799430831,
+        "2010": 0.11475152870879768,
+        "2011": 0.10357548027382668,
+        "2012": 0.046970413341692385,
+        "2013": -0.04253922504196883,
+        "2014": 0.07787901844305956,
+        "2015": -0.035344103686389294,
+        "2016": 0.04419729975679609,
+        "2017": 0.09839681121356714,
+        "2018": -0.016242973976984154,
+        "2019": 0.15272730392284317,
+        "2020": 0.15669479421874621,
+        "2021": 0.055272322598347357,
+        "2022": -0.12598064073859094,
+        "2023": 0.08477448181416558,
+        "2024": 0.10142032719530891,
+        "2025": 0.18370053298309608,
+        "2026": -0.0030348523334658983
+      },
+      "fixed_block_returns": {
+        "2009-13": 0.2967934454179375,
+        "2014-18": 0.1732001714199809,
+        "2019-23": 0.334044821801214,
+        "2024-26": 0.2997951340610068
+      },
+      "ending_inventory": {
+        "SPY": 0,
+        "TLT": 0,
+        "GLD": 0,
+        "SHV": 0
+      }
+    },
+    {
+      "name": "Treasury_only",
+      "cost_multiplier": 2,
+      "weights": {
+        "SHV": 1.0
+      },
+      "daily_marks": 4463,
+      "orders": 142,
+      "receivable_events": 120,
+      "allocation_open_events": 71,
+      "metrics": {
+        "final_net_liquidation_usd": 11722.947859173571,
+        "net_profit_usd": 1722.9478591735715,
+        "net_return": 0.17229478591735714,
+        "cagr": 0.008998944277585741,
+        "max_close_drawdown": -0.02335897069150661,
+        "low_vs_prior_close_high_water": -0.02335897069150661,
+        "paid_costs_usd": 703.9126815979004,
+        "turnover_notional_usd": 1399708.938659668,
+        "maximum_trade_daily_volume_fraction": 0.0008033240997229917,
+        "terminal_hypothetical_liquidation_cost_usd": 0.0,
+        "terminal_unpaid_receivables_usd": 69.156,
+        "dividends_entitled_usd": 1843.9,
+        "filled_orders": 142,
+        "unfilled_orders": 0
+      },
+      "calendar_returns": {
+        "2009": -0.0013141944805910022,
+        "2010": -0.002373227889340912,
+        "2011": -0.002882791428242437,
+        "2012": -0.003572757457518838,
+        "2013": -0.0038888447523794945,
+        "2014": -0.0040457330827483595,
+        "2015": -0.0038409590409043126,
+        "2016": 0.00032602348321653096,
+        "2017": 0.002849230281259718,
+        "2018": 0.012599980792172172,
+        "2019": 0.018251857930789983,
+        "2020": 0.0035750593708732126,
+        "2021": -0.004688246368089621,
+        "2022": 0.005045464122875876,
+        "2023": 0.044009868937599395,
+        "2024": 0.0447765449871238,
+        "2025": 0.03579219150084634,
+        "2026": 0.021425005271302755
+      },
+      "fixed_block_returns": {
+        "2009-13": -0.013955351442795028,
+        "2014-18": 0.00782053909194258,
+        "2019-23": 0.06722137645456416,
+        "2024-26": 0.10535691483527065
+      },
+      "ending_inventory": {
+        "SPY": 0,
+        "TLT": 0,
+        "GLD": 0,
+        "SHV": 0
+      }
+    },
+    {
+      "name": "equity_only",
+      "cost_multiplier": 2,
+      "weights": {
+        "SPY": 1.0
+      },
+      "daily_marks": 4463,
+      "orders": 142,
+      "receivable_events": 71,
+      "allocation_open_events": 71,
+      "metrics": {
+        "final_net_liquidation_usd": 95379.65225787125,
+        "net_profit_usd": 85379.65225787125,
+        "net_return": 8.537965225787124,
+        "cagr": 0.13553161353500398,
+        "max_close_drawdown": -0.32862595144342777,
+        "low_vs_prior_close_high_water": -0.34214769333715345,
+        "paid_costs_usd": 1781.2764877952575,
+        "turnover_notional_usd": 4990921.625984192,
+        "maximum_trade_daily_volume_fraction": 3.6592729024742783e-06,
+        "terminal_hypothetical_liquidation_cost_usd": 0.0,
+        "terminal_unpaid_receivables_usd": 228.569,
+        "dividends_entitled_usd": 10029.716,
+        "filled_orders": 142,
+        "unfilled_orders": 0
+      },
+      "calendar_returns": {
+        "2009": 0.2829908687466427,
+        "2010": 0.1183957286753965,
+        "2011": 0.006290581345968604,
+        "2012": 0.12817139795533472,
+        "2013": 0.27966748312790846,
+        "2014": 0.1267277550604562,
+        "2015": -0.005785771123707484,
+        "2016": 0.13889624708281145,
+        "2017": 0.19241397492096923,
+        "2018": -0.04736055388323834,
+        "2019": 0.28647955394098945,
+        "2020": 0.19220873155835716,
+        "2021": 0.257696778174322,
+        "2022": -0.1918068476023097,
+        "2023": 0.24937718975378043,
+        "2024": 0.24122687248834862,
+        "2025": 0.1736231555681278,
+        "2026": 0.1127115155547238
+      },
+      "fixed_block_returns": {
+        "2009-13": 1.0845614044107816,
+        "2014-18": 0.4492347746970442,
+        "2019-23": 0.9477798740258381,
+        "2024-26": 0.6209231378418623
+      },
+      "ending_inventory": {
+        "SPY": 0,
+        "TLT": 0,
+        "GLD": 0,
+        "SHV": 0
+      }
+    },
+    {
+      "name": "sixty_forty",
+      "cost_multiplier": 2,
+      "weights": {
+        "SPY": 0.6,
+        "TLT": 0.4
+      },
+      "daily_marks": 4463,
+      "orders": 282,
+      "receivable_events": 225,
+      "allocation_open_events": 71,
+      "metrics": {
+        "final_net_liquidation_usd": 42910.412595999136,
+        "net_profit_usd": 32910.412595999136,
+        "net_return": 3.291041259599914,
+        "cagr": 0.08554882891096849,
+        "max_close_drawdown": -0.27901883789486737,
+        "low_vs_prior_close_high_water": -0.2900659484464775,
+        "paid_costs_usd": 1542.4644290252684,
+        "turnover_notional_usd": 3274881.4300842285,
+        "maximum_trade_daily_volume_fraction": 2.9234423533710946e-05,
+        "terminal_hypothetical_liquidation_cost_usd": 0.0,
+        "terminal_unpaid_receivables_usd": 191.291,
+        "dividends_entitled_usd": 7748.867,
+        "filled_orders": 280,
+        "unfilled_orders": 2
+      },
+      "calendar_returns": {
+        "2009": 0.060283228803558186,
+        "2010": 0.12169588263536757,
+        "2011": 0.14397660518571676,
+        "2012": 0.08953807547759651,
+        "2013": 0.10618611508014508,
+        "2014": 0.17969597640255652,
+        "2015": -0.010099416015232232,
+        "2016": 0.07442671389775213,
+        "2017": 0.14872844895002135,
+        "2018": -0.02841717888097328,
+        "2019": 0.23259575615451644,
+        "2020": 0.21993832428020044,
+        "2021": 0.1282988908473599,
+        "2022": -0.23770493265287584,
+        "2023": 0.12725866234087668,
+        "2024": 0.11211589938164535,
+        "2025": 0.11114813934068302,
+        "2026": 0.03726763299897806
+      },
+      "fixed_block_returns": {
+        "2009-13": 0.6397769429921725,
+        "2014-18": 0.40034704897768547,
+        "2019-23": 0.45790556942041705,
+        "2024-26": 0.2817780772100609
+      },
+      "ending_inventory": {
+        "SPY": 0,
+        "TLT": 0,
+        "GLD": 0,
+        "SHV": 0
+      }
+    },
+    {
+      "name": "three_risk_assets",
+      "cost_multiplier": 2,
+      "weights": {
+        "SPY": 0.3333333333333333,
+        "TLT": 0.3333333333333333,
+        "GLD": 0.3333333333333333
+      },
+      "daily_marks": 4463,
+      "orders": 422,
+      "receivable_events": 225,
+      "allocation_open_events": 71,
+      "metrics": {
+        "final_net_liquidation_usd": 35940.6162031731,
+        "net_profit_usd": 25940.6162031731,
+        "net_return": 2.59406162031731,
+        "cagr": 0.07475916524142812,
+        "max_close_drawdown": -0.22464181217765156,
+        "low_vs_prior_close_high_water": -0.23199883666943455,
+        "paid_costs_usd": 1640.3902044807433,
+        "turnover_notional_usd": 2681300.681602478,
+        "maximum_trade_daily_volume_fraction": 2.466654485656861e-05,
+        "terminal_hypothetical_liquidation_cost_usd": 0.0,
+        "terminal_unpaid_receivables_usd": 116.055,
+        "dividends_entitled_usd": 4402.387,
+        "filled_orders": 418,
+        "unfilled_orders": 4
+      },
+      "calendar_returns": {
+        "2009": 0.07332210201972966,
+        "2010": 0.16211825922846357,
+        "2011": 0.14230009113123154,
+        "2012": 0.06604149271389015,
+        "2013": -0.05516269733474022,
+        "2014": 0.10987270799132065,
+        "2015": -0.044486823860183655,
+        "2016": 0.06042782696558291,
+        "2017": 0.13539944983915841,
+        "2018": -0.02611463182150564,
+        "2019": 0.20763044601233882,
+        "2020": 0.21611250419887096,
+        "2021": 0.07922002203173029,
+        "2022": -0.16725361714288367,
+        "2023": 0.10194329787014555,
+        "2024": 0.1239373208185206,
+        "2025": 0.238599823028953,
+        "2026": -0.005320032545367281
+      },
+      "fixed_block_returns": {
+        "2009-13": 0.4351316709133157,
+        "2014-18": 0.24350486403154714,
+        "2019-23": 0.45441988715995385,
+        "2024-26": 0.3847025037801317
+      },
+      "ending_inventory": {
+        "SPY": 0,
+        "TLT": 0,
+        "GLD": 0,
+        "SHV": 0
+      }
+    }
+  ],
+  "max_absolute_residuals": {
+    "ledger_shares": 0.0,
+    "ledger_submitted_shares": 0.0,
+    "ledger_limit": 0.0,
+    "ledger_fixed_cash_budget": 0.0,
+    "ledger_price": 0.0,
+    "ledger_fee_usd": 3.552713678800501e-15,
+    "ledger_cash_after": 0.0,
+    "daily_net_liquidation_usd": 0.0,
+    "daily_cash_usd": 0.0,
+    "daily_receivables_usd": 0.0,
+    "final_net_liquidation_usd": 0.0,
+    "net_profit_usd": 0.0,
+    "net_return": 0.0,
+    "cagr": 0.0,
+    "max_close_drawdown": 0.0,
+    "low_vs_prior_close_high_water": 0.0,
+    "paid_costs_usd": 9.094947017729282e-13,
+    "turnover_notional_usd": 0.0,
+    "maximum_trade_daily_volume_fraction": 0.0,
+    "terminal_hypothetical_liquidation_cost_usd": 0.0,
+    "terminal_unpaid_receivables_usd": 0.0,
+    "dividends_entitled_usd": 0.0,
+    "filled_orders": 0.0,
+    "unfilled_orders": 0.0,
+    "annual_returns": 0.0,
+    "fixed_block_returns": 0.0
+  },
+  "total_daily_marks": 44630,
+  "total_order_records": 3104,
+  "total_dividend_receivable_events": 1972,
+  "gates": {
+    "CAGR_at_least_4pct_both_costs": true,
+    "above_Treasury_CAGR_both_costs": true,
+    "drawdown_at_most_25pct_both_costs": true,
+    "all_fixed_blocks_positive_both_costs": true,
+    "no_annual_return_below_minus_20pct": true
+  },
+  "decision": "HISTORICAL_SCREEN_SURVIVOR_ONLY",
+  "validations": [
+    "No evaluator or inherited wallet helper imported or executed.",
+    "All source manifest members rehashed; each4asset CSV exact4485 aligned sessions and raw metadata zero splits.",
+    "All10 fixed-portfolio/cost wallet paths,44,630 close marks,orders and dividends independently reconstructed.",
+    "Each sleeve budget uses preceding liquidation cash,excludes receivables and entry-day later cash maturities; integer fixed limit quantity includes costs,missed sleeves stay cash.",
+    "Prior-quarter close sells and next actual open buys are checked; no simultaneous open/close inventory borrowing.",
+    "Dividends entitled on carried ex-date shares,90calendar-day receivables cannot finance entries,and unpaid terminal balances included in NAV.",
+    "All annual/fixed-block/CAGR/drawdown/cost/turnover/participation/ending inventory metrics and all5 gates confirmed."
+  ],
+  "historical_2022_loss_explicit": {
+    "1": -0.12117833951983559,
+    "2": -0.12598064073859094
+  },
+  "forward_operational_caution": {
+    "issue": "quarterly_schedule treats final available planned date as quarter-end even when terminal quarter is incomplete; current planned calendar ends2026Nov10.",
+    "historical_impact": "None for evaluation through2026Sep30; Q3end and Oct1entry are correctly available.",
+    "required_before_forward_reuse": "Use a complete known regular quarter calendar,not the truncated historical acquisition calendar. Operational paper intent is distinct from untouched powered confirmation."
+  },
+  "limits": [
+    "Historical screen survivor only; no proven profitable system,OOS/futureconfirmation or live eligibility.",
+    "Quarterly full liquidation/reopen and90day distribution delay are own declared implementation,not native broker/auction/settlement parity.",
+    "All simultaneous asset lows stress metric is not an observed realizable intraday path.",
+    "SPY/TLT/GLD/SHV fixed-family diversification is exposed to equity/duration/inflation risks; observed2022 loss must be reported.",
+    "No rules,parameters,costs,gates or prior frozen protocols changed."
+  ]
+}
