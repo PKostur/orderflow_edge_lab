@@ -1,0 +1,440 @@
+{
+  "status": "PASS_INDEPENDENT_WALLET_CLOCK_METRICS_AND_REJECTION_REVIEW",
+  "results_exact_sha256": "8075fb669ffe001a5f87b7ca9c545b8594d9b1d2fb7fa0891a12bfbdf92f10a0",
+  "evaluator_exact_sha256": "047500a6a4fa605dffc5328df6269a38d061e8064d5a9441d518b67ef03c0005",
+  "reviewed_execution_git_commit": "cc28b8200631524cc9658f8044ea7266342b36d3",
+  "review_script_exact_sha256": "433f1e765677135b67b54de85ff3c4b479bae55a1a4b8d04b89bf50eccd1a671",
+  "source_manifest_exact_sha256": "eb113554865b3e54f91e47cf555631f0a28a76cef009614e7d6cfde33b68da24",
+  "input_receipts": [
+    {
+      "symbol": "BTCUSDT",
+      "aligned_sha256": "96e25db1fd9882e6435d8b9a9bf23a716ccf0f004de46329f6db2bb47c054d82",
+      "raw_sha256": "4168f20e9aff20710847ac31a93e46d5f058efd8ea620c28b026d9ee6e8d821f"
+    },
+    {
+      "symbol": "ETHUSDT",
+      "aligned_sha256": "ccbce670762e32b6cd04a80502399a500f34cff856f1794c8bca68bab8858712",
+      "raw_sha256": "edca258e5393ef7a7321d3e440fa4e83d3d0504792f153befe06a3d8f6b8924e"
+    },
+    {
+      "symbol": "SOLUSDT",
+      "aligned_sha256": "7b556ce71b1ae787c64baadc66f07aa3b6505f28ff4bad3d77cf7fd7024b7fc7",
+      "raw_sha256": "f5a24e9e026e719742c2254983f8bfa2a24562c2b5d826688398f7e18d910a5b"
+    },
+    {
+      "symbol": "LINKUSDT",
+      "aligned_sha256": "d4bc5b454dec76812fd8358443c78ddf4d67eafc8e6d513d1d5267eb7599ddd2",
+      "raw_sha256": "df66f12043a3aac8be892de166002dee6acaff0c70ade9f3414c39df977e18ab"
+    }
+  ],
+  "input_common_bars": 6726,
+  "input_range": [
+    "2020-08-11T00:00:00+00:00",
+    "2026-10-01T00:00:00+00:00"
+  ],
+  "evaluation_range": [
+    "2021-08-16T08:00:00+00:00",
+    "2026-10-01T00:00:00+00:00"
+  ],
+  "blocking_findings": [],
+  "independent_cases": [
+    {
+      "mode": "trend",
+      "unmatched_float_dust_fill_records": [
+        {
+          "fill_open_utc": "2021-09-20T08:00:00+00:00",
+          "symbol": "LINKUSDT",
+          "side": "buy",
+          "notional_usdt": 1.1128875598842569e-14
+        },
+        {
+          "fill_open_utc": "2021-11-29T08:00:00+00:00",
+          "symbol": "ETHUSDT",
+          "side": "buy",
+          "notional_usdt": 1.509438407598651e-14
+        },
+        {
+          "fill_open_utc": "2021-12-06T08:00:00+00:00",
+          "symbol": "SOLUSDT",
+          "side": "buy",
+          "notional_usdt": 1.02740038698812e-14
+        },
+        {
+          "fill_open_utc": "2022-01-03T08:00:00+00:00",
+          "symbol": "ETHUSDT",
+          "side": "buy",
+          "notional_usdt": 1.3214707106357082e-14
+        },
+        {
+          "fill_open_utc": "2022-01-03T08:00:00+00:00",
+          "symbol": "SOLUSDT",
+          "side": "buy",
+          "notional_usdt": 9.609535389643043e-15
+        },
+        {
+          "fill_open_utc": "2022-01-17T08:00:00+00:00",
+          "symbol": "LINKUSDT",
+          "side": "buy",
+          "notional_usdt": 1.1106671138350067e-14
+        },
+        {
+          "fill_open_utc": "2024-03-18T08:00:00+00:00",
+          "symbol": "LINKUSDT",
+          "side": "buy",
+          "notional_usdt": 1.7291057474722038e-14
+        },
+        {
+          "fill_open_utc": "2024-04-08T08:00:00+00:00",
+          "symbol": "ETHUSDT",
+          "side": "buy",
+          "notional_usdt": 2.4104884754905243e-14
+        },
+        {
+          "fill_open_utc": "2024-04-15T08:00:00+00:00",
+          "symbol": "BTCUSDT",
+          "side": "buy",
+          "notional_usdt": 2.8737359714092746e-14
+        },
+        {
+          "fill_open_utc": "2024-04-15T08:00:00+00:00",
+          "symbol": "SOLUSDT",
+          "side": "buy",
+          "notional_usdt": 1.7068568780587158e-14
+        },
+        {
+          "fill_open_utc": "2024-06-03T08:00:00+00:00",
+          "symbol": "BTCUSDT",
+          "side": "buy",
+          "notional_usdt": 2.988351753552276e-14
+        },
+        {
+          "fill_open_utc": "2024-12-23T08:00:00+00:00",
+          "symbol": "SOLUSDT",
+          "side": "buy",
+          "notional_usdt": 2.0232704400768854e-14
+        },
+        {
+          "fill_open_utc": "2025-01-06T08:00:00+00:00",
+          "symbol": "LINKUSDT",
+          "side": "buy",
+          "notional_usdt": 2.0898838215543948e-14
+        },
+        {
+          "fill_open_utc": "2025-02-17T08:00:00+00:00",
+          "symbol": "BTCUSDT",
+          "side": "buy",
+          "notional_usdt": 4.166294479551747e-14
+        },
+        {
+          "fill_open_utc": "2025-06-23T08:00:00+00:00",
+          "symbol": "BTCUSDT",
+          "side": "buy",
+          "notional_usdt": 4.420554200468274e-14
+        },
+        {
+          "fill_open_utc": "2025-09-22T08:00:00+00:00",
+          "symbol": "ETHUSDT",
+          "side": "buy",
+          "notional_usdt": 2.9097418918766494e-14
+        },
+        {
+          "fill_open_utc": "2025-09-22T08:00:00+00:00",
+          "symbol": "LINKUSDT",
+          "side": "buy",
+          "notional_usdt": 1.8900436771218666e-14
+        }
+      ],
+      "side_cost_bps": 20.0,
+      "oracle_fill_count": 634,
+      "retained_fill_count": 635,
+      "marks": 5615,
+      "decisions": 268,
+      "metrics": {
+        "final_net_liquidation_usdt": 12434.083479979381,
+        "net_profit_usdt": 2434.083479979381,
+        "net_return": 0.2434083479979381,
+        "cagr": 0.043430646678535245,
+        "max_close_drawdown": -0.05299970304434998,
+        "same_bar_low_stress_bound": -0.05371600057787418,
+        "mean_gross_exposure": 0.05360975363260191,
+        "rebalance_costs_usdt": 130.80022051285653,
+        "hypothetical_terminal_cost_usdt": 1.6937397607513336
+      },
+      "calendar_returns": {
+        "2021": 0.010922927540329308,
+        "2022": -0.01692518497362827,
+        "2023": 0.11859279380868792,
+        "2024": 0.10612047233582556,
+        "2025": 0.008707848852477218,
+        "2026": 0.0024652211913469557
+      },
+      "leave_one_year_out_compounded": {
+        "2021": 0.22997343726614972,
+        "2022": 0.2648155857441863,
+        "2023": 0.11158265535062717,
+        "2024": 0.12411656695242024,
+        "2025": 0.23267440558974517,
+        "2026": 0.24035060939096708
+      }
+    },
+    {
+      "mode": "always_long",
+      "unmatched_float_dust_fill_records": [],
+      "side_cost_bps": 20.0,
+      "oracle_fill_count": 1072,
+      "retained_fill_count": 1072,
+      "marks": 5615,
+      "decisions": 268,
+      "metrics": {
+        "final_net_liquidation_usdt": 13051.166988417772,
+        "net_profit_usdt": 3051.166988417772,
+        "net_return": 0.3051166988417773,
+        "cagr": 0.05334009236672932,
+        "max_close_drawdown": -0.185554123597108,
+        "same_bar_low_stress_bound": -0.18858333869806287,
+        "mean_gross_exposure": 0.15810343989675515,
+        "rebalance_costs_usdt": 75.94787379282542,
+        "hypothetical_terminal_cost_usdt": 5.340792130588834
+      },
+      "calendar_returns": {
+        "2021": 0.01846652144539851,
+        "2022": -0.14501211890307764,
+        "2023": 0.2678326437134406,
+        "2024": 0.1565043298147788,
+        "2025": 0.0008412409056044456,
+        "2026": 0.0213350694838772
+      },
+      "leave_one_year_out_compounded": {
+        "2021": 0.2814527246212939,
+        "2022": 0.5264739158259808,
+        "2023": 0.029407710326129877,
+        "2024": 0.12850135118024109,
+        "2025": 0.30401970412495305,
+        "2026": 0.2778536034225345
+      }
+    },
+    {
+      "mode": "btc",
+      "unmatched_float_dust_fill_records": [],
+      "side_cost_bps": 20.0,
+      "oracle_fill_count": 1,
+      "retained_fill_count": 1,
+      "marks": 5615,
+      "decisions": 1,
+      "metrics": {
+        "final_net_liquidation_usdt": 17605.16536270833,
+        "net_profit_usdt": 7605.165362708329,
+        "net_return": 0.7605165362708328,
+        "cagr": 0.11669844805550977,
+        "max_close_drawdown": -0.7694113254354862,
+        "same_bar_low_stress_bound": -0.7735726378129252,
+        "mean_gross_exposure": 0.999999999999989,
+        "rebalance_costs_usdt": 19.960079840319164,
+        "hypothetical_terminal_cost_usdt": 35.28089251043733
+      },
+      "calendar_returns": {
+        "2021": -0.027001115466544046,
+        "2022": -0.6420705572611528,
+        "2023": 1.5560728793886773,
+        "2024": 1.213057645544664,
+        "2025": -0.063347225784389,
+        "2026": -0.04591787488667731
+      },
+      "leave_one_year_out_compounded": {
+        "2021": 0.8093715874247736,
+        "2022": 3.918613352395665,
+        "2023": -0.3112416510237038,
+        "2024": -0.20448681496611187,
+        "2025": 0.8795828985241168,
+        "2026": 0.8452463262129819
+      }
+    },
+    {
+      "mode": "trend",
+      "unmatched_float_dust_fill_records": [
+        {
+          "fill_open_utc": "2021-09-20T08:00:00+00:00",
+          "symbol": "LINKUSDT",
+          "side": "buy",
+          "notional_usdt": 1.1128875598842569e-14
+        },
+        {
+          "fill_open_utc": "2024-01-08T08:00:00+00:00",
+          "symbol": "ETHUSDT",
+          "side": "buy",
+          "notional_usdt": 3.08651715297259e-14
+        },
+        {
+          "fill_open_utc": "2024-04-15T08:00:00+00:00",
+          "symbol": "SOLUSDT",
+          "side": "buy",
+          "notional_usdt": 1.7068568780587158e-14
+        },
+        {
+          "fill_open_utc": "2025-10-13T08:00:00+00:00",
+          "symbol": "ETHUSDT",
+          "side": "buy",
+          "notional_usdt": 2.899271100975653e-14
+        }
+      ],
+      "side_cost_bps": 40.0,
+      "oracle_fill_count": 635,
+      "retained_fill_count": 633,
+      "marks": 5615,
+      "decisions": 268,
+      "metrics": {
+        "final_net_liquidation_usdt": 12288.756530880619,
+        "net_profit_usdt": 2288.756530880619,
+        "net_return": 0.2288756530880618,
+        "cagr": 0.0410394791541675,
+        "max_close_drawdown": -0.05580587859712083,
+        "same_bar_low_stress_bound": -0.05651878220043516,
+        "mean_gross_exposure": 0.053613516442187426,
+        "rebalance_costs_usdt": 260.04657489108206,
+        "hypothetical_terminal_cost_usdt": 3.3483870425225777
+      },
+      "calendar_returns": {
+        "2021": 0.009761623819551923,
+        "2022": -0.017546839457467822,
+        "2023": 0.11513272877065606,
+        "2024": 0.10207210394933375,
+        "2025": 0.006205916851749205,
+        "2026": 0.0017371632200136045
+      },
+      "leave_one_year_out_compounded": {
+        "2021": 0.21699579791880308,
+        "2022": 0.25082365495109205,
+        "2023": 0.10199944937747274,
+        "2024": 0.11505921317155288,
+        "2025": 0.22129638924506545,
+        "2026": 0.22674459749294673
+      }
+    },
+    {
+      "mode": "always_long",
+      "unmatched_float_dust_fill_records": [],
+      "side_cost_bps": 40.0,
+      "oracle_fill_count": 1072,
+      "retained_fill_count": 1072,
+      "marks": 5615,
+      "decisions": 268,
+      "metrics": {
+        "final_net_liquidation_usdt": 12957.345897285732,
+        "net_profit_usdt": 2957.3458972857316,
+        "net_return": 0.29573458972857325,
+        "cagr": 0.05185811530705764,
+        "max_close_drawdown": -0.18638200658757442,
+        "same_bar_low_stress_bound": -0.18940291212575266,
+        "mean_gross_exposure": 0.15810769740223923,
+        "rebalance_costs_usdt": 151.3525400896329,
+        "hypothetical_terminal_cost_usdt": 10.609513502812684
+      },
+      "calendar_returns": {
+        "2021": 0.017697802712726585,
+        "2022": -0.14586959393849686,
+        "2023": 0.2657006729568967,
+        "2024": 0.15491895569750125,
+        "2025": -0.0003029921828104909,
+        "2026": 0.020051550566738463
+      },
+      "leave_one_year_out_compounded": {
+        "2021": 0.2732017169288614,
+        "2022": 0.5170219682300734,
+        "2023": 0.023729083355476188,
+        "2024": 0.12192685325354957,
+        "2025": 0.29612730617027005,
+        "2026": 0.2702638303021705
+      }
+    },
+    {
+      "mode": "btc",
+      "unmatched_float_dust_fill_records": [],
+      "side_cost_bps": 40.0,
+      "oracle_fill_count": 1,
+      "retained_fill_count": 1,
+      "marks": 5615,
+      "decisions": 1,
+      "metrics": {
+        "final_net_liquidation_usdt": 17534.884700336937,
+        "net_profit_usdt": 7534.884700336937,
+        "net_return": 0.7534884700336937,
+        "cagr": 0.11582709896336008,
+        "max_close_drawdown": -0.7694113254354862,
+        "same_bar_low_stress_bound": -0.7735726378129252,
+        "mean_gross_exposure": 0.9999999999999888,
+        "rebalance_costs_usdt": 39.840637450198805,
+        "hypothetical_terminal_cost_usdt": 70.42122369613189
+      },
+      "calendar_returns": {
+        "2021": -0.03088537356255061,
+        "2022": -0.6420705572611528,
+        "2023": 1.5560728793886769,
+        "2024": 1.213057645544664,
+        "2025": -0.063347225784389,
+        "2026": -0.04591787488667742
+      },
+      "leave_one_year_out_compounded": {
+        "2021": 0.8093715874247731,
+        "2022": 3.8989780125829876,
+        "2023": -0.3139912073034996,
+        "2024": -0.20766254165867615,
+        "2025": 0.8720795136726436,
+        "2026": 0.8378800146008607
+      }
+    }
+  ],
+  "total_retained_fill_records_checked": 3414,
+  "total_close_wallet_marks_checked": 33690,
+  "max_absolute_residuals": {
+    "oracle_cash": 1.0913936421275139e-11,
+    "oracle_nav": 1.2732925824820995e-11,
+    "oracle_quantity": 4.263256414560601e-14,
+    "signal_nav": 1.2732925824820995e-11,
+    "literal_feature": 2.0816681711721685e-17,
+    "desired_quantity": 4.263256414560601e-14,
+    "final_net_liquidation_usdt": 1.0913936421275139e-11,
+    "net_profit_usdt": 1.0913936421275139e-11,
+    "net_return": 1.1102230246251565e-15,
+    "cagr": 2.220446049250313e-16,
+    "max_close_drawdown": 1.1102230246251565e-16,
+    "same_bar_low_stress_bound": 3.3306690738754696e-16,
+    "mean_gross_exposure": 1.1102230246251565e-16,
+    "rebalance_costs_usdt": 2.842170943040401e-14,
+    "hypothetical_terminal_cost_usdt": 7.105427357601002e-15,
+    "calendar_return": 6.661338147750939e-16,
+    "leave_year": 1.7763568394002505e-15,
+    "fill_price": 0.0,
+    "fill_cost": 0.0,
+    "ledger_cash": 3.2741809263825417e-11,
+    "ledger_quantity": 0.0,
+    "ledger_nav": 3.456079866737127e-11,
+    "ledger_fees": 1.7053025658242404e-13
+  },
+  "gates": {
+    "net_positive_both_costs": true,
+    "close_drawdown_at_most_15pct": true,
+    "increment_over_matched_control_both_costs": false,
+    "all_leave_year_out_positive": true
+  },
+  "decision": "REJECTED_AS_DEFINED",
+  "failed_gates": [
+    "increment_over_matched_control_both_costs"
+  ],
+  "validations": [
+    "No production simulate/weights/rebalance/evaluate imported or executed.",
+    "Literal return signs, log returns and two-pass ddof1 sample variance separately evaluated.",
+    "Six full funded wallet paths independently calculated; all retained fills and every close cash/inventory/NAV also independently reconstructed from signed cashflow ledger.",
+    "All prices/times/fees/cost cases/annual metrics/leave-year compounding/exposure/drawdowns/costs/first-fill labels/decision clocks checked.",
+    "Monday00 signal executes Monday08 using signal bar index i-2; no immediate boundary fill.",
+    "Raw and aligned CSV exact hashes verified against retained manifest; UTC calendars complete and equal.",
+    "Result rejection and all four gates algebraically confirmed without rule changes."
+  ],
+  "limits": [
+    "Entire panel is previously inspected development; no profitability/OOS/future/live promotion.",
+    "Fractional float64 research holdings; no exchange lots/depth/partial-fill/nativebot claim.",
+    "Independent variance evaluation can change numerically negligible dust trades; substantive wallet/metrics reconciled within stated residuals, not bitwise execution identity.",
+    "Same-bar low stress uses simultaneous asset lows against previous close peaks; it is a descriptive stress quantity, not a realizable intrabar drawdown path.",
+    "BTC full-budget execution-open buyhold is intentionally a distinct descriptive benchmark.",
+    "No frozen lanes or prior outcomes modified."
+  ]
+}

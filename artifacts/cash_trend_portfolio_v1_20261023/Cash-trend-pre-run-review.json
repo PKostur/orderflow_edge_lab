@@ -1,0 +1,45 @@
+{
+  "status": "PASS_BOUNDED_PRE_RUN_CODE_REVIEW",
+  "design_git_commit": "82551c684b5a3f6ffd98df4746c41e11418b2ab0",
+  "initial_evaluator_git_commit": "a3f0b22e59f14ccb6d0124e3429abdb6278379c3",
+  "reviewed_evaluator_git_commit": "cc28b8200631524cc9658f8044ea7266342b36d3",
+  "bindings": {
+    "src/orderflow_edge_lab/cash_trend_portfolio.py": {
+      "git_blob_sha256": "6387c7ec0e161bbdf85023f956daa9787d283929374e9ca5c9a939cf400c707a",
+      "working_exact_sha256": "047500a6a4fa605dffc5328df6269a38d061e8064d5a9441d518b67ef03c0005"
+    },
+    "tests/test_cash_trend_portfolio.py": {
+      "git_blob_sha256": "a10d459935690b63b39395e710b9c2bae8b888c72fb4937a16a6f28203ee4647",
+      "working_exact_sha256": "63f3c4fc6aafa78ab1f35b387b6d0564b2aa5df0b0956af60d9679605ba4d939"
+    },
+    "config/cash_trend_portfolio_v1.json": {
+      "git_blob_sha256": "f899d112436a105be93715ab521f29c378e360eda10cd51f71171e477d6f539f",
+      "working_exact_sha256": "f899d112436a105be93715ab521f29c378e360eda10cd51f71171e477d6f539f"
+    },
+    "docs/CASH_TREND_PORTFOLIO_V1.md": {
+      "git_blob_sha256": "3a3653a057a74c45e87e6c6a0b55dbcd08bcf21a0211dd1d8e5d65cdc7637503",
+      "working_exact_sha256": "8a9c107c0d32420d9b9aaf6bb8a98c86f5cd5717c62eaf66957bb56f4eb6d54b"
+    }
+  },
+  "market_data_loaded": false,
+  "market_pnl_inspected": false,
+  "repository_edits": false,
+  "blocking_findings": [],
+  "validations": {
+    "registered_synthetic_tests_rerun": 7,
+    "all_passed": true,
+    "additional_synthetic_wallet_cases": 80,
+    "max_conservation_residual_usdt": 1.4551915228366852e-11,
+    "clock": "Monday08 uses i-2 Sunday16-labelled signal bar; completed-close Monday00,8h delay",
+    "funding": "Sell first, common cost-inclusive scaling, fixed1e-14 reserve on cash-limited buys, negative cash aborts",
+    "causality": "Registered prefix/future mutation tests passed",
+    "reporting_fix": "Reviewed cc28b82 decision ledger and actual first-fill/evaluation-start correction; no feature/wallet changes"
+  },
+  "nonblocking_findings": [],
+  "limits": [
+    "Theoretical fractional float64 Spot units; no lot/depth/partial-fill exchange parity.",
+    "Synthetic/code review only: no market performance,power,OOS,promotion claim.",
+    "BTC full-budget OPEN buyhold is a distinct descriptive benchmark; trend/control quantities fixed at signal close.",
+    "Old frozen rules and protocols unchanged."
+  ]
+}
