@@ -98,12 +98,18 @@ class EquityCalendarTests(unittest.TestCase):
         self.assertNotIn('2012-10-26',sells)
         self.assertEqual(buys['2012-10-31'],'SPY')
         self.assertTrue(any(x['date']=='2012-10-30' for x in closed))
-        frames={s:{d:dict(open=100.,high=101.,low=99.,close=100.,volume=100000.) for d in actual} for s in ('SPY','SHV')}
-        # Start-calendar alone initially carries cash; direct schedule asserts the canceled planned sale.
         shifted=[d for d in planned if d!='2012-11-05']
         b,s,_,_=operational_schedule(planned,shifted,'calendar',20261024)
         self.assertEqual(s['2012-11-06'],'SPY')
         self.assertEqual(b['2012-11-07'],'SHV')
+        start=date(2012,8,1)
+        full_plan=[(start+timedelta(days=i)).isoformat() for i in range((last-start).days+1) if (start+timedelta(days=i)).weekday()<5]
+        full_actual=[d for d in full_plan if d not in ('2012-10-29','2012-10-30')]
+        frames={a:{d:dict(open=100.,high=101.,low=99.,close=100.,volume=100000.) for d in full_actual} for a in ('SPY','SHV')}
+        result=simulate(full_actual,frames,{'SPY':{},'SHV':{}},planning_calendar=full_plan)
+        october=next(x for x in result['ledger'] if x['date']=='2012-10-31')
+        self.assertEqual(october['status'],'BLOCKED_PREVIOUS_ASSET_NOT_SOLD')
+        self.assertFalse(any(x['date']=='2012-10-26' and x['side']=='sell' for x in result['ledger']))
 
 
 if __name__=='__main__':

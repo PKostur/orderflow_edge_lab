@@ -5,6 +5,7 @@ import hashlib
 import json
 import math
 import random
+import subprocess
 from bisect import bisect_left
 from collections import defaultdict
 from datetime import date, timedelta
@@ -234,7 +235,21 @@ def main():
     args=parser.parse_args()
     if args.output.exists():
         raise FileExistsError("refuse evidence overwrite")
+    root=Path(__file__).resolve().parents[2]
+    commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()
+    committed=subprocess.check_output(['git','show','HEAD:src/orderflow_edge_lab/equity_calendar_carry.py'],cwd=root)
+    if Path(__file__).read_bytes().replace(b'\r\n',b'\n') != committed.replace(b'\r\n',b'\n'):
+        raise ValueError('evaluator not committed before evaluation')
+    config_hashes={}
+    for name in ('equity_calendar_carry_v1.json','equity_calendar_carry_v1_1.json','equity_calendar_carry_v1_2.json'):
+        raw=(root/'config'/name).read_bytes()
+        frozen=subprocess.check_output(['git','show','9abf017:config/'+name],cwd=root)
+        if raw != frozen:
+            raise ValueError('protocol changed since pre-outcome freeze')
+        config_hashes[name]=hashlib.sha256(raw).hexdigest()
     report=evaluate(args.source)
+    report.update(executed_commit=commit,protocol_sha256=config_hashes,
+                  source_manifest_sha256=hashlib.sha256((args.source/'manifest.json').read_bytes()).hexdigest())
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(json.dumps(report,allow_nan=False,separators=(",",":")),encoding="utf-8")
     print(json.dumps({k:v for k,v in report.items() if k not in ("cases","random_controls","source_manifest")},indent=2))
