@@ -55,6 +55,14 @@ The GitHub workflow observes completed sessions at 22:15 UTC on weekdays in Octo
 
 This is an **operational forward observation**, not a registered statistical confirmation study. It does not prove an edge, authorize live execution, or satisfy the user's ultimate requirement for confirmation on untouched future data. `promotable=false`; live orders remain disabled. The immediate next step is collect the frozen opening and subsequent observations, reconcile execution assumptions, then define any further confirmation phase before inspecting its future outcomes.
 
+The independent forward review passed the fixed registration, funding, terminal sale, dividend and failure paths. Runtime binds the exact intent/reference/quantities, complete calendar and wallet helper to published registration `d4cb8bd61eb7e0a2c9c1f4cfe07101b7c3fb527c`. GitHub Actions run `40089297194` independently timestamps the fixed observer `084c44306409acf8d160fb8521c3d8d1b6758e46` before the planned opening; retained API receipts are in `external-publication.json`. A self-supplied creation timestamp is not the registration evidence. Subsequent Yahoo revisions may restate earlier modeled marks: retain each raw snapshot and disclose revisions; these are not immutable verified broker executions.
+
+## Delivery checks
+
+[PR #178](https://github.com/PKostur/orderflow_edge_lab/pull/178) carries the new lane. At source commit `084c44306409acf8d160fb8521c3d8d1b6758e46`, all **1,246 tests** passed in Linux/Python 3.10, 3.11, 3.12 and Windows/Python 3.12 CI; Ruff and CodeQL analysis passed. The downloaded remote multi-agent manifest verifies and its release manager is `reviewable`, zero errors/warnings. Repository CodeQL has two pre-existing alerts in `tests/test_news_sentiment.py:26`, created 2 October; this PR does not change that file. A passing analysis is not a claim that the repository has zero alerts.
+
+Collector scripts are retained in a ZIP as acquisition provenance; they contain the original directory layout and guards, and must not overwrite frozen evidence. To recompute history, extract the four-regime source ZIP to a fresh directory and run `python -m orderflow_edge_lab.four_regime_allocation --source <extracted-directory> --output <new-result.json>` with `PYTHONPATH=src`. The output records the current reproduction commit; the archived original run retains its exact execution identity. Calendar creation used `exchange_calendars==4.11.1`; existing archived calendars make economic replay independent of future calendar-library changes.
+
 Reproduce preflight:
 
 ```powershell

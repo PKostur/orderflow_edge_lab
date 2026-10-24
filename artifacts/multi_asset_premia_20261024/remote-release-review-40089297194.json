@@ -1,0 +1,304 @@
+{
+  "agents": [
+    {
+      "agent_id": "adversarial_reviewer",
+      "checks_run": [
+        "required_path:README.md",
+        "required_path:AGENTS.md",
+        "required_path:config/regime_research_v1.json",
+        "unsupported_claim_scan",
+        "safety_boundary",
+        "dependency_challenge",
+        "fail_closed_language",
+        "indicator_mining_boundary"
+      ],
+      "findings": [],
+      "focus": "Challenge specialist conclusions, detect indicator mining/redundancy, unsupported edge claims, hidden holdout reuse, threshold tuning, unsafe live-execution creep and fail-open behavior",
+      "status": "passed"
+    },
+    {
+      "agent_id": "aggressive_flow",
+      "checks_run": [
+        "required_path:config/regime_research_v1.json",
+        "required_path:src/orderflow_edge_lab/mexc_orderflow.py",
+        "required_path:src/orderflow_edge_lab/orderflow_backtest.py",
+        "regime_research_protocol"
+      ],
+      "findings": [],
+      "focus": "CVD, signed aggressive volume, trade intensity, flow acceleration, large-trade share, price-flow divergence, continuation and exhaustion",
+      "status": "passed"
+    },
+    {
+      "agent_id": "cross_asset_context",
+      "checks_run": [
+        "required_path:config/regime_research_v1.json",
+        "required_path:src/orderflow_edge_lab/cross_pair.py",
+        "required_path:src/orderflow_edge_lab/btc_correlation.py",
+        "required_path:src/orderflow_edge_lab/orderflow_backtest.py",
+        "regime_research_protocol"
+      ],
+      "findings": [],
+      "focus": "BTC returns, volatility, order-flow agreement, rolling beta/correlation, lead-lag, and idiosyncratic versus BTC-driven altcoin behavior",
+      "status": "passed"
+    },
+    {
+      "agent_id": "data_integrity",
+      "checks_run": [
+        "required_path:src/orderflow_edge_lab/adapters.py",
+        "required_path:src/orderflow_edge_lab/data_lineage.py",
+        "required_path:src/orderflow_edge_lab/dxfeed_bbo.py",
+        "required_path:src/orderflow_edge_lab/mexc_orderflow.py",
+        "zero_cost_dxfeed_path",
+        "mexc_replay_path"
+      ],
+      "findings": [],
+      "focus": "Market-data adapters, DeepCharts/dxFeed and MEXC ingestion, sequence integrity, timestamps, provenance, and causal feature eligibility",
+      "status": "passed"
+    },
+    {
+      "agent_id": "derivatives_positioning",
+      "checks_run": [
+        "required_path:config/regime_research_v1.json",
+        "required_path:docs/REGIME_RESEARCH.md",
+        "unsupported_claim_scan",
+        "regime_research_protocol"
+      ],
+      "findings": [],
+      "focus": "Funding, open-interest, mark premium/basis and liquidation context only when legitimately available at zero additional cost; missing fields must not be invented",
+      "status": "passed"
+    },
+    {
+      "agent_id": "execution_economics",
+      "checks_run": [
+        "required_path:config/regime_research_v1.json",
+        "required_path:src/orderflow_edge_lab/economics.py",
+        "required_path:src/orderflow_edge_lab/market_conditions.py",
+        "unsupported_claim_scan",
+        "regime_research_protocol",
+        "cost_model_presence",
+        "friction_language_presence"
+      ],
+      "findings": [],
+      "focus": "Spread, fees, slippage, latency/staleness, signal half-life, expected move after friction, and whether statistical predictability is economically tradeable",
+      "status": "passed"
+    },
+    {
+      "agent_id": "execution_safety",
+      "checks_run": [
+        "required_path:src/orderflow_edge_lab/approval.py",
+        "required_path:src/orderflow_edge_lab/execution.py",
+        "required_path:src/orderflow_edge_lab/runtime_snapshot.py",
+        "required_path:src/orderflow_edge_lab/session_audit.py",
+        "live_dependency_scan",
+        "approval_boundary_presence"
+      ],
+      "findings": [],
+      "focus": "Approval-bound paper execution, stale-market rejection, state ownership, journal integrity, kill switches, reconciliation and prevention of accidental live transmission",
+      "status": "passed"
+    },
+    {
+      "agent_id": "indicator_orthogonality",
+      "checks_run": [
+        "required_path:config/regime_research_v1.json",
+        "required_path:docs/REGIME_RESEARCH.md",
+        "unsupported_claim_scan",
+        "regime_research_protocol"
+      ],
+      "findings": [],
+      "focus": "Detect redundant indicators, require incremental market-state information, challenge correlated indicator stacking, and justify interactions before combination",
+      "status": "passed"
+    },
+    {
+      "agent_id": "liquidity_microstructure",
+      "checks_run": [
+        "required_path:config/regime_research_v1.json",
+        "required_path:src/orderflow_edge_lab/mexc_orderflow.py",
+        "required_path:src/orderflow_edge_lab/market_conditions.py",
+        "required_path:src/orderflow_edge_lab/orderflow_backtest.py",
+        "unsupported_claim_scan",
+        "regime_research_protocol"
+      ],
+      "findings": [],
+      "focus": "Spread, displayed depth, microprice, book imbalance, depth-flow, liquidity add/pull, quote intensity, stale/crossed-book quality, and microstructure state",
+      "status": "passed"
+    },
+    {
+      "agent_id": "mean_reversion",
+      "checks_run": [
+        "required_path:config/regime_research_v1.json",
+        "required_path:docs/REGIME_RESEARCH.md",
+        "unsupported_claim_scan",
+        "regime_research_protocol"
+      ],
+      "findings": [],
+      "focus": "Bollinger/VWAP displacement, RSI/return z-score hypotheses, failed breakouts, exhaustion and continuation-versus-reversion state",
+      "status": "passed"
+    },
+    {
+      "agent_id": "news_event_context",
+      "checks_run": [
+        "required_path:config/news_monitor_v1.json",
+        "required_path:src/orderflow_edge_lab/news_monitor.py",
+        "required_path:.github/workflows/news-context.yml",
+        "unsupported_claim_scan"
+      ],
+      "findings": [],
+      "focus": "Public coin-news event timing, conservative symbol attribution, source provenance, and post-event coin/BTC behavior without causal overclaiming or strategy retuning",
+      "status": "passed"
+    },
+    {
+      "agent_id": "reliability_observability",
+      "checks_run": [
+        "required_path:.github/workflows/ci.yml",
+        "required_path:.github/workflows/orderflow-continuous-discovery.yml",
+        "required_path:.github/workflows/cross-pair-transfer.yml",
+        "required_path:.github/workflows/news-context.yml",
+        "required_path:.github/workflows/sentiment-context-v1.yml",
+        "required_path:scripts/deployment_check.py",
+        "required_path:scripts/package_smoke.py",
+        "required_path:src/orderflow_edge_lab/runtime_identity.py",
+        "ci_workflow_presence",
+        "runtime_identity",
+        "hash_evidence",
+        "compileall",
+        "unittest",
+        "deployment_check"
+      ],
+      "findings": [
+        {
+          "code": "command_passed",
+          "evidence": {
+            "output_tail": "",
+            "returncode": 0
+          },
+          "message": "Command passed: /opt/hostedtoolcache/Python/3.12.15/x64/bin/python -m compileall -q src scripts tests",
+          "severity": "info"
+        },
+        {
+          "code": "command_passed",
+          "evidence": {
+            "output_tail": "rror in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.\n  out = out.loc[out.index + pd.Timedelta(hours=8) <= as_of]\n/home/runner/work/orderflow_edge_lab/orderflow_edge_lab/src/orderflow_edge_lab/trend_portfolio_forward.py:48: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.\n  out = out.loc[out.index + pd.Timedelta(hours=8) <= as_of]\n/home/runner/work/orderflow_edge_lab/orderflow_edge_lab/src/orderflow_edge_lab/trend_portfolio_forward.py:48: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.\n  out = out.loc[out.index + pd.Timedelta(hours=8) <= as_of]\n/home/runner/work/orderflow_edge_lab/orderflow_edge_lab/src/orderflow_edge_lab/trend_portfolio_forward.py:48: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.\n  out = out.loc[out.index + pd.Timedelta(hours=8) <= as_of]\n/home/runner/work/orderflow_edge_lab/orderflow_edge_lab/src/orderflow_edge_lab/trend_portfolio_forward.py:48: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.\n  out = out.loc[out.index + pd.Timedelta(hours=8) <= as_of]\n/home/runner/work/orderflow_edge_lab/orderflow_edge_lab/src/orderflow_edge_lab/trend_portfolio_forward.py:48: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.\n  out = out.loc[out.index + pd.Timedelta(hours=8) <= as_of]\n/home/runner/work/orderflow_edge_lab/orderflow_edge_lab/src/orderflow_edge_lab/trend_portfolio_forward.py:48: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.\n  out = out.loc[out.index + pd.Timedelta(hours=8) <= as_of]\n/home/runner/work/orderflow_edge_lab/orderflow_edge_lab/src/orderflow_edge_lab/xs_premia.py:28: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.\n  day = (f.index - pd.Timedelta(microseconds=1)).floor(\"D\")\n/home/runner/work/orderflow_edge_lab/orderflow_edge_lab/src/orderflow_edge_lab/xs_premia.py:28: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.\n  day = (f.index - pd.Timedelta(microseconds=1)).floor(\"D\")\n/home/runner/work/orderflow_edge_lab/orderflow_edge_lab/src/orderflow_edge_lab/xs_premia.py:28: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.\n  day = (f.index - pd.Timedelta(microseconds=1)).floor(\"D\")\n/home/runner/work/orderflow_edge_lab/orderflow_edge_lab/src/orderflow_edge_lab/xs_premia.py:28: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.\n  day = (f.index - pd.Timedelta(microseconds=1)).floor(\"D\")\n/home/runner/work/orderflow_edge_lab/orderflow_edge_lab/src/orderflow_edge_lab/xs_premia.py:28: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.\n  day = (f.index - pd.Timedelta(microseconds=1)).floor(\"D\")\n/home/runner/work/orderflow_edge_lab/orderflow_edge_lab/src/orderflow_edge_lab/xs_premia.py:28: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.\n  day = (f.index - pd.Timedelta(microseconds=1)).floor(\"D\")\n/home/runner/work/orderflow_edge_lab/orderflow_edge_lab/src/orderflow_edge_lab/xs_premia.py:28: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.\n  day = (f.index - pd.Timedelta(microseconds=1)).floor(\"D\")\n/home/runner/work/orderflow_edge_lab/orderflow_edge_lab/src/orderflow_edge_lab/xs_premia.py:28: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.\n  day = (f.index - pd.Timedelta(microseconds=1)).floor(\"D\")\n/home/runner/work/orderflow_edge_lab/orderflow_edge_lab/src/orderflow_edge_lab/xs_premia.py:28: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.\n  day = (f.index - pd.Timedelta(microseconds=1)).floor(\"D\")\n/home/runner/work/orderflow_edge_lab/orderflow_edge_lab/src/orderflow_edge_lab/xs_premia.py:28: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.\n  day = (f.index - pd.Timedelta(microseconds=1)).floor(\"D\")\n/home/runner/work/orderflow_edge_lab/orderflow_edge_lab/src/orderflow_edge_lab/xs_premia.py:28: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.\n  day = (f.index - pd.Timedelta(microseconds=1)).floor(\"D\")\n/home/runner/work/orderflow_edge_lab/orderflow_edge_lab/src/orderflow_edge_lab/xs_premia.py:28: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.\n  day = (f.index - pd.Timedelta(microseconds=1)).floor(\"D\")\n/home/runner/work/orderflow_edge_lab/orderflow_edge_lab/src/orderflow_edge_lab/zoo_mirror_forward.py:26: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.\n  books.index = books.index + pd.Timedelta(days=1)  # stamp at the end of the held day, like the other watches\n/home/runner/work/orderflow_edge_lab/orderflow_edge_lab/src/orderflow_edge_lab/zoo_mirror_forward.py:38: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.\n  fwd = books[(books.index - pd.Timedelta(days=1)) >= start]\nok\ntest_registered_before_start_and_authorizes_nothing (test_zoo_mirror_forward.ZooMirrorForwardTests.test_registered_before_start_and_authorizes_nothing) ... ok\n\n----------------------------------------------------------------------\nRan 1246 tests in 52.022s\n\nOK\n\n",
+            "returncode": 0
+          },
+          "message": "Command passed: /opt/hostedtoolcache/Python/3.12.15/x64/bin/python -m unittest discover -s tests -v",
+          "severity": "info"
+        },
+        {
+          "code": "command_passed",
+          "evidence": {
+            "output_tail": "{\n  \"python\": \"3.12.15\",\n  \"live_transmission_scan\": \"pass\",\n  \"candidate_count\": 7,\n  \"economics\": {\n    \"account_equity\": 10000.0,\n    \"monthly_fixed_cost\": 0.0,\n    \"monthly_cost_hurdle_fraction\": 0.0,\n    \"annualized_simple_cost_hurdle_fraction\": 0.0,\n    \"components\": {\n      \"data\": 0.0,\n      \"platform\": 0.0,\n      \"compute\": 0.0,\n      \"model\": 0.0,\n      \"other\": 0.0\n    },\n    \"note\": \"This is a fixed infrastructure hurdle only. Fees, spread, slippage, funding, taxes and capital drawdown are not included here.\"\n  },\n  \"paper_smoke\": \"pass\",\n  \"instruments\": {\n    \"NQ\": {\n      \"tick_size\": 0.25,\n      \"tick_value\": 5.0\n    },\n    \"MNQ\": {\n      \"tick_size\": 0.25,\n      \"tick_value\": 0.5\n    }\n  },\n  \"status\": \"pass\",\n  \"failures\": []\n}\n",
+            "returncode": 0
+          },
+          "message": "Command passed: /opt/hostedtoolcache/Python/3.12.15/x64/bin/python scripts/deployment_check.py",
+          "severity": "info"
+        }
+      ],
+      "focus": "Compilation, tests, packaging, Linux/Windows CI, workflow failures, hashes, manifests, runtime identity, operator diagnostics and reproducibility",
+      "status": "passed"
+    },
+    {
+      "agent_id": "research_validity",
+      "checks_run": [
+        "required_path:config/orderflow_discovery_v1.json",
+        "required_path:config/regime_research_v1.json",
+        "required_path:src/orderflow_edge_lab/discovery_aggregate.py",
+        "required_path:src/orderflow_edge_lab/research_protocol.py",
+        "required_path:src/orderflow_edge_lab/candidate_freeze.py",
+        "required_path:src/orderflow_edge_lab/holdout_audit.py",
+        "required_path:src/orderflow_edge_lab/trial_ledger.py",
+        "required_path:src/orderflow_edge_lab/promotion.py",
+        "unsupported_claim_scan",
+        "trial_ledger_promotion_binding",
+        "holdout_binding",
+        "regime_protocol_binding"
+      ],
+      "findings": [],
+      "focus": "Discovery/validation/holdout separation, frozen protocols, dependence clustering, candidate freezing, trial accounting, multiple testing, causal audits and promotion evidence",
+      "status": "passed"
+    },
+    {
+      "agent_id": "risk_path",
+      "checks_run": [
+        "required_path:src/orderflow_edge_lab/stop_risk.py",
+        "required_path:src/orderflow_edge_lab/risk_ladder.py",
+        "unsupported_claim_scan",
+        "mae_mfe_path",
+        "exposure_cap_path"
+      ],
+      "findings": [],
+      "focus": "MAE/MFE, stop and target path, RR, requested equity risk, exposure caps, drawdown and risk-of-ruin diagnostics",
+      "status": "passed"
+    },
+    {
+      "agent_id": "sentiment_context",
+      "checks_run": [
+        "required_path:config/sentiment_monitor_v1.json",
+        "required_path:config/sentiment_conditioning_v1.json",
+        "required_path:src/orderflow_edge_lab/sentiment_monitor.py",
+        "required_path:.github/workflows/sentiment-context-v1.yml",
+        "unsupported_claim_scan"
+      ],
+      "findings": [],
+      "focus": "Deterministic public-headline sentiment scoring, source/time provenance, PnL-independent state testing before strategy conditioning, and strict separation between observation and any later veto-only backtest",
+      "status": "passed"
+    },
+    {
+      "agent_id": "transfer_generalization",
+      "checks_run": [
+        "required_path:src/orderflow_edge_lab/cross_pair.py",
+        "required_path:src/orderflow_edge_lab/condition_aggregate.py",
+        "required_path:src/orderflow_edge_lab/market_conditions.py",
+        "required_path:src/orderflow_edge_lab/btc_correlation.py",
+        "unsupported_claim_scan",
+        "regime_research_protocol"
+      ],
+      "findings": [],
+      "focus": "Independent-batch stability, regime stability and PnL-independent cross-pair transfer without relabeling transfer evidence as untouched OOS",
+      "status": "passed"
+    },
+    {
+      "agent_id": "trend_structure",
+      "checks_run": [
+        "required_path:config/regime_research_v1.json",
+        "required_path:docs/REGIME_RESEARCH.md",
+        "required_path:src/orderflow_edge_lab/ema15m_hypothesis.py",
+        "unsupported_claim_scan",
+        "regime_research_protocol"
+      ],
+      "findings": [],
+      "focus": "Trend/range state, completed-candle EMA and slope behavior, ADX/Donchian/directional-efficiency research, and multi-timeframe agreement without look-ahead",
+      "status": "passed"
+    },
+    {
+      "agent_id": "volatility_regime",
+      "checks_run": [
+        "required_path:config/regime_research_v1.json",
+        "required_path:src/orderflow_edge_lab/market_conditions.py",
+        "unsupported_claim_scan",
+        "regime_research_protocol"
+      ],
+      "findings": [],
+      "focus": "ATR/Bollinger-width/realized-volatility state, expansion-contraction behavior, volatility-of-volatility, and movement relative to execution friction",
+      "status": "passed"
+    }
+  ],
+  "config_sha256": "69b4e7af588817713913a0b014d039f38598ba8ef4a6d09a44650b73decb0b90",
+  "generated_at": "2026-10-24T11:18:43.271829+00:00",
+  "manifest_sha256": "528ea4efd7c9282e32a5762270fd6bd245a7c1c7d6ab036133850e1dcd04be50",
+  "release_manager": {
+    "error_count": 0,
+    "live_order_transmission_supported": false,
+    "missing_agents": [],
+    "next_actions": [],
+    "profitable_edge_established": false,
+    "status": "reviewable",
+    "verified_out_of_sample_evidence": false,
+    "warning_count": 0
+  },
+  "runtime": {
+    "pid": 2413,
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "python": "3.12.15"
+  },
+  "schema_version": 1
+}

@@ -1,0 +1,61 @@
+{
+  "status": "PASS_BOUNDED_OPERATIONAL_PAPER_IMPLEMENTATION_REVIEW_PUBLICATION_NOT_VERIFIED",
+  "bindings": {
+    "src/orderflow_edge_lab/four_regime_paper.py": "c189a49777debd1db7a4322187d89f3f767ef9482ddb8f47de328313d3f7b176",
+    "tests/test_four_regime_paper.py": "be1c558ed59b7de78fd46c128eae56a857330cfb44712626ad10c27aa99e3cbc",
+    "config/four_regime_paper_intent_v1.json": "d6032d93494821f3bf8b42f700ea674bf364bc521aa5d7fc32664ae8a2267a3a",
+    "config/four_regime_forward_operational_v1.json": "009e5fcd43aa80e6f1ccc5df42f1de0ae58d315b1505979ea4627681376388ea",
+    ".github/workflows/four-regime-forward-paper.yml": "9f7fdda4c247bc2dac2561fd52b802c80cf3244555999592b7877f24330bddc7"
+  },
+  "registration_commit": "d4cb8bd61eb7e0a2c9c1f4cfe07101b7c3fb527c",
+  "registered_intent_seal": "1d66bb284c0df54a6b1af65d6d0c6f925c1030c8bc08ca8879ebc88da30bfc60",
+  "calendar_exact_sha256": "536bb309183b7d986c86206a17f0109d63d2010d86564239b17591b3c0b005c4",
+  "registered_wallet_helper_normalized_sha256": "e225d2aeb2af6092fe3915b577442be2c97c5bf5001ab7917a339c9a849eb922",
+  "review_script_exact_sha256": "c43a85ad2045ffb5a61505b20ddd273637f0737bcd5bf0828cd24c7867f87b5c",
+  "blocking_findings": [],
+  "market_future_quotes_fetched": false,
+  "manufactured_future_observation_reports_written": false,
+  "repository_edits": false,
+  "validations": {
+    "updated_registered_tests_rerun": 6,
+    "all_passed": true,
+    "real_registration_guard_pass": true,
+    "reference_receipts_and_closes_match_archived_raw": true,
+    "full_calendar_end": "2027-12-31",
+    "synthetic_terminal_wallet_marks": 94,
+    "synthetic_terminal_cash_receivable_nav_max_residual_usd": 0.0,
+    "before_open_and_before_complete_first_session_no_positions": true,
+    "initial_entry_exdate_no_entitlement": true,
+    "postentry_distribution_stays_unspendable_receivable": true,
+    "terminal_sale_not_double_charged": true,
+    "missed_limit_never_retried": true,
+    "resealed_changed_reference_rejected_by_registration_guard": true,
+    "duplicates_and_nonfinite_negative_dividends_rejected": true
+  },
+  "resolved_findings": [
+    "Self-seal alone accepted altered references; fixed registered intent SHA now checked by CLI before any fetch/replay.",
+    "Mutable calendar could omit/duplicate days and duplicate dividend NAV; fixed calendar hash plus unique chronological guard now reject.",
+    "Nonfinite/negative dividends now fail closed."
+  ],
+  "workflow_and_endpoint": {
+    "paper_terminal_session": "2026-12-31",
+    "data_fetch_cutoff_exclusive": "2027-01-01",
+    "workflow_fetch_window_end": "2027-01-08",
+    "cron": "October-December weekdays22:15UTC",
+    "retry_note": "January1-8 retries require workflow_dispatch under current cron.",
+    "read_only_permissions": true,
+    "raw_and_report_artifacts_retained": true
+  },
+  "required_external_preopen_evidence": {
+    "status": "NOT_INDEPENDENTLY_VERIFIED_IN_THIS_REVIEW",
+    "requirement": "Root must publish and retain externally timestamped Git/CI evidence of registration/fixed observer before2026-10-26T13:30UTC. Self-declared created_at is not an external timestamp."
+  },
+  "limits": [
+    "Finite first-quarter operational/reliability pilot, not statistically powered profitability confirmation; every orders/promotable/future_confirmation_started flag remainsfalse.",
+    "Auction-open and terminal-close fills are explicitly assumptions based on future completed daily bars; no exchange orders or verified broker fills.",
+    "Repeated snapshots refetch prior Yahoo history: price/dividend revisions may restate older proxy marks/fills; preserve raw receipts/run artifacts and disclose revisions rather than call these immutable verified executions.",
+    "Ninety-day dividend cash approximation remains; terminal unpaid receivables are asset values, not spendable cash.",
+    "Calendar/schema/data error fails closed; no estimated gains or implicit repair.",
+    "This review does not establish broker access,settlement,tax,exchange-depth,lot or actual fee feasibility."
+  ]
+}
