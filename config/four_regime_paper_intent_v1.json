@@ -1,0 +1,125 @@
+{
+  "protocol": {
+    "protocol": "FOUR_REGIME_FORWARD_OPERATIONAL_V1",
+    "candidate": "FOUR_REGIME_ALLOCATION_V1",
+    "purpose": "finite prospective first-quarter paper observation and data/accounting reliability, not statistical confirmation of an edge",
+    "reference_session": "2026-10-23",
+    "initial_entry_session": "2026-10-26",
+    "initial_open_utc": "2026-10-26T13:30:00+00:00",
+    "terminal_session": "2026-12-31",
+    "terminal_close_utc": "2026-12-31T21:00:00+00:00",
+    "accounts": "two separate10000USD modeled baseline/stress accounts, never pooled capital",
+    "intent": "freeze integer quantities and limit prices from Oct23 closes before Oct26 open; retain canonical SHA256; no retrospective entries if intent created late",
+    "execution": "indicative daily auction-open proxy only if below fixed limit; terminal market-on-close proxy; not actual orders or verified fill prices",
+    "data": "public Yahoo raw unadjusted OHLCV/dividends; complete-calendar and raw-hash audit; reject splits, missing or partial sessions; no repairs",
+    "accounting": "hold fixed initial shares through terminal close; exdate dividends from carried quantity,90day receivable cash delay; allfeesandhypotheticalclosingcosts in marks",
+    "reporting": "daily netPnL, drawdown, cash, share inventory and receivables; no early success stopping, no retuning; a positive observed return alone is not confirmation",
+    "data_or_execution_failure": "fail closed; report unreconciled/no marks rather than publish estimated profits",
+    "future_confirmation_started": false,
+    "orders": false,
+    "promotable": false
+  },
+  "created_at_utc": "2026-10-24T11:08:37.623712+00:00",
+  "reference": {
+    "reference_session": "2026-10-23",
+    "closes": {
+      "SPY": 759.969970703125,
+      "TLT": 81.33999633789062,
+      "GLD": 366.6099853515625,
+      "SHV": 110.33000183105469
+    },
+    "raw_receipts": [
+      {
+        "asset": "SPY",
+        "url": "https://query1.finance.yahoo.com/v8/finance/chart/SPY?period1=1792713600&period2=1792800000&interval=1d&events=div%2Csplits&includeAdjustedClose=false",
+        "sha256": "408da8ce78b9db100ea35387296829b183cbbe2773552b9c2234e65fcaee6ec4",
+        "bytes": 1291
+      },
+      {
+        "asset": "TLT",
+        "url": "https://query1.finance.yahoo.com/v8/finance/chart/TLT?period1=1792713600&period2=1792800000&interval=1d&events=div%2Csplits&includeAdjustedClose=false",
+        "sha256": "7176ab41fb75d646d7f8e0745d7d0fb2f798547cd4d35fb246fc282491fdb88b",
+        "bytes": 1286
+      },
+      {
+        "asset": "GLD",
+        "url": "https://query1.finance.yahoo.com/v8/finance/chart/GLD?period1=1792713600&period2=1792800000&interval=1d&events=div%2Csplits&includeAdjustedClose=false",
+        "sha256": "b47a65bb79e47b7d7e0f7f2908eda2aae60b9aa7c0ca79841dc2d79da1c9ed0c",
+        "bytes": 1247
+      },
+      {
+        "asset": "SHV",
+        "url": "https://query1.finance.yahoo.com/v8/finance/chart/SHV?period1=1792713600&period2=1792800000&interval=1d&events=div%2Csplits&includeAdjustedClose=false",
+        "sha256": "9ba2de02ce79bbdbd3fff6209df829591cffeebcea26a9f3d2efc7e5043981ea",
+        "bytes": 1291
+      }
+    ],
+    "captured_at_utc": "2026-10-24T11:08:37.623703+00:00"
+  },
+  "accounts": [
+    {
+      "initial_usd": 10000.0,
+      "cost_multiplier": 1,
+      "intents": [
+        {
+          "asset": "SPY",
+          "fixed_cash_budget": 2500.0,
+          "limit": 775.1693701171876,
+          "shares": 3
+        },
+        {
+          "asset": "TLT",
+          "fixed_cash_budget": 2500.0,
+          "limit": 82.96679626464844,
+          "shares": 30
+        },
+        {
+          "asset": "GLD",
+          "fixed_cash_budget": 2500.0,
+          "limit": 373.94218505859374,
+          "shares": 6
+        },
+        {
+          "asset": "SHV",
+          "fixed_cash_budget": 2500.0,
+          "limit": 112.53660186767578,
+          "shares": 22
+        }
+      ]
+    },
+    {
+      "initial_usd": 10000.0,
+      "cost_multiplier": 2,
+      "intents": [
+        {
+          "asset": "SPY",
+          "fixed_cash_budget": 2500.0,
+          "limit": 775.1693701171876,
+          "shares": 3
+        },
+        {
+          "asset": "TLT",
+          "fixed_cash_budget": 2500.0,
+          "limit": 82.96679626464844,
+          "shares": 30
+        },
+        {
+          "asset": "GLD",
+          "fixed_cash_budget": 2500.0,
+          "limit": 373.94218505859374,
+          "shares": 6
+        },
+        {
+          "asset": "SHV",
+          "fixed_cash_budget": 2500.0,
+          "limit": 112.53660186767578,
+          "shares": 22
+        }
+      ]
+    }
+  ],
+  "orders": false,
+  "future_confirmation_started": false,
+  "promotable": false,
+  "intent_sha256": "1d66bb284c0df54a6b1af65d6d0c6f925c1030c8bc08ca8879ebc88da30bfc60"
+}

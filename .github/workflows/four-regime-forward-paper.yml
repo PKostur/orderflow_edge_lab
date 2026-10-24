@@ -1,0 +1,45 @@
+name: Four Regime Forward Operational Paper
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 22 * 10-12 1-5"
+
+permissions:
+  contents: read
+
+jobs:
+  paper-observation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Enforce finite observation window
+        id: window
+        run: |
+          python - <<'PY'
+          import datetime, os
+          active = datetime.datetime.now(datetime.timezone.utc).date() <= datetime.date(2027, 1, 8)
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f'active={str(active).lower()}\n')
+          PY
+      - uses: actions/checkout@v5
+        if: steps.window.outputs.active == 'true'
+      - uses: actions/setup-python@v6
+        if: steps.window.outputs.active == 'true'
+        with:
+          python-version: "3.12"
+      - name: Install
+        if: steps.window.outputs.active == 'true'
+        run: python -m pip install -e .
+      - name: Observe frozen initial-quarter paper intent
+        if: steps.window.outputs.active == 'true'
+        run: |
+          python -m orderflow_edge_lab.four_regime_paper --intent config/four_regime_paper_intent_v1.json --calendar artifacts/four_regime_forward_operational_v1/calendar.csv --output artifacts/forward-paper-observation
+      - name: Preserve evidence
+        if: always() && steps.window.outputs.active == 'true'
+        uses: actions/upload-artifact@v6
+        with:
+          name: four-regime-forward-paper-${{ github.run_id }}
+          path: artifacts/forward-paper-observation/
+          retention-days: 90
+          if-no-files-found: warn

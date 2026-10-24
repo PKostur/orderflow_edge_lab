@@ -1,0 +1,64 @@
+{
+  "status": "BLOCKED_PRE_PNL_CALENDAR_KNOWLEDGE_CAUSALITY",
+  "review_utc": "2026-10-24T10:46:25.849864+00:00",
+  "reviewed_git_commit": "38358797afe0d2172b587541e8c18a5f8039cb08",
+  "bindings": {
+    "src/orderflow_edge_lab/equity_calendar_carry.py": "98d9ca064e87f8f1c0134a9389d6e07c6eb3b8c95ad93ca3b62ca2548d4dacce",
+    "tests/test_equity_calendar_carry.py": "642ddc3f7a7eeca3ab64df1158d4f9b634c6e00371ea89a64d21652ffe97a685",
+    "config/equity_calendar_carry_v1.json": "a126b352d0725bec4f790f96295937e646e2e9fe6f2beb95cbdaa204eb72aa98",
+    "config/equity_calendar_carry_v1_1.json": "e9efb9d23d1151ca88c30e111d36c61453e85e0497673fd32101294969a25f46",
+    "docs/EQUITY_CALENDAR_CARRY_V1_1.md": "a828ae4f7ffd37fd75c9af64bc8fde5d78e2fe14bcc83b4e596808dc948d4937"
+  },
+  "calendar_only_exact_sha256": "72cab78c6e474aa317d878a9ecefc7cd89bdc233f0fe697c87d7c106e49f8b50",
+  "source_prices_loaded": false,
+  "market_pnl_inspected": false,
+  "repository_edits": false,
+  "validations": {
+    "synthetic_tests_independently_rerun": 7,
+    "all_passed": true,
+    "terminal_calendar_end": "2026-11-10",
+    "terminal_2026_09_30_open_entry_present": true,
+    "terminal_planned_exit": "2026-10-05",
+    "initial_cash_partial_window_policy": "Explicitly registered; no inherited phantom position",
+    "dividend_and_cost_accounting": "Synthetic entitlement-before-open,90day cash delay,integer fee-inclusive quantity and fill/receivable conservation tests pass"
+  },
+  "blocking_findings": [
+    {
+      "severity": "critical",
+      "location": "make_schedule prior-session-close SHV liquidation on fully realized exchange calendar",
+      "example": {
+        "equity_entry_open": "2012-10-31",
+        "generated_SHV_exit_close": "2012-10-26",
+        "market_closure_announcement": "2012-10-28",
+        "closed_sessions": [
+          "2012-10-29",
+          "2012-10-30"
+        ]
+      },
+      "issue": "Actual-calendar previous-session lookup backdates the Treasury liquidation to Friday before Sunday surprise-closure announcement. Static future-calendar availability is not equivalent to point-in-time calendar knowledge. A future-price mutation test cannot detect this calendar information leak.",
+      "required_resolution": "Before economics, define an explicit as-of planned-calendar/canceled-order policy that never moves an executed order earlier after a surprise closure, and test the Sandy case. Alternatively keep this version closed as a calendar-oracle retrospective diagnostic, without causal/implementable claim."
+    },
+    {
+      "severity": "critical_for_random_control_interpretation",
+      "location": "make_schedule random rng.randrange(3,len(actual_month_sessions)-4)",
+      "issue": "The random chosen offset depends on final actual month length, including unannounced later closures; earlier random orders can therefore change under a later calendar surprise.",
+      "required_resolution": "Apply the same predeclared point-in-time planned-calendar/order-cancellation policy to every funded control; no post-outcome convenience repair."
+    }
+  ],
+  "primary_evidence": [
+    {
+      "title": "NASDAQ OMX coordinated U.S. market closure announcement, Sunday October28,2012",
+      "url": "https://www.nasdaqtrader.com/TraderNews.aspx?id=ETA2012-44"
+    },
+    {
+      "title": "CME industry equity-market closure announcement, October28,2012",
+      "url": "https://www.cmegroup.com/media-room/press-releases/2012/10/28/media_alert_cme_grouptocloseusequityindexfuturesandoptionsonfutu.html"
+    }
+  ],
+  "limits": [
+    "Only calendar metadata and code/config/docs/synthetic fixtures inspected; no archived SPY/SHV prices or PnL accessed.",
+    "No comprehensive market/legal/protocol audit requested or implied.",
+    "Funding/receivable synthetic passes do not remove the calendar knowledge blocker.",
+    "BIL stopped version and SHV substitution retained as declared; no old frozen protocols or strategy rules modified."
+  ]
+}

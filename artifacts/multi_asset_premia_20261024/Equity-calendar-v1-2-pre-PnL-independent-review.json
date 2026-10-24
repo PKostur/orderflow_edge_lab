@@ -1,0 +1,65 @@
+{
+  "status": "PASS_NO_REMAINING_CRITICAL_PRE_RUN_FINDINGS",
+  "review_utc": "2026-10-24T10:51:41.887481+00:00",
+  "reviewed_evaluator_commit": "15bf7c4774a8f3e3e674db31bccce7e4e6da9c8b",
+  "protocol_freeze_commit": "9abf01785982c6bb0387dd5674b156b812f4406a",
+  "bindings": {
+    "src/orderflow_edge_lab/equity_calendar_carry.py": {
+      "exact_sha256": "e225d2aeb2af6092fe3915b577442be2c97c5bf5001ab7917a339c9a849eb922",
+      "git_blob_sha256": "e225d2aeb2af6092fe3915b577442be2c97c5bf5001ab7917a339c9a849eb922"
+    },
+    "tests/test_equity_calendar_carry.py": {
+      "exact_sha256": "a97756d0b954c17ac30a9ef28739dad6d7d78ab99a14133470e7fc0d977c247e",
+      "git_blob_sha256": "a97756d0b954c17ac30a9ef28739dad6d7d78ab99a14133470e7fc0d977c247e"
+    },
+    "config/equity_calendar_carry_v1.json": {
+      "exact_sha256": "a126b352d0725bec4f790f96295937e646e2e9fe6f2beb95cbdaa204eb72aa98",
+      "git_blob_sha256": "a126b352d0725bec4f790f96295937e646e2e9fe6f2beb95cbdaa204eb72aa98"
+    },
+    "config/equity_calendar_carry_v1_1.json": {
+      "exact_sha256": "e9efb9d23d1151ca88c30e111d36c61453e85e0497673fd32101294969a25f46",
+      "git_blob_sha256": "e9efb9d23d1151ca88c30e111d36c61453e85e0497673fd32101294969a25f46"
+    },
+    "config/equity_calendar_carry_v1_2.json": {
+      "exact_sha256": "3dfdfbf8b5d2100975534d44ac090be15374d06da168892748c7920e188bf7de",
+      "git_blob_sha256": "3dfdfbf8b5d2100975534d44ac090be15374d06da168892748c7920e188bf7de"
+    }
+  },
+  "calendar_bindings": {
+    "actual_sha256": "72cab78c6e474aa317d878a9ecefc7cd89bdc233f0fe697c87d7c106e49f8b50",
+    "planned_sha256": "be7c6e0551bdaaa41ba4e74671c10f288a54f1ed9d79eb8a3aa867afcfe4e59b",
+    "planned_minus_actual": [
+      "2012-10-29",
+      "2012-10-30",
+      "2018-12-05",
+      "2025-01-09"
+    ]
+  },
+  "market_prices_loaded": false,
+  "market_pnl_inspected": false,
+  "repository_edits": false,
+  "blocking_findings": [],
+  "validations": {
+    "registered_synthetic_tests_rerun": 8,
+    "all_passed": true,
+    "independent_held_SHV_Sandy_fixture": "PASS: synthetic August-November inventory remains SHV through Oct31; SPY order blocked; no Oct26 sale; Oct30 canceled sale retained",
+    "independent_fixed_random_plans_compared": 100,
+    "actual_future_closure_does_not_change_planned_random_windows": true,
+    "equity_exit_closed_session_rolls_forward_not_back": "Nov5 synthetic closure gives Nov6 close exit, Nov7 open Treasury entry",
+    "terminal_and_initial_policy": "Previously verified November calendar retains final September30 entry; partial initial window starts cash explicitly",
+    "final_commit_delta_review": "Only execution/source/protocol Git provenance guard and held-SHV regression added after core causal repair; no alpha/cost/funding change"
+  },
+  "review_scope": "Bounded pre-price/pre-PnL source/config/calendar and synthetic mechanics review, not economic or comprehensive prospective approval. Parent started first economic run while this note was finalized; no output or archived price accessed by reviewer.",
+  "resolved_prior_findings": [
+    "Static final realized calendar replaced by explicit regular planned calendar with four ad-hoc closures treated as unknown.",
+    "Missed Treasury liquidation remains scheduled on closed date and canceled, never backdated.",
+    "SPY buy blocked when Treasury remains held; no unfunded mixed rotation.",
+    "Random offsets depend on fixed regular calendar rather than later realized month length."
+  ],
+  "remaining_declared_limits": [
+    "No exact as-of exchange calendar announcement archive or auction fill/broker proof; this is the explicitly specified regular-calendar canceled-order model.",
+    "Actual previous-close limit and fixed integer quantity still require later execution/broker feasibility; baseline and stress costs are research assumptions.",
+    "90day dividend cash delay and receivable marks remain declared approximation, not exact payment-date history.",
+    "No PnL/profitability/OOS/promotion claim; old stopped v1/v1.1 and all frozen protocols remain retained."
+  ]
+}
