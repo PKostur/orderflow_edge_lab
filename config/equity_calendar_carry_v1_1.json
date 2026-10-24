@@ -1,0 +1,12 @@
+{
+  "candidate": "EQUITY_CALENDAR_CARRY_V1_1",
+  "inherits_rules": "equity_calendar_carry_v1.json",
+  "assets": ["SPY", "SHV"],
+  "cash_asset_change_reason": "BIL has a 2017 reverse split; frozen v1 refuses splits and stopped during acquisition, before any strategy economics. SHV is selected by Treasury category and pre-2009 inception, never by returns.",
+  "v1_closed": "SOURCE_FEASIBILITY_REJECTED_BEFORE_STRATEGY_EVALUATION",
+  "other_rules_changed": false,
+  "prices_or_strategy_outcomes_inspected": "no strategy PnL; BIL split metadata inspected only; no SHV price payload before this registration",
+  "future_confirmation_started": false,
+  "orders": false,
+  "promotable": false
+}

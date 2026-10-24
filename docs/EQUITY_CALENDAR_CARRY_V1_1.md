@@ -1,0 +1,7 @@
+# Equity calendar carry v1.1: source-feasibility correction
+
+The frozen v1 ingestion gate stopped before evaluating any strategy: BIL raw metadata contains a1:2 reverse split on November30,2017. SPY has no splits in the request. Yahoo nominal/split-adjusted price and dividend conventions were not established well enough to silently apply a share action. No split gap was converted into a return or removed from the sample. V1 remains closed as source-infeasible under its own rules.
+
+Before downloading SHV or calculating any portfolio PnL, this new version replaces only the cash ETF with SHV (short Treasury duration, inception before2009). SPY equity rule, fixed2009–2026Sep sample, calendar, causality, costs, delay, controls, risk and promotion rules all remain exactly as preregistered in [v1](EQUITY_CALENDAR_CARRY_V1.md). Every `BIL` cash-asset reference becomes `SHV`. This is a PnL-independent data-compatibility change, not a rescue of a failed strategy return. If SHV contains splits or incompatible calendars the test fails; no further substitution.
+
+Retain both registrations and the stopped BIL payload. There are two registered design versions, one shared equity-calendar hypothesis, and at most one evaluated economic version. Previous source-performance exposure remains disclosed. No historical or future profits have yet been established.
