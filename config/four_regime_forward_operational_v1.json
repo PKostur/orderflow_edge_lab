@@ -1,0 +1,20 @@
+{
+  "protocol": "FOUR_REGIME_FORWARD_OPERATIONAL_V1",
+  "candidate": "FOUR_REGIME_ALLOCATION_V1",
+  "purpose": "finite prospective first-quarter paper observation and data/accounting reliability, not statistical confirmation of an edge",
+  "reference_session": "2026-10-23",
+  "initial_entry_session": "2026-10-26",
+  "initial_open_utc": "2026-10-26T13:30:00+00:00",
+  "terminal_session": "2026-12-31",
+  "terminal_close_utc": "2026-12-31T21:00:00+00:00",
+  "accounts": "two separate10000USD modeled baseline/stress accounts, never pooled capital",
+  "intent": "freeze integer quantities and limit prices from Oct23 closes before Oct26 open; retain canonical SHA256; no retrospective entries if intent created late",
+  "execution": "indicative daily auction-open proxy only if below fixed limit; terminal market-on-close proxy; not actual orders or verified fill prices",
+  "data": "public Yahoo raw unadjusted OHLCV/dividends; complete-calendar and raw-hash audit; reject splits, missing or partial sessions; no repairs",
+  "accounting": "hold fixed initial shares through terminal close; exdate dividends from carried quantity,90day receivable cash delay; allfeesandhypotheticalclosingcosts in marks",
+  "reporting": "daily netPnL, drawdown, cash, share inventory and receivables; no early success stopping, no retuning; a positive observed return alone is not confirmation",
+  "data_or_execution_failure": "fail closed; report unreconciled/no marks rather than publish estimated profits",
+  "future_confirmation_started": false,
+  "orders": false,
+  "promotable": false
+}
