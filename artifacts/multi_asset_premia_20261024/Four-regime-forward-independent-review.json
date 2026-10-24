@@ -1,5 +1,6 @@
 {
-  "status": "PASS_BOUNDED_OPERATIONAL_PAPER_IMPLEMENTATION_REVIEW_PUBLICATION_NOT_VERIFIED",
+  "status": "PASS_BOUNDED_OPERATIONAL_PAPER_IMPLEMENTATION_AND_PREOPEN_PUBLICATION_REVIEW",
+  "reviewed_observer_commit": "084c44306409acf8d160fb8521c3d8d1b6758e46",
   "bindings": {
     "src/orderflow_edge_lab/four_regime_paper.py": "c189a49777debd1db7a4322187d89f3f767ef9482ddb8f47de328313d3f7b176",
     "tests/test_four_regime_paper.py": "be1c558ed59b7de78fd46c128eae56a857330cfb44712626ad10c27aa99e3cbc",
@@ -11,7 +12,7 @@
   "registered_intent_seal": "1d66bb284c0df54a6b1af65d6d0c6f925c1030c8bc08ca8879ebc88da30bfc60",
   "calendar_exact_sha256": "536bb309183b7d986c86206a17f0109d63d2010d86564239b17591b3c0b005c4",
   "registered_wallet_helper_normalized_sha256": "e225d2aeb2af6092fe3915b577442be2c97c5bf5001ab7917a339c9a849eb922",
-  "review_script_exact_sha256": "c43a85ad2045ffb5a61505b20ddd273637f0737bcd5bf0828cd24c7867f87b5c",
+  "review_script_exact_sha256": "355bb513608966f7b7e1e237a03d4b93e7c7baa5e79600a22f984d23d77a9197",
   "blocking_findings": [],
   "market_future_quotes_fetched": false,
   "manufactured_future_observation_reports_written": false,
@@ -47,8 +48,21 @@
     "raw_and_report_artifacts_retained": true
   },
   "required_external_preopen_evidence": {
-    "status": "NOT_INDEPENDENTLY_VERIFIED_IN_THIS_REVIEW",
-    "requirement": "Root must publish and retain externally timestamped Git/CI evidence of registration/fixed observer before2026-10-26T13:30UTC. Self-declared created_at is not an external timestamp."
+    "status": "INDEPENDENTLY_RETRIEVED_VIA_GITHUB_API_BEFORE_REGISTERED_OPEN",
+    "observed_utc": "2026-10-24T11:20:17.683954+00:00",
+    "commit_receipts": {
+      "d4cb8bd61eb7e0a2c9c1f4cfe07101b7c3fb527c": {
+        "commit_date": "2026-10-24T11:16:06Z",
+        "sha": "d4cb8bd61eb7e0a2c9c1f4cfe07101b7c3fb527c",
+        "url": "https://github.com/PKostur/orderflow_edge_lab/commit/d4cb8bd61eb7e0a2c9c1f4cfe07101b7c3fb527c"
+      },
+      "084c44306409acf8d160fb8521c3d8d1b6758e46": {
+        "commit_date": "2026-10-24T11:16:49Z",
+        "sha": "084c44306409acf8d160fb8521c3d8d1b6758e46",
+        "url": "https://github.com/PKostur/orderflow_edge_lab/commit/084c44306409acf8d160fb8521c3d8d1b6758e46"
+      }
+    },
+    "scope": "Committer dates alone are author supplied. This review independently retrieved both exact immutable commit objects from GitHub before the registered entry; runtime fixed seal/calendar/helper bindings verified."
   },
   "limits": [
     "Finite first-quarter operational/reliability pilot, not statistically powered profitability confirmation; every orders/promotable/future_confirmation_started flag remainsfalse.",
