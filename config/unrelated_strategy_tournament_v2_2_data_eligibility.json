@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "protocol_name": "unrelated-strategy-tournament-v2.2-institutional-data-eligibility",
+  "frozen_at_intent": "2026-09-14",
+  "outcomes_inspected_before_freeze": false,
+  "purpose": "Audit legitimate data availability for the already-frozen institutional lane. This phase performs no indicator selection, strategy PnL, parameter tuning, or candidate promotion.",
+  "sources": {
+    "mexc_public_rest": {
+      "base": "https://api.mexc.com",
+      "authentication_required": false,
+      "allowed_probes": [
+        "contract/depth/{symbol}",
+        "contract/deals/{symbol}",
+        "contract/funding_rate/history",
+        "contract/ticker",
+        "contract/kline/{symbol}",
+        "contract/kline/index_price/{symbol}",
+        "contract/kline/fair_price/{symbol}"
+      ]
+    },
+    "existing_deepcharts_dxfeed": {
+      "use_only_if_already_authorized_and_field_is_observed": true,
+      "do_not_assume_crypto_mexc_entitlement": true
+    },
+    "existing_orderflow_capture_batches": {
+      "use_only_observed_fields": true,
+      "independent_capture_batches_are_dependence_clusters": true
+    }
+  },
+  "audit_symbols": ["BTC_USDT", "ENA_USDT"],
+  "families": {
+    "microprice_imbalance_continuation": {
+      "required": ["timestamped_bid_ask_prices", "timestamped_bid_ask_sizes"],
+      "historical_backtest_requires_persisted_depth": true,
+      "prospective_capture_can_qualify": true
+    },
+    "depth_pull_absorption_reversal": {
+      "required": ["timestamped_multilevel_depth", "depth_updates_or_repeated_snapshots", "executed_trades"],
+      "historical_backtest_requires_persisted_depth": true,
+      "prospective_capture_can_qualify": true
+    },
+    "cvd_price_divergence": {
+      "required": ["timestamped_public_trades", "aggressor_side_or_legitimate_side_classification", "price"],
+      "historical_backtest_requires_persisted_trades": true,
+      "prospective_capture_can_qualify": true
+    },
+    "large_trade_flow_acceleration": {
+      "required": ["timestamped_public_trades", "trade_size", "aggressor_side_or_legitimate_side_classification"],
+      "historical_backtest_requires_persisted_trades": true,
+      "prospective_capture_can_qualify": true
+    },
+    "funding_oi_crowding_reversal": {
+      "required": ["historical_funding_rate", "historical_open_interest"],
+      "historical_open_interest_must_be_explicitly_observed": true,
+      "current_open_interest_is_not_a_substitute": true
+    },
+    "basis_convergence": {
+      "required": ["historical_contract_or_fair_price", "historical_index_price", "aligned_timestamps"],
+      "fair_minus_index_basis_is_allowed_if_both_series_are_directly_observed": true
+    },
+    "btc_lead_lag_residual_momentum": {
+      "required": ["historical_alt_ohlcv", "historical_btc_ohlcv", "aligned_timestamps"],
+      "state_first_required_before_any_pnl": true
+    }
+  },
+  "classification": {
+    "historical_ready": "All required historical fields are legitimately available for the frozen study interval or in preserved independent capture batches.",
+    "prospective_capture_only": "Required public live fields exist but preserved history is insufficient. Research may begin only on future independent capture batches.",
+    "blocked_missing_field": "At least one required field is neither legitimately available historically nor prospectively from an approved source.",
+    "needs_existing_entitlement_check": "Potential source exists in already-authorized DeepCharts/dxFeed, but entitlement/field availability has not been observed and may not be assumed."
+  },
+  "claims": {
+    "strategy_pnl_permitted": false,
+    "profitable_edge_established": false,
+    "untouched_oos": false,
+    "live_order_transmission_supported": false
+  }
+}

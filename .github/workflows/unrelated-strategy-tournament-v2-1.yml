@@ -1,0 +1,54 @@
+name: Unrelated Strategy Tournament V2.1
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'config/unrelated_strategy_tournament_v2*.json'
+      - 'scripts/run_unrelated_strategy_tournament_v2_1.py'
+      - 'scripts/run_unrelated_strategy_tournament_v2_1_1.py'
+      - '.github/workflows/unrelated-strategy-tournament-v2-1.yml'
+  workflow_dispatch:
+
+jobs:
+  validate-and-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install package and research dependencies
+        run: |
+          python -m pip install -e .
+          python -m pip install numpy pandas scipy
+      - name: Compile corrected evaluator
+        run: python -m py_compile scripts/run_unrelated_strategy_tournament_v2_1_1.py
+      - name: Validate frozen protocol
+        run: |
+          python - <<'PY'
+          import json
+          a=json.load(open('config/unrelated_strategy_tournament_v2_1_amendment.json'))
+          e=json.load(open('config/unrelated_strategy_tournament_v2_1_execution.json'))
+          r=json.load(open('config/unrelated_strategy_tournament_v2_1_1_amendment.json'))
+          assert a['outcomes_inspected_before_amendment'] is False
+          assert a['state_layer']['required_before_strategy_pnl'] is True
+          assert a['economic_translation']['allowed_only_after_state_pass'] is True
+          assert a['promotion']['automatic_live_transmission'] is False
+          assert e['outcomes_inspected_before_freeze'] is False
+          assert e['causality']['entry_next_bar_open'] is True
+          assert e['causality']['entry_and_exit_must_remain_in_same_21_day_fold'] is True
+          assert len(e['mapping']) == 8
+          assert r['outcomes_inspected_before_amendment'] is False
+          assert r['research_definitions_changed'] is False
+          assert r['frozen_intervals_unchanged'] is True
+          assert r['randomized_control']['iterations'] == 2000
+          assert r['parameter_neighborhood']['required_for_final_economic_pass'] is True
+          PY
+      - name: Run corrected frozen tournament
+        run: python scripts/run_unrelated_strategy_tournament_v2_1_1.py --out research/unrelated_strategy_tournament_v2_1_1
+      - name: Upload evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: unrelated-strategy-tournament-v2-1-1
+          path: research/unrelated_strategy_tournament_v2_1_1/

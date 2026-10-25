@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "protocol_name": "unrelated-strategy-tournament-v2.1-state-first-execution",
+  "frozen_at_intent": "2026-09-14",
+  "outcomes_inspected_before_freeze": false,
+  "mapping": {
+    "sma_crossover": {"continuous_score": "(fast_sma-slow_sma)/ATR14", "state_horizon_bars": 20, "entry": "score sign when fast and slow are finite", "exit": "opposite score sign or 20 bars"},
+    "keltner_breakout": {"continuous_score": "(close-EMA)/(ATR*mult)", "state_horizon": "max_hold", "entry": "abs(score)>=1", "exit": "EMA recross or max_hold"},
+    "williams_reversal": {"continuous_score": "-(WilliamsR+50)/50", "state_horizon": "max_hold", "entry": "WilliamsR<=oversold long or >=overbought short", "exit": "WilliamsR crosses -50 or max_hold"},
+    "macd_impulse": {"continuous_score": "MACD_histogram/rolling_96_bar_histogram_std", "state_horizon": "max_hold", "entry": "score sign after histogram zero crossing", "exit": "opposite histogram sign or max_hold"},
+    "volume_shock_continuation": {"continuous_score": "lookback_log_return*max(volume_z,0)", "state_horizon": "max_hold", "entry": "volume_z>=frozen threshold and nonzero lookback return", "exit": "max_hold"},
+    "opening_range_breakout": {"continuous_score": "signed distance outside UTC opening range divided by ATR14", "state_horizon": "max_hold_hours converted to bars", "entry": "first causal close outside completed UTC opening range", "exit": "range reentry or max_hold_hours"},
+    "cmo_reversal": {"continuous_score": "-CMO/100", "state_horizon": "max_hold", "entry": "abs(CMO)>=frozen threshold in reversal direction", "exit": "CMO crosses zero or max_hold"},
+    "atr_expansion_breakout": {"continuous_score": "signed breakout distance/ATR14 when ATR14 exceeds rolling frozen quantile", "state_horizon": "max_hold", "entry": "close beyond prior breakout-window high or low and ATR filter true", "exit": "opposite breakout or max_hold"}
+  },
+  "causality": {
+    "signals_use_completed_bar_t": true,
+    "entry_next_bar_open": true,
+    "dynamic_exits_observed_on_completed_bar_then_filled_next_bar_open": true,
+    "no_same_bar_fill": true,
+    "one_active_trade_per_symbol_family_variant": true,
+    "entry_and_exit_must_remain_in_same_21_day_fold": true
+  }
+}
