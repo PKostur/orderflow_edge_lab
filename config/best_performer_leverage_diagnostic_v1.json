@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "protocol_name": "strategy-discovery-v2.1.3-best-performer-leverage-diagnostic-v1",
+  "status": "post_selection_diagnostic",
+  "source_protocol": "strategy-discovery-v2.1.3-low-turnover",
+  "source_workflow_run_id": 34856870642,
+  "source_head_sha": "036b83d5a050b919e7a0046168edf3a2dbf9ab8b",
+  "source_data_artifact_digests": {
+    "1h": "sha256:a7d321b59313c4a8c98cbf152215dd9eccf7c6ceabc69b17a00a0e245299b8a8",
+    "15m": "sha256:49f73751e6ca9ecc1e29a2ce7fdc8362ab561032bc92c6fdcf5a523b437db4d4"
+  },
+  "selection": {
+    "outcome_dependent": true,
+    "can_support_edge_claim": false,
+    "rule": "top five 1h rows by v2.1.3 primary-cost economic leaderboard plus best 15m primary-cost row as a negative control",
+    "candidates": [
+      {"label":"rbs_momentum_1h_192_1p5_8","interval":"1h","family":"rolling_beta_spread_momentum","params":{"regression_window":192,"threshold_z":1.5,"hold_bars":8},"expected_total_trades":1616,"expected_median_fold_net_bps":1.097871258848859},
+      {"label":"session_vwap_reversion_1h_1p5_4","interval":"1h","family":"session_vwap_reversion","params":{"threshold":1.5,"hold_bars":4},"expected_total_trades":2184,"expected_median_fold_net_bps":-0.2668265683277864},
+      {"label":"range_expansion_fade_1h_1p5_8","interval":"1h","family":"range_expansion_fade","params":{"range_z":1.5,"hold_bars":8},"expected_total_trades":1568,"expected_median_fold_net_bps":-0.5128764175636848},
+      {"label":"session_vwap_reversion_1h_1p5_8","interval":"1h","family":"session_vwap_reversion","params":{"threshold":1.5,"hold_bars":8},"expected_total_trades":1678,"expected_median_fold_net_bps":-2.884606645242192},
+      {"label":"opening_range_reversal_1h_4_0p25_8","interval":"1h","family":"opening_range_reversal","params":{"opening_bars":4,"threshold_atr":0.25,"hold_bars":8},"expected_total_trades":2828,"expected_median_fold_net_bps":-3.3436358318363117},
+      {"label":"range_expansion_fade_15m_1p0_8_control","interval":"15m","family":"range_expansion_fade","params":{"range_z":1.0,"hold_bars":8},"expected_total_trades":8136,"expected_median_fold_net_bps":-10.390466554802689}
+    ]
+  },
+  "economics": {
+    "source_round_trip_cost_bps": 16.0,
+    "leverage_multipliers": [1,2,5,10],
+    "requested_primary_leverages": [2,5,10],
+    "leverage_scales_gross_and_cost_notional_equally": true
+  },
+  "portfolio_model": {
+    "type":"equal_weight_symbol_sleeves",
+    "description":"Nine equal-capital symbol sleeves; at most one active source trade per symbol; each sleeve compounds only its own exact source trades. This preserves cross-symbol concurrency without pretending the entire account can be committed independently to every simultaneous trade.",
+    "cross_symbol_rebalancing": false
+  },
+  "risk_path": {
+    "mae_source":"intratrade high/low bars from source immutable klines",
+    "wipeout_bound_underlying_move_abs":"1/leverage",
+    "wipeout_bound_is_exchange_liquidation_price": false,
+    "note":"Maintenance margin, tiering, funding and exchange-specific liquidation mechanics are not inferred. The 1/L MAE breach is an optimistic pre-maintenance capital-wipeout bound."
+  },
+  "bootstrap": {
+    "epochs": 100000,
+    "seed": 20260914,
+    "unit":"whole 21-day calendar dependence fold",
+    "same_fold_draw_applied_to_all_symbol_sleeves": true,
+    "purpose":"stability/risk diagnostic only"
+  },
+  "robustness": {
+    "trim_fraction_each_tail": 0.01,
+    "leave_one_symbol_out": true,
+    "leave_one_fold_out": true,
+    "side_decomposition": true
+  },
+  "claims":{"development_diagnostic_only":true,"verified_oos":false,"profitable_edge_established":false,"live_enabled":false,"automatic_promotion":false}
+}

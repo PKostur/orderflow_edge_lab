@@ -1,0 +1,90 @@
+name: Best Performer Leverage Diagnostic v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/v2-1-3-leverage-diagnostic]
+    paths:
+      - "config/best_performer_leverage_diagnostic_v1.json"
+      - "scripts/run_best_performer_leverage_diagnostic.py"
+      - "tests/test_best_performer_leverage_diagnostic.py"
+      - ".github/workflows/best-performer-leverage-diagnostic-v1.yml"
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: best-performer-leverage-diagnostic-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  protocol-guard:
+    name: post-selection-diagnostic-guard
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]" pytest
+      - name: Verify leverage diagnostic invariants
+        run: python -m pytest -q tests/test_best_performer_leverage_diagnostic.py
+
+  diagnostic:
+    name: exact-trades-100k-fold-bootstrap
+    needs: protocol-guard
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research runtime
+        run: python -m pip install -e ".[research]"
+      - name: Download exact v2.1.3 1h source data
+        uses: actions/download-artifact@v4
+        with:
+          name: strategy-discovery-v2-1-3-data-1h
+          path: artifacts/source/1h
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 34856870642
+      - name: Download exact v2.1.3 15m source data
+        uses: actions/download-artifact@v4
+        with:
+          name: strategy-discovery-v2-1-3-data-15m
+          path: artifacts/source/15m
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 34856870642
+      - name: Run exact-trade leverage and robustness diagnostic
+        run: |
+          python scripts/run_best_performer_leverage_diagnostic.py \
+            --config config/best_performer_leverage_diagnostic_v1.json \
+            --data-1h artifacts/source/1h \
+            --data-15m artifacts/source/15m \
+            --output artifacts/best_performer_leverage_diagnostic_v1/report.json
+      - name: Deterministic multi-agent release gate
+        run: |
+          orderflow-multi-agent --output artifacts/best_performer_leverage_diagnostic_v1/multi_agent_report.json
+          python - <<'PY'
+          import json
+          report=json.load(open("artifacts/best_performer_leverage_diagnostic_v1/report.json",encoding="utf-8"))
+          gate=json.load(open("artifacts/best_performer_leverage_diagnostic_v1/multi_agent_report.json",encoding="utf-8"))
+          if gate["release_manager"]["status"] != "reviewable":
+              raise SystemExit(f"release manager blocked: {gate['release_manager']['next_actions']}")
+          claims=report["claims"]
+          if claims["profitable_edge_established"] or claims["verified_oos"] or claims["live_enabled"]:
+              raise SystemExit("diagnostic illegally escalated research claims")
+          PY
+      - name: Preserve diagnostic evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: best-performer-leverage-diagnostic-v1
+          path: artifacts/best_performer_leverage_diagnostic_v1/
+          retention-days: 30
+          if-no-files-found: error
