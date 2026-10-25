@@ -20,6 +20,7 @@ import sys
 # `--list --json` output is stable across runs.
 _COMMANDS: dict[str, str] = {
     # Backtests and strategy research
+    "orderflow-zero-fee-scalping": "zero_fee_scalping",
     "orderflow-backtest": "orderflow_backtest",
     "orderflow-universal-backtest": "universal_backtest",
     "orderflow-strategy-tournament": "strategy_tournament",
