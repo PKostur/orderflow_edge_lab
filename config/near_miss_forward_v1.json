@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "watch_id": "near-miss-forward-v1",
+  "status": "FROZEN_BEFORE_PROSPECTIVE_START",
+  "question": "Do the two regime-bound near-misses (liquidation-cascade reversal, strong only in 2023-26; CTREND, strong only after 2022-05) keep earning on data nobody has seen, and what does the trend core look like at 2x leverage live-simulated?",
+  "registration_note": "Registered 2026-10-13 at the user's request ('proceed with all'). Every rule below has already been backtested and its results seen (v3 round 2 FAIL: dev Sharpe -0.12, validation 1.73; v1 R2C1 CTREND FAIL: dev -2.4, validation 0.95; trend-core leverage study: registered max safe leverage 1, 9 single-coin liquidations at 2x in 2023-26). None passed its gates, so this is a descriptive forward watch, not a promotion: only data after the start can say whether the recent regime persists. Paper only; no orders, no keys.",
+  "prospective_start_utc": "2026-10-15T00:00:00Z",
+  "sleeves": {
+    "cascade": {
+      "rule": "exactly strategy-search-v3 V3R2C1_liquidation_cascade_reversal as registered in config/strategy_search_v3_round2.json including amendment 1 and implementation_notes (4h move >= 5% with 4h OI drop >= 5%, fade for 24h, 10% of equity per trade, max 10 open, 14 bps round trip, funding over (entry, exit])",
+      "universe": "the 30 symbols in research/strategy_search_v3/round2_universe.json; contracts no longer listed simply produce no events",
+      "scored_trades": "trades whose entry close is strictly after the prospective start; lookback data before the start is used only to form signals",
+      "leverage_levels": [1, 2],
+      "leverage_model": "as round 2 (liquidation_cascade.assess_trade_book / leverage_sim): isolated margin per position, liquidation when the adverse 1h mark-price move from entry reaches 1/L - 0.005 (perp 1h high/low where mark bars are missing), loss = margin + 0.5% of notional"
+    },
+    "ctrend": {
+      "rule": "exactly strategy-search-v1 R2C1_CTREND as registered in config/strategy_search_v1_round2.json and its implementation notes (Binance USDT spot universe incl. stable/leveraged exclusions, weekly CS-C-ENet signal on a 52-week window, quintile long-short value-weighted 0.5 gross per leg, weekly buy-and-hold accounting, 10 bps per side on turnover)",
+      "scored_weeks": "books formed at the first weekly rebalance after the prospective start; daily returns from that rebalance onward",
+      "leverage_levels": [1]
+    },
+    "trend_core": {
+      "rule": "exactly the trend-core leverage assessment v1 setup (config/trend_core_leverage_assessment_v1.json): crypto-trend-core-v1 rules on Binance USDT-M perps, 8h bars from 1h klines ending 00/08/16 UTC, 20 bps round trip, Binance funding",
+      "scored_episodes": "position episodes whose entry is strictly after the prospective start; episodes already open at the start are ignored",
+      "leverage_levels": [1, 2],
+      "leverage_note": "2x does NOT meet the registered max-safe-leverage rule of the assessment (zero liquidations in 2023-26 failed at 2x). It is watched because the user chose it explicitly on 2026-10-13; it carries no claim of safety."
+    }
+  },
+  "data": {
+    "source": "data.binance.vision only (futures um daily 1h klines, 1h mark-price klines, daily metrics; spot daily klines; monthly fundingRate). No REST calls.",
+    "lag": "daily archive files appear about one day after the UTC day; a trade or week is scored only when all bars it needs are published, otherwise it is listed as pending",
+    "funding": "fundingRate is published monthly. Until a month's file exists, its settlements are applied as zero and the affected trades are flagged funding_pending; the report shows P&L with and without the pending flag. Once the file is published, the trades are recomputed with realized funding (the history is replayed from the start on every run, so this is automatic)."
+  },
+  "scoring": "for each sleeve and leverage: daily account returns from the first scored day, cumulative return, annualized Sharpe (365), Newey-West t (5 lags), max drawdown, trade count, liquidation count (leveraged rows), and the forward path's percentile within two descriptive bootstrap bands built from the sleeve's own already-seen daily returns at the same leverage (as-backtested; cascade validation 2023-07-01..2026-09-30, CTREND validation 2022-06-01..2026-09-30 as in v1 round 2, trend core 2023-01-01..2026-09-30 as in the leverage assessment) and the same returns demeaned to zero (zero edge): stationary block bootstrap, mean block 10, 5000 paths, seed 20261013",
+  "reporting": {
+    "review_after_days": 180,
+    "before_review": "descriptive only",
+    "at_review": "descriptive statistics and band percentiles; a sleeve whose forward 1x path sits below the 5th percentile of its as-backtested band is reported as 'not consistent with the recent regime'; no claim of an edge from 180 days"
+  },
+  "honest_power_note": "at the cascade's validation Sharpe (1.73) 180 days gives an expected t of about 1.2, at CTREND's (0.95) about 0.7; this watch can show a breakdown much sooner than it can confirm an edge",
+  "claims": {
+    "strategy_promotion_authorized": false,
+    "paper_trading_authorized": false,
+    "live_trading_authorized": false,
+    "orders_sent": false
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "study_id": "leverage-bracket-study-v1",
+  "amendment": 1,
+  "date_utc": "2026-10-13",
+  "before": "any study output was computed on real data. Data inspected before this amendment: download integrity only (checksums, OHLC validity, gaps, first/last bar per symbol, runs of frozen bars); no trade, return or statistic was computed.",
+  "changes": {
+    "stale_tails": "a trailing run of at least 1 day of frozen bars (high = low = the final close) after a contract stopped trading is not traded (WAVESUSDT from 2024-06-11, SXPUSDT from 2025-12-05); this applies the registered 'delisted contracts kept while they trade'",
+    "yfiiusdt": "no 1-minute bars in the sample (delisted earlier); stays in the universe list, contributes no trades, reported as 'no bars in sample'",
+    "liquidation_pnl": "a liquidated trade loses its margin plus the 0.5% of notional liquidation fee, and also pays the entry half of the trading fee (7 bps of notional, charged at open from the wallet) and any funding settled while it was open: P&L = -(1 + 0.005 L + 0.0007 L) of margin minus funding paid; all other exits pay the full 14 bps round trip"
+  },
+  "interpretations": {
+    "time_stop": "the first bar ending at or after 24h after entry closes the trade at its close, after level checks on that bar; trades that cannot finish before the data end are dropped",
+    "funding_window": "settlements s with open < s <= close",
+    "e0_rng": "random directions drawn per symbol from a generator seeded with [20261013, symbol index], identical across cells",
+    "day_assignment": "a trade belongs to its UTC exit day; the sample halves split by exit date",
+    "bootstrap_p": "one-sided p = (1 + #draws with EV <= 0) / (draws + 1), full sample; feeds review_methods.bh_family at q = 0.10",
+    "ruin_seed": "leverage_sim bootstrap with seed 20261013 (as registered)"
+  }
+}

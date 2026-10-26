@@ -1,0 +1,23 @@
+{
+ "schema_version": 1,
+ "watch_id": "tradfi-perps-forward-v1",
+ "amendment": 2,
+ "date_utc": "2026-10-16",
+ "before": "the prospective start (2026-10-19), before any B1 formation, and before any symbol has been reported unavailable; no TradFi price, return or funding value was computed or viewed",
+ "decided_by": "the assistant, under the user's 2026-10-16 instruction to proceed with all open decisions; the user may replace this rule by a further amendment, which then applies only to formations after its own date",
+ "resolves": "amendment 1 open_rule (a stock-book symbol that stays unavailable on Yahoo keeps B1 pending)",
+ "rule": {
+  "trigger": "the same Yahoo symbol appears in b1_yahoo_blocked (reason 'yahoo_unavailable:<sym>') at two consecutive monthly B1 formations in the watch report",
+  "resolution": "from the next formation after the trigger onward, that symbol is removed from the B1 ranking universe and B1 is formed on the remaining symbols with the frozen 12-1 momentum rule, quantiles and leverage unchanged; earlier formations stay as reported (pending)",
+  "flag": "the report must list every excluded symbol with the formation date of its exclusion (b1_excluded_unavailable)",
+  "implementation": "the code change that applies the exclusion is committed only after the trigger is observed, cites the two report artifacts that show it, and changes nothing else; B0, B2, costs, delisting handling and the calendar check are untouched",
+  "pnl_independence": "the trigger uses data availability only, never a return, price level or ranking outcome"
+ },
+ "known_limitation": "a symbol that disappears from Yahoo after a corporate event may be one with unusual returns, so exclusion can bias B1 slightly; the flag makes every exclusion visible at review",
+ "claims": {
+  "strategy_promotion_authorized": false,
+  "paper_trading_authorized": false,
+  "live_trading_authorized": false,
+  "orders_sent": false
+ }
+}

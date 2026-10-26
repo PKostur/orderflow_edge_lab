@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "check_id": "funding-source-check-v1",
+  "status": "DECLARED_BEFORE_EVALUATION",
+  "kind": "inspect_data (accounting integrity of the lead candidate; not a new strategy or variant)",
+  "question": "Does pairing MEXC prices with Binance funding (the development and untouched-holdout construction) overstate the multi-premia blend, compared with MEXC prices and MEXC funding (the forward construction)?",
+  "registration_note": "Declared 2026-10-06 after fast-gates-v1 G3 (MIXED: the XS legs did not replicate on Binance prices). MEXC's public funding history starts 2025-04-15, so the full 2020-26 rebuild is impossible; the test is a paired comparison on the window MEXC covers. Rules frozen, nothing tuned.",
+  "data": {
+    "prices": "MEXC 8h klines from the existing caches (%TEMP%/multi_premia_data.pkl: 70 development coins; %TEMP%/multi_premia_untouched_data.pkl: 60 untouched coins), unchanged",
+    "funding_A": "Binance funding from the same caches (as in the development and holdout runs)",
+    "funding_B": "MEXC realized funding (contract/funding_rate/history) from 2025-04-15; before that, funding_A is spliced in so the warm-up is identical",
+    "evaluation_window": ["2025-06-01", "2026-09-12"]
+  },
+  "method": "Frozen multi-premia-blend-v1 rules (S1 trend, S2 XS momentum, S3 XS carry, S4 equal-risk blend, 20 bps round trip), run twice on identical prices: A with funding_A, B with funding_B. Report annualized return, Sharpe and Newey-West t per leg for A and B, the paired daily difference B-A with its NW t, and the correlation of MEXC vs Binance funding per coin.",
+  "reading_rules": {
+    "MATERIAL": "S4 annual return under B is below 50% of that under A, or the paired S4 difference B-A has NW t <= -2: the funding mismatch inflates the historical evidence; development (2.09) and holdout (1.39) Sharpe are not decision-grade",
+    "NOT_MATERIAL": "otherwise: the funding source is not the explanation, and the G3 gap comes from MEXC vs Binance price paths themselves",
+    "scope": "applied separately to the 70 development coins (primary) and the 60 untouched coins (secondary)"
+  },
+  "claims": {
+    "strategy_promotion_authorized": false,
+    "live_trading_authorized": false,
+    "changes_frozen_watches": false
+  }
+}

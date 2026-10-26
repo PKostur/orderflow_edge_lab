@@ -1,0 +1,756 @@
+# AI Trading Works (You are just doing it wrong)
+# channel: Moon Dev
+# url: https://www.youtube.com/watch?v=6AiGNWM8Obo
+
+[0:00:00] 99% of people are doing AI trading
+[0:00:02] completely wrong and nobody's going to
+[0:00:05] show you this fix I'm going to show you
+[0:00:06] in this short training here. So, my name
+[0:00:09] is Moonep. I've helped thousands of
+[0:00:11] people go from emotional trader to fully
+[0:00:15] automated trader so they can remove
+[0:00:17] their emotions. I want to go ahead and
+[0:00:19] just dive right in, show you everything.
+[0:00:21] And to be honest, I was just like
+[0:00:23] everybody. I thought that just knowing
+[0:00:25] how to code, I could be a billionaire
+[0:00:27] and make a a billion dollar bot. So, a
+[0:00:30] few years back, I learned how to code by
+[0:00:32] hand like a caveman. And then I built a
+[0:00:36] bot and I lost a bunch of money because
+[0:00:37] I didn't have a framework. So, now that
+[0:00:40] we have AI, anybody can code. So, that's
+[0:00:42] quite beautiful. I believe code is the
+[0:00:44] great equalizer. Now everybody in the
+[0:00:45] world can code with AI, but still
+[0:00:49] everybody's using AI and trading
+[0:00:51] incredibly wrong. And I have the proof
+[0:00:55] of that. Like I sped said, I spent four
+[0:00:57] hours every single day for six months
+[0:01:01] just I watched 15 different courses on
+[0:01:04] how to code. Nobody was sharing how to
+[0:01:06] build trading bots, though. So once I
+[0:01:08] learned how to code, I started to share
+[0:01:11] like, okay, this is how I'm building out
+[0:01:13] my bots. is how I'm building my boss
+[0:01:14] out. And eventually from that failure of
+[0:01:16] building my first bot without having a
+[0:01:19] framework, I came to a framework as
+[0:01:21] well. So I sat there in a co-working
+[0:01:23] space 4 hours a day just to learn how to
+[0:01:26] code. But you're so lucky if you're
+[0:01:28] getting started these days because you
+[0:01:30] have AI and AI can do all of the coding
+[0:01:32] for you. But like I said, everybody's
+[0:01:34] still using AI totally incorrectly for
+[0:01:37] trading. So four hours a day built my
+[0:01:39] first bot after like six months shipped
+[0:01:41] it and it was big failure. Okay, I
+[0:01:43] already told you all that because I
+[0:01:44] didn't have a framework to follow. I
+[0:01:46] just thought that because I know how to
+[0:01:48] code and for you in this ex right now if
+[0:01:51] you don't know how to code just because
+[0:01:52] you have AI you can be a billionaire
+[0:01:54] because you can build bots. That's not
+[0:01:56] actually true. I'll show you how to
+[0:01:57] actually do this. And it came from a
+[0:01:59] failure, right? Cuz I I went ahead and
+[0:02:01] learned how to code, built a bot, lost a
+[0:02:03] bunch of money. I didn't have a
+[0:02:04] framework and then I built a framework.
+[0:02:05] Because in reality, knowing how to code
+[0:02:07] is not knowing how to trade. So, I just
+[0:02:08] came to the market with an idea I
+[0:02:10] thought was good. And it's just like,
+[0:02:12] well, that idea was never actually
+[0:02:15] tested. There was no robustness testing
+[0:02:17] to it. It was just an idea. Just cuz you
+[0:02:19] know how to code doesn't mean you can go
+[0:02:22] ahead and trade. And that's the same
+[0:02:23] thing for now. Just cuz you know how to
+[0:02:24] use AI doesn't mean you know how to
+[0:02:26] trade. You can't just tell AI, "Hey, go
+[0:02:29] ahead and build this or that or go ahead
+[0:02:31] and trade this or that for me." You can
+[0:02:33] have it build things for you, but this
+[0:02:36] is the proof here. Moonab.comi
+[0:02:39] that AI can't really trade for you. I
+[0:02:41] launched OpenAI versus XAI versus Google
+[0:02:44] versus Anthropic versus Moonshot versus
+[0:02:46] Deepseek. And you can see the only one
+[0:02:48] in profit is Open AI and they're up
+[0:02:50] 1.7%. The rest of them are down bad. So,
+[0:02:53] can AI just trade for me? The answer is
+[0:02:56] here at moonab.com/ai.
+[0:02:58] This has been going for, let's see, it's
+[0:03:00] September 9th now. And this has been
+[0:03:02] going since July 24th here. So almost
+[0:03:05] two full months. And you can see the
+[0:03:07] results. AI, can you just go make me
+[0:03:08] money? Well, probably not. Anyways, out
+[0:03:12] of that failure, I built a framework, a
+[0:03:14] system that actually works. Essentially,
+[0:03:17] I went from thinking, "Oh, I know how to
+[0:03:19] code. I can be a billionaire." To
+[0:03:21] getting wrecked and being like, "Oh,
+[0:03:22] well, maybe my strategy didn't actually
+[0:03:25] work. So, let me go ahead and see if it
+[0:03:27] works. Let me back test." I didn't even
+[0:03:28] back test. Back testing kills bad ideas.
+[0:03:31] researching. You get a list of a ton of
+[0:03:34] ideas you think might be good. You got
+[0:03:36] papers, you got YouTube videos, actually
+[0:03:39] you got books. Let me go ahead and show
+[0:03:40] you my road map really quick because I
+[0:03:43] know a lot of you in the zoom already
+[0:03:44] have this. But there's a good book list
+[0:03:47] there where I started just re reading
+[0:03:50] papers just reading reading reading
+[0:03:52] papers listening to audible watching
+[0:03:55] YouTube videos. And the process is this
+[0:03:57] remember research back test and then
+[0:04:00] incubate. I built an actual system and
+[0:04:02] you can see it here in the road map, but
+[0:04:04] I wanted to just show you this book list
+[0:04:06] as well. If you want to screenshot it
+[0:04:07] real quick, these are some of the books
+[0:04:08] that I read to come up with great ideas
+[0:04:11] that I went ahead and then back tested.
+[0:04:13] You can see here, Chat with Traders is
+[0:04:15] also a very good podcast as well. It's
+[0:04:17] got like 300 different um traders here
+[0:04:20] that you can listen to. They kind of
+[0:04:21] tell you a little bit about their
+[0:04:23] strategies, then you can implement into
+[0:04:24] yours. Market Wizards, must readad books
+[0:04:26] here. Like I said, most people are
+[0:04:29] approaching AI trading the way I
+[0:04:31] approached algo training the star. It's
+[0:04:33] like, oh, now I know how to code. Like,
+[0:04:34] yes, you know how to code now, but that
+[0:04:36] doesn't make you a profitable trader.
+[0:04:38] You need a framework that you stack
+[0:04:40] ideas, a ton of ideas, knowing that most
+[0:04:42] of them are not going to work. Okay?
+[0:04:44] Back testing will kill all the bad
+[0:04:46] ideas. And then if they do work, don't
+[0:04:49] do what I did and risk 10K on my first
+[0:04:51] bot. Risk $10 cuz you know that you have
+[0:04:54] a bunch of ideas. You know that they
+[0:04:56] work in the past. And if they work in
+[0:04:57] the past, they might work in the future.
+[0:04:59] So run them with small size. What this
+[0:05:02] does for you is number one, it gets you
+[0:05:04] off the charts. You stop trading by
+[0:05:06] hand. You're instantly more profitable
+[0:05:08] because you're losing money because of
+[0:05:09] your emotions right now trading by hand.
+[0:05:12] So if you go ahead and you take this
+[0:05:13] pivot right now with me, go from hand
+[0:05:16] trader to automated trader because you
+[0:05:18] have Claude, you have Open AI, okay? You
+[0:05:20] take that pivot right now. If you're
+[0:05:22] losing $10,000, $50,000, $100,000, you
+[0:05:26] stop trading by hand. You're instantly
+[0:05:28] more profitable. Okay? Now you're an
+[0:05:30] algorithmic trader. Yes, you're using AI
+[0:05:32] to do the coding, but you're coming up
+[0:05:33] with ideas. I gave you a book list. I
+[0:05:36] gave you the podcast. Coming up with
+[0:05:38] ideas, back test them. See if they're
+[0:05:40] trash. Get them out of there. If they're
+[0:05:42] not trash, incubate them with $10 size.
+[0:05:44] Now, you're an automated trader and
+[0:05:46] you're letting the the true market show
+[0:05:48] you if your strategy works. Yes or no?
+[0:05:51] So please don't approach AI in the the
+[0:05:54] aspect that I'm already testing here for
+[0:05:56] everybody. This is for everybody because
+[0:05:58] everybody asked me, can AI trade for me?
+[0:06:00] This is your answer. But do approach it
+[0:06:02] in some sort of robust system where you
+[0:06:03] can come up with ideas, get rid of the
+[0:06:06] trash, and then test small size and let
+[0:06:08] that bot run for a couple weeks. Does it
+[0:06:10] actually work? Okay, scale it up a
+[0:06:11] little bit. Scale up a little bit more.
+[0:06:14] During that time, you're still looking
+[0:06:15] for new ideas because it's not about
+[0:06:17] having just one bot. Now you may get
+[0:06:19] some ideas from your head if you are a
+[0:06:21] past trader but they do come from books,
+[0:06:23] podcasts, YouTube, build a big uh list.
+[0:06:26] You have Google Scholar as well. There's
+[0:06:28] PhDs that write papers. Not saying that
+[0:06:30] PhDs have good strategies, but they do
+[0:06:32] work hard. You got books. I already
+[0:06:34] showed you those. The podcast I showed
+[0:06:36] you. And then you got YouTube channels
+[0:06:38] as well. So you come up with a ton of
+[0:06:39] ideas from essentially reading or
+[0:06:42] listening. I'm not a big reader. The
+[0:06:44] papers you have to read, but I'm sure at
+[0:06:46] this point you can have somebody read
+[0:06:47] them to you. an AI or something. I like
+[0:06:49] Audible. And then back testing
+[0:06:51] essentially exists to throw out the
+[0:06:52] trash. I use backtesting. If you want to
+[0:06:55] write that down, there's also back
+[0:06:56] trader and zipline. I like back testing.
+[0:06:59] The best. You get some data maybe from
+[0:07:00] Coinbase. They give you unlimited data.
+[0:07:02] Okay, it's free. Test that. Test many
+[0:07:05] time frames, many symbols, and see what
+[0:07:08] actually does well. One thing I like to
+[0:07:10] do is like, okay, if the parameters are
+[0:07:12] here, let's see how good they are if I
+[0:07:14] change to 3%, 4%. And I like to find
+[0:07:16] bubbles here where the strategy works
+[0:07:19] around multiple um close parameters
+[0:07:21] because then if the market which it's
+[0:07:24] never the same in live if it is a little
+[0:07:27] different well it still works. So back
+[0:07:29] testing throws away all the trash and if
+[0:07:31] it passes the back test then just go
+[0:07:33] ahead and build a bot for it. Now AI can
+[0:07:35] help with every part of this process.
+[0:07:37] researching with AI. I'm not I'm not a
+[0:07:39] big fan of just saying, "Hey, give me a
+[0:07:41] profitable trading strategy, but hey, I
+[0:07:43] listened to this podcast and this guy
+[0:07:44] was explaining this type of strategy.
+[0:07:46] How can I implement it with my idea
+[0:07:48] expand with AI that way?" Back testing,
+[0:07:50] obviously AI can do all of the coding
+[0:07:53] for back testing and that's fire because
+[0:07:55] it took me six months to even like get
+[0:07:57] close to learning how to code, you know?
+[0:07:59] So, you can do that now and then once it
+[0:08:01] passes your back test, run it live. You
+[0:08:03] know, Hyperliquid's minimum is $10 and
+[0:08:06] it it controls your risk. Number one,
+[0:08:08] again, you're away from hand trading.
+[0:08:09] Number two, you're running a real bot
+[0:08:11] that you know works in the past. Not
+[0:08:14] guaranteed to work in the future, but
+[0:08:15] you'll see. You'll see if it works in
+[0:08:16] the future. Do you see how much better
+[0:08:18] than this this is than like risking your
+[0:08:21] life savings, you got a million dollars,
+[0:08:22] you're trading by hand. Well, you're
+[0:08:24] going to lose that. And you could just
+[0:08:26] stop right now. Replace that whatever
+[0:08:29] how many hours you spend during the
+[0:08:31] charge, 4 hours, 5 hours, 12 hours sting
+[0:08:33] the charge. Replace that time with
+[0:08:35] building bots to see if they actually
+[0:08:37] work autonomously. And all of this can
+[0:08:39] be done with AI. Yes, you do need good
+[0:08:41] ideas, but I give you a book list. I
+[0:08:43] gave you podcast list. I gave you some
+[0:08:45] places to get ideas. You got Google
+[0:08:46] Scholar. You got papers. It really comes
+[0:08:48] down to like, hey, what kind of ideas do
+[0:08:50] you like, okay, mean reversion strategy
+[0:08:52] into Google Scholar or day trading into
+[0:08:56] Audible, you know? Like there's so many
+[0:08:58] ideas out there. I really like chat with
+[0:09:00] traders because they interview real
+[0:09:02] traders. I really like market wizards.
+[0:09:04] And this is another thing that a lot of
+[0:09:05] people are going to try to like uh tell
+[0:09:07] you is a thing. Like they're going to
+[0:09:09] show you their back test. They're like,
+[0:09:10] "Oh, I made 12 billion%. I'm going to be
+[0:09:12] a billionaire." And it's like, "Okay,
+[0:09:14] that'd be great, but if it was that
+[0:09:16] easy, everybody would do it." The the
+[0:09:18] past does not always line up with the
+[0:09:22] future. So just because it worked in the
+[0:09:24] past, it's not a promise that it's going
+[0:09:26] to work in the future. And that's why
+[0:09:27] the RBI system is so important for me at
+[0:09:30] least because I'm coming up with ideas
+[0:09:31] all the time. I'm back testing to get
+[0:09:33] rid of all the trash. The things that
+[0:09:34] don't work in the past aren't going to
+[0:09:36] just magically work in the future. But
+[0:09:38] if they do work in the past, they might
+[0:09:39] work in the future. So research, back
+[0:09:41] test, incubate small size, and see if it
+[0:09:44] actually works in the future. And this
+[0:09:46] was a hard game. I did learn how to code
+[0:09:47] by hand. So it took me much longer six
+[0:09:50] six months to learn how to code and
+[0:09:52] build a little bot out and then it
+[0:09:54] failed and it took me another six months
+[0:09:55] after I figured out how to actually have
+[0:09:58] a framework to come up with ideas. This
+[0:10:00] is the framework I'm teaching you
+[0:10:01] research back test incubate to find
+[0:10:03] something that actually had an edge. So
+[0:10:05] this does take time. I had a guy come to
+[0:10:07] me saying yo moon this is not working
+[0:10:09] for me. I tested 10 ideas and only one
+[0:10:11] of them works. I'm like bro that's a
+[0:10:13] great hit rate. Keep going. And this is
+[0:10:15] the thing, the AI really changes. And
+[0:10:17] it's not like AI go trade for me. It's
+[0:10:19] AI code for me because it used to take
+[0:10:22] me multiple days just to code out one
+[0:10:24] back test. I remember the time that I
+[0:10:26] found a profitable back test. I was at a
+[0:10:28] little coffee shop. I I left. I was
+[0:10:31] like, "Hell yeah, let's go. Let's go
+[0:10:32] implement this." I ran home. I was so
+[0:10:34] excited. But that used to take me three
+[0:10:36] days minimum. Minimum. And I'm going
+[0:10:38] through Stack Overflow trying to figure
+[0:10:40] out how to code this, code that. AI can
+[0:10:42] do it in a few minutes. So, it's really
+[0:10:44] coming up with great ideas, making sure
+[0:10:46] you have good data, and then back
+[0:10:48] testing that idea to see if it's trash.
+[0:10:49] If it's trash, throw it away. If it's
+[0:10:51] not, let's go ahead and incubate it. And
+[0:10:52] again, AI will help you with the coding
+[0:10:54] part, too. So, while everybody else that
+[0:10:56] wants to use AI for trading is going to
+[0:10:58] go ahead and say, "AI, go trade for me."
+[0:11:00] You're going to actually approach it
+[0:11:02] correctly. I told you, dude, I was
+[0:11:04] eating some eggs and bacon and then a
+[0:11:05] back test hit and I ran home. I I had to
+[0:11:07] get the eggs and bacon out of here. It
+[0:11:08] was good. It was good. But this was even
+[0:11:10] This was a This was like the best
+[0:11:12] feeling I've ever had. a profitable back
+[0:11:14] test. Let's go.
+[0:11:16] And the whole job of this like funnel
+[0:11:19] here, the research back test and
+[0:11:20] incubate is to kill most ideas because
+[0:11:23] we know most traders lose. Most traders
+[0:11:26] are running bad strategies. That kind of
+[0:11:28] means that most strategies are bad,
+[0:11:29] right? So you come up with a ton of
+[0:11:31] ideas, maybe 10% of them work in the
+[0:11:34] past and then maybe a couple of those
+[0:11:36] work in the future. So research, couple
+[0:11:39] ideas, back test to see if they work in
+[0:11:41] the past and then a few of them may work
+[0:11:43] in the future and you scale them up. You
+[0:11:44] start with $10 size and this literally
+[0:11:47] think about this dude. If you're trading
+[0:11:48] big size, whatever big size is to you,
+[0:11:51] if you and you're losing money, if you
+[0:11:53] take me up on this today and you become
+[0:11:55] an automated trader, you're instantly
+[0:11:57] more profitable. You instantly have more
+[0:12:00] time left. You instantly have stress off
+[0:12:02] your shoulders because you don't have to
+[0:12:04] worry about sitting here all day trying
+[0:12:06] to figure out if the price is going to
+[0:12:07] go up or down. No, you just come up with
+[0:12:09] more ideas. You get rid of the trash and
+[0:12:11] then you have AI code the bots out for
+[0:12:13] you and incubate them and they work.
+[0:12:14] Okay, scale them up. Perfect. I was
+[0:12:16] telling you about the guy that said he
+[0:12:18] he tried 10 and only one worked. He was
+[0:12:20] like complaining that like it didn't
+[0:12:21] work. I'm like, bro, that's amazing. One
+[0:12:23] out of 10 is great, especially now that
+[0:12:25] we can use AI in order to find like to
+[0:12:29] code those back tests. Like if you're
+[0:12:30] hitting one out of 10, don't get
+[0:12:32] discouraged. Be excited. And like I
+[0:12:34] said, AI is not just going to hand you a
+[0:12:35] profitable trading bot. You have to
+[0:12:37] bring the idea. That's why I gave you
+[0:12:38] the papers, the books, the podcasts, so
+[0:12:41] you can come up with your experiences
+[0:12:42] plus that idea or that idea triggered
+[0:12:45] with some other idea that you've tested.
+[0:12:47] And you know, everybody's going to come
+[0:12:48] up with their own ideas. And that's
+[0:12:50] pretty much why I can share all this is
+[0:12:51] because you're not here every single
+[0:12:52] day. You're not seeing everything I'm
+[0:12:54] building. I show you how to build
+[0:12:56] things. I show you how to build the
+[0:12:57] infrastructure out. I teach you try to
+[0:12:59] get you caught up to speed with me. But
+[0:13:01] at the end of the day, we all have our
+[0:13:03] own ideas, our own experiences that
+[0:13:05] create our own edge. So it's not going
+[0:13:06] to be like AI, go build me a profitable
+[0:13:08] trading bot, but AI can this is this is
+[0:13:11] an interesting idea. Can you expand on
+[0:13:13] it? AI, can you go ahead and back test
+[0:13:15] this idea for me? AI can this worked in
+[0:13:17] the past. can you go help him help me
+[0:13:19] build a small bot so I can incubate
+[0:13:21] this? You see what I'm saying? And like
+[0:13:23] I said, you know, I try to approach this
+[0:13:25] as a scientist and I know that I'm not
+[0:13:27] always right. I think trading is going
+[0:13:29] to show you that you're not always
+[0:13:31] right. Right? Like if you're a trader,
+[0:13:33] you know, you're not always right. And I
+[0:13:34] try to extrapolate that out to my entire
+[0:13:36] life. When I'm in a conversation, I
+[0:13:37] don't agree with somebody, I step back.
+[0:13:39] I'm like, "Yeah, well maybe I am wrong."
+[0:13:41] You know, I've been proven in the market
+[0:13:42] multiple times I'm wrong. I'm confident
+[0:13:44] I'm wrong. So what that led me to is
+[0:13:46] like, okay, I don't think AI could just
+[0:13:48] trade for you. I don't think you could
+[0:13:49] just say, hey AI, just go ahead and buy
+[0:13:52] and sell for me. But thinking about
+[0:13:54] that, it's like, well, I could be wrong.
+[0:13:55] And everybody asked that. So that's what
+[0:13:58] led me to launching the moon.com/ai
+[0:14:01] is like, okay, let's just answer that
+[0:14:02] question. Let me give them all the same
+[0:14:04] data. You can see the code here. It's
+[0:14:06] all open source. You scroll down here.
+[0:14:09] The code is on GitHub. You can see it.
+[0:14:11] It's all the same code. Each AI gets the
+[0:14:15] same code, same data. You can have it as
+[0:14:18] well. It's all here. It's all
+[0:14:20] standardized. I built the harness and
+[0:14:22] then gave it to six different AIs
+[0:14:23] because I know I could be wrong. I could
+[0:14:25] be totally wrong. I've been proven that
+[0:14:27] over and over again. And I think that's
+[0:14:28] what's great about being a trader is you
+[0:14:30] realize that your opinions don't
+[0:14:32] actually they're not actually certified.
+[0:14:35] Your ideas are not certified, but the
+[0:14:37] market will tell you yes or no if you
+[0:14:39] incubate it. So, I went ahead and I
+[0:14:41] built this. So six AIs can trade for us
+[0:14:44] and let us all know can AI just trade
+[0:14:46] for me 45 days in. I think the answer is
+[0:14:48] no. But down here I thought the answer
+[0:14:50] was no too and then it went crazy. So I
+[0:14:52] think this is going to be interesting
+[0:14:53] over the year. And I just showed you
+[0:14:54] that draw down here. It had a huge draw
+[0:14:56] down at the start and then five out of
+[0:14:58] six got profitable. So we were here and
+[0:15:01] then I was like oh there's trash. But
+[0:15:04] then they all went crazy. So five out of
+[0:15:06] six were profitable. Now at this point
+[0:15:08] it's turned around again. So they're
+[0:15:09] going down again. I know this slide says
+[0:15:11] five out of six, but I built this a few
+[0:15:14] days ago and they now they're not
+[0:15:16] profitable. So that's actually it's
+[0:15:18] pretty enlightening, right? Like we'll
+[0:15:20] see how this goes over the next 90 days,
+[0:15:22] the next year, etc. I think it's a
+[0:15:24] pretty cool open source project. And
+[0:15:25] this was something interesting.
+[0:15:26] Everybody wants to become an algorithmic
+[0:15:28] trader and trade 10,000 times a day.
+[0:15:30] They want to trade a thousand times a
+[0:15:31] day. They want to be a high frequency
+[0:15:32] trader. I don't do that and you don't
+[0:15:34] have to do that. You can trade a few
+[0:15:35] times a week. The thing is bots can be
+[0:15:38] so patient and wait for the perfect
+[0:15:39] setup for 6 days while a human can't
+[0:15:42] wait for 6 minutes. You got to wake up
+[0:15:44] at 9:30 and trade, right? I got to trade
+[0:15:47] the opening range. I got to get trading.
+[0:15:48] I got to Okay. Well, this is what
+[0:15:50] happens to that. So, if you're trading,
+[0:15:52] the more you trade, the less you have.
+[0:15:53] Like literally, if you look at this,
+[0:15:55] okay, so we go here, you can see OpenAI
+[0:15:58] is profitable at 1.3%.
+[0:16:01] But if you look at this, dude, open it
+[0:16:02] up. Look at how many fees they paid.
+[0:16:05] They're up $1.32, but they paid $927
+[0:16:09] in fees. You've never looked at how many
+[0:16:12] fees you paid. That's why I say these
+[0:16:14] exchanges are casinos, dude. They don't
+[0:16:15] promote how many fees you've paid. And
+[0:16:17] you may be trading more than them.
+[0:16:19] They're up $132 and they would be up $11
+[0:16:22] if they didn't have to pay all these
+[0:16:24] fees. Exchanges want you to trade more.
+[0:16:26] Wall Street wants you to trade more.
+[0:16:28] They want you to get on tilt. Exchanges
+[0:16:31] are casinos. Just remember that. At this
+[0:16:34] point, it was up 6%. When I made these
+[0:16:36] slides, it was up 6%, but it also paid
+[0:16:39] 6% in fees. So, I think it was like up
+[0:16:41] $6, but also it paid $6 in fees. Now, a
+[0:16:44] few days later, you can see that they're
+[0:16:46] up $1, and they've paid $9 in fees.
+[0:16:49] That's insane. Please, have you have you
+[0:16:52] ever looked at how many how much you've
+[0:16:54] paid in fees? If you haven't looked at
+[0:16:56] how much you've paid in fees, go here.
+[0:16:59] You just saw how I got there. AI and put
+[0:17:02] in your address or
+[0:17:03] mundave.com/hyperlquid.
+[0:17:05] They both get you there if you click
+[0:17:06] here. Anyways, go look at your fees
+[0:17:08] because I think it's pretty interesting
+[0:17:10] and nobody thinks about this. 100 trades
+[0:17:12] a day is a mountain of fees. Just look
+[0:17:14] at this. The taker fee is 045. The maker
+[0:17:17] fee is 015. And most humans are using
+[0:17:20] taker fees. So if a human was running
+[0:17:22] this this battle here, this fee would
+[0:17:25] probably be triple. So it's $9 right
+[0:17:27] now. If a human was doing this, they
+[0:17:28] would be doing taker orders. meaning
+[0:17:30] they're crossing the spread, meaning
+[0:17:32] they're saying, "Hey, just let me buy
+[0:17:33] now." Luckily, a robot's doing it and
+[0:17:35] they're paying a third of the price. But
+[0:17:37] if a human was, it would be way, way
+[0:17:39] more. You can see if you trade 10 times
+[0:17:40] a day versus 50 times a day versus 100
+[0:17:42] times a day, you're going to get chopped
+[0:17:44] up by fees. That's why I say these
+[0:17:46] exchanges are casinos. They want you to
+[0:17:48] trade more. And this is the thing, who's
+[0:17:50] going to win more? You or your grandma?
+[0:17:52] Your grandma, because she traded one
+[0:17:54] time, you traded a thousand times, she
+[0:17:56] won. The day trader never wins. So if
+[0:17:58] you do want to get into algorithmic
+[0:17:59] trading, this is just another like tip
+[0:18:01] here is don't go for the high frequency
+[0:18:03] trading. Wait, wait a while. Like get
+[0:18:06] some systems working on the weekly, the
+[0:18:08] daily. It doesn't need to overtrade.
+[0:18:11] Look at grandma. She she entered one
+[0:18:12] time into Apple in 1982. Who's winning?
+[0:18:15] One fee. Fees compound fast. And by the
+[0:18:18] way, you pay fees on the entire
+[0:18:20] position. So a lot of people like to use
+[0:18:22] leverage. 10x levers, 20x levers, 30x
+[0:18:24] leverage. You're paying fees on that
+[0:18:26] entire position. If you got a million
+[0:18:27] dollar position but only 50,000 in
+[0:18:30] margin, you're paying fees on the whole
+[0:18:31] million dollars. And there's a funding
+[0:18:34] fee. I didn't even talk about exchanges
+[0:18:36] are casinos. They put the button like
+[0:18:38] let's trade trade more. Flashing lights.
+[0:18:40] You see the flashing lights. They're
+[0:18:42] they're just slot machines. They're
+[0:18:43] trying to speed you up, trying to get
+[0:18:44] you excited, trying to get you scared.
+[0:18:46] The charts going up and down. It's down
+[0:18:48] and you're scared. It's up. You're
+[0:18:50] excited. Let me take off my takeprofit.
+[0:18:52] They want you to trade more. The more
+[0:18:53] you trade, the less you have. At the end
+[0:18:54] of the day, I think you know the honest
+[0:18:56] answer. AI can't just trade for you. I
+[0:18:59] am willing to be proven wrong, though,
+[0:19:00] and that's why I have this. But it can
+[0:19:02] speed up the coding. I believe code is a
+[0:19:04] great equalizer. If you know how to
+[0:19:05] code, you'll never have to listen to
+[0:19:07] anybody ever again. Like, you can build
+[0:19:09] whatever you want for the rest of your
+[0:19:10] life. AI allows us all to know how to
+[0:19:12] code. But this is the the honest answer
+[0:19:14] here. AI sped up the coding part of
+[0:19:17] this. It didn't just give me some
+[0:19:18] profitable trading bot. And then, if you
+[0:19:20] think about it, these in-game decisions,
+[0:19:22] that's what speeds you up. You're you're
+[0:19:25] trading by hand. You're looking at the
+[0:19:26] charts. You have to go ahead and make a
+[0:19:28] decision. You have to say, "Okay, I want
+[0:19:30] to sell now, buy now, sell now, buy now.
+[0:19:33] I want to go bigger size, smaller size."
+[0:19:37] Every trade, you lose money by the fees,
+[0:19:39] right? Every single trade you get
+[0:19:41] outside of the game and you start
+[0:19:42] looking at your trading as a business,
+[0:19:44] which it is. Okay. Well, wouldn't you
+[0:19:46] just deploy Teslas to drive around like
+[0:19:49] automated cars instead of like trying to
+[0:19:51] show for everyone around? Of course. So,
+[0:19:54] I want you to stop making decisions
+[0:19:55] inside the game. Any trader can do this
+[0:19:58] today. You have access to AI. Pull back
+[0:20:01] a little bit. Make the outofgame
+[0:20:03] decisions. Make the make the plan,
+[0:20:04] right? Make the plan for the system and
+[0:20:07] then let the bot execute the system,
+[0:20:09] whatever your system is. And let's be
+[0:20:10] honest, it's low-key an addiction. It's
+[0:20:12] midkey an addiction. And if it wasn't an
+[0:20:14] addiction, you would have walked away by
+[0:20:16] now. You wake up, get liquidated, like,
+[0:20:18] I'm done. I'm not doing this again. But
+[0:20:20] after a couple days, you build your
+[0:20:21] confidence back up, and guess what?
+[0:20:22] You're back at the charts because you
+[0:20:24] have some good idea. You refuse to stop.
+[0:20:26] You refuse to take your take profit. You
+[0:20:28] keep adding leverage, and the cycle goes
+[0:20:31] on and on until that day that you
+[0:20:33] decide, I am not trading by hand
+[0:20:35] anymore. I'm an automated trader now.
+[0:20:38] I've got so many liquidation emails. It
+[0:20:41] took me to finally meet somebody that I
+[0:20:44] thought was just a regular guy that
+[0:20:45] inspired me to finally automate my
+[0:20:47] trading. If you can do it, I can do it,
+[0:20:49] too. I hope I inspire you. And think
+[0:20:51] about it like this. If you're just going
+[0:20:52] to guess which way the price is going to
+[0:20:54] go every single day, that doesn't really
+[0:20:55] compound, right? Like one day you're
+[0:20:57] going to blow up and lose all your
+[0:20:58] money. That's it, right? 9:30. You're
+[0:21:00] like betting your life savings every
+[0:21:01] single day at 9:30 at the open. I
+[0:21:03] haven't even looked at the charts today.
+[0:21:04] It's 9:52. But a system actually
+[0:21:06] compounds. If you're waking up every day
+[0:21:08] and you're saying, "I'm going to work on
+[0:21:09] my algo trading system. I'm going build
+[0:21:11] my bots. I'm going to back test. I'm
+[0:21:12] going to research." That compounds
+[0:21:14] because something I built last month
+[0:21:16] helped me today. Something I built last
+[0:21:18] year helped me today. I was able to
+[0:21:21] build a bot that worked two years ago
+[0:21:23] and then I added a new idea on top of
+[0:21:25] it. It got better. You see, that's
+[0:21:26] compounding. Trading by hand. I woke up
+[0:21:29] last week at 9:30 a.m. I got liquidated.
+[0:21:31] I woke up today at 9:30 a.m. I lost half
+[0:21:34] my port. Tomorrow I'm gonna wake up at
+[0:21:36] 9:30 a.m. like [laughter] up
+[0:21:40] up big and then that's just gonna lead
+[0:21:41] me to the next day where I make some
+[0:21:43] irrational decision because I stayed up
+[0:21:45] too late. You see what I'm saying? That
+[0:21:46] doesn't compound. Being an automated
+[0:21:48] trader using AI to code out systems
+[0:21:50] literally compounds. And Jim Simons, the
+[0:21:54] guy that I'm chasing, my goat, he's the
+[0:21:56] best algorithmic trader ever. He ran up
+[0:21:58] a net worth of $31 billion in this exact
+[0:22:01] industry. He always says, "Keep, you
+[0:22:04] have to keep making your systems better
+[0:22:05] and better because that's what everybody
+[0:22:07] else is going to do." And he didn't have
+[0:22:09] AI. He didn't have AI to do the coding
+[0:22:11] to help him make his systems better and
+[0:22:13] better. So, you do. No more digging
+[0:22:16] through Stack Overflow. Just show up
+[0:22:18] with a new idea instead of staring at
+[0:22:20] the charts. That's it. Compound instead
+[0:22:23] of just gambling each day. And like I
+[0:22:25] said, this is going to save you so much
+[0:22:27] money just because you know how to code
+[0:22:29] or use AI to build a bot. Don't just go
+[0:22:31] run and put 10K in it. I know the
+[0:22:33] feeling. You want to just They're like,
+[0:22:35] "Oh, I know. This is this works. Let me
+[0:22:37] go ahead and put a bunch of money in it.
+[0:22:38] $10 is going to be boring." And I was
+[0:22:40] the same way. But I built this framework
+[0:22:43] that I follow every single time I launch
+[0:22:45] a bot. Now, start with $10 size and
+[0:22:47] scale up as it works. Because just cuz
+[0:22:49] your back tests work does not mean it's
+[0:22:51] going to work in the future. And by the
+[0:22:52] way, the guy that inspired me, he was
+[0:22:54] trading a billion dollars per day. A
+[0:22:57] billion dollars per day. Let that sink
+[0:22:59] in. I don't need to trade all that. But
+[0:23:01] the thing that I thought was fascinating
+[0:23:04] is he's trading a billion dollars per
+[0:23:06] day and he never trades more than $1,000
+[0:23:11] position sizes. So that should change
+[0:23:13] change like the whole way you're
+[0:23:15] thinking about this. A lot of people
+[0:23:16] think that there's like one like magic
+[0:23:19] bullet, one bot that you're going to
+[0:23:20] find that's just going to make you
+[0:23:21] millions of dollars. And I would
+[0:23:23] challenge you on that. You know, I just
+[0:23:24] gave you the example of that guy $1,000
+[0:23:26] size. Obviously, it's not just one bot.
+[0:23:28] It's multiple strategies layered on top
+[0:23:30] of each other because if one dies or one
+[0:23:32] doesn't do well one week, the other two,
+[0:23:34] three, four, five can do well. One might
+[0:23:36] be trending uh trendbot, the other might
+[0:23:38] be a mean reversion. You stack them on
+[0:23:40] and your P&L curve just gets smoother
+[0:23:43] and smoother and smoother opposed to
+[0:23:45] like having all of your eggs in one
+[0:23:47] basket. So build one and then build
+[0:23:49] another, maybe the opposite, for
+[0:23:51] example, like a trender and then a mean
+[0:23:53] reversion and then just go deeper and
+[0:23:55] deeper and keep layering them. One bot
+[0:23:57] is not a business. Just waits to meet
+[0:24:00] like the wrong market essentially. If I
+[0:24:02] had AI, it would have taken me like a
+[0:24:04] month to build a bot. Um, but it took me
+[0:24:06] like a good year to build out an actual
+[0:24:09] edge. My first at least my first edge.
+[0:24:11] Uh, so it is going to take a while. It's
+[0:24:13] not like it's not a get-richqu. It's
+[0:24:15] just not. And I know a lot of people
+[0:24:16] think that it is like, but you got to
+[0:24:18] think of it like this. Nobody's going to
+[0:24:20] give you a profitable trading bot. So if
+[0:24:22] nobody's going to give you a profitable
+[0:24:23] trading bot, you have to build it
+[0:24:25] yourself. And for me it was learn how to
+[0:24:28] code. Okay, that took six months. I had
+[0:24:30] to build it myself. But I didn't build a
+[0:24:31] strategy that worked. Okay, so I lost
+[0:24:33] money. So that's six months. Okay, that
+[0:24:34] takes months. Then I finally built a
+[0:24:36] framework, the RBI system that I could
+[0:24:38] follow. Okay, that led me to some things
+[0:24:39] that were profitable. Okay, great. But
+[0:24:41] now I'm a year in. You have AI, so it's
+[0:24:44] going to be much faster ideally. I can't
+[0:24:46] promise that, but nobody's going to give
+[0:24:48] you a profitable trading bot because the
+[0:24:49] edge I work the edges I work for, like I
+[0:24:52] I'm not going to give them to you or
+[0:24:53] else they're going to disappear. You see
+[0:24:55] what I'm saying? And that's that goes
+[0:24:56] for everybody. There's something called
+[0:24:57] alpha decay. And essentially, if there's
+[0:25:00] you tell a bunch of people there's a
+[0:25:01] million dollars in Manhattan in front of
+[0:25:03] the the McDonald's on whatever street,
+[0:25:07] how long is that million dollars going
+[0:25:08] to be there? Not very long, right? So,
+[0:25:10] at the end of the day, I think it comes
+[0:25:11] down to stop asking AI what to trade and
+[0:25:14] ask it to build the system. You have my
+[0:25:16] whole framework now. Research, back
+[0:25:17] test, and then incubate. So research,
+[0:25:20] come up with great ideas, back test, get
+[0:25:22] rid of all the trash. And if it works in
+[0:25:24] the past, it might work in the future.
+[0:25:25] So incubate it. Small size, $10. Now you
+[0:25:29] have become a much better trader. And if
+[0:25:31] you start today and you say, "I'm never
+[0:25:33] going to trade by hand again."

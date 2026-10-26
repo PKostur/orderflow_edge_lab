@@ -20,7 +20,12 @@ data/mexc_orderflow/
 .DS_Store
 
 # Ruflo/Codex local runtime and generated integration state.
-.claude/
+.claude/*
+!.claude/settings.json
+!.claude/agents/
+!.claude/hooks/
+!.claude/skills/
+!.claude/ledger/
 .claude-flow/
 .codex/
 .mcp.json

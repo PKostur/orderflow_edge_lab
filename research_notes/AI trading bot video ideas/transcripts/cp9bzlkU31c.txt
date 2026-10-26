@@ -1,0 +1,584 @@
+# I Built a Python Bot for Prize Picks!
+# channel: Moon Dev
+# url: https://www.youtube.com/watch?v=cp9bzlkU31c
+
+[0:00:00] prize picks bot here so you can win
+[0:00:03] more. You can see all of the data I've
+[0:00:04] already gotten. I'm using Python
+[0:00:09] and it looks like there's a lot here to
+[0:00:11] explore. So I want to make sure that as
+[0:00:13] soon as I see things, which is right
+[0:00:15] now, you see things as well. So, if
+[0:00:18] you're not familiar with prize picks,
+[0:00:20] it's what all the kids are using these
+[0:00:22] days
+[0:00:23] in order to do kind of fantasy sports
+[0:00:27] kind of sports betting.
+[0:00:29] You can check it out if you want. I
+[0:00:32] mean,
+[0:00:34] it's gambling, so be careful. It's not
+[0:00:37] financial advice. I'm not a financial
+[0:00:38] advisor.
+[0:00:40] I'm just a data dog looking to get an
+[0:00:43] edge in any market. Okay. So, let's go
+[0:00:45] ahead and show you the code that I have
+[0:00:46] so far. You can see I can find all the
+[0:00:48] leagues here,
+[0:00:54] the markets,
+[0:00:56] the stats, etc. Let's go ahead and slide
+[0:00:58] through all the code so you have it
+[0:01:00] right off the bat.
+[0:01:04] Right off the bat, dude, so we can be on
+[0:01:06] the same page. So, you can see I'm
+[0:01:08] importing pandas request daytime. I'm
+[0:01:10] using Python quad code as well, of
+[0:01:13] course. Hey bro, real quick, can you do
+[0:01:15] me a favor and just tap that like button
+[0:01:19] and if you want to see more of this, hit
+[0:01:21] the subscribe as well.
+[0:01:24] Thank you so much. I'm going to keep
+[0:01:25] showing everything. Just tap that like
+[0:01:28] and hit the subscribe. So, it takes the
+[0:01:29] API endpoint. So, this is the how to
+[0:01:31] call the endpoint here. We try the
+[0:01:33] response. We get the data for the
+[0:01:35] response.
+[0:01:38] If there's data, we're going to make a
+[0:01:39] pandas data frame, of course, because
+[0:01:41] we're data dogs and we use pandas. Guys,
+[0:01:44] we normalize the JSON. Okay,
+[0:01:47] we organize all the data here. Boom,
+[0:01:50] bada bang.
+[0:01:52] And then have an exception here. Okay,
+[0:01:54] now we want to go ahead and fetch all
+[0:01:56] the markets. So, this is how you fetch
+[0:01:59] all the markets. You see
+[0:02:00] partner-api.prizepix.com/leagues
+[0:02:04] fetches all available markets from prize
+[0:02:06] picks here. Fetching leagues. Just want
+[0:02:09] you to see all the code that I have.
+[0:02:12] Fetch all projections here. All the
+[0:02:15] current markets.
+[0:02:17] Thousand per page.
+[0:02:20] Group by sports league if available.
+[0:02:22] Show stat types if available.
+[0:02:25] Show projections a key. Sweet, dude.
+[0:02:30] Display the columns. And then we save
+[0:02:31] everything into a CSV so we can look at
+[0:02:34] it later.
+[0:02:35] So we can look at it later. And look at
+[0:02:37] this, dude. We got both the CSVs right
+[0:02:39] here. Here we got the leagues, you know,
+[0:02:41] basketball, soccer, football, tennis,
+[0:02:43] CSGO. CS:GO is a a sport now, dude.
+[0:02:48] Prize pick projections. Beautiful. You
+[0:02:50] have all of that code.
+[0:02:53] I'm so grateful. So grateful that you
+[0:02:56] have it. Now, now I want to dive deeper.
+[0:03:00] Now that you're all caught up to speed,
+[0:03:01] I want to dive deeper.
+[0:03:04] Let's see what we can do.
+[0:03:08] Okay, so it looks like optic odds is
+[0:03:12] get access to the price fix sports book
+[0:03:14] API, real-time betting odds, player
+[0:03:16] props, alternate markets, futures,
+[0:03:19] historical odds, and more. Okay. What do
+[0:03:23] you get with the prize pick sports API?
+[0:03:26] So, pre-match, inplay, live odds,
+[0:03:28] futures, deep links, injury reports,
+[0:03:32] game and player results, schedulers,
+[0:03:35] schedules and rosters, historical data.
+[0:03:38] Historical data is important to us. Get
+[0:03:41] your bet graded in real time with our
+[0:03:43] bet grading API endpoint. What the hell?
+[0:03:46] Uh, that's putting their bias on it, but
+[0:03:49] okay. With optic odds, you have the
+[0:03:52] fastest data you need. So, this doesn't
+[0:03:55] look like it's an official API. Connect
+[0:03:57] to the prize picks API in under five
+[0:03:58] minutes.
+[0:04:01] Comprehensive sports bing API. Let's
+[0:04:03] see. Get started, though.
+[0:04:07] Uh, you got to sign up. You got to sign
+[0:04:09] up. Optic odds. You're dead to me. Let's
+[0:04:13] see what else we have here. Web prize
+[0:04:14] fix web scraping. Great prize pick API
+[0:04:18] guide for sports betting prop.
+[0:04:23] I don't know much about web scraping.
+[0:04:27] I'm working on doing the same thing.
+[0:04:28] I'll update you once I figure out a
+[0:04:30] solution. Keep me updated. Working on
+[0:04:32] something similar. Any success? Any
+[0:04:34] update? Trying to do the same thing.
+[0:04:36] Isn't web scraing not allowed? Use uses
+[0:04:38] code.
+[0:04:41] Scrape projects API data guide for
+[0:04:43] sports betting props. Okay. In the world
+[0:04:46] of sports betting, gaining an edge
+[0:04:49] over the competition often boils down to
+[0:04:51] having the best data. Price picks a
+[0:04:53] popular platform for sports betting
+[0:04:55] props over 250 daily props across
+[0:04:59] various sports categories. Collecting
+[0:05:02] these in a single readable format can
+[0:05:05] give you invaluable insights. Look at
+[0:05:07] how you do it though. Price fix doesn't
+[0:05:09] offer a public API for users to get
+[0:05:12] direct access to his prop data. So
+[0:05:15] scraping becomes a practical solution.
+[0:05:18] Ireate betting data analyze and compare
+[0:05:22] players save time. So required tools
+[0:05:24] here Python, Selenium, Pandas. Got all
+[0:05:27] these Chrome setting up the web scraping
+[0:05:30] script here. Okay, sick bro.
+[0:05:34] I want you to make another file here.
+[0:05:38] I'm using cloud code, of course.
+[0:05:41] Cloud code, of course.
+[0:05:44] So, we have a
+[0:05:47] example here that will show you how to
+[0:05:49] scrape prize picks. Go ahead and use
+[0:05:51] everything in that example to build a
+[0:05:56] another file, a second file that will go
+[0:06:00] ahead and um do all of the functionality
+[0:06:02] here so we can explore the data even
+[0:06:04] more.
+[0:06:06] Okay, this is going to be good because
+[0:06:07] now I'm going to be able to understand
+[0:06:08] entirely what we can do with scraping.
+[0:06:11] Selenium is chill.
+[0:06:14] I create a second file that uses
+[0:06:15] Selenium scrape prize pix data directly
+[0:06:18] from their web interface
+[0:06:28] from their web interface.
+[0:06:32] Selenium is chill.
+[0:07:05] Okay, let's see what she creates, dude.
+[0:07:07] Let's see what she creates.
+[0:07:30] So, she says she's frosting right now.
+[0:07:32] She's getting frosty like the bear.
+[0:07:38] Tip: run terminal set to enable
+[0:07:40] convenient terminal integration while
+[0:07:41] shift enter for a new line and more.
+[0:07:44] Hey, that's cool. They're adding tips.
+[0:07:46] Let's see if there's anything else we
+[0:07:48] can find any more examples on the
+[0:07:50] internet. I already gave you the code
+[0:07:52] for the first part, so that's sick.
+[0:07:55] Let's see if the internet has any more
+[0:07:57] funsies for us. Examples pyb scrape
+[0:08:01] prize pics. Okay, that could be a good
+[0:08:03] one. Um, prize picks odds and API data.
+[0:08:06] So, it looks like they script scraped it
+[0:08:09] here. Okay, let's go ahead and see what
+[0:08:10] she did.
+[0:08:13] So, created scrape prize pics, a
+[0:08:15] comprehensive selenium based scraper
+[0:08:17] that features automated browser control
+[0:08:19] with Chrome.
+[0:08:20] Pop-up handling multiple extraction
+[0:08:23] methods for props data.
+[0:08:26] Scrolling to load more content saves
+[0:08:28] data in bull CSV. Okay, first install
+[0:08:30] that. I already got installed.
+[0:08:31] >> You want to learn and connect with
+[0:08:32] hundreds of other automated traders.
+[0:08:35] Join the newsletter below and get a free
+[0:08:37] invite to our Discord so you can chat
+[0:08:39] with us.
+[0:08:40] >> All right, so first I'm going to get it
+[0:08:41] working and then I'm going to give you
+[0:08:42] the code.
+[0:08:45] How about that? That's a fair trade,
+[0:08:46] bro. It's a fair trade. Let me get it
+[0:08:48] working. Yo, run in headless mode
+[0:08:51] always.
+[0:08:53] I don't want none of that.
+[0:08:56] Slim it down, shorty. We don't want any
+[0:08:57] of those questions. I just want to run
+[0:08:59] it. If I say run it, run the terminal.
+[0:09:01] You run it. Okay. Don't play those games
+[0:09:03] with me. Headless, of course. Or
+[0:09:05] whatever works best. I'm the data dog,
+[0:09:08] but she actually knows everything, dude.
+[0:09:15] Simplify web scraper prompts. Remove
+[0:09:17] prompts.
+[0:09:19] Okay. Okay.
+[0:09:27] What up, Beverly Wanda? What's up, Nay?
+[0:09:31] How you doing? Yo,
+[0:09:35] finally we got some we got some women
+[0:09:37] over here on um Tik Tok. We got 99.6%
+[0:09:41] men over here on YouTube. And that's
+[0:09:44] that's cool. I mean, we're we're data
+[0:09:47] dogs. We're nerds.
+[0:09:51] We're nerds, dude.
+[0:09:53] We're nerdy nerds.
+[0:09:56] If you're a nerdy nerd, then you'll like
+[0:09:58] this stuff. But if you're not a nerdy
+[0:10:00] nerd, then you might not like it. And
+[0:10:04] that's okay. We got Claude code. We got
+[0:10:05] AI coding for us. What up, Dollar? Good
+[0:10:08] luck today. Thank you, bro. Much love to
+[0:10:10] you. 777 Maxi and Dollar. I hope you
+[0:10:13] guys are both well. Thank you for coming
+[0:10:16] through.
+[0:10:17] Much love to you both.
+[0:10:20] We got Claw Code [ __ ] around with
+[0:10:23] prize picks right now. Leishka, what up?
+[0:10:26] Juan, what's up, dude? Antonio, what's
+[0:10:28] up? Brian, dude, this is popping.
+[0:10:35] What up, Beth?
+[0:10:39] What is up,
+[0:10:43] Claude? code changing the game for prize
+[0:10:46] picks. We'll see. We'll see about that,
+[0:10:48] fam. We'll see about that fam.
+[0:10:54] All right. If you want to see the code,
+[0:10:56] dude, you got to get on YouTube.
+[0:10:59] It is what it is.
+[0:11:02] Cuz I don't know how to set up the API
+[0:11:04] yet for Tik Tok. Let's see if I can
+[0:11:06] figure it out. Okay, so
+[0:11:12] this is my code for that. Let's go ahead
+[0:11:16] and say um make another GitHub. Okay,
+[0:11:19] we're doing hella GitHubs as always,
+[0:11:21] dude. Hella GitHubs every day. [ __ ] it.
+[0:11:24] Skinny in a bucket. Create new repo. Um
+[0:11:29] this is going to be live stream
+[0:11:33] recorder
+[0:11:35] recorder. So, I got Cloud Co going. So,
+[0:11:38] I I don't need to just sit and look at
+[0:11:41] it. No way. I can have her work for me.
+[0:11:46] Yes.
+[0:11:51] Create a new repo. Okay.
+[0:11:54] What's up, Marian?
+[0:11:57] What's up, Marian?
+[0:11:59] CD
+[0:12:01] CD up in there. Whoa, whoa, whoa. What
+[0:12:04] the hell?
+[0:12:07] What the hell, bro?
+[0:12:12] I said CD.
+[0:12:15] I said CD. I don't know what you did.
+[0:12:18] CD.
+[0:12:20] What the hell?
+[0:12:25] Holy smokes, bro. This is crazy. Let's
+[0:12:28] go ahead and check this out over here.
+[0:12:31] CD. Oh, it's probably What the hell?
+[0:12:35] It's because I'm not. Yeah. Okay, I got
+[0:12:37] it. I got it now. At least At least I
+[0:12:39] got it now, bro.
+[0:12:41] Copy repo path
+[0:12:44] CD B code dot
+[0:12:48] code dot. We're in there. Perfect. Okay,
+[0:12:52] so
+[0:12:54] what is she doing? She's done here. Um,
+[0:12:57] I'm gonna go ahead and give this clog
+[0:13:00] code
+[0:13:04] this here. So, we got two ideas going at
+[0:13:07] the same time and it just it's it be
+[0:13:08] like that all the time.
+[0:13:10] So main py
+[0:13:25] get back to chatbt. Let's grab that and
+[0:13:27] then forget about it for half a second
+[0:13:29] cuz we got a project we're working on
+[0:13:31] and she's done.
+[0:13:33] AI real estate. That was fun.
+[0:13:37] Okay. Save. Okay.
+[0:13:39] So, let's save that for now. And then
+[0:13:41] looks like she's done. Fix the and
+[0:13:44] simplified. Thank you for making it more
+[0:13:45] simply
+[0:13:47] more simply fun. Starting prize fix
+[0:13:49] scraper. Okay. Scrape. Scrape. Scrape.
+[0:13:50] Let's see what you do, dude.
+[0:13:53] Let's see what you do. Hands off the
+[0:13:55] wheel. I'm scared to drive.
+[0:14:00] I haven't driven in 10 years, dude.
+[0:14:04] I haven't driven in a decade.
+[0:14:09] I drove a golf cart the other day.
+[0:14:11] Almost crashed it.
+[0:14:17] I drove a golf cart.
+[0:14:26] So, it says scraping props here.
+[0:14:35] I'm a little nervous it's not working.
+[0:14:37] Can you add some more feedback here or
+[0:14:39] something? I don't know. But it's been
+[0:14:42] paused here for like 30 seconds.
+[0:14:45] Maybe longer.
+[0:14:48] Maybe longer. Maybe longer.
+[0:14:51] Let me go ahead and ask this question
+[0:14:53] here while we're here.
+[0:14:56] walk me through short step by step how
+[0:14:59] to go ahead and get the um
+[0:15:03] Tik Tok API set up so I can show my
+[0:15:07] screen on the Tik Tok live instead of my
+[0:15:11] face.
+[0:15:15] I use OBS. I use OBS.
+[0:15:28] I use OBS.
+[0:15:33] OBS. OBS.
+[0:15:38] OBS. Setting up Tik Tok streams. Mean,
+[0:15:42] thank you. I've helped hundreds of
+[0:15:43] people automate their trading, even if
+[0:15:45] they've never coded a day in their life.
+[0:15:47] You can go check all the testimonials on
+[0:15:49] my web page. The link is in the
+[0:15:51] description, but there's a 100% money
+[0:15:54] back guarantee, no questions asked for
+[0:15:56] 90 days. So, click the link below and
+[0:15:59] make sure to jump in right now. And if
+[0:16:01] you don't like it, then you get your
+[0:16:03] money back.
+[0:16:03] >> You get your money back.
+[0:16:06] Okay, you can see it's done. Browser
+[0:16:09] closed. No data to save. That did not
+[0:16:12] work.
+[0:16:14] So, I'm trying to scrape prize picks
+[0:16:17] here. And um
+[0:16:22] we got that error. Not an error, but
+[0:16:26] okay. You can see that it finally
+[0:16:28] finished, but the thing is it didn't get
+[0:16:30] anything. So, go ahead and update it.
+[0:16:32] Thank you. So, I'm going to let her run
+[0:16:34] with that. But remember, we got another
+[0:16:35] project going at the same damn time
+[0:16:37] because we're thugs.
+[0:16:42] Okay. So, let's go ahead and see if we
+[0:16:44] can get this to start recording
+[0:16:47] my um Twitch stream.
+[0:16:52] Requests. She I got requests. You know,
+[0:16:54] I have requests in here, dude.
+[0:16:58] You know, I have requests in here, dude.
+[0:17:03] I just have to go to the right um
+[0:17:05] terminal here. TFL, bro. Okay.
+[0:17:10] Run it. See if you can start recording.
+[0:17:12] Pip install DLP.
+[0:17:15] Oh, I better not say that.
+[0:17:19] Um, let's go ahead and say uh
+[0:17:34] Claude
+[0:17:37] dangerously
+[0:17:39] run skip
+[0:17:43] permissions cuz I'm a dangerous
+[0:17:45] dangerous guy. added much more detail.
+[0:17:48] Okay, now let's run this as well. So,
+[0:17:51] yes, I trust the folder. Yes, yes, yes.
+[0:17:54] Okay, I got this error. Please pip
+[0:17:57] install them for me. Go ahead and add
+[0:17:59] requirements.txt and then pip install it
+[0:18:01] into my current environment for me.
+[0:18:03] Thank you, shorty. Thank you. Thank you.
+[0:18:05] Thank you. Much love to you.
+[0:18:09] Thank you so so much.
+[0:18:12] Okay, run it, bro. Run it. and she's
+[0:18:15] running the prize picks down here. So, I
+[0:18:18] already gave you a ton of code already.
+[0:18:19] So, I'm glad uh I'm going to start doing
+[0:18:21] that here at the start of the videos
+[0:18:23] just so you can uh you can bounce if you
+[0:18:26] don't want to be here. And this I
+[0:18:27] [snorts] mean, of course, you want to be
+[0:18:28] here, but if you got somewhere to go, I
+[0:18:31] can just go ahead and make the videos at
+[0:18:32] the very start.
+[0:18:35] At the very very start, I'll show all
+[0:18:37] the code at the very very start, dude.
+[0:18:39] Let's do that. And then I'm going to add
+[0:18:41] more code by the end. So, if you do kick
+[0:18:43] it, by the way, I've got this clipper
+[0:18:45] here. Um, this is sick because it makes
+[0:18:49] it so clips are super easy for me to
+[0:18:52] make. It's probably, you probably seen
+[0:18:54] them by now. Raw streams. Okay, let's go
+[0:18:56] ahead and put in all these parts.
+[0:19:03] [snorts]
+[0:19:07] Damn, dude. I actually got to delete
+[0:19:09] that video now that I think about it.
+[0:19:14] I'mma delete yesterday's video. There's
+[0:19:16] actually OBSC that is
+[0:19:19] can't tell you. Don't don't don't do
+[0:19:22] anything. Don't do anything with
+[0:19:23] yesterday's video, please.
+[0:19:26] Nothing happened. I just forgot to I'm
+[0:19:30] deleting it. Peace. It's not never going
+[0:19:31] to be seen again. What happened
+[0:19:32] yesterday will stay in yesterday's
+[0:19:35] world. Woo! It's gone. Peace. [snorts]
+[0:19:37] Too quick. Too quick. Too quick, dude.
+[0:19:40] Too quick. I got it up out of here.
+[0:19:42] There was some leakage. Obsec leakage
+[0:19:44] yesterday.
+[0:19:46] So, you know when you sometimes have
+[0:19:48] leakage? Yeah, big leakage yesterday,
+[0:19:51] dude. Big leakage.
+[0:19:53] I forgot. Damn. I got to remember things
+[0:19:56] like that or else I'm cooked. It's just
+[0:19:58] that
+[0:20:00] if I if I like show my private key, I I
+[0:20:03] keep stream for like four more hours.
+[0:20:06] So, sometimes I forget, you know. Oh.
+[0:20:10] Little sketchy. Little sketchy.
+[0:20:14] Little sketchy if you ask me.
+[0:20:20] [snorts]
+[0:20:22] Okay, so we updated the scraper.
+[0:20:24] Hopefully this will work. Now, let's go
+[0:20:27] ahead and close some of these windows
+[0:20:30] here.
+[0:20:34] We'll keep that one open here. Let's go
+[0:20:36] ahead and run it.
+[0:20:38] Let's see if we can get Okay, there we
+[0:20:40] go. app.prizepix.com.
+[0:20:46] I don't accept your cookies. Maybe my
+[0:20:48] browser will though. Oh, so it looks
+[0:20:51] like they are.
+[0:20:57] Maybe I have to accept.
+[0:21:01] No.
+[0:21:02] Oh, maybe prize fix isn't available
+[0:21:04] here.
+[0:21:12] Yeah, it is
+[0:21:15] price fix available in Puerto Rico 202
+[0:21:19] or July 24th
+[0:21:29] app.pricfix.com
+[0:21:31] here.
+[0:21:33] If I go there on my browser
+[0:21:36] before Oh, that's why.
+[0:21:39] That is silly, Billy.
+[0:21:43] That is so so silly.
+[0:21:50] What? I didn't even pass as a human,
+[0:21:52] dude. I'm actually a human.
+[0:21:58] Holy smokes, dude.
+[0:22:01] I can't even pass as a human.
+[0:22:05] Okay, so they just got some funny
+[0:22:07] business to literally block what I'm
+[0:22:09] trying to do here. Press and hold. I
+[0:22:11] can't even pass as a human, bro. I'm not
+[0:22:14] a human. YouTube doesn't think I'm a
+[0:22:15] human either. That's why I put my ugly
+[0:22:19] mode on this, bro. Damn, dude. Damn.
+[0:22:22] Damn.
+[0:22:29] Press and hold. I'm not even get able to
+[0:22:30] get through as a human. So, um I want to
+[0:22:34] show you this code one more time just so
+[0:22:35] you have full access to it cuz I want to
+[0:22:37] make sure you you leave with some
+[0:22:40] actionable stuff here. Um this is all of
+[0:22:44] the code to run the initial get markets
+[0:22:47] and see all of the markets and you can
+[0:22:49] kind of work from there. I'm sure this
+[0:22:51] will give you some alpha here, but each
+[0:22:52] day I'm really here just being a data
+[0:22:54] dog, figuring out new things in order to
+[0:22:57] squeeze more alpha out of the market.
+[0:22:59] And what is the market? There are so
+[0:23:01] many markets. It's beautiful. So, here's
+[0:23:03] all the code for the price picks market
+[0:23:05] explorer.
+[0:23:06] >> I know sometimes my videos can be long.
+[0:23:08] That's because I'm just showing you over
+[0:23:10] my shoulder. But if you want me to
+[0:23:11] actually hold your hand through
+[0:23:13] automating and building your own bot,
+[0:23:16] I'll show you how in the link below.
+[0:23:18] Check it out.
+[0:23:18] >> Screenshot. Screenshot. Screenshot.
+[0:23:22] Screenshot it, dude. Screenshot it.
+[0:23:25] Matter of fact, you know what I should
+[0:23:26] do is I'm just going to go ahead and
+[0:23:29] upload this to GitHub. How about that?
+[0:23:31] How about that? Let me go ahead and
+[0:23:32] upload this to GitHub. Um, let's go
+[0:23:36] ahead and clean up the environment. The
+[0:23:38] only file that works is Git Markets. So,
+[0:23:39] let's just have that be um the file that
+[0:23:42] we use. Add a readme that will explain
+[0:23:44] what Git Markets does for everybody on
+[0:23:46] GitHub. Start there. Yeah.
+[0:23:50] N. And then go ahead and push it to
+[0:23:51] GitHub. Yeah. And then go push it to
+[0:23:53] GitHub.
+[0:23:54] Don't Don't be taking credit for it,
+[0:23:56] dude. Don't be taking credit for it.
+[0:23:59] Don't say anything about Claw. Say Moon
+[0:24:01] Death.
+[0:24:02] Is she because she's sneaky with that
+[0:24:05] moonath? [ __ ] Use. Try using Google
+[0:24:09] Trends.
+[0:24:11] Okay.
+[0:24:14] I heard they have a Google Trends API
+[0:24:16] now, which is awesome.
+[0:24:22] Have you used it at all yet?
+[0:24:40] Dude, by the way, there are five spaces
+[0:24:43] left here today. Let's see if we can
+[0:24:45] pull it up. Five spaces left for the
+[0:24:49] algo trade camp. We have this $101 off.
+[0:24:52] So
+[0:24:55] killing it. If you want in, you want you
+[0:24:57] get in today or else you're probably not
+[0:24:59] going to be able to get in. This is
+[0:25:00] where I teach you step by step how to
+[0:25:01] automate your trading. It's short,
+[0:25:03] concise videos. My videos on YouTube
+[0:25:05] tend to be longer. It's me exploring, me
+[0:25:08] working. It's the only way I can really
+[0:25:09] make content. Um I think there's a lot
+[0:25:13] to learn here just by exploring with me.
+[0:25:16] But if you want just straight to the
+[0:25:17] point, how to build a trading bot after
+[0:25:20] back testing to make sure it actually
+[0:25:21] works and you want to be in a community
+[0:25:24] today, you get $101 off. There are five
+[0:25:28] spaces available and then after that the
+[0:25:31] it's just going to go back to regular
+[0:25:32] price. So um you can check out the link
+[0:25:35] on the in the description here,
+[0:25:37] algoramp.com.
+[0:25:39] And yeah, that's that done. cleaned up
+[0:25:41] everything. Committed with Moon Death
+[0:25:44] Repository now live.
+[0:25:47] Okay, let's go check it out.
+[0:25:51] Read me
+[0:25:53] a Python tool to fetch prize picks.
+[0:25:55] Okay,
+[0:25:57] sick, dude. Sick.
+[0:26:00] Created by Moon. It's actually Moondev.
+[0:26:05] It's actually
+[0:26:07] moondev
+[0:26:09] and link to my YouTube.
+[0:26:14] So, let's go ahead and get all that set
+[0:26:16] up and then you will have all of the
+[0:26:18] code because I will set it up to be
+[0:26:20] public now.
+[0:26:22] So, Mundav, that's me. And I think I'm
+[0:26:25] just going to do this. Is this helpful
+[0:26:27] if I just put all of my code on GitHub
+[0:26:32] just piece by piece from here on out?
+[0:26:34] because then
+[0:26:36] then if you have questions, you can just
+[0:26:38] ask AI. Don't ask me.
+[0:26:41] All right. So, I'm going to go ahead and
+[0:26:42] update that. It's actually Moon Dev and
+[0:26:44] then also link to my YouTube. So, if you
+[0:26:48] want to ask me those questions that
+[0:26:50] you're dying to ask, you can. Best tool
+[0:26:53] to scrape.
+[0:26:55] Okay. You're saying scrape Google
+[0:26:58] Trends, dude. You heard you heard
+[0:27:00] there's a Google Trends API now, right?
+[0:27:05] updated now shows that. Let's go ahead
+[0:27:07] and see
+[0:27:11] created by Mundev. Okay, perfect. And
+[0:27:14] then let's go to settings, I believe.
+[0:27:19] And then how do you make it public?
+[0:27:23] Merge archives.
+[0:27:26] Auto close. Change visibility.
+[0:27:29] Change the puby. I want to make this
+[0:27:31] repo public. I've read and I understand.
+[0:27:35] What the hell?
+[0:27:39] Okay. Um,
+[0:27:42] do I have that? Where's my phone?
+[0:28:00] Matter of fact, I don't know.
+[0:28:03] Oh, I'm using it.
+[0:28:06] Funny me. Funny me. I'm using it. Tik
+[0:28:08] Tok is right there, dude.
+[0:28:11] Search the Google Trends API. You search
+[0:28:14] it, dude. Send it to me. Link me.
+[0:28:22] Link me, bro. Link me.
+[0:28:28] Um, don't look at this.
+[0:28:37] Okay, so that is live now on GitHub.
+[0:28:40] Let's see. I believe
+[0:28:43] and um yeah, I'll put the link in the
+[0:28:45] description.

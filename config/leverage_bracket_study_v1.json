@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "study_id": "leverage-bracket-study-v1",
+  "status": "FROZEN_BEFORE_COMPUTATION",
+  "question": "If a high-leverage position is closed as soon as it is up 10-20% on its margin (or when it is liquidated, stopped, or 24 hours old) and a new one is opened right away, what does repeating that do to an account on real Binance perp prices after fees and funding?",
+  "registration_note": "Registered 2026-10-13 at the user's request ('higher leverage, take 10-20% profit per trade on margin, then repeat'). Descriptive mechanics study, NOT a search trial (N unchanged): it measures win rate, fee drag, liquidation rate and ruin of take-profit brackets. Entries are deliberately simple (random, with or against the last 24h move) so the result is about the bracket, not about a signal. No price data has been loaded for it. Paper only; no orders.",
+  "universe": "the 30 Binance USDT-M perps in research/strategy_search_v3/round2_universe.json (ranked by 2020-Q4 volume, fixed before this study); delisted contracts kept while they trade",
+  "sample": ["2024-01-01", "2026-09-30"],
+  "data": "Binance futures um 1-minute klines (last price) from data.binance.vision, monthly files with daily files where months are missing; monthly fundingRate archive. Liquidation is checked on last-price 1m high/low (more conservative than mark price, which moves less).",
+  "entries": {
+    "E0_random": "direction long or short with probability 1/2 (seeded RNG, seed 20261013)",
+    "E1_with_24h": "direction = sign of the perp's return over the previous 24 hours (close to close, 1440 one-minute closes); no trade if exactly 0",
+    "E2_against_24h": "direction = minus the sign used by E1"
+  },
+  "cycle": "per symbol, trades are sequential: a new position opens at the close of the 1-minute bar in which the previous one closed (first entry at the first 1m close of the sample with 24h of history); one position per symbol at a time",
+  "grid": {
+    "leverage": [10, 20, 50, 75],
+    "take_profit_on_margin": [0.10, 0.15, 0.20],
+    "stops": {
+      "S1_liquidation_only": "no stop; the position runs to take-profit, liquidation or the 24h time stop",
+      "S2_half_margin_stop": "stop when the loss reaches 50% of margin (adverse price move 0.5/L), before liquidation"
+    }
+  },
+  "price_levels": "take-profit price = entry x (1 + side x TP/L); stop price = entry x (1 - side x 0.5/L); liquidation when the adverse move from entry reaches 1/L - 0.005 (maintenance margin 0.5%), losing the margin plus a 0.5% of notional liquidation fee; 24h time stop closes at the 1m close",
+  "intrabar_rule": "levels are checked on each 1m bar's high and low; if a favourable and an adverse level are both touched in the same bar the adverse one is assumed first (conservative); such bars are counted and reported; take-profit and stop fill at the level price (no improvement), liquidation at the liquidation price",
+  "costs": "taker 5 bps + 2 bps slippage per side = 14 bps round trip on notional (i.e. 0.14% x L of margin per trade); funding on held notional at each settlement while open (longs pay positive rates)",
+  "account": "one account starting at 1.0; each new position commits margin = 2% of current account equity (30 symbols, so at most 60% of equity is committed); P&L settles into equity at close; equity ruin = below 50% of start",
+  "outputs": {
+    "per_cell": "for each entry x leverage x take-profit x stop (72 cells): trades, win rate, mean win and mean loss in % of margin, liquidation rate, stop rate, time-stop rate, same-bar ambiguity count, fees and funding as % of margin per trade, net expected value per trade in % of margin with a 95% interval from a day-block bootstrap (mean block 10 days, 2000 draws, seed 20261013), and the driftless break-even win rate for comparison",
+    "per_account": "account equity path, final equity, max drawdown, time to first fall below 50%, and P(ruin within 365 days) from the stationary block bootstrap of daily account returns used in search v3 (mean block 10, 5000 paths, seed 20261013)"
+  },
+  "reading": {
+    "viable_cell": "a cell is called 'worth a separately registered trial' only if its net EV per trade has a 95% lower bound above 0 in BOTH halves of the sample (2024-01-01..2025-05-15 and 2025-05-16..2026-09-30) AND its account P(ruin within 365 days) <= 5%, after Benjamini-Hochberg across all 72 cells at q = 0.10 (one-sided p from the bootstrap)",
+    "otherwise": "report the mechanics (fee drag, liquidation share, ruin speed) as the answer; no tuning, no extra grid points after the results are seen"
+  },
+  "claims": {
+    "strategy_promotion_authorized": false,
+    "paper_trading_authorized": false,
+    "live_trading_authorized": false,
+    "orders_sent": false
+  }
+}
