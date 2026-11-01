@@ -1,0 +1,161 @@
+{
+ "check_id": "hyperliquid-venue-check-v1",
+ "window": [
+  "2023-05-12",
+  "2026-09-12"
+ ],
+ "pass_rule": "PASS if at least 40 coins are available, Hyperliquid S4 annualized Sharpe >= 0.5 x the reference S4 Sharpe on the common dates, and Hyperliquid S4 Newey-West t (5 lags) >= 2.0. Otherwise FAIL. Leg statistics are descriptive.",
+ "coins": 64,
+ "missing": [
+  "AKE_USDT",
+  "BR_USDT",
+  "LSK_USDT",
+  "PHA_USDT",
+  "QNT_USDT",
+  "RARE_USDT"
+ ],
+ "contracts": {
+  "AAVE_USDT": "AAVE",
+  "ADA_USDT": "ADA",
+  "AERO_USDT": "AERO",
+  "APT_USDT": "APT",
+  "AR_USDT": "AR",
+  "ATOM_USDT": "ATOM",
+  "AVAX_USDT": "AVAX",
+  "BCH_USDT": "BCH",
+  "BNB_USDT": "BNB",
+  "BTC_USDT": "BTC",
+  "CFX_USDT": "CFX",
+  "CRV_USDT": "CRV",
+  "DASH_USDT": "DASH",
+  "DOGE_USDT": "DOGE",
+  "DOT_USDT": "DOT",
+  "EIGEN_USDT": "EIGEN",
+  "ENA_USDT": "ENA",
+  "ETC_USDT": "ETC",
+  "ETHFI_USDT": "ETHFI",
+  "ETH_USDT": "ETH",
+  "FARTCOIN_USDT": "FARTCOIN",
+  "FET_USDT": "FET",
+  "GALA_USDT": "GALA",
+  "GRASS_USDT": "GRASS",
+  "HBAR_USDT": "HBAR",
+  "HYPE_USDT": "HYPE",
+  "ICP_USDT": "ICP",
+  "INJ_USDT": "INJ",
+  "JTO_USDT": "JTO",
+  "JUP_USDT": "JUP",
+  "KAS_USDT": "KAS",
+  "LDO_USDT": "LDO",
+  "LINK_USDT": "LINK",
+  "LTC_USDT": "LTC",
+  "NIL_USDT": "NIL",
+  "ONDO_USDT": "ONDO",
+  "OP_USDT": "OP",
+  "ORDI_USDT": "ORDI",
+  "PENGU_USDT": "PENGU",
+  "PEPE_USDT": "kPEPE",
+  "POL_USDT": "POL",
+  "PUMPFUN_USDT": "PUMP",
+  "PYTH_USDT": "PYTH",
+  "RENDER_USDT": "RENDER",
+  "RUNE_USDT": "RUNE",
+  "SEI_USDT": "SEI",
+  "SHIB_USDT": "kSHIB",
+  "SOL_USDT": "SOL",
+  "SUI_USDT": "SUI",
+  "TAO_USDT": "TAO",
+  "TIA_USDT": "TIA",
+  "TRUMPOFFICIAL_USDT": "TRUMP",
+  "UNI_USDT": "UNI",
+  "VIRTUAL_USDT": "VIRTUAL",
+  "WIF_USDT": "WIF",
+  "WLD_USDT": "WLD",
+  "WLFI_USDT": "WLFI",
+  "XLM_USDT": "XLM",
+  "XMR_USDT": "XMR",
+  "XPL_USDT": "XPL",
+  "XRP_USDT": "XRP",
+  "ZEC_USDT": "ZEC",
+  "ZEN_USDT": "ZEN",
+  "ZRO_USDT": "ZRO"
+ },
+ "common_dates": {
+  "days": 1097,
+  "first": "2023-09-11 00:00:00+00:00",
+  "last": "2026-09-11 00:00:00+00:00",
+  "hyperliquid_S4": {
+   "sharpe": 1.0927132080508921,
+   "t": 1.9394540482543354,
+   "annual_return": 0.09633780514818552
+  },
+  "reference_S4": {
+   "sharpe": 2.267676459041278,
+   "t": 3.666714845748441,
+   "annual_return": 0.22579772189517588
+  }
+ },
+ "hyperliquid_full_period": {
+  "S1": {
+   "sharpe": 0.6524586058199545,
+   "t": 1.2290271408906077,
+   "max_drawdown": -0.10373053677009769,
+   "days": 1158,
+   "annual_return": 0.06073946265875016
+  },
+  "S2": {
+   "sharpe": 0.7570079663625342,
+   "t": 1.492280203164692,
+   "max_drawdown": -0.2488961753242166,
+   "days": 1158,
+   "annual_return": 0.18774842387462196
+  },
+  "S3": {
+   "sharpe": -0.1862697808973056,
+   "t": -0.32043548901568186,
+   "max_drawdown": -0.5096361077474107,
+   "days": 1158,
+   "annual_return": -0.03801329120715169
+  },
+  "S4": {
+   "sharpe": 1.0927132080508921,
+   "t": 1.9394540482543354,
+   "max_drawdown": -0.10151420410072609,
+   "days": 1097,
+   "annual_return": 0.09633780514818552
+  }
+ },
+ "reference_full_period": {
+  "S1": {
+   "sharpe": 1.186721244466124,
+   "t": 2.8208232036716097,
+   "max_drawdown": -0.10537208550544386,
+   "days": 2229,
+   "annual_return": 0.14123428291671078
+  },
+  "S2": {
+   "sharpe": 0.9763386356207161,
+   "t": 2.4192503431862638,
+   "max_drawdown": -0.40801214555767706,
+   "days": 2229,
+   "annual_return": 0.3356848661918466
+  },
+  "S3": {
+   "sharpe": 1.8186768323024787,
+   "t": 3.9002371896166426,
+   "max_drawdown": -0.4751481344360532,
+   "days": 2229,
+   "annual_return": 0.5854282876793652
+  },
+  "S4": {
+   "sharpe": 2.2453151508661984,
+   "t": 4.7832283032138205,
+   "max_drawdown": -0.1317730908417265,
+   "days": 2168,
+   "annual_return": 0.3048472952241499
+  }
+ },
+ "s4_daily_correlation": 0.8063424241201883,
+ "passes": false,
+ "verdict": "FAIL"
+}

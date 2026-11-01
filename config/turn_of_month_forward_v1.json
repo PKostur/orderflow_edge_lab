@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "watch_id": "turn-of-month-forward-v1",
+  "status": "FROZEN_BEFORE_PROSPECTIVE_START",
+  "question": "Does the turn-of-the-month effect in SPY (McConnell & Xu 2008), the only strategy-search-v1 candidate that passed every gate except the multiple-testing gate, keep earning forward?",
+  "registration_note": "Registered 2026-10-12. Its development (1993-2005) and validation (2020-2026-09) results have been seen (search v1: dev Sharpe 0.55, validation 0.41, matched-null p 0.048, P(real) 0.66 under the null-consistent G5), so only data after the start below can test it. Descriptive forward watch; no promotion, no live trading.",
+  "prospective_start_utc": "2026-10-13T00:00:00Z",
+  "rule": "exactly strategy-search-v1 R1C4: hold SPY over trading days -1, +1, +2, +3 around each month end (enter at the close of day -2, exit at the close of day +3), cash (0 return) otherwise; Yahoo adjusted close; 10 bps round trip on traded weight",
+  "scoring": "daily net returns from the first trading day after the start; summarize like the other forward watches (annualized Sharpe on 252 days, Newey-West t, drawdown, invested days) and compare with SPY buy-and-hold over the same days",
+  "reporting": {
+    "review_after_days": 365,
+    "before_review": "descriptive only",
+    "at_review": "descriptive statistics plus the action-matched timing null (run-length shuffle, 999 draws) on the forward days; no verdict on edge from one year (about 48 invested days)"
+  },
+  "honest_power_note": "at the published Sharpe (~0.5) a t of 2 needs about 16 years of forward data; this watch can show a breakdown much sooner than it can confirm an edge",
+  "claims": {
+    "strategy_promotion_authorized": false,
+    "paper_trading_authorized": false,
+    "live_trading_authorized": false
+  }
+}

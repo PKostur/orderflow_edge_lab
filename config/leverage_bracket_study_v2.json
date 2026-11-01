@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "study_id": "leverage-bracket-study-v2",
+  "status": "FROZEN_BEFORE_COMPUTATION",
+  "question": "Do other bracket parameters (lower leverage 2-10x, a 7-day time stop, maker-fee take-profit exits) turn the 10-20%-on-margin take-profit loop positive, on 1-minute data this bracket idea has not been tested on?",
+  "registration_note": "Registered 2026-10-13 at the user's request ('proceed with testing other parameters') after leverage-bracket-study-v1 (2024-01..2026-09) found all 72 cells negative. The new parameters were chosen after seeing v1, so they are judged primarily on 2021-01-01..2023-12-31, a period no bracket study has used (other repo studies used these prices for different strategies). 2024-01..2026-09 (v1's period, already seen) is used only as a consistency check. Descriptive mechanics study, NOT a search trial (N unchanged). No price data for 2021-2023 has been loaded for it. Paper only.",
+  "inherits": "config/leverage_bracket_study_v1.json and its amendment 1 for everything not listed here: universe (research/strategy_search_v3/round2_universe.json), entries E0/E1/E2, sequential per-symbol cycle, price levels, liquidation (1/L - 0.005, loss = margin + 0.5% notional + entry fee + funding), same-bar adverse-first rule, 1m last-price high/low, funding, stale-tail rule, account (2% of realized equity per position, ruin below 50%), bootstrap settings (seed 20261013)",
+  "samples": {
+    "primary": ["2021-01-01", "2023-12-31"],
+    "primary_halves": [["2021-01-01", "2022-06-30"], ["2022-07-01", "2023-12-31"]],
+    "consistency_check": ["2024-01-01", "2026-09-30"]
+  },
+  "grid": {
+    "leverage": [2, 3, 5, 10],
+    "take_profit_on_margin": [0.10, 0.15, 0.20],
+    "stops": ["S1_liquidation_only", "S2_half_margin_stop"],
+    "time_stop_hours": [24, 168],
+    "fee_models": {
+      "F1_taker": "taker 5 bps + 2 bps slippage per side on every entry and exit (as v1): 14 bps round trip",
+      "F2_maker_take_profit": "entry taker 7 bps (5 + 2 slippage); take-profit exit as a resting limit order at the TP price, maker fee 2 bps, no slippage, filled only if the 1m bar trades THROUGH the TP price by at least one tick-equivalent of 0.01% (touch-only bars do not fill; the position stays open); stop, liquidation and time-stop exits taker 7 bps"
+    }
+  },
+  "cells": "3 entries x 4 leverage x 3 take-profit x 2 stops x 2 time stops x 2 fee models = 288",
+  "outputs": "as v1 per cell (trades, win rate net > 0, TP hit rate, liquidation/stop/time-stop rates, same-bar ambiguity, fees and funding per trade, net EV per trade in % of margin with day-block bootstrap 95% interval, break-even and driftless-fair win rates, realized account path, first day below 50%, P(ruin 365d)) for the primary sample and, separately, for the consistency-check sample",
+  "ruin_statistic": "P(ruin) from the stationary bootstrap only when the realized account stays above zero for the whole sample; if equity reaches zero or below, report P(ruin) = 1 by definition (the historical path ruined) and the day it happened (fixes the v1 reading issue in research/leverage_bracket/NOTES.md)",
+  "reading": {
+    "viable_cell": "net EV per trade with a 95% lower bound above 0 in BOTH primary halves, Benjamini-Hochberg across all 288 cells at q = 0.10 on the primary sample's one-sided bootstrap p, P(ruin within 365 days) <= 5% on the primary sample, AND net EV per trade above 0 (point estimate) in the consistency-check sample",
+    "otherwise": "report the mechanics; no further grid after these results are seen without a new registration on data not yet used"
+  },
+  "claims": {
+    "strategy_promotion_authorized": false,
+    "paper_trading_authorized": false,
+    "live_trading_authorized": false,
+    "orders_sent": false
+  }
+}

@@ -1,0 +1,285 @@
+{
+  "schema_version": 1,
+  "search_id": "strategy-search-v1",
+  "round": 1,
+  "status": "DECLARED_BEFORE_TESTING",
+  "registration_note": "Declared 2026-10-11 under config/strategy_search_v1.json before any candidate was backtested. 22 web candidates were collected (notes: research_notes/Web strategy search and validation/round1_*.md); 7 pass the eligibility screen. Ambiguities are resolved below once, before testing. Trials used after this round: 7 of 40.",
+  "screened_out": {
+    "GTAA_Faber": "excluded family (multi-asset time-series trend on index ETFs)",
+    "DAA_Keller": "top-N parameter not published in retrieved sources",
+    "BAA_Keller": "canary rule ambiguous, performance paywalled",
+    "option_expiration_week": "two conflicting window definitions",
+    "sector_momentum_QC": "universe not specified",
+    "country_beta_QC": "universe not specified",
+    "fx_carry_QC": "rate data discontinued, sizing unspecified; carry family",
+    "gold_fed_model_QC": "threshold rarely triggers in data era; no published result",
+    "overnight_drift": "two trades per day; 10 bps round trip per day exceeds published gross return",
+    "pre_fomc_drift": "daily bars cannot reproduce the 2pm-2pm window; post-publication evidence of disappearance",
+    "pre_holiday": "documented disappearance for large caps; holiday list not retrieved",
+    "etf_flow_sign_crypto": "free flow series (Farside) not retrievable",
+    "mvrv_nupl_crypto": "entry/exit rules not retrieved",
+    "gbtc_premium": "rule not published; instrument converted 2024",
+    "crypto_basis_factor": "parameters not retrieved; carry-adjacent",
+    "plus coinbase premium, DVOL, skew, OI, stablecoin, netflow": "no published codable rule"
+  },
+  "common": {
+    "data": "Yahoo daily adjusted close (dividends and splits) via orderflow_edge_lab.etf_history_holdout.fetch_yahoo_daily; FRED via fredgraph.csv; month-end = last trading day of the month; signals computed at the close of the signal day and applied from the next trading day's close-to-close return",
+    "cost": "10 bps round trip on traded weight (5 bps per side)",
+    "cash": "uninvested weight earns 0 (conservative)",
+    "validation_window": [
+      "2020-01-01",
+      "2026-09-30"
+    ]
+  },
+  "candidates": [
+    {
+      "id": "R1C1_VAA_G12",
+      "source": "Keller & Keuning 2017 (SSRN 3002624) via CXO",
+      "universe": {
+        "risky": [
+          "SPY",
+          "IWM",
+          "QQQ",
+          "VGK",
+          "EWJ",
+          "VWO",
+          "VNQ",
+          "GSG",
+          "GLD",
+          "TLT",
+          "LQD",
+          "HYG"
+        ],
+        "cash": [
+          "SHY",
+          "IEF",
+          "LQD"
+        ]
+      },
+      "rule": "monthly; momentum 13612W = 12*r1m + 4*r3m + 2*r6m + 1*r12m (month-end total returns); b = count of risky with momentum < 0; CF = min(1, b/B); n = round_half_up((1-CF)*T) risky slots, each weight 1/T, filled by the top-n risky by momentum; remaining weight to the cash asset with the highest momentum",
+      "params": {
+        "B": 4,
+        "T": 2
+      },
+      "perturb": {
+        "B": [
+          3,
+          5
+        ],
+        "T": [
+          1,
+          3
+        ]
+      },
+      "development": [
+        "first full signal",
+        "2016-12-31"
+      ],
+      "null": "allocation"
+    },
+    {
+      "id": "R1C2_PAA2",
+      "source": "Keller & Keuning 2016 (SSRN 2759734) via CXO",
+      "universe": {
+        "risky": [
+          "SPY",
+          "QQQ",
+          "IWM",
+          "VGK",
+          "EWJ",
+          "EEM",
+          "IYR",
+          "GSG",
+          "GLD",
+          "HYG",
+          "LQD",
+          "TLT"
+        ],
+        "safe": [
+          "IEF"
+        ]
+      },
+      "rule": "monthly; MOM = P_t / mean(last 12 month-end closes incl. t) - 1; n0 = count of risky with MOM <= 0; safe share = min(1, n0/6); remainder split equally over the top 6 risky with MOM > 0 (weight (1-safe)/6 each); unfilled slots go to IEF",
+      "params": {
+        "lookback_months": 12,
+        "protection_divisor": 6,
+        "top_n": 6
+      },
+      "perturb": {
+        "lookback_months": [
+          10,
+          14
+        ],
+        "protection_divisor": [
+          5,
+          7
+        ],
+        "top_n": [
+          5,
+          7
+        ]
+      },
+      "development": [
+        "first full signal",
+        "2015-12-31"
+      ],
+      "null": "allocation"
+    },
+    {
+      "id": "R1C3_GEM",
+      "source": "Antonacci 2012/2014 via CXO",
+      "universe": {
+        "us": "SPY",
+        "ex_us": "EFA",
+        "bonds": "AGG",
+        "tbill": "FRED DTB3"
+      },
+      "rule": "monthly; R12 = 12-month total return; tbill12 = mean(DTB3 over last 12 months)/100; if R12(SPY) > tbill12: hold whichever of SPY, EFA has the higher R12; else hold AGG",
+      "params": {
+        "lookback_months": 12
+      },
+      "perturb": {
+        "lookback_months": [
+          10,
+          14
+        ]
+      },
+      "development": [
+        "first full signal",
+        "2013-12-31"
+      ],
+      "null": "allocation"
+    },
+    {
+      "id": "R1C4_turn_of_month",
+      "source": "McConnell & Xu 2008 (FAJ) via Quantpedia",
+      "universe": [
+        "SPY"
+      ],
+      "rule": "hold SPY over trading days -1, +1, +2, +3 around each month end (enter at the close of day -2, exit at the close of day +3); otherwise cash",
+      "params": {
+        "days_before": 1,
+        "days_after": 3
+      },
+      "perturb": {
+        "window": [
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      },
+      "development": [
+        "1993-02-01",
+        "2005-12-31"
+      ],
+      "null": "timing"
+    },
+    {
+      "id": "R1C5_vix_ratio_short_vol",
+      "source": "R-bloggers 'Which Implied Volatility Ratio Is Best?' (QuantStrat TradeR)",
+      "universe": [
+        "SVXY"
+      ],
+      "signal_data": [
+        "^VIX",
+        "^VIX3M"
+      ],
+      "rule": "ratio = VIX/VIX3M; long SVXY on day t if ratio(t-2) < 1 and ratio(t-2) < SMA60(ratio)(t-2); otherwise cash (SVXY's leverage change in 2018 is accepted as published instrument behaviour)",
+      "params": {
+        "threshold": 1.0,
+        "sma_days": 60,
+        "lag_days": 2
+      },
+      "perturb": {
+        "threshold": [
+          0.8,
+          1.2
+        ],
+        "sma_days": [
+          48,
+          72
+        ]
+      },
+      "development": [
+        "2011-10-04",
+        "2019-12-31"
+      ],
+      "null": "timing"
+    },
+    {
+      "id": "R1C6_oil_spy",
+      "source": "Driesprong, Jacobsen & Maat 2008 via QuantConnect strategy library",
+      "universe": [
+        "SPY"
+      ],
+      "signal_data": [
+        "FRED DCOILWTICO",
+        "FRED DTB3"
+      ],
+      "rule": "at each month end, OLS of SPY monthly return on the previous month's WTI return over the last 24 monthly pairs; forecast next month from this month's WTI return; hold SPY next month if forecast > DTB3/100/12, else cash. Data substitution: QC's discontinued oil and T-bill series replaced by FRED (logged)",
+      "params": {
+        "window_months": 24
+      },
+      "perturb": {
+        "window_months": [
+          19,
+          29
+        ]
+      },
+      "development": [
+        "2010-01-01",
+        "2017-12-31"
+      ],
+      "null": "timing"
+    },
+    {
+      "id": "R1C7_style_momentum",
+      "source": "QuantConnect strategy library, momentum and style rotation",
+      "universe": [
+        "IJJ",
+        "IJK",
+        "IJS",
+        "IJT",
+        "IVE",
+        "IVW"
+      ],
+      "rule": "monthly (first trading day); momentum = P_t/P_(t-240 trading days) - 1; +0.5 weight on the highest, -0.5 on the lowest (page text version; the page's code sorts the other way, the text is taken as the published intent)",
+      "params": {
+        "lookback_days": 240
+      },
+      "perturb": {
+        "lookback_days": [
+          192,
+          288
+        ]
+      },
+      "development": [
+        "first full signal",
+        "2018-12-31"
+      ],
+      "null": "allocation"
+    }
+  ],
+  "nulls": {
+    "allocation": "999 books: each rebalance date keeps the real weight vector but assigns it to a random permutation of the candidate's available assets (review_methods.matched_random_selection_returns), seed 20261011",
+    "timing": "999 position series with the same number of invested days and the same distribution of in-market spell lengths, spells placed at random (block shuffle of runs), seed 20261011"
+  },
+  "independence_reference": "crypto-trend-core-v1 combined book backtest (repo rules, 2020-01-01 onward) and SPY buy-and-hold",
+  "implementation_notes": {
+    "date_utc": "2026-10-11",
+    "before": "the single round-1 run; no real-data result computed",
+    "G1": "50 random dates as registered (seed 20261011); a non-gating decision-date diagnostic on up to 50 rebalance dates is reported; any diagnostic failure is treated as a bug to fix and log, never as a pass",
+    "G4": "observed statistic and null both use development gross returns; allocation null draws one random asset assignment per rebalance spell (held until the next weight change); timing null shuffles in-market and out-of-market run lengths separately",
+    "G5": "trial set = all prior ledger trials plus every round-1 candidate (7), Sharpes in daily unannualized units as the repo's deflated_sharpe_probability expects",
+    "G6": "perturbed variants with longer lookbacks start at their own first signal; halves split by trading-day count, each half must have a positive mean",
+    "GEM_perturbation": "T-bill hurdle over L months = mean(DTB3 over L months)/100 * L/12 (equals the registered rule at L = 12)",
+    "G8_reference": "crypto-trend-core-v1 book rebuilt from MEXC 8h prices + Binance funding (venue substitution: MEXC funding history starts 2025-04), restamped -1 day",
+    "accounting": "constant target weights between rebalances (no drift); no borrow cost on the style short; all series on the SPY trading calendar; FRED values lagged 1 business day",
+    "provenance": "per-ticker first/last date, row count and sha256 of price frames recorded in round1_results.json"
+  }
+}

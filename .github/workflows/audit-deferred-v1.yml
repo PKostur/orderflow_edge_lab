@@ -1,0 +1,88 @@
+name: Audit Deferred Tests v1
+
+# Runs the DEFERRED tests of reports/Deeper branch evidence audit.md (Sections 0.8 and 0.9) once, on a hosted runner
+# that can reach MEXC, data.binance.vision, Hyperliquid and the artifact store. Triggered by a push to
+# audit/run-deferred-v1. Single look: a marker branch is pushed just before the run step, and the guard refuses to
+# start if the marker or the results branch exists. Descriptive only.
+
+on:
+  push:
+    branches: [audit/run-deferred-v1]
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: audit-deferred-v1
+  cancel-in-progress: false
+
+jobs:
+  deferred:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v5
+      - name: Single-look guard
+        run: |
+          set -u
+          for b in audit/deferred-started-2026-10-16 audit/deferred-results-2026-10-16; do
+            rc=0; git ls-remote --exit-code --heads origin "$b" >/dev/null || rc=$?   # steps run under bash -e
+            if [ "$rc" -eq 0 ]; then echo "$b exists: the deferred tests already started once"; exit 1; fi
+            if [ "$rc" -ne 2 ]; then echo "cannot verify $b (git ls-remote exit $rc)"; exit 1; fi
+          done
+      - name: Network preflight (uses no look)
+        run: |
+          set -euo pipefail
+          curl -fsS -m 30 -o /dev/null https://contract.mexc.com/api/v1/contract/ping
+          curl -fsS -m 30 -o /dev/null https://api.mexc.com/api/v1/contract/ping
+          curl -fsS -m 30 -o /dev/null "https://s3-ap-northeast-1.amazonaws.com/data.binance.vision?delimiter=/&prefix=data/futures/um/monthly/fundingRate/BTCUSDT/"
+          curl -fsS -m 30 -o /dev/null https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-09.zip.CHECKSUM
+          curl -fsS -m 30 -o /dev/null -X POST -H 'Content-Type: application/json' -d '{"type":"meta"}' https://api.hyperliquid.xyz/info
+          curl -fsS -m 30 -o /dev/null -H "Authorization: Bearer ${{ github.token }}" "https://api.github.com/repos/${{ github.repository }}/actions/artifacts?per_page=1"
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install (as the forward workflows install) plus statsmodels
+        run: |
+          python -m pip install -e ".[research]"
+          python -m pip install "statsmodels==0.15.0"
+          mkdir -p audit_out
+          python -m pip freeze > audit_out/pip_freeze.txt
+      - name: Tests of the code under audit
+        run: |
+          python -c "import statsmodels.api"
+          python -m unittest tests.test_xs_premia_pit tests.test_xs_premia tests.test_archive_forward_artifacts -v
+      - name: Mark the look as started
+        run: |
+          set -euo pipefail
+          git push origin "HEAD:refs/heads/audit/deferred-started-2026-10-16"
+      - name: Run the deferred tests (single look)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TEMP: ${{ runner.temp }}
+        run: python scripts/audit_deferred_2026_10_16.py --output audit_out/deferred_results_v1.json
+      - name: Upload results artifact
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: audit-deferred-results-2026-10-16
+          path: audit_out/
+          if-no-files-found: warn
+      - name: Publish results branch
+        if: always()
+        run: |
+          set -euo pipefail
+          test -f audit_out/deferred_results_v1.json || { echo "no results file"; exit 1; }
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git worktree add --detach res_wt
+          cd res_wt
+          git checkout --orphan audit/deferred-results-2026-10-16
+          git rm -rf --quiet .
+          cp ../audit_out/deferred_results_v1.json ../audit_out/pip_freeze.txt .
+          printf 'Deferred tests of the 2026-10-16 evidence audit, run once by audit-deferred-v1.yml at %s (source %s).\n' \
+            "$(date -u +%Y-%m-%dT%H:%MZ)" "$GITHUB_SHA" > README.md
+          git add -A
+          git commit -q -m "audit: deferred test results (single run)"
+          git push origin HEAD:audit/deferred-results-2026-10-16

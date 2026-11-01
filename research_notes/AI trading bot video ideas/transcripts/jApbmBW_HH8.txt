@@ -1,0 +1,2209 @@
+# I Let AI Test 12,000 Trading Bots in One Day (Here's What It Found)
+# channel: Moon Dev
+# url: https://www.youtube.com/watch?v=jApbmBW_HH8
+
+[0:00:00] I just let AI test 12,000
+[0:00:04] trading bots in one day, and this is
+[0:00:06] exactly what I found. Here's a question
+[0:00:09] that pretty much everybody asks as a new
+[0:00:12] trader. What if I had a robot just do
+[0:00:15] this for me? Do the boring work for me?
+[0:00:18] Well, today I'm going to show you
+[0:00:19] exactly that. I had one simple idea of
+[0:00:23] making a trading bot do this a certain
+[0:00:25] number of times, then I said, "F it.
+[0:00:27] Let's just go ahead and do it 12,000
+[0:00:29] times. But doing that by hand would
+[0:00:31] would have taken years. So, I obviously
+[0:00:34] didn't do that. I show you my whole
+[0:00:36] setup here to have AI do exactly that
+[0:00:39] 12,000 tests and it found some things
+[0:00:42] that I would have never found on my own.
+[0:00:45] So, stick around because I show you all
+[0:00:47] of the results. And some of this was
+[0:00:49] just too good to be true. So, I had to
+[0:00:52] double check, but I show you everything.
+[0:00:53] Don't worry. My name is Mundev. I've
+[0:00:55] helped thousands of people automate
+[0:00:57] their trading from absolutely zero, no
+[0:00:59] coding skills, nothing to fully
+[0:01:01] automated trader. And here I'll show you
+[0:01:03] step by step live. So you can do this as
+[0:01:06] well. Look at me. Look at me right now,
+[0:01:10] dude. Look at me. Look at me. Look at
+[0:01:12] me. Look at me. 257% return short. I'm
+[0:01:16] going to show you everything. We are
+[0:01:18] running 10,000, no 12,000 different back
+[0:01:21] tests here live. Save time inality 86%
+[0:01:26] win rate. Okay, I'm shorting sooie for
+[0:01:28] the rest of my life at 7 a.m. or I don't
+[0:01:31] even know what 7 UTC is to be real. I've
+[0:01:33] updated it. Clear winner. 1 to 15%
+[0:01:36] range. 100% profitable. Total disaster
+[0:01:39] is 15 to 30% range sense just makes
+[0:01:41] sense. What if one house actually equals
+[0:01:44] one house coin? Even if there's a zero.
+[0:01:47] All right, so I posted this the other
+[0:01:48] day, but for trading looking at
+[0:01:49] seasonality is common. So seasonality is
+[0:01:52] differences within the seasons, you
+[0:01:54] know, fall, winter, etc. Summer, yada
+[0:01:57] yada, earning seasons, yada yada. Okay,
+[0:01:58] that's that's pretty common here in
+[0:02:00] trading, but I'm interested in diving
+[0:02:01] deeper into timeality. Timeality is
+[0:02:04] okay, what happens in different time
+[0:02:05] parts of the the day. Timality, dude.
+[0:02:08] So, we're just going to go ahead and
+[0:02:09] back test these ideas. First off, let's
+[0:02:12] go ahead and open up claw code. I'm
+[0:02:14] going to say claude dangerously
+[0:02:17] skip permissions time minality trading
+[0:02:21] bots. Okay. So I want you to use my sub
+[0:02:25] agent here that knows how to back test
+[0:02:28] back testing sub agent and um I think
+[0:02:32] it's called back testing architect.
+[0:02:33] Anyways I want you to go ahead and test
+[0:02:35] an idea of at 12 UTC
+[0:02:39] short. No 12 UTC on Wednesdays. 12 UTC
+[0:02:43] on Wednesdays short for a takerit of 3%
+[0:02:48] and a stop loss of 5%. Build this into a
+[0:02:51] new folder because
+[0:02:54] we're going to be building out a tunch
+[0:02:56] of bunch of these strategies and I'm
+[0:02:58] calling them
+[0:03:00] time minality
+[0:03:02] strategies. Okay, so I've got a sub
+[0:03:05] agent here that will help me out with
+[0:03:06] this. Get me started. Yes, thank you.
+[0:03:09] Let's start the house coin bot because
+[0:03:11] if one house really equals one house
+[0:03:13] coin, I'm going to own a lot of houses.
+[0:03:16] Um, I forgot to update the actual title
+[0:03:19] of this time analy trading boss. Update
+[0:03:22] update. Okay, I've updated the title to
+[0:03:25] this. Okay, 777. Okay, so you can see my
+[0:03:27] back test architect build Wednesday 12
+[0:03:30] UTC short strategy. So it's using my
+[0:03:32] back test architect. It's building the
+[0:03:34] 12 UTC. Fire, fire, fire. Did you see
+[0:03:37] that? Solana deck speedbot auto Solana
+[0:03:40] meme gain. That sounds sketch. 777 to
+[0:03:44] you, fam.
+[0:03:47] Okay, sick, bro. Everybody always asks
+[0:03:50] me where do I get started with trading
+[0:03:51] bots? Well, I put together this road map
+[0:03:53] because I believe code is a great
+[0:03:55] equalizer and I show absolutely
+[0:03:57] everything Wall Street won't show
+[0:03:58] because when I started this, nobody was
+[0:04:01] showing exactly how to build trading
+[0:04:03] bots. So, I had to figure it out by
+[0:04:04] myself. So I went ahead along the
+[0:04:06] journey I started to build out a road
+[0:04:09] map. Stop trading by hand, how to build
+[0:04:11] your bot, generate 90 plus trading
+[0:04:13] strategies, how to actually use AI in
+[0:04:15] trading. These are videos here. You can
+[0:04:18] come to my live zoom calls each day. You
+[0:04:20] come to the discord. This is the trading
+[0:04:22] bot roadmap. Moonv.com/roadmap
+[0:04:25] frequently asked questions here. Answer
+[0:04:27] all your questions that are probably in
+[0:04:29] your mind. I give you my actual
+[0:04:30] framework here. RBI system. I give you a
+[0:04:33] ton of different trading strategies and
+[0:04:36] alpha generation techniques. I have a
+[0:04:38] book list. So, all the books that I read
+[0:04:40] to get um in tune with this industry,
+[0:04:42] come up with strategies, learn how to do
+[0:04:45] this. I give you my Mundave AI agents. I
+[0:04:47] give you a ton of crypto data. This is
+[0:04:49] insane because crypto data is usually
+[0:04:51] expensive. Then I give you a ton of code
+[0:04:53] from these videos. So, if you've been
+[0:04:54] watching my videos, I've got the Poly
+[0:04:56] Market code. I've got the Hyperlquid
+[0:04:57] code. Got some machine learning code.
+[0:05:00] This is in my trading bot road map. And
+[0:05:02] you get this as a bonus. A bonus for
+[0:05:05] just jumping into the next Zoom call. I
+[0:05:07] do Zoom calls every day. There's a link
+[0:05:09] in the description. You get the 3-hour
+[0:05:11] Zoom call. You get to chat with me, ask
+[0:05:13] any questions. Plus, you get the full
+[0:05:15] replay of the Zoom call. You actually
+[0:05:17] get the previous Zoom call as well.
+[0:05:20] Plus, you get a bonus of the API key.
+[0:05:22] You get a bonus of the app. And you get
+[0:05:24] bonus of the Trading Bot road map. So, I
+[0:05:26] just showed you the road map. The app is
+[0:05:28] how I control all of my AI agents. you
+[0:05:31] get access to that and then the API key
+[0:05:33] controls moon.com/doccks.
+[0:05:35] You get all of this just as a bonus for
+[0:05:37] coming to my next Zoom. You can see
+[0:05:40] there's five star reviews. It's only $5
+[0:05:42] as well. It's the 90-day no questions
+[0:05:45] asked money back guarantee, but it's
+[0:05:47] only five bucks and you unlock 3-hour
+[0:05:49] Zoom, the full replay, the previous
+[0:05:51] replay, Mundave API key, the app, and
+[0:05:54] the trading bot road map that I started
+[0:05:56] showing you here at the start. I look
+[0:05:58] forward to seeing you in the next Zoom
+[0:06:00] and really getting to meet you and
+[0:06:01] getting to know you. I'll give you
+[0:06:03] absolutely everything I got every single
+[0:06:04] day. Join in. It's five bucks. There's a
+[0:06:07] link in the description or the chat or
+[0:06:09] somewhere around here. I'll see you
+[0:06:12] there. So, that's rolling and this is
+[0:06:15] rolling and 777 to you. Much love.
+[0:06:19] Appreciate you, Rico. Good to see you,
+[0:06:21] bro. Bro, um let's go ahead and see if
+[0:06:24] there's anybody that needs my attention
+[0:06:25] here. Feel free to reach out on Twitter.
+[0:06:28] This is baking here. So, while that
+[0:06:30] bakes, I'll go ahead and respond to
+[0:06:31] anybody here in Twitter or Discord. Back
+[0:06:34] test architect cooking. So, I built this
+[0:06:36] cloud code back test architect. And
+[0:06:38] that's pretty much somebody who knows
+[0:06:40] how to um back test for me essentially.
+[0:06:43] I think while I do this, I want to go
+[0:06:44] ahead and get some more data. So, let's
+[0:06:47] get some data here. And let's see here.
+[0:06:50] Scroll down to this is the GitHub that
+[0:06:52] all the Quantite get. So everybody in
+[0:06:54] quantity has access to this all these
+[0:06:56] back tests. This is crazy data here.
+[0:06:58] Let's say bird eye. Okay, bird eye.
+[0:07:00] Cool. I'm gonna get the bird eyee data
+[0:07:02] first because I want to do this for some
+[0:07:05] Solana tokens. And um I want to do it
+[0:07:09] for big Solana tokens here. Uh I saw it.
+[0:07:12] Okay. Useless.
+[0:07:14] Um Pump or Popcat Trump. Okay. Let's
+[0:07:18] grab Let's do it for all three of these
+[0:07:20] here. Copy this. And then I'm going to
+[0:07:22] do one hour one h days back. Let's see
+[0:07:25] if we can get 300. That'll be far. I
+[0:07:28] don't think there's 300 days on this
+[0:07:29] token though. API says uh unauthorized.
+[0:07:34] Unauthorized. Okay. Well, maybe I have
+[0:07:38] the wrong key. Let me go ahead and see.
+[0:07:40] We got the architect bacon. So, bird eye
+[0:07:43] uh devs. We're going to go here to
+[0:07:46] security. Make sure my IP is
+[0:07:48] whitelisted. Um, what's my IP address?
+[0:07:52] Pretty sure that's me. 197.
+[0:07:55] That's me, fam. Okay, let's try a
+[0:07:57] different key then. It's 10th. Okay.
+[0:07:59] What the hell? Oh, it's back testing for
+[0:08:01] me. All righty. Copy here. Let's go put
+[0:08:03] the key in and remind you that this is
+[0:08:05] not financial advice. Nothing I do is
+[0:08:08] financial advice. I'm here with you,
+[0:08:10] dude. I'm just in the trenches with you.
+[0:08:12] That's it. ENV. Don't look at my ENV.
+[0:08:14] Please close your eyes if you can see
+[0:08:16] it. Bird eye key. Paste it in. Close
+[0:08:18] that out. And we're good. All right,
+[0:08:19] let's run it. And it's opening all these
+[0:08:21] different charts here. You can see it's
+[0:08:23] testing all these things for me. So,
+[0:08:25] it's catching it's getting all the data
+[0:08:27] needed. Okay, we got the keys. Perfect.
+[0:08:29] Got the keys. The keys. The keys. If you
+[0:08:31] can answer that, I know I know where you
+[0:08:32] live. If you can answer that, got the
+[0:08:35] keys. The keys. The keys. If you can
+[0:08:37] answer the rest of that, I know where
+[0:08:38] you live, dude. But most people won't be
+[0:08:40] able to answer that. Okay, so you can
+[0:08:42] see I'm getting 1220
+[0:08:45] data for 1 hour. Damn, that was fast.
+[0:08:47] Okay, you can see these are testing some
+[0:08:49] of the ideas of this time and I want to
+[0:08:52] get some new data. So, and they should
+[0:08:55] all the data should be going here. Okay,
+[0:08:58] there it is. I'm going to delete these
+[0:08:59] datas here just so they don't confuse
+[0:09:01] me. I have a specific idea and you'll
+[0:09:03] see it throughout this, but the main
+[0:09:05] idea is more important timeality in my
+[0:09:09] opinion. Let's just pull up some more of
+[0:09:11] these here. I'm just going to pull up
+[0:09:12] some random Solana tokens. fraud coin.
+[0:09:16] [snorts]
+[0:09:16] Just just I'm looking at this. This has
+[0:09:18] not enough data, brother.
+[0:09:22] Oh, man. Thank you. Thank you. Thank
+[0:09:24] [snorts] you. Thank you. Thank you. I
+[0:09:25] know you were saying bless you. Thank
+[0:09:26] you. Troll, Popcat, um Launchcoin,
+[0:09:29] [snorts] Gito. Uh what are some other
+[0:09:31] big Solana tokens? Okay, got all that.
+[0:09:35] So, we're getting data here now. Baking.
+[0:09:37] Still baking.
+[0:09:39] Hey, fam. You don't have to run these.
+[0:09:40] Just show me how to run them. Show me
+[0:09:41] where the files at and I'll do that.
+[0:09:43] Okay, we got that one. Let's get Jup.
+[0:09:46] Let's get Jupity Jup. Okay, sick. And
+[0:09:49] okay, I think we got plenty here.
+[0:09:50] Perfect. So, we got those. We need to
+[0:09:52] test those out. So, I'm going to write
+[0:09:53] that down. We're going to say 1016 here.
+[0:09:55] Uh, come back to test the bird eye
+[0:10:00] tokens on the 12 UTC thing. Okay, let's
+[0:10:04] go ahead and see time here. You can see
+[0:10:06] it has multiple base files, MFI, ADX.
+[0:10:10] Perfect. Let's get it. Let's go ahead
+[0:10:12] and test all of them real quick.
+[0:10:14] Timality. Let's see the base first. UTC
+[0:10:17] short calman short ADX Wednesday 12.
+[0:10:22] Okay, this is it. It's not going to work
+[0:10:24] for all data sources.
+[0:10:26] Okay, so here's all of the results. So
+[0:10:29] return is not good on any of them, but
+[0:10:31] that's okay because it's not the full
+[0:10:32] idea. So Wednesday is a UTC here. It's
+[0:10:35] interesting to see the returns actually.
+[0:10:37] [snorts] It's not It's not good, but
+[0:10:40] it's interesting that it's so small on
+[0:10:42] each of them. Okay, let's get the real
+[0:10:43] idea going here. Um I want to get some
+[0:10:45] more data here, though. Let's get some
+[0:10:48] um Well, I probably have some. Okay, so
+[0:10:52] first off, I'm going to send it all of
+[0:10:53] this data. Okay. Um All right. So, we
+[0:10:57] want to rewrite this a bit because a lot
+[0:10:59] of that data that is we're using this on
+[0:11:01] that we're looking through is not 1 hour
+[0:11:03] data. We have to only test on 1 hour
+[0:11:05] data. This folder here is full of 1 hour
+[0:11:06] data. And then also the folder below has
+[0:11:10] a bunch of 1 hour data as well. So I
+[0:11:13] want to loop through all of these data
+[0:11:15] sources to test the strategy as they
+[0:11:18] should be 1 hour UTC data. And we're
+[0:11:22] just getting started. So smash the
+[0:11:23] Lizzy. Smash the Lizzy and lock in
+[0:11:26] because I'm just getting started with
+[0:11:28] this because the next thing I'm going to
+[0:11:30] do is going to be crazy. So I want to
+[0:11:32] that's going to take a while too. I like
+[0:11:34] this. Okay. So let's also you can see
+[0:11:37] here's a 1 hour data. So let's copy
+[0:11:39] this. You know what I should do is just
+[0:11:41] um make a 1 hour data folder. 1 hour
+[0:11:45] data da rename here 1 hour data. And
+[0:11:49] we're going to copy in this data here.
+[0:11:52] And we're going to paste it. Now the
+[0:11:54] data sources may be named a little
+[0:11:56] differently the headers columns. So,
+[0:11:59] please check all the different data
+[0:12:01] source the datas we have and um there
+[0:12:04] should just be two different types. You
+[0:12:06] know, you'll see the CSVs that have the
+[0:12:08] contract address.csv that's going to
+[0:12:10] have one type of headers and then the
+[0:12:11] other ones will have another type that's
+[0:12:13] from Coinbase data. Anyways, this folder
+[0:12:16] has a bunch of 1 hour data and I want
+[0:12:19] you to update those those back tests
+[0:12:23] that you created to loop through this
+[0:12:25] data instead. Okay. So, let's get a
+[0:12:28] bunch of 1 hour data in there. So, we
+[0:12:30] got IB data. We got Coinbase data. IB
+[0:12:33] hour data in there. No 4 hours. 4 hour.
+[0:12:36] So, let's grab all our 1 hours. Okay. 1
+[0:12:38] hour. 1 hour gap 500 weeks. Um, I guess
+[0:12:42] the 5 minute would work. ETH 1 hour. 1
+[0:12:46] hour. Soul. Okay. So, this should be not
+[0:12:49] enough yet. Not enough. I want to add
+[0:12:51] some more data in here. So, what are the
+[0:12:54] top tickers on Coinbase? Coin Gecko.
+[0:12:57] Let's go to exchanges here. Crypto
+[0:13:00] exchanges. Coinbase 26 billion in
+[0:13:03] volume. Binance has. Wow. And Coinbase
+[0:13:06] has 3.2 billion.
+[0:13:08] H. So, BTC, Ethereum, soul. We got
+[0:13:11] those. XRP. Let's get XRP because people
+[0:13:13] love that. I don't know why, but they
+[0:13:15] do. Let's say 1H here. So, this is how
+[0:13:17] you get data. I'm a data dog. You are,
+[0:13:20] too. XRP. Okay. Let's go ahead here and
+[0:13:23] say 4 weeks. Nah, let's get 52.
+[0:13:27] Missing API credentials. XRP 52. 1 hour,
+[0:13:31] please. 1 H. There we go. Let's delete
+[0:13:34] this one cuz I don't know what's going
+[0:13:36] on with that phone. Okay, so we got that
+[0:13:38] going. And let's go ahead and step on
+[0:13:41] the gas a little bit. Oh, we want to go
+[0:13:43] ahead through this as well. So, I'll go
+[0:13:45] through that in a bit. Um,
+[0:13:47] multi-resolution. OFI. Multi-resolution.
+[0:13:50] Don't forget about that. go through our
+[0:13:53] new OFI test. Okay, let's get back to
+[0:13:56] that in a second. This one here is
+[0:13:58] stuck. It looks like I'm going to kill
+[0:14:00] that terminate. And then we're going to
+[0:14:02] go here and say CD up into there. Sorry,
+[0:14:06] not that. Let's go ahead and have her
+[0:14:08] start building cuz she can start
+[0:14:10] building. I can just keep adding more in
+[0:14:11] there. She's done. Okay, what's the next
+[0:14:14] toki? Doge. Yo, Praath, what's up, bro?
+[0:14:16] Doge. Okay, so we're getting Doge next.
+[0:14:19] And then let's go ahead and see if we
+[0:14:20] can get up in there. So we can get two
+[0:14:22] times. Copy path CD. Um, actually CD dot
+[0:14:26] dot. Okay. And then activate act
+[0:14:30] activivate tflow, bro. Oh, look. She's
+[0:14:34] done already. So this time I'll be able
+[0:14:36] to get to doze chain link. So link and
+[0:14:38] sooie link here. Run it back and then
+[0:14:42] change it to sooie. And then run this.
+[0:14:44] Copy path. Copy path. Python and then
+[0:14:47] what's next? This should get Suie. Yep.
+[0:14:50] Suie right here. Perfect. So, I'm just
+[0:14:53] railing Coinbase for all their data. The
+[0:14:56] only limit to your to our realization of
+[0:14:59] tomorrow will be our doubts of today.
+[0:15:01] Yes, dude. That's facts, dude. Because
+[0:15:03] you are what you think you are. You are
+[0:15:05] what you say you are. He is his deepest
+[0:15:08] Cardano ADA. You are what you feel in
+[0:15:11] your heart, dude. Okay, let's get ADA up
+[0:15:13] in there. And then let's also get let's
+[0:15:15] get LTC up in there. Okay. So, let's say
+[0:15:18] LTC. We'll run it from this one. Look at
+[0:15:20] this. Two times just railing Coinbase.
+[0:15:23] Thank you, CB. I love you. And then
+[0:15:25] let's get um that's probably good. Well,
+[0:15:28] let's get Zcash and H bar. So,
+[0:15:29] everybody's talking about Zcash right
+[0:15:30] now. Anyways, Zcash
+[0:15:33] and she's working on our thing. So, it's
+[0:15:36] exactly how I like to play this game. I
+[0:15:38] like to step on the gas. She's working.
+[0:15:40] I'm working. We working. Let's go Zcash.
+[0:15:41] Okay. What else? Hideera. Damn, they got
+[0:15:44] some real like things I don't even think
+[0:15:46] about. H bar. So, you can see this is
+[0:15:49] 10:30 from 2024. Perfect. Hour data.
+[0:15:52] Nice. Okay, great. So, she's done
+[0:15:54] already. So, she's done with this. Okay,
+[0:15:57] so perfect.
+[0:15:59] So, that was Zcash. Let's close this
+[0:16:00] now. And this is H bar, I believe. So,
+[0:16:03] let's go to our data um 1 [snorts] hour
+[0:16:05] data here. Okay. And then let's go find
+[0:16:07] those 1 hours that we we got. So they're
+[0:16:10] all weird tokens like Doge, HAR, HAR,
+[0:16:14] Link, LTC, Suie, XRP, Zcash. What else?
+[0:16:18] What else? Fam, ADA. I knew there was
+[0:16:21] something else. You could have told me.
+[0:16:23] Uh, but Moon, there's no chat. But Moon,
+[0:16:27] the chat is dead. Okay, so now we can
+[0:16:29] see updated files. Let's go ahead and
+[0:16:32] test all these out. But while she's
+[0:16:33] doing that, well, let's make sure that
+[0:16:35] they work first. Let's do that. Slow
+[0:16:38] down, Moon. Slow down. I know I want to
+[0:16:39] step on the gas, but sometimes you got
+[0:16:41] to have patience. It's required down
+[0:16:44] here, dude. Okay. Time summary. Okay,
+[0:16:47] let's read through it. Created a and
+[0:16:49] tested four variations of a timebased
+[0:16:52] trading strategy that shorts Bitcoin and
+[0:16:54] other assets at 12 UTC on Wednesdays.
+[0:16:57] The strategies were tested across 25
+[0:16:59] different yachty yachties yachties.
+[0:17:01] Let's get it. Let's just see it
+[0:17:03] ourselves. We're data dogs. We can see
+[0:17:04] it ourselves. We can see it ourselves.
+[0:17:06] We're data dogs. What is these doing?
+[0:17:09] Okay. So, I don't want the top 10
+[0:17:12] results. I want all the results. Amazon
+[0:17:14] stock daily 1 hour. I think you mistook
+[0:17:17] the um agenda here. We don't want that
+[0:17:20] old data anymore. We just want this new
+[0:17:23] data path. Only this one. So, everything
+[0:17:25] in this folder, all these datas in this
+[0:17:27] folder, I want to loop through. And I
+[0:17:29] want to show the full stats for each
+[0:17:31] loop. The whole back test.py stats. And
+[0:17:34] then at the end, I want to see all the
+[0:17:36] stats in that brick just like we showed
+[0:17:38] before. We have that layout of stats.
+[0:17:40] Thank you. And then let's give it the
+[0:17:42] folder again cuz she was just tripping.
+[0:17:45] She was just tripping. Copy path. Paste
+[0:17:48] it in. Let's get it. And this next idea,
+[0:17:50] dude, this next part of the idea is
+[0:17:52] killer.
+[0:17:54] Perfect. Let me update the other three
+[0:17:55] straties. We bought any houses today?
+[0:17:58] Damn, dude. Nothing. What's going on,
+[0:18:00] bro? Let me get some of those cribs.
+[0:18:02] Come buy you a crib, dude. Come about
+[0:18:04] your crib. Poly market. Let's see. Poly
+[0:18:07] market is so soft right now. If you
+[0:18:08] can't make profits trading on poly, you
+[0:18:10] should just go buy and hold index funds
+[0:18:11] because you are not going to make it.
+[0:18:13] Interesting, dude. What um types of
+[0:18:16] opportun
+[0:18:18] opportunities
+[0:18:21] are you seeing on PM poly for poly
+[0:18:25] market? Okay. So, let's see here. Only
+[0:18:28] use data from there. Found 19 files.
+[0:18:30] Perfect. And some Solana tokens. Print
+[0:18:33] full data. Okay, we're data dogs. Let's
+[0:18:35] get it. There we go.
+[0:18:39] Okay, so we got nans on a couple of
+[0:18:41] them. I wonder why. Uh, as I mentioned
+[0:18:43] before, the um the ones that have
+[0:18:48] What the hell, dude? That's crazy. First
+[0:18:51] off, what is this pump? 4 hours 30 days.
+[0:18:54] That's my bad. Maybe maybe I got the
+[0:18:56] wrong data here. One day. What the hell?
+[0:18:58] I thought I got You saw me You saw me
+[0:19:01] get that, right? I thought I got the
+[0:19:03] right one. Okay, let's go to delete and
+[0:19:05] let's make sure these are correct. 1
+[0:19:06] hour. 1 hour. 1 hour. Copy. And that was
+[0:19:10] 1 hour. Okay. 1 hour. 1 hour. What the
+[0:19:14] hell? How does that keep happening? Do I
+[0:19:16] keep sending them over or 1 hour? 1
+[0:19:19] hour. 1 hour. Okay. Let's get some more
+[0:19:20] from Bird Eye because um how would we
+[0:19:24] find the top tokens on
+[0:19:27] Solana? That's a good question. Just
+[0:19:30] straight up real quick. Top tokens on
+[0:19:32] Solana. Poly. Top tokens ever on Solana.
+[0:19:36] 24-hour volume. Launchcoin maybe. Okay,
+[0:19:38] I can try to use memory here. Whiff.
+[0:19:41] Okay, what else? Fartcoin. Let's put
+[0:19:43] ourselves back in 2024 here. Fartcoin.
+[0:19:46] Um, shees. What's made it to the other
+[0:19:49] side? I guess you know have some
+[0:19:51] selection bias built in. Tron,
+[0:19:54] Zcash, Pepe.
+[0:19:57] I know I'm missing a ton. Oh, they
+[0:19:59] probably have a memecoin here or Solana
+[0:20:01] chain cryptocurrencies by chain. Yes,
+[0:20:06] Solana. There we go. Zero. All return
+[0:20:09] all Solana. See all Solana coins,
+[0:20:11] please. Pingu, I believe I already got
+[0:20:13] that one. Bonk, of course. SPX. Helium.
+[0:20:18] Let me get one more goodie. Mudang.
+[0:20:20] Let's get it. Okay, so we got plenty
+[0:20:21] now. Well, not plenty, but we have
+[0:20:23] enough. Copy here. Let's go back to the
+[0:20:25] data source here. The data getter. Get
+[0:20:27] that data. be 1 hour. You see it right?
+[0:20:30] 1 hour. It's going to be sent to bird
+[0:20:33] eyee. It should be deez.
+[0:20:36] Okay, let's go find it right now and
+[0:20:38] just send it over right now. DZ
+[0:20:41] 1 hour jz 1 hour right here. Okay, I'm
+[0:20:45] copying now. Hit copy. Should be over
+[0:20:47] here now. Okay, there it is. Let's get
+[0:20:49] it. Coinbase data. Bird eye data. Okay,
+[0:20:51] let's move on to the next one. That was
+[0:20:53] Bonky. Rest in peace, Bon guy. Wait, SPX
+[0:20:57] 900 is on Ethereum.
+[0:21:00] No, it's not. Is it? Could be. Let's
+[0:21:03] see. I got it. Okay, let's bring it on
+[0:21:06] over. What's the What's this start with?
+[0:21:08] J3. J3. J3. Copy over.
+[0:21:14] Oh, we got liquidations coming in today.
+[0:21:17] We got liquidations. Okay, let's go
+[0:21:20] ahead and find that last one. It's
+[0:21:22] Mudang. You remember that? Remember that
+[0:21:24] cute little hippo that we thought was
+[0:21:27] going to 10 billion?
+[0:21:29] I remember that. Delusional
+[0:21:32] bull runs.
+[0:21:35] So funny, bro. Think back to how you
+[0:21:37] were thinking back in 2024. Think back
+[0:21:40] to those times and you will giggle. 777.
+[0:21:44] Jimmy, good to see you. Ed D. Here we
+[0:21:47] go. Copy. And then we'll go ahead and
+[0:21:49] paste it in here. Okay. Sick, dude. So
+[0:21:52] now I can say, hey, you know, I
+[0:21:54] mentioned earlier that the um the
+[0:21:56] headers might be a little different. The
+[0:21:59] columns might be a little different for
+[0:22:01] the two types of data. We have the ones
+[0:22:02] that are pretty clear like ZUSD
+[0:22:05] 1 hour. That's Coinbase. You can see
+[0:22:07] those headers easy. Go ahead and build
+[0:22:09] some tool to print out the headers, make
+[0:22:11] sure they match, and then go ahead
+[0:22:12] update all these files cuz we got this
+[0:22:13] air. But the ones that have the contract
+[0:22:16] address in them, that's from Bird Eye.
+[0:22:17] So their data may be different, though.
+[0:22:19] All right. While she's cooking, I'll
+[0:22:20] cook, too. While she's cooking, I'll
+[0:22:22] cook too. Dude, let's go back to that
+[0:22:24] file, the first one, because she gonna
+[0:22:26] be done with that one first. Short.
+[0:22:28] Okay. Where'd it go? I don't even see
+[0:22:31] the folder any the file anymore. She
+[0:22:33] deleted it. Okay. I'm going to get out
+[0:22:34] of the data cuz she acts weird when I
+[0:22:36] have my tab on the data even though I'm
+[0:22:38] a data dog. AI won't take CO's jobs, but
+[0:22:41] I will
+[0:22:44] delete this post. What post, bro? Um,
+[0:22:47] crypto markets, all the new equities,
+[0:22:48] markets, weather, YouTube views. But
+[0:22:51] how? Tell me more, bro. I want to know
+[0:22:53] more. I want to know. Delete this post.
+[0:22:56] 777, fam. Repost that. That's funny.
+[0:22:59] This might be good. Too good to be true.
+[0:23:00] How about a trading bot where retail
+[0:23:02] share edge and profits? Well, smart
+[0:23:05] crypto. What's up, fam? Holy market is
+[0:23:07] such a fascinating platform to build
+[0:23:08] trading. Oh, she's done. Sick. So,
+[0:23:11] Wednesday 12 UTC short. Let's get it
+[0:23:13] recreated. It was missing. Why is you
+[0:23:15] miss Why did you do that? The error
+[0:23:16] cause was after setting the date time as
+[0:23:19] the index. When you do parse dates plus
+[0:23:22] index call, the date time becomes the
+[0:23:25] index leaving only five columns. Then
+[0:23:28] trying to assign five names to what
+[0:23:30] pandas thought has six is the error.
+[0:23:32] Okay, let's go ahead and run it then.
+[0:23:35] See what happens. Nans, I see some nans
+[0:23:38] in there, fam. What's up with the nans?
+[0:23:40] What's up with the nans? I'm not even
+[0:23:42] looking at the data even though I'm a
+[0:23:43] data. I'm not going to look at it until
+[0:23:44] I get everything perfect. What's up with
+[0:23:46] the nans? Six sharp nans. Okay, this one
+[0:23:50] had nans right here. 1 hour. Oh, cuz
+[0:23:53] it's gap data. Okay. Okay, that's fair.
+[0:23:55] That's fair. Brave. All right, let's see
+[0:23:58] what's happening here. So, this is all
+[0:24:00] of the returns and whatnot for all the
+[0:24:03] different data sources. So, you got
+[0:24:05] Zcash, XRP, yada yada. Um, I can't read
+[0:24:08] this though. Uh, don't use exponents in
+[0:24:10] the return. I can't read that. I'm just
+[0:24:12] a human. You're using the I think it's
+[0:24:15] exponents. Maybe not exponents. Yeah, I
+[0:24:16] think it's exponents, but don't do that.
+[0:24:18] Put out the whole number.
+[0:24:20] I think it's exponents, right? Exponents
+[0:24:22] points. Come on, bro. Scientific
+[0:24:25] scientific notation. Yes. No scientific
+[0:24:28] notation.
+[0:24:29] All right, let's see if any of these
+[0:24:30] tweeties have anything to say to me.
+[0:24:32] You're awesome, dude. Thank you, bro.
+[0:24:34] Thank you, bro. Much love. Um, let's see
+[0:24:37] here. Might be worth collaborating. I've
+[0:24:39] got an AI hedge fund running now and it
+[0:24:42] could make sense to build a tailored
+[0:24:44] version focused on PM. Could be a strong
+[0:24:46] fit if we combine forces. Okay, let's
+[0:24:48] see what you got, fam. Let's see what
+[0:24:50] you got. Tell me more, bro. Sounds like
+[0:24:52] you got some good ideas. I want your
+[0:24:55] ideas, too. That's a that's a reason I
+[0:24:56] share all this, dude. I do believe code
+[0:24:58] is a great equalizer. I do do believe if
+[0:25:00] I share everything, you can do anything
+[0:25:01] I can do but better. But at the same
+[0:25:04] time, dude, I I'm doing this so I can
+[0:25:06] conversate with people smarter than me
+[0:25:08] because I'm just a kid in my bedroom.
+[0:25:10] It's not even a kid anymore. He
+[0:25:14] now perfect. All four files have been
+[0:25:16] updated. Let's get it. Okay, now we're
+[0:25:18] going to be able to read the data. You
+[0:25:19] probably already read it, but I can't
+[0:25:21] read things like that. Return is Why is
+[0:25:23] the return so small? What size are you
+[0:25:26] using? I noticed the returns are very
+[0:25:29] small. So, this makes me feel like you
+[0:25:30] may be using a smaller size than 95%.
+[0:25:36] You should go 95% all in for every
+[0:25:38] trade. First, tell me if that's correct.
+[0:25:41] Are you just using bad small size and
+[0:25:44] then fix it? Thank you. Dance. How about
+[0:25:46] a trading? Okay, we already read that
+[0:25:48] one. Hey, Poly Market. How How do you
+[0:25:51] want me to bet the Dow Jones will go
+[0:25:53] down at least 200 points today? Not
+[0:25:57] yesterday. I'm not sure what that means,
+[0:25:58] Jose, but I love you. Retail find edge,
+[0:26:00] right? Translation: Hordes of Rubes who
+[0:26:03] think they have an edge and will make
+[0:26:06] the easiest money imaginable. If your
+[0:26:08] exchange is retweetingish like that, run
+[0:26:10] the FOA. Okay. Okay. Quote. If you're
+[0:26:13] enjoying this so far, I want to invite
+[0:26:15] you to our private Zoom call. It's
+[0:26:17] pretty much every single day. I do three
+[0:26:18] hours. You get to chat with me. Ask me
+[0:26:21] any questions you have. Plus, you get
+[0:26:23] the full replay as I know you're a busy
+[0:26:25] person. And you also get the Mundev API
+[0:26:28] key. The Mundv API key is amazing. It
+[0:26:31] has connections to all of my
+[0:26:33] institutional data. And the app that you
+[0:26:35] see me using all day, you also get
+[0:26:37] access to that. And then you also get
+[0:26:39] access to a trading bot road map. If I
+[0:26:42] were to ever write a book, this is the
+[0:26:44] outline of it. I'm going to show you
+[0:26:46] everything. Just go ahead and jump into
+[0:26:47] the Zoom. You're not going to have any
+[0:26:49] ads or anything like that ever again. If
+[0:26:52] you are in the Zoom, it's all live and
+[0:26:54] you have all of the time in the world
+[0:26:57] each day to ask me any questions. Plus,
+[0:27:00] like I said, you also get the API key.
+[0:27:03] You can go to moonab.com/doccks
+[0:27:05] and explore what the API key does, but
+[0:27:08] it is a thick piece of API for you. So,
+[0:27:14] I want you to have access to it because
+[0:27:16] I want you to have the data that Wall
+[0:27:17] Street will never give you. So, you get
+[0:27:20] that as a bonus when you jump into the
+[0:27:22] Zoom call. Just click the link in the
+[0:27:24] description and you can go ahead and get
+[0:27:26] that. What else do you get? You get the
+[0:27:29] Moondev app. So, this is what you see me
+[0:27:31] using all day. This is how I control all
+[0:27:33] of my agents and I stop losing my
+[0:27:36] terminals and tabs. So, you get the app
+[0:27:39] as well. But not only that, like I said,
+[0:27:41] this is better than a book. If you're
+[0:27:43] curious about this industry, get the
+[0:27:45] road map. The road map is another free
+[0:27:46] bonus for joining the Zoom call. You can
+[0:27:48] see the trading bot road map here. I
+[0:27:51] walk you through some of my videos that
+[0:27:53] will show you how to automate your
+[0:27:54] trading. You get access to my discord
+[0:27:56] here. Um, you get access to the
+[0:27:59] frequently asked questions, my actual
+[0:28:01] RBI system, a book list that will show
+[0:28:04] you where to find ideas and how to
+[0:28:08] automate your trading. And then so much
+[0:28:10] code from these YouTube videos. So, if
+[0:28:12] you want the code from the YouTube
+[0:28:13] videos, you want the app, you want the
+[0:28:16] API key, and you want to be able to chat
+[0:28:19] with me and chat with everybody else in
+[0:28:20] the community, jump into the next Zoom
+[0:28:22] call.
+[0:28:24] There's probably one today or tomorrow.
+[0:28:27] I'll see you there. It's only five
+[0:28:29] bucks, dude. What the hell is a rube,
+[0:28:34] though?
+[0:28:36] That's my question. Okay, perfect. Four.
+[0:28:37] All four strategies have been fixed now.
+[0:28:40] Um, let's see what she was doing before
+[0:28:42] because it feels like she must have been
+[0:28:44] using 1%. You're absolutely right.
+[0:28:46] Looking at the code, I'm using size one,
+[0:28:48] which in backp means one unit, not 95%
+[0:28:51] of capital. That's why the returns are
+[0:28:53] tiny, tiny, tiny. Let's see. Let's see
+[0:28:56] what happens next. Okay, here's all the
+[0:28:58] data, dog. Okay, so you can see this.
+[0:29:00] Hold on, hold on, hold on. I need to run
+[0:29:02] it back. I got to run it back, dude. I
+[0:29:05] need buy and hold return right there
+[0:29:07] next to the main return. So to the right
+[0:29:09] of it so I can see just quickly and
+[0:29:11] easily, you know. Thank you. And Poly
+[0:29:13] Market is absolutely free for everyone.
+[0:29:15] A fact be facts. It's free, dude. Holy
+[0:29:18] moly. Holy moly. Holy. Holy holy. That's
+[0:29:21] a lot. Poly market ignites trading bot
+[0:29:23] development boom. Poly market is the
+[0:29:25] world leading prediction market is
+[0:29:26] drawing more developers into the trading
+[0:29:27] bot discussion. The platform is renowned
+[0:29:29] for its unlimited market diversity
+[0:29:32] allowing users to engage in prediction
+[0:29:34] events. Recently developer Mundv shared
+[0:29:37] enthusiasm for Poly Market on X
+[0:29:38] highlighting its infinite markets as
+[0:29:41] ideal for bot development. This reflects
+[0:29:43] the platform's growing ecosystem.
+[0:29:44] Technically, Poly Market supports AI
+[0:29:46] agents and copy trading bots as seen in
+[0:29:49] the open source. However, the appeal of
+[0:29:51] unlimited markets poses challenges
+[0:29:53] liquidity. I ain't reading all that.
+[0:29:55] I'll give you a retweet though. Okay, so
+[0:29:56] you can see here these are the returns
+[0:29:59] of that strategy. But that's not even
+[0:30:00] the strategy I was looking for. So um
+[0:30:03] this is 1% return buy and holds 113.
+[0:30:07] This is a short strategy though. So
+[0:30:09] profit factor 1.1
+[0:30:11] sharp buy and hold. Okay. So now I want
+[0:30:14] to get juicy with it after we test these
+[0:30:15] four these other three. These other
+[0:30:17] three just to see just to see if this
+[0:30:19] baseline idea does anything cuz Yeah.
+[0:30:22] Yeah. Let's just let's start there.
+[0:30:24] Let's start there. Okay. So you can see
+[0:30:26] the returns are better on this one. 18%.
+[0:30:29] This is a short only strategy. 18%.
+[0:30:31] Sharp ratio 1.47
+[0:30:34] sharp ratio 3.23 on this one. Buy and
+[0:30:36] hold is -44%. Sharp ratio here 3.23.
+[0:30:40] Only two trades though. 141 trades. Buy
+[0:30:43] and hold. 36,000. Short only. Short
+[0:30:45] only. Short only. Okay. So, let's go
+[0:30:48] ahead and see if any of these other ones
+[0:30:49] have any fire in them. And then we're
+[0:30:53] going to go ahead and try the actual
+[0:30:55] idea. Well, not the actual idea. This is
+[0:30:58] part of the idea, but you'll see in a
+[0:31:00] second. So, you can see 0000
+[0:31:03] um short returns is way better than buy
+[0:31:07] and hold. This is easy though. This is
+[0:31:09] easy. We all know that because these are
+[0:31:10] all the Solana tokens. Everything is
+[0:31:12] Solana cook. It's cooked. Okay, let's
+[0:31:14] check out the MFI. Then I got to take a
+[0:31:16] quick whiz and I'll be right back and
+[0:31:18] then we're going to test the big big
+[0:31:20] dog. Actually, you know what? I'm I'mma
+[0:31:22] hold it. I'mma hold it. Okay. So now,
+[0:31:26] all right. So now what I want you to do
+[0:31:28] is for those four files, once you make
+[0:31:31] four new files, maybe make a subfolder
+[0:31:33] here. And the new premise here, it's
+[0:31:35] going to take a lot. This is going to be
+[0:31:36] computational for sure. But I want you
+[0:31:39] to loop through every single hour of the
+[0:31:41] day. Since we have 20, all this data is
+[0:31:43] 24 hours. 1 hour 24 1 hour bars. I want
+[0:31:48] you to loop through every single hour of
+[0:31:50] the day and run that same strategy
+[0:31:53] against each hour. Meaning right now
+[0:31:55] we're saying short at 12 UTC. Well, I
+[0:31:57] want you to try 1 2 3 4 separately. So
+[0:32:01] one back test will be at 1. One back
+[0:32:03] test will be at two. One back test will
+[0:32:05] be at three. One back test will be four.
+[0:32:08] Okay. So there should be 24 full back
+[0:32:11] test for each set of data. So you can
+[0:32:14] see this is going to take a long time to
+[0:32:15] loop through all of them. So, we're
+[0:32:18] going to do that for go ahead and build
+[0:32:20] that. You'll make one folder for short
+[0:32:22] and then you'll make one folder for long
+[0:32:24] and do the exact inverse. So, you should
+[0:32:26] make eight files here. Go ahead and ask
+[0:32:29] me any questions you have and reiterate
+[0:32:32] what I said to build before you start
+[0:32:35] building. So, I can go take a whiz while
+[0:32:37] you build it. Let's make sure we're on
+[0:32:39] the same page, dog. I feel like this is
+[0:32:42] the this is the sauce. This is the sauce
+[0:32:44] in time. Nobody else is trading time
+[0:32:46] andality and there is time andality out
+[0:32:48] there. Key news. I like that. Speak to
+[0:32:52] me in Chinese. Speak to me in Chinese.
+[0:32:55] Untrue. You just need to look a bit
+[0:32:57] harder. Fire. Anything is fire, dude.
+[0:33:00] [snorts] Claude calls you Dr. Deog. He
+[0:33:02] does. He's my guy. That's my guy. Thank
+[0:33:05] you, bro. Thank you, bro. I love how the
+[0:33:08] voice makes me punctuate better. Looking
+[0:33:11] you up, fam. How about Oh, nice. Nice,
+[0:33:15] dude. Nice. Okay, let's answer these
+[0:33:17] questions. F. Got it. Dr. Data Dog, let
+[0:33:19] me make sure I understand before you go
+[0:33:22] take that whiz. New folder structure.
+[0:33:25] Hour optimizer short. Hour optimizer
+[0:33:27] long. Yes. Short folder. Base strategy.
+[0:33:30] No filters. Yes. Yes. What each file
+[0:33:32] does. Loop through 24 hours. Three. Yes.
+[0:33:35] Run a full back test on each data source
+[0:33:37] in 1 hour. Yes. Each hour gets its own
+[0:33:40] Wednesday entry signal at a specific
+[0:33:42] hour. Holy moly, dude. This is going to
+[0:33:45] take longer. Holy hell, bro. I didn't
+[0:33:48] even think about that. This isn't going
+[0:33:50] to be Wednesday. Wednesday only. We
+[0:33:52] should do it for We should do it for all
+[0:33:54] weeks, all days. Damn, that's tricky,
+[0:33:57] though. How can we do this? Honestly, do
+[0:34:00] we do every hour of every day of the
+[0:34:03] whole week? Let's start there. But then,
+[0:34:06] how can we build this out to then test
+[0:34:09] just Wednesdays or just Thursdays or
+[0:34:11] just Fridays? You see what I'm saying?
+[0:34:13] I'm curious about both because I would
+[0:34:15] love to loop through every hour only
+[0:34:16] Wednesdays and back test that, but I'd
+[0:34:18] also like to loop through every hour
+[0:34:20] throughout the whole week. So, how would
+[0:34:22] you propose to test all of these here
+[0:34:25] today? Just so we can figure out exactly
+[0:34:28] the best time to take this long or short
+[0:34:31] trade based on the hour, if there is
+[0:34:33] one. Okay. Do you want the final summary
+[0:34:35] to show your best hours across all data
+[0:34:37] sources or best per individual data
+[0:34:40] source? I want to see all of it. I want
+[0:34:42] to see all data sources, not combined,
+[0:34:44] but piece by step by step in that brick
+[0:34:47] at the end. You know how it made the
+[0:34:48] table at the end? I want to see all that
+[0:34:49] into a table. It's going to be a big ass
+[0:34:51] table, but that's all right. I can't
+[0:34:53] understand you. [laughter]
+[0:34:58] Oh god.
+[0:35:01] for viewers sensitive to use of the
+[0:35:03] nword. I
+[0:35:07] years
+[0:35:09] though not sold in any major bookstores
+[0:35:12] his books dump truck, stain, I
+[0:35:15] smell and book have sold
+[0:35:18] over 600,000
+[0:35:20] copies combined. Despite his popularity,
+[0:35:24] very few have ever seen him due to his
+[0:35:26] reclusiveness. But in an effort to bring
+[0:35:29] his message to a wider audience, he
+[0:35:32] agreed to give his first public
+[0:35:34] interview ever to Frontline. But getting
+[0:35:38] to Mr. Bixby.
+[0:35:39] >> We'll get back to that in a second.
+[0:35:41] [laughter]
+[0:35:42] I can't understand you. All right, Dr.
+[0:35:46] Dog, let me think this through.
+[0:35:47] Computational beasts, the smart
+[0:35:48] approach. Okay. Separate files for
+[0:35:50] different days. Okay. Make it modular so
+[0:35:53] you can test different scenarios. So,
+[0:35:57] hourly short all days, hourly short
+[0:35:59] weekday, hourly short specific days,
+[0:36:01] hourly short mfi all days, hourly short.
+[0:36:06] Okay, I think it's cleaner. Make one
+[0:36:07] file per strategy type. It takes
+[0:36:10] parameters like all days. Okay. Or even
+[0:36:12] better. Okay, I like that having the
+[0:36:14] parameters um your over your even better
+[0:36:17] day. So, just loop through 0 1 2 3 4 5
+[0:36:19] 6. We can drop the three uh other types
+[0:36:24] to make this a little bit smaller. So we
+[0:36:26] don't need the MFI, the ADX or the
+[0:36:27] Calman. We'll just do the regular
+[0:36:29] strategy base strategy just to make it a
+[0:36:32] little easier for us. And that column,
+[0:36:33] those columns look good. Also have it
+[0:36:35] output a CSV with the data. Build two
+[0:36:38] versions to start. Yeah, I like those
+[0:36:40] two versions you mentioned. Yeah, I like
+[0:36:42] the all days version and the single day
+[0:36:44] version, but I think that um the way you
+[0:36:47] made that list is actually pretty chill
+[0:36:49] because then I could say let's start
+[0:36:50] with one through or 0 through six,
+[0:36:52] whatever, 1 through 7, however you set
+[0:36:54] that up. And then we can uh also have
+[0:36:57] another one. I can go back and then try
+[0:36:59] it just for single days too.
+[0:37:01] >> It was an odyssey in itself, riddled
+[0:37:03] with backcountry holl, shifty
+[0:37:05] gobetweens, and palpable danger.
+[0:37:09] >> Excuse me. Not sure we're in the right
+[0:37:12] place. We're looking for Clayton Bsby.
+[0:37:15] >> Look no further, fella. You found me.
+[0:37:18] [laughter]
+[0:37:18] >> Uh Clayton Bsby, the author.
+[0:37:23] What? You don't think I can write them
+[0:37:24] books? Just cuz I'm blind don't mean I'm
+[0:37:27] dumb.
+[0:37:29] How could this have happened?
+[0:37:33] A black white supremacist.
+[0:37:36] >> I'll search for answers.
+[0:37:37] >> All right, I'm done before I get a
+[0:37:38] strike, bro. But you should go watch
+[0:37:40] that on your own time because it's
+[0:37:42] funny. Bankerbot,
+[0:37:45] will you watch the stream with us?
+[0:37:47] Bankerbot, we can all we can all watch
+[0:37:50] it together.
+[0:37:56] We can all watch it together as one big
+[0:37:57] happy family.
+[0:38:00] We'll need to define which agents can
+[0:38:02] give us an edge in poly market. I use a
+[0:38:04] four layer architecture. Mainly we
+[0:38:06] should focus on defining L1 and L2. For
+[0:38:08] example, in crypto, I use agents like
+[0:38:10] orderbook analyzer. Okay, dude. I see
+[0:38:13] you. That's far. No way. You're done
+[0:38:15] yet. I didn't even take my whiz. Okay,
+[0:38:18] so short optimizer here. on my long
+[0:38:21] optimizer. Hourly short optimizer. Okay.
+[0:38:24] Configuration at each top of the file
+[0:38:27] zero. Change this. Change this. Okay.
+[0:38:29] Test 24 hours time specific days on each
+[0:38:33] data source with all seven days. 19 data
+[0:38:36] sources time 7 * 7 days * 24 = 3. Wait,
+[0:38:40] with all seven days is 19. That's 3,100
+[0:38:44] with one day. Okay, let's start with one
+[0:38:46] day then. N. Let's run it up, bro. Let's
+[0:38:48] run it up. Let's do all of them. Let's
+[0:38:50] try to do all of them. I got to pee so
+[0:38:52] bad though. Like it's unbelievably. It's
+[0:38:55] about It's dribbling. I'm dribbling
+[0:38:57] right now. Okay. Hourly short optimizer.
+[0:38:59] Let's start with that one. Okay. Hourly
+[0:39:01] optimizer here. Short. Okay. Hourly
+[0:39:05] short optimizer. I got to go. I got to
+[0:39:07] go. Okay. Okay. I'm going to go. I'm
+[0:39:09] going to go. I'm going to go. Let's get
+[0:39:10] this running and I'm going to go. What
+[0:39:11] the hell is going on? Okay. Sick. It's
+[0:39:13] It's doing its thing. It's doing its
+[0:39:14] thing. I'll be right back. Would you
+[0:39:16] look at that, Jimmy? 2549.
+[0:39:21] Damn, dude. We're crushing today. See if
+[0:39:23] I can help anybody in the the chat, bro.
+[0:39:26] Uh, the real alpha lies in niche
+[0:39:28] markets. Most overlooked noises. Edge
+[0:39:30] sharpens. Nice. Which niche markets are
+[0:39:32] you keeping your eye on? Okay, we got
+[0:39:34] hella hella back test coming. This is
+[0:39:36] going to be a boatload of data. Holy AI
+[0:39:39] coded slob. What? You don't love it,
+[0:39:42] bro? So sad. So sad, dude. So sad. Okay,
+[0:39:47] look at this. We're done. Worst return,
+[0:39:49] best return, average return. Let's see
+[0:39:50] all of returns. How about that? Give me
+[0:39:52] all of them. Okay, so bottom 20 worst
+[0:39:55] performers. Don't care about those. Top
+[0:39:57] 20 best performers here. Look at this,
+[0:40:00] dude. Look at this. Look at me. Look at
+[0:40:03] me right now, dude. Look at me. Look at
+[0:40:05] me. Look at me. Look at me. 257% return
+[0:40:09] short only. Okay. Also, I want you to
+[0:40:12] build another file. I want you to go
+[0:40:13] ahead and build another file. Two files,
+[0:40:15] I guess. One for long, one for short.
+[0:40:17] that that takes the trade every day at
+[0:40:20] that time. So while this these two files
+[0:40:22] were awesome because I got to see every
+[0:40:24] hour of every day separately, I want to
+[0:40:27] see like 10 10 UTC Monday Tuesday all
+[0:40:30] days and two UTC all day. All right, so
+[0:40:34] this is the documentation
+[0:40:36] moon.com/doccks.
+[0:40:38] This is the documentation for my API and
+[0:40:41] you actually get the API key when you
+[0:40:43] come to the Zoom. There's a bunch of
+[0:40:44] people in the Zoom each day you can
+[0:40:46] connect with and you can ask me any
+[0:40:48] questions. It's free consulting in the
+[0:40:50] Zoom each day. Plus, I give you my API
+[0:40:52] key for mundev.com/doccks if you want to
+[0:40:55] go ahead and get ahead of it and check
+[0:40:56] it out. But not only that, you get
+[0:40:58] another bonus. You get the app that I'm
+[0:41:00] using all day. You get the app that I
+[0:41:02] use all day long and you stop losing
+[0:41:05] agents in all your terminals. This is
+[0:41:07] how I run all of my agent flows. You get
+[0:41:09] that app as well. But not only that, you
+[0:41:11] also get the road map. The road map is
+[0:41:13] sick because this walks you through how
+[0:41:15] to get your trading bots live. I show
+[0:41:17] you a bunch of my YouTube videos. I
+[0:41:19] invite you to my Discord. I answer
+[0:41:21] frequently asked questions. I show you
+[0:41:23] my RBI framework. I give you my book
+[0:41:25] list. I give you so much code from these
+[0:41:27] videos. So you see me posting every
+[0:41:29] single day. Well, I post a lot of the
+[0:41:31] code here in this section. So that's in
+[0:41:34] the road map. Like I said, you get the
+[0:41:36] app, you get the API key, and then you
+[0:41:38] get to chat with me all day. You're in
+[0:41:40] the Zoom call. You get the full replay
+[0:41:42] from the Zoom call. It's a three-hour
+[0:41:44] Zoom each day. The API key is a bonus.
+[0:41:46] The app is a bonus. The TrainBot road
+[0:41:48] map is a bonus. And guess what? It's
+[0:41:51] only $5. There's a 90-day no questions
+[0:41:53] asked money back guarantee. So you don't
+[0:41:55] if you don't absolutely love it, then
+[0:41:57] you get your money back. It's five
+[0:41:58] bucks. Join me in the next Zoom call.
+[0:42:01] Meet some other algorithmic traders. Get
+[0:42:04] the full replay. Get the API key, the
+[0:42:07] app, the trading bot road mapap, and
+[0:42:08] this trading bot road map. Oh my
+[0:42:10] goodness, dude. This is better than a
+[0:42:12] book. So, jump in, get it as a bonus.
+[0:42:14] There's a link in the description, and
+[0:42:16] it's only five bucks with a 90-day money
+[0:42:18] back guarantee. So, you see what I'm
+[0:42:19] saying? Opposed to doing them
+[0:42:21] separately. So, these will be separate
+[0:42:23] files because what you just gave me was
+[0:42:24] goat, bro. Thank you. Okay. And then the
+[0:42:27] results should also be up in here and we
+[0:42:29] can check them out. Where though? Where
+[0:42:31] the results at, though? That's right.
+[0:42:33] That's correct. By the way, before you
+[0:42:35] do that for the long and short
+[0:42:37] optimizers, I just ran the short and it
+[0:42:39] didn't go into that subfolder. The
+[0:42:40] results didn't go into that subfolder.
+[0:42:42] It should put all of the results in that
+[0:42:44] subfolder, the CSV, so I can go ahead
+[0:42:46] and look at them in CSV. I got them
+[0:42:48] printed out into the terminal. But go
+[0:42:50] ahead and update those first and then go
+[0:42:53] ahead and build the above and have that
+[0:42:55] same feedback. Thank you.
+[0:42:57] Okay, so some of this data is sick,
+[0:42:59] dude. Do you think about it? But I mean
+[0:43:01] 3,000 back test, that's the tricky part.
+[0:43:04] So Thursday at 11:00, Tuesday and
+[0:43:07] Thursday at 11:00 shorting Solana 218
+[0:43:10] trades. Bam. I need expected value in
+[0:43:13] these outputs too.
+[0:43:16] Go ahead. Also, I need expected value in
+[0:43:20] all of these as well. In the outputs,
+[0:43:23] the final output. Hey, this is slick rig
+[0:43:25] with it though. So you can see Soul USD
+[0:43:28] 257% on the short side. Su is sui sui
+[0:43:33] 146 on the short side
+[0:43:36] 124 on the short side for soul. So this
+[0:43:39] 1 hour data solana 250 weeks is a lot
+[0:43:42] too. It's like almost 5 years. Timality
+[0:43:45] bro I'm telling you there's something up
+[0:43:46] with timeality.
+[0:43:48] Timality is no joke. You don't know what
+[0:43:50] timeality is. You know what seasonality
+[0:43:52] is then you know what timeality is. This
+[0:43:54] is no joke fam. Perfect Dr. They not all
+[0:43:56] done. Okay, now save to that subfolder.
+[0:43:59] Test each hour of each day. Okay, so I'm
+[0:44:01] going to have to get a bunch of these
+[0:44:03] running at the same time because I don't
+[0:44:05] have time. I got time, but let's go
+[0:44:07] ahead and get these out over here. Okay,
+[0:44:09] I'm going to go ahead and kind of
+[0:44:11] activate four times. Three more times.
+[0:44:13] Three more times. I'm going to kind of
+[0:44:14] activate copy path. I'm going to kind of
+[0:44:17] activate TFL, bro. Kind of activate TFL.
+[0:44:22] Activate TFlow.
+[0:44:25] CD up in that hole time and ality. Damn,
+[0:44:28] that's a lot. I got to do a lot of
+[0:44:31] rewinding. [snorts]
+[0:44:33] Activate CD B. Okay, another time.
+[0:44:38] Activate.
+[0:44:40] Activate Tflow. Okay, CD. Okay, double
+[0:44:44] CD. No way. Activate. Activate Tflow,
+[0:44:48] bro. CD. No, not double CD. Okay, let's
+[0:44:52] get it. Let's get all of them going
+[0:44:54] here. Yeah, you've never seen anything
+[0:44:56] like this here. I'm sorry. I'm sorry.
+[0:44:58] You haven't seen things like this yet.
+[0:45:00] This is new. New new. You talk about
+[0:45:02] seasonality, I talk about timeality.
+[0:45:04] Okay, let's go ahead and test all of
+[0:45:06] them then. Yes. Okay. Combined. So,
+[0:45:09] hourly short optimizer. Let's do that
+[0:45:10] one first. So, we just saw copy path.
+[0:45:14] Jimmy 777, fam. Good to see you, bro.
+[0:45:17] Come on. Spam the 777s. Nobody's in
+[0:45:20] here. That's okay because time and is
+[0:45:22] something most people won't be able to
+[0:45:23] ever understand. I'm just kidding, fam.
+[0:45:25] I'm just kidding. You can do anything I
+[0:45:27] can do but better and I know that cuz
+[0:45:30] you're a human, too. Python, run it.
+[0:45:32] Python, run it. Python, run it. Python,
+[0:45:35] run it. Copy path. Copy path. Python,
+[0:45:39] run it. Copy path. Python, run it. Run
+[0:45:43] it. Python, run it. Timeality. We got an
+[0:45:46] emergency here on the iPhone. Oh, it's a
+[0:45:49] test. Okay. Turn that off. Okay, we
+[0:45:51] got one more timeality here, dude. One
+[0:45:53] more time.
+[0:45:55] CPU taking a taking a beating in the
+[0:45:58] day. Taking a beating today, dude. Copy
+[0:46:02] path. Python. Run it. Run it, bro. Bro,
+[0:46:06] run it. Damn, I got all these open.
+[0:46:09] Since nobody else is going to show you
+[0:46:10] the difference between seasonality and
+[0:46:12] time and alley, I'm going to show you
+[0:46:14] everything. We are running 10,000, no
+[0:46:17] 12,000 different back tests here live.
+[0:46:20] Save time and desktop. Boom. Close it.
+[0:46:24] Push it. Um, most traders would never
+[0:46:29] think of this desktop time and date
+[0:46:33] modified.
+[0:46:34] Showing all results live now, dude.
+[0:46:38] Okay, so we got the 7 days done, dude.
+[0:46:42] Hold a thought. Continue. Pop a bottle.
+[0:46:44] Okay, there we go, dude. So, here's all
+[0:46:47] the data. Okay, this is the 64% win
+[0:46:50] rate, huh? This is short hourly combined
+[0:46:53] days. This is long combined days. Long
+[0:46:56] John Silvers, dude. You remember that,
+[0:46:58] Olado? I know you've been there. I know
+[0:47:00] you've been to Long John Silvers. I know
+[0:47:01] that for a fact. Okay, let's see where
+[0:47:04] this data has been saved to. Okay, so
+[0:47:08] how do we do that? Well, we go to cursor
+[0:47:11] again and results here. Okay, perfect.
+[0:47:14] So, you got results and results. Let's
+[0:47:16] go ahead and see what happens. Reveal
+[0:47:17] and finder, please. So, these are the
+[0:47:19] short combined days numbers. There
+[0:47:21] aren't any warnings for this
+[0:47:22] spreadsheet. Then why you even pop up on
+[0:47:23] me like that? Huh? Tell me that. Why you
+[0:47:26] even pop up on me if you're going to say
+[0:47:27] there's not any warnings? Okay. Draw
+[0:47:29] down sharp. Let's go ahead and organize
+[0:47:31] these how we want to see them. Can you
+[0:47:33] see this dude? Nah, probably not. Huh?
+[0:47:35] 200%. Okay, that's probably a little
+[0:47:37] better for you. So, buy and hold return
+[0:47:39] here. Let's go ahead and first sort by
+[0:47:41] return. Oh, it's already sorted by
+[0:47:43] return. So, this is sooie. One hour
+[0:47:46] short every day at 6 UTC. Beautiful.
+[0:47:52] Let's wait for these two to be done. But
+[0:47:53] this is I've got some good ideas coming
+[0:47:55] off this. Ideas are flowing. Ideas are
+[0:47:58] flowing, dude. Have AI go through and
+[0:48:02] give top 10 for return
+[0:48:07] sharp EV all separately. look at the CS
+[0:48:11] at the CSVs.
+[0:48:13] Build a script to
+[0:48:16] organize that like that and then make a
+[0:48:22] nice MD file that um explains the top
+[0:48:28] for each of these categories
+[0:48:32] for each of the
+[0:48:35] uh data sets. not data sets. Uh, runs
+[0:48:40] long, short, and then combined,
+[0:48:45] long, short. Okay, so I'm gonna have
+[0:48:48] that go while I do this. I don't know
+[0:48:49] why I just typed all that stuff, dude.
+[0:48:51] Crazy you still type. So, since there
+[0:48:53] are four different files, you're going
+[0:48:54] to get the top 10 for each of them. You
+[0:48:57] add them to the So, there's going to be
+[0:48:59] top 10 for each of those, you know,
+[0:49:02] return sharp and EV for each of four
+[0:49:04] files.
+[0:49:07] And then you'll make MD for all of them
+[0:49:09] combined.
+[0:49:11] And you can put it in the hour
+[0:49:12] optimizer.
+[0:49:13] It'll call it final results MD. And then
+[0:49:16] I'll push it to GitHub and I can read it
+[0:49:17] because it'll be in a nice little table
+[0:49:20] like you said you do. Thank you. Okay,
+[0:49:22] that's going to be Slick Rick too. So I
+[0:49:25] don't know, dude. I think I'm on fire. I
+[0:49:27] think I'm on fire. So let's go ahead and
+[0:49:29] analyze this data while she analyzes it
+[0:49:32] as well. So you can see buy and hold
+[0:49:34] return. Sooie, it's a short obviously,
+[0:49:36] but everything's going down. Total
+[0:49:38] trades, 64% win rate. High win rate, 80%
+[0:49:42] win rate. Yo, I don't see expected value
+[0:49:44] on here, bro. Bro, okay, skip the EV
+[0:49:48] because you did not put the expected
+[0:49:50] value on this data, unfortunately, even
+[0:49:53] though I asked for it. Don't put it now
+[0:49:54] cuz it's too late.
+[0:49:57] But I want you to make the instead of
+[0:49:59] EV, I want it to be draw down. And we're
+[0:50:02] looking for the lowest draw down in that
+[0:50:05] case. The other ones are highest, you
+[0:50:07] know, like highest sharp, highest
+[0:50:09] return. And then I want the lowest draw
+[0:50:12] down, top 10. All the CSVs have already
+[0:50:15] been completed. There are two in each
+[0:50:17] result folder. So you should be able to
+[0:50:19] build scripts and do this without
+[0:50:21] running anything else besides those new
+[0:50:23] scripts that just filter through it. You
+[0:50:25] know,
+[0:50:31] we got some liquidations coming through.
+[0:50:34] Let's go ahead and look through each of
+[0:50:36] these parts. Ain't nobody want to see
+[0:50:38] the top, the bottom 20. Holy moly. Oh my
+[0:50:41] god. This is actually fire. BTC 34,000%
+[0:50:45] return. Oh, this must be long. This must
+[0:50:48] be long only. I was going to say, so
+[0:50:50] these are the long onlyies. You can see
+[0:50:52] BTC long at any time over the last
+[0:50:54] bajillion years and you're gonna make a
+[0:50:56] bajillion dollars, but you can't go back
+[0:50:57] in time. So, these are all going to be
+[0:50:59] BTC's. Okay, so this one is interesting,
+[0:51:01] but the idea was actually short. So, I
+[0:51:03] want to focus in on that idea. We got
+[0:51:06] Mad Lakes coming through, dude. Game
+[0:51:08] people getting smoked right now. BTC
+[0:51:10] getting smoked. Who else is getting
+[0:51:12] smoked? Soul getting smoked. Everything
+[0:51:15] getting smoked. Time to pivot. I'm just
+[0:51:18] kidding, dude. Lock in. I will never
+[0:51:20] pivot away from crypto. I promise you
+[0:51:22] that. Okay, so [clears throat] these are
+[0:51:23] the worst and here's the best. So Sooie
+[0:51:25] Sooie looks good, dude. Let's zoom out a
+[0:51:27] little bit so we can maybe get this
+[0:51:29] looking better. Yeah, Sooie looks nice
+[0:51:33] on that short. I knew there was going to
+[0:51:34] be fire in here. That's why I did it. H
+[0:51:36] bar looks.
+[0:51:38] The thing is is these are shorts and
+[0:51:40] that's helpful for having an
+[0:51:43] uncorrelated
+[0:51:44] set of strategies, right? If a lot of
+[0:51:46] your strategies are long, you have to
+[0:51:47] find short strategies as well. Sharps
+[0:51:49] are pretty good. 1.59. It's not amazing,
+[0:51:52] but let's go ahead and see what these
+[0:51:53] ones are looking like.
+[0:51:56] Zoom out a little bit so we can try to
+[0:51:59] get these all. So, this one is the long
+[0:52:01] hourly optimizer. It's going to be BTC's
+[0:52:03] the best, of course. You can see it's
+[0:52:06] all BTC. I shouldn't even put BTC in
+[0:52:08] there to be honest. Draw down 58%. Okay,
+[0:52:11] I'm more interested in the shorts as
+[0:52:13] this was the idea. I just did the
+[0:52:14] inverse because I might as well always
+[0:52:17] do the inverse of your idea. see if
+[0:52:19] you're just wrong. Cuz a lot of times
+[0:52:22] you're just wrong. I am at least. Maybe
+[0:52:24] you're right. But so Tuesdays, short
+[0:52:26] Solana, Tuesdays at 11:00. Tuesdays and
+[0:52:29] Thursdays at 11:00. Short Salana that's
+[0:52:32] held up for 5 years. That's what I've
+[0:52:34] gotten so far out of this. It's short
+[0:52:36] Solana. Tuesday, Thursdays at 11 UTC.
+[0:52:40] Roth, what's up, bro? Atlanta, what's
+[0:52:42] up, dude? How are you guys? Hope you're
+[0:52:44] doing well. 777, much love.
+[0:52:49] This Sooie Sharp is nasty. It's a nasty
+[0:52:52] little sharp. 86% win rate. Okay, I'm
+[0:52:55] shorting Sooie for the rest of my life
+[0:52:57] at 700 a.m. or I don't even know what 7
+[0:52:59] UTC is to be real. I don't know what
+[0:53:02] time that is. Let's see if she's
+[0:53:03] finished up here because I think this is
+[0:53:05] going to be a nice little update. Okay,
+[0:53:08] there we go. So, let's go ahead and get
+[0:53:10] this on GitHub because I can't read
+[0:53:12] that. Analyze results. Final results
+[0:53:14] here. Perfect. I can't read that though.
+[0:53:17] So let's say new terminal here
+[0:53:21] uh get add dot
+[0:53:24] get commit slashm
+[0:53:28] time minality
+[0:53:30] back test.
+[0:53:38] Make sure I'm not pushing any keys.
+[0:53:40] Bees,
+[0:53:42] no keys, please. No keys. No keys. No
+[0:53:45] keys.
+[0:53:47] All right, let's push it. Get push. Get
+[0:53:50] push here. Launch coin in a sea of red.
+[0:53:54] Let's say go to GitHub AI agents for
+[0:53:56] trading. Not right now. Mundave on
+[0:54:00] YouTube. Repo Mundav trading boss. If
+[0:54:03] you want all this code, dude, join the
+[0:54:05] boot camp. Join Quan Elite. Join join
+[0:54:08] everything in the link below if you want
+[0:54:10] all the code. You do have to be part of
+[0:54:13] Quant Elite. Can't get into Corn Elite
+[0:54:15] until you join the boot camp. Links in
+[0:54:16] the description. 1 minute ago.
+[0:54:18] Timonality back test. What the hell
+[0:54:20] y'all put in here? Solana. Nice folks.
+[0:54:23] What is you doing here? Oh, you know
+[0:54:25] what I did is I updated some of this.
+[0:54:27] Uh, yeah, I updated the bird. Anyways,
+[0:54:30] let's go to back test. Find that timing,
+[0:54:32] bro. There's so many back tests in here,
+[0:54:34] dude. Look at this. Look at this. So
+[0:54:37] many back tests. I give away, dude. I
+[0:54:40] give away. He gives it all away. Time
+[0:54:43] and Alley summary. Let's get it. That
+[0:54:44] ain't it. Time and Alley summary.
+[0:54:47] Results. Maybe hour optimizer. Maybe
+[0:54:49] final results. Here we go. All right.
+[0:54:50] This is the results, fam. So, let's see
+[0:54:53] what we got. And what we got? I'll We'll
+[0:54:55] see if we got anything that should be
+[0:54:56] built for. I don't know. We'll see. I
+[0:54:58] think I have a couple couple goodies in
+[0:55:00] my eyes. Okay. Actually, I want to
+[0:55:02] update this real quick. Actually, what I
+[0:55:04] want you to do is I want to I want you
+[0:55:05] to redo that final results here, but for
+[0:55:08] the long only strategies, I want you to
+[0:55:10] remove Bitcoin as Bitcoin obviously is,
+[0:55:14] you know, going to go up a lot. So, I
+[0:55:17] want you to have a final results without
+[0:55:19] Bitcoin. So, I want you to have two full
+[0:55:22] two file two files for final results.
+[0:55:24] One as is, don't change it, and then one
+[0:55:27] without Bitcoin for long and short. I
+[0:55:30] think that's important. Okay. So, let's
+[0:55:32] go ahead and wait for her to do that and
+[0:55:33] then I'll get it back on GitHub and then
+[0:55:35] we'll go ahead and push it. See if
+[0:55:36] anybody needs my help here. You need
+[0:55:39] help? Got questions? I'm here. I'm
+[0:55:41] locked, dude. I'm locked. I just sent
+[0:55:43] 4444
+[0:55:45] banker to Mundev on base. The hell is
+[0:55:48] that? One house equals one house coin.
+[0:55:51] That's crazy, dude. If that happens,
+[0:55:53] let's see if my my housecoin bot is
+[0:55:55] working still or has made any um buys
+[0:55:58] here. I think I can close these now.
+[0:56:00] That was fun. Come on. Buy me some
+[0:56:02] homes, bro. Buy me. There we go. Bought
+[0:56:04] 4500 here. See if I bought any others.
+[0:56:07] Bought 4,500 here as well. Okay. Homeboy
+[0:56:10] says one. Okay. Another 4500. He says
+[0:56:12] one house. One house coin. So, I didn't
+[0:56:15] say another 4500. If I own all the
+[0:56:17] houses in the world, you know why. Cuz I
+[0:56:19] stream every day. I'm locked. I'm
+[0:56:21] locked. I'm locked. I'm showing
+[0:56:24] everything. This is not financial
+[0:56:25] advice. Please read that. Pause it.
+[0:56:27] Okay. Let's go ahead and see here how
+[0:56:29] she's doing. Okay, look at that. Final
+[0:56:31] results. No BTC long. I'm sorry. I meant
+[0:56:34] no BTC in general. So, for those final
+[0:56:37] results, no BTC long and short. Thank
+[0:56:39] you. Go ahead and update that read me or
+[0:56:41] that MD and uh you know, don't change
+[0:56:43] the OG. Don't change the OG. Just update
+[0:56:46] that one. Please got it. Dr. Data Dog,
+[0:56:48] count me as well for what, dude. Let's
+[0:56:52] get it, bro. Let's get it, bro. I had
+[0:56:54] way more emphasis on that than a period
+[0:56:57] show. So, one house equals one house
+[0:56:59] coin. These boys, these boys is nuts,
+[0:57:01] dude. We front run them. Sorry, Trump
+[0:57:04] fan. All houses have already been placed
+[0:57:06] on the chain. Okay, here we go. So,
+[0:57:08] let's go ahead and push this terminal
+[0:57:11] here. New terminal.
+[0:57:13] Get
+[0:57:16] commit slashm time
+[0:57:20] update. Get push. All right, now we can
+[0:57:23] go ahead and look at it. So first off we
+[0:57:25] have our hour optimizer results. Okay,
+[0:57:28] generated 10 to 16. This report analyzes
+[0:57:30] the per performance of hourly trading
+[0:57:32] strategies across different time frames
+[0:57:34] and data sources. Strategy overview. So
+[0:57:37] short optimizer tests each day hour
+[0:57:40] combination severally 3,92 back tests.
+[0:57:44] Short combined tests each hour on all
+[0:57:46] days combined 456 back test. Long
+[0:57:50] optimizers tests each day hour
+[0:57:53] combination separately 3,192
+[0:57:56] back tests long combined test each hour
+[0:57:59] of all days. Okay, so top 10 highest
+[0:58:02] returns for the short optimizer. We've
+[0:58:05] got Solana coming in at 257%. 11 UTC 11
+[0:58:10] UTC. I'm going to be all over this,
+[0:58:12] dude. We'll see. We'll see if it works.
+[0:58:14] We'll see if it works. Max draw down
+[0:58:16] 23%. Win rate 71%.
+[0:58:20] Sooie 1 hour 52 weeks. All right. So,
+[0:58:23] this is my API that I use.
+[0:58:25] Moon.com/doccks
+[0:58:26] goes ahead and explains it. It's a bunch
+[0:58:28] of hyperlquid data. There's also some
+[0:58:30] polyarket data on here. But one of my
+[0:58:32] favorite things is I get to see
+[0:58:34] everybody's liquidations. So, I see
+[0:58:36] everybody's liquidations at all times
+[0:58:39] across multiple accounts. I have Binance
+[0:58:41] liquidations in here. I have hyperlquid
+[0:58:43] liquidations. You can see it for stocks,
+[0:58:45] etc. Binance futures liquidations here.
+[0:58:48] This is moonab.com/doccks if you want to
+[0:58:50] explore the documentation right now. But
+[0:58:52] the thing that I really, really, really
+[0:58:55] like is I love to be able to see
+[0:58:57] everybody else's positions because this
+[0:58:59] wasn't possible before Hyperlquid. You
+[0:59:03] can see literally every single person's
+[0:59:06] positions and you can just scroll
+[0:59:09] through here and see how to do it on the
+[0:59:11] docs. It's pretty amazing. You just call
+[0:59:13] the API and you're able to see exactly
+[0:59:16] where is everybody else positioned,
+[0:59:19] where are they going to get liquidated,
+[0:59:21] how close are they getting to getting
+[0:59:22] liquidated. All of these things you
+[0:59:24] weren't able to see before hyperlquid,
+[0:59:26] but now you can see them through this
+[0:59:29] API. And the cool thing about this API
+[0:59:31] is if you come to my next Zoom call,
+[0:59:33] it's only five bucks. You get a
+[0:59:34] three-hour Zoom, the full replay, you
+[0:59:36] get the API key as a bonus. So
+[0:59:38] mundab.com/doccks
+[0:59:40] shows the API key. There's a link in the
+[0:59:42] description to join the Zoom. You get it
+[0:59:44] as a free bonus. You also get my app
+[0:59:47] which helps me control all of my AI
+[0:59:49] agents you watch me use all day. And you
+[0:59:51] get the road map. The road map will hold
+[0:59:53] your hand through the process of
+[0:59:54] automating your trading. But this API
+[0:59:56] key, literally, not even Wall Street has
+[0:59:59] this. So, you're able to see every
+[1:00:01] single person's positions. You're able
+[1:00:03] to see be able to get all the
+[1:00:05] liquidations across all of the different
+[1:00:07] exchanges. This is insane that I give it
+[1:00:10] to you for a free bonus. Go ahead and
+[1:00:12] click the link in the description or the
+[1:00:13] chat. It's only five bucks. Jump into
+[1:00:16] the Zoom. It's a three-hour Zoom. You
+[1:00:17] get the full replay just in case you
+[1:00:19] can't be there. And you get the API key
+[1:00:22] app and the Trading B road map. I'll see
+[1:00:25] you there. Data. Okay. I should do this
+[1:00:28] again and try every 15 minutes, but
+[1:00:30] maybe you can do that one. You got all
+[1:00:32] the code. B max draw down's only 10% on
+[1:00:35] this. That's interesting. Okay, so
+[1:00:37] Solana is popping up a lot here. 10, 11,
+[1:00:40] 13. Tuesday, Thursday seem to be bad
+[1:00:43] days for Soul. ETH 1 hour here. Return
+[1:00:47] 122%. It's 5 years negative 39 draw
+[1:00:51] downs. A little heavier. Highest sharps.
+[1:00:53] Let's check this one out. Sharp of 4.5.
+[1:00:56] Damn, only six trades though. 100% win
+[1:00:59] rate. Holy hell, that's pretty good.
+[1:01:01] Return is only 18%. Buy and hold is
+[1:01:04] don't know where the buy and hold is
+[1:01:05] actually on this one. Max draw down only
+[1:01:07] 2% is crazy. It's why the sharp's so
+[1:01:09] high. 4.5 4.2 4.2 same token. Thursday
+[1:01:14] is six. Yeah. Why is this the same exact
+[1:01:16] Maybe I put the same token in twice.
+[1:01:18] Sunday 4.17% return. Top 10 lowest draw
+[1:01:22] down. Okay. You're
+[1:01:25] slightly slow, buddy. You're slightly
+[1:01:27] slow for that one, but we'll fix it. You
+[1:01:29] can see the problem with the lowest draw
+[1:01:31] down. You know what I meant, right? I
+[1:01:33] meant highest draw down. I guess I
+[1:01:35] really meant lowest, but it's
+[1:01:36] technically highest because it's a
+[1:01:39] negative number. That was my bad, but
+[1:01:41] also kind of your bad. Like you're
+[1:01:43] you're the smart guy here. Come on,
+[1:01:45] blood. Haha. You're absolutely right,
+[1:01:47] Dr. D. My bad on that one. You said
+[1:01:50] lowest draw down. I should have known
+[1:01:52] you meant smallest shallowest draw down.
+[1:01:54] It's all good, baby girl. So this this
+[1:01:56] is irrelevant. Short combined. So what
+[1:01:58] was this? Oh yeah. Yeah, this is
+[1:02:01] combined now. So, Sooie Sooie 6 at 6
+[1:02:05] UTC.97
+[1:02:06] sharp draw downs a little higher though.
+[1:02:09] I'm going to go ahead and get these up
+[1:02:10] there because I want to see the real
+[1:02:12] stuffs. New terminal here. Get ad get
+[1:02:16] add dot get commit slashm newoo get push
+[1:02:22] get push.
+[1:02:24] All right, let's get it. Zero draw down.
+[1:02:26] Okay, so there needs to be more than
+[1:02:28] five trades though. Some educations are
+[1:02:31] popping up here. So we want there to be
+[1:02:33] at least five trades and then the lowest
+[1:02:35] draw down. And again, lowest means
+[1:02:37] shallowest. Yeah, that was my bad. Let's
+[1:02:39] go see if anybody needs my help. OMG.
+[1:02:41] Okay, fire, right? Fire, right? Kind of
+[1:02:43] like Pandora's box right now. Box.
+[1:02:46] Sorry, Trump fan. All the houses already
+[1:02:48] been taken. One house equals one house
+[1:02:50] coin. I love it, dude. Come on. Anyone
+[1:02:52] trading with size on market? We can see
+[1:02:54] them. Can we actually see them at all
+[1:02:55] times? is yes, dude. I'm looking at him
+[1:02:57] right now. Matter of fact, Panthers
+[1:03:00] versus Devils. Damn, somebody threw 50
+[1:03:03] rocks at a B or baseball game or hockey
+[1:03:06] game. Blue Jackets. I don't even know
+[1:03:07] what that is. Predators versus
+[1:03:10] Canadians. That must be like Canada
+[1:03:12] hockey or something. I know the Golden
+[1:03:14] Knights Vegas.
+[1:03:19] Okay, now they're fixed. Let's go ahead
+[1:03:20] and say get ad cuz I'm very interested
+[1:03:22] in that low draw down. But we got to get
+[1:03:24] some real data in there. Get add dot get
+[1:03:27] commit slashmality.
+[1:03:31] What?
+[1:03:35] What the hell? So odd because I get this
+[1:03:37] even though I thought we made some
+[1:03:39] changes, right? Alon has sacrificed
+[1:03:41] himself for the trenches. Send it.
+[1:03:43] Compacting convo. Great timing, bro. Yo,
+[1:03:46] 777 bad. Good to see you, fam. 777 fam,
+[1:03:49] I hope you're having a wonderful day
+[1:03:50] today. I hope you get everything you
+[1:03:52] ever imagined. Please close your eyes
+[1:03:54] every once in a while. So just close
+[1:03:55] your eyes and imagine what you want
+[1:03:57] because we're all human, dude. We can
+[1:03:58] have whatever we want. You are what you
+[1:04:00] think you are. Everything starts with a
+[1:04:03] thought. Not a thought like that, dude.
+[1:04:05] Not a thought like that. Stay away from
+[1:04:07] those thoughts. Everything starts with a
+[1:04:09] thought, dude. Think cleanly. Think you
+[1:04:11] can do anything and you can. I promise
+[1:04:13] you, dude. I promise you. Everything
+[1:04:15] here, everything I've ever done is just
+[1:04:17] a thought. It's just a thought. 777 to
+[1:04:20] you, fam. Let's get it. Every day, okay?
+[1:04:22] Every day. You don't need to come here
+[1:04:23] every day. That's fine. I'll be here
+[1:04:25] every day. Just trust. Throw the 777
+[1:04:27] every once in a while. So, I know that
+[1:04:29] you're working too. Okay. So, let's go
+[1:04:31] ahead and see what happened. Excellent.
+[1:04:32] So, the commit was already made and it
+[1:04:35] includes the Okay, let's see. For real.
+[1:04:37] For real. Smallest draw down. I mean,
+[1:04:39] that's weird because let's try it again
+[1:04:41] here. I'll just change something in it.
+[1:04:44] Lowest draw down, highest sharp, max
+[1:04:47] draw down. I mean, found I think that
+[1:04:49] it's actually there's not updated yet
+[1:04:51] because I even see the final results.
+[1:04:53] MD, it still has the max draw down. We
+[1:04:55] want to make sure those have at least
+[1:04:57] five minimum trades because a lot of
+[1:04:58] them are showing zeros. So, in order to
+[1:05:00] get this zero and the nons away, we'll
+[1:05:02] say five minimum trades and the
+[1:05:04] shallowest draw down. Please do it for
+[1:05:06] both of those review files. Thank you.
+[1:05:08] Ah, you're absolutely right, Dr. D. I
+[1:05:10] need to update both analysis scripts to
+[1:05:11] filter out the other things. Yes, you
+[1:05:13] do. Yes, you do. Yes, you do. Yes, you
+[1:05:15] do. Yes, you do. Surges number of rate
+[1:05:18] cuts in 2025. Damn, dude. Is that Fox,
+[1:05:22] bro? I mean, I don't see anybody on here
+[1:05:24] sweeping, but I might have missed it.
+[1:05:26] Shallowest. Okay, there we go. Blood.
+[1:05:28] There you go. Thank you for fixing that
+[1:05:30] because I was about to I was about to
+[1:05:31] smack yourself. Half a billion was
+[1:05:34] liquidated in 24 hours. Where are these
+[1:05:35] billions coming from? If everybody got
+[1:05:39] liquidated on Friday.
+[1:05:41] Sheesh. Get ad dot. Get ad dot. Get
+[1:05:45] commit slash
+[1:05:47] timeality.
+[1:05:49] Get push. Get push. Let's get it. So, I
+[1:05:53] guess there is a um a meeting today. So,
+[1:05:56] I want to see these draw downs real
+[1:05:58] quick. Okay, there we go. Here we go.
+[1:06:01] So,.91
+[1:06:03] draw down. Nice, [clears throat]
+[1:06:04] bro. You can see how the sharps are high
+[1:06:07] when it's that low of draw down. Profit
+[1:06:09] factor uh not there.
+[1:06:15] I want to study these. I want to study
+[1:06:17] this data, dude. I want to study this.
+[1:06:20] These are not very many trades short
+[1:06:22] combined. Let's go ahead and check these
+[1:06:24] out. So, Suie 1 hour and these are the
+[1:06:28] final final results, right? Yeah. Okay.
+[1:06:30] No BTC. Then we got that as well. So, I
+[1:06:32] want to go through these and we'll wrap
+[1:06:34] it up here. Much love to you. 777
+[1:06:36] highest sharp ratio. Top shallowest draw
+[1:06:38] down. Top 10. This is a short optimizer.
+[1:06:41] Top 10% return.
+[1:06:44] Um, top 10 shallow
+[1:06:47] draw down short return here.
+[1:06:50] Top 10 highest sharp ratios. Okay, this
+[1:06:53] is the combined. Okay, this is what
+[1:06:54] we're looking at. Short combined. This
+[1:06:55] is all days. So, Sooie 52 weeks every
+[1:07:00] day at six short sooie or nine, but
+[1:07:04] preferably six. I mean, that's
+[1:07:05] interesting, dude, to say the least. Top
+[1:07:08] 10 high is sharp here. Draw down is not
+[1:07:10] bad. 10%. 80% win rate. Damn. Turn
+[1:07:13] 68.36. Top 10 shallowest max draw down
+[1:07:17] across the board. This is the all days.5
+[1:07:20] long optimizer here. So these are all
+[1:07:22] going to be BTC. So when we're looking
+[1:07:24] at the longs, let's look at the other
+[1:07:26] ones. Oh, but this one's looking good
+[1:07:28] though. 3.9 sharp return percentage back
+[1:07:30] draw down three. Only six trades though.
+[1:07:34] Little fishy here. Oh, these are all the
+[1:07:36] same token address. I wonder why. Oh,
+[1:07:37] because they're different days. That's
+[1:07:39] right. Wednesday. Okay. Shallowest draw
+[1:07:42] down here. Long combined. Okay, long
+[1:07:45] combined. I want to look at the other
+[1:07:46] ones. shallowest draw down here. Max
+[1:07:48] draw down 11 sharp weak sharp though.
+[1:07:52] Summary stats overall performance by
+[1:07:54] strategy. The short optimizer the long
+[1:07:57] obviously long combine is going to be
+[1:07:59] really good here on this one because
+[1:08:00] it's going ahead and using BTC data. And
+[1:08:02] now let's go look at without BTC data
+[1:08:04] because I feel like that's more
+[1:08:05] important. So again it's a I'm going to
+[1:08:08] take these notes here. Um I'm going to
+[1:08:10] take these notes here. Where is that?
+[1:08:12] Okay. So I feel like these top three top
+[1:08:17] three ideas here are those ones or I
+[1:08:19] guess it's Solana
+[1:08:22] at Tuesday Thursday at 11 UTC short
+[1:08:25] sooie USD 1 hour. But there's so much I
+[1:08:29] can dive deeper. I need to dive so much
+[1:08:31] deeper on this. I [snorts] can dive so
+[1:08:34] much deeper on this. Use different SLTP,
+[1:08:40] etc. So maybe I'll do that. Maybe I'll
+[1:08:42] do that next. And then there was another
+[1:08:44] one here that I was interested in. Short
+[1:08:47] combined. Yes. Suie. Suie has six. Just
+[1:08:51] taking some notes here. I'm going to do
+[1:08:52] that. I'm going to do it because it's
+[1:08:54] not hard, dude. None of this stuff is
+[1:08:56] hard anymore. This is easy, bro. All you
+[1:08:58] got to do is come up with the idea and
+[1:09:00] tell the AI to do it for you. Cook,
+[1:09:01] cook, cook, cook. Cook until the devs
+[1:09:04] start crying. They say, "Oh, you can't
+[1:09:06] code as good as me. I could code
+[1:09:08] better." AI is not going to take any
+[1:09:10] developer jobs. I am. I'm going to
+[1:09:12] automate all developer jobs. I'm not
+[1:09:13] taking your stinking job, bro. I'm going
+[1:09:16] to automate it. I'm sorry coming at you
+[1:09:19] big heads out there. All the big head
+[1:09:21] devs out there told me I couldn't cut.
+[1:09:23] All the big head dabs will say it's just
+[1:09:25] AI slop. Okay. Slop on this. Slop on the
+[1:09:29] unemployment. We coming for you. Big.
+[1:09:32] Okay. Long combined here. So, this is
+[1:09:34] without the This is what I was
+[1:09:36] interested in. The BTZ top 10% highest
+[1:09:39] return. So Zcash been on a a tear
+[1:09:42] lately. I'm not really interested in
+[1:09:44] these long ones. I've got a lot of long
+[1:09:45] systems. I'm I'm looking for shorts.
+[1:09:48] Short systems uncorrelated. Um but this
+[1:09:52] is interesting to look at nonetheless.
+[1:09:54] Sharps are lower. Okay. What about top
+[1:09:56] 10 highest sharps? 33% return. These are
+[1:09:58] on some meme coins. I can't tell you
+[1:10:00] which one. Top shallowest draw down on
+[1:10:02] the long side. Turns try. So summary
+[1:10:05] stats. Okay. Short optimizer here. Okay.
+[1:10:07] So what I want to do now? All right. So,
+[1:10:10] I feel like this Solana data, the two
+[1:10:14] that you can see in there, and then the
+[1:10:15] one Sooie data, actually, it's two Sooie
+[1:10:18] datas. We want to focus in on those two.
+[1:10:21] All right. So, maybe make another
+[1:10:23] subfolder. Anyways, we're going to focus
+[1:10:25] on on those four data sets. And then I
+[1:10:30] want to use the backtesting. py
+[1:10:33] optimizer for the four data sets. These
+[1:10:35] are short only. the short only files,
+[1:10:38] those ones we're going to focus on here.
+[1:10:40] And I want you to use the optimizer to
+[1:10:43] optimize take profits and stop losses
+[1:10:46] between 1 and 10% no 1 and 15% for both
+[1:10:52] of them in 1% increments. So now we'll
+[1:10:57] be testing four different data sets
+[1:11:01] across using back testing.py's PY's
+[1:11:04] built-in optimizer and then we'll get
+[1:11:06] all those stats for each of them.
+[1:11:08] Essentially, what I'm trying to figure
+[1:11:09] out is what is the best take-profit
+[1:11:13] stop-loss. Okay, go ahead and build that
+[1:11:15] and then show me how to run it and then
+[1:11:16] I'll run it. And then make sure the data
+[1:11:18] is outputed somewhere nice in the CSV as
+[1:11:21] well and also in the terminal. Thank
+[1:11:23] you. Matter of fact, ask me any
+[1:11:25] questions you may have before you get
+[1:11:27] started. Just so we're on the same page,
+[1:11:30] dog.
+[1:11:33] Great idea, Dr. Da Dog. Let me clarify a
+[1:11:35] few things. Data sets to focus on one
+[1:11:37] hour. Sweet. Yes. Yes. I think that's
+[1:11:39] only Is that only two data sets now?
+[1:11:41] Yeah. Yeah, it's just one. My bad. Uh
+[1:11:44] yeah. Yeah, you're right. It's just one
+[1:11:45] data set. I mean, it's two. One for each
+[1:11:47] symbol. So, we insult. That's correct.
+[1:11:49] On the take profit stop-loss, there are
+[1:11:51] there's an optimizer built into back
+[1:11:53] testing. That I want you to use for this
+[1:11:56] optimization. So, should be pretty easy
+[1:11:58] to just use theirs. You don't need to
+[1:12:00] think about it too much. And yes, I just
+[1:12:02] want to run it on those specific hours
+[1:12:04] that performed well, not on all 23 or
+[1:12:08] else this will take forever. Yeah, that
+[1:12:09] folder is fine. Use the one that
+[1:12:11] performed well. The screenshots show.
+[1:12:13] So, the first screenshot was Solana on
+[1:12:17] Tuesday, Solana on Thursday, and Suie on
+[1:12:22] Monday. And then the second screenshot
+[1:12:24] was actually all the days combined. One
+[1:12:27] for Soul, one for Solana. So those are
+[1:12:29] the ones you should test. He's the
+[1:12:31] biggest of dogs. What's your favorite
+[1:12:33] strategy that you're willing to share
+[1:12:35] for good ideas?
+[1:12:37] Back test those ideas and if they work
+[1:12:43] in the past, incubate into trading boss
+[1:12:48] with small size. This is good for
+[1:12:51] everybody. As a matter of fact, if it's
+[1:12:52] good for everybody, I repost it like
+[1:12:54] that. Okay. So, let's go ahead here and
+[1:12:56] see. Perfect. Let me confirm my
+[1:12:57] understanding. Screenshot one shows the
+[1:12:59] days. Okay. Screenshot two shows all
+[1:13:01] days. So, that's five different
+[1:13:03] configurations optimized on four. Okay.
+[1:13:05] Okay. Big ad for each configuration test
+[1:13:09] TP 1 to 15. Yes, that's right. Let's get
+[1:13:11] it. No, the for the for the to answer
+[1:13:14] your question number one, it's it's for
+[1:13:16] all days just like we want to test
+[1:13:18] exactly what we tested there with the
+[1:13:19] all days but with the optimizer in
+[1:13:22] there, you know, short only for all of
+[1:13:25] them. Those are the ones I'm interested
+[1:13:27] in. Thanks. Go ahead. Come on, baby
+[1:13:29] girl. Let's get it. Let's get it. Let's
+[1:13:31] get Let's get it. Let's get it. Let's
+[1:13:33] get it. Yes.
+[1:13:41] Let me show you some code. Let me show
+[1:13:42] you some code here. So you can make sure
+[1:13:44] to leave your leave um leave here with
+[1:13:47] some fire. Let's look at the um hourly
+[1:13:50] optimizer short because I think this is
+[1:13:52] my favorite. So this is how you do it,
+[1:13:55] dude. Here's all the code. I'm going
+[1:13:56] scroll through real fast because you can
+[1:13:58] pause, rewind, do whatever you need to
+[1:14:00] do. Okay, so here's all the code, dude.
+[1:14:02] Carmelo Anthony just followed me. Melo.
+[1:14:05] Maybe it's not. Maybe maybe it wasn't
+[1:14:07] Carmelo. You saw all the code though.
+[1:14:09] Okay, let's go ahead and see what's
+[1:14:11] Gucci here. So, see how to run for
+[1:14:15] single day three configurations for all
+[1:14:17] days. Okay, let's do that. I should have
+[1:14:20] kept those terminals open. Matter of
+[1:14:21] fact, damn, I knew I should have
+[1:14:23] activate. Activate TFL Python. Sorry,
+[1:14:28] I'm a Tardio. What the hell are you,
+[1:14:30] bro? CD first off. Then second off run
+[1:14:35] this code. Optimize single day. Okay.
+[1:14:38] Optimize a single day.
+[1:14:41] Optimize
+[1:14:43] single day. Copy path. Feeling good.
+[1:14:46] Copy path. Feeling good. Python. Run it.
+[1:14:49] There she goes. Let's say noo-noo kind
+[1:14:51] of activate plow.
+[1:14:55] CD up into here.
+[1:15:01] CD. The heli. CD and then all days. I'll
+[1:15:06] be bad. Python, run it. Tell me I'm not
+[1:15:08] working. Tell me I'm not working. Tell
+[1:15:10] me I'm not working. He's actually
+[1:15:12] working today. Tell me he's not working.
+[1:15:14] He is. You don't even know what you're
+[1:15:16] looking at. Bad bath. Bad wiki. You
+[1:15:17] don't even know what you're looking at.
+[1:15:18] Come on, fam. Let's go. Catch up. That's
+[1:15:21] also a big plus of Poly Market infinite
+[1:15:23] back testing of data on on chain for
+[1:15:26] free. That's actually fire. Um, I don't
+[1:15:29] know how to back test on Poly Market,
+[1:15:31] but we're gonna do that. We're going to
+[1:15:33] do that here. Back test. Figure out how
+[1:15:35] to back test. Figure out on Poly Market
+[1:15:40] how to back test. Okay, looks like we
+[1:15:42] are done here. CSV. Okay, I can't read
+[1:15:46] any of those. Hey, we got this error
+[1:15:47] here, fam. Hey, baby girl, we got this
+[1:15:50] little bit of an error here on the
+[1:15:52] optimize all days. Please fix. Okay, we
+[1:15:55] can see all optimized results here.
+[1:15:56] Perfect. I can't read any of it. Okay,
+[1:15:59] 289% return here. Take profit with 14
+[1:16:02] and five 5% stop loss. It's interesting.
+[1:16:05] It didn't get that much better. But
+[1:16:08] that's good in my opinion because it's
+[1:16:10] like less overfit, you know? How's co
+[1:16:12] going? Damn, people going crazy about
+[1:16:14] this. How's coin, dude? You said what?
+[1:16:17] Okay, so perfect. Actually completed
+[1:16:19] successfully. The C CSV was saved. The
+[1:16:22] multiprocessor warnings are just noise.
+[1:16:23] Oh, okay. Cool. Then what I want you to
+[1:16:25] do is take since they're both done now
+[1:16:27] in the results folder in the TPSL
+[1:16:29] optimizer results folder. I want you to
+[1:16:32] go analyze those results now and I want
+[1:16:34] you to give me the top 10 or I want I
+[1:16:37] want you to just analyze them and you
+[1:16:38] know how I like to analyze these and I
+[1:16:40] want you to go ahead put on an MD and
+[1:16:42] then we'll go I'll go ahead and update
+[1:16:43] it on GitHub and then I'll read it. So
+[1:16:45] yeah, pull all the all the alpha you can
+[1:16:48] out of these runs and um yeah, put the
+[1:16:52] MD together. Thank you. I was just like,
+[1:16:54] I'm going to let her take the wheel for
+[1:16:56] the rest of the day cuz I've been going
+[1:16:58] crazy on this idea for long enough and
+[1:17:00] I've shown you everything. I showed you
+[1:17:02] the code 777. Here, let's show you
+[1:17:04] optimize single day. By the way, here's
+[1:17:06] another set of code while this is
+[1:17:07] working. I want to make sure you get
+[1:17:09] everything. If you see it, you can do
+[1:17:10] it. You can rewind, pause, whatever you
+[1:17:12] need to do in order to get all the code
+[1:17:13] if you want to dude. This is back
+[1:17:14] testing code. Much love to you. 777. All
+[1:17:17] right. So, you got it all, dude. Let's
+[1:17:19] get it. So, LaMelo Ball just followed me
+[1:17:21] on Twitter. It's pretty cool. Um, is it
+[1:17:24] of any help though? Someone once someone
+[1:17:26] buys big, usually you have to buy at
+[1:17:29] much higher price later. I mean, up for
+[1:17:32] interpretation
+[1:17:33] for sure. But one could look at a big
+[1:17:36] buyer as someone who has inside
+[1:17:39] knowledge. Wait for it to retrace a
+[1:17:43] little bit and take the same side. Or
+[1:17:45] the exact opposite of that. But that's
+[1:17:47] the fun part about trading. Up for
+[1:17:50] interpretation for sure. But one could
+[1:17:52] look at a big player as someone who has
+[1:17:55] inside knowledge, wait for it to retrace
+[1:17:58] a little bit and take the same side or
+[1:18:01] the exact opposite of that. But that's
+[1:18:03] the fun part about trading. We can both
+[1:18:05] look at the same data and come to a
+[1:18:09] exact opposite conclusion. Okay, let's
+[1:18:12] go ahead and see here. I don't want to
+[1:18:14] see what you got to say there. I want to
+[1:18:15] go ahead and see it on the GitHub. New
+[1:18:18] terminal.
+[1:18:20] Get add
+[1:18:22] get commit slashm timeality
+[1:18:26] get push get push timeality. If you're
+[1:18:28] enjoying this so far, I want to invite
+[1:18:30] you to our private Zoom call. It's
+[1:18:32] pretty much every single day. I do three
+[1:18:34] hours. You get to chat with me. Ask me
+[1:18:36] any questions you have. Plus, you get
+[1:18:39] the full replay as I know you're a busy
+[1:18:41] person. And you also get the Mundev API
+[1:18:43] key. Mundev API key is amazing. and it
+[1:18:47] has connections to all of my
+[1:18:48] institutional data and the app that you
+[1:18:51] see me using all day. You also get
+[1:18:52] access to that. And then you also get
+[1:18:55] access to a trading bot road map. If I
+[1:18:57] were to ever write a book, this is the
+[1:18:59] outline of it. I'm going to show you
+[1:19:01] everything. Just go ahead and jump into
+[1:19:03] the Zoom. You're not going to have any
+[1:19:05] ads or anything like that ever again. If
+[1:19:07] you are in the Zoom, it's all live and
+[1:19:10] you have all of the time in the world
+[1:19:13] each day to ask me any questions. Plus,
+[1:19:16] like I said, you also get the API key.
+[1:19:19] You can go to moonab.com/doccks
+[1:19:21] and explore what the API key does, but
+[1:19:24] it is a thick piece of API for you. So,
+[1:19:30] I want you to have access to it because
+[1:19:31] I want you to have the data that Wall
+[1:19:33] Street will never give you. So, you get
+[1:19:35] that as a bonus when you jump into the
+[1:19:38] Zoom call. Just click the link in the
+[1:19:39] description and you can go ahead and get
+[1:19:42] that. What else do you get? You get the
+[1:19:44] Moondev app. So, this is what you see me
+[1:19:46] using all day. This is how I control all
+[1:19:49] of my agents and I stop losing my
+[1:19:52] terminals in tabs. So, you get the app
+[1:19:54] as well. But not only that, like I said,
+[1:19:57] this is better than a book. If you're
+[1:19:58] curious about this industry, get the
+[1:20:00] road map. The road map is another free
+[1:20:02] bonus for joining the Zoom call. You can
+[1:20:04] see the trading bot road map here. I
+[1:20:06] walk you through some of my videos that
+[1:20:08] will show you how to automate your
+[1:20:09] trading. You get access to my Discord
+[1:20:12] here. Um, you get access to the
+[1:20:15] frequently asked questions, my actual
+[1:20:17] RBI system, a book list that will show
+[1:20:20] you where to find the ideas and how to
+[1:20:24] automate your trading, and then so much
+[1:20:26] code from these YouTube videos. So, if
+[1:20:28] you want the code from the YouTube
+[1:20:29] videos, you want the app, you want the
+[1:20:32] API key, and you want to be able to chat
+[1:20:34] with me and chat with everybody else in
+[1:20:36] the community, jump into the next Zoom
+[1:20:38] call,
+[1:20:40] there's probably one today or tomorrow.
+[1:20:42] I'll see you there. It's only five
+[1:20:44] bucks, dude.
+[1:20:46] >> Strats hour optimizer. Maybe TP
+[1:20:50] stop-loss take profit analysis. Let's
+[1:20:52] read through it, dude. I'm going to
+[1:20:53] leave you here, though. I showed you all
+[1:20:55] the code. Rewind. TPSL optimization and
+[1:20:58] analysis.
+[1:21:00] Hourbased short strategies. Okay.
+[1:21:02] Generated 2025, 1016. Optimize take
+[1:21:06] profit and stop loss parameters 1
+[1:21:07] through 15%. Find the best performing on
+[1:21:11] short Solana. Actually, you know what I
+[1:21:13] want to do? All right. Now, I want you
+[1:21:15] to go ahead and duplicate the files so I
+[1:21:18] can run them again, but this time we
+[1:21:19] will essentially just optimize for
+[1:21:23] between 15% and 40%. N 30 15 and 30%.
+[1:21:28] So, same files or new files, but that'll
+[1:21:31] be the only change. And then once I'm
+[1:21:33] done with running those, I'll let you
+[1:21:35] know and you can update the read me. I
+[1:21:37] feel like just this will be nice. This
+[1:21:40] will just uh allow us to get even more
+[1:21:43] information. See if there's an edge in
+[1:21:45] that stuff. Bigger takeprofit stop
+[1:21:47] losses. Yes. Tested five configurations
+[1:21:51] with 1,125 total back tests. Okay. Found
+[1:21:54] the top ones. Keep finding. Sooie Monday
+[1:21:56] and seven UTC is the absolute winner.
+[1:21:59] Return 146. Sharp 2.4 draw down 10%. Top
+[1:22:03] five configurations by return here
+[1:22:09] 378%. Okay, so that did get boosted. So
+[1:22:13] routine% take profit and 2% stop losses.
+[1:22:17] So a tight stop. A tight tight stop.
+[1:22:20] That's interesting, dude. I guess I
+[1:22:22] didn't send this. What the hell? 289% on
+[1:22:25] soul 14 and five. Suie all days Monday
+[1:22:28] through Sunday 242. This is alpha, dude.
+[1:22:32] really interesting stuff. Every trader
+[1:22:35] knows about seasonality,
+[1:22:38] but today I dove deep into time and
+[1:22:45] found some super
+[1:22:48] interesting stuffs uh results. Video up
+[1:22:52] later on YouTube. Video up later on
+[1:22:56] YouTube with all the code. Okay, sick,
+[1:22:59] dude. This is really cool. Our whole
+[1:23:02] move today risk adjuster return to sharp
+[1:23:04] ratio so sharp 2.3 lower draw downs top
+[1:23:09] five configurable max draw down best
+[1:23:11] risk management 146% okay so sooie here
+[1:23:16] seven UTC single day Monday sooie short
+[1:23:20] Sunday or Monday best risk adjusted
+[1:23:23] return highest sharp soul oh my god I
+[1:23:27] got to keep this file on me dog I show
+[1:23:29] everything because I can't do
+[1:23:31] everything, dude. I can't do everything.
+[1:23:33] I'd rather show everything, dude.
+[1:23:36] Results here. Put on my note sheet. I
+[1:23:38] slick Rick with it, dude. Okay, let's go
+[1:23:40] ahead and run these other two. She's not
+[1:23:42] done yet. Okay, let's keep going
+[1:23:43] through. Oh, she's done now. Okay, so
+[1:23:46] optimizer. Perfect. So, let's go find
+[1:23:49] those and get them running. So, copy
+[1:23:51] path. Single day first. Copy path. Okay,
+[1:23:53] that's the first one. Let's say Python.
+[1:23:56] Run it. Okay. And then let's go ahead
+[1:23:57] and get the saki. Copy path. Python run
+[1:24:00] it. Okay, so we got both of them running
+[1:24:02] now. Alpha Insights highest absolute
+[1:24:05] return massive gains, but it has a let
+[1:24:09] runners let winners run strategy only
+[1:24:12] 22% win rate. Winners are huge. Losses
+[1:24:15] are tiny. Interesting. Interesting.
+[1:24:17] Interesting. Soul USD Tuesday, the
+[1:24:21] volatile beast. Oh my goodness. This
+[1:24:23] they did a great job with this analysis
+[1:24:25] here. So, I can't wait to to see what's
+[1:24:29] next. And what's next is coming up,
+[1:24:31] dude. It's coming up. Coming up next.
+[1:24:34] We've got more data for you for data
+[1:24:36] dogs. Buying a house. People like this.
+[1:24:39] Buying a house for 0.005 cents just
+[1:24:43] makes sense. What if one house actually
+[1:24:45] equals one house coin? Even if there's a
+[1:24:47] 0.00002% 0000002%
+[1:24:52] chance happen that happens. It's
+[1:24:55] positive EV. It's not financial advice.
+[1:24:58] I'm not a financial adviser, but I am
+[1:25:00] running this bot here to accumulate as
+[1:25:02] much as possible. And hey, maybe maybe I
+[1:25:05] lose it all. That's okay because I will
+[1:25:08] own all the houses on the blockchain by
+[1:25:09] the end of this. Again, not financial
+[1:25:12] advice. Anything I buy, I will sell. Of
+[1:25:15] course. Of course. Of course. I buy and
+[1:25:18] sell with bots. I build trade bots. Not
+[1:25:20] a financial advisor. That is me. I am
+[1:25:22] not. I will never give you financial
+[1:25:23] advice. I'll never give you a bot that
+[1:25:25] just makes you a bajillion dollars
+[1:25:26] overnight. That is not math. Okay, let's
+[1:25:28] get it. B. So, this one looks to be
+[1:25:30] done. Perfect. So, what I want to say to
+[1:25:32] her is, "All right, the two new CSVs are
+[1:25:34] done optimizing those different back
+[1:25:36] tests. So, please go ahead and update
+[1:25:38] the
+[1:25:40] um MD you made now to include the
+[1:25:44] information you found from those as
+[1:25:45] well.
+[1:25:47] um and just just build it right into the
+[1:25:49] MD because now essentially we've
+[1:25:51] optimized between one and 30% take
+[1:25:53] profit and stop loss. So combine the two
+[1:25:55] and just rewrite that and also here in
+[1:25:58] the in the chat here let me know what
+[1:26:02] the differences were in a brief summary
+[1:26:05] while the MD might be a little bit
+[1:26:06] longer. Don't make it don't chunk it up
+[1:26:09] too much. Don't put too much s keep the
+[1:26:11] sauce in there. Keep the sauce but not
+[1:26:13] the don't go crazy. Don't Don't put a
+[1:26:16] bunch of slop in there is what I'm
+[1:26:17] trying to say. Come on, buddy. See if
+[1:26:19] anybody needs my help. Nice one, bro.
+[1:26:21] Working on mine, too. Nice, dude. Nice,
+[1:26:23] bro. Good luck. Have fun. Um, screenshot
+[1:26:27] calibrate. No dollars. Don't think
+[1:26:29] anyone gets it yet or they are just
+[1:26:32] being fake. Me? Nah, real is a nail.
+[1:26:35] Took two seconds to think of the prompt,
+[1:26:37] but not hating, just empowering. Seems
+[1:26:40] like everyone is a fish and the goal is
+[1:26:42] to eliminate fraud. I don't know what
+[1:26:45] that means, but much love to you. I
+[1:26:48] couldn't tell if that was love or hate.
+[1:26:49] He says, "What if?" When? Not if. When?
+[1:26:52] Not if. Bad wiki. I am new to prediction
+[1:26:55] markets. What is time and how can
+[1:26:57] trading bots take advantage of it?
+[1:26:59] Seasonality is like trading in the fall
+[1:27:04] or in a certain month or a certain week
+[1:27:08] or before earnings, etc.
+[1:27:14] Timeality
+[1:27:18] is chopping up the hours or minutes of
+[1:27:21] the days and seeing if there is edge in
+[1:27:26] trading. For example, only on Tuesdays
+[1:27:29] at 11 p.m. Today, I've been running back
+[1:27:32] tests for every single hour on every
+[1:27:35] single day, both combined and
+[1:27:38] independently. So, I have all the
+[1:27:39] answers now at least on the hour
+[1:27:42] increment. Next would be to test the
+[1:27:45] 15minute increment or something shorter.
+[1:27:49] I'll post the video on my YT in the next
+[1:27:52] day or two. [snorts]
+[1:27:54] Okay, so here we go. Perfect. Dr. Day
+[1:27:57] Dog, I've updated it. Clear winner. 1 to
+[1:28:00] 15% range. 100% profitable. Total
+[1:28:03] disaster is 15 to 30% range. Woo boy.
+[1:28:07] Key insight. There's a hard bounty at uh
+[1:28:10] 15%. Never go wider than 15% on a short
+[1:28:13] strategy. That logically makes sense
+[1:28:16] because crypto is up only. It's up only,
+[1:28:21] dude, in the long term. But we just
+[1:28:23] found that out cuz we're data dogs and
+[1:28:24] we looked at the data dog. Diamondity.
+[1:28:27] All of this is on GitHub. If you're in
+[1:28:29] Quant Elite, get push.
+[1:28:32] Um, matter of fact, let me go ahead here
+[1:28:35] and um go to timeality strategies and
+[1:28:38] let's go to Discord. Um, let's go here
+[1:28:42] and say quant elite code. Paste that in.
+[1:28:46] And I feel like that was a pretty good
+[1:28:48] explanation that I just wrote.
+[1:28:50] Seasonality is like trading in the fall
+[1:28:52] or in a certain month or a certain week
+[1:28:54] or before earnings, etc. Timing analysis
+[1:28:56] is chopping up the hours. Today, I've
+[1:28:58] been running back tests for every single
+[1:28:59] hour, both combined. Here's the uh
+[1:29:02] here's all the code. Here is all the
+[1:29:06] code. And then let's go ahead and post
+[1:29:07] that in the membersh. And then um I'm
+[1:29:10] going to go ahead and say quantly code
+[1:29:12] here. This for quantly only. Copy
+[1:29:15] message link here. Boom, dude. Boom.
+[1:29:17] Okay, dude. I think I showed you
+[1:29:19] everything. Do you have any other
+[1:29:20] questions? Let me check the chat real
+[1:29:22] quick. Any questions in the chat? No, no
+[1:29:24] qu no questions in the chat. Okay, so
+[1:29:27] that's good for me then. I will see you
+[1:29:28] next time. Every single day I am here
+[1:29:30] live and um I'm going to keep going live
+[1:29:33] but I got to cut off the video because
+[1:29:35] it's getting too long and people don't
+[1:29:37] like long videos anymore or something.

@@ -1,0 +1,2425 @@
+{
+  "claims": {
+    "live_trading_authorized": false,
+    "orders_sent": false,
+    "strategy_promotion_authorized": false
+  },
+  "provenance": {
+    "core_config_sha256": "4d42f6b6c140d83155060185baf71ccda1c9916e566b8032da33496bda50098d",
+    "funding_coverage": {
+      "DON8:ADAUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 7122,
+        "held_bar_opens_uncovered": 0
+      },
+      "DON8:BCHUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 7213,
+        "held_bar_opens_uncovered": 0
+      },
+      "DON8:BNBUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 7092,
+        "held_bar_opens_uncovered": 0
+      },
+      "DON8:BTCUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 7213,
+        "held_bar_opens_uncovered": 0
+      },
+      "DON8:DASHUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 7110,
+        "held_bar_opens_uncovered": 0
+      },
+      "DON8:DOGEUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 6638,
+        "held_bar_opens_uncovered": 0
+      },
+      "DON8:DOTUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 6510,
+        "held_bar_opens_uncovered": 0
+      },
+      "DON8:ENAUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 2552,
+        "held_bar_opens_uncovered": 0
+      },
+      "DON8:ETCUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 7167,
+        "held_bar_opens_uncovered": 0
+      },
+      "DON8:ETHUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 7213,
+        "held_bar_opens_uncovered": 0
+      },
+      "DON8:LINKUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 7164,
+        "held_bar_opens_uncovered": 0
+      },
+      "DON8:LTCUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 7173,
+        "held_bar_opens_uncovered": 0
+      },
+      "DON8:SOLUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 6426,
+        "held_bar_opens_uncovered": 0
+      },
+      "DON8:SUIUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 3557,
+        "held_bar_opens_uncovered": 0
+      },
+      "DON8:UNIUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 6429,
+        "held_bar_opens_uncovered": 0
+      },
+      "DON8:XRPUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 7182,
+        "held_bar_opens_uncovered": 0
+      },
+      "DON8:ZECUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 7092,
+        "held_bar_opens_uncovered": 0
+      },
+      "EMA8:ADAUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 6574,
+        "held_bar_opens_uncovered": 0
+      },
+      "EMA8:BCHUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 6473,
+        "held_bar_opens_uncovered": 0
+      },
+      "EMA8:BNBUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 6548,
+        "held_bar_opens_uncovered": 0
+      },
+      "EMA8:BTCUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 6710,
+        "held_bar_opens_uncovered": 0
+      },
+      "EMA8:DASHUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 6516,
+        "held_bar_opens_uncovered": 0
+      },
+      "EMA8:DOGEUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 6162,
+        "held_bar_opens_uncovered": 0
+      },
+      "EMA8:DOTUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 6027,
+        "held_bar_opens_uncovered": 0
+      },
+      "EMA8:ENAUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 2425,
+        "held_bar_opens_uncovered": 0
+      },
+      "EMA8:ETCUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 6440,
+        "held_bar_opens_uncovered": 0
+      },
+      "EMA8:ETHUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 6687,
+        "held_bar_opens_uncovered": 0
+      },
+      "EMA8:LINKUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 6593,
+        "held_bar_opens_uncovered": 0
+      },
+      "EMA8:LTCUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 6413,
+        "held_bar_opens_uncovered": 0
+      },
+      "EMA8:SOLUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 5930,
+        "held_bar_opens_uncovered": 0
+      },
+      "EMA8:SUIUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 3317,
+        "held_bar_opens_uncovered": 0
+      },
+      "EMA8:UNIUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 5927,
+        "held_bar_opens_uncovered": 0
+      },
+      "EMA8:XRPUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 6356,
+        "held_bar_opens_uncovered": 0
+      },
+      "EMA8:ZECUSDT": {
+        "engine_coverage": 1.0,
+        "held_bar_opens": 6457,
+        "held_bar_opens_uncovered": 0
+      }
+    },
+    "funding_rest_verification": {
+      "ENAUSDT": {
+        "confirmed_by_rest": [
+          {
+            "open": "2026-06-24T08:00:00+00:00",
+            "rest_times": [
+              "2026-06-24T08:00:00+00:00"
+            ],
+            "settlements_from_interval": 2,
+            "settlements_on_rest": 1,
+            "settlements_present": 1
+          }
+        ],
+        "repaired_from_rest": []
+      },
+      "SOLUSDT": {
+        "confirmed_by_rest": [
+          {
+            "open": "2022-11-10T08:00:00+00:00",
+            "rest_times": [
+              "2022-11-10T04:00:00+00:00",
+              "2022-11-10T06:00:00+00:00",
+              "2022-11-10T08:00:00+00:00"
+            ],
+            "settlements_from_interval": 4,
+            "settlements_on_rest": 3,
+            "settlements_present": 3
+          }
+        ],
+        "repaired_from_rest": []
+      }
+    },
+    "input_sha256": {
+      "ADAUSDT": {
+        "funding": {
+          "files": 81,
+          "sha256": "5a932ad12a684c9a63dabb255e4564576ae938513f105f851a9a66fd4cc48717"
+        },
+        "mark": {
+          "files": 40,
+          "sha256": "e7a71a3fd00bfce88fd0069f235d94a481aa1a67968be68b13b4fd548852cca5"
+        },
+        "perp": {
+          "files": 81,
+          "sha256": "1b609d8d775bfbb3b9f3fd0f50852e9753964db8b17c16229ae32d5cfe3e90c5"
+        }
+      },
+      "BCHUSDT": {
+        "funding": {
+          "files": 81,
+          "sha256": "57a7f4a84669800212b5710811a85a07bcd8f18cecf0451c88d70a01a52237c4"
+        },
+        "mark": {
+          "files": 40,
+          "sha256": "eda5629235854796142923030186a8bde1789b421c20492c74990a0b47278738"
+        },
+        "perp": {
+          "files": 81,
+          "sha256": "673b2a2c3639af33997cfc7dcde95a29050cf2fc559b61c5919cd7c8cc25a73d"
+        }
+      },
+      "BNBUSDT": {
+        "funding": {
+          "files": 80,
+          "sha256": "eb74c773228c32acde89c57e94b486980d60a8cba4ea402227f93f0758767843"
+        },
+        "mark": {
+          "files": 40,
+          "sha256": "a93f9281484992753e0772c742ad09ea7ee2f2c988fb4282e52ae96290ac9ad1"
+        },
+        "perp": {
+          "files": 80,
+          "sha256": "cfe5a79e33c7e75d56bc766fe9b5094bb0d8fe3917e66683298a459ad5e4b5d9"
+        }
+      },
+      "BTCUSDT": {
+        "funding": {
+          "files": 81,
+          "sha256": "b23d148480a5ab3f70fecbf64f8a3460b4234480678cbfdbff5c6cca1b9dd4f5"
+        },
+        "mark": {
+          "files": 43,
+          "sha256": "b5e94b4e6f2cf9c2d6950c855d4e1de143ef0a86ae37a9c33eaef920255c47eb"
+        },
+        "perp": {
+          "files": 81,
+          "sha256": "0594ff913e29f7311f0c0c73a7fc2dba1bfcc8de7c652af26cd7518e69e4cf4e"
+        }
+      },
+      "DASHUSDT": {
+        "funding": {
+          "files": 80,
+          "sha256": "a3e3c9eb61083976ffe416bf755741991cec88a2e60003631eab507cd3f7dc89"
+        },
+        "mark": {
+          "files": 39,
+          "sha256": "23697782dbdea90f37631c86d89c04bd027756bf9418a6ee2f873bf5c561d89e"
+        },
+        "perp": {
+          "files": 80,
+          "sha256": "a29c9c207d218cd2114d2724e932d3e64cc9a0acd8d090af66b946b42f8f778e"
+        }
+      },
+      "DOGEUSDT": {
+        "funding": {
+          "files": 75,
+          "sha256": "31ea1652eddd38691b4c7bc2558892061fa8f7b3440833a68b03bd409fba6664"
+        },
+        "mark": {
+          "files": 39,
+          "sha256": "86607410aedc37031202d241b6a8b9cc01bf7466e810dbed1c265fec197d5b8d"
+        },
+        "perp": {
+          "files": 75,
+          "sha256": "db2a7c4f4c820e1107d2fcb6aef5fc6a3f485565475356f69b167ae9fa0cf502"
+        }
+      },
+      "DOTUSDT": {
+        "funding": {
+          "files": 74,
+          "sha256": "154f77faf58e60a58913fefa3f2d64250e0e54704e2933860a74e3e4e68b132f"
+        },
+        "mark": {
+          "files": 40,
+          "sha256": "a10bea15c2729e6339c850e8868ac9cb06c242b1826afabfd91c1603cc9038e5"
+        },
+        "perp": {
+          "files": 74,
+          "sha256": "d44da4a84b9458b8e5628e13100b39f25640be21d3c6c3e2335ec2d8796166b6"
+        }
+      },
+      "ENAUSDT": {
+        "funding": {
+          "files": 30,
+          "sha256": "81ce7a21efeddd6847784b573ca346f976b82be8de74004286e9759f688a6047"
+        },
+        "mark": {
+          "files": 30,
+          "sha256": "105b7e249d8c516a9a8e5a58eff7eae99f06e2f5680f12e3b151d9b1e5574da7"
+        },
+        "perp": {
+          "files": 30,
+          "sha256": "ee2e6883c99d72e7a3e93ce1b433b2d4a729341cf4f2d190d7294b1d3c3afa59"
+        }
+      },
+      "ETCUSDT": {
+        "funding": {
+          "files": 81,
+          "sha256": "16c2296603fcc599c63d29edaac009ff3bcee1ac88647bf8157fe9f637a40cf7"
+        },
+        "mark": {
+          "files": 40,
+          "sha256": "39c64e175cfa239a72f7462da9e8d766c03ce528129e9eb52bca7e914fd2c4a4"
+        },
+        "perp": {
+          "files": 81,
+          "sha256": "4b18ae6a48ef0bc48c4fb6b4d7dfe7de197b323f465053bf63632980cd4291e8"
+        }
+      },
+      "ETHUSDT": {
+        "funding": {
+          "files": 81,
+          "sha256": "b28899045e90b201427f7d7cd55b168dfcf56e4121cbe10bf31508144e02cc32"
+        },
+        "mark": {
+          "files": 41,
+          "sha256": "7ea5a0877a3aa27d7045dcacf70c2308ad0aa44be13ad2c3e8995321963f6cb0"
+        },
+        "perp": {
+          "files": 81,
+          "sha256": "72ecfcd47eff53c5d9f066a849727b0a136b9b1ae274e2326722ad08636dcab4"
+        }
+      },
+      "LINKUSDT": {
+        "funding": {
+          "files": 81,
+          "sha256": "90a1974eec5f658953e7d46b9fc07b6f9bcb818c9fc010b316d931d9a797ef9f"
+        },
+        "mark": {
+          "files": 40,
+          "sha256": "2bb8a61d5dd0f17ff86ce6dc97134a6685cc92e485df5c01c5819dfc24005a93"
+        },
+        "perp": {
+          "files": 81,
+          "sha256": "5c593d638536f9b0813a3f6ae7570ea200b139db73487e6a1add832e1edfaeea"
+        }
+      },
+      "LTCUSDT": {
+        "funding": {
+          "files": 81,
+          "sha256": "412ccb2d3d4e06e0bf18b5712f4ac5f1d78d33c826c49e770b1ffe2754d4a986"
+        },
+        "mark": {
+          "files": 40,
+          "sha256": "c2ab069d5fc36224502f0e78fcecf14ae82812a76186d664131900a9a003c76f"
+        },
+        "perp": {
+          "files": 81,
+          "sha256": "da158575cb5b93e27c631819e7188bde3e67598f4e1698ee67bbc521afecdfe3"
+        }
+      },
+      "SOLUSDT": {
+        "funding": {
+          "files": 73,
+          "sha256": "9b26c3e5615be14343ea66182d872b0c477037448cec5bf44c84a965694df8b3"
+        },
+        "mark": {
+          "files": 39,
+          "sha256": "d94eb25df512bbb1af36d8a8bb47c09ecb4019a3d685e517470ba354aad3d4be"
+        },
+        "perp": {
+          "files": 73,
+          "sha256": "0bcd5d7e9285b8c990566f777b6bb33feea291c0a3165f3dee41176e33b634ce"
+        }
+      },
+      "SUIUSDT": {
+        "funding": {
+          "files": 41,
+          "sha256": "dc7ca2c107f613ce1799980aec3dc0ec01c86cedf8b8940f0f3c26cc7a62f183"
+        },
+        "mark": {
+          "files": 39,
+          "sha256": "988d022cdfb00d84e10d4186a56d3373acaaf00c28302bda210842548201cd43"
+        },
+        "perp": {
+          "files": 41,
+          "sha256": "c8115516ae1fb0b86f982dcfbcf6c422af7b138bbe59f12fa7cdee0817b0727e"
+        }
+      },
+      "UNIUSDT": {
+        "funding": {
+          "files": 73,
+          "sha256": "0233a2d15e68214148226b580299dbc82b069b14fa0befca740d9eea52270899"
+        },
+        "mark": {
+          "files": 40,
+          "sha256": "d891c437c2c0eaed4c7c40c8a90bcb9aaf8be105139a3ba85f119527197ef267"
+        },
+        "perp": {
+          "files": 73,
+          "sha256": "89b669be85481f40cef4e6977d2ca5f9be8c5ada8419ef909689931575c78dce"
+        }
+      },
+      "XRPUSDT": {
+        "funding": {
+          "files": 81,
+          "sha256": "4c0825ceb96f9049b2600ee70eda379e20d99bc903f92040294e9cdcd4c3d3c1"
+        },
+        "mark": {
+          "files": 40,
+          "sha256": "625f7fa968d296ae1a079173fe910ee62db74f588bc5efe1b9d017260d484932"
+        },
+        "perp": {
+          "files": 81,
+          "sha256": "cafa19a3c6232d775b1d4ba304b8a6ed49e156f8bcd7db9e3994ce352ed119b9"
+        }
+      },
+      "ZECUSDT": {
+        "funding": {
+          "files": 80,
+          "sha256": "9b74bab764f313a3b5d05b6c490ec198d480bfd07d5e969a9721e66eac67677b"
+        },
+        "mark": {
+          "files": 39,
+          "sha256": "7ba6b3acc5cee88f21ba7d7d3e19280e71d267beaf4eff7c61fbd53cb79416fb"
+        },
+        "perp": {
+          "files": 80,
+          "sha256": "c3dac8ceeaaecd93c992fe60d44ef6d9ebdba6fb86186136e080cdd965a69321"
+        }
+      }
+    },
+    "mark_note": "mark-price klines are used where the mark archive has a bar; the perp 1h high/low stand in before a symbol's first mark bar and for holes after it (counts per symbol in ranges[*].perp_fallback_mark_bars). First mark bar end per symbol: ranges[*].first_mark_bar_end (earliest 2020-12-01 01:00:00+00:00, latest 2024-04-02 09:00:00+00:00; 0 symbols without any mark bar)",
+    "mark_vs_perp_divergence": {
+      "ADAUSDT": {
+        "at_high": "2025-03-25T13:00:00+00:00",
+        "at_low": "2024-03-05T20:00:00+00:00",
+        "bars_compared": 28488,
+        "max_rel_diff_high": 0.010024736362452857,
+        "max_rel_diff_low": 0.036219214688238514
+      },
+      "BCHUSDT": {
+        "at_high": "2025-10-10T22:00:00+00:00",
+        "at_low": "2023-12-11T03:00:00+00:00",
+        "bars_compared": 29208,
+        "max_rel_diff_high": 0.03407964450521288,
+        "max_rel_diff_low": 0.038457955877317436
+      },
+      "BNBUSDT": {
+        "at_high": "2025-09-17T21:00:00+00:00",
+        "at_low": "2025-10-10T22:00:00+00:00",
+        "bars_compared": 28488,
+        "max_rel_diff_high": 0.022632700700294283,
+        "max_rel_diff_low": 0.04868868382710056
+      },
+      "BTCUSDT": {
+        "at_high": "2023-10-23T23:00:00+00:00",
+        "at_low": "2023-08-17T22:00:00+00:00",
+        "bars_compared": 30720,
+        "max_rel_diff_high": 0.029734700180090626,
+        "max_rel_diff_low": 0.02087629486636025
+      },
+      "DASHUSDT": {
+        "at_high": "2026-09-06T14:00:00+00:00",
+        "at_low": "2024-12-05T07:00:00+00:00",
+        "bars_compared": 28488,
+        "max_rel_diff_high": 0.07755286529045911,
+        "max_rel_diff_low": 0.08518518518518528
+      },
+      "DOGEUSDT": {
+        "at_high": "2024-08-20T01:00:00+00:00",
+        "at_low": "2025-10-10T22:00:00+00:00",
+        "bars_compared": 28488,
+        "max_rel_diff_high": 0.021010542168674668,
+        "max_rel_diff_low": 0.05749505068574835
+      },
+      "DOTUSDT": {
+        "at_high": "2025-01-20T08:00:00+00:00",
+        "at_low": "2023-08-17T22:00:00+00:00",
+        "bars_compared": 29208,
+        "max_rel_diff_high": 0.011306434563758346,
+        "max_rel_diff_low": 0.03741496598639454
+      },
+      "ENAUSDT": {
+        "at_high": "2024-10-28T21:00:00+00:00",
+        "at_low": "2024-10-26T00:00:00+00:00",
+        "bars_compared": 21852,
+        "max_rel_diff_high": 0.041654444118509965,
+        "max_rel_diff_low": 0.036848670044331844
+      },
+      "ETCUSDT": {
+        "at_high": "2023-08-29T15:00:00+00:00",
+        "at_low": "2023-12-11T03:00:00+00:00",
+        "bars_compared": 29208,
+        "max_rel_diff_high": 0.033378782747969245,
+        "max_rel_diff_low": 0.07557894653535001
+      },
+      "ETHUSDT": {
+        "at_high": "2023-10-01T23:00:00+00:00",
+        "at_low": "2025-02-03T03:00:00+00:00",
+        "bars_compared": 29952,
+        "max_rel_diff_high": 0.0145407770112359,
+        "max_rel_diff_low": 0.03724339813670853
+      },
+      "LINKUSDT": {
+        "at_high": "2024-05-23T13:00:00+00:00",
+        "at_low": "2026-08-22T06:00:00+00:00",
+        "bars_compared": 29208,
+        "max_rel_diff_high": 0.016666666666666673,
+        "max_rel_diff_low": 0.06527684776119398
+      },
+      "LTCUSDT": {
+        "at_high": "2025-04-03T04:00:00+00:00",
+        "at_low": "2025-02-24T23:00:00+00:00",
+        "bars_compared": 29208,
+        "max_rel_diff_high": 0.01421021726365247,
+        "max_rel_diff_low": 0.037345695652173945
+      },
+      "SOLUSDT": {
+        "at_high": "2023-07-14T01:00:00+00:00",
+        "at_low": "2024-02-28T18:00:00+00:00",
+        "bars_compared": 28488,
+        "max_rel_diff_high": 0.046296388218827235,
+        "max_rel_diff_low": 0.02812726395793499
+      },
+      "SUIUSDT": {
+        "at_high": "2024-10-28T21:00:00+00:00",
+        "at_low": "2023-08-17T22:00:00+00:00",
+        "bars_compared": 28488,
+        "max_rel_diff_high": 0.03018144799089766,
+        "max_rel_diff_low": 0.06387136049559199
+      },
+      "UNIUSDT": {
+        "at_high": "2024-06-17T00:00:00+00:00",
+        "at_low": "2024-05-23T21:00:00+00:00",
+        "bars_compared": 29208,
+        "max_rel_diff_high": 0.03924258080000001,
+        "max_rel_diff_low": 0.0795755422282677
+      },
+      "XRPUSDT": {
+        "at_high": "2023-07-13T19:00:00+00:00",
+        "at_low": "2023-12-04T12:00:00+00:00",
+        "bars_compared": 29208,
+        "max_rel_diff_high": 0.03630246632124354,
+        "max_rel_diff_low": 0.051044354983002374
+      },
+      "ZECUSDT": {
+        "at_high": "2025-07-09T03:00:00+00:00",
+        "at_low": "2025-06-01T15:00:00+00:00",
+        "bars_compared": 28488,
+        "max_rel_diff_high": 0.03701605914893614,
+        "max_rel_diff_low": 0.07504288164665524
+      }
+    },
+    "ranges": {
+      "ADAUSDT": {
+        "bars": 7304,
+        "first_8h_bar": "2020-01-31 08:00:00+00:00",
+        "first_mark_bar_end": "2023-07-01 01:00:00+00:00",
+        "funding_rows": 7339,
+        "incomplete_bars_dropped": 0,
+        "last_8h_bar": "2026-09-30 16:00:00+00:00",
+        "perp_fallback_mark_bars": {
+          "before_first_mark": 29920,
+          "holes_after_first_mark": 24
+        }
+      },
+      "BCHUSDT": {
+        "bars": 7395,
+        "first_8h_bar": "2020-01-01 00:00:00+00:00",
+        "first_mark_bar_end": "2023-06-01 01:00:00+00:00",
+        "funding_rows": 7395,
+        "incomplete_bars_dropped": 0,
+        "last_8h_bar": "2026-09-30 16:00:00+00:00",
+        "perp_fallback_mark_bars": {
+          "before_first_mark": 29928,
+          "holes_after_first_mark": 24
+        }
+      },
+      "BNBUSDT": {
+        "bars": 7274,
+        "first_8h_bar": "2020-02-10 08:00:00+00:00",
+        "first_mark_bar_end": "2023-07-01 01:00:00+00:00",
+        "funding_rows": 7274,
+        "incomplete_bars_dropped": 0,
+        "last_8h_bar": "2026-09-30 16:00:00+00:00",
+        "perp_fallback_mark_bars": {
+          "before_first_mark": 29680,
+          "holes_after_first_mark": 24
+        }
+      },
+      "BTCUSDT": {
+        "bars": 7395,
+        "first_8h_bar": "2020-01-01 00:00:00+00:00",
+        "first_mark_bar_end": "2020-12-01 01:00:00+00:00",
+        "funding_rows": 7395,
+        "incomplete_bars_dropped": 0,
+        "last_8h_bar": "2026-09-30 16:00:00+00:00",
+        "perp_fallback_mark_bars": {
+          "before_first_mark": 8040,
+          "holes_after_first_mark": 20400
+        }
+      },
+      "DASHUSDT": {
+        "bars": 7292,
+        "first_8h_bar": "2020-02-04 08:00:00+00:00",
+        "first_mark_bar_end": "2023-07-01 01:00:00+00:00",
+        "funding_rows": 7292,
+        "incomplete_bars_dropped": 0,
+        "last_8h_bar": "2026-09-30 16:00:00+00:00",
+        "perp_fallback_mark_bars": {
+          "before_first_mark": 29824,
+          "holes_after_first_mark": 24
+        }
+      },
+      "DOGEUSDT": {
+        "bars": 6820,
+        "first_8h_bar": "2020-07-10 16:00:00+00:00",
+        "first_mark_bar_end": "2023-07-01 01:00:00+00:00",
+        "funding_rows": 6821,
+        "incomplete_bars_dropped": 1,
+        "last_8h_bar": "2026-09-30 16:00:00+00:00",
+        "perp_fallback_mark_bars": {
+          "before_first_mark": 26055,
+          "holes_after_first_mark": 24
+        }
+      },
+      "DOTUSDT": {
+        "bars": 6692,
+        "first_8h_bar": "2020-08-22 08:00:00+00:00",
+        "first_mark_bar_end": "2023-06-01 01:00:00+00:00",
+        "funding_rows": 6698,
+        "incomplete_bars_dropped": 1,
+        "last_8h_bar": "2026-09-30 16:00:00+00:00",
+        "perp_fallback_mark_bars": {
+          "before_first_mark": 24305,
+          "holes_after_first_mark": 24
+        }
+      },
+      "ENAUSDT": {
+        "bars": 2734,
+        "first_8h_bar": "2024-04-02 16:00:00+00:00",
+        "first_mark_bar_end": "2024-04-02 09:00:00+00:00",
+        "funding_rows": 5467,
+        "incomplete_bars_dropped": 1,
+        "last_8h_bar": "2026-09-30 16:00:00+00:00",
+        "perp_fallback_mark_bars": {
+          "before_first_mark": 0,
+          "holes_after_first_mark": 24
+        }
+      },
+      "ETCUSDT": {
+        "bars": 7349,
+        "first_8h_bar": "2020-01-16 08:00:00+00:00",
+        "first_mark_bar_end": "2023-06-01 01:00:00+00:00",
+        "funding_rows": 7349,
+        "incomplete_bars_dropped": 0,
+        "last_8h_bar": "2026-09-30 16:00:00+00:00",
+        "perp_fallback_mark_bars": {
+          "before_first_mark": 29560,
+          "holes_after_first_mark": 24
+        }
+      },
+      "ETHUSDT": {
+        "bars": 7395,
+        "first_8h_bar": "2020-01-01 00:00:00+00:00",
+        "first_mark_bar_end": "2023-03-01 01:00:00+00:00",
+        "funding_rows": 7395,
+        "incomplete_bars_dropped": 0,
+        "last_8h_bar": "2026-09-30 16:00:00+00:00",
+        "perp_fallback_mark_bars": {
+          "before_first_mark": 27720,
+          "holes_after_first_mark": 1488
+        }
+      },
+      "LINKUSDT": {
+        "bars": 7346,
+        "first_8h_bar": "2020-01-17 08:00:00+00:00",
+        "first_mark_bar_end": "2023-06-01 01:00:00+00:00",
+        "funding_rows": 7346,
+        "incomplete_bars_dropped": 0,
+        "last_8h_bar": "2026-09-30 16:00:00+00:00",
+        "perp_fallback_mark_bars": {
+          "before_first_mark": 29536,
+          "holes_after_first_mark": 24
+        }
+      },
+      "LTCUSDT": {
+        "bars": 7355,
+        "first_8h_bar": "2020-01-09 08:00:00+00:00",
+        "first_mark_bar_end": "2023-06-01 01:00:00+00:00",
+        "funding_rows": 7370,
+        "incomplete_bars_dropped": 0,
+        "last_8h_bar": "2026-09-30 16:00:00+00:00",
+        "perp_fallback_mark_bars": {
+          "before_first_mark": 29608,
+          "holes_after_first_mark": 24
+        }
+      },
+      "SOLUSDT": {
+        "bars": 6608,
+        "first_8h_bar": "2020-09-14 08:00:00+00:00",
+        "first_mark_bar_end": "2023-07-01 01:00:00+00:00",
+        "funding_rows": 6700,
+        "incomplete_bars_dropped": 1,
+        "last_8h_bar": "2026-09-30 16:00:00+00:00",
+        "perp_fallback_mark_bars": {
+          "before_first_mark": 24353,
+          "holes_after_first_mark": 24
+        }
+      },
+      "SUIUSDT": {
+        "bars": 3739,
+        "first_8h_bar": "2023-05-03 16:00:00+00:00",
+        "first_mark_bar_end": "2023-07-01 01:00:00+00:00",
+        "funding_rows": 3739,
+        "incomplete_bars_dropped": 0,
+        "last_8h_bar": "2026-09-30 16:00:00+00:00",
+        "perp_fallback_mark_bars": {
+          "before_first_mark": 1400,
+          "holes_after_first_mark": 24
+        }
+      },
+      "UNIUSDT": {
+        "bars": 6611,
+        "first_8h_bar": "2020-09-18 08:00:00+00:00",
+        "first_mark_bar_end": "2023-06-01 01:00:00+00:00",
+        "funding_rows": 6614,
+        "incomplete_bars_dropped": 1,
+        "last_8h_bar": "2026-09-30 16:00:00+00:00",
+        "perp_fallback_mark_bars": {
+          "before_first_mark": 23657,
+          "holes_after_first_mark": 24
+        }
+      },
+      "XRPUSDT": {
+        "bars": 7364,
+        "first_8h_bar": "2020-01-06 08:00:00+00:00",
+        "first_mark_bar_end": "2023-06-01 01:00:00+00:00",
+        "funding_rows": 7379,
+        "incomplete_bars_dropped": 0,
+        "last_8h_bar": "2026-09-30 16:00:00+00:00",
+        "perp_fallback_mark_bars": {
+          "before_first_mark": 29680,
+          "holes_after_first_mark": 24
+        }
+      },
+      "ZECUSDT": {
+        "bars": 7274,
+        "first_8h_bar": "2020-02-05 08:00:00+00:00",
+        "first_mark_bar_end": "2023-07-01 01:00:00+00:00",
+        "funding_rows": 7292,
+        "incomplete_bars_dropped": 0,
+        "last_8h_bar": "2026-09-30 16:00:00+00:00",
+        "perp_fallback_mark_bars": {
+          "before_first_mark": 29680,
+          "holes_after_first_mark": 24
+        }
+      }
+    },
+    "study_config_sha256": "8555516b43613209487c67ddfb091f3ed2df605b116be7160d6f0081c040e859",
+    "symbols_missing_from_cache": [],
+    "symbols_used": {
+      "ADA_USDT": "ADAUSDT",
+      "BCH_USDT": "BCHUSDT",
+      "BNB_USDT": "BNBUSDT",
+      "BTC_USDT": "BTCUSDT",
+      "DASH_USDT": "DASHUSDT",
+      "DOGE_USDT": "DOGEUSDT",
+      "DOT_USDT": "DOTUSDT",
+      "ENA_USDT": "ENAUSDT",
+      "ETC_USDT": "ETCUSDT",
+      "ETH_USDT": "ETHUSDT",
+      "LINK_USDT": "LINKUSDT",
+      "LTC_USDT": "LTCUSDT",
+      "SOL_USDT": "SOLUSDT",
+      "SUI_USDT": "SUIUSDT",
+      "UNI_USDT": "UNIUSDT",
+      "XRP_USDT": "XRPUSDT",
+      "ZEC_USDT": "ZECUSDT"
+    },
+    "top_adverse_excursions_by_symbol": {
+      "ADAUSDT": [
+        {
+          "entry_time": "2021-04-23T08:00:00+00:00",
+          "exit_time": "2021-05-06T00:00:00+00:00",
+          "max_adverse_excursion": 0.49062142395144037,
+          "perp_fallback_bars": 304,
+          "side": -1,
+          "sleeve": "DON8:ADAUSDT"
+        },
+        {
+          "entry_time": "2022-05-31T08:00:00+00:00",
+          "exit_time": "2022-07-13T00:00:00+00:00",
+          "max_adverse_excursion": 0.3652905198776758,
+          "perp_fallback_bars": 1024,
+          "side": 1,
+          "sleeve": "DON8:ADAUSDT"
+        },
+        {
+          "entry_time": "2022-01-17T08:00:00+00:00",
+          "exit_time": "2022-01-22T08:00:00+00:00",
+          "max_adverse_excursion": 0.3299339739818266,
+          "perp_fallback_bars": 120,
+          "side": 1,
+          "sleeve": "DON8:ADAUSDT"
+        },
+        {
+          "entry_time": "2021-05-06T00:00:00+00:00",
+          "exit_time": "2021-06-21T16:00:00+00:00",
+          "max_adverse_excursion": 0.3253909359526155,
+          "perp_fallback_bars": 1120,
+          "side": 1,
+          "sleeve": "DON8:ADAUSDT"
+        },
+        {
+          "entry_time": "2024-12-20T00:00:00+00:00",
+          "exit_time": "2025-03-02T16:00:00+00:00",
+          "max_adverse_excursion": 0.3249715632810724,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "DON8:ADAUSDT"
+        },
+        {
+          "entry_time": "2022-01-09T00:00:00+00:00",
+          "exit_time": "2022-01-17T08:00:00+00:00",
+          "max_adverse_excursion": 0.3037921110546809,
+          "perp_fallback_bars": 200,
+          "side": -1,
+          "sleeve": "DON8:ADAUSDT"
+        },
+        {
+          "entry_time": "2021-04-29T16:00:00+00:00",
+          "exit_time": "2021-05-23T16:00:00+00:00",
+          "max_adverse_excursion": 0.26416482707873434,
+          "perp_fallback_bars": 576,
+          "side": 1,
+          "sleeve": "EMA8:ADAUSDT"
+        },
+        {
+          "entry_time": "2022-10-30T00:00:00+00:00",
+          "exit_time": "2022-11-10T00:00:00+00:00",
+          "max_adverse_excursion": 0.2629823725583611,
+          "perp_fallback_bars": 264,
+          "side": 1,
+          "sleeve": "DON8:ADAUSDT"
+        },
+        {
+          "entry_time": "2025-03-02T16:00:00+00:00",
+          "exit_time": "2025-03-31T08:00:00+00:00",
+          "max_adverse_excursion": 0.25879905180388535,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "DON8:ADAUSDT"
+        },
+        {
+          "entry_time": "2021-11-09T08:00:00+00:00",
+          "exit_time": "2021-11-24T08:00:00+00:00",
+          "max_adverse_excursion": 0.25258308359797826,
+          "perp_fallback_bars": 360,
+          "side": 1,
+          "sleeve": "DON8:ADAUSDT"
+        }
+      ],
+      "BCHUSDT": [
+        {
+          "entry_time": "2026-09-10T16:00:00+00:00",
+          "exit_time": "2026-09-22T16:00:00+00:00",
+          "max_adverse_excursion": 0.4588928777201614,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "DON8:BCHUSDT"
+        },
+        {
+          "entry_time": "2021-04-02T16:00:00+00:00",
+          "exit_time": "2021-05-19T16:00:00+00:00",
+          "max_adverse_excursion": 0.4166737761700821,
+          "perp_fallback_bars": 1128,
+          "side": 1,
+          "sleeve": "DON8:BCHUSDT"
+        },
+        {
+          "entry_time": "2021-04-03T00:00:00+00:00",
+          "exit_time": "2021-05-20T08:00:00+00:00",
+          "max_adverse_excursion": 0.4122814557582218,
+          "perp_fallback_bars": 1136,
+          "side": 1,
+          "sleeve": "EMA8:BCHUSDT"
+        },
+        {
+          "entry_time": "2022-11-10T00:00:00+00:00",
+          "exit_time": "2023-01-09T08:00:00+00:00",
+          "max_adverse_excursion": 0.3449011680143755,
+          "perp_fallback_bars": 1448,
+          "side": -1,
+          "sleeve": "DON8:BCHUSDT"
+        },
+        {
+          "entry_time": "2022-11-10T00:00:00+00:00",
+          "exit_time": "2022-11-24T08:00:00+00:00",
+          "max_adverse_excursion": 0.3449011680143755,
+          "perp_fallback_bars": 344,
+          "side": -1,
+          "sleeve": "EMA8:BCHUSDT"
+        },
+        {
+          "entry_time": "2021-01-27T16:00:00+00:00",
+          "exit_time": "2021-02-09T08:00:00+00:00",
+          "max_adverse_excursion": 0.3331070318823928,
+          "perp_fallback_bars": 304,
+          "side": -1,
+          "sleeve": "DON8:BCHUSDT"
+        },
+        {
+          "entry_time": "2025-01-18T00:00:00+00:00",
+          "exit_time": "2025-02-03T00:00:00+00:00",
+          "max_adverse_excursion": 0.3007217943676939,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "DON8:BCHUSDT"
+        },
+        {
+          "entry_time": "2022-10-29T08:00:00+00:00",
+          "exit_time": "2022-11-10T00:00:00+00:00",
+          "max_adverse_excursion": 0.2565525484504397,
+          "perp_fallback_bars": 280,
+          "side": 1,
+          "sleeve": "DON8:BCHUSDT"
+        },
+        {
+          "entry_time": "2021-03-25T00:00:00+00:00",
+          "exit_time": "2021-04-02T16:00:00+00:00",
+          "max_adverse_excursion": 0.2434016358883549,
+          "perp_fallback_bars": 208,
+          "side": -1,
+          "sleeve": "DON8:BCHUSDT"
+        },
+        {
+          "entry_time": "2021-03-01T00:00:00+00:00",
+          "exit_time": "2021-03-11T16:00:00+00:00",
+          "max_adverse_excursion": 0.2368472478558245,
+          "perp_fallback_bars": 256,
+          "side": -1,
+          "sleeve": "EMA8:BCHUSDT"
+        }
+      ],
+      "BNBUSDT": [
+        {
+          "entry_time": "2020-09-04T00:00:00+00:00",
+          "exit_time": "2020-09-12T08:00:00+00:00",
+          "max_adverse_excursion": 0.3118079372856443,
+          "perp_fallback_bars": 200,
+          "side": -1,
+          "sleeve": "DON8:BNBUSDT"
+        },
+        {
+          "entry_time": "2021-05-20T00:00:00+00:00",
+          "exit_time": "2021-07-30T00:00:00+00:00",
+          "max_adverse_excursion": 0.29217245709501893,
+          "perp_fallback_bars": 1704,
+          "side": -1,
+          "sleeve": "EMA8:BNBUSDT"
+        },
+        {
+          "entry_time": "2022-11-10T00:00:00+00:00",
+          "exit_time": "2023-01-04T08:00:00+00:00",
+          "max_adverse_excursion": 0.19311146962818457,
+          "perp_fallback_bars": 1328,
+          "side": -1,
+          "sleeve": "DON8:BNBUSDT"
+        },
+        {
+          "entry_time": "2025-02-13T00:00:00+00:00",
+          "exit_time": "2025-02-28T08:00:00+00:00",
+          "max_adverse_excursion": 0.19039281254933474,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "DON8:BNBUSDT"
+        },
+        {
+          "entry_time": "2020-09-12T08:00:00+00:00",
+          "exit_time": "2020-10-30T08:00:00+00:00",
+          "max_adverse_excursion": 0.16538215722395583,
+          "perp_fallback_bars": 1152,
+          "side": 1,
+          "sleeve": "DON8:BNBUSDT"
+        },
+        {
+          "entry_time": "2024-11-03T16:00:00+00:00",
+          "exit_time": "2024-11-09T08:00:00+00:00",
+          "max_adverse_excursion": 0.15722231995142638,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "DON8:BNBUSDT"
+        },
+        {
+          "entry_time": "2022-09-07T00:00:00+00:00",
+          "exit_time": "2022-10-04T08:00:00+00:00",
+          "max_adverse_excursion": 0.14403386340235663,
+          "perp_fallback_bars": 656,
+          "side": -1,
+          "sleeve": "DON8:BNBUSDT"
+        },
+        {
+          "entry_time": "2023-02-13T16:00:00+00:00",
+          "exit_time": "2023-03-14T16:00:00+00:00",
+          "max_adverse_excursion": 0.1439629022697954,
+          "perp_fallback_bars": 696,
+          "side": -1,
+          "sleeve": "DON8:BNBUSDT"
+        },
+        {
+          "entry_time": "2023-11-27T16:00:00+00:00",
+          "exit_time": "2023-12-12T08:00:00+00:00",
+          "max_adverse_excursion": 0.14064672377449888,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "DON8:BNBUSDT"
+        },
+        {
+          "entry_time": "2022-11-15T00:00:00+00:00",
+          "exit_time": "2022-11-26T16:00:00+00:00",
+          "max_adverse_excursion": 0.14039806347498646,
+          "perp_fallback_bars": 280,
+          "side": -1,
+          "sleeve": "EMA8:BNBUSDT"
+        }
+      ],
+      "BTCUSDT": [
+        {
+          "entry_time": "2021-02-28T16:00:00+00:00",
+          "exit_time": "2021-03-13T16:00:00+00:00",
+          "max_adverse_excursion": 0.3936491114867797,
+          "perp_fallback_bars": 312,
+          "side": -1,
+          "sleeve": "DON8:BTCUSDT"
+        },
+        {
+          "entry_time": "2021-06-14T16:00:00+00:00",
+          "exit_time": "2021-07-19T16:00:00+00:00",
+          "max_adverse_excursion": 0.29246018000219787,
+          "perp_fallback_bars": 840,
+          "side": 1,
+          "sleeve": "DON8:BTCUSDT"
+        },
+        {
+          "entry_time": "2022-02-24T08:00:00+00:00",
+          "exit_time": "2022-03-24T16:00:00+00:00",
+          "max_adverse_excursion": 0.28534704370179936,
+          "perp_fallback_bars": 680,
+          "side": -1,
+          "sleeve": "DON8:BTCUSDT"
+        },
+        {
+          "entry_time": "2021-04-23T08:00:00+00:00",
+          "exit_time": "2021-06-14T16:00:00+00:00",
+          "max_adverse_excursion": 0.2427706949111901,
+          "perp_fallback_bars": 1256,
+          "side": -1,
+          "sleeve": "DON8:BTCUSDT"
+        },
+        {
+          "entry_time": "2023-03-09T00:00:00+00:00",
+          "exit_time": "2023-03-14T16:00:00+00:00",
+          "max_adverse_excursion": 0.21753765054919738,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "DON8:BTCUSDT"
+        },
+        {
+          "entry_time": "2022-02-07T16:00:00+00:00",
+          "exit_time": "2022-02-24T08:00:00+00:00",
+          "max_adverse_excursion": 0.21690454525324138,
+          "perp_fallback_bars": 400,
+          "side": 1,
+          "sleeve": "DON8:BTCUSDT"
+        },
+        {
+          "entry_time": "2021-03-13T16:00:00+00:00",
+          "exit_time": "2021-04-23T08:00:00+00:00",
+          "max_adverse_excursion": 0.2014217501729228,
+          "perp_fallback_bars": 976,
+          "side": 1,
+          "sleeve": "DON8:BTCUSDT"
+        },
+        {
+          "entry_time": "2022-10-27T00:00:00+00:00",
+          "exit_time": "2022-11-09T08:00:00+00:00",
+          "max_adverse_excursion": 0.18924387236010487,
+          "perp_fallback_bars": 320,
+          "side": 1,
+          "sleeve": "EMA8:BTCUSDT"
+        },
+        {
+          "entry_time": "2023-03-07T00:00:00+00:00",
+          "exit_time": "2023-03-14T16:00:00+00:00",
+          "max_adverse_excursion": 0.17938682195284222,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "EMA8:BTCUSDT"
+        },
+        {
+          "entry_time": "2022-09-12T08:00:00+00:00",
+          "exit_time": "2022-09-19T08:00:00+00:00",
+          "max_adverse_excursion": 0.1787942725239847,
+          "perp_fallback_bars": 168,
+          "side": 1,
+          "sleeve": "DON8:BTCUSDT"
+        }
+      ],
+      "DASHUSDT": [
+        {
+          "entry_time": "2020-04-09T16:00:00+00:00",
+          "exit_time": "2020-05-10T08:00:00+00:00",
+          "max_adverse_excursion": 0.9987396017141418,
+          "perp_fallback_bars": 736,
+          "side": 1,
+          "sleeve": "DON8:DASHUSDT"
+        },
+        {
+          "entry_time": "2020-04-11T08:00:00+00:00",
+          "exit_time": "2020-04-14T08:00:00+00:00",
+          "max_adverse_excursion": 0.9986789960369882,
+          "perp_fallback_bars": 72,
+          "side": 1,
+          "sleeve": "EMA8:DASHUSDT"
+        },
+        {
+          "entry_time": "2025-09-22T16:00:00+00:00",
+          "exit_time": "2025-10-02T00:00:00+00:00",
+          "max_adverse_excursion": 0.6265986860409719,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "EMA8:DASHUSDT"
+        },
+        {
+          "entry_time": "2026-01-14T16:00:00+00:00",
+          "exit_time": "2026-01-31T08:00:00+00:00",
+          "max_adverse_excursion": 0.436230353559202,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "EMA8:DASHUSDT"
+        },
+        {
+          "entry_time": "2024-12-22T08:00:00+00:00",
+          "exit_time": "2024-12-26T00:00:00+00:00",
+          "max_adverse_excursion": 0.40805254140491143,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "EMA8:DASHUSDT"
+        },
+        {
+          "entry_time": "2021-01-10T08:00:00+00:00",
+          "exit_time": "2021-01-24T16:00:00+00:00",
+          "max_adverse_excursion": 0.3665136995545958,
+          "perp_fallback_bars": 344,
+          "side": 1,
+          "sleeve": "EMA8:DASHUSDT"
+        },
+        {
+          "entry_time": "2024-12-20T00:00:00+00:00",
+          "exit_time": "2025-04-23T00:00:00+00:00",
+          "max_adverse_excursion": 0.36027586206896556,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "DON8:DASHUSDT"
+        },
+        {
+          "entry_time": "2021-12-24T08:00:00+00:00",
+          "exit_time": "2022-01-22T00:00:00+00:00",
+          "max_adverse_excursion": 0.33762869908696497,
+          "perp_fallback_bars": 688,
+          "side": 1,
+          "sleeve": "DON8:DASHUSDT"
+        },
+        {
+          "entry_time": "2021-03-25T00:00:00+00:00",
+          "exit_time": "2021-04-02T16:00:00+00:00",
+          "max_adverse_excursion": 0.31959356832346925,
+          "perp_fallback_bars": 208,
+          "side": -1,
+          "sleeve": "DON8:DASHUSDT"
+        },
+        {
+          "entry_time": "2025-09-22T08:00:00+00:00",
+          "exit_time": "2025-10-01T16:00:00+00:00",
+          "max_adverse_excursion": 0.3167895584725537,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "DON8:DASHUSDT"
+        }
+      ],
+      "DOGEUSDT": [
+        {
+          "entry_time": "2025-10-04T00:00:00+00:00",
+          "exit_time": "2025-10-11T00:00:00+00:00",
+          "max_adverse_excursion": 0.6564738881140555,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "EMA8:DOGEUSDT"
+        },
+        {
+          "entry_time": "2025-07-10T00:00:00+00:00",
+          "exit_time": "2025-10-11T00:00:00+00:00",
+          "max_adverse_excursion": 0.5088025703523156,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "DON8:DOGEUSDT"
+        },
+        {
+          "entry_time": "2022-04-25T08:00:00+00:00",
+          "exit_time": "2022-04-26T00:00:00+00:00",
+          "max_adverse_excursion": 0.38020329138431747,
+          "perp_fallback_bars": 16,
+          "side": -1,
+          "sleeve": "DON8:DOGEUSDT"
+        },
+        {
+          "entry_time": "2022-01-14T08:00:00+00:00",
+          "exit_time": "2022-01-22T08:00:00+00:00",
+          "max_adverse_excursion": 0.3532799836892809,
+          "perp_fallback_bars": 192,
+          "side": 1,
+          "sleeve": "DON8:DOGEUSDT"
+        },
+        {
+          "entry_time": "2021-05-24T16:00:00+00:00",
+          "exit_time": "2021-06-04T16:00:00+00:00",
+          "max_adverse_excursion": 0.34642609717160155,
+          "perp_fallback_bars": 264,
+          "side": -1,
+          "sleeve": "EMA8:DOGEUSDT"
+        },
+        {
+          "entry_time": "2021-10-25T00:00:00+00:00",
+          "exit_time": "2021-11-26T16:00:00+00:00",
+          "max_adverse_excursion": 0.339890591602362,
+          "perp_fallback_bars": 784,
+          "side": 1,
+          "sleeve": "DON8:DOGEUSDT"
+        },
+        {
+          "entry_time": "2022-01-22T08:00:00+00:00",
+          "exit_time": "2022-03-24T00:00:00+00:00",
+          "max_adverse_excursion": 0.3278084714548804,
+          "perp_fallback_bars": 1456,
+          "side": -1,
+          "sleeve": "DON8:DOGEUSDT"
+        },
+        {
+          "entry_time": "2022-04-24T16:00:00+00:00",
+          "exit_time": "2022-04-26T00:00:00+00:00",
+          "max_adverse_excursion": 0.2863909774436089,
+          "perp_fallback_bars": 32,
+          "side": -1,
+          "sleeve": "EMA8:DOGEUSDT"
+        },
+        {
+          "entry_time": "2025-01-17T16:00:00+00:00",
+          "exit_time": "2025-02-02T08:00:00+00:00",
+          "max_adverse_excursion": 0.27981495834140674,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "DON8:DOGEUSDT"
+        },
+        {
+          "entry_time": "2022-11-19T00:00:00+00:00",
+          "exit_time": "2022-11-27T16:00:00+00:00",
+          "max_adverse_excursion": 0.27523910733262485,
+          "perp_fallback_bars": 208,
+          "side": -1,
+          "sleeve": "EMA8:DOGEUSDT"
+        }
+      ],
+      "DOTUSDT": [
+        {
+          "entry_time": "2025-07-11T00:00:00+00:00",
+          "exit_time": "2025-10-11T00:00:00+00:00",
+          "max_adverse_excursion": 0.7533505154639175,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "DON8:DOTUSDT"
+        },
+        {
+          "entry_time": "2021-05-07T00:00:00+00:00",
+          "exit_time": "2021-05-19T16:00:00+00:00",
+          "max_adverse_excursion": 0.6307574083857644,
+          "perp_fallback_bars": 304,
+          "side": 1,
+          "sleeve": "DON8:DOTUSDT"
+        },
+        {
+          "entry_time": "2021-05-07T00:00:00+00:00",
+          "exit_time": "2021-05-19T16:00:00+00:00",
+          "max_adverse_excursion": 0.6307574083857644,
+          "perp_fallback_bars": 304,
+          "side": 1,
+          "sleeve": "EMA8:DOTUSDT"
+        },
+        {
+          "entry_time": "2021-04-23T08:00:00+00:00",
+          "exit_time": "2021-05-07T00:00:00+00:00",
+          "max_adverse_excursion": 0.5409681803924302,
+          "perp_fallback_bars": 328,
+          "side": -1,
+          "sleeve": "DON8:DOTUSDT"
+        },
+        {
+          "entry_time": "2021-03-25T00:00:00+00:00",
+          "exit_time": "2021-04-03T00:00:00+00:00",
+          "max_adverse_excursion": 0.3742674568751448,
+          "perp_fallback_bars": 216,
+          "side": -1,
+          "sleeve": "DON8:DOTUSDT"
+        },
+        {
+          "entry_time": "2021-04-03T00:00:00+00:00",
+          "exit_time": "2021-04-23T08:00:00+00:00",
+          "max_adverse_excursion": 0.3569466391151087,
+          "perp_fallback_bars": 488,
+          "side": 1,
+          "sleeve": "DON8:DOTUSDT"
+        },
+        {
+          "entry_time": "2025-11-08T00:00:00+00:00",
+          "exit_time": "2025-11-25T16:00:00+00:00",
+          "max_adverse_excursion": 0.3304615384615384,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "DON8:DOTUSDT"
+        },
+        {
+          "entry_time": "2021-12-27T00:00:00+00:00",
+          "exit_time": "2022-01-09T00:00:00+00:00",
+          "max_adverse_excursion": 0.26193366988305955,
+          "perp_fallback_bars": 312,
+          "side": 1,
+          "sleeve": "DON8:DOTUSDT"
+        },
+        {
+          "entry_time": "2022-11-05T00:00:00+00:00",
+          "exit_time": "2022-11-10T00:00:00+00:00",
+          "max_adverse_excursion": 0.24418604651162784,
+          "perp_fallback_bars": 120,
+          "side": 1,
+          "sleeve": "DON8:DOTUSDT"
+        },
+        {
+          "entry_time": "2023-02-13T16:00:00+00:00",
+          "exit_time": "2023-02-18T00:00:00+00:00",
+          "max_adverse_excursion": 0.23749166110740483,
+          "perp_fallback_bars": 104,
+          "side": -1,
+          "sleeve": "DON8:DOTUSDT"
+        }
+      ],
+      "ENAUSDT": [
+        {
+          "entry_time": "2025-05-06T00:00:00+00:00",
+          "exit_time": "2025-05-11T00:00:00+00:00",
+          "max_adverse_excursion": 0.6301526717557251,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "DON8:ENAUSDT"
+        },
+        {
+          "entry_time": "2026-06-03T16:00:00+00:00",
+          "exit_time": "2026-06-11T00:00:00+00:00",
+          "max_adverse_excursion": 0.39385316017316024,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "DON8:ENAUSDT"
+        },
+        {
+          "entry_time": "2026-06-11T00:00:00+00:00",
+          "exit_time": "2026-07-22T16:00:00+00:00",
+          "max_adverse_excursion": 0.36843514528013355,
+          "perp_fallback_bars": 24,
+          "side": -1,
+          "sleeve": "DON8:ENAUSDT"
+        },
+        {
+          "entry_time": "2025-05-11T00:00:00+00:00",
+          "exit_time": "2025-05-31T08:00:00+00:00",
+          "max_adverse_excursion": 0.31111111111111106,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "EMA8:ENAUSDT"
+        },
+        {
+          "entry_time": "2025-04-25T08:00:00+00:00",
+          "exit_time": "2025-05-06T00:00:00+00:00",
+          "max_adverse_excursion": 0.2957611742424242,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "DON8:ENAUSDT"
+        },
+        {
+          "entry_time": "2026-01-04T16:00:00+00:00",
+          "exit_time": "2026-01-19T08:00:00+00:00",
+          "max_adverse_excursion": 0.28909911894273127,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "DON8:ENAUSDT"
+        },
+        {
+          "entry_time": "2025-05-03T00:00:00+00:00",
+          "exit_time": "2025-05-10T08:00:00+00:00",
+          "max_adverse_excursion": 0.2857272046859746,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "EMA8:ENAUSDT"
+        },
+        {
+          "entry_time": "2024-08-24T00:00:00+00:00",
+          "exit_time": "2024-08-28T16:00:00+00:00",
+          "max_adverse_excursion": 0.2844641844956933,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "DON8:ENAUSDT"
+        },
+        {
+          "entry_time": "2025-06-01T08:00:00+00:00",
+          "exit_time": "2025-07-11T16:00:00+00:00",
+          "max_adverse_excursion": 0.2379877458884232,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "EMA8:ENAUSDT"
+        },
+        {
+          "entry_time": "2025-01-13T08:00:00+00:00",
+          "exit_time": "2025-04-25T08:00:00+00:00",
+          "max_adverse_excursion": 0.23528097230769218,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "DON8:ENAUSDT"
+        }
+      ],
+      "ETCUSDT": [
+        {
+          "entry_time": "2020-12-23T16:00:00+00:00",
+          "exit_time": "2021-01-04T08:00:00+00:00",
+          "max_adverse_excursion": 0.4257739649384557,
+          "perp_fallback_bars": 280,
+          "side": -1,
+          "sleeve": "DON8:ETCUSDT"
+        },
+        {
+          "entry_time": "2022-02-22T00:00:00+00:00",
+          "exit_time": "2022-03-20T00:00:00+00:00",
+          "max_adverse_excursion": 0.3781250000000001,
+          "perp_fallback_bars": 624,
+          "side": -1,
+          "sleeve": "DON8:ETCUSDT"
+        },
+        {
+          "entry_time": "2022-08-29T00:00:00+00:00",
+          "exit_time": "2023-01-04T08:00:00+00:00",
+          "max_adverse_excursion": 0.37283470940586033,
+          "perp_fallback_bars": 3080,
+          "side": -1,
+          "sleeve": "DON8:ETCUSDT"
+        },
+        {
+          "entry_time": "2024-04-14T00:00:00+00:00",
+          "exit_time": "2024-05-21T00:00:00+00:00",
+          "max_adverse_excursion": 0.29574643572522685,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "DON8:ETCUSDT"
+        },
+        {
+          "entry_time": "2020-03-16T16:00:00+00:00",
+          "exit_time": "2020-04-25T08:00:00+00:00",
+          "max_adverse_excursion": 0.2909641158668396,
+          "perp_fallback_bars": 952,
+          "side": -1,
+          "sleeve": "EMA8:ETCUSDT"
+        },
+        {
+          "entry_time": "2021-06-20T16:00:00+00:00",
+          "exit_time": "2021-08-07T16:00:00+00:00",
+          "max_adverse_excursion": 0.27996890598150725,
+          "perp_fallback_bars": 1152,
+          "side": -1,
+          "sleeve": "DON8:ETCUSDT"
+        },
+        {
+          "entry_time": "2021-10-27T16:00:00+00:00",
+          "exit_time": "2021-11-09T08:00:00+00:00",
+          "max_adverse_excursion": 0.2752733900364519,
+          "perp_fallback_bars": 304,
+          "side": -1,
+          "sleeve": "DON8:ETCUSDT"
+        },
+        {
+          "entry_time": "2021-10-09T16:00:00+00:00",
+          "exit_time": "2021-10-27T16:00:00+00:00",
+          "max_adverse_excursion": 0.26724549521670704,
+          "perp_fallback_bars": 432,
+          "side": 1,
+          "sleeve": "DON8:ETCUSDT"
+        },
+        {
+          "entry_time": "2021-11-09T08:00:00+00:00",
+          "exit_time": "2021-11-26T16:00:00+00:00",
+          "max_adverse_excursion": 0.2622680481060732,
+          "perp_fallback_bars": 416,
+          "side": 1,
+          "sleeve": "DON8:ETCUSDT"
+        },
+        {
+          "entry_time": "2020-07-09T00:00:00+00:00",
+          "exit_time": "2020-09-03T16:00:00+00:00",
+          "max_adverse_excursion": 0.25967766229853895,
+          "perp_fallback_bars": 1360,
+          "side": 1,
+          "sleeve": "DON8:ETCUSDT"
+        }
+      ],
+      "ETHUSDT": [
+        {
+          "entry_time": "2020-03-09T16:00:00+00:00",
+          "exit_time": "2020-04-09T00:00:00+00:00",
+          "max_adverse_excursion": 0.6579406631762653,
+          "perp_fallback_bars": 728,
+          "side": -1,
+          "sleeve": "EMA8:ETHUSDT"
+        },
+        {
+          "entry_time": "2020-03-09T00:00:00+00:00",
+          "exit_time": "2020-04-06T16:00:00+00:00",
+          "max_adverse_excursion": 0.6187230630450036,
+          "perp_fallback_bars": 688,
+          "side": -1,
+          "sleeve": "DON8:ETHUSDT"
+        },
+        {
+          "entry_time": "2021-02-28T08:00:00+00:00",
+          "exit_time": "2021-03-14T00:00:00+00:00",
+          "max_adverse_excursion": 0.4508803931057587,
+          "perp_fallback_bars": 328,
+          "side": -1,
+          "sleeve": "DON8:ETHUSDT"
+        },
+        {
+          "entry_time": "2022-10-26T16:00:00+00:00",
+          "exit_time": "2022-11-10T00:00:00+00:00",
+          "max_adverse_excursion": 0.31641724368997093,
+          "perp_fallback_bars": 344,
+          "side": 1,
+          "sleeve": "EMA8:ETHUSDT"
+        },
+        {
+          "entry_time": "2021-09-22T00:00:00+00:00",
+          "exit_time": "2021-10-06T16:00:00+00:00",
+          "max_adverse_excursion": 0.31550875619695756,
+          "perp_fallback_bars": 352,
+          "side": -1,
+          "sleeve": "DON8:ETHUSDT"
+        },
+        {
+          "entry_time": "2021-12-01T08:00:00+00:00",
+          "exit_time": "2021-12-04T16:00:00+00:00",
+          "max_adverse_excursion": 0.2894681103163069,
+          "perp_fallback_bars": 80,
+          "side": 1,
+          "sleeve": "EMA8:ETHUSDT"
+        },
+        {
+          "entry_time": "2021-03-14T00:00:00+00:00",
+          "exit_time": "2021-05-19T16:00:00+00:00",
+          "max_adverse_excursion": 0.27232537118040046,
+          "perp_fallback_bars": 1600,
+          "side": 1,
+          "sleeve": "DON8:ETHUSDT"
+        },
+        {
+          "entry_time": "2021-05-23T00:00:00+00:00",
+          "exit_time": "2021-07-26T16:00:00+00:00",
+          "max_adverse_excursion": 0.26902668746133673,
+          "perp_fallback_bars": 1552,
+          "side": -1,
+          "sleeve": "EMA8:ETHUSDT"
+        },
+        {
+          "entry_time": "2025-10-06T16:00:00+00:00",
+          "exit_time": "2025-10-11T00:00:00+00:00",
+          "max_adverse_excursion": 0.2667165429372072,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "DON8:ETHUSDT"
+        },
+        {
+          "entry_time": "2021-09-22T00:00:00+00:00",
+          "exit_time": "2021-10-04T00:00:00+00:00",
+          "max_adverse_excursion": 0.2617095828195569,
+          "perp_fallback_bars": 288,
+          "side": -1,
+          "sleeve": "EMA8:ETHUSDT"
+        }
+      ],
+      "LINKUSDT": [
+        {
+          "entry_time": "2020-03-17T16:00:00+00:00",
+          "exit_time": "2020-04-09T08:00:00+00:00",
+          "max_adverse_excursion": 0.6993957703927492,
+          "perp_fallback_bars": 544,
+          "side": -1,
+          "sleeve": "EMA8:LINKUSDT"
+        },
+        {
+          "entry_time": "2020-12-24T00:00:00+00:00",
+          "exit_time": "2021-01-06T16:00:00+00:00",
+          "max_adverse_excursion": 0.5544617628292771,
+          "perp_fallback_bars": 328,
+          "side": -1,
+          "sleeve": "DON8:LINKUSDT"
+        },
+        {
+          "entry_time": "2020-12-24T08:00:00+00:00",
+          "exit_time": "2021-01-04T08:00:00+00:00",
+          "max_adverse_excursion": 0.541601866251944,
+          "perp_fallback_bars": 264,
+          "side": -1,
+          "sleeve": "EMA8:LINKUSDT"
+        },
+        {
+          "entry_time": "2021-04-03T00:00:00+00:00",
+          "exit_time": "2021-05-19T16:00:00+00:00",
+          "max_adverse_excursion": 0.3995882750568426,
+          "perp_fallback_bars": 1120,
+          "side": 1,
+          "sleeve": "DON8:LINKUSDT"
+        },
+        {
+          "entry_time": "2025-01-18T00:00:00+00:00",
+          "exit_time": "2025-02-24T08:00:00+00:00",
+          "max_adverse_excursion": 0.3809367528999083,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "DON8:LINKUSDT"
+        },
+        {
+          "entry_time": "2020-03-17T16:00:00+00:00",
+          "exit_time": "2020-04-07T08:00:00+00:00",
+          "max_adverse_excursion": 0.37562940584088633,
+          "perp_fallback_bars": 496,
+          "side": -1,
+          "sleeve": "DON8:LINKUSDT"
+        },
+        {
+          "entry_time": "2021-04-02T16:00:00+00:00",
+          "exit_time": "2021-05-19T16:00:00+00:00",
+          "max_adverse_excursion": 0.37159120144069974,
+          "perp_fallback_bars": 1128,
+          "side": 1,
+          "sleeve": "EMA8:LINKUSDT"
+        },
+        {
+          "entry_time": "2021-09-22T00:00:00+00:00",
+          "exit_time": "2021-10-16T16:00:00+00:00",
+          "max_adverse_excursion": 0.3418731625367493,
+          "perp_fallback_bars": 592,
+          "side": -1,
+          "sleeve": "DON8:LINKUSDT"
+        },
+        {
+          "entry_time": "2022-06-13T08:00:00+00:00",
+          "exit_time": "2022-07-18T16:00:00+00:00",
+          "max_adverse_excursion": 0.33421516754850095,
+          "perp_fallback_bars": 848,
+          "side": -1,
+          "sleeve": "DON8:LINKUSDT"
+        },
+        {
+          "entry_time": "2021-09-22T00:00:00+00:00",
+          "exit_time": "2021-10-05T08:00:00+00:00",
+          "max_adverse_excursion": 0.3153203602594616,
+          "perp_fallback_bars": 320,
+          "side": -1,
+          "sleeve": "EMA8:LINKUSDT"
+        }
+      ],
+      "LTCUSDT": [
+        {
+          "entry_time": "2022-11-10T00:00:00+00:00",
+          "exit_time": "2022-11-23T08:00:00+00:00",
+          "max_adverse_excursion": 0.6765402843601896,
+          "perp_fallback_bars": 320,
+          "side": -1,
+          "sleeve": "DON8:LTCUSDT"
+        },
+        {
+          "entry_time": "2025-10-10T00:00:00+00:00",
+          "exit_time": "2025-10-11T00:00:00+00:00",
+          "max_adverse_excursion": 0.5849161567193832,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "DON8:LTCUSDT"
+        },
+        {
+          "entry_time": "2025-10-04T16:00:00+00:00",
+          "exit_time": "2025-10-11T08:00:00+00:00",
+          "max_adverse_excursion": 0.5565084486711386,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "EMA8:LTCUSDT"
+        },
+        {
+          "entry_time": "2025-02-03T08:00:00+00:00",
+          "exit_time": "2025-04-25T16:00:00+00:00",
+          "max_adverse_excursion": 0.4114326040931546,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "DON8:LTCUSDT"
+        },
+        {
+          "entry_time": "2021-04-03T00:00:00+00:00",
+          "exit_time": "2021-05-19T16:00:00+00:00",
+          "max_adverse_excursion": 0.388477327419431,
+          "perp_fallback_bars": 1120,
+          "side": 1,
+          "sleeve": "DON8:LTCUSDT"
+        },
+        {
+          "entry_time": "2021-04-02T16:00:00+00:00",
+          "exit_time": "2021-05-19T16:00:00+00:00",
+          "max_adverse_excursion": 0.3780891597485484,
+          "perp_fallback_bars": 1128,
+          "side": 1,
+          "sleeve": "EMA8:LTCUSDT"
+        },
+        {
+          "entry_time": "2025-01-17T00:00:00+00:00",
+          "exit_time": "2025-02-03T16:00:00+00:00",
+          "max_adverse_excursion": 0.3541232817399695,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "EMA8:LTCUSDT"
+        },
+        {
+          "entry_time": "2025-01-16T08:00:00+00:00",
+          "exit_time": "2025-02-03T08:00:00+00:00",
+          "max_adverse_excursion": 0.32531759239039143,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "DON8:LTCUSDT"
+        },
+        {
+          "entry_time": "2025-11-10T00:00:00+00:00",
+          "exit_time": "2025-12-01T08:00:00+00:00",
+          "max_adverse_excursion": 0.3020508003992015,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "DON8:LTCUSDT"
+        },
+        {
+          "entry_time": "2025-02-06T00:00:00+00:00",
+          "exit_time": "2025-02-11T08:00:00+00:00",
+          "max_adverse_excursion": 0.2779725001936109,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "EMA8:LTCUSDT"
+        }
+      ],
+      "SOLUSDT": [
+        {
+          "entry_time": "2021-05-23T16:00:00+00:00",
+          "exit_time": "2021-07-31T16:00:00+00:00",
+          "max_adverse_excursion": 0.9278890197618114,
+          "perp_fallback_bars": 1656,
+          "side": -1,
+          "sleeve": "DON8:SOLUSDT"
+        },
+        {
+          "entry_time": "2021-09-22T00:00:00+00:00",
+          "exit_time": "2021-10-21T08:00:00+00:00",
+          "max_adverse_excursion": 0.5295159433590132,
+          "perp_fallback_bars": 704,
+          "side": -1,
+          "sleeve": "DON8:SOLUSDT"
+        },
+        {
+          "entry_time": "2021-05-24T08:00:00+00:00",
+          "exit_time": "2021-06-06T00:00:00+00:00",
+          "max_adverse_excursion": 0.49784701557850514,
+          "perp_fallback_bars": 304,
+          "side": -1,
+          "sleeve": "EMA8:SOLUSDT"
+        },
+        {
+          "entry_time": "2022-10-29T08:00:00+00:00",
+          "exit_time": "2022-11-09T00:00:00+00:00",
+          "max_adverse_excursion": 0.4469492034866247,
+          "perp_fallback_bars": 256,
+          "side": 1,
+          "sleeve": "DON8:SOLUSDT"
+        },
+        {
+          "entry_time": "2025-10-03T16:00:00+00:00",
+          "exit_time": "2025-10-11T00:00:00+00:00",
+          "max_adverse_excursion": 0.38709095862274684,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "EMA8:SOLUSDT"
+        },
+        {
+          "entry_time": "2024-08-05T08:00:00+00:00",
+          "exit_time": "2024-08-26T00:00:00+00:00",
+          "max_adverse_excursion": 0.3324404575328409,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "EMA8:SOLUSDT"
+        },
+        {
+          "entry_time": "2025-01-13T16:00:00+00:00",
+          "exit_time": "2025-01-18T08:00:00+00:00",
+          "max_adverse_excursion": 0.3314119424701998,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "DON8:SOLUSDT"
+        },
+        {
+          "entry_time": "2023-02-10T00:00:00+00:00",
+          "exit_time": "2023-02-20T08:00:00+00:00",
+          "max_adverse_excursion": 0.3255541451030173,
+          "perp_fallback_bars": 248,
+          "side": -1,
+          "sleeve": "DON8:SOLUSDT"
+        },
+        {
+          "entry_time": "2025-01-18T16:00:00+00:00",
+          "exit_time": "2025-02-03T08:00:00+00:00",
+          "max_adverse_excursion": 0.31682707233778334,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "EMA8:SOLUSDT"
+        },
+        {
+          "entry_time": "2025-01-18T08:00:00+00:00",
+          "exit_time": "2025-02-18T08:00:00+00:00",
+          "max_adverse_excursion": 0.2960709503028221,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "DON8:SOLUSDT"
+        }
+      ],
+      "SUIUSDT": [
+        {
+          "entry_time": "2024-09-02T00:00:00+00:00",
+          "exit_time": "2024-09-17T16:00:00+00:00",
+          "max_adverse_excursion": 0.5615789473684212,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "DON8:SUIUSDT"
+        },
+        {
+          "entry_time": "2025-04-06T16:00:00+00:00",
+          "exit_time": "2025-04-23T00:00:00+00:00",
+          "max_adverse_excursion": 0.31706642678948377,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "DON8:SUIUSDT"
+        },
+        {
+          "entry_time": "2024-07-25T08:00:00+00:00",
+          "exit_time": "2024-08-11T00:00:00+00:00",
+          "max_adverse_excursion": 0.2863092838909043,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "EMA8:SUIUSDT"
+        },
+        {
+          "entry_time": "2025-08-03T00:00:00+00:00",
+          "exit_time": "2025-09-13T00:00:00+00:00",
+          "max_adverse_excursion": 0.2547238089523581,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "DON8:SUIUSDT"
+        },
+        {
+          "entry_time": "2025-03-27T08:00:00+00:00",
+          "exit_time": "2025-04-06T16:00:00+00:00",
+          "max_adverse_excursion": 0.24191150329654318,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "DON8:SUIUSDT"
+        },
+        {
+          "entry_time": "2026-08-22T00:00:00+00:00",
+          "exit_time": "2026-09-13T08:00:00+00:00",
+          "max_adverse_excursion": 0.17224988157271437,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "EMA8:SUIUSDT"
+        },
+        {
+          "entry_time": "2024-03-21T16:00:00+00:00",
+          "exit_time": "2024-04-06T16:00:00+00:00",
+          "max_adverse_excursion": 0.16419787141851278,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "EMA8:SUIUSDT"
+        },
+        {
+          "entry_time": "2023-10-09T16:00:00+00:00",
+          "exit_time": "2023-10-28T16:00:00+00:00",
+          "max_adverse_excursion": 0.16129334789997574,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "DON8:SUIUSDT"
+        },
+        {
+          "entry_time": "2025-09-13T00:00:00+00:00",
+          "exit_time": "2025-09-25T16:00:00+00:00",
+          "max_adverse_excursion": 0.15880613068029034,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "DON8:SUIUSDT"
+        },
+        {
+          "entry_time": "2026-09-15T08:00:00+00:00",
+          "exit_time": "2026-09-18T16:00:00+00:00",
+          "max_adverse_excursion": 0.15623763654419068,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "EMA8:SUIUSDT"
+        }
+      ],
+      "UNIUSDT": [
+        {
+          "entry_time": "2020-12-11T08:00:00+00:00",
+          "exit_time": "2020-12-31T08:00:00+00:00",
+          "max_adverse_excursion": 0.5637048601683411,
+          "perp_fallback_bars": 480,
+          "side": -1,
+          "sleeve": "DON8:UNIUSDT"
+        },
+        {
+          "entry_time": "2024-11-05T00:00:00+00:00",
+          "exit_time": "2024-11-06T08:00:00+00:00",
+          "max_adverse_excursion": 0.3949196651917404,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "EMA8:UNIUSDT"
+        },
+        {
+          "entry_time": "2026-08-15T00:00:00+00:00",
+          "exit_time": "2026-08-22T08:00:00+00:00",
+          "max_adverse_excursion": 0.39120426070647085,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "EMA8:UNIUSDT"
+        },
+        {
+          "entry_time": "2024-11-03T16:00:00+00:00",
+          "exit_time": "2024-11-06T08:00:00+00:00",
+          "max_adverse_excursion": 0.3570892997560625,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "DON8:UNIUSDT"
+        },
+        {
+          "entry_time": "2023-12-18T16:00:00+00:00",
+          "exit_time": "2023-12-26T16:00:00+00:00",
+          "max_adverse_excursion": 0.357068426536992,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "DON8:UNIUSDT"
+        },
+        {
+          "entry_time": "2024-06-11T16:00:00+00:00",
+          "exit_time": "2024-08-22T00:00:00+00:00",
+          "max_adverse_excursion": 0.3483179229819243,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "DON8:UNIUSDT"
+        },
+        {
+          "entry_time": "2026-08-12T08:00:00+00:00",
+          "exit_time": "2026-08-23T16:00:00+00:00",
+          "max_adverse_excursion": 0.33376914285714293,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "DON8:UNIUSDT"
+        },
+        {
+          "entry_time": "2025-11-12T00:00:00+00:00",
+          "exit_time": "2025-11-22T16:00:00+00:00",
+          "max_adverse_excursion": 0.2818840189182635,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "EMA8:UNIUSDT"
+        },
+        {
+          "entry_time": "2020-12-19T08:00:00+00:00",
+          "exit_time": "2020-12-24T08:00:00+00:00",
+          "max_adverse_excursion": 0.2576520537124802,
+          "perp_fallback_bars": 120,
+          "side": 1,
+          "sleeve": "EMA8:UNIUSDT"
+        },
+        {
+          "entry_time": "2025-05-11T00:00:00+00:00",
+          "exit_time": "2025-06-07T08:00:00+00:00",
+          "max_adverse_excursion": 0.25291951939626633,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "EMA8:UNIUSDT"
+        }
+      ],
+      "XRPUSDT": [
+        {
+          "entry_time": "2020-12-24T00:00:00+00:00",
+          "exit_time": "2021-01-31T00:00:00+00:00",
+          "max_adverse_excursion": 1.0092735703245752,
+          "perp_fallback_bars": 912,
+          "side": -1,
+          "sleeve": "EMA8:XRPUSDT"
+        },
+        {
+          "entry_time": "2025-09-13T00:00:00+00:00",
+          "exit_time": "2025-10-11T00:00:00+00:00",
+          "max_adverse_excursion": 0.6159454325839078,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "DON8:XRPUSDT"
+        },
+        {
+          "entry_time": "2021-05-23T16:00:00+00:00",
+          "exit_time": "2021-07-28T08:00:00+00:00",
+          "max_adverse_excursion": 0.5402797202797203,
+          "perp_fallback_bars": 1576,
+          "side": -1,
+          "sleeve": "DON8:XRPUSDT"
+        },
+        {
+          "entry_time": "2020-12-15T16:00:00+00:00",
+          "exit_time": "2021-01-30T16:00:00+00:00",
+          "max_adverse_excursion": 0.3913778529163144,
+          "perp_fallback_bars": 1104,
+          "side": -1,
+          "sleeve": "DON8:XRPUSDT"
+        },
+        {
+          "entry_time": "2022-02-24T08:00:00+00:00",
+          "exit_time": "2022-03-28T08:00:00+00:00",
+          "max_adverse_excursion": 0.36748676424789783,
+          "perp_fallback_bars": 696,
+          "side": -1,
+          "sleeve": "DON8:XRPUSDT"
+        },
+        {
+          "entry_time": "2025-03-03T00:00:00+00:00",
+          "exit_time": "2025-04-03T00:00:00+00:00",
+          "max_adverse_excursion": 0.3534696933601062,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "DON8:XRPUSDT"
+        },
+        {
+          "entry_time": "2023-06-28T08:00:00+00:00",
+          "exit_time": "2023-07-13T16:00:00+00:00",
+          "max_adverse_excursion": 0.3491467554428238,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "EMA8:XRPUSDT"
+        },
+        {
+          "entry_time": "2021-01-31T16:00:00+00:00",
+          "exit_time": "2021-02-28T16:00:00+00:00",
+          "max_adverse_excursion": 0.2890004182350481,
+          "perp_fallback_bars": 672,
+          "side": 1,
+          "sleeve": "EMA8:XRPUSDT"
+        },
+        {
+          "entry_time": "2024-08-07T16:00:00+00:00",
+          "exit_time": "2024-08-08T00:00:00+00:00",
+          "max_adverse_excursion": 0.28587372847416903,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "EMA8:XRPUSDT"
+        },
+        {
+          "entry_time": "2023-07-14T00:00:00+00:00",
+          "exit_time": "2023-08-07T16:00:00+00:00",
+          "max_adverse_excursion": 0.25454923963698795,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "EMA8:XRPUSDT"
+        }
+      ],
+      "ZECUSDT": [
+        {
+          "entry_time": "2021-11-18T16:00:00+00:00",
+          "exit_time": "2021-11-22T00:00:00+00:00",
+          "max_adverse_excursion": 0.5660856207840782,
+          "perp_fallback_bars": 80,
+          "side": -1,
+          "sleeve": "DON8:ZECUSDT"
+        },
+        {
+          "entry_time": "2022-02-22T08:00:00+00:00",
+          "exit_time": "2022-03-09T00:00:00+00:00",
+          "max_adverse_excursion": 0.47713717693836977,
+          "perp_fallback_bars": 280,
+          "side": -1,
+          "sleeve": "DON8:ZECUSDT"
+        },
+        {
+          "entry_time": "2021-11-22T00:00:00+00:00",
+          "exit_time": "2022-01-06T00:00:00+00:00",
+          "max_adverse_excursion": 0.4484529352887419,
+          "perp_fallback_bars": 1080,
+          "side": 1,
+          "sleeve": "DON8:ZECUSDT"
+        },
+        {
+          "entry_time": "2020-12-24T00:00:00+00:00",
+          "exit_time": "2021-01-10T00:00:00+00:00",
+          "max_adverse_excursion": 0.44506584881832933,
+          "perp_fallback_bars": 408,
+          "side": -1,
+          "sleeve": "DON8:ZECUSDT"
+        },
+        {
+          "entry_time": "2026-06-06T08:00:00+00:00",
+          "exit_time": "2026-07-07T16:00:00+00:00",
+          "max_adverse_excursion": 0.43191790799947116,
+          "perp_fallback_bars": 24,
+          "side": -1,
+          "sleeve": "EMA8:ZECUSDT"
+        },
+        {
+          "entry_time": "2021-03-29T16:00:00+00:00",
+          "exit_time": "2021-05-19T16:00:00+00:00",
+          "max_adverse_excursion": 0.3804230451629295,
+          "perp_fallback_bars": 1224,
+          "side": 1,
+          "sleeve": "EMA8:ZECUSDT"
+        },
+        {
+          "entry_time": "2025-12-27T16:00:00+00:00",
+          "exit_time": "2026-01-26T00:00:00+00:00",
+          "max_adverse_excursion": 0.37322446822233774,
+          "perp_fallback_bars": 0,
+          "side": 1,
+          "sleeve": "DON8:ZECUSDT"
+        },
+        {
+          "entry_time": "2021-03-25T08:00:00+00:00",
+          "exit_time": "2021-04-01T16:00:00+00:00",
+          "max_adverse_excursion": 0.3574660633484163,
+          "perp_fallback_bars": 176,
+          "side": -1,
+          "sleeve": "DON8:ZECUSDT"
+        },
+        {
+          "entry_time": "2020-12-24T08:00:00+00:00",
+          "exit_time": "2021-01-09T16:00:00+00:00",
+          "max_adverse_excursion": 0.3310172813112416,
+          "perp_fallback_bars": 392,
+          "side": -1,
+          "sleeve": "EMA8:ZECUSDT"
+        },
+        {
+          "entry_time": "2025-12-01T16:00:00+00:00",
+          "exit_time": "2025-12-22T16:00:00+00:00",
+          "max_adverse_excursion": 0.31628781904287145,
+          "perp_fallback_bars": 0,
+          "side": -1,
+          "sleeve": "EMA8:ZECUSDT"
+        }
+      ]
+    }
+  },
+  "result": {
+    "effective_window": {
+      "days_used": 2404,
+      "first_daily_stamp_any_sleeve": "2020-01-03T00:00:00+00:00",
+      "first_daily_stamp_used": "2020-03-02T00:00:00+00:00",
+      "last_daily_stamp_any_sleeve": "2026-09-30T00:00:00+00:00",
+      "last_daily_stamp_used": "2026-09-30T00:00:00+00:00",
+      "note": "stamp d covers day d-1; leading stamps before the first non-zero account return are trimmed",
+      "samples": {
+        "from_2023": {
+          "days": 1368,
+          "first_covered_day": "2023-01-01T00:00:00+00:00",
+          "first_daily_stamp": "2023-01-02T00:00:00+00:00",
+          "last_covered_day": "2026-09-29T00:00:00+00:00",
+          "last_daily_stamp": "2026-09-30T00:00:00+00:00",
+          "requested": [
+            "2023-01-01",
+            "2026-09-30"
+          ]
+        },
+        "whole": {
+          "days": 2404,
+          "first_covered_day": "2020-03-01T00:00:00+00:00",
+          "first_daily_stamp": "2020-03-02T00:00:00+00:00",
+          "last_covered_day": "2026-09-29T00:00:00+00:00",
+          "last_daily_stamp": "2026-09-30T00:00:00+00:00",
+          "requested": [
+            "2020-01-01",
+            "2026-09-30"
+          ]
+        }
+      },
+      "warmup_stamps_trimmed": 59
+    },
+    "episodes_without_mark_bars": 0,
+    "levels": {
+      "from_2023": {
+        "1": {
+          "annual_return": 0.12448016686697616,
+          "days": 1368,
+          "final_equity": 1.5522603141606435,
+          "historical_ruin": false,
+          "leverage": 1,
+          "max_drawdown": -0.11202413801226518,
+          "median_equity_1y": 1.1147706071845915,
+          "min_equity": 0.9543315413687475,
+          "n_liquidations": 0,
+          "p05_equity_1y": 0.9355210232504962,
+          "ruin_probability_365d": 0.0
+        },
+        "10": {
+          "annual_return": 0.5606544444821489,
+          "days": 1368,
+          "final_equity": 5.302774021206885,
+          "historical_ruin": false,
+          "leverage": 10,
+          "max_drawdown": -0.6800328315228819,
+          "median_equity_1y": 1.4823554240475016,
+          "min_equity": 0.6113021595444389,
+          "n_liquidations": 557,
+          "p05_equity_1y": 0.3579758893877148,
+          "ruin_probability_365d": 0.2634
+        },
+        "2": {
+          "annual_return": 0.23829969714296473,
+          "days": 1368,
+          "final_equity": 2.227952293980599,
+          "historical_ruin": false,
+          "leverage": 2,
+          "max_drawdown": -0.2165731755393434,
+          "median_equity_1y": 1.2178190555895747,
+          "min_equity": 0.906844107345566,
+          "n_liquidations": 9,
+          "p05_equity_1y": 0.8602708195667406,
+          "ruin_probability_365d": 0.0
+        },
+        "20": {
+          "annual_return": 0.5347407104020887,
+          "days": 1368,
+          "final_equity": 4.980225827970695,
+          "historical_ruin": true,
+          "leverage": 20,
+          "max_drawdown": -0.8352182929674148,
+          "median_equity_1y": 1.4305266798106167,
+          "min_equity": 0.45031039868821143,
+          "n_liquidations": 972,
+          "p05_equity_1y": 0.19145281371103484,
+          "ruin_probability_365d": 0.4708
+        },
+        "3": {
+          "annual_return": 0.34746061742152734,
+          "days": 1368,
+          "final_equity": 3.057871097676357,
+          "historical_ruin": false,
+          "leverage": 3,
+          "max_drawdown": -0.3169768220189253,
+          "median_equity_1y": 1.3159446896649514,
+          "min_equity": 0.8607202823646627,
+          "n_liquidations": 32,
+          "p05_equity_1y": 0.7825146989376528,
+          "ruin_probability_365d": 0.0014
+        },
+        "5": {
+          "annual_return": 0.5116172599063302,
+          "days": 1368,
+          "final_equity": 4.704767776224456,
+          "historical_ruin": false,
+          "leverage": 5,
+          "max_drawdown": -0.480468523895751,
+          "median_equity_1y": 1.4627788249865317,
+          "min_equity": 0.7643109074416023,
+          "n_liquidations": 160,
+          "p05_equity_1y": 0.6176032513857341,
+          "ruin_probability_365d": 0.0492
+        }
+      },
+      "whole": {
+        "1": {
+          "annual_return": 0.1908828843094148,
+          "days": 2404,
+          "final_equity": 3.1600681669798285,
+          "historical_ruin": false,
+          "leverage": 1,
+          "max_drawdown": -0.13858831017961815,
+          "median_equity_1y": 1.1661033999452952,
+          "min_equity": 0.9889146140338044,
+          "n_liquidations": 3,
+          "p05_equity_1y": 0.9360075938488588,
+          "ruin_probability_365d": 0.0
+        },
+        "10": {
+          "annual_return": 1.1193892521639812,
+          "days": 2404,
+          "final_equity": 140.7739063759711,
+          "historical_ruin": false,
+          "leverage": 10,
+          "max_drawdown": -0.7777132809898147,
+          "median_equity_1y": 1.857166757867863,
+          "min_equity": 0.9760573718235167,
+          "n_liquidations": 1012,
+          "p05_equity_1y": 0.3778760487973122,
+          "ruin_probability_365d": 0.2572
+        },
+        "2": {
+          "annual_return": 0.40259166954537773,
+          "days": 2404,
+          "final_equity": 9.283965696090368,
+          "historical_ruin": false,
+          "leverage": 2,
+          "max_drawdown": -0.27607757682663303,
+          "median_equity_1y": 1.3375300157386187,
+          "min_equity": 0.9702820864299386,
+          "n_liquidations": 27,
+          "p05_equity_1y": 0.8614354616230611,
+          "ruin_probability_365d": 0.0002
+        },
+        "20": {
+          "annual_return": 1.6579247653197262,
+          "days": 2404,
+          "final_equity": 625.4117832155104,
+          "historical_ruin": false,
+          "leverage": 20,
+          "max_drawdown": -0.895565782305994,
+          "median_equity_1y": 1.9555670351340444,
+          "min_equity": 0.8955827085775819,
+          "n_liquidations": 1631,
+          "p05_equity_1y": 0.23972886054579837,
+          "ruin_probability_365d": 0.4018
+        },
+        "3": {
+          "annual_return": 0.6413899709262831,
+          "days": 2404,
+          "final_equity": 26.148670457503627,
+          "historical_ruin": false,
+          "leverage": 3,
+          "max_drawdown": -0.413944482086942,
+          "median_equity_1y": 1.5129891634944541,
+          "min_equity": 0.9726645043987213,
+          "n_liquidations": 87,
+          "p05_equity_1y": 0.7789023044566404,
+          "ruin_probability_365d": 0.0056
+        },
+        "5": {
+          "annual_return": 1.1260403397971945,
+          "days": 2404,
+          "final_equity": 143.70921706706906,
+          "historical_ruin": false,
+          "leverage": 5,
+          "max_drawdown": -0.602295286431252,
+          "median_equity_1y": 1.839288217303117,
+          "min_equity": 0.9712866650319861,
+          "n_liquidations": 333,
+          "p05_equity_1y": 0.6172971585562493,
+          "ruin_probability_365d": 0.0686
+        }
+      }
+    },
+    "mark_coverage": {
+      "episodes_entirely_perp_fallback": 959,
+      "episodes_partially_covered": 16,
+      "episodes_with_missing_hours": 16,
+      "episodes_with_perp_fallback_bars": 1033
+    },
+    "max_safe_leverage_by_sample": {
+      "from_2023": 1,
+      "whole": null
+    },
+    "max_safe_leverage_registered": 1,
+    "max_safe_leverage_rule": "largest L with P(ruin 365d) <= 5% in EVERY reported sample and no liquidations in the 2023-2026 path (conservative reading of the registration)",
+    "n_episodes": 2153,
+    "n_sleeves": 34,
+    "samples": {
+      "from_2023": [
+        "2023-01-01",
+        "2026-09-30"
+      ],
+      "whole": [
+        "2020-01-01",
+        "2026-09-30"
+      ]
+    },
+    "unlevered_check_final_equity": 3.1921110918583593
+  },
+  "schema_version": 1,
+  "status": "RESULT_DESCRIPTIVE_ONLY",
+  "study_id": "trend-core-leverage-assessment-v1"
+}

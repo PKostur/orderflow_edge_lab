@@ -1,0 +1,22 @@
+{
+ "schema_version": 1,
+ "watch_id": "carry-forward-v1",
+ "status": "FROZEN_BEFORE_PROSPECTIVE_START",
+ "registered_utc": "2026-10-23",
+ "prospective_start_utc": "2026-10-24T00:00:00Z",
+ "question": "What does a delta-neutral BTC/ETH funding carry on MEXC actually earn from today on, after fees, measured from the exchange's own public prices and funding prints?",
+ "venue": "MEXC (spot 60m klines, USDT perpetual 1h klines, funding_rate history); the same venue as the other forward watches",
+ "assets": ["BTCUSDT", "ETHUSDT"],
+ "paper_capital_usdt": 10000,
+ "allocation": "half the capital per asset; per asset, half buys spot and half is margin for an equal-notional 1x short perpetual, so hedged notional = 2,500 USDT per asset",
+ "construction": "carry.hedge_daily as in config/carry_study_v1.json: daily close = 1h bar ending 00:00 UTC; daily P&L per notional = spot return - perp return + funding settled in (t-1 00:00, t 00:00]; entered at the close of the start day; month-end reset to equal notional",
+ "costs": {"spot_taker_bps": 10.0, "perp_taker_bps": 5.0, "slippage_bps_per_leg": 2.0, "exit_cost": "the report shows P&L both before and after a hypothetical exit at the latest close"},
+ "warmup": "prices and funding are fetched from 30 days before the start (the MEXC fetchers need at least 200 bars); nothing before the start is scored",
+ "reporting": {"review_after_days": 90, "outputs": ["days", "funding received", "basis P&L", "costs", "net P&L in USDT", "return on capital", "annualized run rate", "per-day funding prints"]},
+ "claims": {
+  "strategy_promotion_authorized": false,
+  "paper_trading_authorized": false,
+  "live_trading_authorized": false,
+  "orders_sent": false
+ }
+}

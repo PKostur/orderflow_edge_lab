@@ -11,12 +11,14 @@ import json
 import os
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = Path("C:/Users/007pe/src/ofel_runs/dashboard")
 PY = str(ROOT / ".venv" / "Scripts" / "python.exe")
 GH_DIR = r"C:\Program Files\GitHub CLI"
+BRANCH = "research/payoff-geometry-v1-1"
 
 
 def run(cmd: list[str], timeout: int, env: dict | None = None) -> tuple[int, str]:
@@ -65,12 +67,17 @@ def main() -> int:
     env["PYTHONPATH"] = str(ROOT / "src")
     now = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%MZ")
     steps = [
-        ("pull", ["git", "pull", "--rebase"], 180),
+        ("pull", ["git", "pull", "--rebase", "origin", BRANCH], 180),
         ("snapshot", [PY, "scripts/dashboard_snapshot.py", str(OUT)], 1200),
         ("status", [PY, "scripts/generate_status.py", "--snapshot", str(OUT / "watches.json")], 120),
     ]
     for name, cmd, t in steps:
         code, out = run(cmd, t, env)
+        if code != 0 and name == "pull":
+            # a concurrent fetch in the same checkout can leave FETCH_HEAD with several refs
+            # ("Cannot rebase onto multiple branches"); wait, then pull the branch explicitly once
+            time.sleep(30)
+            code, out = run(["git", "pull", "--rebase", "origin", BRANCH], t, env)
         if code != 0:
             add_state_line(f"- Monitor {now}: step '{name}' failed (exit {code}); see the task run. {out.strip().splitlines()[-1][:200] if out.strip() else ''}")
             run(["git", "add", "SESSION_STATE.md"], 60, env)

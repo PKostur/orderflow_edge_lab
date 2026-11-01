@@ -1,0 +1,2316 @@
+# I Built an AI Kalshi Bot That Spots What Others Can't
+# channel: Moon Dev
+# url: https://www.youtube.com/watch?v=YhJvEeeVCRw
+
+[0:00:00] got this AI bot for Koshi that I'm
+[0:00:03] building out here. Five years ago, I had
+[0:00:05] never written a line of code, though. I
+[0:00:07] was scared of it, too. Don't worry. But
+[0:00:10] today, I have trading bots that trade
+[0:00:12] for me 24/7, all day, all night. And
+[0:00:16] guess what? AI does all of the heavy
+[0:00:21] lifting for me. If I went from zero to
+[0:00:24] here, I think you can do it as well. And
+[0:00:28] in this video, I'm starting a new
+[0:00:31] project. I'm showing you how to use call
+[0:00:33] sheet from square one on a market that I
+[0:00:37] hadn't traded before. I was I'm a poly
+[0:00:39] market guy. You'll see exactly how it
+[0:00:41] works. We set up the tools. AI writes
+[0:00:44] the code and the scanner goes live for
+[0:00:47] call sheet before your eyes. I'll also
+[0:00:50] show you every simple system that you
+[0:00:54] can implement today to test ideas before
+[0:00:58] you risk a single dollar. This one
+[0:01:01] system I show you today is the
+[0:01:03] difference between guessing and actually
+[0:01:07] knowing. And to be real, it's easier
+[0:01:10] than you think. My name is Mundep. I've
+[0:01:12] helped thousands of people automate
+[0:01:14] their trading, even if they've never
+[0:01:16] coded a day in their life. I can't wait
+[0:01:18] to show you everything I know about call
+[0:01:22] sheet here in this short video. 65 says,
+[0:01:25] "You're locked in with a 13 cent profit
+[0:01:28] per share risk-free. Doesn't matter who
+[0:01:30] wins. You're not betting on the leg
+[0:01:33] money." You know, when you look around,
+[0:01:35] the only people making money are
+[0:01:37] automated traders. James, my thesis from
+[0:01:40] the start was, hey, what do I have to
+[0:01:42] lose? Five years ago I was just a
+[0:01:46] emotional hand trader. I got way to
+[0:01:48] approach trading. He says that's cool.
+[0:01:50] One of my bots I set up watching you is
+[0:01:52] pretty. Always been able to work harder.
+[0:01:54] That's the thing that sucks about
+[0:01:55] trading dude. Can't just work harder at
+[0:01:58] it. More you trade the less you have.
+[0:02:00] Everybody and their mother is talking
+[0:02:01] about arbitrageing between Kshi and
+[0:02:04] Paulie Market. Okay. So if everybody's
+[0:02:06] talking about it, there might be
+[0:02:07] something there. But who knows until
+[0:02:09] somebody actually tries it. So,
+[0:02:11] everybody's going to go ahead and steal
+[0:02:12] this video and then be like, "Oh, look
+[0:02:14] at me. I'm uh I live in China. I'm
+[0:02:18] Chinese cousin. Yes, this is my Chinese
+[0:02:20] cousin." And he made a billion dollars
+[0:02:21] off arbitrage in between Khi and Poly
+[0:02:24] Market. But my name is Mundav. So, you
+[0:02:27] know, I don't really care if people
+[0:02:29] borrow my videos. Just don't do sketch
+[0:02:31] stuff with them. 777 vibes all the time,
+[0:02:34] please. I'm going to go through these
+[0:02:35] call she API docs, but I've got her
+[0:02:38] setting up two different AI agents. I
+[0:02:40] got Cloud Code of course. Cloud code of
+[0:02:42] course sitting here and she is going
+[0:02:45] through the docs as well. And she's
+[0:02:46] trying to make a scanner here of anybody
+[0:02:49] that has traded over $1,000 size. But I
+[0:02:51] haven't even looked at the docs yet. So
+[0:02:53] I got to look at the docs at least
+[0:02:54] briefly. You know, I know we have AI
+[0:02:56] now. Making your first request here.
+[0:02:59] Okay. Open API specifications. Welcome.
+[0:03:02] Okay. Let's see what making our first
+[0:03:04] request looks like. Start trading on
+[0:03:06] costing under five minutes. To make your
+[0:03:08] first request, we recommend testing a
+[0:03:10] public endpoint like get markets. Okay,
+[0:03:12] nice. As you explore our other
+[0:03:15] endpoints, you'll notice some endpoints
+[0:03:17] return an authentication error. If you
+[0:03:20] want to experiment with these endpoints,
+[0:03:22] you'll need to get API keys. Okay. You
+[0:03:25] may also want to sign up for a demo
+[0:03:27] account to test without real funds.
+[0:03:29] Okay. The following resources might help
+[0:03:32] you on the journey to exploring call
+[0:03:35] sheets markets. Okay. Quick start market
+[0:03:37] data. Get market data here. Okay. So,
+[0:03:40] filter by market status, possible
+[0:03:42] values, unopened, closed, settled. Um,
+[0:03:46] so we can get markets. Okay. What else
+[0:03:47] can we get? Get market candlesticks.
+[0:03:49] Okay. Time period length, valid values,
+[0:03:52] 1 minute, 1 hour. Okay. So, we can get
+[0:03:54] candlesticks from from each market.
+[0:03:58] That's nice. and she's still working on
+[0:03:59] this. Let me test the API actually. All
+[0:04:01] right, so this is the documentation.
+[0:04:03] mundave.com/doccks.
+[0:04:05] This is the documentation for my API.
+[0:04:08] And you actually get the API key when
+[0:04:10] you come to the Zoom. There's a bunch of
+[0:04:11] people in the Zoom each day you can
+[0:04:13] connect with and you can ask me any
+[0:04:15] questions. It's free consulting in the
+[0:04:17] Zoom each day. Plus, I give you my API
+[0:04:19] key for moddev.com/doccks if you want to
+[0:04:22] go ahead and get ahead of it and check
+[0:04:24] it out. But not only that, you get
+[0:04:25] another bonus. You get the app that I'm
+[0:04:27] using all day. You get the app that I
+[0:04:29] use all day long and you stop losing
+[0:04:32] agents in all your terminals. This is
+[0:04:34] how I run all of my agent flows. You get
+[0:04:37] that app as well. But not only that, you
+[0:04:39] also get the road map. The road map is
+[0:04:40] sick because this walks you through how
+[0:04:42] to get your trading bots live. I show
+[0:04:44] you a bunch of my YouTube videos. I
+[0:04:46] invite you to my Discord. I answer
+[0:04:48] frequently asked questions. I show you
+[0:04:50] my RBI framework. I give you my book
+[0:04:52] list. I give you so much code from these
+[0:04:55] videos. So you see me posting every
+[0:04:57] single day. Well, I post a lot of the
+[0:04:58] code here in this section. So that's in
+[0:05:01] the road map. Like I said, you get the
+[0:05:03] app. You get the API key and then you
+[0:05:05] get to chat with me all day. You're in
+[0:05:08] the Zoom call. You get the full replay
+[0:05:10] from the Zoom call. It's a 3-hour Zoom
+[0:05:12] each day. The API key is a bonus. The
+[0:05:14] app is a bonus. The TrainBot road map is
+[0:05:16] a bonus. And guess what? It's only $5.
+[0:05:19] There's a 90-day no questions asked
+[0:05:21] money back guarantee. So you don't if
+[0:05:22] you don't absolutely love it, then you
+[0:05:24] get your money back. It's five bucks.
+[0:05:26] Join me in the next Zoom call. Meet some
+[0:05:29] other algorithmic traders. Get the full
+[0:05:32] replay. Get the API key, the app, the
+[0:05:34] trading bar road map, and this trading
+[0:05:36] road map. Oh my goodness, dude. This is
+[0:05:38] better than a book. So jump in, get it
+[0:05:41] as a bonus. There's a link in the
+[0:05:42] description, and it's only five bucks
+[0:05:44] with a 90-day money back guarantee. It
+[0:05:46] work. The API works, but no price
+[0:05:48] dollars. Yes, price dollars. No price
+[0:05:50] dollars. Now I need to fix the field
+[0:05:52] names. Okay, so I'm just kind of seeing
+[0:05:54] what you can do here while she goes
+[0:05:56] ahead and does something similar here.
+[0:05:59] She's trying to build out a scanner. So,
+[0:06:00] you know, I've got all the Poly Market
+[0:06:02] stuff, all the bots that I've built.
+[0:06:04] You've seen them. Everybody's saying I'm
+[0:06:05] their Chinese cousin. This chill
+[0:06:08] name's Mund.
+[0:06:10] Hello. I believe CO is a great
+[0:06:12] equalizer. So, I essentially sent her
+[0:06:14] off to that GitHub that I've been
+[0:06:15] cooking on for I don't know, a few
+[0:06:17] months now. Maybe a year. I don't know.
+[0:06:19] Time is irrelevant. I'm just going to
+[0:06:21] keep swimming. But I'm saying, "Hey, go
+[0:06:23] ahead and build that out for Call
+[0:06:24] Street." Now, we're starting with the
+[0:06:26] scanner, though. I've got a bunch of
+[0:06:27] bots that I'm running here on Poly
+[0:06:29] Market. Let's go ahead and start
+[0:06:31] recreating some of those. Super simple,
+[0:06:34] dude. Because if I get all the
+[0:06:35] infrastructure down, then boom, I could
+[0:06:37] go ahead and test some arbitragees, etc.
+[0:06:39] I don't know. Can you go ahead and make
+[0:06:40] a data frame of all of the different um
+[0:06:43] type of bots that I have in my GitHub?
+[0:06:46] You don't need to like put numbers or
+[0:06:47] anything. just be like done done done
+[0:06:50] done done, etc. So, it'll just be a way
+[0:06:53] for me to pretty much see everything
+[0:06:55] that is in this for the Poly Market
+[0:06:57] side. Okay, so this will be good for
+[0:06:59] both of us. I need to figure this out
+[0:07:01] though first. First and foremost, my
+[0:07:03] headphones stopped and when it they
+[0:07:05] stop, [ __ ] gets weird. They get it's
+[0:07:08] gets really really weird. So, let me
+[0:07:10] make sure to show you this is not
+[0:07:12] financial advice. And then one of the
+[0:07:14] worst things about Apple is how they
+[0:07:16] take over your AirPods sometimes. Yeah,
+[0:07:19] [ __ ] these AirPods. I'm going go Bose.
+[0:07:22] I'm going to go Bose if I have to. It's
+[0:07:24] more locked anyways. Yeah, I'm way more
+[0:07:26] locked with the bows on, dude. I got the
+[0:07:28] AirPods and the Bose. Okay, we got
+[0:07:30] esports bots. We've got hurricane bots.
+[0:07:32] We got spread bots. We got liquidation
+[0:07:35] momentum bots. We got no market bots.
+[0:07:37] So, I got the juice on Poly Market.
+[0:07:39] Okay, so what's happening here? So, no
+[0:07:42] API is needed. Call sheet scanner is
+[0:07:44] done. Let's go ahead and see what it
+[0:07:46] looks like, son. Let's put it up here
+[0:07:48] because feel like it's better up there.
+[0:07:52] T. And then we're going to go ahead and
+[0:07:54] say shorty.
+[0:07:58] Okay, let's go here. Say Paul. What the
+[0:08:02] Python 3? What the hell is Python 3?
+[0:08:06] Okay, we got a scanner now. Big whale
+[0:08:08] here. Market is that okay. I mean, this
+[0:08:11] is chill. This is chill. But do they
+[0:08:13] have a websocket or something that I
+[0:08:14] could just have this fire in or is itif
+[0:08:18] the 15 second static the only way? And
+[0:08:21] what I want you to do regardless is at
+[0:08:24] the end of each post here, I want to
+[0:08:26] have a nice uh data frame essentially
+[0:08:30] that will have the market. Nah, not a
+[0:08:32] data frame. That's not going to be good.
+[0:08:34] But we don't need the Mundev. I want a
+[0:08:36] link. I want a link to the market if
+[0:08:38] possible because that would be nice.
+[0:08:40] That would be very nice as I'm just
+[0:08:41] getting used to this platform and yeah,
+[0:08:44] I just need I need to see the actual
+[0:08:48] link as well. So maybe you could make
+[0:08:51] like a more compact overview at the
+[0:08:54] bottom of each of them, each of the
+[0:08:55] rounds or whatever that will have all of
+[0:08:58] the last, let's say 25 top ones. The
+[0:09:02] last 25 whales. Yes.
+[0:09:05] easily being able to see the name of the
+[0:09:07] market, the link, and the value. So, the
+[0:09:11] name of the market, the side, the value,
+[0:09:15] and the link. Short, concise. Thank you,
+[0:09:18] Shorty. Thank you. Done. 83 scripts.
+[0:09:21] Done. Now, this is what I need you to do
+[0:09:22] now. Now, what I'd like you to do is
+[0:09:24] print that out into a nice little fun
+[0:09:27] colorful data frame that I can take a
+[0:09:29] screenshot of and have access to so I
+[0:09:32] can see all the things all the
+[0:09:34] capabilities I have to port on over.
+[0:09:36] This is a major project. I've I've
+[0:09:39] cooked up a lot of good things on Poly
+[0:09:40] Market. Now, I'm going to start cooking
+[0:09:42] some of those things on call sheet.
+[0:09:44] Theoretically, I should be a better call
+[0:09:47] sheet trader than I am on Poly Market
+[0:09:49] cuz I got my Dwet on KHI or on Poly
+[0:09:52] Market. And now I'm just going to pick
+[0:09:54] the ones that I feel like are the best
+[0:09:56] to focus on for Koshi. Plus, I got other
+[0:09:59] ideas now. I got two exchanges. I can ar
+[0:10:01] do things like that. Yeah, this is just
+[0:10:04] going to continue to happen. I mean,
+[0:10:06] this happened with Hyperlid 3 years ago.
+[0:10:07] Happened with Solana two years ago.
+[0:10:10] Happened with Poly Market last year.
+[0:10:12] There's always going to be new markets.
+[0:10:14] Markets are markets are markets that you
+[0:10:15] could sit on the sidelines for the rest
+[0:10:17] of your life. Or you could actually step
+[0:10:18] on the gas like me every single day. I
+[0:10:21] take shots, dude. Shots. I just close my
+[0:10:24] eyes 20 minutes. Think about what I
+[0:10:26] really want to attack and I attack it.
+[0:10:27] Let's get it. So, print this out. Print
+[0:10:29] out the ideas. So, I have this data
+[0:10:31] frame I can look at and just keep coming
+[0:10:33] back to like, okay, this is all the
+[0:10:34] things I've done. Okay, what's next?
+[0:10:36] What what are we bringing over to Kosi?
+[0:10:37] What are we not? Thank you. So, let's
+[0:10:40] see that scanner again. Okay, seven will
+[0:10:42] trades page not found. Yeah, gang, this
+[0:10:45] is not it, bro. Bro, let's go ahead and
+[0:10:47] find it, though. Let's help her out.
+[0:10:48] Okay. Um, Charlotte verse Brooklyn
+[0:10:51] winner here. Okay, that's an easy one.
+[0:10:53] Yo, let's go ahead here. It's like, all
+[0:10:55] right, so you can see this link doesn't
+[0:10:57] work. It errors out. So, I'm going to go
+[0:10:59] ahead and find that for you and then
+[0:11:01] paste it here so you can see the rhyme
+[0:11:03] or reason between behind how links are
+[0:11:05] made on Koshi. Khi, what a hell of a
+[0:11:08] name, huh? What does that even mean?
+[0:11:10] that sounds like cereal. That's why I
+[0:11:11] haven't traded on it is cuz just reminds
+[0:11:13] me of cereal, bro. Is there like a KHI
+[0:11:16] cereal? Khi hasn't even been to the
+[0:11:19] website yet. Jesus, dude. It's just so
+[0:11:23] funny, dude. Every every once in a while
+[0:11:25] I log on to Twitter, I just see people
+[0:11:26] yapping about random [ __ ] like what you
+[0:11:29] know about that. You don't know
+[0:11:30] anything. I don't know anything about
+[0:11:31] it, dude. So, I have to go see. But I'm
+[0:11:34] the only one out here that's actually
+[0:11:35] showing it all. So, it's funny. It's
+[0:11:39] funny. It's funny. It's funny. It's
+[0:11:41] Charlotte at Brooklyn. Okay. Charlotte
+[0:11:43] at Brooklyn. So, you can see that's what
+[0:11:45] it looks like here. Now, there's got to
+[0:11:47] be Now, I see it's much different. So,
+[0:11:50] it's probably going to be different for
+[0:11:51] each category, though. So, it must be in
+[0:11:53] the docks somewhere. Yeah. I want this
+[0:11:56] more of like a Phoenix Suns colors
+[0:11:59] instead of what [snorts] they are now.
+[0:12:01] You know, like that deep uh no purples.
+[0:12:04] I don't like the purples of the suns,
+[0:12:05] but like the orange of the hot like sun.
+[0:12:07] like it's like a hot orange or
+[0:12:09] something, you know? Black, black and uh
+[0:12:12] neonish orange. I think that'd be fire.
+[0:12:18] Okay, here we go. Let's see if she got
+[0:12:20] it now. Okay, see that's nice. Let's go
+[0:12:23] look at our call sheet arsenal scanners
+[0:12:26] back test. Now, I need this to be more
+[0:12:28] concise. I need this to be more concise.
+[0:12:30] Like one page max, no scroll. So, you
+[0:12:34] can just like tighten them up. Like I I
+[0:12:36] see you broke down all the different
+[0:12:38] types of no bots and all the different
+[0:12:40] types of whale bots, etc. I don't need
+[0:12:42] it to be an inventory checklist. I need
+[0:12:44] it to be more of like, oh, weather bots,
+[0:12:47] oh, no bots, oh, earthquake bots, oh,
+[0:12:51] esports bot. You see what I'm saying?
+[0:12:52] Okay, so it should just be a short one
+[0:12:54] pager. I could look at um call it poly
+[0:12:57] market trading bots to port to Kalshi
+[0:12:59] and you could drop the header, you could
+[0:13:02] drop the numbers of trading bots,
+[0:13:04] scanners, etc. Where it says the orange
+[0:13:06] button then trading bots, you could just
+[0:13:08] have it casually say that. Okay, so it's
+[0:13:10] just going to be one simple page like I
+[0:13:12] like how you did the whole list of
+[0:13:13] things. That looks great, but it's just
+[0:13:15] going to be that. It's going to be that
+[0:13:17] uh f that uh like sheet looking thing
+[0:13:19] that you built. No headers or anything
+[0:13:21] like that. just where it says trading
+[0:13:23] bots with the orange dot above the uh
+[0:13:26] Excel. Look at that. That's where it'll
+[0:13:28] say Poly Market bots to port to Koshi.
+[0:13:31] She can't she can't understand Koshi
+[0:13:33] because what type of name is that? All
+[0:13:35] right, let's check this out. So, we got
+[0:13:37] our scanner already going. Beautiful,
+[0:13:40] beautiful, beautiful, beautiful. See if
+[0:13:41] this goes to the right page. No. Okay.
+[0:13:44] Okay. Okay. Okay. We got it. We got it.
+[0:13:47] We got it. We got it. Okay. Okay. We got
+[0:13:49] it. We got it. Sign up to trade. We'll
+[0:13:51] see. We'll see, dude. We'll see. We'll
+[0:13:53] see about that, buddy. See if we sign up
+[0:13:56] to trade. How about that? There we go.
+[0:13:58] This is better. Okay, so we got the lag
+[0:14:00] r bots. That's interesting. Maybe it's
+[0:14:02] easier on Poly Market. Maybe there's
+[0:14:05] more of a lag. Got the liquidation
+[0:14:07] momentum bots. Yes. The stink bid bots.
+[0:14:10] Got the whale copy bots, the no market
+[0:14:12] bots, the weather no bots, the Elon
+[0:14:14] tweet no bots, the mean reversion bot,
+[0:14:16] the spread bot, polyhyper hedging bots,
+[0:14:20] the MACD CVD bots, the Opus AI agent
+[0:14:23] bots, the market maker framework. Okay.
+[0:14:25] Sports scanner, seven sports esports
+[0:14:28] scanner, Dota 2, we need that for both
+[0:14:30] sides. Cali scanner sweeper sweeper
+[0:14:34] sweeper P&L ML models back test position
+[0:14:39] size and/ Kelly criterion
+[0:14:42] [snorts] autoredeem key tools. Okay, so
+[0:14:44] that's the plan. That's the plan.
+[0:14:47] Careful out there. Remember I only have
+[0:14:50] two things I sell. Okay, so moonave.com
+[0:14:53] and be careful. I'm I'm being serious
+[0:14:55] about this. Be careful because there's
+[0:14:56] people that are like taking my voice at
+[0:14:58] this point. AI can do any anything. So,
+[0:15:01] be careful. Be careful. What's up with
+[0:15:02] this spacing there? Be careful. Be
+[0:15:05] careful. Be careful. I'm not going to
+[0:15:07] tell you ever to send me money.
+[0:15:10] If you ever see anything saying send
+[0:15:12] money or join this sketch exchange, you
+[0:15:15] know it's not me. You know it's not me.
+[0:15:18] There's mad spacing between those two.
+[0:15:21] We don't need that big of a space. Okay.
+[0:15:23] Just tighten up a little bit. Okay.
+[0:15:25] Thank you. So, just be careful out
+[0:15:27] there. Okay, be careful. You're going to
+[0:15:30] hear you're going to hear what sounds
+[0:15:31] like me and it's just not me. I'm not
+[0:15:34] going to I'm not going to say, "Hey,
+[0:15:36] bro, use this exchange. Send the money
+[0:15:38] there." yada yada. No way. Never. Some
+[0:15:40] weird ass exchange. I'm also not going
+[0:15:42] to DM you either. No offense. One page,
+[0:15:44] no scroll, zero header. Perfect. Okay,
+[0:15:47] beautiful. So, she's tightening that up.
+[0:15:49] We got the ser the the scanner is
+[0:15:51] cooking now. So, okay. So, BTC price up
+[0:15:54] in the next 15 minutes, it looks like.
+[0:15:56] So, I'm not even familiar with their
+[0:15:57] different markets. So, yeah, I I really
+[0:16:00] don't know anything about Khi. So, I'm
+[0:16:01] starting at square one as I always do.
+[0:16:03] Every single [ __ ] time you come here,
+[0:16:05] I'm starting square one. And if I'm not,
+[0:16:07] then the hell am I doing? BTC price up
+[0:16:10] in the next 15 minutes. So, looks like
+[0:16:11] the 15-minute markets are still here on
+[0:16:14] Koshi. They're getting their real dang
+[0:16:16] wet, too. Will average gas prices be
+[0:16:18] over 4.18?
+[0:16:20] Answer is no. That's an interesting one
+[0:16:22] cuz you can kind of figure out how to
+[0:16:25] price gas. You can figure out how to
+[0:16:26] price gas. That could be cool. I'm going
+[0:16:29] write that down. I'm going to make a
+[0:16:30] call sheet sheet. Call she call she
+[0:16:33] ideas, I guess. Figure out how to price
+[0:16:36] gas at the tank based off gas or oil. I
+[0:16:40] I don't know what the relationship is
+[0:16:42] there. It might be one to one. I don't
+[0:16:43] know. I just don't know. So, we'll see.
+[0:16:47] We'll see. But this is literally my
+[0:16:48] life. Test everybody. and test
+[0:16:50] everything everybody else is just going
+[0:16:52] to yap about. So, let me just test it
+[0:16:54] cuz if I if you guys are yapping about
+[0:16:56] something, then it's it's there's
+[0:16:58] something there. So, if I see Twitter
+[0:17:00] all [ __ ] talk about some [ __ ] like
+[0:17:03] poly market, yada yada, there's
+[0:17:04] something there, but everybody's got
+[0:17:06] their opinions. My opinion doesn't
+[0:17:07] matter, dude. Your opinion doesn't
+[0:17:09] matter. No offense. Not in this game.
+[0:17:11] That's the thing. You want to make money
+[0:17:13] or you want to be right. I don't give a
+[0:17:16] [ __ ]
+[0:17:17] about being wrong. I'll be wrong every
+[0:17:20] day. I'm the trash, man. Throw up so
+[0:17:22] many shots. See what sticks. See what
+[0:17:24] sticks. Do they have that market here?
+[0:17:27] That's another thing. Okay, now that I'm
+[0:17:29] getting set up with I'm already having
+[0:17:31] ideas coming, but now that I'm getting
+[0:17:34] set up here on Khi, there are unlimited
+[0:17:38] arbitrageages, right? Not unlimited, but
+[0:17:40] gas. Okay, we'll gas it. They do have
+[0:17:43] that one. So, what was this one? Gas
+[0:17:45] prices this week begins Sunday, April
+[0:17:48] 5th. Okay, so this is next week's one
+[0:17:51] day above 4.1. I don't drive, so I'm not
+[0:17:54] aware of any of this. March 31st. So,
+[0:17:57] April, they got monthlyies here on Poly
+[0:18:00] Market. There's good volume here. Uh,
+[0:18:04] let's look at April. That one's already
+[0:18:06] decided. So, will gas hit blank by the
+[0:18:09] end of April verse gas prices this week
+[0:18:13] begins April 5th. If average ga and this
+[0:18:16] is average gas prices if average regular
+[0:18:19] gas prices for United States are
+[0:18:21] strictly greater than 4.14 on April 6
+[0:18:26] then the market results to yes outcome
+[0:18:29] verified from AAA. Okay. So we do have
+[0:18:33] the gas prices at the end of the next
+[0:18:35] month. So it's um above 430
+[0:18:40] verse look at this. I feel like they're
+[0:18:42] working together low key. I feel like
+[0:18:44] they're low-key working together.
+[0:18:45] They're like, "Let's just change
+[0:18:46] ourselves a little bit. Just a little
+[0:18:48] bit." But I feel like if they kept the
+[0:18:50] same markets exactly, it could be good,
+[0:18:53] right? There's zero volume here. I see
+[0:18:55] why you got a maker reway and rewards on
+[0:18:58] that one, gang. So, gas prices here
+[0:19:00] could be interesting. I've never thought
+[0:19:02] about it, and that's that's great
+[0:19:03] because I like to think about things
+[0:19:05] that I've never thought about, you know.
+[0:19:06] Okay. Will the number of unemployment
+[0:19:08] rate exceed 10%.
+[0:19:11] So, these are people that have traded
+[0:19:14] over $1,000. So, they're just helping me
+[0:19:17] discover markets. Of course, sports
+[0:19:20] betting is a thing. And I do like that
+[0:19:23] sports betting idea still where sports
+[0:19:25] betting the No. Uh, no. Sports betting
+[0:19:29] with a stink bid. Can you tell me that
+[0:19:31] real quick? Can you actually talk to me
+[0:19:32] about this really quickly? Sports
+[0:19:35] betting prior. Was there any way to do a
+[0:19:37] stink bid type idea with sports betting
+[0:19:41] before Poly Market and Koshi came along?
+[0:19:44] Meaning, can you Yeah, just walk me
+[0:19:47] through the process of sports betting. I
+[0:19:49] mean, I know the lines change a bit, but
+[0:19:52] let's say a whale came in and needed to
+[0:19:55] get out of a position. Well, on poly
+[0:19:57] market there's and on call sheet you
+[0:20:00] could have a bid sitting there 20% lower
+[0:20:03] and grab a really good deal on let's say
+[0:20:05] the Lakers winning. I don't know if that
+[0:20:08] functionality was here in sports betting
+[0:20:10] before. So can you just walk me through
+[0:20:13] how that scenario how would you execute
+[0:20:15] getting a 20% discount on let's say the
+[0:20:18] Lakers winning because that's what
+[0:20:20] sports betting is. It's like picking one
+[0:20:23] side or the other of the other team
+[0:20:24] winning. And I know there's more
+[0:20:25] intricacies to that, but I'm trying to
+[0:20:27] figure out if this is a new paradigm of
+[0:20:30] something you could do with sports
+[0:20:32] betting like stink bids or if this was
+[0:20:34] be able to be done before. So just walk
+[0:20:37] me through that. Thank you. Cuz that's
+[0:20:39] interesting. I've stayed away from
+[0:20:40] sports thus far. Even if you look at my
+[0:20:44] scanner that you do get access to here,
+[0:20:48] um here's the scanner here. You can see
+[0:20:50] that I ignore crypto and sports on the
+[0:20:53] scanner. You can undo it if you want,
+[0:20:55] but this essentially just watches all of
+[0:20:57] the Poly Market big traders. Kind of
+[0:21:00] like what I just built right now for
+[0:21:01] Call Street. This just gives me
+[0:21:04] unlimited ideas.
+[0:21:06] Any of the stolen Kit Kats recovered by
+[0:21:09] April 5th. Dude, I could sit here all
+[0:21:10] day. I could sit here all day and just
+[0:21:13] look at this scanner and print cash or
+[0:21:15] lose cash. It's not financial advice.
+[0:21:17] Not financial advice. Not financial
+[0:21:19] advice. You'll probably lose all your
+[0:21:21] money, but you're the type of dude
+[0:21:23] that's going to come up in here and ask
+[0:21:24] like, "What did I just buy?" after going
+[0:21:26] to a website. So, we're not the same.
+[0:21:28] We're not equal. Much love to you. You
+[0:21:30] could do anything. We are actually
+[0:21:32] equal. You're just kind of cooked. I'm
+[0:21:33] cooked, too. We're both cooked. I do
+[0:21:36] believe is a great equalizer. And I do
+[0:21:38] believe that as long as your blood is
+[0:21:39] red, you can do this, too. But I'm not
+[0:21:42] just going to sit here and be your
+[0:21:43] counselor. So,
+[0:21:46] you don't believe in yourself, back out.
+[0:21:48] Back out. Cut back. You don't believe in
+[0:21:49] yourself? Back out. Come back what you
+[0:21:51] do. All right. So, US forces enter Iran
+[0:21:53] by December 31st. Somebody just said no.
+[0:21:57] Okay. So, I love this dude. And I built
+[0:22:00] this a while ago. I built this a while
+[0:22:03] ago. Will crude oil CL hit a high of 105
+[0:22:06] by the end of March? Is that free money?
+[0:22:09] Is that free money? Is that free money?
+[0:22:11] I have no idea. I haven't been watching
+[0:22:13] oil. I haven't been watching it. So, I
+[0:22:15] don't know if it's free money. I think
+[0:22:17] it's free money. But wait, did it hit?
+[0:22:20] Oh. Oh my god. Look at that. 104.94.
+[0:22:25] [laughter]
+[0:22:26] [snorts] 104.94.
+[0:22:29] I might just buy a note here. Oh, but I
+[0:22:31] can't. That's why I'm building on call
+[0:22:33] today, dude. She h this market will
+[0:22:38] resolve in yes if on any day on any
+[0:22:42] trading day the official CME settlement
+[0:22:45] price for the active month was over. So
+[0:22:49] did we get over 105 this month? Yeah.
+[0:22:53] It's not free money. This is already
+[0:22:55] over. Why are people saying no? Maybe
+[0:22:59] it's on the daily. Yeah. Yeah. Yeah. But
+[0:23:01] this is March, right? Yeah. That's March
+[0:23:03] as well. But did it close over on the
+[0:23:07] CME CME oil futures? Um, data I guess
+[0:23:12] data bento. There you go. Oh, this ass.
+[0:23:14] I was like, damn, some organic, huh?
+[0:23:17] Good for you. Pixel my ass just said
+[0:23:19] that [ __ ] Okay, so gas here. DME. Does
+[0:23:24] it show the link? I mean, it clearly
+[0:23:27] must have not. Let's look at just look
+[0:23:30] at the daily. How about that? We'll just
+[0:23:32] look at the daily. Okay, we are. What
+[0:23:34] was the close here? Closed 102. Closed
+[0:23:38] 100.
+[0:23:39] Close. What was this? Close, silly guy.
+[0:23:42] Come on. Look at the high closes. High.
+[0:23:44] Low. Close 94.
+[0:23:47] Close 935. Close 88.3. I mean, market
+[0:23:52] open March 6th. When's it closed? 105.
+[0:23:56] How many? What can you get here? Say no
+[0:23:58] here. But it had to be a limit, I
+[0:24:02] suppose. 967. What is that? Okay, so 3
+[0:24:06] something% if you get filled. But you're
+[0:24:08] buying you're buying the note. So
+[0:24:10] there's more actually. I mean, if you
+[0:24:14] I'm not Don't do this. Of course, I'm
+[0:24:15] just thinking this through cuz that's a
+[0:24:17] whole another idea. on expiration day.
+[0:24:20] On expiration
+[0:24:22] day of a market, look for low um risk
+[0:24:29] ideas like oil is closing at end of
+[0:24:34] March and today is end of March. Okay.
+[0:24:39] So there there's definitely a chance it
+[0:24:41] goes over and closes over 105, but I'm
+[0:24:44] not here to say all that. Not here to
+[0:24:46] say that it easily can go over. It's
+[0:24:48] right there. It hasn't hasn't. But you
+[0:24:51] can see it has gone over technically
+[0:24:53] just not closed over. So keep your eye
+[0:24:55] on it cuz there is there is like this is
+[0:24:59] 5%. You know um now it just jumped up.
+[0:25:02] So there is volume here. I don't think I
+[0:25:05] can bid on this right now. 94 maybe
+[0:25:07] matching
+[0:25:09] restricted
+[0:25:11] [clears throat] restricted.
+[0:25:12] Well, I can wait. I can wait. I'll keep
+[0:25:14] an eye on this. I can wait and miss it.
+[0:25:17] It's not a big deal. It's just like
+[0:25:19] interesting to see. But this does
+[0:25:22] involve mad risk, right? Because it
+[0:25:24] could close over 105. It hasn't all
+[0:25:26] month, but it could. So, let's make sure
+[0:25:29] that these rules are here. Active month.
+[0:25:32] Okay. So, is equal to or above the
+[0:25:36] listed price by the final trading day
+[0:25:38] March 2020. Otherwise, okay, [snorts]
+[0:25:40] this market will resolve to yes if on
+[0:25:42] any trading date the official CME
+[0:25:45] settlement price for the active month
+[0:25:47] front month of crude oil futures is E.
+[0:25:50] If you're enjoying this so far, I want
+[0:25:52] to invite you to our private Zoom call.
+[0:25:54] It's pretty much every single day. I do
+[0:25:56] three hours. You get to chat with me,
+[0:25:58] ask me any questions you have. Plus, you
+[0:26:00] get the full replay as I know you're a
+[0:26:02] busy person. And you also get the Mundev
+[0:26:04] API key. The Mundev API key is amazing.
+[0:26:08] and it has connections to all of my
+[0:26:10] institutional data and the app that you
+[0:26:13] see me using all day. You also get
+[0:26:14] access to that. And then you also get
+[0:26:17] access to a trading bot road map. If I
+[0:26:19] were to ever write a book, this is the
+[0:26:21] outline of it. I'm going to show you
+[0:26:23] everything. Just go ahead and jump into
+[0:26:25] the Zoom. You're not going to have any
+[0:26:27] ads or anything like that ever again. If
+[0:26:29] you are in the Zoom, it's all live and
+[0:26:32] you have all of the time in the world
+[0:26:35] each day to ask me any questions. Plus,
+[0:26:38] like I said, you also get the API key.
+[0:26:41] You can go to moonab.com/doccks
+[0:26:43] and explore what the API key does, but
+[0:26:46] it is a thick piece of API for you. So,
+[0:26:51] I want you to have access to it because
+[0:26:53] I want you to have the data that Wall
+[0:26:55] Street will never give you. So, you get
+[0:26:57] that as a bonus when you jump into the
+[0:27:00] Zoom call. Just click the link in the
+[0:27:01] description and you can go ahead and get
+[0:27:04] that. What else do you get? You get the
+[0:27:06] Moondev app. So, this is what you see me
+[0:27:08] using all day. This is how I control all
+[0:27:10] of my agents and I stop losing my
+[0:27:14] terminals in tabs. So, you get the app
+[0:27:16] as well. But not only that, like I said,
+[0:27:18] this is better than a book. If you're
+[0:27:20] curious about this industry, get the
+[0:27:22] road map. The road map is another free
+[0:27:24] bonus for joining the Zoom call. You can
+[0:27:26] see the trading bot road map here. I
+[0:27:28] walk you through some of my videos that
+[0:27:30] will show you how to automate your
+[0:27:31] trading. You get access to my Discord
+[0:27:34] here. Um, you get access to the
+[0:27:37] frequently asked questions, my actual
+[0:27:39] RBI system, a book list that will show
+[0:27:42] you where to find ideas and how to
+[0:27:45] automate your trading, and then so much
+[0:27:47] code from these YouTube videos. So, if
+[0:27:50] you want the code from the YouTube
+[0:27:51] videos, you want the app, you want the
+[0:27:54] API key, and you want to be able to chat
+[0:27:56] with me and chat with everybody else in
+[0:27:58] the community, jump into the next Zoom
+[0:28:00] call,
+[0:28:02] there's probably one today or tomorrow.
+[0:28:04] I'll see you there. It's only five
+[0:28:06] bucks, dude.
+[0:28:08] >> Equal to or above the listed price by
+[0:28:11] the final trading day. So, that's a
+[0:28:14] whole idea that came out of that. On
+[0:28:17] expiration days, there could be some low
+[0:28:21] time risk ideas. Oh, look at that, bro.
+[0:28:24] Look at that. Look at that, dude. Oh,
+[0:28:27] there's a tab on.com/polyarket
+[0:28:30] that shows expiring soon. Holy smokes.
+[0:28:34] Compounding, dude. I went from
+[0:28:36] compounding back in the day when I
+[0:28:38] didn't know how to code cuz I was paying
+[0:28:40] developers to code [ __ ] for me. Then
+[0:28:43] when I had to automate my trading, I
+[0:28:45] finally got back to compounding. I
+[0:28:49] skipped the middle part because I don't
+[0:28:50] like talking about it, but you're
+[0:28:52] probably going through it right now.
+[0:28:54] You're probably staring at those charts
+[0:28:56] all day long. Sure, you win some, but
+[0:28:58] you lose a lot. You lose time. You have
+[0:29:01] to go through all that stress stare into
+[0:29:03] those charts trying to guess if it's
+[0:29:06] going up or down. Just test it. If it
+[0:29:08] goes up, great. If it goes down, great.
+[0:29:11] You got the data from the past that can
+[0:29:14] lead you in a better way than just
+[0:29:16] trading by hand. Look at that data in
+[0:29:18] the past. If it works in the past, okay,
+[0:29:21] build it into a bot. Build your
+[0:29:23] confidence up. See if you can cook. And
+[0:29:26] hey, when your confidence is high, maybe
+[0:29:28] you'll throw a dollar or two on a live
+[0:29:30] bot. $10 minimum on Hyperlid, $1 minimum
+[0:29:34] on Poly Market. The real cost is you
+[0:29:37] deciding to automate your trading to
+[0:29:40] approach it as a quant and stop being
+[0:29:42] scared. I was scared, too. But if that
+[0:29:45] pain is big enough, do you really want
+[0:29:47] to get away from trading by hand for the
+[0:29:49] rest of your life? Got to attack your
+[0:29:51] fears. Attack, attack, attack. Will Nike
+[0:29:54] beat earnings? So, let's see. I mean,
+[0:29:56] that's expiring today. I actually really
+[0:29:59] like these expiring soon markets. Okay,
+[0:30:02] so there's a 738%
+[0:30:04] chance that they beat earnings. Look at
+[0:30:07] this, dude. Okay. [ __ ] dude. Dude, this
+[0:30:10] is overwhelming, bro. Too many ideas
+[0:30:12] coming at me live, dude. And all you
+[0:30:14] guys are watching and hearing it all.
+[0:30:15] I'm not saying my shit's goat by any
+[0:30:17] means. I'm just saying I got mad ideas
+[0:30:20] and I actually show everybody. So, much
+[0:30:23] love to you. Thank you for coming
+[0:30:24] through. Holy hell though. Holy hell.
+[0:30:27] So, if there's a 78% chance that Nike
+[0:30:32] will beat earnings, what does a stock
+[0:30:34] look like? But remember, just because
+[0:30:35] they beat earnings doesn't mean stock
+[0:30:37] price go up. But that's the type of
+[0:30:39] thing you could answer with a back test.
+[0:30:41] Okay, the last 30 years when Nike has
+[0:30:45] beat earnings, what happens to their
+[0:30:46] stock? Then you'll have some intel that
+[0:30:48] I literally don't have, but I have the
+[0:30:50] idea. And remember, Poly Market's pretty
+[0:30:52] good at predicting things. So they're
+[0:30:54] saying 78% chance right now. Remember,
+[0:30:58] Poly Market is built to pull inside
+[0:31:01] information out of insiders. Super
+[0:31:04] sketch if you think about it, but it
+[0:31:06] keeps a very, very clean market because
+[0:31:08] if you know something I don't know,
+[0:31:10] you're inside of Nike. I'm not saying
+[0:31:12] that they're doing this. I'm definitely
+[0:31:15] not dogging Nike cuz you know I'm a Nike
+[0:31:18] guy. Just the example. Poly Market is
+[0:31:21] pretty good at predicting because it's
+[0:31:23] the the wisdom of the crowd. The crowd.
+[0:31:26] The crowd. The crowd. I mean, the wisdom
+[0:31:27] of the crowd is why you're here.
+[0:31:29] Actually, everything I learn, I learned
+[0:31:31] from you. You guys just drop dimes all
+[0:31:33] day. So, thank you. Cuz not only are you
+[0:31:36] dropping them to me, but you're dropping
+[0:31:38] them to everybody else in the chat. So,
+[0:31:40] we all appreciate you, bro. Thank you
+[0:31:42] for putting fire in the chat. Nike. Holy
+[0:31:45] hell. Holy hell. Holy, holy moly. What
+[0:31:50] the hell happened to Nike? Whoa, whoa,
+[0:31:53] whoa, whoa, whoa, whoa, whoa, whoa.
+[0:31:55] Phil, is Phil still alive? Phil, what's
+[0:31:59] going on? You got to get back into the
+[0:32:01] chair. Oh, 88. Yeah, you rest in peace,
+[0:32:03] bro. Rest in shoe dog. Pretty good book
+[0:32:06] if you haven't read it. If you haven't
+[0:32:07] read it, Shoe Dog. Okay, so damn,
+[0:32:11] they've just been straight down 70%.
+[0:32:15] That is insane. Is that not insane for a
+[0:32:19] Nike size company to be down that big?
+[0:32:21] Holy hell. Wow. Roblox up 10%. This is
+[0:32:25] another one that's got tortured. But
+[0:32:27] this is like a a shitcoin compared to
+[0:32:29] Nike, right? Let's go ahead and look
+[0:32:31] into that a bit. This is what I love
+[0:32:32] about Poly Market. It's so fast. Like
+[0:32:35] one second we're in finance, the other
+[0:32:37] second we're in politics, another second
+[0:32:39] we're like learning about this. I just
+[0:32:41] It's really fun, dude. It's really fun
+[0:32:43] trading these markets because you learn
+[0:32:44] a lot of stuff. Like I did not know Nike
+[0:32:47] has been getting beaten down. Why has
+[0:32:49] Nike gotten so smashed here in the last
+[0:32:51] few years? It looks like they are down
+[0:32:53] 70% from peaks. What are their true
+[0:32:56] numbers? What is the narrative that's
+[0:32:59] driving that down? Is it true numbers?
+[0:33:01] Is it fear competition? And obviously
+[0:33:04] you got like all these boomer shoes
+[0:33:06] everybody's wearing like the Enclouds
+[0:33:08] and the [ __ ] other bunky bunks
+[0:33:11] like absolute biscuits. People are
+[0:33:14] absolutely wearing absolute biscuits
+[0:33:16] these days. And that's like my narrative
+[0:33:19] for Nike losing cuz everybody bought it
+[0:33:21] into these biscuit ass dad shoes. But uh
+[0:33:24] yeah, what's the true narrative? Cuz now
+[0:33:27] that I'm saying it through to you, you
+[0:33:28] know, it's kind of coming to me why Nike
+[0:33:30] is down. But what is the true narrative
+[0:33:32] and what are the real numbers? Quarter
+[0:33:35] over quarter, year over year. Yeah,
+[0:33:38] dude. Um, big Nike guy. So, I've got a
+[0:33:41] huge bias. Huge bias, but I want to hear
+[0:33:44] the truth. Thank you. All right. So,
+[0:33:48] that's an interesting idea as well.
+[0:33:50] Nike, something's going on there. And,
+[0:33:53] um, oil. That's interesting. Interesting
+[0:33:56] idea there. Well, gas. Okay, that's
+[0:33:58] interesting. Let's see if this was
+[0:34:00] updated here. All right. I mean, that's
+[0:34:01] fine. That's fine. Let's go ahead and
+[0:34:04] make sure I got that update here though.
+[0:34:05] This page is just getting pretty busy to
+[0:34:08] be honest, but I already put the video
+[0:34:10] out. And I hope that adds some
+[0:34:12] clarification to you guys. Let's see
+[0:34:14] what they're saying about Nike. Okay.
+[0:34:15] Well, she's not done yet. So, let's see
+[0:34:17] what they said about this. Great
+[0:34:18] question, Mundav. Let me break it down.
+[0:34:20] Traditional sports betting like
+[0:34:21] DraftKings, FanDuel, and Vegas. How it
+[0:34:23] works. You bet against the house, not
+[0:34:25] other people. You want Lakers to win.
+[0:34:26] You go to DraftKings. They give you odds
+[0:34:29] like 150. Bet 150 to win 100. There is
+[0:34:32] no order book, no bids, no asks, no
+[0:34:34] limit orders. You take their price or
+[0:34:36] you don't. That's it. If a whale wants
+[0:34:39] out, they can't sell their bet. They're
+[0:34:41] stuck. Or they have to hedge by betting
+[0:34:44] the other side at whatever the house is
+[0:34:47] offering. Now, could you get a 20%
+[0:34:50] discount? No. Never. The house sets the
+[0:34:52] price. You can't place a resting bid and
+[0:34:55] wait. The concept doesn't exist. It's
+[0:34:57] like walking into a store. The price tag
+[0:35:00] is the price tag. Prediction markets
+[0:35:02] Poly Market and KHI. How it works. You
+[0:35:04] bet against other people on an open
+[0:35:07] order book. You want Lakers to win.
+[0:35:09] Lakers yes is trading at 65 cents. You
+[0:35:12] place a limit. Buy at 52. Your bid sits
+[0:35:16] on the book. It's visible. It waits. The
+[0:35:18] a whale has 10,000 Lakers shares. Yes.
+[0:35:21] And they need to exit now. Maybe the
+[0:35:23] game is going badly. Maybe they need
+[0:35:26] capital elsewhere. They hit sell hard
+[0:35:29] and if there's not enough liquidity at
+[0:35:31] 65 cents, the price walks down through
+[0:35:33] the book. Your 52 bid gets filled. You
+[0:35:37] just bought Lakers. Yes. At a 20%
+[0:35:40] discount at fair value. Lakers win. You
+[0:35:42] get a dollar per share. You paid 52
+[0:35:44] cents. That's a 92% return. Instead of a
+[0:35:47] 54% return, everyone else got at 65.
+[0:35:52] That is epic. Epic, dude. Epic.
+[0:35:56] Epic. Choose.
+[0:35:58] Why? This is a new paradigm. So,
+[0:36:01] features the order book. Traditional
+[0:36:03] sports books didn't have it. Poly and Ky
+[0:36:06] do limit orders. Stink bits. Impossible.
+[0:36:10] Yes. Poly market do. Sell your position.
+[0:36:13] No, you're stuck. Yes. Anytime. Okay,
+[0:36:16] hold on. So, theoretically, I could have
+[0:36:19] stinks. God, I shouldn't be telling
+[0:36:21] people this, but I could have stinks
+[0:36:22] across both markets. Koshi and Poly
+[0:36:26] Market. Wait for one of those whales to
+[0:36:27] disrupt disrupt the market. Get on one
+[0:36:29] side and then immediately fill the other
+[0:36:31] side on the other market. [ __ ] dude.
+[0:36:34] Poly market one side, call [ __ ] the
+[0:36:36] other. Wait for a whale. Fill that [ __ ]
+[0:36:39] If it fills, take the other sides as a
+[0:36:41] mark side as a market order.
+[0:36:46] Man, man, man. What a world we live in,
+[0:36:48] huh? What a world. Sell your position.
+[0:36:50] You can sell anytime. Whale liquidation
+[0:36:53] creates discount. Bot driven execution
+[0:36:55] against toos everywhere. Fully supported
+[0:36:58] via API. So you can finally use bots to
+[0:37:01] trade sports. That's a huge unlock.
+[0:37:04] Second huge unlock was the discount.
+[0:37:06] Third huge unlock is the ARB. God, you
+[0:37:09] should have never got me started on this
+[0:37:11] call she [ __ ] bro. We're gonna cook
+[0:37:13] today, Appy. We going to cook all day.
+[0:37:17] All day. All day. I should probably log
+[0:37:20] off. I should probably log off. It's
+[0:37:22] getting too hot already. It's just too
+[0:37:23] hot, Tay Tay. It's too hot. It's too too
+[0:37:27] hot. The end of March. [ __ ] This the
+[0:37:31] start of the new year. It's a new year,
+[0:37:33] new me. New year, new me. It's a new
+[0:37:35] moon. So, the key difference in
+[0:37:38] traditional sports betting, there's no
+[0:37:39] counterparty on the other side you can
+[0:37:42] negotiate with. The sports book is the
+[0:37:44] counterparty and they set the price.
+[0:37:47] There's no mechanism to say I'll take
+[0:37:48] 20% less on Poly Market and Kashi.
+[0:37:51] You're trading peer-to-peer on a club.
+[0:37:53] Centralized limit order book. The exact
+[0:37:55] same infrastructure as a stock exchange,
+[0:37:57] stink bids, limit orders, market making,
+[0:37:59] all of it works because there are humans
+[0:38:01] and bots on both sides. This is
+[0:38:03] genuinely new for sports betting. The
+[0:38:05] order book and API combination means you
+[0:38:08] can run the same strategies that quant
+[0:38:09] firms run on stock. Everybody always
+[0:38:12] asks me, where do I get started with
+[0:38:13] trading bots? Well, I put together this
+[0:38:15] road map because I believe code is a
+[0:38:17] great equalizer and I show absolutely
+[0:38:19] everything Wall Street won't show
+[0:38:21] because when I started this, nobody was
+[0:38:23] showing exactly how to build trading
+[0:38:25] bots. So, I had to figure it out by
+[0:38:27] myself. So, I went ahead along the
+[0:38:29] journey. I started to build out a road
+[0:38:31] map. Stop trading by hand, how to build
+[0:38:33] your bot, generate 90 plus trading
+[0:38:35] strategies, how to actually use AI in
+[0:38:38] trading. These are videos here. You can
+[0:38:40] come to my live Zoom calls each day.
+[0:38:42] Come to the discord. This is the trading
+[0:38:44] bot roadmap. Moonv.com/roadmap.
+[0:38:47] Frequently asked questions here. Answer
+[0:38:49] all your questions that are probably in
+[0:38:51] your mind. I give you my actual
+[0:38:52] framework here. RBI system. I give you a
+[0:38:55] ton of different trading strategies and
+[0:38:58] alpha generation techniques. I have a
+[0:39:00] book list. So all the books that I read
+[0:39:02] to get um in tune with this industry,
+[0:39:05] come up with strategies, learn how to do
+[0:39:07] this. I give you my Mundave AI agents. I
+[0:39:09] give you a ton of crypto data. This is
+[0:39:11] insane cuz crypto day is usually
+[0:39:13] expensive. Then I give you a ton of code
+[0:39:15] from these videos. So if you've been
+[0:39:16] watching my videos, I've got the Poly
+[0:39:18] Market code. I've got the hyperlquid
+[0:39:19] code, got some machine learning code.
+[0:39:22] This is in my TradingB road map. And you
+[0:39:25] get this as a bonus. A bonus for just
+[0:39:28] jumping into the next Zoom call. I do
+[0:39:30] Zoom calls every day. There's a link in
+[0:39:31] the description. You get the three-hour
+[0:39:33] Zoom call. You get to chat with me, ask
+[0:39:35] any questions. Plus, you get the full
+[0:39:37] replay of the Zoom call. You actually
+[0:39:39] get the previous Zoom call as well.
+[0:39:42] Plus, you get a bonus of the API key.
+[0:39:44] You get a bonus of the app and you get
+[0:39:47] bonus of the trading bot road mapap. So,
+[0:39:48] I just showed you the road map. The app
+[0:39:50] is how I control all of my AI agents.
+[0:39:53] You get access to that and then the API
+[0:39:55] key controls moon.com/doccks.
+[0:39:58] You get all of this just as a bonus for
+[0:39:59] coming to my next Zoom. You can see
+[0:40:02] there's fivestar reviews. It's only $5
+[0:40:05] as well. It's a 90-day no questions
+[0:40:07] asked money back guarantee, but it's
+[0:40:09] only five bucks and you unlock 3-hour
+[0:40:11] Zoom, the full replay, the previous
+[0:40:13] replay, Mundave API key, the app, and
+[0:40:17] the trading bot road map that I started
+[0:40:18] showing you here at the start. I look
+[0:40:20] forward to seeing you in the next Zoom
+[0:40:22] and really getting to meet you and
+[0:40:23] getting to know you. I'll give you
+[0:40:25] absolutely everything I got every single
+[0:40:27] day. Join in. It's five bucks. There's a
+[0:40:29] link in the description or the chat or
+[0:40:32] somewhere around here. I'll see you
+[0:40:34] there, Mark. Stock exchanges, but on
+[0:40:37] sports, weather, politics, Elon, tweets,
+[0:40:39] anything. That's a paradigm shift.
+[0:40:41] That's literally a cross exchange
+[0:40:42] arbitrage triggered by whale
+[0:40:44] liquidation. The logic. Place stink bids
+[0:40:46] on Poly Market at - 20% on the Lakers.
+[0:40:49] Yes. Play stink bids on Koshi at - 20%
+[0:40:53] on Lakers. Yes. Whale dumps on Poly
+[0:40:55] Market. Your 52 cent filled immediately
+[0:40:58] market sell on KHI 65. You're locked in
+[0:41:03] with a 13 cent profit per share
+[0:41:05] risk-free. Doesn't matter who wins.
+[0:41:08] You're not betting on the Lakers
+[0:41:10] anymore. You're betting on the whale and
+[0:41:11] patience. The beautiful part, you
+[0:41:13] already have the infrastructure for
+[0:41:15] this. Look at your arsenal. Yeah. So, I
+[0:41:18] mean, realistically, we could also just
+[0:41:22] sit there on Poly Market. You could
+[0:41:26] feel that whale disruption and then just
+[0:41:30] sell when it gets back to parody. Right.
+[0:41:32] This doesn't even need to be a gross
+[0:41:33] exchange thing, but I feel like in the
+[0:41:35] long run, it's just going to take some
+[0:41:36] testing, but the long run, I think it's
+[0:41:38] going to be about holding to expiration.
+[0:41:40] So, what I want you to do is for in our
+[0:41:43] sports folder, I want you to go ahead
+[0:41:44] and build that out. You have a scanner
+[0:41:46] for all the sports uh things, all the
+[0:41:50] sports, what do you call those? Games.
+[0:41:52] Yeah. And essentially, I want you to go
+[0:41:54] ahead and um put 30% stink bids on them
+[0:42:00] all. Uh let's start just with the NBA.
+[0:42:02] So all the NBA games and we'll put $2
+[0:42:04] size stink bids 30% stink. Make that a
+[0:42:08] variable up top and we'll just stink on
+[0:42:10] the
+[0:42:12] poly market and then eventually we'll
+[0:42:13] get over to Koshi as well cuz we're
+[0:42:15] cooking over there now as well. But
+[0:42:16] we'll start with the poly market
+[0:42:18] stinkies. You have everything you need
+[0:42:19] for that. I mean you could look at the
+[0:42:21] no bots, you could look at the the
+[0:42:22] weather bots. Those are both recent like
+[0:42:24] the weather's super recent. So, the
+[0:42:27] functionality, you should set it up in a
+[0:42:28] way that can't be multi- account like
+[0:42:30] the weather bots, but we'll use the OG
+[0:42:31] account for this test. We're only going
+[0:42:33] to bid the NBA games here today. Now,
+[0:42:36] there's a huge caveat here. You got to
+[0:42:38] be able to get the score of the game and
+[0:42:40] the time left in the game. So, I think
+[0:42:42] we have a ESPN style thing in our sports
+[0:42:44] thing that shows the scanner and what
+[0:42:46] type time the game is. Essentially, I
+[0:42:49] only want this running. I want to cancel
+[0:42:51] all bids after the first half. Okay. So,
+[0:42:56] I want to if we didn't fill before the
+[0:42:58] first half, I want it all cancelled. See
+[0:43:00] what I'm saying? So, if it's the second
+[0:43:01] half has started, we're going to cancel
+[0:43:03] all orders. If we filled, okay, we hold
+[0:43:06] the expiration. So, there's going to be
+[0:43:07] no sell here. It's just going to be you
+[0:43:10] have to be very clear on this part like
+[0:43:11] what is the time left in the game. In
+[0:43:15] basketball, there are four quarters. 1 2
+[0:43:17] 3 4. If it's the first or the second
+[0:43:20] quarter, the bids can stay. It will just
+[0:43:22] sit there. 30% discount. I just thought
+[0:43:25] of something though. We're gonna have to
+[0:43:26] get the odds. No, no, no, no, no, no.
+[0:43:28] We'll pick the higher side. Whichever
+[0:43:30] side is more expensive, they've got the
+[0:43:32] advantage. They've got the odds, right?
+[0:43:34] So, if if one side is 60, yes, for
+[0:43:37] Lakers winning, okay, we're going to
+[0:43:39] take that side, but we're going to take
+[0:43:40] 30% discount. So, that is essentially
+[0:43:44] looking all day. Who has the odds? Well,
+[0:43:46] the Lakers have the odds. They're at 62
+[0:43:48] cents, right? So, we're going to take a
+[0:43:50] 30% bid on that and just sit there all
+[0:43:53] the way until the end of the second
+[0:43:54] quarter. At the end of the second
+[0:43:56] quarter, if we haven't filled, that game
+[0:43:57] is over for us. We're going to do that
+[0:43:59] for all NBA games tonight. Tonight,
+[0:44:03] we're going to have the data back
+[0:44:04] tomorrow. [ __ ] I mean, let me know. Let
+[0:44:06] me know if you have any questions before
+[0:44:08] you start, but I think I yapped enough
+[0:44:10] for you to build this out. I always say
+[0:44:12] the weather bots probably their best
+[0:44:14] example. They're the freshest. No market
+[0:44:16] still running too, but you [snorts] got
+[0:44:18] all the code you need in order to build
+[0:44:20] this. You already got the sports scanner
+[0:44:21] as well. I think that shows the the
+[0:44:25] times um of the games and you'll be able
+[0:44:27] to see what quarter they're in. Okay, so
+[0:44:29] I think she's good off that. Sweet,
+[0:44:31] dude. Well, I know I said I was setting
+[0:44:33] up calli. I did. I set up the call she
+[0:44:35] scanner. I set up all the call she
+[0:44:37] scanners and stuff. So, that was far. Um
+[0:44:39] let's go ahead and put the the um the
+[0:44:42] public [clears throat] on an ad here cuz
+[0:44:43] I Hey, Moonve here. I wanted to explain
+[0:44:47] what you're going to get when you join
+[0:44:49] here today. It's five bucks. It's a Zoom
+[0:44:52] call. Really filtering out the noise. If
+[0:44:54] you're serious about this industry and
+[0:44:56] you want to see everything that I'm
+[0:44:57] building, then jump into the Zoom. There
+[0:45:01] are some major differences from the
+[0:45:03] public stream. The Zoom call that you'll
+[0:45:06] be joining here today has no ads, no
+[0:45:10] breaks, and you can actually chat with
+[0:45:13] me all day long.
+[0:45:15] Nobody else will have access to chat in
+[0:45:18] the public. They'll have massive ad
+[0:45:21] breaks and honestly sometimes I just
+[0:45:23] forget to turn it off. So it's usually
+[0:45:26] 12 minutes, sometimes 36, 48. So you'll
+[0:45:29] miss a lot if you don't join the Zoom.
+[0:45:32] You also get the replay from yesterday.
+[0:45:35] So yesterday or the previous Zoom. So
+[0:45:37] the previous Zoom call, you get that
+[0:45:40] replay. So, it's kind of like buy one
+[0:45:42] Zoom get one free as you get the next
+[0:45:45] Zoom and you get the last Zoom's replay.
+[0:45:48] And if you can't make the time, this
+[0:45:50] time is always going to change here.
+[0:45:52] It's always going to be different. It's
+[0:45:54] going to be two to two to four hours,
+[0:45:55] I'd say, majority of the time. And if
+[0:45:58] you can't make it at this specific time,
+[0:46:01] don't worry because on top of
+[0:46:03] yesterday's or the previous streams
+[0:46:05] replay, you get this stream's replay as
+[0:46:08] well. I know we're all over the world
+[0:46:11] here and we're all stepping on the gas.
+[0:46:13] So, I'd love to meet you sometime if you
+[0:46:15] can show up live to the Zoom. But don't
+[0:46:17] worry if you can't because you get the
+[0:46:20] full replay that is not accessible
+[0:46:22] anywhere else in the world. It's not on
+[0:46:25] YouTube, not on Twitter. If you want the
+[0:46:27] replay for the next stream and the
+[0:46:30] replay from the last stream, all you
+[0:46:32] have to do is get a ticket here today.
+[0:46:34] It is $5 to filter out the noise. Now, I
+[0:46:37] want to make this the greatest
+[0:46:39] experience ever. You pay five bucks, you
+[0:46:41] get a you get the past zoom, you get the
+[0:46:44] next Zoom, and you get both replays.
+[0:46:47] They aren't available anywhere in the
+[0:46:49] world. It's already worth well past $5,
+[0:46:52] I hope. But I wanted to make it an
+[0:46:55] absolute no-brainer. So, you can see I
+[0:46:59] give you 24hour API access and some
+[0:47:03] other massive bonuses that I just want
+[0:47:05] to go over really quickly. So, you're
+[0:47:07] crystal clear on what you'll get when
+[0:47:09] you join. First and foremost, you're
+[0:47:11] paying the five bucks for the Zoom call,
+[0:47:13] the next Zoom, and you get that replay
+[0:47:15] as well. And then you get the past Zooms
+[0:47:17] replay as well. But since you're going
+[0:47:19] to be watching over my shoulder while
+[0:47:21] I'm chasing Jim Simons, the $ 31 billion
+[0:47:25] man, I can't really teach in the next
+[0:47:28] Zoom. So, what I did is I put together a
+[0:47:31] threehour
+[0:47:33] stepbystep master class on how you can
+[0:47:36] get your trading bots live. It's a
+[0:47:38] three-hour training that when you join
+[0:47:41] right now, you'll get instant access to.
+[0:47:44] So, I don't know what time it is
+[0:47:46] compared to when the Zoom starting, but
+[0:47:48] hey, you might have 3 hours to watch
+[0:47:50] that right now or next week or whenever.
+[0:47:53] But this is a step-by-step master class
+[0:47:56] helping you automate your trading. This
+[0:47:59] will be teaching while you'll be
+[0:48:01] watching over my shoulder at the next
+[0:48:02] Zoom. So, I just wanted to make this be
+[0:48:04] a really great bonus because this right
+[0:48:06] here is well worth way more than five
+[0:48:09] bucks. I'm excited for you to get into
+[0:48:12] this industry. I don't know where you
+[0:48:13] are, but hey, if you're just starting,
+[0:48:15] this is going to be super helpful for
+[0:48:16] you. But I wanted to make sure that this
+[0:48:19] was even better. So, you get the the
+[0:48:21] Zoom session, the next Zoom session, you
+[0:48:23] get both replays, the past Zoom, the
+[0:48:26] next Zoom, you get the how to automate
+[0:48:28] your trading master class, which is a
+[0:48:30] three-hour step-by-step master class,
+[0:48:32] but then if you show up live tomorrow,
+[0:48:35] these are 24-hour bonuses that you get
+[0:48:38] right when you show up live. There's a
+[0:48:40] few times throughout the day, you know,
+[0:48:42] depending on what time you get there,
+[0:48:44] I'll drop all of these bonuses in the
+[0:48:46] chat. So, these are live show up bonuses
+[0:48:48] and you get them for 24 hours, but each
+[0:48:52] one of these would cost a few hundred
+[0:48:54] per month anyways. So, I just wanted to
+[0:48:56] go ahead and give you a free bonus so
+[0:48:59] you can kind of see what we're working
+[0:49:00] with here. I built the Hyperlid data
+[0:49:03] layer Mundev API and you get that for 24
+[0:49:07] hours when you get access to the Zoom.
+[0:49:10] So go to mundave.com/doccks
+[0:49:13] and you can go ahead and explore the
+[0:49:15] Hyperlquid data layer API. Essentially,
+[0:49:18] if you're trading on Hyperlquid, you're
+[0:49:20] going to get data so much faster. But
+[0:49:23] not just that, you're going to be able
+[0:49:24] to see people's positions. And that API
+[0:49:27] also bundles in the Mundev AI. So
+[0:49:30] there's a ton of endpoints here.
+[0:49:32] mundave.com/doccks.
+[0:49:34] You can go ahead and explore it. And
+[0:49:36] hey, maybe this right here is such a
+[0:49:40] great bonus for you that you'll join the
+[0:49:42] Zoom call. You get this for 24 hours and
+[0:49:45] you can explore, use all of the data you
+[0:49:47] need, do whatever you want to do. This
+[0:49:50] is such a great data source and you can
+[0:49:52] read all about it. mundev.com/doccks.
+[0:49:56] I mentioned you also get the Mundev AI
+[0:49:58] in that API key. So what I do is each
+[0:50:01] day in the chat I drop the API key. It's
+[0:50:04] 24-hour access. I use the same API key
+[0:50:08] as you. So, you know, it's going to be
+[0:50:10] robust because if the API key goes down,
+[0:50:13] I'm using the same one. I put it in the
+[0:50:15] chat every every day. Every time I get
+[0:50:18] on Zoom, it's a new key. So, it's
+[0:50:20] 24-hour access, and it's a bonus just to
+[0:50:23] actually show up. Now, I know if you're
+[0:50:26] living on the other side of the world,
+[0:50:27] that might be hard. I'm sorry about
+[0:50:28] that, but I tried to make this well
+[0:50:30] worth $5. Anyways, you get both replays,
+[0:50:33] previous, the next, and you get the
+[0:50:35] three-hour master class on how to
+[0:50:37] automate your trading if you can show up
+[0:50:39] even for a few minutes. Come in, get the
+[0:50:41] key. On top of that, you get the Moondev
+[0:50:44] app. The Mundev app is where I do all of
+[0:50:47] my do all of my coding and I can see
+[0:50:50] everybody's position. You can see the
+[0:50:52] API key powers this as well. So, you put
+[0:50:55] the API key in here, you say unlock app.
+[0:50:58] So you can see I have four different cla
+[0:51:00] codes and sometimes I have up to six
+[0:51:02] claude codes. This is on the code tab.
+[0:51:05] On the trade tab I can see everybody's
+[0:51:08] position. This is insane. We weren't
+[0:51:10] able to see this before. You can see
+[0:51:12] this guy gets liquidated in 7%. This guy
+[0:51:15] gets liquidated in8%. This guy has a
+[0:51:18] $8.5 million ETH long that he gets
+[0:51:21] liquidated in 1.2%. This guy has a 3
+[0:51:24] million BTC short. This is the stuff
+[0:51:26] that you've always been skeptical about.
+[0:51:28] They can see my positions. Yes, Wall
+[0:51:30] Street has been able to see your
+[0:51:31] positions, but finally we have the power
+[0:51:34] to see other people's positions. So, the
+[0:51:36] Mundev app is where I get an edge in
+[0:51:38] trading and I'm able to code so much
+[0:51:41] faster because if you've been using
+[0:51:43] Claude Code, you know the context
+[0:51:45] switching is the hardest thing. Flipping
+[0:51:47] through all these different tabs here
+[0:51:49] trying to figure out which one has what
+[0:51:51] thing you're working on, it was a mess.
+[0:51:53] So, I built it right into here. I also
+[0:51:56] went ahead and I put back testing in
+[0:51:57] here. So instead of fiddling around
+[0:51:59] trying to figure out how to back test
+[0:52:01] without AI. AI is built into this. I
+[0:52:04] also here you can get open high low
+[0:52:06] closed volume data. You want one hour
+[0:52:09] data for the last 400 weeks on BTC
+[0:52:12] whatever ETH soul. This is data that
+[0:52:15] would cost you so much money. This is
+[0:52:17] crazy that I'm giving it as a bonus just
+[0:52:20] for joining the zoom. I believe code's
+[0:52:22] the great equalizer. I give you
+[0:52:25] absolutely everything because I know if
+[0:52:28] you take this serious and you actually
+[0:52:31] attack this industry, the worstc case
+[0:52:34] scenario is you learn how to code.
+[0:52:36] That's how I looked at it at least.
+[0:52:38] Okay, I can spend a couple years chasing
+[0:52:41] Jim Simons. I have to learn how to code.
+[0:52:43] Best case scenario, I have a bunch of
+[0:52:46] profitable trading bots trading for me
+[0:52:48] 24/7. Blessed. But at the time, worst
+[0:52:50] case scenario was I know how to code and
+[0:52:52] I've been scared of learning how to code
+[0:52:53] my entire life. I believe code is a
+[0:52:55] great equalizer and that's why I share
+[0:52:57] this so freely. I had to tighten up a
+[0:52:59] little bit. I got hacked a couple times.
+[0:53:01] I've got a lot of trolls in the chat. It
+[0:53:03] is what it is. It comes with the
+[0:53:05] territory. I love this game. I'm going
+[0:53:07] to keep sharing absolutely everything
+[0:53:09] every single day. But I had to put a $5
+[0:53:12] wall up. It's nothing crazy. By the way,
+[0:53:15] there's a 90-day no questions asked
+[0:53:18] money back guarantee. So, if you don't
+[0:53:20] absolutely love what you see in the Zoom
+[0:53:23] or the past Zoom or the TradingBot
+[0:53:26] master class or you don't get any value
+[0:53:27] out of the API or the AI or the Mundev
+[0:53:31] app, I didn't even talk about the road
+[0:53:33] map yet. People always ask me, Mmundave,
+[0:53:35] please write a book. I think this is
+[0:53:37] better than a book because this grows
+[0:53:39] with me. You can see you just use your
+[0:53:41] API key. Put the API key in there and
+[0:53:45] you have 24hour access to this as well.
+[0:53:48] This will hold your hand through the
+[0:53:50] process of building a trading bot. I
+[0:53:52] have a lot of free resources. If you
+[0:53:54] want to go the free route, this is the
+[0:53:56] best way. You can see it just opens up
+[0:53:58] videos here, video after video,
+[0:54:01] >> some of my top videos. Join the Discord.
+[0:54:04] Bunch of bunch of frequently asked
+[0:54:06] questions. You can explore the YouTube.
+[0:54:08] Join the Discord. these frequently asked
+[0:54:10] questions you probably have in your mind
+[0:54:12] right now. So, I'll answer them for you.
+[0:54:15] But not only that, I give you my actual
+[0:54:17] system. The process of automating your
+[0:54:19] trading starts with research of trading
+[0:54:21] strategies. Then you back test those
+[0:54:23] strategies to see if they actually work
+[0:54:25] in the past. If they work in the past,
+[0:54:27] they're not guaranteed to work in the
+[0:54:28] future, but they're much more likely.
+[0:54:30] So, I follow the RBI system. This took
+[0:54:33] years to create, and you get it as a
+[0:54:35] bonus just for joining me in the Zoom
+[0:54:38] call. I'm so down to share all of this
+[0:54:41] information to the entire world, but
+[0:54:43] there's bad actors out there. Throw
+[0:54:45] five. I know you're a legit guy. RBI,
+[0:54:48] research, back test, and then incubate
+[0:54:50] into smalls size bots. You can see I
+[0:54:52] even give you ideas out of my personal
+[0:54:56] idea book. I also give you a book list
+[0:54:58] that will show you exactly what books
+[0:55:00] you need to read if you're just getting
+[0:55:01] started with this. And then again,
+[0:55:03] another data source so you can get
+[0:55:04] unlimited data. Plus, you've seen me
+[0:55:07] drop in YouTube videos code from videos.
+[0:55:09] So, I've got the HIPP3 liquidation
+[0:55:12] trading bot, the HIP3 funding rate
+[0:55:15] scanner, the Poly Market Hyperlquid
+[0:55:17] liquidation statistical arbitrage, the
+[0:55:19] Poly Market 5m minute bot, the CVD 5m
+[0:55:22] minute bot, the MACD 5m minute back
+[0:55:24] test, the MACD histogram, the XG Boost
+[0:55:27] RAW candle ML on the BTZ 5m minute, the
+[0:55:30] Poly Market Weather Scanner, the Poly
+[0:55:32] Market Redemption Bot. I'm down to give
+[0:55:35] you. All right, so this is my API that I
+[0:55:37] use. Moonv.comdocs
+[0:55:39] goes ahead and explains it. It's a bunch
+[0:55:41] of hyperlquid data. There's also some
+[0:55:43] Polymarket data on here. But one of my
+[0:55:45] favorite things is I get to see
+[0:55:47] everybody's liquidations. So I see
+[0:55:49] everybody's liquidations at all times
+[0:55:52] across multiple accounts. I have Binance
+[0:55:54] liquidations in here. I have Hyperlid
+[0:55:56] liquidations. You can see it for stocks,
+[0:55:58] etc. Binance futures liquidations here.
+[0:56:01] This is moonab.com/doccks if you want to
+[0:56:03] explore the documentation right now. But
+[0:56:05] the thing that I really, really, really
+[0:56:08] like is I love to be able to see
+[0:56:10] everybody else's positions because this
+[0:56:12] wasn't possible before Hyperlid. You can
+[0:56:16] see literally every single person's
+[0:56:19] positions and you can just scroll
+[0:56:22] through here and see how to do it on the
+[0:56:24] docs. It's pretty amazing. You just call
+[0:56:26] the API and you're able to see exactly
+[0:56:29] where is everybody else positioned,
+[0:56:32] where are they going to get liquidated,
+[0:56:34] how close are they getting to getting
+[0:56:35] liquidated. All of these things you
+[0:56:37] weren't able to see before hyperlquid,
+[0:56:39] but now you can see them through this
+[0:56:42] API. And the cool thing about this API
+[0:56:44] is if you come to my next Zoom call,
+[0:56:46] it's only five bucks. You get a
+[0:56:47] three-hour Zoom, the full replay, you
+[0:56:49] get the API key as a bonus. So
+[0:56:51] moon.com/doccks shows the API key.
+[0:56:54] There's a link in the description to
+[0:56:56] join the Zoom. You get it as a free
+[0:56:57] bonus. You also get my app which helps
+[0:57:00] me control all of my AI agents you watch
+[0:57:03] me use all day. And you get the road
+[0:57:04] map. The road map will hold your hand
+[0:57:06] through the process of automating your
+[0:57:08] trading. But this API key literally not
+[0:57:11] even Wall Street has this. So you're
+[0:57:14] able to see every single person's
+[0:57:15] positions. You're able to see be able to
+[0:57:17] get all the liquidations across all of
+[0:57:20] the different exchanges. This is insane
+[0:57:22] that I give it to you for a free bonus.
+[0:57:24] Go ahead and click the link in the
+[0:57:26] description or the chat. It's only five
+[0:57:28] bucks. Jump into the Zoom. It's a
+[0:57:30] three-hour Zoom. You get the full replay
+[0:57:31] just in case you can't be there. And you
+[0:57:33] get the API key app and the Trading B
+[0:57:37] road map. I'll see you there.
+[0:57:39] Everything. I've given these people
+[0:57:40] everything. They've had such great
+[0:57:42] things to say. They say I've changed
+[0:57:44] their life. Okay. I just can't do that
+[0:57:46] all in the public now. I want to make
+[0:57:48] sure that I'm only communicating PE with
+[0:57:50] people that are serious about this
+[0:57:51] industry. So, it's five bucks to get
+[0:57:54] into the Zoom. And you can see I can
+[0:57:56] keep going of all the bonuses you're
+[0:57:58] going to get and what that API opens.
+[0:58:01] But this is the lion share, dude. You
+[0:58:03] get to be able to watch everything.
+[0:58:05] You're able to chat. You're able to
+[0:58:07] connect with others that are serious
+[0:58:09] about this industry. You get in the
+[0:58:11] Discord. All that for five bucks. The
+[0:58:13] API key, I'm not going to spend too much
+[0:58:15] more time on it because it opens a lot
+[0:58:18] of things. You see, this is a paid
+[0:58:19] product from some people. They're
+[0:58:21] charging you a hundred hundred some
+[0:58:23] dollars for this. You want to trade on
+[0:58:24] Poly Market, I see every single trade
+[0:58:26] that comes through. I can say, "Hey, I
+[0:58:28] only want to see trades that are over a
+[0:58:29] thousand. Hey, I only want to see
+[0:58:31] whales. Hey, I only want to see the no
+[0:58:33] markets. Hey, I want to see the ones
+[0:58:35] with actual edge. Hey, I want to see
+[0:58:37] what markets are closing soon." This is
+[0:58:39] Poly Market stuff that you can't get
+[0:58:41] access to without that API key.
+[0:58:43] Moon.com/poly
+[0:58:44] market if you want to check it out now.
+[0:58:46] This is unbelievable. You can look
+[0:58:48] around. There are other companies
+[0:58:50] selling this type of stuff. A couple
+[0:58:52] hundred bucks a month. It's free. It's
+[0:58:54] free when you join. You can see over
+[0:58:56] here. This is another place to see
+[0:58:57] everybody's positions. So, you'll have
+[0:58:59] the app. You can see it there or you can
+[0:59:01] see it on the web. Feel free to join the
+[0:59:03] arena. We're building out a leaderboard
+[0:59:06] here. This is free to join. You don't
+[0:59:08] have to join the Zoom. You don't have to
+[0:59:09] pay me anything ever to join the
+[0:59:11] arena.com/arrenena.
+[0:59:13] People are competing to predict the next
+[0:59:17] hourly price or 5 minute price on
+[0:59:20] Bitcoin. Worshoski has been killing
+[0:59:22] them. Eight correct, two wrong. Okay,
+[0:59:25] the weekly here. Papo here. 13 correct,
+[0:59:28] four wrong. These are people in our
+[0:59:30] community. If you want to be great at
+[0:59:32] something, you must be around other
+[0:59:34] people that are trying to be great as
+[0:59:37] well. You know that. I don't need to
+[0:59:38] tell you that. But that's what this Zoom
+[0:59:41] has created. You know, I got hacked big
+[0:59:43] time December. All the other quants got
+[0:59:46] mad at me. I share too much stuff. Wall
+[0:59:48] Street doesn't like this. I get it.
+[0:59:50] People are attacking. So, what do I have
+[0:59:52] to do? I have to change up. You've seen
+[0:59:54] me for the last 5 years stream all this
+[0:59:56] for free on YouTube. Free. But now I
+[0:59:58] can't because some people hate me. And
+[1:00:01] the things that I show here, dude. The
+[1:00:03] people I talk to, I leak too much. I'm
+[1:00:05] not going to conversate with somebody
+[1:00:06] who's trying to take me down. It is what
+[1:00:09] it is. Not going to show everything to
+[1:00:11] the public stream. When things get real
+[1:00:14] crazy, I just throw this ad on and I can
+[1:00:17] talk about how many bonuses you get for
+[1:00:19] 20, 30 minutes. So, if you're seeing
+[1:00:21] this right now, well, if you don't want
+[1:00:24] to see this again, jump into the Zoom.
+[1:00:26] It's five bucks. You're a trader. It's
+[1:00:29] nothing for you. It's just a
+[1:00:30] verification meth method. it I it's been
+[1:00:33] very effective to get rid of 95% of
+[1:00:36] trolls or people that are just trying to
+[1:00:38] waste time or you know how it goes. Look
+[1:00:40] at look at all live stream chats. So
+[1:00:43] feel free to jump in. It's going to be
+[1:00:45] fire. I'm going to show you everything
+[1:00:47] I'm building in the day. You're going to
+[1:00:48] get a full replay in case you can't make
+[1:00:50] it and you get the previous replay.
+[1:00:53] That's awesome. On top of that, I hold
+[1:00:55] your hand through the process of
+[1:00:56] automating your trading. I give you a
+[1:00:58] ton of bonuses here. the API key. You
+[1:01:01] saw what it opened up. It opened up the
+[1:01:03] Poly Market scanner. That would be a few
+[1:01:04] hundred bucks. The API documentation.
+[1:01:07] This hopping and there's been some win
+[1:01:09] winners here. So, the hourly ends the
+[1:01:12] 1795 here. It ends um in 3 days. Okay.
+[1:01:17] But every day if you join the hourly,
+[1:01:19] you also join the the daily 5 minutes.
+[1:01:22] So, this is weekly and this is a five
+[1:01:25] minute. You could read about the the
+[1:01:26] arena if you want to join this. You win
+[1:01:28] a on the weekly one a $1795 credit here.
+[1:01:32] I'll show you what you can use that
+[1:01:33] credit on here in a bit. On the daily,
+[1:01:36] you win a $50 NFT that you can trade for
+[1:01:40] dollars or whatever you want. Worshoski
+[1:01:42] is going to own all of them by the end
+[1:01:44] of this. He's cooking you guys. But
+[1:01:46] let's see if you can compete. He said he
+[1:01:48] learned everything he knows from my boot
+[1:01:51] camp, which is cool. But that's the
+[1:01:53] thing is I could show you absolutely
+[1:01:54] everything and you could just fly by me.
+[1:01:56] That's the point. That's the point. So,
+[1:01:58] the point here is I show you everything
+[1:02:00] I know. Get you caught up to speed with
+[1:02:01] me and then you could go show everybody.
+[1:02:04] Boom. You could compete, dude. You can
+[1:02:06] go compete and win a bunch of credits
+[1:02:08] for now. But hopefully this will be cash
+[1:02:10] soon once this works out. And um yeah, I
+[1:02:13] want to get some of these five minute
+[1:02:15] winners here. So, we'll do that in a
+[1:02:16] bit. The 1795. What could you use that
+[1:02:19] on? Well, I see already today in the
+[1:02:22] chat multiple times, how do I get
+[1:02:24] started from scratch? Well, this is how
+[1:02:27] you get started from scratch. Now, I
+[1:02:30] didn't know how to code before I started
+[1:02:32] automated trading. So, I literally can
+[1:02:34] hold your hand through the process of
+[1:02:36] never coding a day in your life, maybe
+[1:02:38] even being scared of it. And I can hold
+[1:02:41] your hand through the process of getting
+[1:02:42] your trading bots live. So, I got a lot
+[1:02:46] more to get done today, but to respect
+[1:02:48] your time and to respect the schedule
+[1:02:50] and to respect everybody here, I will
+[1:02:52] spend 10 minutes showing you step by
+[1:02:55] step how you can get access to
+[1:02:57] everything I have in more of a teaching
+[1:02:59] manner opposed to what you saw today.
+[1:03:02] And every single day, it's going to be
+[1:03:03] over the shoulder. And I hope that's
+[1:03:05] very valuable within itself. Well, I
+[1:03:07] know it is because you guys keep coming
+[1:03:09] back to the streams. So, that's fire.
+[1:03:12] This is what you'll get if you join
+[1:03:14] today. Now, it's not three thou $3,000,
+[1:03:16] but that's the value of the boot camp.
+[1:03:19] I'll show you step by step how to get
+[1:03:21] your trading bots live, even if you've
+[1:03:23] never coded a day in your life. It's a
+[1:03:25] six week boot camp with short and
+[1:03:27] concise videos where I hold your hand
+[1:03:30] through the process of automating your
+[1:03:32] trading, how to get your bots actually
+[1:03:34] live, even if you don't know how to
+[1:03:36] code. We've had hundreds of people just
+[1:03:38] like yourself find me somewhere on
+[1:03:39] YouTube or Twitter, join this Zoom call,
+[1:03:41] and join. They've had success, so
+[1:03:43] there's no reason you can't. I'll show
+[1:03:45] you all the testimonials later, but
+[1:03:47] you've probably seen a bunch of them.
+[1:03:48] You see, I don't even code by hand
+[1:03:50] anymore, but I'll show you step by step
+[1:03:52] how to have AI do all the heavy lifting
+[1:03:54] like she does for me. Those are in the
+[1:03:56] AI master classes. You get that as well.
+[1:03:58] You also get the Solana CopyBot and
+[1:04:00] Sniperbot course. Two full courses here
+[1:04:03] that you get access to when you join
+[1:04:05] today. This is lifetime access. You
+[1:04:07] never have to pay me again ever for
+[1:04:09] anything. It's a $7,000 value and I have
+[1:04:12] so much more to give you. You're going
+[1:04:14] to get the Algo Trade Camp, which holds
+[1:04:16] your hand through the process of getting
+[1:04:17] your trading bots live. Even if you've
+[1:04:19] never coded a day in your life right
+[1:04:21] now, you're probably wasting your life
+[1:04:22] staring at the charts, stressed out,
+[1:04:26] borderline depressed. It sucks. You're a
+[1:04:29] hardworking person. Me, too. But trading
+[1:04:31] by hand, it's not good for hardworking
+[1:04:33] people because you're just going to
+[1:04:34] trade more and you're just going to lose
+[1:04:36] more. So for the rest of your life, you
+[1:04:38] can rely on having trading bots trading
+[1:04:41] for you instead of you trying to trade
+[1:04:43] by hand and just wasting your life. I'll
+[1:04:46] show you how to build it on any
+[1:04:47] exchange. I'll show you how to build on
+[1:04:49] Solana. I'll also show you how to build
+[1:04:51] on Poly Market. And if I get my bots
+[1:04:54] live on Calli, I'll show you that, too,
+[1:04:56] because you get access to everything
+[1:04:58] forever. This is lifetime all access.
+[1:05:01] You get unlimited private Zoom calls. So
+[1:05:03] you'll never have to pay $5 to $20 again
+[1:05:05] for these private Zooms. And then you
+[1:05:07] get the behemoth which is Quantite. This
+[1:05:10] is 300 bots and back test. You see how I
+[1:05:13] cooked up a couple ideas today. I've
+[1:05:15] been doing this for 5 years and every
+[1:05:17] single week I drop new code into Quant
+[1:05:20] Elite. You can literally join today and
+[1:05:23] you'll be able to get access to the
+[1:05:25] members area, of course, connect with
+[1:05:27] other people, but you'll be able to
+[1:05:29] scroll through Quant Elite for hours if
+[1:05:32] not days. There are so many bots and
+[1:05:34] back tests to get you to a point where
+[1:05:36] you're just so far ahead of anybody else
+[1:05:39] and they'll never be able to catch up.
+[1:05:41] So, the whole premise of this package is
+[1:05:43] to get you caught up to speed with me.
+[1:05:46] Some of you guys may already have the AI
+[1:05:48] master classes. That's awesome. Maybe
+[1:05:50] you already have the algo trade camp.
+[1:05:52] That's awesome. But nobody has lifetime
+[1:05:55] all access to Quant Elite except the
+[1:05:58] people that have joined this in the last
+[1:06:00] couple months. This won't be here
+[1:06:01] forever because this is all access to
+[1:06:04] everything and I give you some crazy
+[1:06:06] bonuses like the Mundev Vault. The
+[1:06:08] Mundev Vault has 100 plus live streams
+[1:06:12] from the past that are not available on
+[1:06:15] YouTube or anywhere else and I just keep
+[1:06:17] adding and adding and adding and adding
+[1:06:19] to them because we keep going. So, if
+[1:06:21] you want to dive into the nitty-gritty,
+[1:06:23] that's where you'll find everything. You
+[1:06:25] also get the Mundv API key. A lot of
+[1:06:27] people have asked, "Hey, drop the API
+[1:06:29] key. Drop the API key." Uh, for now,
+[1:06:32] I've been giving it away for 24 hours to
+[1:06:34] people that come to the Zoom. You heard
+[1:06:36] about that earlier. If you want your own
+[1:06:38] API key, lifetime version, you already
+[1:06:42] know how to see what it does.
+[1:06:43] Moonub.comdoccks.
+[1:06:46] If you want one for life, you can have
+[1:06:48] your own if you join today. And that's
+[1:06:50] just a bonus because this is a
+[1:06:52] transformation. Right now, you're
+[1:06:53] stressed out trading by hand, losing
+[1:06:56] money. You know, when you look around,
+[1:06:58] the only people making money are
+[1:07:01] automated traders. Jane Street,
+[1:07:03] Renaissance, Citadel, Jim Simons, all
+[1:07:07] automated traders. You get the API key
+[1:07:10] along with step-by-step short concise
+[1:07:12] videos that will teach you exactly how
+[1:07:14] to get your trading bots live so you
+[1:07:16] don't have to live that stressed out,
+[1:07:18] depressed life ever, ever again. How
+[1:07:21] many times did you see me checking the
+[1:07:23] charts nervously today? Maybe like once
+[1:07:26] or twice when I was looking into this
+[1:07:27] Nike stuff. But if you truly have good
+[1:07:30] ideas, you should have robots trade them
+[1:07:33] for for you instead. Like there's no
+[1:07:36] reason to waste your life, right? We all
+[1:07:38] got into trading so we could get our
+[1:07:40] time back. Isn't that correct? It's kind
+[1:07:42] of funny how we all just stare at these
+[1:07:43] charts all day. I don't do that. I
+[1:07:45] haven't done that in years. And I was
+[1:07:47] just like you scared to learn how to
+[1:07:49] code, but now we have AI that does
+[1:07:51] everything for us. So I'll show you how
+[1:07:52] to get your bots live and have AI do all
+[1:07:55] the heavy lifting. Plus, I'll show you
+[1:07:57] how to build on Solana and Poly Market.
+[1:08:00] So, you could be a powerful coin, not
+[1:08:02] just a one-trick pony, right? I want to
+[1:08:05] show you how to build bots for any
+[1:08:07] market for the rest of your life because
+[1:08:09] just like me, like I've experienced this
+[1:08:11] throughout. I started on one exchange on
+[1:08:13] FEMX, okay? And then Hyperlid dropped,
+[1:08:17] DYDX dropped. There's new markets always
+[1:08:19] popping up. Solana dropped, Poly Market
+[1:08:21] dropped. I want to make you a powerful
+[1:08:23] quant. I'll do that here step by step.
+[1:08:26] I'll also give you my trading bot GitHub
+[1:08:28] which is another $5,000 value as there's
+[1:08:31] a 100 plus bots and back test is my real
+[1:08:33] GitHub that I upload to and the most
+[1:08:36] craziest AI agent GitHub in the world.
+[1:08:38] It was one of the fastest ever. I took
+[1:08:40] it down cuz I got hacked. Everything is
+[1:08:42] behind closed doors now. I'm not sharing
+[1:08:44] this with the public. Everything you
+[1:08:46] join here when you [snorts] get lifetime
+[1:08:48] access, nobody else has access to this.
+[1:08:50] Everybody else is going to be trying to
+[1:08:52] stress out and put the pieces together
+[1:08:54] through my videos. Good luck. I show
+[1:08:56] everything I do. But a,000 videos were
+[1:08:59] removed. I had to. YouTube made me take
+[1:09:02] them down. On top of that, you get the
+[1:09:03] Mundv app access. This is going to be
+[1:09:05] $1,000 a month to everybody else. You
+[1:09:07] get lifetime access to everything you
+[1:09:09] see on this page. If you have questions
+[1:09:11] about any of them, please let me know. I
+[1:09:14] will answer all questions in the chat
+[1:09:16] after this. You get the algo trade camp
+[1:09:18] which is the course that shows you step
+[1:09:19] by step how to get your bots live. The
+[1:09:21] AI master class is the course that shows
+[1:09:23] you how to be a master of AI. Be able to
+[1:09:26] have AI do everything for you. You just
+[1:09:28] need to bring the ideas. And if you
+[1:09:30] don't have the ideas, I teach you how to
+[1:09:32] come up with unlimited ideas here. I can
+[1:09:34] go forever because I have unlimited
+[1:09:36] ideas. You see the road map there. A ton
+[1:09:38] of ideas on there already. I give you
+[1:09:41] the two courses of that took two years
+[1:09:44] for me to build. I was building on
+[1:09:46] Solana. I'm building on Poly Market. You
+[1:09:49] get everything in that course. I'll show
+[1:09:50] you how to build four different bots. By
+[1:09:52] the end of these courses, you'll be able
+[1:09:54] to build any bot on any exchange and any
+[1:09:59] idea. So, you can really craft your own
+[1:10:01] edge. You get Quantite. That's 300 BL
+[1:10:04] plus bots and back test that you can
+[1:10:06] look at immediately. If I had this, I
+[1:10:08] would pay $48,000 for this. No doubt. I
+[1:10:12] would pay $48,000 just for the AGO Trade
+[1:10:14] Camp, but I want to make this the best
+[1:10:16] offer ever. So, if you're already in the
+[1:10:18] Ago Trade Camp or the AI master classes,
+[1:10:21] this is a no-brainer because a lot of
+[1:10:23] you are paying $3,500 a year. So, you'll
+[1:10:26] see the price here and it'll be a
+[1:10:28] no-brainer. I wanted to make it even
+[1:10:30] better by giving you the vault. If you
+[1:10:32] want to get into the weeds of any topic,
+[1:10:34] you can. If you want to have your own
+[1:10:36] API key forever, you can get that. If
+[1:10:39] you want the trading bot GitHub and my
+[1:10:41] AI agents GitHub, this is very private
+[1:10:45] stuff that you get access to. Nobody
+[1:10:46] else is getting this. You also get the
+[1:10:48] Mundev app access. $48,000 value, I'm
+[1:10:51] not even going to charge you 24. I'm not
+[1:10:53] even going to charge you $12,000. Ask
+[1:10:55] yourself, if all this does is help you
+[1:10:57] build one trading bot. Is it worth
+[1:10:59] $7,200? Yes, of course. So, if it's
+[1:11:02] worth $7,200,
+[1:11:04] join right now. It's a one-time payment.
+[1:11:07] You never pay me ever again for
+[1:11:09] anything. If you see me selling
+[1:11:10] something, you have access to it
+[1:11:12] forever. $17.99 mundave.com/go
+[1:11:17] and know that there's a 90day money
+[1:11:20] back, no questions asked guarantee. So,
+[1:11:23] you can go to mundave.com/go
+[1:11:27] right now and join because you know that
+[1:11:30] you have 90 days to check it out. You
+[1:11:32] can go from uninformed buyer to an
+[1:11:35] informed buyer. You see everything that
+[1:11:38] you get on this page. You get the algo
+[1:11:40] trade camp. I'll show you step by step
+[1:11:42] how to get your bots live. I'll show you
+[1:11:44] how to use AI to do all of the heavy
+[1:11:46] lifting. I'll show you how to build on
+[1:11:48] Solana and Poly Market. I'll show you
+[1:11:52] I'll give you all of the Zoom calls
+[1:11:54] forever. I'll give you 300 plus bots and
+[1:11:56] back tests and add new code every single
+[1:11:59] week. I give you the Mundv vault, the
+[1:12:01] API keys, both GitHubs, Mundev app
+[1:12:04] access, and you can see these are real
+[1:12:06] people just like yourself that maybe
+[1:12:08] were skeptical. That's okay. I'm a
+[1:12:10] random dude on the internet. I get that.
+[1:12:13] But that's why I give you a 90-day no
+[1:12:15] questions asked money back guarantee.
+[1:12:17] You can get to know me. If it's not for
+[1:12:19] you, then it's not for you. There's no
+[1:12:21] questions asked. There's multiple ways
+[1:12:23] to pay. You can pay with crypto, cash,
+[1:12:25] whatever. This is all suit through
+[1:12:26] Stripe. And if it's too much to put down
+[1:12:29] right now, put two payments at 949.
+[1:12:32] You can see all the hundreds of people
+[1:12:33] that have joined just like you. They sat
+[1:12:36] here and they watched me build for 2,
+[1:12:38] three hours just like you. But these
+[1:12:40] guys are doers. And I know you're a doer
+[1:12:43] as well. You just might be skeptical.
+[1:12:45] And that's fine. Be skeptical. Check it
+[1:12:47] out for 90 days. And if you're skeptical
+[1:12:50] by the end, then you just get your money
+[1:12:52] back anytime in the 90 days. If it could
+[1:12:54] be tomorrow, if you buy today and you
+[1:12:57] want your money back later, that's fine.
+[1:12:58] Later today, that's fine. I just want
+[1:13:01] you to be an informed buyer because I
+[1:13:02] know we're all weird about hoarding our
+[1:13:04] money, but money is just a tool of
+[1:13:06] exchange. If you can buy 5 years of your
+[1:13:08] life back for 1795,
+[1:13:11] wouldn't you do that? I would do
+[1:13:13] anything. If somebody brought this to me
+[1:13:15] when I first started trading, cuz I saw
+[1:13:17] the emotions right away. I felt the
+[1:13:19] emotions right away. There's a better
+[1:13:21] way to approach trading. He says,
+[1:13:23] "That's cool. One of my bots I set up
+[1:13:24] watching you is pretty profitable.
+[1:13:26] Thanks to you." Hi guys, I'm new to
+[1:13:28] this. Yes, it's a life-changing
+[1:13:30] experience. So, feel free to jump in,
+[1:13:33] check it out. There's 90 full days. You
+[1:13:35] can see if you click the button here.
+[1:13:38] There's a bunch of different payment
+[1:13:39] options as well. You can use card,
+[1:13:41] debit, credit, whatever. Crypto, USDC,
+[1:13:46] CLA if you're in the United States. You
+[1:13:48] can get these payments down to $86.
+[1:13:51] That's insane.
+[1:13:53] But only do this if you're actually
+[1:13:55] going to step on the gas. There's doers
+[1:13:57] and dabblers in this world. I think
+[1:13:58] you're a doer because you stuck here for
+[1:14:01] 3 hours thinking, "Damn, this would look
+[1:14:04] good. This would be good if I could have
+[1:14:06] some boss going as well. This stuff
+[1:14:08] looks so good." Don't be one of those
+[1:14:11] people that stick with me for three
+[1:14:13] hours saying all those things to
+[1:14:14] yourself about how you're going to
+[1:14:15] automate your training and then I
+[1:14:17] literally serve you on a golden platter
+[1:14:20] stepbyep short concise videos that will
+[1:14:24] accelerate your time by 5 years minimum.
+[1:14:27] And the thing is this is lifetime all
+[1:14:29] access. So I'm obviously going to get
+[1:14:31] better and better and the things I find
+[1:14:33] out I put into quantite which you have
+[1:14:36] access to forever. So, if I'm here for
+[1:14:38] another year, it's well well worth the
+[1:14:41] $17.95. But what if I'm here for two
+[1:14:43] years? What if I'm here for three? Now,
+[1:14:46] lifetime access. You get everything from
+[1:14:48] the past that makes it all the way worth
+[1:14:51] it already. Everything is instant access
+[1:14:54] and it pays for itself over and over and
+[1:14:56] over again. You can just read what they
+[1:14:58] have to say. I understand I'm a random
+[1:15:00] dude on the internet. I get that. But I
+[1:15:03] commend you for finding me. There's not
+[1:15:05] many people that share this stuff. In
+[1:15:07] fact, I would argue there's nobody that
+[1:15:10] shows you as precisely step by step how
+[1:15:13] to go from emotional hand trader,
+[1:15:15] stressed out, depressed hand trader,
+[1:15:18] can't figure out these markets, even
+[1:15:20] though you're a hard worker and you've
+[1:15:21] always been able to work harder. That's
+[1:15:23] the thing that sucks about trading,
+[1:15:25] dude. Can't just work harder at it. The
+[1:15:27] more you trade, the less you have. But
+[1:15:30] how many times today was I able to spin
+[1:15:32] something up super quick because I'm
+[1:15:34] compounding. You're not compounding as a
+[1:15:36] trader. That's a waste of life. So, I
+[1:15:38] don't want you to waste your life
+[1:15:40] anymore. Get it? We all hoard money. We
+[1:15:42] all want to just hoard it and keep it
+[1:15:44] forever. But got to use it as a tool of
+[1:15:46] exchange to buy your time back. That's
+[1:15:47] what all the top CEOs do. They buy
+[1:15:50] books. They pay consultants. They buy
+[1:15:53] courses. Anyone in doubt is definitely
+[1:15:56] worth it. I was in doubt myself. But
+[1:15:58] when I pulled the trigger, I was happy I
+[1:16:00] did. It's not a sales pitch by any
+[1:16:02] means. Just a personal opinion. The boot
+[1:16:04] camp put me six months ahead. So, it's a
+[1:16:06] 90-day money back guarantee. You know,
+[1:16:08] go ahead and just try it out. If it's
+[1:16:10] for you, keep it. If not, then get your
+[1:16:12] money back. But you see everything that
+[1:16:14] everybody has to say about it. I'll
+[1:16:16] answer any questions you may have here.
+[1:16:18] Let's see here. Can you respond to my
+[1:16:20] question? Can you give me a link to the
+[1:16:22] weatherbot? Um, let's see here. Is that
+[1:16:25] because there's a difference in poly
+[1:16:26] market five minute up and down actual
+[1:16:28] trading view when I converted it to pine
+[1:16:30] script and try to back test on trading
+[1:16:32] view. You got to stay off trading view.
+[1:16:34] That's the answer. That's my answer to
+[1:16:37] you.
+[1:16:39] mundab.com/go. That's a good question.
+[1:16:41] So NB. All right. So this is the
+[1:16:43] documentation. Moonv.com/doccks.
+[1:16:46] This is the documentation for my API.
+[1:16:49] And you actually get the API key when
+[1:16:51] you come to the Zoom. There's a bunch of
+[1:16:52] people in the Zoom each day. you can
+[1:16:54] connect with and you can ask me any
+[1:16:56] questions. It's free consulting in the
+[1:16:58] Zoom each day. Plus, I give you my API
+[1:17:00] key for mundev.com/doccks
+[1:17:03] if you want to go ahead and get ahead of
+[1:17:04] it and check it out. But not only that,
+[1:17:06] you get another bonus. You get the app
+[1:17:08] that I'm using all day. You get the app
+[1:17:10] that I use all day long and you stop
+[1:17:12] losing agents in all your terminals.
+[1:17:15] This is how I run all of my agent flows.
+[1:17:17] You get that app as well. But not only
+[1:17:19] that, you also get the road map. The
+[1:17:21] road map is sick because this walks you
+[1:17:22] through how to get your trading bots
+[1:17:24] live. I show you a bunch of my YouTube
+[1:17:26] videos. I invite you to my Discord. I
+[1:17:29] answer frequently asked questions. I
+[1:17:30] show you my RBI framework. I give you my
+[1:17:33] book list. I give you so much code from
+[1:17:35] these videos. So, you see me posting
+[1:17:37] every single day. Well, I post a lot of
+[1:17:39] the code here in this section. So,
+[1:17:42] that's in the road map. Like I said, you
+[1:17:43] get the app, you get the API key, and
+[1:17:46] then you get to chat with me all day.
+[1:17:48] You're in the Zoom call. You get the
+[1:17:50] full replay from the Zoom call. It's a
+[1:17:52] three-hour Zoom each day. The API key is
+[1:17:54] a bonus. The app is a bonus. The
+[1:17:56] TrainBot road map is a bonus. And guess
+[1:17:58] what? It's only $5. There's a 90-day no
+[1:18:01] questions asked money back guarantee. So
+[1:18:03] you don't if you don't absolutely love
+[1:18:04] it, then you get your money back. It's
+[1:18:06] five bucks. Join me in the next Zoom
+[1:18:09] call. Meet some other algorithmic
+[1:18:11] traders. Get the full replay. Get the
+[1:18:14] API key, the app, the trading bot road
+[1:18:16] map, and this trading bot road map. Oh
+[1:18:18] my goodness, dude. This is better than a
+[1:18:20] book. So, jump in, get it as a bonus.
+[1:18:22] There's a link in the description and
+[1:18:24] it's only five bucks with a 90-day money
+[1:18:26] back guarantee. Says, "Your stuff is
+[1:18:28] amazing and thank you for sharing all
+[1:18:29] this. Um, I would definitely purchase
+[1:18:31] this, but just doubting myself if I
+[1:18:33] should first do some of your YouTube
+[1:18:34] stuff. Many thanks." So, I mean, it
+[1:18:36] depends. If you want to attack this
+[1:18:38] industry as quickly as possible and find
+[1:18:42] results as quickly as possible, you
+[1:18:44] obviously need to find somebody that is
+[1:18:46] already five, six, seven years ahead of
+[1:18:48] you. Now, I've only been in this
+[1:18:50] industry for 5 years, but I can take
+[1:18:53] your next 5 years of fiddling around
+[1:18:55] with YouTube videos like mine and trying
+[1:18:57] to figure it out and I can put it into
+[1:18:59] two weeks because the boot camp is two
+[1:19:01] weeks. The majority is two weeks. It's a
+[1:19:03] six week boot camp because I'm not like
+[1:19:05] your guru or something like that.
+[1:19:07] I'm actually here stepping on the gas
+[1:19:08] every single day and finding more stuff.
+[1:19:11] So, I [snorts] extended it to six weeks,
+[1:19:13] but I can take five years of work and
+[1:19:15] explain it in two weeks. So, you know,
+[1:19:18] option A is to go fiddle around on my
+[1:19:20] YouTube, try to piece things together
+[1:19:21] through my 3 to 6 hour streams, and
+[1:19:24] that's just going to take way longer.
+[1:19:26] But if you truly value your time, I
+[1:19:28] think you see that $1,800 is worth I
+[1:19:31] don't know what how much is your time
+[1:19:32] worth. I believe my time is worth $1,000
+[1:19:34] an hour. So, me, it's a no-brainer to
+[1:19:36] jump in here. Maybe you believe your
+[1:19:39] time is worth $2,000 an hour or 500.
+[1:19:42] Whatever your time is worth, you just
+[1:19:44] have to do the math because I've got two
+[1:19:46] terabytes, 2.5 terabytes of videos. It's
+[1:19:50] probably about 3,000 hours of videos.
+[1:19:53] I've got provability. Like, it's it's
+[1:19:55] provable that I've been locked for 5
+[1:19:59] years. Do I know everything in the
+[1:20:00] world? No. But if you haven't been
+[1:20:02] attacking this game for 5 years, I I
+[1:20:04] know more than you. I don't mean to be
+[1:20:06] cocky, but I the whole goal is to get
+[1:20:09] you caught up to speed with me so that
+[1:20:12] we can help each other. You see people
+[1:20:14] cooking in the arena. Some of these
+[1:20:16] people went through the training and now
+[1:20:18] they're winning the arenas. So, the same
+[1:20:20] training that you could get access to
+[1:20:22] today, you seen all of the results from
+[1:20:25] other people, the testimonials from
+[1:20:27] other people. Those people actually took
+[1:20:28] me up on this offer of the Algo Trade
+[1:20:32] Camp. Now, you get even more than
+[1:20:34] everything that they got. So, you know,
+[1:20:37] that's a personal decision. How much is
+[1:20:39] your time worth? Do you want to try to
+[1:20:41] piece this all together through three to
+[1:20:42] uh within three to six hour streams
+[1:20:45] where more than 90% of them have been
+[1:20:48] removed because YouTube made me remove
+[1:20:49] them? All the past streams are in here.
+[1:20:52] YouTube is a fraction of what I know.
+[1:20:54] And if you want to be around other
+[1:20:56] others that are like-minded, chasing the
+[1:20:58] same industry as you and you know the
+[1:21:00] value of that 1 plus 1 equals three,
+[1:21:03] then definitely jump in because we are
+[1:21:05] the largest and the best community for
+[1:21:08] algo traders. Everybody has to go
+[1:21:11] through these gates, you know, and
+[1:21:12] that's really beautiful if you think
+[1:21:13] about it. So I was sad at first when I
+[1:21:16] got hacked that I was so scared that I
+[1:21:18] can't share this stuff anymore on
+[1:21:19] YouTube. That sucked. But somebody's
+[1:21:21] like, "Don't worry about it. Mundab
+[1:21:22] burnt toast theory." And they were
+[1:21:24] right. The burnt burn burnt toast theory
+[1:21:26] sent us to paid streams. So you got to
+[1:21:29] pay $5. But that's great because then
+[1:21:32] our conversations are so much better cuz
+[1:21:34] now we're only talking to people that
+[1:21:36] are actually interested in this stuff
+[1:21:38] and actually willing to throw five. So
+[1:21:40] now we got this filter and that's
+[1:21:43] amazing. But if you want even more of a
+[1:21:44] filter, you want to be able to connect
+[1:21:46] with everybody forever for the rest of
+[1:21:47] your life, then definitely think about
+[1:21:49] joining the mundab.com/golifetime
+[1:21:52] access because you do get the community
+[1:21:53] for life. You got all of my past work
+[1:21:55] showing you step-bystep and short,
+[1:21:57] concise videos how to get your training
+[1:21:59] bots live. That's all at moon.com/go. I
+[1:22:02] think you've heard enough. If you have
+[1:22:04] any questions, feel free to ask them. I
+[1:22:05] want to go over a couple of these
+[1:22:06] winners here. A lot of these winners are
+[1:22:09] they've learned from the YouTube channel
+[1:22:11] or the boot camp. Kelly says he learned
+[1:22:13] it all from the boot camp. So he's
+[1:22:15] Worski. He's number one. He's smoking
+[1:22:17] everybody. So the thesis is playing out.
+[1:22:19] My thesis from the start was hey, what
+[1:22:21] do I have to lose 5 years ago? I was
+[1:22:24] just a emotional hand trader. I got
+[1:22:28] inspired to become an automated trader
+[1:22:31] and there was nothing on the internet
+[1:22:32] about automated trading. very very few
+[1:22:35] courses or anything that's gonna help.
+[1:22:37] So I was like, "Let me just do this
+[1:22:39] live. I'll just show everything. Show
+[1:22:40] everything along the way." And people
+[1:22:43] like Kelly found me. People like you
+[1:22:45] found me. And you can take what I know
+[1:22:48] and then just take it to the next level
+[1:22:49] because I can't get in your shoes and
+[1:22:51] you can't get in mine. But you can get
+[1:22:53] in mine more than I can get in yours
+[1:22:54] because I literally tell you everything
+[1:22:56] I know. I researched it all for the last
+[1:22:58] five years. I've been building live for
+[1:23:01] the last five years. and the stuff that
+[1:23:04] I find that's helpful, the systems I
+[1:23:07] build, I put into the the lifetime
+[1:23:10] offer. So, you have access to all that.
+[1:23:11] You know, the link. I want to go ahead
+[1:23:13] and go through some of these winners.
+[1:23:16] So, as you can see here, the history
+[1:23:18] page, you can see Worshoski
+[1:23:21] won this one. So, congrats March 30th
+[1:23:24] and this is working great. So, this is
+[1:23:26] all in beta because I got to make sure
+[1:23:28] it actually works before I like put real
+[1:23:30] cash behind it. So, I mean, the NFTts
+[1:23:33] are real cash. I could sell those
+[1:23:35] myself. So, I am sending $50 a day to
+[1:23:38] people, which is awesome. And Kelly has
+[1:23:41] won at least twice, four times. See,
+[1:23:45] look at that, dude. So, he's won 200.
+[1:23:47] That's beautiful. And that's how it
+[1:23:49] should be, dude. I'll show you guys
+[1:23:51] everything. And then now we have an
+[1:23:53] arena where I can just go ahead and send
+[1:23:56] you cash for winning. I don't know. I
+[1:23:58] think it's I think competition is
+[1:24:00] beautiful. And I mean, it's capitalism,
+[1:24:02] right? Pure competition. Let's see who
+[1:24:05] wins. So, Kelly's got some I've got my
+[1:24:09] uh team here that I want to go through
+[1:24:10] some of these and figure out which ones
+[1:24:13] we're going to send Kelly. And then
+[1:24:15] hopefully Root Killer, Root Colonel is
+[1:24:17] here as well. And he might be in the
+[1:24:19] public chat. He might not be, but I want
+[1:24:21] to get some of these sent out here
+[1:24:23] before the end. So, let's go to arena
+[1:24:25] winners here. Okay. And who's this one?
+[1:24:29] Kelly, fourth NFT win. Okay, I got that
+[1:24:32] one here. Um, let's see if the other
+[1:24:35] dude has hit us up. So, I got your I got
+[1:24:37] your three here. I don't think that the
+[1:24:42] other guy has hit us up yet. So, only
+[1:24:44] Kelly has followed the instructions so
+[1:24:46] far. Kelly, question for you, bro. Does
+[1:24:49] it show your claim NFT pretty precisely?
+[1:24:53] Like, is it pretty easy to follow that?
+[1:24:55] Are there any errors you see? The reason
+[1:24:57] I'm asking is I haven't heard from Root
+[1:24:59] Killer yet. So, yes, no problems. Okay,
+[1:25:03] perfect. So, the system is working.
+[1:25:06] Let's see. Maybe I did hear from Root
+[1:25:08] Killer. I'm just going to send this over
+[1:25:10] to my teammate. Thank you for those.
+[1:25:13] Thank you for sending me those. I will
+[1:25:16] get them sent now. Have you heard
+[1:25:18] anything from this guy who won? Okay, so
+[1:25:21] let's go ahead and look at the NFTts
+[1:25:23] that Kelly picked out and then I can
+[1:25:26] pick which ones I send to him. So he
+[1:25:28] gets three more. I've already sent him
+[1:25:30] one and these are all his choices. So
+[1:25:33] these are around 50 bucks. I don't I
+[1:25:34] don't know. I think they're up and down,
+[1:25:37] but I just got a bunch of them. So the
+[1:25:39] collection for is $49. Okay, so owned by
+[1:25:43] Mundab for Rio. Okay, that's a cool one.
+[1:25:46] I like that. I like the McDonald's one.
+[1:25:48] That one's clean as well. the red eyes.
+[1:25:51] Like that. This one's super chill. I
+[1:25:53] really like the art here, dude. Really
+[1:25:55] do. I'mma bog guard the I'mma bog guard
+[1:25:57] the yellows, but I'm picking three out
+[1:25:59] of all your links you sent me. I I like
+[1:26:02] you having a McDonald's one. I think the
+[1:26:04] McDonald's ones are rare. Maybe not
+[1:26:06] actually rare, but I just think they're
+[1:26:08] sick. So, I'm going to send you one of
+[1:26:09] the McDonald's. Okay. Got to have a red
+[1:26:11] eyes. And then um so what I do is I ask
+[1:26:14] you to send me three of them that you'd
+[1:26:16] like and then I just pick which one out
+[1:26:18] of the three that uh I'm willing to part
+[1:26:20] ways with essentially red eyes. That's a
+[1:26:22] top thousand rarity. I'm sending that.
+[1:26:25] I'm sending it, dude. I'm sending it.
+[1:26:26] You get it? Well, let's actually see if
+[1:26:28] he's dumping them. If he's dumping them,
+[1:26:30] I'm not sending a red eyes. Are you
+[1:26:32] dumping them or are you holding them,
+[1:26:33] Kelly? That tells me a little bit.
+[1:26:35] Holding. Okay. Okay. If you're holding I
+[1:26:38] like because I think Kelly's gonna keep
+[1:26:40] smoking you [ __ ] Let's be
+[1:26:42] honest. He's gonna keep smoking you
+[1:26:44] guys. So if he's holding them, that's
+[1:26:47] one thing. I'll give him some fires.
+[1:26:49] Feel like these are just We're playing
+[1:26:50] Pokemon here at the end. Playing Pokemon
+[1:26:53] at the end of the day. Okay. So I'm
+[1:26:56] pretty indifferent about these three,
+[1:26:57] Kelly. So you got any input of which one
+[1:27:00] you want here? You already gave me your
+[1:27:02] input. That's That's the thing. I just
+[1:27:03] need to pick. Just need to pick. Got a
+[1:27:05] Mickey D's. This one that's not on the
+[1:27:08] list. Oh, that's on the earlier list
+[1:27:10] maybe cuz he's winning so much, dude.
+[1:27:12] Smoking you guys. Oh, he wants that one,
+[1:27:16] huh? Okay. Okay. So, let's get you that
+[1:27:18] one. No, that's your That's already
+[1:27:20] owned owned by you. I already sent that
+[1:27:21] one. Okay. Okay. Got you. Got you. I
+[1:27:24] like this one cuz it's clean. Some of
+[1:27:26] them are a little noisy. All right. I
+[1:27:28] found my three. I'm going to send you,
+[1:27:29] dude. So, let me go ahead and get those
+[1:27:31] sent here and then I should probably get
+[1:27:33] some food. A puma. Got to catch them
+[1:27:35] all. Let's get it, dude. So, these are
+[1:27:38] I'm going to send these maybe twice a
+[1:27:39] week or so. So, you know, thank you for
+[1:27:43] your patience, dude. I know that I'm
+[1:27:44] three behind here, but this is awesome.
+[1:27:47] I I just love competition. So, I love to
+[1:27:49] see people win competitions. I think
+[1:27:52] competition is going to breed greatness
+[1:27:54] here in our community. So, I'll do
+[1:27:57] whatever it takes here. I'll maybe put
+[1:27:59] some cash up later. Uh, this is cash
+[1:28:01] because I could sell this quite
+[1:28:03] literally. But, um, let me get all of
+[1:28:06] those three cents here. And, um, yeah,
+[1:28:10] it's going to be far. It's going to be
+[1:28:11] far. Going to be far. So, I've got all
+[1:28:13] three on the links here. Beautiful. And
+[1:28:17] then close this. Close all this. I got
+[1:28:21] ways a ways to go on the call she stuff,
+[1:28:23] but we did get the the goodies done, the
+[1:28:27] scanner done. Okay. So, I'm connected.
+[1:28:29] Now I just got to go to open C. All
+[1:28:31] right. So I got all three set up here.
+[1:28:34] And now I just need your atti which I
+[1:28:35] have. Got to grab it from here. Okay.
+[1:28:37] And then I'm going to send all three of
+[1:28:39] those to you. So send destination wallet
+[1:28:42] 65 65.
+[1:28:45] Review transfer here. Confirm. Sent one
+[1:28:48] over you Kelly. I got two more on the
+[1:28:50] way. Review transfer. Red eyes coming
+[1:28:53] soon. Red eyes is on its way. One more
+[1:28:55] to go here. So, Kelly's our champion
+[1:28:58] here today. And I mean, did he win
+[1:29:01] today's as well? My timing is a little
+[1:29:03] effed up right now. I don't know what
+[1:29:05] time it is where I am in the world
+[1:29:08] either. So, neither will you.
+[1:29:12] Nobody knows. I got a lot more to build
+[1:29:15] today. Um, let's see how we're going to
+[1:29:17] do this. Okay. So, see, I can keep the
+[1:29:20] zoom on. Okay. Anybody still here? Oh,
+[1:29:23] there's still 21 people here. Okay, you
+[1:29:25] guys are locked. far. Well, um, okay.
+[1:29:28] So, the Zoom maybe I'll stop the That's
+[1:29:32] what I'll do.

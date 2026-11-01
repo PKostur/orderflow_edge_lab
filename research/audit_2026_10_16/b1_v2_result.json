@@ -1,0 +1,260 @@
+{
+ "archive_commit": "2a7916b0920f78d85ceb51abcb666f0d302e0c4e",
+ "excluded": {
+  "Near-miss paper (cascade/CTREND/trend 2x)": "fewer than 10 scored days",
+  "Turn-of-month SPY (search-v1 near miss)": "fewer than 10 scored days"
+ },
+ "primary": {
+  "common_dates": 12,
+  "correlation": {
+   "Cross-asset trend": {
+    "Cross-asset trend": 1.0,
+    "Cross-asset trend, inverse-vol": 0.98,
+    "Crypto trend core": 0.96,
+    "Crypto trend core + vol target": 0.96,
+    "Multi-premia blend": 0.81,
+    "Multi-premia, 5-coin human book": 0.12,
+    "Paper account: 70-coin blend, 10,000 USDT": 0.02,
+    "Trend portfolio (10 coins)": 0.99,
+    "Zoo mirrors (BTC shock reversal, lottery momentum)": 0.18
+   },
+   "Cross-asset trend, inverse-vol": {
+    "Cross-asset trend": 0.98,
+    "Cross-asset trend, inverse-vol": 1.0,
+    "Crypto trend core": 0.98,
+    "Crypto trend core + vol target": 0.98,
+    "Multi-premia blend": 0.86,
+    "Multi-premia, 5-coin human book": 0.09,
+    "Paper account: 70-coin blend, 10,000 USDT": 0.07,
+    "Trend portfolio (10 coins)": 0.98,
+    "Zoo mirrors (BTC shock reversal, lottery momentum)": 0.23
+   },
+   "Crypto trend core": {
+    "Cross-asset trend": 0.96,
+    "Cross-asset trend, inverse-vol": 0.98,
+    "Crypto trend core": 1.0,
+    "Crypto trend core + vol target": 1.0,
+    "Multi-premia blend": 0.89,
+    "Multi-premia, 5-coin human book": 0.17,
+    "Paper account: 70-coin blend, 10,000 USDT": 0.13,
+    "Trend portfolio (10 coins)": 0.98,
+    "Zoo mirrors (BTC shock reversal, lottery momentum)": 0.2
+   },
+   "Crypto trend core + vol target": {
+    "Cross-asset trend": 0.96,
+    "Cross-asset trend, inverse-vol": 0.98,
+    "Crypto trend core": 1.0,
+    "Crypto trend core + vol target": 1.0,
+    "Multi-premia blend": 0.88,
+    "Multi-premia, 5-coin human book": 0.17,
+    "Paper account: 70-coin blend, 10,000 USDT": 0.12,
+    "Trend portfolio (10 coins)": 0.98,
+    "Zoo mirrors (BTC shock reversal, lottery momentum)": 0.18
+   },
+   "Multi-premia blend": {
+    "Cross-asset trend": 0.81,
+    "Cross-asset trend, inverse-vol": 0.86,
+    "Crypto trend core": 0.89,
+    "Crypto trend core + vol target": 0.88,
+    "Multi-premia blend": 1.0,
+    "Multi-premia, 5-coin human book": 0.28,
+    "Paper account: 70-coin blend, 10,000 USDT": 0.41,
+    "Trend portfolio (10 coins)": 0.85,
+    "Zoo mirrors (BTC shock reversal, lottery momentum)": 0.54
+   },
+   "Multi-premia, 5-coin human book": {
+    "Cross-asset trend": 0.12,
+    "Cross-asset trend, inverse-vol": 0.09,
+    "Crypto trend core": 0.17,
+    "Crypto trend core + vol target": 0.17,
+    "Multi-premia blend": 0.28,
+    "Multi-premia, 5-coin human book": 1.0,
+    "Paper account: 70-coin blend, 10,000 USDT": 0.67,
+    "Trend portfolio (10 coins)": 0.17,
+    "Zoo mirrors (BTC shock reversal, lottery momentum)": 0.27
+   },
+   "Paper account: 70-coin blend, 10,000 USDT": {
+    "Cross-asset trend": 0.02,
+    "Cross-asset trend, inverse-vol": 0.07,
+    "Crypto trend core": 0.13,
+    "Crypto trend core + vol target": 0.12,
+    "Multi-premia blend": 0.41,
+    "Multi-premia, 5-coin human book": 0.67,
+    "Paper account: 70-coin blend, 10,000 USDT": 1.0,
+    "Trend portfolio (10 coins)": 0.07,
+    "Zoo mirrors (BTC shock reversal, lottery momentum)": 0.54
+   },
+   "Trend portfolio (10 coins)": {
+    "Cross-asset trend": 0.99,
+    "Cross-asset trend, inverse-vol": 0.98,
+    "Crypto trend core": 0.98,
+    "Crypto trend core + vol target": 0.98,
+    "Multi-premia blend": 0.85,
+    "Multi-premia, 5-coin human book": 0.17,
+    "Paper account: 70-coin blend, 10,000 USDT": 0.07,
+    "Trend portfolio (10 coins)": 1.0,
+    "Zoo mirrors (BTC shock reversal, lottery momentum)": 0.19
+   },
+   "Zoo mirrors (BTC shock reversal, lottery momentum)": {
+    "Cross-asset trend": 0.18,
+    "Cross-asset trend, inverse-vol": 0.23,
+    "Crypto trend core": 0.2,
+    "Crypto trend core + vol target": 0.18,
+    "Multi-premia blend": 0.54,
+    "Multi-premia, 5-coin human book": 0.27,
+    "Paper account: 70-coin blend, 10,000 USDT": 0.54,
+    "Trend portfolio (10 coins)": 0.19,
+    "Zoo mirrors (BTC shock reversal, lottery momentum)": 1.0
+   }
+  },
+  "eigenvalues": [
+   0.0001,
+   0.0022,
+   0.0097,
+   0.0227,
+   0.0845,
+   0.2694,
+   0.7767,
+   1.9747,
+   5.86
+  ],
+  "expected_max_z": 0.5197553442805939,
+  "first": "2026-10-06",
+  "included": [
+   "Multi-premia blend",
+   "Multi-premia, 5-coin human book",
+   "Crypto trend core",
+   "Crypto trend core + vol target",
+   "Trend portfolio (10 coins)",
+   "Cross-asset trend",
+   "Cross-asset trend, inverse-vol",
+   "Zoo mirrors (BTC shock reversal, lottery momentum)",
+   "Paper account: 70-coin blend, 10,000 USDT"
+  ],
+  "last": "2026-10-17",
+  "n_eff": 2.0810315920926894
+ },
+ "registration": "audit 0.10",
+ "sensitivity_without_paper_account": {
+  "common_dates": 14,
+  "correlation": {
+   "Cross-asset trend": {
+    "Cross-asset trend": 1.0,
+    "Cross-asset trend, inverse-vol": 0.99,
+    "Crypto trend core": 0.97,
+    "Crypto trend core + vol target": 0.97,
+    "Multi-premia blend": 0.84,
+    "Multi-premia, 5-coin human book": 0.19,
+    "Trend portfolio (10 coins)": 0.99,
+    "Zoo mirrors (BTC shock reversal, lottery momentum)": 0.07
+   },
+   "Cross-asset trend, inverse-vol": {
+    "Cross-asset trend": 0.99,
+    "Cross-asset trend, inverse-vol": 1.0,
+    "Crypto trend core": 0.98,
+    "Crypto trend core + vol target": 0.98,
+    "Multi-premia blend": 0.88,
+    "Multi-premia, 5-coin human book": 0.16,
+    "Trend portfolio (10 coins)": 0.98,
+    "Zoo mirrors (BTC shock reversal, lottery momentum)": 0.12
+   },
+   "Crypto trend core": {
+    "Cross-asset trend": 0.97,
+    "Cross-asset trend, inverse-vol": 0.98,
+    "Crypto trend core": 1.0,
+    "Crypto trend core + vol target": 1.0,
+    "Multi-premia blend": 0.9,
+    "Multi-premia, 5-coin human book": 0.23,
+    "Trend portfolio (10 coins)": 0.98,
+    "Zoo mirrors (BTC shock reversal, lottery momentum)": 0.09
+   },
+   "Crypto trend core + vol target": {
+    "Cross-asset trend": 0.97,
+    "Cross-asset trend, inverse-vol": 0.98,
+    "Crypto trend core": 1.0,
+    "Crypto trend core + vol target": 1.0,
+    "Multi-premia blend": 0.9,
+    "Multi-premia, 5-coin human book": 0.24,
+    "Trend portfolio (10 coins)": 0.98,
+    "Zoo mirrors (BTC shock reversal, lottery momentum)": 0.08
+   },
+   "Multi-premia blend": {
+    "Cross-asset trend": 0.84,
+    "Cross-asset trend, inverse-vol": 0.88,
+    "Crypto trend core": 0.9,
+    "Crypto trend core + vol target": 0.9,
+    "Multi-premia blend": 1.0,
+    "Multi-premia, 5-coin human book": 0.36,
+    "Trend portfolio (10 coins)": 0.87,
+    "Zoo mirrors (BTC shock reversal, lottery momentum)": 0.4
+   },
+   "Multi-premia, 5-coin human book": {
+    "Cross-asset trend": 0.19,
+    "Cross-asset trend, inverse-vol": 0.16,
+    "Crypto trend core": 0.23,
+    "Crypto trend core + vol target": 0.24,
+    "Multi-premia blend": 0.36,
+    "Multi-premia, 5-coin human book": 1.0,
+    "Trend portfolio (10 coins)": 0.24,
+    "Zoo mirrors (BTC shock reversal, lottery momentum)": 0.24
+   },
+   "Trend portfolio (10 coins)": {
+    "Cross-asset trend": 0.99,
+    "Cross-asset trend, inverse-vol": 0.98,
+    "Crypto trend core": 0.98,
+    "Crypto trend core + vol target": 0.98,
+    "Multi-premia blend": 0.87,
+    "Multi-premia, 5-coin human book": 0.24,
+    "Trend portfolio (10 coins)": 1.0,
+    "Zoo mirrors (BTC shock reversal, lottery momentum)": 0.07
+   },
+   "Zoo mirrors (BTC shock reversal, lottery momentum)": {
+    "Cross-asset trend": 0.07,
+    "Cross-asset trend, inverse-vol": 0.12,
+    "Crypto trend core": 0.09,
+    "Crypto trend core + vol target": 0.08,
+    "Multi-premia blend": 0.4,
+    "Multi-premia, 5-coin human book": 0.24,
+    "Trend portfolio (10 coins)": 0.07,
+    "Zoo mirrors (BTC shock reversal, lottery momentum)": 1.0
+   }
+  },
+  "eigenvalues": [
+   0.0001,
+   0.0021,
+   0.0102,
+   0.031,
+   0.1028,
+   0.773,
+   1.2418,
+   5.8391
+  ],
+  "expected_max_z": 0.5197553442805939,
+  "first": "2026-10-04",
+  "included": [
+   "Multi-premia blend",
+   "Multi-premia, 5-coin human book",
+   "Crypto trend core",
+   "Crypto trend core + vol target",
+   "Trend portfolio (10 coins)",
+   "Cross-asset trend",
+   "Cross-asset trend, inverse-vol",
+   "Zoo mirrors (BTC shock reversal, lottery momentum)"
+  ],
+  "last": "2026-10-17",
+  "n_eff": 1.7656757571283348
+ },
+ "source_artifacts": {
+  "Cross-asset trend": 12117191364,
+  "Cross-asset trend, inverse-vol": 12116547949,
+  "Crypto trend core": 12116667784,
+  "Crypto trend core + vol target": 12116987663,
+  "Multi-premia blend": 12117495416,
+  "Multi-premia, 5-coin human book": 12117495416,
+  "Near-miss paper (cascade/CTREND/trend 2x)": 12116687836,
+  "Paper account: 70-coin blend, 10,000 USDT": 12117495416,
+  "Trend portfolio (10 coins)": 12116554356,
+  "Turn-of-month SPY (search-v1 near miss)": 12117495416,
+  "Zoo mirrors (BTC shock reversal, lottery momentum)": 12117495416
+ }
+}

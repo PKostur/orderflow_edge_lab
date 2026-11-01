@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "search_id": "strategy-search-v1",
+  "status": "DECLARED_BEFORE_ANY_CANDIDATE",
+  "question": "Does any automated trading strategy published on the web, tested exactly as published, pass every gate below on free data?",
+  "registration_note": "Declared 2026-10-11, before any candidate was collected or viewed. The user asked to keep searching until a strategy passes all tests. Searching until something passes is a multiple-testing machine, so the gates, the trial budget and the deflated-Sharpe correction are fixed here and cannot be changed after candidates are seen.",
+  "scope": {
+    "eligible": "strategies with explicit, codable rules (entry, exit, sizing, universe, rebalance) published on the web (papers, quant blogs, bot repos, strategy libraries), testable on free daily or 8h data: Yahoo daily ETFs/indices/futures proxies, FRED series, and the repo's crypto loaders (MEXC, Binance, OKX, Bybit, Hyperliquid, Deribit DVOL)",
+    "excluded": "families already tested and failed in this repo: price-only strategy zoos (breakout, mean reversion, pairs, session/time-of-day effects, vol-managed momentum, high-vol breakout, 8h reversal), Fear & Greed sentiment, Kronos/foundation-model forecasts, FX/index trend on the repo's 20 ETFs, consolidation/regime diagnostics, funding carry; new trend variants on DON8/EMA8/VOL8 or the repo's 10 crypto coins; anything needing order-book replay, paid data or live order placement",
+    "preference": "evidence-rate rule: candidates that add independent breadth (assets outside the crypto factor) or a new information type are tested first"
+  },
+  "procedure": {
+    "no_tuning": "each candidate is coded once with the source's published parameters; if the source gives none, the candidate is ineligible. Bugs may be fixed only if a truncation (look-ahead) test or an accounting check fails, and the fix is logged",
+    "trial_budget": 40,
+    "rounds": "web research in rounds of up to 12 candidates; stop at the first candidate that passes every gate, or when the budget is spent, or after 4 rounds",
+    "ledger": "every candidate tested is appended to research/strategy_search_v1/trials.jsonl with its daily return series hash; untested or ineligible candidates are logged with the reason"
+  },
+  "samples": {
+    "development": "the source's own sample period if stated (truncated to data availability), otherwise data start to 2019-12-31",
+    "validation": "2020-01-01 to 2026-09-30 minus any part of the development sample; never used for anything but this gate",
+    "costs": "ETFs and index proxies 10 bps round trip; crypto 20 bps round trip plus the venue's own funding on held perp positions; FRED-based signals use only data published before the trade date (release lag 1 business day minimum)"
+  },
+  "gates": {
+    "G1_truncation": "signals at date t are identical when all data after t is removed (checked on 50 random dates)",
+    "G2_development": "net annualized Sharpe >= 0.5 and Newey-West t (5 lags) >= 2.0",
+    "G3_validation": "net annualized Sharpe >= 0.4, same sign as development, and validation Sharpe >= 40% of development Sharpe",
+    "G4_matched_null": "development mean return beats 999 action-matched random books (review_methods), empirical p <= 0.05",
+    "G5_deflated_sharpe": "deflated Sharpe probability >= 0.95 on the development sample, with the number of trials = every candidate tested so far in this search (cumulative, not per round) and the variance of their Sharpe ratios",
+    "G6_robustness": "every published parameter perturbed by +/-20% (one at a time): development Sharpe stays >= 50% of the published-parameter Sharpe in all perturbations; and positive Sharpe in both halves of the development sample",
+    "G7_costs": "cost wall (round trip at which mean net return reaches zero) >= 3 x the assumed cost",
+    "G8_independence": "daily return correlation with the repo's trend core (crypto-trend-core-v1 combined book) <= 0.5 over their overlap; for non-crypto candidates also <= 0.7 with SPY buy-and-hold"
+  },
+  "outcome": {
+    "pass": "a candidate passing G1-G8 is a promising prospect only: it is frozen and registered as a forward watch (descriptive until its own review). No promotion, no live trading.",
+    "no_pass": "if the budget or rounds are exhausted, the search reports FAIL with the full trial ledger; it is not extended or rerun with looser gates"
+  },
+  "claims": {
+    "strategy_promotion_authorized": false,
+    "live_trading_authorized": false
+  }
+}

@@ -1,0 +1,2246 @@
+# Harvard Algorithmic Trading with AI (for CS50 Grads)
+# channel: Moon Dev
+# url: https://www.youtube.com/watch?v=Vu62g43_1aE
+
+[0:00:01] Today, I am going to be showing
+[0:00:04] graduates of CS50 from Harvard how to
+[0:00:07] algorithmic trade using AI and all of
+[0:00:11] the tools that I personally use
+[0:00:14] in order to build out trading systems
+[0:00:16] that trade these markets automatically
+[0:00:19] without emotions, without you having to
+[0:00:22] stare at the charts. Now,
+[0:00:24] if you've ever traded before,
+[0:00:26] you know that it is a very emotional
+[0:00:29] game.
+[0:00:30] You want to buy when the price is going
+[0:00:31] up. You want to sell when the price is
+[0:00:33] going down.
+[0:00:35] We automate everything else in this
+[0:00:37] world. We have cars driving us.
+[0:00:40] But, a lot of people still do not
+[0:00:42] automate their trading. So, if you are
+[0:00:44] advanced enough to go through CS50 and
+[0:00:47] you understand everything when it comes
+[0:00:49] to, you know, the introduction of
+[0:00:51] coding, then you are going to be a
+[0:00:54] perfect fit here.
+[0:00:56] Especially if your skill is only
+[0:00:59] developed by hours and hours and hours
+[0:01:02] of beating on your craft.
+[0:01:04] If you're one of those that will just
+[0:01:06] continue to get better and better and
+[0:01:08] keep working on your craft like Will
+[0:01:10] Smith just said,
+[0:01:12] this is one of the most fascinating
+[0:01:14] industries in the world. This is Jim
+[0:01:16] Simons here.
+[0:01:18] He used machine learning, which is AI,
+[0:01:22] in order to run up a net worth of $31
+[0:01:24] billion.
+[0:01:27] All with automated trading, the exact
+[0:01:30] stuff I will be showing you here today.
+[0:01:32] You can see I have an AI agent down here
+[0:01:35] in the bottom next to the timer that is
+[0:01:37] backtesting
+[0:01:39] trading strategies for me. I will
+[0:01:41] explain all of
+[0:01:42] these systems and everything we're going
+[0:01:44] to build here
+[0:01:46] to you, but one of the most important
+[0:01:49] things in the system that I follow to
+[0:01:51] automate my trading and the same thing
+[0:01:53] that Jim Simons did
+[0:01:55] is called backtesting. Backtesting is
+[0:01:57] the process of
+[0:01:59] seeing if a strategy worked in the past.
+[0:02:01] If it worked in the past, it's much more
+[0:02:03] likely to work in the future.
+[0:02:06] But, it's not guaranteed.
+[0:02:08] This is the system I will be showing
+[0:02:10] here today, and I will be showing every
+[0:02:11] single line of code. You can see I have
+[0:02:14] every single liquidation coming in on
+[0:02:16] the market. I have every single order. I
+[0:02:19] can see when people are going to get
+[0:02:21] liquidated. So, as I said, this is going
+[0:02:24] to be a little advanced. So, make sure
+[0:02:26] that you take CS50 first.
+[0:02:29] But, I can see everybody's positions in
+[0:02:31] the market, when they get liquidated,
+[0:02:34] when they entered, how far they are away
+[0:02:37] from liquidation,
+[0:02:39] and so on.
+[0:02:40] These are things that most people will
+[0:02:42] never ever show you. So, I am holding it
+[0:02:45] out for your class here today.
+[0:02:48] Let's go ahead and build out this read
+[0:02:50] me here. All of this code will be on the
+[0:02:53] GitHub.
+[0:02:55] Right here.
+[0:02:56] Just type in Harvard algorithm
+[0:02:58] algorithmic trading with AI. I'm going
+[0:03:00] to show you all of the AI that I use,
+[0:03:03] how I use it. And sorry to burst your
+[0:03:05] bubble, but you are not going to be
+[0:03:07] predicting price with AI, not today. If
+[0:03:10] everybody predicts the weather, it's
+[0:03:12] going to be 75° tomorrow. Well, it can
+[0:03:15] be 75° tomorrow.
+[0:03:17] But, if everybody predicts Bitcoin price
+[0:03:19] is going to be $85,000
+[0:03:21] tomorrow, that price will be traded on.
+[0:03:24] It will change.
+[0:03:26] Again, you can predict some things with
+[0:03:28] machine learning, of course.
+[0:03:31] I'm going to show you how to actually
+[0:03:32] use AI.
+[0:03:34] We're going to use agents here. In the
+[0:03:35] bottom left, you can see it's back
+[0:03:37] testing. We're going to use cursor. If
+[0:03:39] you want to Google that, you can use
+[0:03:40] cursor or WinSurf. Cursor is where you
+[0:03:44] write the code. It's called an IDE, and
+[0:03:46] you know that already. You've been
+[0:03:47] through CS50.
+[0:03:50] Okay. So, if you haven't, type in CS50
+[0:03:54] here into YouTube and go watch that
+[0:03:56] prerequisite course, please.
+[0:03:58] Cursor is where you code
+[0:04:04] to help you code faster. Matter fact,
+[0:04:07] I'll show you right away. We'll We'll
+[0:04:09] create a read me right now using cursor.
+[0:04:12] This is the first way we're using AI
+[0:04:14] here. Okay.
+[0:04:17] Please go ahead and build me a read me
+[0:04:19] here.
+[0:04:21] And that read me will explain the
+[0:04:23] following.
+[0:04:27] This is an open-source project teaching
+[0:04:32] Harvard students how to
+[0:04:36] become algorithmic traders.
+[0:04:40] I will be explaining the step-by-step
+[0:04:43] system
+[0:04:45] I follow in order to automate my trading
+[0:04:48] strategies. I believe that humans have
+[0:04:52] too much emotion, they have too many
+[0:04:54] things going on in the day, and they all
+[0:04:56] got into trading to get their time back.
+[0:04:59] The unfortunate truth is
+[0:05:02] most traders are unprofitable and they
+[0:05:05] stare at the screen all day long wasting
+[0:05:07] all of their time and making no money.
+[0:05:11] My hypothesis,
+[0:05:13] along with Jim Simons who ran up a $30
+[0:05:15] billion
+[0:05:17] net worth, is
+[0:05:19] the only way to trade
+[0:05:22] is with robots. So, I will be explaining
+[0:05:25] my RBI system. I will be showing all of
+[0:05:27] the code, all of the resources, all of
+[0:05:30] the places I use AI.
+[0:05:34] I'll be showing everything in this RBI
+[0:05:35] system. The RBI system starts with R,
+[0:05:38] which is research. Research is
+[0:05:41] the most important thing in algorithmic
+[0:05:43] trading.
+[0:05:45] You have to research trading strategies.
+[0:05:49] Those strategies you will later backtest
+[0:05:51] to see if they actually work in the
+[0:05:53] past. Backtesting is the process of
+[0:05:55] looking at open high low close volume
+[0:05:57] data, essentially past data, to see
+[0:06:01] if the strategy that you thought of, you
+[0:06:03] researched, you read about,
+[0:06:06] works in the past.
+[0:06:08] So, the process of algorithmic trading
+[0:06:09] is actually free for the R and the B.
+[0:06:14] I will be sharing stories about how I
+[0:06:16] ran to the bot immediately, and I lost a
+[0:06:18] bunch of money
+[0:06:20] because I didn't research. I didn't
+[0:06:21] backtest. I implemented strategy that
+[0:06:23] did not work.
+[0:06:25] I'll be explaining all of that, and this
+[0:06:27] system, the RBI system, is going to keep
+[0:06:30] you away from ever building a bot until
+[0:06:33] you know it at least works in the past.
+[0:06:35] If it works in the past, it's not
+[0:06:37] guaranteed
+[0:06:41] This system has helped thousands
+[0:06:44] of people just like yourself automate
+[0:06:45] their trading.
+[0:06:47] And it's free on moondev.com, the whole
+[0:06:49] roadmap and everything. All of this will
+[0:06:51] be in the GitHub.
+[0:06:57] Please build the readme with that
+[0:06:59] information.
+[0:07:00] Okay, so, as you saw there, I used
+[0:07:03] another set of AI, so I'm passing this
+[0:07:05] prompt into AI, Claude 3.7 Sonnet. That
+[0:07:08] is
+[0:07:09] one of the most advanced right now. It's
+[0:07:11] all debatable, of course.
+[0:07:13] Now,
+[0:07:14] I used a voice control there
+[0:07:18] in order to pass it into AI,
+[0:07:21] to to Cursor, which is my IDE. But, this
+[0:07:25] Flow Pro is what I use. Now, I have no
+[0:07:29] connections with them. I just use it.
+[0:07:31] Because you can see, it allows me to hit
+[0:07:33] this little FN button, and
+[0:07:37] it took my words per minute to 162 words
+[0:07:40] per minute. And it does things like
+[0:07:42] correct like ums and ahs. It's using AI
+[0:07:45] in order to
+[0:07:46] listen to my voice and then write out
+[0:07:48] full sentences. So, now I can pass it on
+[0:07:51] to Claude
+[0:07:52] 3.7
+[0:07:54] and she will go ahead and build a read
+[0:07:56] me. Remember, all of this code is going
+[0:07:59] to be on the GitHub. So,
+[0:08:01] I will make sure it's all up here and
+[0:08:03] I'll push it frequently. Anytime I
+[0:08:08] All right. So, anything else you'd like
+[0:08:10] me to add? Let's go ahead and look
+[0:08:12] through the read me here. I'll close
+[0:08:14] that out for now.
+[0:08:15] Let's actually just go ahead and add it
+[0:08:17] to the
+[0:08:18] uh GitHub because I know it'll look
+[0:08:20] nice. Get add dot get commit /m um read
+[0:08:24] me.
+[0:08:26] And get push.
+[0:08:27] Okay, there we go. So, it's on the
+[0:08:29] GitHub now. Let's go ahead and read
+[0:08:31] through it.
+[0:08:33] This is the initial commit. Where is it?
+[0:08:38] Hello.
+[0:08:41] Get push, I thought.
+[0:08:45] There it is. Okay, so Harvard
+[0:08:46] Algorithmic Trading with AI, the RBI
+[0:08:48] system. Research, backtest, and
+[0:08:50] implement. Welcome to the Harvard
+[0:08:51] Algorithmic Trading with AI repository.
+[0:08:54] This open-source project teaches
+[0:08:55] students how to become algorithmic
+[0:08:57] traders by following a systematic
+[0:09:00] approach to automating trading
+[0:09:02] strategies. Why algorithmic trading?
+[0:09:04] Most traders face two challenges,
+[0:09:05] emotional decision-making leading to
+[0:09:07] poor trades, time wasted staring at
+[0:09:10] screens all day with little to no
+[0:09:12] problem little to no
+[0:09:35] works for different market conditions.
+[0:09:37] Build a solid solid hypothesis, then
+[0:09:40] backtest. Backtesting validates your
+[0:09:42] strategy against historical data. Test
+[0:09:44] your strategy against open high low
+[0:09:46] close volume data. Evaluate performance
+[0:09:49] metrics, refine parameters, avoid
+[0:09:52] survivorship bias.
+[0:09:54] Then implement. Only after successful
+[0:09:56] research and backtesting,
+[0:09:59] you code your strategy. Set up proper
+[0:10:01] risk management. Deploy with careful
+[0:10:04] monitoring. Scale gradually.
+[0:10:07] What this repository contains.
+[0:10:09] Step-by-step guides for each stage of
+[0:10:12] the RBI system.
+[0:10:14] Code examples and templates. Resources
+[0:10:18] for data collection.
+[0:10:20] AI integration. Learning from mistakes.
+[0:10:22] I'll share personal stories of rushing
+[0:10:24] to implementation without proper
+[0:10:26] research and backtesting resulting in
+[0:10:28] significant losses. These cautionary
+[0:10:30] tales will emphasize why the RBI system
+[0:10:33] exists and how to avoid common pitfalls.
+[0:10:37] Okay, so let's go ahead and add some
+[0:10:40] resources here
+[0:10:41] to this because this is going to be very
+[0:10:44] very important for you. So, let me go
+[0:10:47] ahead and get all of the resources I can
+[0:10:49] think of at the start. Um add these add
+[0:10:52] these resources to the read me at the
+[0:10:56] bottom.
+[0:11:02] Cursor.
+[0:11:04] My AI
+[0:11:05] Imagine you had everything you wanted.
+[0:11:07] Everything.
+[0:11:09] Imagine you were everything you ever
+[0:11:10] wanted to be.
+[0:11:13] And capture that feeling.
+[0:11:16] That's the easiest way to manifest what
+[0:11:17] you want.
+[0:11:20] So, Flow Pro, cursor and IDE AI IDE,
+[0:11:24] Flow Pro, my voice to text AI I use.
+[0:11:28] It's not mine, but it's the one I use.
+[0:11:30] Now, the important thing about Flow Pro,
+[0:11:33] and I had to do this when I started to
+[0:11:35] learn how to code,
+[0:11:37] was I had to learn how to type first
+[0:11:39] because I was pecking. And in order to
+[0:11:41] really code fast and get things done,
+[0:11:44] you have to learn how to type. So, if
+[0:11:45] you don't know how to type, I would say
+[0:11:47] that's the first thing to learn. But
+[0:11:49] nowadays, we have Flow Pro. So, once I
+[0:11:51] learned how to type, I got up to 62
+[0:11:53] words per minute. Once I started using
+[0:11:55] this Flow Pro AI, I got to 162 words per
+[0:11:59] minute. Now, this guy, you'll hear him
+[0:12:01] multiple times throughout today. He says
+[0:12:03] you need to make your systems better and
+[0:12:04] better and better because that's what
+[0:12:06] everybody else is going to do.
+[0:12:08] My first system I needed to make better
+[0:12:10] was I was typing like at 20 words per
+[0:12:13] minute. So, I learned to type. I used
+[0:12:16] one of these typing test typing
+[0:12:19] typing speed racers. That was the first
+[0:12:21] system I had to make better.
+[0:12:24] That's the first system I had to make
+[0:12:25] better, dude. So, make your systems
+[0:12:28] better and better. Whatever it is, if
+[0:12:29] it's your life system, hold on. Let me
+[0:12:31] tell you one thing real quick. It's all
+[0:12:33] about your systems. You know that. Jim
+[0:12:35] says it all the time. But what I just
+[0:12:37] hit on right there is very important,
+[0:12:39] dude. Your life systems as well. How
+[0:12:41] much sleep are you getting? 8 hours, I
+[0:12:43] hope. Okay. Did you get a workout in
+[0:12:46] today? Please make sure to work out
+[0:12:47] every single day. If you need to
+[0:12:49] meditate, please do that because that
+[0:12:51] will get you very clear on what you
+[0:12:52] want. If you are clear on what you want,
+[0:12:55] you will get it. You get what you think
+[0:12:56] about.
+[0:12:58] You get what you think about.
+[0:13:00] So, please take 20, 40, 60 minutes a day
+[0:13:03] to close your eyes and dream about what
+[0:13:05] you want.
+[0:13:06] This guy is no different than me. He's
+[0:13:08] no different than you.
+[0:13:10] I'm no different than you. You're no
+[0:13:12] different than me.
+[0:13:14] I have different thoughts than you,
+[0:13:15] maybe. I know I can do anything, and I
+[0:13:17] know you can, too. So, make sure your
+[0:13:19] personal algorithm is tight.
+[0:13:21] Make sure that you know you can have
+[0:13:23] anything in this world. And then once
+[0:13:25] you know that, okay.
+[0:13:29] Now you can start coding. Okay, here are
+[0:13:31] a couple resources I want to add. First
+[0:13:34] there the ID AI IDE where I code.
+[0:13:38] What else do I have here on my screen?
+[0:13:41] Well, I have cursor the AI IDE. The Flow
+[0:13:44] Pro is important for the voice to text
+[0:13:46] that I use. Okay.
+[0:13:48] Anything else on this screen that I want
+[0:13:50] to use? CS50 is a prerequisite to this,
+[0:13:53] dude.
+[0:13:54] Prerequisite here.
+[0:13:56] Uh let's go ahead here and say
+[0:14:00] CS50.
+[0:14:05] This is a pre-wreck
+[0:14:10] to this class. Make sure to watch it,
+[0:14:13] dude.
+[0:14:14] Make sure to watch it.
+[0:14:18] What else is there that I need to show
+[0:14:20] you?
+[0:14:21] Nothing else. I need to keep pushing
+[0:14:23] forward. Okay, while that does that, I'm
+[0:14:26] going to say research.
+[0:14:29] And then I'm going to say backtest. No,
+[0:14:31] not there, dude.
+[0:14:34] Backtest.
+[0:14:39] And then I'm going to say
+[0:14:46] Let's call this backtest. Keep it
+[0:14:48] consistent here.
+[0:14:52] I don't think this is the right thing
+[0:14:54] they put there, but that's okay, we'll
+[0:14:56] fix it.
+[0:14:58] And then we're going to put implement.
+[0:14:59] We're going to make this all around one
+[0:15:01] simple system. This simple system is the
+[0:15:03] system that will allow you to find
+[0:15:06] unlimited trading strategies
+[0:15:08] that actually work in the past. If they
+[0:15:10] work in the past, they're not guaranteed
+[0:15:11] to work in the future, but let me tell
+[0:15:13] you this right now, dude. If I tell the
+[0:15:15] whole class right now, "Hey, class,
+[0:15:17] there's a million dollars. It's behind
+[0:15:22] It's behind the Luxor building, which is
+[0:15:25] just down the just down the just down
+[0:15:27] the path.
+[0:15:28] Okay, it's behind that building. That's
+[0:15:30] a million dollars. And there's
+[0:15:31] the whole class just hold me heard that,
+[0:15:33] right? And the people on YouTube, they
+[0:15:35] heard it as well. Okay. Okay, great.
+[0:15:37] There's a million dollars behind that
+[0:15:38] building.
+[0:15:40] How long would that million dollars be
+[0:15:41] there?
+[0:15:44] Not very long. Everybody's going to get
+[0:15:45] up right now and go get it.
+[0:15:48] Right?
+[0:15:49] Okay, let me give you another example.
+[0:15:54] They got $500 gift cards here.
+[0:15:57] They got $500 gift gift cards here in
+[0:16:00] the cafeteria.
+[0:16:02] But there's only 50 of them.
+[0:16:04] And I'm telling a thousand people right
+[0:16:05] now.
+[0:16:06] How long are those gift cards are going
+[0:16:07] to be there?
+[0:16:09] You got it, dude.
+[0:16:12] You got it. Nobody's ever going to give
+[0:16:14] you a profitable trading strategy.
+[0:16:15] Nobody's ever going to give you a bot
+[0:16:16] that you can just run.
+[0:16:19] Because if someone did, everybody would
+[0:16:21] go get it.
+[0:16:23] And if everybody goes and gets it,
+[0:16:26] they'll be gone.
+[0:16:27] That's
+[0:16:29] what's important about this RBI system
+[0:16:31] is you have to build your own edge. What
+[0:16:33] is an edge? An edge is a a strategy or
+[0:16:36] an approach, an alpha generation
+[0:16:38] technique that you have
+[0:16:40] that not many other people know about.
+[0:16:43] And that's something that you can trade.
+[0:16:46] You can have your bots trade that edge.
+[0:16:49] It's your little secret. I've got my
+[0:16:52] edge. Everybody that has gone through
+[0:16:55] this RBI system
+[0:16:57] that are in the boot camp and you can
+[0:16:58] read below here, they have their edges.
+[0:17:02] Nobody shares their edge.
+[0:17:05] But one of my biggest edges is this
+[0:17:07] system. And I'm I'm okay with sharing
+[0:17:10] this edge because I believe code is the
+[0:17:13] great equalizer.
+[0:17:15] And let me tell you this. I spent 10 15
+[0:17:18] years in technology building apps,
+[0:17:20] websites, SaaS, whatever.
+[0:17:24] And this whole time, I thought I I
+[0:17:26] wasn't going to be able to I can't I
+[0:17:28] can't code these by myself. I need to
+[0:17:30] hire someone off Upwork, so I just hired
+[0:17:33] people off Upwork.
+[0:17:35] I tried to learn how to code a couple
+[0:17:36] times, but it just
+[0:17:38] it never stuck.
+[0:17:40] Sometimes you just have to find the
+[0:17:41] right thing. And for me, I had a
+[0:17:43] problem. I was trading too big of size,
+[0:17:47] trading my life savings by hand
+[0:17:49] emotionally.
+[0:17:51] Price going up, you want to buy. Price
+[0:17:53] going down, you want to sell. Up and
+[0:17:55] down and up and staring at these charts
+[0:17:56] all day. We got into trading so we could
+[0:17:58] have our time back, right?
+[0:18:00] Yes.
+[0:18:02] Of course.
+[0:18:04] I was sick of staring at these screens
+[0:18:06] for weeks on end just to lose.
+[0:18:09] I met someone who is trading a billion
+[0:18:11] dollars per day, and that someone looked
+[0:18:13] just like me. He was a homie.
+[0:18:15] Not really a homie because I just met
+[0:18:17] him, but you you know what I'm saying.
+[0:18:19] Someone just like me and you.
+[0:18:22] So, I was like, "Okay, if he can do it,
+[0:18:24] I can do this, too.
+[0:18:26] I can automate my trading. He figured
+[0:18:28] out how to do it, why can't I figure it
+[0:18:29] out?"
+[0:18:31] So, I set out on that path just to
+[0:18:33] discover that this is the most secretive
+[0:18:34] industry in the world, and nobody is
+[0:18:36] sharing anything.
+[0:18:38] So, I decided, "Hey, I'm just going to
+[0:18:41] explore all this
+[0:18:43] and share it all on my YouTube."
+[0:18:47] My name is MoonDev. I believe code is a
+[0:18:48] great equalizer.
+[0:18:49] I believe if you learn how to code,
+[0:18:52] you can build anything for the rest of
+[0:18:53] your life.
+[0:18:55] So, you can see here, I have over 1,700
+[0:18:58] hours
+[0:18:59] of step-by-step tutorials that show you
+[0:19:01] exactly
+[0:19:03] how to automate your trading.
+[0:19:05] But today, I'm going to give you the
+[0:19:07] whole enchilada here in this
+[0:19:10] short short video. So, let's go ahead
+[0:19:12] here and
+[0:19:14] first off cursor No, it's not cursor.
+[0:19:18] This is called Flow Pro.
+[0:19:24] voice
+[0:19:28] Flow Pro voice
+[0:19:30] Whisper Flow, okay? Whisper Flow, here
+[0:19:33] it is. It's called Whisper Flow.
+[0:19:35] So, let's go here and I'll put that on
+[0:19:37] the resources because everything that I
+[0:19:40] use
+[0:19:42] I'm going to give to you.
+[0:19:45] This changed my life.
+[0:19:47] Like I said, I worked so hard to get up
+[0:19:48] to a 60 words per minute and then they
+[0:19:50] just dropped this down here on me and I
+[0:19:52] got to 162. So, now you have it too,
+[0:19:54] dude.
+[0:19:55] Everything I have you have. I believe
+[0:19:57] code's a great equalizer, okay?
+[0:19:59] So, what's next? Well, let's go back to
+[0:20:01] my system here.
+[0:20:03] This is a system that I follow each and
+[0:20:04] every day. The process of automating
+[0:20:06] your trading starts with the research,
+[0:20:07] research, research. Where do you find
+[0:20:09] strategies or ideas? Okay, I'll show you
+[0:20:11] exactly how.
+[0:20:13] Let me go ahead here and get up inside
+[0:20:16] this cursor here and say research. Let's
+[0:20:18] make a read me here.
+[0:20:22] A research for read me, okay?
+[0:20:25] A read me research.
+[0:20:30] Let's go ahead and just have the AI make
+[0:20:32] it.
+[0:20:33] I just built a new read me here for
+[0:20:39] the research folder and you can see it
+[0:20:41] here.
+[0:20:44] So, read
+[0:20:48] me
+[0:20:50] in the research folder.
+[0:20:52] Please go ahead and build it out and add
+[0:20:54] these
+[0:20:57] step-by-step
+[0:20:58] ideas and resources for research it.
+[0:21:04] Now, the RBI system explains that we
+[0:21:07] must research for trading strategies and
+[0:21:10] alpha generation techniques. Below are
+[0:21:12] some places you can find
+[0:21:14] trading strategies and alpha generation
+[0:21:16] techniques.
+[0:21:19] I'm not negotiating with myself.
+[0:21:21] Yeah.
+[0:21:21] The deal was already made. Deal was made
+[0:21:23] when I set out at the beginning of the
+[0:21:25] summer and said this is the training
+[0:21:26] plan I'm doing.
+[0:21:28] I signed that contract with myself. I'm
+[0:21:30] doing it.
+[0:21:31] Mhm.
+[0:21:31] You know, throughout the that process
+[0:21:33] you'll start talking to yourself like,
+[0:21:34] man, I got to I think I need to maybe if
+[0:21:37] we No.
+[0:21:39] No. This is non-negotiable.
+[0:21:41] Non-negotiable.
+[0:21:42] So Google Scholar has really great
+[0:21:45] papers written by
+[0:21:47] PhDs
+[0:21:50] about trading.
+[0:21:52] Trading strategies, trading ideas. Is
+[0:21:54] anything going to be step-by-step?
+[0:21:56] Maybe, maybe not. Probably not.
+[0:21:59] Remember, you have to keep your alpha
+[0:22:01] close to your chest. So profitable
+[0:22:02] momentum
+[0:22:03] trading strategies, applying deep
+[0:22:05] learning.
+[0:22:06] It depends on how you want to treat
+[0:22:09] trade these markets, what your risk
+[0:22:11] profile is looking like, etc., etc. But
+[0:22:15] Google Scholar has unlimited ideas.
+[0:22:17] Well, how do you get ideas in order to
+[0:22:19] get into Google Scholar, to start typing
+[0:22:21] in the Google Scholar?
+[0:22:23] Please give me 20 different approaches
+[0:22:26] to trading that
+[0:22:30] I can research
+[0:22:32] with the hopes of automating.
+[0:22:35] So there you go. Now this is a base way
+[0:22:38] to get ideas, okay?
+[0:22:41] There you go. There you go, dude. There
+[0:22:43] you go.
+[0:22:49] Chat GPT
+[0:22:51] can give you
+[0:22:52] broad ideas that you can then go
+[0:22:55] research on Google Scholar
+[0:22:57] and other places below.
+[0:23:01] Podcasts
+[0:23:04] like chat with traders
+[0:23:08] has
+[0:23:10] 300 plus
+[0:23:13] trading styles traders
+[0:23:16] styles
+[0:23:19] you can learn from
+[0:23:21] okay
+[0:23:22] books
+[0:23:25] there are a bunch of trading
+[0:23:28] books I will list below
+[0:23:35] YouTube
+[0:23:37] YouTube has unlimited ideas
+[0:23:43] search
+[0:23:44] some of the terms
+[0:23:47] from above okay
+[0:23:49] so chat GPT just gave me a ton of ideas
+[0:23:52] here
+[0:23:53] look at this dude you can follow you can
+[0:23:55] look into trend following you can look
+[0:23:56] into mean reversions that are momentum
+[0:23:59] strategies breakout breakdowns machine
+[0:24:01] learning time series reinforcement
+[0:24:04] learning sentiment driven trading
+[0:24:08] we have unlimited resources here
+[0:24:10] in order to come up with any trading
+[0:24:13] idea
+[0:24:16] any strategy that you want to explore
+[0:24:18] you can remember after you find that
+[0:24:20] strategy
+[0:24:22] you simply go ahead and you back test
+[0:24:25] to see if it worked in the past I have a
+[0:24:28] bunch of code here I will get to in a
+[0:24:30] second and I'll show you everything
+[0:24:32] but first I want to give you a few books
+[0:24:34] here that you can
+[0:24:36] potentially read and come up with a ton
+[0:24:39] of ideas
+[0:24:40] now if you don't like reading use
+[0:24:42] audible but at the end of the day these
+[0:24:44] books have unlimited ideas ideas in them
+[0:24:49] here is
+[0:24:50] a book list
+[0:24:53] market wizards there's three or four of
+[0:24:56] those books.
+[0:25:01] The man who solved the market to learn
+[0:25:02] about Jim Simons.
+[0:25:06] Dark Pools.
+[0:25:09] Flash Boys.
+[0:25:12] The Quants.
+[0:25:15] The Complete Turtle Trader.
+[0:25:18] How to trade in stocks.
+[0:25:22] A Random Walk Down Wall Street.
+[0:25:25] Fooled by Randomness.
+[0:25:29] Best Loser Wins.
+[0:25:32] One Up On Wall Street.
+[0:25:35] The Black Swan.
+[0:25:38] What I Learned Losing a Million Dollars.
+[0:25:42] Option Volatility and Pricing.
+[0:25:46] Trading in the Zone.
+[0:25:55] Systematic Trading.
+[0:25:58] Trading Systems and Methods.
+[0:26:02] Advances in Financial Machine Learning.
+[0:26:07] The Leverage Space Trading Model.
+[0:26:11] The Mathematics of Money Management.
+[0:26:16] Rocket Science for Traders.
+[0:26:20] Cybernetic Analysis for Stocks and
+[0:26:22] Futures.
+[0:26:25] Cycle Analytics for Traders.
+[0:26:30] Statistical Sound Indicators for
+[0:26:32] Financial Market Prediction.
+[0:26:35] The Universal Tactics of Successful
+[0:26:37] Trend Trading.
+[0:26:40] Stocks on the Move.
+[0:26:43] Cybernetic Trading Strategies.
+[0:26:48] Testing and Tuning Market Trading
+[0:26:50] Systems.
+[0:26:52] Permutation and Randomization tests of
+[0:26:55] trading system development
+[0:27:00] detecting regime change in computational
+[0:27:03] finance
+[0:27:06] Remember it comes down to your
+[0:27:08] style of trading that you want to build.
+[0:27:13] The RBI system will help you
+[0:27:15] find ideas that actually work in the
+[0:27:17] past. Now, just because they worked in
+[0:27:20] the past does not mean they're going to
+[0:27:21] work in the future. So, that's the
+[0:27:23] tricky part.
+[0:27:25] But above, you have
+[0:27:27] a ton of books and podcasts
+[0:27:32] that you can read or listen to to come
+[0:27:35] up with unlimited ideas and just keep
+[0:27:38] the research flowing.
+[0:27:40] Every single day as an algorithmic
+[0:27:43] trader, you should be doing one of the
+[0:27:44] three things: researching, backtesting,
+[0:27:48] or implementing code into trading bots.
+[0:27:52] This is the RBI system.
+[0:27:55] And this is the master resource
+[0:27:59] for the R, which is research.
+[0:28:03] All right, so let's go ahead and have it
+[0:28:04] build out a read me here for that one.
+[0:28:32] Okay, there we go. Look at that.
+[0:28:35] And then let's go ahead here and push it
+[0:28:38] to GitHub.
+[0:28:39] Please push that to GitHub for me.
+[0:28:43] So, you can see the AI. I'm using the
+[0:28:45] agent mode here in cursor and you can
+[0:28:49] see that it is essentially able to push
+[0:28:52] the GitHub for me as well. So AI is
+[0:28:56] speeding the process up and Jim Simons
+[0:28:58] constantly says it you have to make your
+[0:29:00] systems better and better and better.
+[0:29:02] One of my systems is my personal system.
+[0:29:06] How do I live my life? How do I make
+[0:29:07] sure that I'm always in a good mood
+[0:29:10] pushing forward? Well, I eat well, I
+[0:29:12] sleep 8 hours, I meditate and I work
+[0:29:15] out.
+[0:29:16] That's my personal system.
+[0:29:18] Okay, this is my algorithmic trading
+[0:29:20] system RBI. How do I make this better?
+[0:29:23] Well, first learn to type, get your
+[0:29:25] typing speed up to 60 and then okay,
+[0:29:27] learn some tools like the flow pro stuff
+[0:29:30] that I was showing you with the voice
+[0:29:31] attack to get to 162. Then spend my time
+[0:29:34] researching. Okay, how can I research
+[0:29:36] faster? Well, I have this AI model using
+[0:29:38] deep seek here doing some research for
+[0:29:41] me right now. Okay, perfect. Let's use
+[0:29:43] AI wherever we can and then we're going
+[0:29:45] to go ahead and backtest. Well, I got a
+[0:29:47] bunch of different trading strategies
+[0:29:49] and ideas here that now we can see
+[0:29:52] exactly how to come up with ideas. So
+[0:29:55] let's go ahead here and see if the
+[0:29:57] readme is now there. Let's go ahead and
+[0:30:00] say
+[0:30:01] research. Okay.
+[0:30:04] Why research matters?
+[0:30:06] Research is the critical first step in
+[0:30:08] the RBI research backtest and implement
+[0:30:11] system. Without proper research, you're
+[0:30:13] essentially gambling rather than
+[0:30:15] trading. As an algorithmic trader, you
+[0:30:17] should be doing one of the three things
+[0:30:19] every day. Researching, backtesting, or
+[0:30:21] implementing code into trading bots.
+[0:30:23] Sources for trading strategies and alpha
+[0:30:26] generation techniques.
+[0:30:28] Google Scholar here, search for
+[0:30:30] peer-reviewed papers.
+[0:30:32] University repositories. Many
+[0:30:34] universities publish finance and trading
+[0:30:36] research, financial journals, Journal of
+[0:30:38] Finance, Review of Finance. I don't know
+[0:30:40] what these are, but chat GPT AI and
+[0:30:43] machine learning research papers with
+[0:30:45] code trader insight chat with traders
+[0:30:47] podcast featuring 300 plus professional
+[0:30:49] traders sharing their methods market
+[0:30:52] wizard series interviews with top
+[0:30:54] traders must must must read that.
+[0:30:56] Recordings often available online for
+[0:30:59] trading conferences.
+[0:31:00] Online platforms YouTube trading forms
+[0:31:03] finance blogs trading psychology and
+[0:31:06] philosophy are these books here.
+[0:31:08] Market structure and history essential
+[0:31:11] trading books here flash boys dark pools
+[0:31:13] the quants.
+[0:31:15] The man who solved the market one up on
+[0:31:16] Wall Street trading systems and methods
+[0:31:19] systematic trading by Robert Carver.
+[0:31:22] Damn. This is a good list dude. So you
+[0:31:25] got everything here and we're building
+[0:31:27] out this
+[0:31:29] Harvard algorithmic trading with AI but
+[0:31:31] make sure make sure make sure that you
+[0:31:33] watch CS50 first because we're going to
+[0:31:35] fly through this dude. Okay. So we got
+[0:31:38] the research set up. Now how do we
+[0:31:40] backtest? Well, let me go ahead and give
+[0:31:42] you a backtesting template to start.
+[0:31:45] in all of us. It's very simple.
+[0:31:49] This is what I believe.
+[0:31:52] And
+[0:31:53] I'm willing to die for it.
+[0:31:54] Yeah.
+[0:31:55] Period.
+[0:31:57] Period.
+[0:31:59] So inside of this road map again, this
+[0:32:01] is free on moondev.com. I have the RBI
+[0:32:03] system here. If we look at the
+[0:32:05] backtesting section, there's actually a
+[0:32:06] backtest here because this is
+[0:32:09] a part that got me tripped up for a long
+[0:32:11] time.
+[0:32:15] For a long long time. So let's go ahead
+[0:32:17] and put that template in there and now
+[0:32:19] you have access to it. You can see it's
+[0:32:22] using different things. Let's go ahead
+[0:32:23] and build another read me here read me
+[0:32:26] dot MD.
+[0:32:32] I'm building a read me dot MD for this
+[0:32:34] backtesting folder here and I want you
+[0:32:36] to put these following resources here.
+[0:32:38] Again, the RBI system is research,
+[0:32:40] backtest, and then implement. So,
+[0:32:42] backtesting is the process of looking at
+[0:32:44] open, high, low, close, volume data in
+[0:32:46] order to see if a strategy actually
+[0:32:49] worked in the past. If it works in the
+[0:32:50] past, it's much more likely to work in
+[0:32:52] the future. It's not guaranteed, though.
+[0:32:54] Please put these resources below in
+[0:32:55] order to uh make a good read me of this
+[0:32:58] section.
+[0:33:00] So, first off,
+[0:33:03] template
+[0:33:06] .py
+[0:33:08] This is a template backtest that you can
+[0:33:11] use to test out any idea. Especially
+[0:33:13] with AI, you can tell it to look at it
+[0:33:15] and then build in the idea that you
+[0:33:17] researched previously in the earlier
+[0:33:19] section in the research folder.
+[0:33:21] Okay.
+[0:33:25] Three different
+[0:33:27] backtesting
+[0:33:29] libraries
+[0:33:32] backtrader
+[0:33:34] backtesting.py
+[0:33:36] and
+[0:33:37] zipline. What was the other one,
+[0:33:39] actually?
+[0:33:42] These are my two that I'm using the
+[0:33:44] most, backtrader and backtesting.py.
+[0:33:49] I'll think of the other one later, but I
+[0:33:50] don't even use it that much, so.
+[0:33:55] I personally like backtesting.py the
+[0:33:58] best and that's what the template is
+[0:33:59] showing.
+[0:34:03] Data.
+[0:34:05] Getting data is one of the most
+[0:34:06] important parts because without data,
+[0:34:10] you can't backtest. So, I will put a few
+[0:34:14] different files that allow you to get
+[0:34:16] data here in this folder.
+[0:34:26] Let's see if I have those files, dude.
+[0:34:31] Okay, here we go.
+[0:34:34] So, Yahoo
+[0:34:36] Let's just get some Yahoo daily data.
+[0:34:42] template uh data.py
+[0:34:45] Okay, let's just put this Yahoo data
+[0:34:47] data in here and you can see we can get
+[0:34:49] it for Apple,
+[0:34:51] Google,
+[0:34:53] Amazon, all these different
+[0:34:56] things here.
+[0:35:00] And it's probably the easiest way to get
+[0:35:02] data. So, let's just get it for Apple
+[0:35:04] and Google for now.
+[0:35:07] Let's say data.py.
+[0:35:15] So, here uh data. data.py
+[0:35:18] is a way to get data
+[0:35:21] from Yahoo
+[0:35:22] data.
+[0:35:25] Okay, perfect. template.py,
+[0:35:28] three different backtesting libraries,
+[0:35:30] and then data.py.
+[0:35:34] Okay, so let's make that readme here,
+[0:35:36] dude.
+[0:35:42] And while we do that, let's go over this
+[0:35:44] data folder here or this data file, so
+[0:35:47] you can see how to import this. You'll
+[0:35:49] need yfinance. You'll need pandas.
+[0:35:53] Um let's go to the readme here. This
+[0:35:55] readme Let's say accept here.
+[0:35:58] Okay, you can see here overview
+[0:36:00] backtesting is crucial part template.
+[0:36:03] backtrader zipline backtesting.py
+[0:36:05] data.py perfect
+[0:36:10] In this readme, we want to say important
+[0:36:13] packages.
+[0:36:14] Mhm.
+[0:36:15] Well, I'll just I'll just pip freeze it
+[0:36:18] or whatever.
+[0:36:20] Show you all the packages that are
+[0:36:21] needed here. Packages, actually.
+[0:36:25] Packages,
+[0:36:26] Python packages.
+[0:36:32] Uh Pandas,
+[0:36:36] super important to learn.
+[0:36:40] It's like it's like Excel
+[0:36:43] for Python.
+[0:36:46] Okay, backtesting.py.
+[0:36:50] This is how I backtest.
+[0:36:56] Let's go to the data, Yahoo Finance.
+[0:36:59] YFinance.
+[0:37:01] This is where we get free daily data,
+[0:37:06] perfect. Okay, let's go through this
+[0:37:08] code so you see it all because if you
+[0:37:11] can see it all, you can be it all and I
+[0:37:13] believe in you, dude. So, you can see
+[0:37:16] our save directory here. So, I need a
+[0:37:18] data folder and I actually might go
+[0:37:21] ahead and change this to put this in the
+[0:37:23] backtest. Okay, let's make a data here.
+[0:37:27] I'm a data dog and I know you are too,
+[0:37:29] so let's get it, dude. Let's go ahead
+[0:37:32] and paste this in here.
+[0:37:36] Let's just put it in here in general.
+[0:37:39] Okay, backtest data. Okay, now you can
+[0:37:42] see the rest of the code. Let me go
+[0:37:43] through it so you understand it all.
+[0:37:51] Just some login setup here and then this
+[0:37:54] is the symbols we want to get data for.
+[0:37:56] Maybe I'll get it for Amazon as well.
+[0:37:59] I usually trade crypto,
+[0:38:02] but a market is a market in my opinion
+[0:38:04] and whether you trade crypto, stocks,
+[0:38:07] futures, whatever,
+[0:38:08] at the end of the day, these charts are
+[0:38:11] too emotional for people to trade by
+[0:38:13] hand and if you're trying to chase up or
+[0:38:16] down, you will get smoked at the end of
+[0:38:18] the day.
+[0:38:20] I truly believe the only way to trade
+[0:38:23] is automated. So,
+[0:38:26] I'm going to show you everything here.
+[0:38:29] Okay, first off, let's go ahead here and
+[0:38:33] let's try to pull some data.
+[0:38:37] You can see here this is how I set up
+[0:38:38] all these symbols.
+[0:38:40] And then you see I can download and save
+[0:38:44] daily data here.
+[0:38:46] And this will allow me to get the actual
+[0:38:48] data so you can see all the code and I
+[0:38:50] will push all this to GitHub as well.
+[0:38:51] It's going to be a free public GitHub.
+[0:38:55] If OS path exists,
+[0:38:57] file path, you can see we're reading in
+[0:38:59] the data here.
+[0:39:03] And then we set the end date to
+[0:39:05] yesterday.
+[0:39:07] Try to get all the data daily data that
+[0:39:10] we can.
+[0:39:12] And then while attempts equals under max
+[0:39:14] attempts and the current day is
+[0:39:19] past the start day, we're going to keep
+[0:39:20] it moving and we're going to grab all of
+[0:39:22] the data here.
+[0:39:25] Just so you can see this all. I want you
+[0:39:27] to have access to all of the data for
+[0:39:29] free from Yahoo Finance.
+[0:39:35] If not data.empty,
+[0:39:38] this is the third part where we're
+[0:39:39] processing and saving the data.
+[0:39:43] And then we download and save it. So,
+[0:39:45] let's go ahead and see if this code
+[0:39:46] works.
+[0:39:48] So, there's no module named YFinance.
+[0:39:52] Now, I use Python.
+[0:39:54] I use Anaconda.
+[0:39:57] And
+[0:39:59] I use 3.10.9, but that doesn't matter
+[0:40:02] too much. All Python versions really
+[0:40:05] work.
+[0:40:06] I run this again. I already have it
+[0:40:08] installed attempting to download the
+[0:40:09] data. Okay.
+[0:40:11] Beautiful, beautiful, beautiful. Let's
+[0:40:12] see if I can get some daily data here.
+[0:40:15] Fetching historical data, perfect, from
+[0:40:17] 2000 2003
+[0:40:20] 2004
+[0:40:22] 2004
+[0:40:24] Okay, so it's getting a ton of data
+[0:40:26] right now.
+[0:40:27] I don't know how much I asked from it,
+[0:40:30] but I asked for a lot, clearly.
+[0:40:33] I think I'm going for all the data that
+[0:40:35] they have.
+[0:40:37] So, let's see what what it comes out
+[0:40:38] with here.
+[0:40:45] And then I want to show you I want to
+[0:40:46] get a
+[0:40:48] a data set. I'm just going to add a data
+[0:40:50] because I have so much data, dude.
+[0:40:52] That I want to just add some data sets
+[0:40:54] in here for you.
+[0:40:56] And that would just be easy to do. So,
+[0:40:59] let's put that BTC 1 hour for 1,000
+[0:41:02] weeks. Okay, that's a lot of data, dude.
+[0:41:05] Let's put the
+[0:41:07] SOL 1 day for 1,000 weeks here.
+[0:41:16] This actually didn't work here, so
+[0:41:20] they may have changed their way to get
+[0:41:22] data, unfortunately. We'll see.
+[0:41:25] Let me go ahead and make sure that you
+[0:41:26] have a source to get data.
+[0:41:32] Here we go. You can get some hyper
+[0:41:34] liquid data. This is super easy to get
+[0:41:36] data. Let's call this data file. Let's
+[0:41:38] change the data file to be hyper liquid
+[0:41:40] data because then it's super easy to get
+[0:41:43] and you don't even need an API key.
+[0:41:48] You can see I can just get BTC data
+[0:41:50] here.
+[0:41:52] And you can see all this code. I'll
+[0:41:54] scroll through it really quickly in case
+[0:41:56] you don't want to get the GitHub.
+[0:41:57] I'm not afraid to die on a treadmill.
+[0:42:00] You might have more talent than me. You
+[0:42:03] might be smarter than me, but if we get
+[0:42:05] on the treadmill together, right?
+[0:42:08] There's two things. You're getting off
+[0:42:10] first or I'm going to die.
+[0:42:13] It's really that simple.
+[0:42:21] All right, let's try this one out here.
+[0:42:24] So, we're fetching BTC data. There's no
+[0:42:27] parent called this. Okay, let's use AI
+[0:42:29] in order to fix this because
+[0:42:33] you know, that's what AI is here for.
+[0:42:35] I know I can debug this easy, but I'd
+[0:42:36] rather just have her do it.
+[0:42:39] You can see I got an error here, but
+[0:42:40] please go ahead and add it to this path
+[0:42:42] here.
+[0:42:45] So, that's our data path, and I just
+[0:42:48] needed to update the path. So, make dir
+[0:42:50] Okay.
+[0:42:52] Um
+[0:42:53] back test data.
+[0:43:08] That folder is already created, so you
+[0:43:09] don't need to make that dir.
+[0:43:12] Just update the code here in order to
+[0:43:14] save it to that
+[0:43:16] folder.
+[0:43:19] data.py Sometimes you have to tag it
+[0:43:21] because it doesn't quite have it.
+[0:43:24] So, it's just going to update that code
+[0:43:25] now in order to save it to the place
+[0:43:27] that I want it to save to.
+[0:43:50] And then I'm going to keep adding more
+[0:43:51] data into here
+[0:43:53] as well, so you have access to just some
+[0:43:55] good data sets.
+[0:44:00] Matter fact, I think I have some data
+[0:44:02] sets on the
+[0:44:04] the
+[0:44:05] um
+[0:44:06] the folder.
+[0:44:09] Here you can see the 15-minute data just
+[0:44:11] came through here.
+[0:44:13] For a couple months, okay, that's nice.
+[0:44:15] I got a couple months of data here on
+[0:44:17] the 15-minute. I can change this data at
+[0:44:20] any time. So now this is using
+[0:44:22] HyperLiquid, which is a crypto exchange
+[0:44:25] that I like to use. Um and
+[0:44:30] yeah, they give free data, which is
+[0:44:31] nice. Coinbase also gives free data. I
+[0:44:34] could show you that some other time, but
+[0:44:36] there's also plenty of data on the
+[0:44:37] internet. So I just wanted to give you a
+[0:44:39] few data sets here. If I go over to the
+[0:44:42] road map, there's actually a few data
+[0:44:44] sets on there as well. So let's go to
+[0:44:47] the crypto data section and you can see
+[0:44:50] 6 hours for 1,000 weeks. Let's get that
+[0:44:53] one for sure. That's a nice big piece of
+[0:44:55] data here. Let's go ahead and say
+[0:44:58] download. Yes.
+[0:45:01] And then let's get the ETH for 1,000
+[0:45:03] weeks as well. Download. Yes.
+[0:45:06] And then let's get the That's good for
+[0:45:08] now. You can have the rest on the road
+[0:45:12] map. It's there for free. So
+[0:45:13] moondev.com, that's it, dude.
+[0:45:16] Okay, let's go here and get those data
+[0:45:18] pads in there or those new data sets in
+[0:45:20] there.
+[0:45:24] Beautiful. Now you have a place to
+[0:45:26] download data. No API keys needed.
+[0:45:29] You can change this to be 1 day.
+[0:45:32] It might be a capital D. We'll see.
+[0:45:35] Okay, you can see I just got the 1 day.
+[0:45:37] Perfect. So you have this new data
+[0:45:40] source and let's make sure to push
+[0:45:43] Please push this full GitHub, the whole
+[0:45:46] thing, to the GitHub and make the note
+[0:45:49] saying uploaded data and data sources.
+[0:45:54] data.py
+[0:45:58] So I just want to push all of it to
+[0:46:00] GitHub here so you have access to it
+[0:46:02] all.
+[0:46:08] Add back test. Thank you.
+[0:46:16] Uploaded data and data source sources of
+[0:46:19] data.py.
+[0:46:22] Beautiful.
+[0:46:24] Get push origin main. Okay.
+[0:46:30] Successfully pushed all the data. Okay,
+[0:46:32] so now you know how to research and come
+[0:46:35] up with ideas.
+[0:46:37] You know how to research, you can come
+[0:46:39] up with unlimited ideas now. Now, you
+[0:46:41] also know how to get data so you can
+[0:46:43] backtest it. And you have this backtest
+[0:46:46] library here that shows you how or this
+[0:46:49] backtest code that shows you how to
+[0:46:51] backtest.
+[0:46:53] So, now
+[0:46:54] ideally, you know how to code cuz you've
+[0:46:56] watched CS50. You know how to get data.
+[0:47:00] And now you have a template piece of
+[0:47:02] code here that shows you how to
+[0:47:03] backtest.
+[0:47:06] So, you pretty much have everything you
+[0:47:08] need to do the R and the B, and that's
+[0:47:10] the most important part.
+[0:47:12] The R and the B, the research and the
+[0:47:14] backtest. So, you can see research
+[0:47:16] backtest here.
+[0:47:18] And we added a couple things here to the
+[0:47:21] research section.
+[0:47:23] You can see, okay, research. Beautiful.
+[0:47:25] Beautiful. Beautiful.
+[0:47:28] Life is beautiful.
+[0:47:30] Backtest here, you can see the full
+[0:47:32] backtest section here.
+[0:47:37] Backtesting is a crucial part. Okay,
+[0:47:38] great. And then you also have this
+[0:47:40] data.py.
+[0:47:42] You can go ahead and get data here from
+[0:47:44] Hyperliquid for free.
+[0:47:47] That's crazy, dude.
+[0:47:49] So, I'm going to show you everything.
+[0:47:50] Remember, research, backtest, and then
+[0:47:52] implement.
+[0:47:54] Okay, six. So, you got the backtest
+[0:47:56] data. Now, we're going to go over the
+[0:47:58] template. How do you actually backtest?
+[0:48:00] How do you come up with Well, you
+[0:48:02] already know how to come up with ideas,
+[0:48:04] but let's say we came up with an idea.
+[0:48:06] Let's go ahead here and quickly see uh
+[0:48:09] if there's an idea that we can
+[0:48:12] look at. Okay, how about this? Bollinger
+[0:48:14] band breakout. Okay, sweet. Let's go
+[0:48:17] ahead and that's the idea.
+[0:48:20] You can see Bollinger band breakout
+[0:48:22] short here. Well, I want to go ahead and
+[0:48:26] make a Bollinger band
+[0:48:31] squeeze breakout here. So, what I would
+[0:48:34] do here is say
+[0:48:38] backtest BB squeeze
+[0:48:42] with a VWAP.
+[0:48:44] Not not VWAP. I'm not going to do VWAP.
+[0:48:46] I just get excited. I I like to use a
+[0:48:48] VWAP. I like to use VWAP.
+[0:48:50] Let's say BB squeeze ADX. It's just a
+[0:48:53] random idea. It doesn't matter if it
+[0:48:56] works or not. I just want to show you
+[0:48:57] this. I also want to tell you this. This
+[0:48:59] one time somebody came to me and they
+[0:49:01] said, "Dude, I don't think algorithmic
+[0:49:03] trading works. I tried 10 different
+[0:49:05] ideas and only one of them worked."
+[0:49:09] And I said, "Dude,
+[0:49:12] great job."
+[0:49:14] Cuz that's a 10% hit rate.
+[0:49:17] 10% hit rate is nice in algorithmic
+[0:49:19] trading.
+[0:49:21] You have to get through your losers in
+[0:49:23] order to find winners and just be happy
+[0:49:25] every time you get through a losing
+[0:49:26] backtest because you know there's
+[0:49:29] thousands, if not hundreds of thousands
+[0:49:31] of people that are trading that exact
+[0:49:32] strategy that you just backtested. And
+[0:49:35] now you have a secret power. You know
+[0:49:37] that that strategy does not work in the
+[0:49:39] past while all of these other thousands
+[0:49:42] of people, they are continuing to trade
+[0:49:44] that strategy.
+[0:49:45] They're trading a strategy that doesn't
+[0:49:47] work on top of a philosophy that doesn't
+[0:49:50] work. They're trading a strategy that
+[0:49:52] you just back tested and you know it
+[0:49:54] does not work in the past and they're
+[0:49:56] trading it by hand. Maybe they are the
+[0:49:59] best, the most self-aware person in the
+[0:50:01] world and they're a good trader by hand.
+[0:50:03] They don't have any bad days, they don't
+[0:50:05] get emotional, they don't sleep too
+[0:50:07] little. Maybe they're the best in the
+[0:50:09] world, but you know their strategy
+[0:50:11] doesn't work.
+[0:50:13] And you also know that trading by hand
+[0:50:15] doesn't work because one day you won't
+[0:50:17] get enough sleep, one day you'll get on
+[0:50:19] tilt because of a conversation, one day
+[0:50:22] someone's going to convince you on
+[0:50:23] Twitter to go long or short, one day
+[0:50:26] you'll use too much leverage. These are
+[0:50:28] just the common things that traders fall
+[0:50:31] into and they think, "Oh, yeah, I can
+[0:50:33] trade this by hand." No, you can't. So,
+[0:50:36] every time you find a losing back test,
+[0:50:38] be happy cuz you know somebody else is
+[0:50:40] trading that strategy and you don't have
+[0:50:43] to even look at it anymore.
+[0:50:46] So, that dude that told me one out of
+[0:50:48] 10, I said, "Good job, keep going, bro.
+[0:50:50] That's a good hit rate, one out of 10."
+[0:50:52] So, reset your expectations. This is not
+[0:50:55] going to be easy, but it's the biggest
+[0:50:57] reward in the world. If this guy ran up
+[0:50:59] a net worth of 31 billion, do you think
+[0:51:02] it's going to be easy? No way.
+[0:51:05] But trading by hand is not easy, wasting
+[0:51:07] your time is not easy, looking at these
+[0:51:09] charts is not easy. So, I'm going to
+[0:51:11] show you the better way.
+[0:51:13] Okay, it's the R and the B. R and the B,
+[0:51:16] let's figure out what works, what
+[0:51:17] doesn't work. A lot's not going to work.
+[0:51:19] Let's look through the charts, let's
+[0:51:20] find the good pieces, let's build our
+[0:51:22] own edges. I'm never going to show you
+[0:51:23] something that just makes you a bunch of
+[0:51:25] money because if I show you, I'm showing
+[0:51:27] everybody else, dude, and that's going
+[0:51:29] to be gone. The edge is going to be
+[0:51:31] obsolete. But there are plenty of
+[0:51:33] anomalies that are in the market and Jim
+[0:51:35] Simons says that every single day to us.
+[0:51:37] He says, "There are infinite anomalies
+[0:51:40] in the market."
+[0:51:42] You just have to keep making your
+[0:51:43] systems better and better and better.
+[0:51:45] So, this is an iterative game. This game
+[0:51:48] will never stop. It's probably the
+[0:51:49] hardest game you've ever played, but
+[0:51:51] again, it's the biggest reward. So, the
+[0:51:53] RBI system
+[0:51:54] is how I follow
+[0:51:56] and continue to play this game. So, how
+[0:51:58] would I go ahead and backtest this new
+[0:52:00] idea? Let's say that I came up with this
+[0:52:03] idea from one of these sources. Maybe I
+[0:52:06] was listening to Chat with Traders and I
+[0:52:08] heard a trader talk about this
+[0:52:11] Bollinger Band Squeeze ADX strategy.
+[0:52:14] Okay, let's see if it actually works or
+[0:52:16] I was reading Market Wizards
+[0:52:18] else's life.
+[0:52:19] Don't be trapped by dogma, which is
+[0:52:21] living with the results of other
+[0:52:23] people's thinking.
+[0:52:25] Don't let the noise of others' opinions
+[0:52:26] drown out your own inner voice.
+[0:52:29] And most important, have the courage to
+[0:52:31] follow your heart and intuition.
+[0:52:33] They somehow already know what you truly
+[0:52:36] want to become.
+[0:52:37] Everything else is secondary.
+[0:52:41] Stay hungry.
+[0:52:43] Stay foolish.
+[0:52:44] Maybe I was I was reading the Market
+[0:52:47] Wizards books and I came up with an idea
+[0:52:49] because this guy was trading a style I
+[0:52:51] thought was cool. I was watching a
+[0:52:52] YouTube video or I was reading one of
+[0:52:54] these books.
+[0:52:56] Generate ideas.
+[0:52:58] Generate ideas you think that might
+[0:53:00] work. And if they you think they might
+[0:53:01] work, okay, this is how you backtest
+[0:53:03] them. Let's go ahead and say I here.
+[0:53:06] Let's make a new one here and I'm going
+[0:53:07] to tag my template.
+[0:53:10] Tag the template because the template
+[0:53:12] has been set out in order to work
+[0:53:15] and build backtest
+[0:53:17] easier. So, again, this took me years to
+[0:53:19] build, so you have it for free.
+[0:53:23] Please use the template above in order
+[0:53:24] to see how to set up a backtest.
+[0:53:29] And let's also give it the data. Let's
+[0:53:31] go to copy path here.
+[0:53:33] I just want to make sure that it has my
+[0:53:34] actual path for the data.
+[0:53:37] Cuz I'm a data da data path here. Okay.
+[0:53:40] I'm going to put it in there.
+[0:53:43] Okay, there it is.
+[0:53:45] And
+[0:53:47] Okay, please use that template. Okay, BB
+[0:53:49] squeeze.
+[0:53:53] I want you then to go ahead and build a
+[0:53:56] trading strategy that uses a Bollinger
+[0:53:59] band squeeze breakout
+[0:54:02] type strategy and include the ADX in
+[0:54:05] that strategy as well. Please make sure
+[0:54:08] to print out the back test stats of the
+[0:54:11] original. Print them in full. No need to
+[0:54:14] print the plot.
+[0:54:15] And then after printing out the the
+[0:54:17] regular stats, then you can go ahead and
+[0:54:21] start optimizing.
+[0:54:26] So essentially, I'll be able to see the
+[0:54:28] stats first and then you can start
+[0:54:30] optimizing as that will take a little
+[0:54:31] bit longer and then print out those
+[0:54:33] stats as well. Use the template in order
+[0:54:35] to see how to do this.
+[0:54:40] I'll create a Bollinger band squeeze
+[0:54:42] breakout strategy with ADX for you using
+[0:54:45] the template as a guide.
+[0:54:48] Now I'll create a new file.
+[0:54:50] Hey, hey, hey.
+[0:54:52] Build here.
+[0:54:54] Build here, bro.
+[0:55:19] All right, so you can see the AI is
+[0:55:21] creating all this code for me based off
+[0:55:23] of my template. I gave you the template
+[0:55:25] so you have it.
+[0:55:33] Okay, so you can see here. I I accept
+[0:55:36] here. And then let's try to run it.
+[0:55:38] Let's get the error back here if there
+[0:55:40] is one. Yes.
+[0:55:42] Mismatch new values have
+[0:55:44] six elements. Okay, let's say here
+[0:55:48] I got this bug here, and you can see my
+[0:55:51] data
+[0:55:52] head here.
+[0:55:53] So, let's give it the data head because
+[0:55:56] the elements will sometimes be off, you
+[0:55:58] know?
+[0:55:59] So,
+[0:56:02] essentially it's
+[0:56:04] says there's six columns, but my
+[0:56:06] template had my template had six columns
+[0:56:09] because my other data has the
+[0:56:11] comma at the end. It's okay. It's super
+[0:56:13] easy to fix. Just tell the AI what your
+[0:56:15] problem is, and just keep iterating
+[0:56:17] making things better and better and
+[0:56:19] better.
+[0:56:22] I see the issue. The CSV file has five
+[0:56:25] columns, but our code is trying to
+[0:56:26] rename the six columns. So, let's go
+[0:56:29] ahead and fix that. You can see we're
+[0:56:31] using the Bollinger Band window of 20,
+[0:56:33] the BB standard deviation of two, the
+[0:56:36] Keltner window of 20, the Keltner ATR
+[0:56:39] multiple of 1.5, the ADX period, the ADX
+[0:56:42] threshold, the take profit,
+[0:56:45] the stop loss here.
+[0:56:48] Let's go ahead and say accept. And then
+[0:56:51] let's go ahead and run it back and see
+[0:56:52] what the next error is. Okay, there's no
+[0:56:54] new error. Perfect.
+[0:56:56] We don't need to print all these. Please
+[0:56:58] don't print all these debug. Please
+[0:57:00] don't print all these debugs. It makes
+[0:57:02] it really hard for me to see the first
+[0:57:05] output.
+[0:57:07] Just show me the first dots and then
+[0:57:08] move on to the optimizing, but no need
+[0:57:10] to print out all the debugging output.
+[0:57:12] Thank you.
+[0:57:20] I'll modify the code to remove the debug
+[0:57:22] prints. Thank you.
+[0:57:36] BB Squeeze 80X.
+[0:57:48] Okay, let's go ahead and say accept,
+[0:57:50] though.
+[0:57:54] And then we can run this here and see
+[0:57:57] what happens.
+[0:57:58] Okay, there we go. There is our back
+[0:58:00] test. Now, some things that we want to
+[0:58:02] look at on the back test here. You can
+[0:58:04] see the profit factor is 1.08.
+[0:58:07] The expectancy is 0.15. I like to look
+[0:58:10] for an expectancy over 0.2. You can see
+[0:58:12] it's optimizing. It's going to take a
+[0:58:13] while to optimize. There's 342
+[0:58:17] different things it needs to optimize.
+[0:58:19] Now, be careful when it comes to
+[0:58:20] optimizing and overfitting.
+[0:58:23] Please explain to me the problem with
+[0:58:26] over optimizing and overfitting trading
+[0:58:28] strategies and how to not over optimize.
+[0:58:32] So, let's have her explain it to us, but
+[0:58:34] let's also look at some of these stats
+[0:58:36] here. This is just a random strategy
+[0:58:39] that I just picked out of thin air. You
+[0:58:41] will have a much better strategy if you
+[0:58:43] actually go out and research like I
+[0:58:45] showed you. But you can see the exposure
+[0:58:47] time. This is what I like to look at. I
+[0:58:50] like to look at the return percentage,
+[0:58:52] of course, versus the buy and hold. You
+[0:58:54] can't go back and buy and hold from 2015
+[0:58:57] of BTC. So, just throw this out the
+[0:58:59] window.
+[0:59:00] Okay? You can't go back in time. This
+[0:59:02] number does not matter too much. Of
+[0:59:04] course, if you just went back and held
+[0:59:06] BTC for 10 years, but you can't do that.
+[0:59:10] So, I'd rather look at the return
+[0:59:12] percentage, of course, 22%. Okay. The
+[0:59:15] return versus the drawdown. How much
+[0:59:17] does it draw down? Well, if you had
+[0:59:20] bought and hold Bitcoin, you would have
+[0:59:21] drawn down like 90%. What is a drawdown?
+[0:59:24] It's how much money you essentially get
+[0:59:27] down if you're holding say $100,000
+[0:59:30] and it goes down to 30,000. Well, that's
+[0:59:32] a 70% drawdown. Okay, the sharp ratio
+[0:59:35] here, I like to look for things that are
+[0:59:37] above a 1.5, 1.2.
+[0:59:41] Sortino ratio is similar to the sharp
+[0:59:43] ratio, but it doesn't penalize the
+[0:59:45] upside, so it's much better here for
+[0:59:47] crypto. The Calmar ratio, I believe this
+[0:59:49] is the return divided by the drawdown.
+[0:59:52] So, like I look at the return and the
+[0:59:55] drawdown, the Calmar kind of represents
+[0:59:57] that, I believe. Max drawdown here,
+[0:59:59] average drawdown, the number of trades,
+[1:00:01] you can see it traded 217 times. The win
+[1:00:05] percentage is 42%. Okay, well, profit
+[1:00:09] factor 1.08. I like to see that higher.
+[1:00:12] I like to see the expectancy higher. You
+[1:00:14] can see this is going to take forever to
+[1:00:16] optimize. I'm going to make it a little
+[1:00:17] faster because at the end of the day, we
+[1:00:20] don't want to over-optimize and I'll
+[1:00:22] tell you why here in a second.
+[1:00:24] Let's make this 15. Let's change this to
+[1:00:29] 2.1.
+[1:00:32] Let's change this to 20. And again,
+[1:00:36] this is optimizing to find the best
+[1:00:38] value and that's a little sketch
+[1:00:40] sometimes.
+[1:00:42] Stop loss here, three to
+[1:00:45] four, two to
+[1:00:47] four.
+[1:00:50] This is still going to take forever.
+[1:00:51] There's too many things we're optimizing
+[1:00:53] here, so
+[1:00:54] what I would do is try to find a couple
+[1:00:56] things to optimize for.
+[1:00:58] Anyways, let's read through what she had
+[1:01:00] to say because
+[1:01:02] overfitting is something you will hear
+[1:01:04] all the time. Overfitting is trading in
+[1:01:06] trading strategy optimization is a
+[1:01:08] significant risk
+[1:01:10] that can lead to poor real-world
+[1:01:12] performance. Here's a concise
+[1:01:14] explanation. Problems with overfitting
+[1:01:16] trading strategies, false confidence. An
+[1:01:17] overfitted strategy performed especially
+[1:01:20] exceptionally well on historical data,
+[1:01:23] but fails in live trading. Curve
+[1:01:25] fitting, the optimization process
+[1:01:27] discovers patterns that are random noise
+[1:01:30] rather than genuine market edges.
+[1:01:32] Parameter sensitivity, highly optimized
+[1:01:34] strategies often perform dramatically
+[1:01:37] differently with slight parameter
+[1:01:39] changes. Historical accidents, the
+[1:01:42] strategy may be optimized to specific
+[1:01:45] market events that won't repeat. How to
+[1:01:48] avoid overfitting? Use walk forward
+[1:01:50] testing. Train on one period, test on a
+[1:01:53] subsequent out of sample period. This is
+[1:01:55] like testing on 5 years of data and
+[1:01:58] seeing if the strategy works and then
+[1:02:00] later testing to see if that strategy
+[1:02:01] works on a different set of data. Limit
+[1:02:04] parameters, which we definitely didn't
+[1:02:05] just do here. We just up the parameters.
+[1:02:08] The more parameters you use to optimize,
+[1:02:10] the higher the risk of overfitting. Keep
+[1:02:13] your strategy simple, so you can see
+[1:02:15] there's a ton of parameters here. Uh ton
+[1:02:18] of different things that I can
+[1:02:20] optimize for and base the signals off
+[1:02:23] of.
+[1:02:26] Meaning we have a lot of parameters,
+[1:02:27] meaning
+[1:02:29] sometimes the most simple strategy works
+[1:02:31] better. So, be careful of that. Use
+[1:02:33] broader parameter ranges instead of
+[1:02:35] fine-tuning. Testing ADX from 24 to 26,
+[1:02:38] use wider steps. Cross-validate across
+[1:02:41] assets. A truly robust strategy should
+[1:02:43] work reasonably well across multiple
+[1:02:46] similar instruments.
+[1:02:47] is only developed by hours and hours and
+[1:02:50] hours of beating on your craft.
+[1:02:52] Check parameter stability. If small
+[1:02:54] changes in parameters cause dramatic
+[1:02:56] performance shifts, the strategy is
+[1:02:58] likely over fitted. Focus on robustness
+[1:03:01] metrics. Beyond raw returns, examine
+[1:03:04] metrics like Sharpe ratio, max drawdown,
+[1:03:07] and win rate consistency. Test on
+[1:03:10] different market regimes. Ensure your
+[1:03:11] strategy works in in trending markets,
+[1:03:13] ranging, and volatile markets.
+[1:03:16] Incorporate transaction costs. May many
+[1:03:19] seemingly profitable strategies
+[1:03:21] disappear once realistic fees and
+[1:03:23] slippage are included. So, make sure
+[1:03:25] that there are fees and slippage
+[1:03:26] included. Let's go check that out. I
+[1:03:29] know that in the template we put fees in
+[1:03:32] there. Fees are important because
+[1:03:34] if this trades 500 times, that's 500
+[1:03:37] opens and closes that you have to have a
+[1:03:39] fee on. The fee is typically 0.001%.
+[1:03:43] I put it at 0.002 just so I can see
+[1:03:46] something with higher fees because it
+[1:03:48] will account a little bit for the
+[1:03:50] slippage. Slippage is the price you pay
+[1:03:52] versus the price you they said you were
+[1:03:53] going to pay essentially. Sometimes
+[1:03:55] you're trading too big a size and you
+[1:03:57] have to pay a little bit more. Let's
+[1:03:59] check out what this optimization looks
+[1:04:01] like. Okay, so you can see here that the
+[1:04:03] profit factor is a bit higher. Okay,
+[1:04:05] that's good. The expectancy is 0.23.
+[1:04:08] It's better than my 0.2 that I would
+[1:04:10] like. Perfect. So, 0.2 is what I wanted.
+[1:04:14] You can see here the exposure time is
+[1:04:16] 21% and the return is 112
+[1:04:19] or 122%. Again, you can't go back in
+[1:04:22] time and buy Bitcoin in 10 years ago.
+[1:04:24] So, no reason to even look at this. Look
+[1:04:27] at this return, 122%
+[1:04:30] versus the drawdown.
+[1:04:32] 30%. Look at the exposure time. Okay.
+[1:04:36] It's holding it for 20% of the time, a
+[1:04:38] fifth of the time. That's great because
+[1:04:41] it's not always in a trade and then you
+[1:04:42] have less black swan risk. Please, go
+[1:04:45] ahead and explain to me
+[1:04:48] Please go ahead and explain to me what
+[1:04:50] black swan risk is.
+[1:04:54] Also, explain to me how having a lower
+[1:04:57] exposure time may help with this black
+[1:05:01] swan risk.
+[1:05:03] Okay, let's just ask her that. Okay. You
+[1:05:06] can see the win rate is much better
+[1:05:07] here. It's 57.3 versus the one above
+[1:05:10] that was 40%.
+[1:05:12] But remember, overfitting. You don't
+[1:05:14] want to optimize too much now. So, I
+[1:05:16] showed you a pretty optimized, not like
+[1:05:18] extremely optimized, but it's pretty
+[1:05:20] optimized.
+[1:05:21] It looks better, of course, but
+[1:05:23] remember, overfitting. Okay, black swan
+[1:05:26] risk in trading. Black swan risk refers
+[1:05:29] to rare, unexpected events that have
+[1:05:31] extreme impact or rash or are
+[1:05:34] rationalized after the fact. In trading,
+[1:05:37] these are sudden market shocks that are
+[1:05:40] statistically outliers,
+[1:05:42] nearly impossible to predict, cause
+[1:05:45] catastrophic losses due to extreme price
+[1:05:48] movements, often occur during what
+[1:05:51] appears to be normal market conditions.
+[1:05:54] Examples include the 2008 financial
+[1:05:58] crisis, the 2020
+[1:06:01] virus crash, the 2010 flash crash,
+[1:06:06] and there's going to be more. These are
+[1:06:08] just things that happen.
+[1:06:10] Lower expo How lower exposure time
+[1:06:12] mitigates black swan risk. Lower
+[1:06:15] exposure time, less time with active
+[1:06:17] positions in the market, helps protect
+[1:06:19] against black swan risk in several ways.
+[1:06:22] There's a statistical advantage. The
+[1:06:24] less time you're in the market, the
+[1:06:26] lower the probability of being caught in
+[1:06:28] a black swan event.
+[1:06:32] Overnight protection. Many extreme
+[1:06:34] events occur during off hours or when
+[1:06:37] liquidity is thin. Short-term strategies
+[1:06:40] that close positions at the end of
+[1:06:42] sessions avoid overnight gap risks.
+[1:06:45] Reduce correlation exposure. During
+[1:06:48] black swan events, typical correlations
+[1:06:51] break down and many assets move together
+[1:06:55] in the panic. Less time in the market
+[1:06:57] reduces exposure to these correlation
+[1:07:00] breakdowns. Capital preservation.
+[1:07:03] With lower exposure time, more capital
+[1:07:06] remains in cash or low-risk assets,
+[1:07:09] providing a buffer against extreme
+[1:07:12] drawdowns, reduce leverage impact.
+[1:07:15] Strategies with lower exposure time
+[1:07:17] often use less leverage, reducing the
+[1:07:19] amplification of losses during black
+[1:07:22] swan events.
+[1:07:24] So, there you go. That's the R and the
+[1:07:26] B, research and back test, research and
+[1:07:29] back test. You saw how I did the R and
+[1:07:32] the B here. The implementation of the
+[1:07:35] actual bot must be earned. The first
+[1:07:38] step is to research. The second step is
+[1:07:40] to back test. There's no reason to spend
+[1:07:43] any money here on any market or any
+[1:07:46] trade until you find things that
+[1:07:48] actually work in the past. If you feel
+[1:07:50] that you have earned it, you feel that
+[1:07:52] you have ideas that look good in the
+[1:07:54] past, okay, then move to implementation.
+[1:07:57] How do I implement into a bot? Well,
+[1:08:00] implementing into a bot, you would have
+[1:08:02] to use an exchange, but again, let me
+[1:08:05] warn you here. This is when real money
+[1:08:07] comes to play, and you don't want to
+[1:08:10] risk your real money unless
+[1:08:12] you have something that actually works
+[1:08:14] in the past.
+[1:08:17] So, you can see this BB squeeze.
+[1:08:20] It looks like it works in the past, but
+[1:08:22] there's a big caveat. It may have been
+[1:08:24] over optimized.
+[1:08:26] I did not look into
+[1:08:29] other
+[1:08:31] types of time frames to trade this on. I
+[1:08:34] did not look into other assets. I just
+[1:08:37] want to show you the example of the full
+[1:08:39] RBI system.
+[1:08:42] But, just know that this is usually
+[1:08:43] elongated, meaning longer. This is
+[1:08:45] usually longer because I'm spending more
+[1:08:47] time researching and back testing. I'm
+[1:08:49] back testing. I'm I'm walking my dog,
+[1:08:51] researching, listening to Audible,
+[1:08:52] listening to podcast. It's more time.
+[1:08:55] I'm trying to make this fast just for
+[1:08:56] this class, dude. So, I'm showing you
+[1:08:59] step by step the RBI, but again, it's
+[1:09:01] going to be longer than this when you do
+[1:09:03] it because I got lucky here and I found
+[1:09:05] one that worked right away. Okay, great.
+[1:09:07] A BB squeeze ADX.
+[1:09:12] Please go ahead and push this full
+[1:09:14] GitHub to GitHub and
+[1:09:17] have the note be
+[1:09:20] new back test uploaded.
+[1:09:24] Okay, so all of this is on the GitHub or
+[1:09:26] it should be here in a second.
+[1:09:29] Let's say I accept.
+[1:09:34] Accept.
+[1:09:39] Accept.
+[1:09:42] Get push.
+[1:09:46] Awesome.
+[1:09:47] Awesome. Awesome. Awesome.
+[1:09:50] So, what else do we want to do here,
+[1:09:52] dude?
+[1:10:05] The next step would to be build this
+[1:10:08] algorithm out.
+[1:10:10] And
+[1:10:13] how will we do that?
+[1:10:16] Well, we'll go to the bot.py. We need to
+[1:10:18] have a .env.
+[1:10:20] Let's make a .env. This is where I'm
+[1:10:22] going to store my keys.
+[1:10:26] And then also, let's duplicate this.
+[1:10:32] Rename.
+[1:10:35] .env example.
+[1:10:38] Okay, so I'm going to put a .env in here
+[1:10:42] and a .env example.
+[1:10:46] Now, this is going to store your keys.
+[1:10:47] Don't share this with anybody, not even
+[1:10:49] me.
+[1:10:53] Okay, this is what the example is going
+[1:10:56] to look like.
+[1:10:59] And then this is not financial advice.
+[1:11:19] Okay, perfect perfect. You can see the
+[1:11:21] example is what the .env looks like.
+[1:11:24] Let's make a get ignore here.
+[1:11:26] Get ignore will allow me to never show
+[1:11:29] you that code on the GitHub. .gitignore
+[1:11:33] .env
+[1:11:37] And not the example though.
+[1:11:39] Save.
+[1:11:41] All right, you can see it just got dark.
+[1:11:43] Perfect.
+[1:11:44] Okay, so you see the .env example. What
+[1:11:46] am I putting in there? The Hyperliquid
+[1:11:48] key. You can use any exchange you want.
+[1:11:50] This is the exchange that I'm using
+[1:11:51] Hyperliquid.
+[1:11:54] At the end of the day, all of these
+[1:11:55] exchanges are trading against you. They
+[1:11:57] are not on your team. Don't think
+[1:11:58] they're on your team. Be careful. There
+[1:12:00] has been things that happened in the
+[1:12:02] past like FTX where an exchange ended up
+[1:12:04] being a scam. I don't trust any
+[1:12:07] exchange. I am here to just
+[1:12:10] extract alpha
+[1:12:12] by trading on the exchange.
+[1:12:15] And you have to be careful. Just be
+[1:12:16] careful. Be careful. Be careful.
+[1:12:18] Don't trust anybody.
+[1:12:21] Don't trust any of these exchanges.
+[1:12:23] Okay, bot.py. So the first thing we'll
+[1:12:25] need to do here is build out this
+[1:12:28] strategy. So
+[1:12:30] let's give it an example here. I have
+[1:12:33] like
+[1:12:36] some example code.
+[1:12:44] Above is an example bot that I want you
+[1:12:47] to follow in order to build out this
+[1:12:52] Your time is limited.
+[1:12:53] BB squeeze ADX strategy that we just
+[1:12:56] backtested.
+[1:12:59] BB ADX squeeze
+[1:13:02] So, essentially use the code as a guide.
+[1:13:04] You know, there's a MoonDev API that you
+[1:13:06] won't need to use. There's a lot of
+[1:13:07] things you won't need to use in the
+[1:13:08] above. Assume that we have nice funcs
+[1:13:11] already um in our folder structure. So,
+[1:13:15] whenever it calls n. will use nice
+[1:13:17] funcs. I'll build that out as we build.
+[1:13:21] Um but yeah, just build out this
+[1:13:23] backtested strategy into this file here
+[1:13:26] called bot.py.
+[1:13:35] And use the above as a template and
+[1:13:40] also use this screenshot of my checklist
+[1:13:44] to make sure all of these things are
+[1:13:46] implemented. Like for example, the risk
+[1:13:48] controls, P&L close, and so on and so
+[1:13:50] on. So, just look through the checklist,
+[1:13:52] look through the above code, and build
+[1:13:54] out this bot of the BB squeeze that we
+[1:13:58] backtested into bot.py here.
+[1:14:02] Build
+[1:14:03] here
+[1:14:05] at bot.py. Okay, and then also
+[1:14:08] I have this again on the RBI system
+[1:14:11] that's on the roadmap moondev.com. It's
+[1:14:13] free. Um I have this
+[1:14:17] checklist here.
+[1:14:18] Implement into a bot with tiny size, and
+[1:14:21] that's a key because you don't want to
+[1:14:22] trade anything that even if it worked in
+[1:14:24] the past, you don't want to use big size
+[1:14:25] unless it actually continues to work in
+[1:14:28] the future. It's not guaranteed to work
+[1:14:29] in the future.
+[1:14:31] It's not guaranteed. It's just more
+[1:14:32] likely, and this is a probabilities
+[1:14:34] game.
+[1:14:36] The probabilities game you are playing
+[1:14:38] here today.
+[1:14:39] Okay, so let me go ahead and paste that
+[1:14:41] in here.
+[1:14:43] And then we're going to go ahead and
+[1:14:44] send it in and see what she can do.
+[1:14:47] So, I'm using AI. This is how you use AI
+[1:14:49] in trading right now.
+[1:14:51] Uh yes, I have agents running down in
+[1:14:53] the bottom left. You've seen that the
+[1:14:55] entire time. I'll get to that some other
+[1:14:56] day. If you want to
+[1:14:58] If you want a second class on this, just
+[1:15:00] say class two class two. Give me class
+[1:15:03] two in the comment section below. Say
+[1:15:05] class two. I'm going to give you the
+[1:15:07] short concise version of the RBI system.
+[1:15:10] I can sit here all day. I teach you
+[1:15:12] everything. I teach you everything in
+[1:15:13] the boot camp. I try to teach you a lot
+[1:15:16] on the road map. This is the boot camp.
+[1:15:18] There's been hundreds, if not thousands.
+[1:15:20] Actually, there's been thousands of
+[1:15:22] people that have gone through this and
+[1:15:23] we have hundreds of reviews. You can
+[1:15:25] Google it. Um it's Algo Trade Camp.
+[1:15:27] There's a 100% money-back guarantee. No
+[1:15:29] questions asked. I teach you everything
+[1:15:31] step by step and I hold your hand
+[1:15:34] through this process because I know
+[1:15:35] nobody else in the world is sharing this
+[1:15:37] information. So, I thought, "Hey, I have
+[1:15:40] to do this anyways. I'm chasing this guy
+[1:15:42] right here and $31 billion is enough for
+[1:15:46] me. I would take 1/30 of that." So, that
+[1:15:49] means 29, 30 other people can get down
+[1:15:52] on their own billion.
+[1:15:54] It's going to be a hard game. It's going
+[1:15:56] to be a long game. He died at 86 and he
+[1:15:59] did this until he died.
+[1:16:01] I'm 35. I didn't learn how to code until
+[1:16:03] I was 30. You can do anything, dude.
+[1:16:07] I've implemented a BB Squeeze ADX
+[1:16:10] trading bot based on your backtest
+[1:16:12] strategy and checklist. The bot includes
+[1:16:14] risk controls. We implemented the N. PNO
+[1:16:16] close. Perfect.
+[1:16:19] Strategy implementation. Use the
+[1:16:21] Bollinger Bands plus Keltner Channel
+[1:16:23] squeeze detection with ADX confirmation
+[1:16:27] for strength.
+[1:16:29] Position entry checks. Verifies no
+[1:16:32] existing positions before entering a new
+[1:16:34] position. Perfect. Order cancellation.
+[1:16:37] Cancels all orders before opening new
+[1:16:39] ones. Perfect. N. Cancel all orders.
+[1:16:42] Decimal handling. So, I've done all
+[1:16:44] this. I've worked all this out for you,
+[1:16:46] dude. So, I'm trying to make this
+[1:16:48] truncated, short, concise class. If
+[1:16:52] you've completed Harvard's CS50, you
+[1:16:54] should be right with me here. You have
+[1:16:56] all the tools that I have. Order type
+[1:16:58] choice, scheduling, debug statements.
+[1:17:01] Perfect. Perfect. The bot follows your
+[1:17:03] trading checklist exactly. It checks for
+[1:17:05] a position before entering. It cancels
+[1:17:08] all positions all open orders before
+[1:17:10] opening a new one. Uses proper decimal
+[1:17:14] adjustments for size and price. Uses
+[1:17:17] limit orders, which are configurable.
+[1:17:19] Runs on a schedule every minute.
+[1:17:21] Debugging is easy with colorful outputs.
+[1:17:24] Thank you. The strategy matches your
+[1:17:26] back test. The BB window, BB standard
+[1:17:28] deviation, Keltner window, Keltner ATR
+[1:17:32] multiple, ADX. Perfect. Let's go ahead
+[1:17:34] and say accept. Now, there's going to be
+[1:17:36] some debugging here, and I also need to
+[1:17:39] get one more file in there cuz I want
+[1:17:41] you to have everything I have.
+[1:17:43] Nice funcs.py. This is where I put my
+[1:17:45] nice functions, if you couldn't tell.
+[1:17:48] You can see I'm using my get hyper
+[1:17:51] liquid key here.
+[1:17:54] Get OS. Perfect. And we're bringing in
+[1:17:56] some fun code to keep it fun because
+[1:17:59] anything you can have fun with, you can
+[1:18:01] do forever. If you thoroughly have fun
+[1:18:04] finding new ideas, digging for gold,
+[1:18:08] chasing a big dream like this, dude,
+[1:18:11] then you can code forever. Me, I love it
+[1:18:13] here.
+[1:18:15] Use market orders. I set it to false for
+[1:18:17] now. You can see I initialize the
+[1:18:19] account here. The squeeze flag is false.
+[1:18:22] Squeeze release false. Print the banner,
+[1:18:25] and then we fetch the data. So, interval
+[1:18:28] 6 hours. Okay.
+[1:18:30] Then we fetch the candlesticks, the data
+[1:18:32] here.
+[1:18:35] And that fetch open high low close
+[1:18:37] volume. This actually isn't going to
+[1:18:39] work with 6-hour because
+[1:18:41] HyperLiquid has 4-hour or 4 hours
+[1:18:44] instead of 6-hour data. So, you'll have
+[1:18:47] to go back and backtest the 4-hour data,
+[1:18:49] dude. Of course, I'm not going to show
+[1:18:52] you everything and do all the tweaking
+[1:18:54] and testing here with you. But, we
+[1:18:56] backtested it on the 6-hour data. Now,
+[1:18:59] this bot has on the 4-hour data. So,
+[1:19:01] right there, I'm not following my
+[1:19:03] backtest. So, of course, don't run
+[1:19:05] anything like this. I want to get the
+[1:19:07] templates up for you because I'm never
+[1:19:09] going to just give you a boatload of
+[1:19:11] fish. I want you to learn this process.
+[1:19:13] I'm a professor. I want you to
+[1:19:16] understand everything I know, so you can
+[1:19:19] take this much, much further than me. My
+[1:19:22] bet is yes, I can continue to do this
+[1:19:25] for the rest of my life, and I will.
+[1:19:27] But, my bet is if I get a thousand
+[1:19:30] people also doing this with me, against
+[1:19:34] me,
+[1:19:36] versus me, however you want to think of
+[1:19:38] it, scarcity or abundance, I think we're
+[1:19:41] all doing this together. I bet on 1,000
+[1:19:44] of you guys over one of me, and that's
+[1:19:46] all I'm doing, dude. I will show you
+[1:19:48] everything, every single day. I go live
+[1:19:51] every day, and I show you everything.
+[1:19:53] Calculate indicators here. This is how
+[1:19:55] we're going to calculate the indicators.
+[1:19:57] You can see I'm using TA-Lib.
+[1:20:00] That's a package that we need to add to
+[1:20:03] our
+[1:20:04] Python packages, TA-Lib.
+[1:20:08] Indicators
+[1:20:10] for finance.
+[1:20:12] Perfect. Let's go back to the bot.py.
+[1:20:14] You can see TA-Lib. We're using TA-Lib.
+[1:20:17] Great. We analyze the markets here.
+[1:20:19] We're looking for the squeeze. The
+[1:20:21] squeeze released here.
+[1:20:25] Checking if it's an actual squeeze like
+[1:20:27] our backtest, and then we're looking at
+[1:20:29] the ADX just like we did in our
+[1:20:31] backtest. Now, there's going to be
+[1:20:33] debugging that needs to be done, but I
+[1:20:35] want to get these templates up for you
+[1:20:36] so so you can do anything. You can see
+[1:20:40] this is the bot section here and we
+[1:20:42] check to see if I'm in a position first.
+[1:20:44] I need to get the position. So how do we
+[1:20:46] get the position? Well, I have all those
+[1:20:49] functions here for you. So let's say get
+[1:20:51] position
+[1:20:52] and let's just put that function in
+[1:20:54] there to start in the nice funks. I want
+[1:20:56] you to have everything I have access to.
+[1:20:59] Okay, nice funks here dude. Let's go
+[1:21:01] ahead and paste it in. What else do we
+[1:21:03] need from this here? Well, we need the
+[1:21:06] info contents in
+[1:21:09] info.
+[1:21:16] We need to make a bunch of imports here
+[1:21:18] so
+[1:21:19] let's go ahead and import all of this.
+[1:21:23] There we go.
+[1:21:24] And now this should work perfect.
+[1:21:27] Let's see if there's anything else in
+[1:21:29] here that we use. No, okay, perfect. So
+[1:21:32] let's keep going through the bot section
+[1:21:33] to see what other nice funks we need.
+[1:21:35] You can see n.getposition is now here.
+[1:21:38] Do we import nice funks as n? I don't
+[1:21:41] think so.
+[1:21:42] Let's say import
+[1:21:45] nice funks as n. By the way, I don't
+[1:21:47] know if you saw that CCXT pop up, but
+[1:21:49] CCXT allows you to connect to any
+[1:21:52] exchange in the world. So I have plenty
+[1:21:54] of tutorials showing CCXT here and this
+[1:21:57] connects to all the exchanges you could
+[1:21:59] ever want to connect to. I just use
+[1:22:01] HyperLiquid because it's somewhat
+[1:22:03] decentralized, but if you want to
+[1:22:05] connect to Binance, Coinbase, KuCoin,
+[1:22:07] Kraken, whatever, you can connect to all
+[1:22:10] of those using CCXT, okay. So let me go
+[1:22:13] ahead and put that on the readme as
+[1:22:15] well. CCXT
+[1:22:17] CCXT
+[1:22:19] if you want to connect to other
+[1:22:23] exchanges
+[1:22:26] changes other than
+[1:22:30] hyperliquid.
+[1:22:32] Perfect. So, everything I have, you
+[1:22:33] have. Okay, nice funcs here. Let's go
+[1:22:36] back to the bot cuz now I have it
+[1:22:38] implemented the nice funcs
+[1:22:41] nice funcs are where I put my nice
+[1:22:42] funcs. It's right in the word. It's
+[1:22:44] right in the word n.getposition.
+[1:22:47] Perfect. Okay, let's see what else there
+[1:22:49] is. Fetch klines. Let's go up to fetch
+[1:22:51] klines because I believe this uses
+[1:22:55] No, it doesn't.
+[1:22:57] n.fetchopenhighlowclose
+[1:22:59] Rest at the end, not in the middle.
+[1:23:02] And that's something I always live by.
+[1:23:05] You know.
+[1:23:05] I'm not going to rest. I'm going to keep
+[1:23:06] on pushing out. There are a lot of
+[1:23:08] answers
+[1:23:09] that I don't have. Even questions that I
+[1:23:12] don't have. But I'm just going to keep
+[1:23:14] going. Just going to keep going and I'll
+[1:23:16] figure these things out as you go,
+[1:23:17] right? And you just continue to build
+[1:23:18] that way. So, that I try to live by that
+[1:23:20] all the time. Rest at the end. Rest at
+[1:23:22] the end.
+[1:23:23] Okay, so that was actually I changed it
+[1:23:25] to get open Actually, that's not it.
+[1:23:27] That's not it. Get It does not it.
+[1:23:30] That's not it, dude. That's not it.
+[1:23:32] Let's find the uh Here we go.
+[1:23:36] Get open high low close volume two. It's
+[1:23:39] actually going to be called. You can see
+[1:23:40] this is using Kraken, but we don't want
+[1:23:41] to use Kraken. We want to get it
+[1:23:43] cracking, but we don't want to use
+[1:23:45] Kraken. Okay, let's say get open high
+[1:23:47] low close volume two. No way. I want to
+[1:23:49] save this. Cancel. So, you can see here
+[1:23:53] when I get the data, I'm putting it
+[1:23:55] right
+[1:23:56] somewhere around here. Right there. Get
+[1:23:57] open high low close volume two. Now we
+[1:23:59] get it. pd.to_datetime.
+[1:24:02] Okay, perfect. I just want to look for
+[1:24:03] any nice funcs that we have here because
+[1:24:06] I need to make sure that you have all
+[1:24:08] access to the nice funcs all the nice
+[1:24:10] funcs, dude, because that's the one
+[1:24:12] piece you don't have. I don't need to go
+[1:24:14] through all this code simply because you
+[1:24:16] see it all on GitHub.
+[1:24:18] You got it all on GitHub now, dude. So,
+[1:24:20] n.askbid. Okay. Well, let's go ahead and
+[1:24:23] get that askbid here.
+[1:24:25] And
+[1:24:27] you'll have that code as well because
+[1:24:29] the askbid is used over and over and
+[1:24:32] over again. And sometimes you might want
+[1:24:34] level two data or things like that.
+[1:24:36] Level two data
+[1:24:38] shows you all the asks and the bids that
+[1:24:40] have not been
+[1:24:42] um filled. You can see you can get the
+[1:24:44] ask on the ask and the bid.
+[1:24:47] But you can also get a few higher. So,
+[1:24:49] this is a huge function that you will
+[1:24:51] love love love and I want to make sure
+[1:24:53] that you have have have everything I
+[1:24:55] have have have. Adjust leverage in USDC
+[1:24:58] size. Okay, this is another one that's a
+[1:25:01] little tricky to build, but I want to
+[1:25:02] make sure that you have it all. And if
+[1:25:05] you have it all, you can be it all. And
+[1:25:07] even if you don't have it all, you can
+[1:25:08] still be it all. I believe in you so so
+[1:25:11] much. That's why I'm taking my time out
+[1:25:13] of today and making this step-by-step
+[1:25:15] tutorial because I want you to succeed,
+[1:25:18] dude. Get SC size and pixels. This is
+[1:25:22] another tricky one, dude. So, let me
+[1:25:24] just get you that code right now. Okay,
+[1:25:26] so here we go. Let's go pull it all in
+[1:25:29] here.
+[1:25:31] And you can see, okay, get decimals.
+[1:25:35] Let's put it in there. Okay, there it
+[1:25:36] is. You can see that's a nice funky funk
+[1:25:39] right there.
+[1:25:40] And you have all the code that I have.
+[1:25:43] Market order, you need the market and
+[1:25:45] you need the limit order.
+[1:25:46] Um I'm going to go ahead and actually
+[1:25:49] just say limit order if long. I just
+[1:25:51] want limits, so I'm going to delete
+[1:25:52] this.
+[1:25:55] I just want the limit order here
+[1:25:57] for both of these.
+[1:26:00] Sorry.
+[1:26:03] Sorry, not sorry. I'm just going to put
+[1:26:05] the limits in.
+[1:26:06] The limit order is just a better way,
+[1:26:09] in my opinion.
+[1:26:10] So, here's the limit order here.
+[1:26:18] Let's put in the nice funks.
+[1:26:22] So now you have a way to put in orders
+[1:26:24] as well. That's crazy, dude. This is all
+[1:26:26] free. All free because I believe in you.
+[1:26:29] Let's go. Let's go. Lock in every single
+[1:26:31] day. I'll lock in, too. I'll just keep
+[1:26:33] building. I build everything here live
+[1:26:36] uh free on YouTube because I believe
+[1:26:38] code is a great equalizer. I believe if
+[1:26:40] you see everything I see, you can be
+[1:26:42] way, way more than me. I showed you all
+[1:26:45] of the code here, dude. Here, let's do a
+[1:26:46] quick little walk-through of this
+[1:26:49] full system. Remember, the full system
+[1:26:51] is lit right here. Okay, it's written
+[1:26:54] right here. It's the research, backtest,
+[1:26:56] and implementation. Welcome to the
+[1:26:58] Harvard algorithmic trading with AI
+[1:27:00] repository. This is an open-source
+[1:27:03] project.
+[1:27:04] Teaches you how to become an algorithmic
+[1:27:06] trader by following a systematic
+[1:27:08] approach to automating trading
+[1:27:10] strategies.
+[1:27:12] Most people face
+[1:27:14] poor judgment, high emotions, wasting of
+[1:27:17] time with little profit. So, I propose a
+[1:27:20] different system to approaching trading.
+[1:27:22] Do not trade until you have researched
+[1:27:26] and you've backtested enough to find
+[1:27:28] things that actually work in the past
+[1:27:30] and then have those things that work in
+[1:27:32] the past run with a robot.
+[1:27:36] Do not let your emotions get in the way.
+[1:27:38] Don't crank up that leverage. Don't
+[1:27:40] stare at that chart. None of that. Stare
+[1:27:42] at this code. This repo has everything
+[1:27:45] in it.
+[1:27:46] The full RBI system. I showed you all of
+[1:27:48] the places in order to research. I
+[1:27:50] showed you how to use AI in coding to
+[1:27:52] build trading bots. I showed you
+[1:27:54] everything. The prerequisite to this is
+[1:27:57] Harvard's CS50. Go watch that.
+[1:28:00] The introduction to computer science. If
+[1:28:01] you understand that, you'll understand
+[1:28:03] everything. These are some Python
+[1:28:05] packages that are super important to
+[1:28:07] know. Learn pandas, dude, right now.
+[1:28:09] Thank you. Backtesting.py is how I
+[1:28:12] backtest. YFinance where you get free
+[1:28:14] daily data. TA-Lib indicators for
+[1:28:17] finance. CCXT if you want to connect to
+[1:28:19] other exchanges. Okay, so I made three
+[1:28:22] different folders here.
+[1:28:23] The R is where we start. This shows you
+[1:28:26] all of the places that you can go ahead
+[1:28:28] and come up with unlimited strategies.
+[1:28:29] Those strategies then can tee off an
+[1:28:32] idea that will allow you to then see if
+[1:28:35] hey, did this work in the past? You use
+[1:28:37] a backtest. We'll get to that here in a
+[1:28:38] second. But here's a list of great books
+[1:28:41] that you can pull unlimited ideas out of
+[1:28:44] and then the Chat With Traders podcast
+[1:28:47] and
+[1:28:48] the Market Wizards books. Dude, there's
+[1:28:50] unlimited ideas. Okay, that's all in the
+[1:28:51] research folder here. Okay, then we have
+[1:28:54] the backtest folder here. Here's some
+[1:28:56] sample data I put in there for you so so
+[1:28:58] you can have it. And then I also gave
+[1:29:00] you the hyper liquid data source here
+[1:29:03] where you can pull a couple months of
+[1:29:04] data for free without any API keys. The
+[1:29:07] read me will show you all about
+[1:29:09] backtesting. And then the
+[1:29:11] implementation. I put my bot.py. You can
+[1:29:13] say this is a template. I did not do the
+[1:29:16] debugging yet because I don't want to I
+[1:29:19] don't want you to focus on the bot until
+[1:29:22] you go ahead and you do the backtesting
+[1:29:24] and research. Once you have the research
+[1:29:26] and backtesting, this is a full template
+[1:29:28] of a bot here and I included my nice
+[1:29:31] funcs that took me years and years to
+[1:29:33] build. So you have everything that I've
+[1:29:36] spent multiple years on. You know my
+[1:29:38] entire system. It all comes down to the
+[1:29:41] R, the B, and the I. RBI system here.
+[1:29:44] This is all free on moondev.com.
+[1:29:48] This explains the full system. It
+[1:29:50] answers a bunch of questions. There's a
+[1:29:52] road map. There's resources, a Discord
+[1:29:54] community, frequently asked questions.
+[1:29:57] Everything I can give you I try to give
+[1:29:59] you here, dude. And if you need more, of
+[1:30:01] course I have the boot camp and that's a
+[1:30:03] 100% money back guarantee forever. So
+[1:30:07] it's actually 90-day money back
+[1:30:08] guarantee. You should be able to make a
+[1:30:09] decision by then. If you want to join
+[1:30:12] that, please feel free to. I made it
+[1:30:13] very inexpensive because I don't want
+[1:30:15] you to waste any more money. You have
+[1:30:17] the bot, you've got the nice funcs. Let
+[1:30:19] me go ahead and make sure all of this
+[1:30:22] GitHub is added to the GitHub get add.
+[1:30:26] get commit um
+[1:30:30] All the code for Harvard
+[1:30:34] algorithmic
+[1:30:36] trading class. So, you can see I have my
+[1:30:40] .env example, my ignore, my bot.py. And
+[1:30:44] then I'm going to say get push. And this
+[1:30:46] is now finished. You have all of the
+[1:30:49] code on GitHub. Let's go ahead here to
+[1:30:53] Harvard algorithmic trading with AI. And
+[1:30:56] you can see you have the research, the
+[1:30:58] backtest, and the implement. So,
+[1:31:00] implement is where the bot and the nice
+[1:31:02] funcs are. You understand everything. If
+[1:31:06] you did not take Harvard CS50 yet,
+[1:31:09] please go back and watch Harvard CS50
+[1:31:12] and then come back to this training
+[1:31:15] here. And this will all make sense. The
+[1:31:17] GitHub's here, it's public. You can
+[1:31:19] probably just Google it. From here, it's
+[1:31:22] on you to research, research, research,
+[1:31:25] come up with ideas. There are so many
+[1:31:27] ideas. You can see I didn't even get to
+[1:31:29] my AI agents yet. If you want to see
+[1:31:31] something like that, say AI agent class
+[1:31:34] below. Let me know below, say AI agent
+[1:31:36] class. If you want to see how to use
+[1:31:38] liquidation data, liquidation data is
+[1:31:41] when people get liquidated. And I showed
+[1:31:43] you this at the start of today. I can
+[1:31:45] see when other people are going to get
+[1:31:47] liquidated. I can see exactly how far
+[1:31:49] away until they get liquidated. And
+[1:31:52] that's insane.
+[1:31:53] It's all about coming up with alpha that
+[1:31:55] works for you. These different data
+[1:31:57] sources I have are my secret alpha
+[1:32:00] sources. And they're not so secret. I
+[1:32:03] just found them. I came up with the
+[1:32:05] ideas and then I looked for them and
+[1:32:07] then I built it and then built into my
+[1:32:08] bots. One way to get a competitive edge
+[1:32:11] on everybody else is using data that not
+[1:32:13] everybody else has. So all this data
+[1:32:16] you've seen on my screen today, not
+[1:32:18] everybody has access to this. So while
+[1:32:20] 99% of people are trading by hand,
+[1:32:25] I'm making a moat around my business by
+[1:32:28] never trading by hand. Okay, those that
+[1:32:30] don't trade by hand,
+[1:32:32] do they have custom data and secret data
+[1:32:34] sources? Probably not. Okay, so 99% of
+[1:32:38] people that don't trade by hand, they
+[1:32:40] don't have
+[1:32:41] they don't have their secret data
+[1:32:42] sources. Okay, I got my own custom data
+[1:32:45] sources. Okay, more separation. And this
+[1:32:47] is all about making your systems better
+[1:32:49] and better and better and creating more
+[1:32:51] and more separation between your
+[1:32:52] competition. Those who keep going and
+[1:32:55] keep swimming will always win no matter
+[1:32:58] what they do in this world. If you can't
+[1:33:00] fly, then run. If you can't run, then
+[1:33:03] walk. And if you can't walk, then crawl.
+[1:33:07] But by all means, just keep going.
+[1:33:10] That's what Martin Luther King Jr. says
+[1:33:12] to me every single day. While Jim Rohn
+[1:33:14] says keep making your systems better and
+[1:33:16] better. Kobe says the contract's already
+[1:33:19] been signed. Mike says discipline is
+[1:33:21] doing what you hate to do but do it like
+[1:33:23] you love it. Make a choice.
+[1:33:25] Like you just decide
+[1:33:28] what it's going to be, who you're going
+[1:33:29] to be, how you're going to do it. Just
+[1:33:31] decide. And then from that point, the
+[1:33:35] universe is going to get out your way.
+[1:33:37] It's like it's water. It wants to it
+[1:33:38] wants to move and go around stuff, you
+[1:33:40] know.
+[1:33:41] It's water.

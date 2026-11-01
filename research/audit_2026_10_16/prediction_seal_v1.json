@@ -1,0 +1,309 @@
+{
+ "claims": {
+  "live_trading_authorized": false,
+  "paper_trading_authorized": false,
+  "strategy_promotion_authorized": false
+ },
+ "created_utc": "2026-10-16",
+ "descriptive_only": true,
+ "envelopes_cumulative_and_drawdown_percentiles_at_day_n": {
+  "crypto-trend-core-v1": {
+   "as_backtested": {
+    "180": {
+     "cum_p5": -0.06769499852862852,
+     "cum_p50": 0.05794734582702876,
+     "cum_p95": 0.3348573355879463,
+     "mdd_p5": -0.13132070326121123,
+     "mdd_p50": -0.06320475560168998,
+     "mdd_p95": -0.03161315817237331
+    },
+    "30": {
+     "cum_p5": -0.0375239284117042,
+     "cum_p50": 0.0033381500912014195,
+     "cum_p95": 0.0950357923854701,
+     "mdd_p5": -0.06987307231496814,
+     "mdd_p50": -0.022644154779239756,
+     "mdd_p95": -0.008698613168115816
+    },
+    "60": {
+     "cum_p5": -0.049767602302599676,
+     "cum_p50": 0.012201836421241508,
+     "cum_p95": 0.15672298473329813,
+     "mdd_p5": -0.08899250499245424,
+     "mdd_p50": -0.035260564270235495,
+     "mdd_p95": -0.01623076365912438
+    },
+    "90": {
+     "cum_p5": -0.05789124978248327,
+     "cum_p50": 0.021624186619908947,
+     "cum_p95": 0.20971336124664453,
+     "mdd_p5": -0.1061835932709154,
+     "mdd_p50": -0.044403494035655244,
+     "mdd_p95": -0.02059238107557855
+    }
+   },
+   "book": "combined",
+   "input_sha256": "b83018893b238e272fa61a8699d60a70b6577405eea2529b7eac7858b4e1f206",
+   "zero_edge": {
+    "180": {
+     "cum_p5": -0.13750359218227118,
+     "cum_p50": -0.02121648498840556,
+     "cum_p95": 0.2350936568391345,
+     "mdd_p5": -0.172842719074527,
+     "mdd_p50": -0.09561665382589107,
+     "mdd_p95": -0.0498491637415338
+    },
+    "30": {
+     "cum_p5": -0.04993896901285612,
+     "cum_p50": -0.009586059679139558,
+     "cum_p95": 0.08097076633154898,
+     "mdd_p5": -0.07499211059006183,
+     "mdd_p50": -0.028639328560726984,
+     "mdd_p95": -0.01282737479787699
+    },
+    "60": {
+     "cum_p5": -0.07411337069449293,
+     "cum_p50": -0.013704667546028337,
+     "cum_p95": 0.12717993211648818,
+     "mdd_p5": -0.10247629260146666,
+     "mdd_p50": -0.046477240503961015,
+     "mdd_p95": -0.022327434648331486
+    },
+    "90": {
+     "cum_p5": -0.09385848671716314,
+     "cum_p50": -0.01734542953669982,
+     "cum_p95": 0.16365410060742167,
+     "mdd_p5": -0.12515047779420066,
+     "mdd_p50": -0.0613779309074432,
+     "mdd_p95": -0.03125031534859757
+    }
+   }
+  },
+  "multi-premia-blend-v1": {
+   "as_backtested": {
+    "180": {
+     "cum_p5": -0.036016069809440755,
+     "cum_p50": 0.11772067452955604,
+     "cum_p95": 0.44889091440620055,
+     "mdd_p5": -0.1006420867886364,
+     "mdd_p50": -0.050076368309868835,
+     "mdd_p95": -0.026680841500557346
+    },
+    "30": {
+     "cum_p5": -0.029805314294136086,
+     "cum_p50": 0.011171613828044769,
+     "cum_p95": 0.11832317749316906,
+     "mdd_p5": -0.04997115198335156,
+     "mdd_p50": -0.020011071404242187,
+     "mdd_p95": -0.008318039676804351
+    },
+    "60": {
+     "cum_p5": -0.03751491409249578,
+     "cum_p50": 0.02955376065769444,
+     "cum_p95": 0.20271999000943694,
+     "mdd_p5": -0.07322388997046418,
+     "mdd_p50": -0.029605078343442948,
+     "mdd_p95": -0.01407057507984954
+    },
+    "90": {
+     "cum_p5": -0.03784795012425398,
+     "cum_p50": 0.048620870293458296,
+     "cum_p95": 0.2712618377238645,
+     "mdd_p5": -0.07779485493853733,
+     "mdd_p50": -0.03569235018973371,
+     "mdd_p95": -0.017955622238165603
+    }
+   },
+   "book": "S4_blend",
+   "input_sha256": "626611699cb746e6821e7062204073f289a92bba83bd6863bc640f899e1e92e9",
+   "zero_edge": {
+    "180": {
+     "cum_p5": -0.1626059393195545,
+     "cum_p50": -0.028946109457462565,
+     "cum_p95": 0.2590178006620265,
+     "mdd_p5": -0.18537525956956277,
+     "mdd_p50": -0.10514874661954154,
+     "mdd_p95": -0.05137326900680386
+    },
+    "30": {
+     "cum_p5": -0.05232222107705765,
+     "cum_p50": -0.01226426247746737,
+     "cum_p95": 0.09248660317926248,
+     "mdd_p5": -0.06541997932132962,
+     "mdd_p50": -0.030940839348519433,
+     "mdd_p95": -0.014278583752824536
+    },
+    "60": {
+     "cum_p5": -0.0816567170057811,
+     "cum_p50": -0.017611833118019837,
+     "cum_p95": 0.1477590328384745,
+     "mdd_p5": -0.09576406948284985,
+     "mdd_p50": -0.05035391037993453,
+     "mdd_p95": -0.02463619925076004
+    },
+    "90": {
+     "cum_p5": -0.10325920918586975,
+     "cum_p50": -0.022603521989951136,
+     "cum_p95": 0.185089684329112,
+     "mdd_p5": -0.1221812949428636,
+     "mdd_p50": -0.06700448542544202,
+     "mdd_p95": -0.032094852563812275
+    }
+   }
+  }
+ },
+ "external_anchor": {
+  "opentimestamps": "not stamped: calendar servers unreachable from the audit session (proxy 403); stamp later with `ots stamp` on this file and commit the .ots proof"
+ },
+ "formal_review_rules": [
+  {
+   "criteria": {
+    "all_runs_succeeded": true,
+    "max_drawdown_not_worse_than": -0.2,
+    "mean_daily_return_gt": 0.0
+   },
+   "horizon_days": 180,
+   "report_file": "report.json",
+   "series": "S4_blend",
+   "threshold_rationale": "drawdown guardrail about 1.4x the worst drawdown seen in development (-14%) and the untouched holdout (-11%)",
+   "watch_id": "multi-premia-blend-v1"
+  },
+  {
+   "criteria": {
+    "all_runs_succeeded": true,
+    "max_drawdown_not_worse_than": -0.35,
+    "mean_daily_return_gt": 0.0
+   },
+   "horizon_days": 180,
+   "report_file": "human_report.json",
+   "series": "H5",
+   "threshold_rationale": "secondary book; guardrail about 1.1x the development drawdown (-31%); the untouched holdout already failed this book (Sharpe 0.60), so a pass here is weak evidence",
+   "watch_id": "multi-premia-human-v1-forward"
+  },
+  {
+   "criteria": {
+    "all_runs_succeeded": true,
+    "funding_drag_within_ratio_of_estimate": 2.0,
+    "max_drawdown_not_worse_than": -0.25,
+    "mean_daily_return_gt": 0.0
+   },
+   "funding": {
+    "estimate_annualized": -0.009733,
+    "estimate_source": "research/forward_formal_reviews/trend_core_funding_estimate_2026_09_30.json (frozen pipeline, pre-start window 2026-07-15 to 2026-09-29, 75 days)",
+    "realized": "report funding_contribution.combined.annualized",
+    "rule": "pass if realized >= 0 (funding received) or |realized| <= 2 x |estimate|"
+   },
+   "horizon_days": 180,
+   "report_file": "report.json",
+   "series": "combined",
+   "threshold_rationale": "verbatim from config/crypto_trend_core_v1.json review_criteria_at_180_days",
+   "watch_id": "crypto-trend-core-v1"
+  },
+  {
+   "criteria": {
+    "all_runs_succeeded": true,
+    "funding_drag_within_ratio_of_estimate": 2.0,
+    "max_drawdown_not_worse_than": -0.25,
+    "mean_daily_return_gt": 0.0
+   },
+   "funding": {
+    "estimate_annualized": -0.009733,
+    "estimate_source": "same as crypto-trend-core-v1",
+    "realized": "crypto-trend-core-v1 report funding_contribution.combined.annualized x this report's overlay_state.forward_mean_leverage (this watch reports no funding split; it is the core book scaled by the overlay)",
+    "rule": "pass if realized >= 0 or |realized| <= 2 x |estimate| x forward_mean_leverage"
+   },
+   "horizon_days": 180,
+   "report_file": "report.json",
+   "series": "core_voltarget",
+   "threshold_rationale": "verbatim from config/crypto_trend_core_voltarget_v1.json review_criteria_at_180_days",
+   "watch_id": "crypto-trend-core-voltarget-v1"
+  }
+ ],
+ "frozen_config_sha256": {
+  "config/chop_regime_search_v1.json": "4a9abe3b15ecd5bf245611acdc8a53a7b53a3abe48b10d2aab8d881d2660c923",
+  "config/crypto_trend_core_v1.json": "4d42f6b6c140d83155060185baf71ccda1c9916e566b8032da33496bda50098d",
+  "config/crypto_trend_core_voltarget_v1.json": "ee0591decaaec0a1e7c16a9ccbd779e394493bb7ae7c797645c9a309315a3ea1",
+  "config/custom_sentiment_v1.json": "fbbb88c2e94d10483058c3b8600fc351d021a261aa57a80f2f6d02a7ccc41afc",
+  "config/discovery_v2_sprint13_payoff_meta_v1.json": "fa4143b066c26a12f7e6cde800c1d7aa7d1a115721eb0c80e2cd9579cd2320f9",
+  "config/dv2_payoff_meta_trend_accel_shadow_v1.json": "340890cfa1d2621310ca6d44d267125f3d3a06d75dd0805a26e20fe5805eec6a",
+  "config/evidence_v2_session_audit_v1.json": "482a95e491fc59ddf47a2b1f08efca20c39480564219480467a9e8ec5768dacf",
+  "config/evidence_v2_session_forward_watch_v1.json": "fb6a6e823db421b0420dfa39ad7af78f7ea2c9e7d6441ceab5472a6da47e3958",
+  "config/fade24_forward_v1.json": "8670817120585be177f9b9468ab1e9ee7b3d517b5b55d366b23147d30ae7feb7",
+  "config/fast_gates_v1.json": "bf1592ef658110c2aeb2a24e0609ee929ff2719a65ded75ff9a3d6cbb9ec7b81",
+  "config/forward_drawdown_envelopes_v1.json": "6046e0ff313632966faa7331fd82751ba3e0cdfec06684a2d18b5db5b2642a45",
+  "config/forward_formal_reviews_v1.json": "d2bf3eda69373a833c933c5df3f1768b019acb6dfe03d503f0ec20e6c09a3a44",
+  "config/forward_formal_reviews_v2.json": "cc8b2ea6a277432bbb70cef6392e127354bae9ff2e58f6868283fab441abd249",
+  "config/funding_crowding_overlay_v1.json": "2be6b1110d4024ac57ef25086dc1a115da382cde242d570ed6733e22cd140c57",
+  "config/funding_source_check_v1.json": "a3722870f94d3ea8f77c6ccd01e2b4d756d32418eece98ccbdf967515198c0f4",
+  "config/fx_index_prop_v1.json": "c94e10be050a3c340df36a85bb45446d14cb0286f35ed1e9f9d8ac8dd2badd9d",
+  "config/hyperliquid_vault_persistence_v1.json": "54314b6108fd8458dcd4807aa6d30f620172978cb0f997a29ff5486571f6f7ae",
+  "config/hyperliquid_vaults_collection_v1.json": "326939ace6e64c96e296c52a658873aa2c940b66f268491a6b0401546b5a9a73",
+  "config/hyperliquid_venue_check_v1.json": "5925e4a609695e120a69ff862fe68d7c11689658fdee725292eff14d149719f5",
+  "config/kronos_v1.json": "6b384eedb958e736273f7839714a57bd137868384add332a38dd48a2233fa81a",
+  "config/leverage_bracket_study_v1.json": "6cd260962f019ed467a2eb08265400867566e82ea773aa5ac60e78ede6c0ba68",
+  "config/leverage_bracket_study_v2.json": "530b19df48697465adb1d57abf20fad07f870077f76b0706abcc3d81ebccb9b5",
+  "config/liquidation_flow_v1.json": "1f1ea9b586bf35fa2b10c1f9adbf481ed8bcbd9447d29dca5fbe24cf4f942543",
+  "config/multi_premia_blend_v1.json": "28ff6ae49427104014f89bb50617b0e4b3443f86af80276146c44bd54a081c3e",
+  "config/multi_premia_human_v1.json": "03c8c1ac21f6d631d3dcf87487a9f7714ed2d8ffeabad5d1aa1708b6b1a0240a",
+  "config/multi_premia_robustness_v1.json": "d9393f8bc72c73f3882a1fd6f43ef24432afeacbe55f9ffcabcb93a0cd257868",
+  "config/multi_premia_untouched_holdout_v1.json": "fec9d1d71888db786ce3bbd3e58b4b2d32403f8fdb966edbec1c69910496a730",
+  "config/multi_premia_v1.json": "75696ae29d76aa299cabb979fcbf23572e7cb05187062b0bb58090742a79fe3e",
+  "config/near_miss_forward_v1.json": "1dce78dd5c73a7fe0bceec5d58496d878f154e74648afb3c9a80adc78b7c1b89",
+  "config/new_listing_holdout_v1.json": "41f6d8e0108606d6740a6464c85ac899a1022b5762dd5253f110d7db19a69ce9",
+  "config/news_sentiment_review_v2.json": "a9afd19b3af909a4ce4e4f0880c3d235157d654e69c1ba555ee6ccc7f3bd978e",
+  "config/news_sentiment_v1.json": "46ee32816c404fedde27086c9978e4643b8e1fe7161a8474a652f809a0f9e301",
+  "config/paper_account_blend_v1.json": "b530f2631021da5ac9019a4bbe59ac424b59cfe8621e6a982ca4378ec1f06c35",
+  "config/portfolio_vol_target_v1.json": "cbe812d08267dfcb606123fa1443a8044b4a3637b7c4905f5255666c16692089",
+  "config/prop_firm_v1.json": "f34b98a80cc39bbe91cdca2117d1d377e2e1a29d1f0d353d330961a025dc21e0",
+  "config/prop_firm_v2.json": "db74612fbfde8a055631031a4c7e5dd9e188af8789e6d5bda50c3eb7722832df",
+  "config/prop_firm_v3.json": "7034abd881fe56087d004bea817c3519849ddccb1720f4d3bf1bbdc1a5b94cd6",
+  "config/prop_firm_v4.json": "2e063a0d76f82671154f5882ff090f4d209bed54e13d9a40913208a12d6bc663",
+  "config/prop_firm_v5.json": "ec2eab3869907db8a6e0b481faf301f0c6a5c5ceccbd095a311de1efd447a1aa",
+  "config/prop_firm_v6.json": "3f7f1b00b750c023b2f7506aef2e3edbe5375c9303a993e9edb72ef2d9e60392",
+  "config/prop_firm_v7.json": "90a5d90bb079ad4be3e70e3f78162ce17111b30dde5874724c1db987d2d99572",
+  "config/prop_paper_forward_v1.json": "5590288164e347089a3c574421df3c3556c55adfdeedd2bb9172f7e9c0c91228",
+  "config/regime_switch_v1.json": "26c33f196bd8bed4d7b91c7a67dd7d858c632ea8a4445cc66f28bfac40d1c321",
+  "config/session_watch_cvd_lny_v1.json": "f19319521bf88d1aec6a31719d6420e5c1684913151126bae6334b9e6e00b250",
+  "config/strategy_search_v1.json": "5162c0ed8f0e1577aec046144167d198cad9cd239a25d5c0036392c63474c202",
+  "config/strategy_search_v1_round1.json": "f0b0f52157c81ac6349228ac88444014cc752fc05338555ab8400c68fbf88909",
+  "config/strategy_search_v1_round2.json": "9d6dd2440ea5a3188537ae0b434b1d37225ae716fce71f6899e62417dd7f0cea",
+  "config/strategy_search_v2.json": "15c449e4fab43b0818855d8bbc93eb4fa4b1b089d72ab7a7aabc6cf75405caed",
+  "config/strategy_search_v3_amendment_1.json": "6bf25202ece689cb6d6493facc87efecc4e648bb3a35fcfdbd94a05ea929e973",
+  "config/strategy_search_v3_leveraged.json": "54be2db2c5e632e0e442b3499a54cd946eef373ccba4b81d29745f451935e88b",
+  "config/strategy_search_v3_round1.json": "c81c1909241ac64a0baa972cd8ca1d6ef18576d4aa7d4c3930d7b3c7d50bc636",
+  "config/strategy_search_v3_round2.json": "2ff04f52ec76c8b4d5061532845e1b9350c4e09a1c21751b1fee7cc0102ae788",
+  "config/strategy_search_v3_round3.json": "b6bf2942f4e0884e626640f93c1ccde84ac1f37a6472888bf010cd6279e3a905",
+  "config/strategy_zoo_v1.json": "0b0defb52576ac8423765798189b38c32f37d4023ea3af6a297a09f209564fab",
+  "config/strategy_zoo_v2.json": "9acc9697dc830025325377429f7c2eb5b4ffd617ddbb470789ec57d28b47f28f",
+  "config/tradfi_perps_forward_v1.json": "a7371952d1aaee380d133cfb6ff2844077888e5f0f26b26b260c86683aa1343f",
+  "config/trend_channel_exit_v1.json": "6d70ee1ad904b8fd7ffaacb4b765f2f36ace852117c7bdf5d9ca0b56d3635c55",
+  "config/trend_core_leverage_assessment_v1.json": "8555516b43613209487c67ddfb091f3ed2df605b116be7160d6f0081c040e859",
+  "config/trend_ensemble_v1.json": "52fbf77e4f3e1d9eb11cb9630ccb1ba89ba457f0d899ae9088a1075def76cf28",
+  "config/turn_of_month_forward_v1.json": "01eaf426e76f6a7faefde7fa8d6c3cf70284847ef042568bb75f362f1ab0a8e7",
+  "config/universal_canonical_v3_forward_companion_v1.json": "153f021d181ef7b616987b1e5b8f21330f2e20957a114ef21ae52664ce07fb43",
+  "config/universal_cross_asset_trend_forward_v1.json": "d4779c3e48075d3bd7b0b3ad175a53e34ff9c59ab76d644a2a9117759a170c9e",
+  "config/universal_cross_asset_trend_invvol_forward_v1.json": "c2254f22504693e59f115db0b546033023498703035f5f12caf5851d7f41a2dc",
+  "config/universal_etf_long_history_holdout_v1.json": "109109e3cd1da12fcc66e26311c62d8ffeca3e19186fbcded867acd1f42795af",
+  "config/universal_pre_window_crypto_holdout_v1.json": "8cfd439ab42f2caa379f0e05427dab23c4d742f82f6e394787c1ebb18f4e6110",
+  "config/universal_regime_marginal_pairwise_shadow_v1.json": "d5048f3018d85cd5f4e152b1cb698df12f248504f0a923cffd6800e7871da51c",
+  "config/universal_session_alignment_shadow_v1.json": "9abe6f9ab95b511312c42e47395ca628a570db04be576b3d12f829ff751f25fa",
+  "config/universal_trend_portfolio_forward_v1.json": "f216ad49670a4cfbba8094e153d5a2444dbccdb453dc005bc020c9ba85c0f770",
+  "config/universal_untouched_coins_holdout_v1.json": "b282ecb4727016b1111b904c2efce4ec14ef8838c526db1ab9fa71cc5e6887f3",
+  "config/untouched_coins_holdout_v2.json": "ce2b0b1c3f259e5f965bd53341cd2f0767cc20fdaef32bd3c59958da909f3bfd",
+  "config/xs_low_vol_v1.json": "fb70e162cdf9f0577ba0224a4c8bb4bec48af4ab197f31d6f0316c315c903bfc",
+  "config/zoo_mirror_forward_v1.json": "62bf76361154941fc0fb10ff6c8b61dee00c6281f000071712671c0d46afd01a"
+ },
+ "g2_alarm_thresholds": {
+  "dev_daily_sd": 0.007152,
+  "dev_sharpe_raw": 2.0879,
+  "either_rule_false_alarm": 0.0364,
+  "max_drawdown_alarm": -0.13678,
+  "medians": {
+   "max_drawdown": -0.06315,
+   "min_rolling_60d": -0.04474
+  },
+  "min_rolling_60d_alarm": -0.10552
+ },
+ "purpose": "Commit, before the data arrive, the envelope percentiles, review rules and frozen-config hashes that later forward results will be read against.",
+ "seal_id": "forward-prediction-seal-v1"
+}

@@ -1,0 +1,221 @@
+# Most Traders Looks At The Wrong Data (thats why they lose)
+# channel: Moon Dev
+# url: https://www.youtube.com/watch?v=0OdEqSaPFfA
+
+[0:00:00] You see 99.9% of traders aren't even
+[0:00:02] looking at the right data cuz it's too
+[0:00:04] expensive.
+[0:00:05] So, I'm going to show you how to get it
+[0:00:07] for cheaper. I'm going to show you what
+[0:00:08] that data is and why it's so, so
+[0:00:11] important to be looking at the right
+[0:00:12] data when you're trading, especially if
+[0:00:14] you're building bots, if you're
+[0:00:15] backtesting, doing all that stuff. This
+[0:00:17] is where the edge is. So, I'll show you
+[0:00:19] everything step-by-step here
+[0:00:21] shortly and concisely.
+[0:00:23] The data that most people are throwing
+[0:00:24] away, they have the
+[0:00:25] open-high-low-close-volume data cuz it's
+[0:00:26] inexpensive, but they're missing the
+[0:00:28] order, the timing, the size, the venue.
+[0:00:30] You're missing a lot. You're missing a
+[0:00:31] lot. It's called tick data if you don't
+[0:00:33] know already. Well, a
+[0:00:34] a tick is one trade with its own time,
+[0:00:38] with its own size, venue, while a candle
+[0:00:42] is just a summary of the ticks. You have
+[0:00:44] all the trades you got, the the bid, the
+[0:00:46] ask. One tick equals one trade, but one
+[0:00:48] candle has the open, the high, the low,
+[0:00:50] the close. If you're backtesting
+[0:00:52] something, you don't know if it if the
+[0:00:55] trade happened within the candle or not.
+[0:00:58] But, if you have tick data, then you're
+[0:00:59] going to get much more precise backtest.
+[0:01:02] Now, backtesting is a process seeing if
+[0:01:03] something works in the past and if
+[0:01:05] you're not backtesting and you're a
+[0:01:06] trader, you're leaving a lot of money on
+[0:01:07] the table. My name is Mondave. I've
+[0:01:08] helped thousands of people go go from
+[0:01:10] hand trader to fully automated trader
+[0:01:12] and one of those steps is backtesting.
+[0:01:15] Everybody starts with
+[0:01:15] open-high-low-close-volume data and
+[0:01:17] that's fine. I just want to get you up
+[0:01:18] to date here and make sure that you are
+[0:01:20] using a little bit of tick data as well.
+[0:01:22] You can see here a candle throws away
+[0:01:24] the order, the timing, the size, and
+[0:01:25] venue. So, one block and 1,000 tiny
+[0:01:28] prints, they look the same.
+[0:01:30] The candle can't tell them apart, but
+[0:01:32] the tape can.
+[0:01:34] The ticks can. You see, I had to go get
+[0:01:37] some extra data because 80% of the Tesla
+[0:01:39] volume in our NASDAQ feed printed off
+[0:01:41] exchange. Off exchange and 41% of the
+[0:01:43] trades, 41% of Tesla trades add zero
+[0:01:46] shares to a volume bar. So, you can see
+[0:01:49] here 80% off in dark [snorts] pools, 20%
+[0:01:52] lit, NASDAQ venues. Trade count, 41%.
+[0:01:55] Every tick carries its venue and its
+[0:01:57] size. A candle mixes it all into one.
+[0:02:01] You see why that might be a little
+[0:02:02] difficult if you're back testing, right?
+[0:02:04] So, if you use ticks, ticks fill you on
+[0:02:06] the real next trade and show you
+[0:02:09] second-wide effects no bar can see. So,
+[0:02:12] open high low close volume is going to
+[0:02:13] miss things. You can see one is the
+[0:02:15] honest fill. You got the 9.2 BP bars
+[0:02:18] versus 3.3. You can see the retail slow
+[0:02:21] retail retail flow set up here. The
+[0:02:23] one-minute bars plus 13.6, but ticks out
+[0:02:27] of sample is -13. The speed here, you
+[0:02:29] can see the burst here. It changes
+[0:02:31] everything. This is all inside of a
+[0:02:34] one-minute bar.
+[0:02:35] You can't see this with open high low
+[0:02:36] close volume. And this is the key. When
+[0:02:38] your stop and your target both are
+[0:02:40] inside one bar, only the ticks know
+[0:02:42] which one hit first. So, maybe you hit
+[0:02:45] your take profit or your stop loss, but
+[0:02:48] since you're using open high low close
+[0:02:49] volume, you don't know which one hit
+[0:02:51] first, so it's almost meaningless. A bar
+[0:02:53] back test has to guess, and it usually
+[0:02:55] guesses in your favor.
+[0:02:57] So, that's why if you sit there long
+[0:02:59] enough and you back test long enough,
+[0:03:01] you probably will find something that
+[0:03:03] works. But, if you're using tick data,
+[0:03:04] you'll know
+[0:03:06] much more precisely. Now, I follow a
+[0:03:08] process RBI, research, back test, and
+[0:03:10] then incubate. Incubating is important
+[0:03:12] to me because we know that not
+[0:03:15] everything that worked in the past is
+[0:03:16] going to work in the future. So, if you
+[0:03:17] incubate with a bot, you're going to get
+[0:03:19] the real fills.
+[0:03:21] But, now to get your back testing closer
+[0:03:22] to what it's going to look like in
+[0:03:23] incubation, you can use tick data.
+[0:03:31] Now, I think this is the biggest reason
+[0:03:32] people don't use tick data. Crypto ticks
+[0:03:33] are free. I did just grab like 100 GB of
+[0:03:36] data. You can get them from Binance or
+[0:03:38] Bybit, but stock ticks cost money. So,
+[0:03:40] most traders just never look at them.
+[0:03:42] You can see zero bucks for Binance and
+[0:03:44] Bybit. You don't even need API key. You
+[0:03:45] can go back to 2017. You're going to
+[0:03:48] need some hard hardware for this or a
+[0:03:50] hard drive space. I like I said, I I
+[0:03:52] downloaded 136 GB of tick data. So,
+[0:03:55] we're going to have some fun on the
+[0:03:56] Zoom. Every day I do a private Zoom. You
+[0:03:58] can join if you'd like to. I give you
+[0:04:00] the API key or everything that I use.
+[0:04:02] But, it doesn't matter. Join if you'd
+[0:04:03] like. Stocks, futures, and other data
+[0:04:07] like
+[0:04:08] stocks, futures, forex, etc. You can see
+[0:04:10] how much it actually cost. I also did
+[0:04:12] yesterday just spend $150
+[0:04:15] on stock ticks for Tesla.
+[0:04:18] Now, imagine if you do that for Nvidia
+[0:04:20] and all of these other
+[0:04:22] stocks, it racks up fast.
+[0:04:25] Free data is where everybody works. Paid
+[0:04:27] data is where pretty much nobody nobody
+[0:04:30] looks. With that being said, there is
+[0:04:31] tick data for crypto, which is amazing,
+[0:04:34] and that's why I spend a lot of my time
+[0:04:36] in
+[0:04:36] in crypto because a lot of the data is
+[0:04:38] free. And think about it like this, if
+[0:04:40] you're using open high low close volume
+[0:04:41] data only, you're not knowing if your
+[0:04:43] stop loss hits first or your or your
+[0:04:45] take profit hits first. And yes, it does
+[0:04:47] cost some money, but think about it like
+[0:04:49] this, what if you spend $200 on data and
+[0:04:51] it saves you from a fake winner that you
+[0:04:53] lose $1,000 on? Then it's cheap.
+[0:04:56] Both time and money. You can see I spent
+[0:04:58] 150 on Tesla ticks.
+[0:05:00] And I had something that was
+[0:05:02] plus 13% and I actually haven't gone
+[0:05:06] through the with the full test yet. But,
+[0:05:08] it was plus 13% and we're going to see
+[0:05:11] if it actually makes it through the tick
+[0:05:13] data as well.
+[0:05:15] Because if I think that it's going to
+[0:05:16] return 13% and I deploy it and it loses
+[0:05:18] money, $1,000, well, I could have just
+[0:05:21] saved my money by paying a little bit of
+[0:05:23] money on the data. So, it's a decision
+[0:05:25] you have to make. What I would
+[0:05:27] recommend, even though I'm not a
+[0:05:28] financial advisor, is start using a tick
+[0:05:30] data with crypto because it's free
+[0:05:32] still.
+[0:05:33] And then hey, if you want to trade
+[0:05:34] stocks, you got to pay a little bit.
+[0:05:36] At the end of the day, better data will
+[0:05:38] find better edges. And if you're willing
+[0:05:40] to pay a little bit for data or hunt a
+[0:05:42] little bit for data, like it took me a
+[0:05:44] while to find that tick data for crypto,
+[0:05:45] I had to hunt for it. Everybody can find
+[0:05:47] open high low close volume data pretty
+[0:05:49] easily. Makes the most sense.
+[0:05:51] But remember, you know, I'm on year
+[0:05:52] five, six here. So, all I'm trying to do
+[0:05:55] is get better and better because that's
+[0:05:56] what Jim Simons says. He says you just
+[0:05:58] have to make your systems better and
+[0:06:00] better because that's what everybody
+[0:06:01] else is going to do. Okay, well, I also
+[0:06:04] have been using a lot of open high low
+[0:06:06] close volume data.
+[0:06:07] Okay, let's go try to find some tick
+[0:06:09] data for crypto. It was actually kind of
+[0:06:10] hard to find. It's hard to store, hard
+[0:06:12] to download. Okay, great. Well, that's
+[0:06:15] That means that the majority of people
+[0:06:16] aren't going to do it. Perfect. Now, you
+[0:06:18] made your system better. Okay, and now
+[0:06:20] stock data is
+[0:06:22] is not uh hard to find, but it's
+[0:06:24] expensive. I just spent 150 on Tesla.
+[0:06:26] You just got to make your systems better
+[0:06:27] and better. Let me go ahead and show you
+[0:06:29] all the code.
+[0:06:32] You can price it for free. I use Data
+[0:06:33] Bento for this. If you want this, you
+[0:06:35] can see you just price I price it for
+[0:06:36] free before I run it so I can see what
+[0:06:38] the cost is going to be. I'll give you
+[0:06:39] all the code for this. This will allow
+[0:06:41] you to price it for free. Data Bento is
+[0:06:43] just a service that has a bunch of data.
+[0:06:45] And you're going to have to pause,
+[0:06:46] rewind, do what you need to do in order
+[0:06:48] to get this code, but you can price it
+[0:06:50] for free. So, I knew it was going to be
+[0:06:51] 150 before I pulled it, which is nice
+[0:06:52] because
+[0:06:53] uh maybe a year ago I didn't price it be
+[0:06:56] I didn't price it because I didn't have
+[0:06:58] I didn't have the thought of using AI to
+[0:07:01] price it first. But here's all the code
+[0:07:02] so you can download the data, price it.
+[0:07:04] You've got all the code. You now know
+[0:07:05] tick data is better than open high low
+[0:07:06] close volume data. Try to use it.

@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "search_id": "strategy-search-v2",
+  "status": "DECLARED_TEMPLATE_NO_CANDIDATES",
+  "question": "Same question as strategy-search-v1, with a corrected multiple-testing gate (G5) fixed before any v2 candidate is chosen.",
+  "registration_note": "Declared 2026-10-12 after strategy-search-v1 closed as FAIL (0/9). v1's G5 measured luck with the cross-trial spread of Sharpe ratios centred on their mean; one extreme trial (CTREND, dev Sharpe -2.4) inflated that bar to ~1.5-1.9 annualized. v2 measures luck as the expected maximum of N zero-edge strategies with the candidate's own sample length and return shape (null-consistent). v1 verdicts are NOT rescored (that would be a post-hoc change); recomputed under this rule none of v1's 9 would pass all gates either.",
+  "inherits": "config/strategy_search_v1.json (scope, exclusions, samples, costs, gates G1-G4 and G6-G8, no tuning, single look per round, ledger)",
+  "trial_budget": 40,
+  "gates_changed": {
+    "G5_deflated_sharpe": "P(true Sharpe > SR0) >= 0.95, where PSR = Phi((SR - SR0) * sqrt(T-1) / sqrt(1 - skew*SR + (kurt-1)/4*SR^2)) on daily development returns, SR0 = SE0 * E[max of N standard normals] (Bailey & Lopez de Prado approximation (1-g)*Phi^-1(1-1/N) + g*Phi^-1(1-1/(N e)), g = Euler-Mascheroni), SE0 = sqrt((1 - skew*SR + (kurt-1)/4*SR^2)/(T-1)), and N = all trials in strategy-search-v1 and v2 so far including this one (v1 contributes 9)"
+  },
+  "single_candidate_mode": "a candidate may also be tested alone if it is named, with written reasoning, before any of its data is loaded; N still counts all v1+v2 trials (no reset)",
+  "implementation": "orderflow_edge_lab.review_methods.deflated_sharpe_null_consistent",
+  "claims": {
+    "strategy_promotion_authorized": false,
+    "live_trading_authorized": false
+  }
+}

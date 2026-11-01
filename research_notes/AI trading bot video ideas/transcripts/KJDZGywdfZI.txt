@@ -1,0 +1,356 @@
+# JevAstraFable AI Traded Polymarket 5 Minute Markets for 24 hours
+# channel: Moon Dev
+# url: https://www.youtube.com/watch?v=KJDZGywdfZI
+
+[0:00:00] Jev AI versus Open AI and Astra versus
+[0:00:04] Fable. We have going here trading on
+[0:00:06] Polymarket. You can see she just picked
+[0:00:08] down or they, shall I say, just picked
+[0:00:11] down because this is a consensus bot.
+[0:00:14] Each of them get to decide
+[0:00:16] and they all said down this time. But
+[0:00:18] we've been waiting here for probably
+[0:00:20] four rounds where they didn't make any
+[0:00:22] trades. So they are patient, which in my
+[0:00:24] opinion is a good thing.
+[0:00:26] I've helped thousands of people automate
+[0:00:28] their trading and patience is
+[0:00:30] one of the edges that most don't have.
+[0:00:33] You know, bots can sit for 6 days.
+[0:00:35] People can't sit for 6 minutes. So I'm
+[0:00:37] glad they're passing some rounds here.
+[0:00:39] We'll see if they win this one. It It
+[0:00:41] doesn't look like it. But what I'm going
+[0:00:43] to show you right now is all of the
+[0:00:45] stats from a true 25 trade test. And
+[0:00:49] there's a lot of passes in between. So
+[0:00:51] what I did is I set this up in a way.
+[0:00:53] I'll explain it all here. Looks like
+[0:00:55] we're going to take the L here, but
+[0:00:56] remind me to look back in 43 seconds.
+[0:00:59] 83911.
+[0:01:01] That's what they said. It's under 886.
+[0:01:04] So there would need to be a dump here.
+[0:01:06] So let me go ahead and
+[0:01:08] start it off by telling you, you know, I
+[0:01:10] I used Astra here. I used Fable and I
+[0:01:13] used Jev. They all get to decide.
+[0:01:16] It's one account, just $5 per trade, and
+[0:01:18] I'm going to give you all the stats and
+[0:01:19] the scoreboard and all that good stuff.
+[0:01:21] Let's go ahead and see if we get the
+[0:01:22] dub. Looks like they're taking a L here.
+[0:01:24] So I might need to add that to the
+[0:01:25] record.
+[0:01:26] But then I'll go ahead and explain the
+[0:01:28] rest. 915 886, they took the loss here.
+[0:01:32] >> with
+[0:01:33] >> if they get the next one.
+[0:01:34] >> AI is deciding.
+[0:01:35] >> But let me explain everything and get
+[0:01:37] you all of the code here. So if you
+[0:01:39] don't know Polymarket opens a brand new
+[0:01:40] Bitcoin up down market every 5 minutes.
+[0:01:42] There's 288 of them per day. That's a
+[0:01:45] lot of opportunity to trade, but it is
+[0:01:47] an effective leverage of like 2,000,
+[0:01:49] 3,000. Very, very high when you start
+[0:01:52] doing the math math. Ask your AI like,
+[0:01:54] "What's the effective leverage of
+[0:01:56] 5-minute markets?" because they turn
+[0:01:57] over every 5 minutes and you can
+[0:02:00] literally go from 10 cents to a dollar.
+[0:02:02] Mad leverage. But, let's see if AI can
+[0:02:05] trade them better than a human can. All
+[0:02:07] three of them get the same window and
+[0:02:09] the same numbers.
+[0:02:11] The only difference is the brain. You
+[0:02:12] got Jeff AI, you've got Astra from Open
+[0:02:14] AI, and you've got Fable 5.1. That's the
+[0:02:17] only difference. Every brain gets the
+[0:02:19] whole picture before it ever says
+[0:02:21] anything. So, it sees the 288 5-minute
+[0:02:24] bars, the strike, the TWAP so far,
+[0:02:27] couple volatility numbers,
+[0:02:29] the order book, liquidation fuel. They
+[0:02:31] see other people's positions, which I
+[0:02:33] think it's pretty sneaky cool. I use my
+[0:02:35] AI which I gave or my API which I gave
+[0:02:37] to everybody already in the Zoom, but to
+[0:02:39] see everybody's positions on BTC.
+[0:02:42] But, I give it to the AI. I think that's
+[0:02:44] an interesting little idea there to give
+[0:02:46] to AIs. Then, they give back one prompt.
+[0:02:48] It's just good. You We give them the
+[0:02:49] prompt and they say up, down, or
+[0:02:51] nothing. You can see here
+[0:02:53] on this last run here, they said down,
+[0:02:56] down, up. And it just prints out the
+[0:02:58] entire time so we can see everything.
+[0:03:00] The one before that was down, down,
+[0:03:01] down. Now, if two of the three agree,
+[0:03:03] there's one $5 trade that goes on the
+[0:03:06] side. If they say down, two of the three
+[0:03:08] say down, okay, they go down.
+[0:03:10] All three go down, they go down, and
+[0:03:12] vice versa. It's five bucks at whatever
+[0:03:14] price it is. You know, it can be any
+[0:03:15] price between
+[0:03:17] 1 cent, which is rare, but like 10 cents
+[0:03:20] and 50 cents you can see getting at 47
+[0:03:22] cents. Well, then the gain will be a
+[0:03:24] little bit more.
+[0:03:26] >> You can see that they just picked down
+[0:03:27] here.
+[0:03:28] >> Order filled.
+[0:03:29] >> Down, down, down.
+[0:03:31] We'll keep an eye on this. I don't know
+[0:03:33] if we'll be here by the end of this. I
+[0:03:35] want to show you all of the code and
+[0:03:36] everything. Okay, so it picked down. It
+[0:03:38] needs to be 914. It needs to be 909.
+[0:03:42] Needs to be under 914. It's at 909 now
+[0:03:44] and there's 2 minutes left. I've got a
+[0:03:45] lot I want to show you still. I want to
+[0:03:47] get you the code, all that good stuff.
+[0:03:48] And the cool thing about this is I made
+[0:03:50] a like a shadow trader on this. So, even
+[0:03:52] the person or sorry, the AI that is not
+[0:03:56] in the consensus side if like Jev and
+[0:03:57] Astro said up and then Stable said down,
+[0:04:00] even that one gets scored. It just gets
+[0:04:03] scored on paper. There's a couple that I
+[0:04:05] wanted this to live trade just for fun.
+[0:04:07] And so, I took the consensus, but
+[0:04:09] they're all getting rated on what they
+[0:04:11] say regardless of if they make it into
+[0:04:14] the batch or not. And this is kind of
+[0:04:16] interesting that I found out using these
+[0:04:18] 5-minute markets. There's something
+[0:04:19] weird going on. I don't I can't confirm
+[0:04:21] this one entirely, so let me know if you
+[0:04:23] know, but I think they close on more of
+[0:04:25] like a rolling average price
+[0:04:28] from what I've seen
+[0:04:30] opposed to like the actual closing
+[0:04:31] price. There's something really weird
+[0:04:33] that goes on at the end of each of these
+[0:04:34] markets,
+[0:04:35] but maybe we'll catch it here now. 47
+[0:04:37] seconds, 46 seconds. Needs to be under
+[0:04:40] 914. It's at 907 now. Okay. And that
+[0:04:42] weird thing came down to like PolyMarket
+[0:04:45] is based off of Chainlink, but I'm
+[0:04:47] looking at Binance data. So, that might
+[0:04:49] mess you up a little bit if you are
+[0:04:50] going to attempt to trade on these
+[0:04:52] 5-minute markets. We do have 19 seconds
+[0:04:55] left.
+[0:04:55] >> Like, you just decide
+[0:04:57] what it's going to be, who you're going
+[0:04:59] to be, how you're going to do it. Just
+[0:05:01] decide. And then from that point the
+[0:05:05] universe is going to get out your way.
+[0:05:06] It's like it's water. It wants to It
+[0:05:08] wants to move and go around stuff, you
+[0:05:10] know.
+[0:05:11] >> All right. So, it looks like we did
+[0:05:12] secure this dub under 914.
+[0:05:16] >> The AI is deciding.
+[0:05:17] >> 57%. We'll see if they make another
+[0:05:20] decision here that we'll catch. I don't
+[0:05:21] think we'll catch it by the end. I'm
+[0:05:23] going to get through this.
+[0:05:24] >> [laughter]
+[0:05:25] >> I'm sorry. I'm trying to be fast. So,
+[0:05:27] look out for this. Like, if you're
+[0:05:28] looking at prices and you're looking at
+[0:05:29] like Bitcoin prices on Hyperliquid or
+[0:05:32] Binance, it might be a little different
+[0:05:33] because Chainlink's like based off the
+[0:05:34] average, so I thought that was
+[0:05:36] interesting. Then another thing I tested
+[0:05:38] was at the start I was
+[0:05:40] letting them decide off the first 15
+[0:05:43] seconds, and I don't think that's enough
+[0:05:44] data. So, I moved it. I moved it to 150
+[0:05:47] seconds. So, the new market, okay, they
+[0:05:48] get 150 seconds to kind of see what's
+[0:05:50] going on and then decide. That makes
+[0:05:52] sense to me.
+[0:05:53] Instead of having giving them just 5% of
+[0:05:55] the market cuz they kept saying no, and
+[0:05:57] I wanted to get some trades in there.
+[0:05:59] But, I don't want to push them. You
+[0:06:00] know, patience is a gift. And now, one
+[0:06:02] of these three was wrong most of the
+[0:06:04] time and still made the most money.
+[0:06:06] That's interesting.
+[0:06:07] Jav, Astro, or Fable is the question.
+[0:06:09] You can see there is 60 windows.
+[0:06:12] 25 actually traded.
+[0:06:14] Most of the time there wasn't consensus
+[0:06:15] or they Yeah, they passed. And then it
+[0:06:17] looks like there's one area there, so
+[0:06:19] 25 actual trades. I waited until that
+[0:06:22] point cuz I wanted to get like a good
+[0:06:23] amount of data. It took a good day.
+[0:06:25] I know it's not like
+[0:06:27] thousands of trades that you need, but
+[0:06:29] still
+[0:06:30] interesting. At the end of the day,
+[0:06:31] there was 25 trades, only 10 won.
+[0:06:34] 40% hit rate, but the profit was $27,
+[0:06:36] 23% on money spent.
+[0:06:38] Let's see if it can continue. I mean,
+[0:06:39] we're one loss so far during this
+[0:06:42] recording
+[0:06:43] and one win. But, it looks like the hit
+[0:06:45] rate is only 40%. Average entry was 0.34
+[0:06:48] though. So, at 0.34,
+[0:06:51] you know, you get a dollar back if
+[0:06:52] you're right. So, it only needed to be
+[0:06:53] right 34% of the time
+[0:06:55] just to stand still. It was right 40% of
+[0:06:57] the time.
+[0:06:58] That 6-point gap is the entire profit.
+[0:07:00] Token denied. And you can see it made 45
+[0:07:02] bucks, but then gave every single dollar
+[0:07:04] back. Every single dollar back. And then
+[0:07:07] it got one trade that just saved the
+[0:07:08] day.
+[0:07:09] So, this is the actual order the trades
+[0:07:12] happened in. You can see it started
+[0:07:14] here, got up to plus $45, and then just
+[0:07:17] gave it all back. I don't like I don't
+[0:07:19] like seeing that.
+[0:07:21] So, over 100 trades, is it going to do
+[0:07:22] that often? Is it going to do it more
+[0:07:24] often than this? 33 in one go.
+[0:07:27] And that's the cool thing about these
+[0:07:28] markets. Like I was saying earlier, the
+[0:07:30] effective leverage is so high because
+[0:07:31] it's they're always turning over every 5
+[0:07:33] minutes, so you have 288 opportunities
+[0:07:35] per day to trade them.
+[0:07:37] And you can literally buy at 10 cents
+[0:07:39] and turn it into a dollar, so it's not
+[0:07:41] financial advice. I haven't cracked
+[0:07:43] these markets yet, so I'll keep showing
+[0:07:44] absolutely everything along the way, and
+[0:07:46] ideally I'm able to give you this code
+[0:07:48] as well. Obviously, don't run it just
+[0:07:50] off top like that. Build in your own
+[0:07:52] ideas. So, you know how I was having
+[0:07:54] them all shadow each other, so everybody
+[0:07:56] was getting a chance to give their vote
+[0:07:59] at least.
+[0:08:00] Jev was right was far more than the
+[0:08:02] other other two were right, which is
+[0:08:04] interesting. 71% of the time.
+[0:08:06] Is that random? Is that lucky? Fable was
+[0:08:08] right 39% of the time, and Astra was
+[0:08:10] right 31% of the time. The ranking is
+[0:08:12] Jev, then Fable, then Astra. But then
+[0:08:14] look at this, the one that was right the
+[0:08:16] least made the most money. How? That's
+[0:08:19] the question. But look at this, it's
+[0:08:20] just I guess it's it's almost luck,
+[0:08:22] right? Because they were right on the
+[0:08:24] ones that were low priced, and it's not
+[0:08:26] necessarily like luck, but I need to see
+[0:08:29] like a thousand trades. This was 25
+[0:08:31] trades.
+[0:08:33] Jev was right 75 71% of the time and
+[0:08:35] returned 13%.
+[0:08:36] >> New Polymarket window. The AI is
+[0:08:38] deciding.
+[0:08:39] >> Astra was right 31% and
+[0:08:41] 31% of the time and returned 35%.
+[0:08:45] So, there's a lesson in this, right?
+[0:08:48] It's not not all about winning
+[0:08:50] percentage. And that's the interesting
+[0:08:51] thing about this, these are binary, so
+[0:08:53] you're going to zero if you lose.
+[0:08:55] And, you know, Astra bought the long
+[0:08:57] shots, and Jev bought the favorites.
+[0:08:59] It's kind of what we saw.
+[0:09:00] Being right less often at better prices
+[0:09:03] clearly beat being right more often at
+[0:09:05] worse ones. So, you got the average
+[0:09:07] average entry for Astra is at 0.29
+[0:09:09] cents.
+[0:09:10] 29 cents. Fable, and then Jev's down
+[0:09:12] here. Jev is only guessing when they
+[0:09:15] know they're right. That's interesting.
+[0:09:17] And then we had one anomaly, it looks
+[0:09:18] like, so two brains said down, the third
+[0:09:21] sat out, and it was a 13 cent bet, so
+[0:09:25] buying at 13 cents returned 669%.
+[0:09:29] So, how often is that going to happen is
+[0:09:30] the question. This is really
+[0:09:31] interesting, when they all three agreed,
+[0:09:33] they won more often and made less money.
+[0:09:36] A split vote means the cheap side, and
+[0:09:37] the cheap side is where the money was.
+[0:09:39] So, 17 trades, 147% profit of $16.
+[0:09:44] Average entry of 41 cents when three out
+[0:09:46] of three agreed, when two out of three
+[0:09:47] agreed, 25% win rate.
+[0:09:50] Profit of 11, average entry of 20 cents.
+[0:09:53] Half the win rate, 2/3 of the profit.
+[0:09:56] Same lesson as the twist.
+[0:09:58] The price does the work, not the hit
+[0:10:00] rate. Mhm, interesting. Okay, okay. Now,
+[0:10:03] the costs. These are interesting. Jeff
+[0:10:05] costs 1 and 1/2 cents. 1 and 1/2 cents
+[0:10:07] for the whole day. Fable was 3 $3.72 and
+[0:10:11] Astra was $2.64.
+[0:10:13] You can see they just all they denied
+[0:10:15] this token because Jeff said down, Astra
+[0:10:18] said up, and Fable said nothing. So, the
+[0:10:21] cost is obviously way different. Jeff is
+[0:10:23] very inexpensive. They're doing
+[0:10:25] different things though. It's like
+[0:10:26] system one thinking versus system two.
+[0:10:27] So, you can see $2.64, $3.72 for Fable.
+[0:10:32] And then the speed is interesting. Jeff,
+[0:10:34] 475 milliseconds versus Astra's 5,460
+[0:10:38] and Fable's 10,942.
+[0:10:40] The cheap fast one was also the accurate
+[0:10:43] one. And these are the obvious things
+[0:10:45] you've been thinking. 25 trades is not a
+[0:10:46] study. One ticket is 121% of the profit.
+[0:10:50] The shadow books never paid a spread.
+[0:10:52] Basis USD equals 40 is an estimate.
+[0:10:56] What did not hold up? The settle rule.
+[0:10:59] All right, so I'm going to go ahead and
+[0:11:00] try to get all of this code here now to
+[0:11:03] everybody in the Zoom. I'm just going to
+[0:11:05] put it on the road map here.
+[0:11:07] So, if you're in the Zoom or tomorrow's
+[0:11:09] Zoom, whatever, let me go ahead and get
+[0:11:11] this code all set up inside of this road
+[0:11:15] map here.
+[0:11:16] I already have so much starter code
+[0:11:18] here, so anybody that jumps into the
+[0:11:20] Zoom gets all of this Polymarket
+[0:11:22] 5-minute market starter code, so you can
+[0:11:24] just get started with an idea like this
+[0:11:26] right now. But, I think it'd be
+[0:11:28] interesting to put the
+[0:11:30] Jeff versus Astra
+[0:11:33] vs. Fable study in here. You saw the
+[0:11:36] holes and it was 25 trades.
+[0:11:38] It's not going to be printing you a
+[0:11:39] million dollars. None of this will. You
+[0:11:42] really have to build out your own edge.
+[0:11:43] There's something called alpha decay. I
+[0:11:44] can't just tell everybody that's
+[0:11:45] watching like
+[0:11:47] what prints money or else it's not going
+[0:11:48] to print money anymore. So,
+[0:11:50] um
+[0:11:51] have fun. I'll put this code right here
+[0:11:54] by the end of this Zoom and I'll see you
+[0:11:56] in the next one.

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "watch_id": "fade24-forward-v1",
+  "status": "FROZEN_BEFORE_PROSPECTIVE_START",
+  "question": "Does the best cell of leverage-bracket-study-v2 (fade the last 24h move at 2x, take profit at +15% of margin, stop at -50% of margin, 7-day time stop) keep a positive expected value per trade on data that did not exist when it was chosen, and does it beat the same bracket with random direction?",
+  "registration_note": "Registered 2026-10-14 at the user's request. The cell E2_L2_TP15_S2_T168 was the best of 288 in leverage-bracket-study-v2 on 2021-23 (+0.66% of margin per trade with taker fees, one-sided p 0.052 before correction, not significant after Benjamini-Hochberg over 288; worst drawdown -65%; P(ruin 1y) 17%). It was selected by looking at results, so a regression toward zero is expected; only data after the start below can test it. Descriptive paper watch; no promotion, no orders, no keys.",
+  "prospective_start_utc": "2026-10-17T00:00:00Z",
+  "rule": "exactly leverage-bracket-study-v2 cell E2_L2_TP15_S2_T168 (config/leverage_bracket_study_v2.json with its v1 inheritance and amendments): per symbol, sequential positions; direction = minus the sign of the perp's close-to-close return over the previous 1440 one-minute bars (no trade if 0 or if that bar is missing); leverage 2; take-profit at +15% of margin (price move 7.5%); stop at -50% of margin (price move 25%); liquidation level 1/2 - 0.005 (cannot be reached before the stop); 7-day (10080-minute) time stop; same-bar adverse-first rule; reopen at the close of the closing bar",
+  "books": {
+    "fade24_F1": "the rule with fee model F1 (taker 7 bps per side, 14 bps round trip), primary",
+    "fade24_F2": "the rule with fee model F2 (maker take-profit with 0.01% through-fill), secondary",
+    "random_F1": "control: the same bracket with direction drawn at random (E0, seeded per symbol with [20261017, symbol index]), F1 fees"
+  },
+  "universe": "the 30 symbols of research/strategy_search_v3/round2_universe.json; contracts not trading simply produce no trades (stale-tail rule as in leverage-bracket-study-v1 amendment 1)",
+  "scored_trades": "positions opened strictly after the prospective start, scored when they close; open positions at the data end are listed as open (unrealized P&L shown separately, never in the scored series); the first position per symbol opens at the first 1m close after the start that has 24h of history",
+  "account": "as the studies: one paper account per book starting at 1.0, 2% of realized equity as margin per new position, P&L settles at close; daily realized account returns stamped at 00:00Z of the next UTC day",
+  "data": "data.binance.vision only: futures um daily 1m klines and monthly fundingRate; per-symbol freshness and funding_pending handling as near-miss-forward-v1 (a trade whose bars are not all published is pending; unpublished funding months are flagged and replayed when published)",
+  "scoring": "per book: closed trades, take-profit / stop / time-stop shares, mean net P&L per trade in % of margin with a day-block bootstrap 95% interval (mean block 10, 2000 draws, seed 20261017), realized account path, max drawdown; fade24_F1 minus random_F1 mean per trade with a bootstrap interval",
+  "reporting": {
+    "review_after_days": 180,
+    "before_review": "descriptive only",
+    "at_review": "descriptive statistics; the 2021-23 estimate (+0.66% of margin per trade, F1) is reported as 'not contradicted' if it lies inside the forward 95% interval and 'contradicted' otherwise; no claim of an edge from one sample of a selected cell"
+  },
+  "honest_power_note": "the 2021-23 cell made about 3,400 trades a year across 30 symbols; 180 days gives roughly 1,700 trades, enough to distinguish +0.66% from about -0.5% of margin per trade but not +0.66% from zero with confidence",
+  "claims": {
+    "strategy_promotion_authorized": false,
+    "paper_trading_authorized": false,
+    "live_trading_authorized": false,
+    "orders_sent": false
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "envelope_id": "forward-drawdown-envelopes-v1",
+  "status": "FROZEN_BEFORE_COMPUTATION",
+  "registered_utc": "2026-10-12",
+  "note": "Descriptive 'is this drawdown still normal?' envelopes. Computed only from daily backtest returns dated before each watch's prospective start. No verdicts, no thresholds, no effect on any registered review, promotion, filter or sizing.",
+  "method": {
+    "type": "stationary_block_bootstrap",
+    "mean_block_days": 20,
+    "paths": 5000,
+    "seed": 20261012,
+    "horizon_days": 365,
+    "variants": {
+      "as_backtested": "raw pre-start daily returns",
+      "zero_edge": "pre-start daily returns minus their mean"
+    },
+    "outputs_per_forward_day_n_1_to_365": ["cumulative return p5/p50/p95", "running max drawdown p5/p50/p95"]
+  },
+  "covered": [
+    {
+      "watch_id": "multi-premia-blend-v1",
+      "book": "S4_blend",
+      "series": "development S4 series as in scripts/fast_gates_calibrate_2026_10_04.py g2(), from %TEMP%/multi_premia_data.pkl",
+      "pre_start_cut": "index < 2026-09-12 UTC"
+    },
+    {
+      "watch_id": "crypto-trend-core-v1",
+      "book": "combined",
+      "series": "strategy_search.crypto_trend_core_reference(config/crypto_trend_core_v1.json, %TEMP%/multi_premia_data.pkl)",
+      "pre_start_cut": "index < 2026-09-29 UTC"
+    }
+  ],
+  "not_covered": "all other watches: no long pre-start backtest series available",
+  "output": "research/forward_envelopes/envelopes_v1.json"
+}

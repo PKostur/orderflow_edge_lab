@@ -1,0 +1,567 @@
+# Karpathy Loop Made Trading Bots Do WHAT in 24 Hours (ROI & Cost Revealed)
+# channel: Moon Dev
+# url: https://www.youtube.com/watch?v=b70or37mSfg
+
+[0:00:00] I just ran the Carpathy loop, but for
+[0:00:02] trading for 24 hours, and we're going to
+[0:00:05] see the full ROI and the cost revealed,
+[0:00:08] and I already took a peek at the cost. I
+[0:00:10] haven't taken a peek at the ROI yet. So,
+[0:00:12] you're seeing this live. It's here in
+[0:00:14] the top right. You can see it's been
+[0:00:15] running for 24 hours. If you don't know
+[0:00:17] what the Carpathy loop is, Andre
+[0:00:18] Carvathy is one of the founders of Open
+[0:00:21] AI. He created this loop that
+[0:00:23] essentially allows you know claude
+[0:00:25] codecs to loop infinitely to optimize
+[0:00:29] any goal. Okay. So the goal that I am
+[0:00:32] optimizing on is better and better back
+[0:00:35] tests for my trading systems. I'm an
+[0:00:37] algorithmic trader and I build new
+[0:00:39] trading systems every day and I've
+[0:00:41] helped thousands of people do just that.
+[0:00:43] My name is Mund if you don't know me by
+[0:00:44] now. You can see the carpathy loop is
+[0:00:46] still going and I want to reveal the
+[0:00:48] actual results and I want to reveal the
+[0:00:49] cost. So, let's just go ahead and dive
+[0:00:51] right into the cost because I just
+[0:00:53] opened it up here and you can see I'm on
+[0:00:55] the 200 plan and I've used 50% of my
+[0:00:58] use. I'm usually down here in the 25%
+[0:01:01] usage. So, this is 50% of my use until
+[0:01:05] Tuesday. Okay, it's Saturday today. So,
+[0:01:08] I have a few more days. I'm at 50%. So,
+[0:01:10] it hasn't hit my limits. It hasn't hit
+[0:01:12] my limits. But, that is the true cost. I
+[0:01:14] mean, it's about what what would you say
+[0:01:17] that is $50? Because if this is a $200
+[0:01:19] plan, this sets might be $25. But what
+[0:01:23] is the API cost is the question. I'm
+[0:01:25] never going to use this with API. I
+[0:01:27] think that uh these are heavily
+[0:01:29] subsidized. All this AI that we're
+[0:01:30] getting right now is heav he heavily
+[0:01:32] subsidized by venture capitalists and
+[0:01:34] other investors that are essentially um
+[0:01:37] giving open AI and Anthropic a ton of
+[0:01:40] money in order to uh run and get to AGI
+[0:01:44] first. So it's to me there's no point in
+[0:01:47] using the APIs unless you need like
+[0:01:49] aentic flows and then in that case okay
+[0:01:52] use open router because then you can
+[0:01:53] connect to like any AI Kimmy M3 etc. But
+[0:01:57] um this is the true cost you can see 49%
+[0:02:00] of my $200 plan and it's been running
+[0:02:02] for 24 hours. So now I want to go ahead
+[0:02:04] and get into the actual
+[0:02:07] results here. So, since she's still
+[0:02:09] running, I'm going to let her keep
+[0:02:10] running. And I'm, as you can see, she's
+[0:02:12] on iteration 159 here. And I want to go
+[0:02:15] ahead and just have AI explain it to me.
+[0:02:17] All of this has already been pushed to
+[0:02:19] the GitHub, by the way. So, if you
+[0:02:20] already have the GitHub, congrats. Let's
+[0:02:22] go here and say exactly this. Um, hey,
+[0:02:26] the Carpathy. Oh, my thing is cooked,
+[0:02:29] dude. I can't even type in this. I can't
+[0:02:31] even type right now. Maybe my keyboard's
+[0:02:33] dead. No. Try to put the Moon Dev API
+[0:02:35] key in here again.
+[0:02:40] Somebody asked what's the exact GitHub
+[0:02:42] for this? It's GitHub. It's Mundo
+[0:02:44] Trading Bots here and you can scroll
+[0:02:46] down to the I think it's in the back
+[0:02:48] test folder. Yep. Carpathy loop here.
+[0:02:50] And then if you go to auto research,
+[0:02:52] this is all of the code here. So, Moonup
+[0:02:54] auto research the Carpathy loop for back
+[0:02:56] test. This explains it all. You know,
+[0:02:58] this is what you actually change here is
+[0:03:00] the program. MD, the strategy. Py, the
+[0:03:03] harness, the loop, the morning.
+[0:03:05] Um, this is the only one you change. And
+[0:03:08] at the end of this, I will go ahead and
+[0:03:09] go through all of the code. So, you have
+[0:03:11] it because I know not everybody has my
+[0:03:13] GitHub. So, I'll just scroll through all
+[0:03:16] of the code here at the end after I get
+[0:03:18] the true results. So, you can see that I
+[0:03:20] ran the Carpathy loop here for 24 hours
+[0:03:22] and it did 100 plus iterations. I want
+[0:03:25] you to go ahead and give me the stats in
+[0:03:28] a table here that I can totally
+[0:03:30] understand. I want to see the top 10
+[0:03:33] best strategies that it has created thus
+[0:03:35] far. And yeah, like ROI, draw down,
+[0:03:38] sharp, all those good things. Thank you.
+[0:03:41] While she does that, let me go ahead and
+[0:03:43] start looking through the code because
+[0:03:45] this will give you access to all the
+[0:03:46] code. I mean, this is my GitHub. A lot
+[0:03:48] of you already have this, but let's go
+[0:03:50] ahead and look at the structure. The
+[0:03:51] first thing it says is program.md. This
+[0:03:53] is what you actually change. So, these
+[0:03:55] are the things that you actually change.
+[0:03:57] This is all in English. So, you can just
+[0:03:59] screenshot this, rewind, do whatever you
+[0:04:00] need to do. I'm going to go fast here
+[0:04:01] cuz I'm waiting on the results. And um
+[0:04:04] okay, that's program. MD. You just saw
+[0:04:06] that. Let's go ahead and see what the
+[0:04:07] next thing is. It's strategy. py. So, if
+[0:04:10] I show you strategy py here, um then
+[0:04:12] you'll be able to build anything you
+[0:04:14] want. Now, what I believe in is we all
+[0:04:16] build our own things. So, that's why I
+[0:04:18] don't give you plug-and-play bots or
+[0:04:19] anything like that. I believe code is a
+[0:04:20] great equalizer. And once you learn how
+[0:04:21] to build all this stuff, you'll be able
+[0:04:23] to build anything for the rest of your
+[0:04:24] life. This is strategy. You can see
+[0:04:26] there's a lot of a lot of text, human
+[0:04:28] text, and then some uh variables here as
+[0:04:31] well. But this human text helps the AI
+[0:04:34] understand what they're doing. So, I'll
+[0:04:35] just scroll through all this fairly
+[0:04:37] quickly and I'll trust that you know how
+[0:04:39] to pause and rewind and screenshot and
+[0:04:41] all that. Obviously, I can't give my
+[0:04:43] GitHub to everybody in the world. Um,
+[0:04:45] this is the most secretive industry in
+[0:04:46] the world and I'm doing my best to show
+[0:04:49] you the infrastructure around it. Let's
+[0:04:50] go ahead and keep scrolling through this
+[0:04:51] code here. There's a lot. There'll be a
+[0:04:54] lot of pausing and rewinding for you,
+[0:04:56] but you can see this one. You can really
+[0:04:58] just talk to your AI after you send this
+[0:05:00] screenshot here, and she'll be able to
+[0:05:03] get all of it in there for you. And then
+[0:05:05] build your own stuff, you know, build
+[0:05:06] your own ideas out based off of this.
+[0:05:08] It's going to be fire. I'm going to go
+[0:05:09] ahead and show you the results here. I'm
+[0:05:10] having the claw code go through all of
+[0:05:13] the results from the Carpathy Loop right
+[0:05:15] now, and we're going to be able to see
+[0:05:16] the results in just about I don't know,
+[0:05:18] probably one minute from now. So, hang
+[0:05:21] tight. If you want this code, if you
+[0:05:23] don't want this code, you know, fast
+[0:05:24] forward, do what you need to do. But I'm
+[0:05:27] going to give you through all the code
+[0:05:28] throughout this. And if you're already
+[0:05:30] in the GitHub, okay, here's the init
+[0:05:31] file. If you're already in the GitHub,
+[0:05:33] then you have this already. So, anything
+[0:05:35] I can do, you can do better. I believe
+[0:05:36] in you. Okay, let's keep it going. Let's
+[0:05:38] keep it going. Let's keep it going.
+[0:05:39] Let's keep it going. Here's the rest of
+[0:05:40] the code. Here's the rest of the code.
+[0:05:42] Okay, there's just a little bit more
+[0:05:44] here in the strategy. py and I hope you
+[0:05:48] are able to get all this here. And if
+[0:05:50] you're not, then just just rewind. Do
+[0:05:53] what you need to do here. And then we're
+[0:05:54] about to see the results here cuz she's
+[0:05:56] done. Okay, that's strategy. py. There's
+[0:05:57] a few more files I need to go through,
+[0:05:59] but I'll go through those after we see
+[0:06:00] the results. The next file I'll go
+[0:06:02] through is the the harness. The harness
+[0:06:04] py is going to allow you to build out um
+[0:06:08] another portion of this. Okay, she's
+[0:06:10] still going through it. So, found it.
+[0:06:11] The whole night ran on the wrong Python.
+[0:06:14] So, let me go OS the Okay, so she was on
+[0:06:18] the wrong Python um environment, it
+[0:06:21] looks like, but um that should be fine.
+[0:06:23] Harness py back testing py. Okay, launch
+[0:06:27] file back testing py harness py. Let's
+[0:06:30] just go ahead and double check that
+[0:06:32] she's on the right one. Let's go ahead
+[0:06:33] and open it up. Opening cursor here
+[0:06:35] because I do have two of them. Auto
+[0:06:37] research lick copy path. I just want to
+[0:06:40] make sure that you're looking at this
+[0:06:41] one that did it did run all night and it
+[0:06:44] is on the auto research lick. So, it's
+[0:06:45] different than the first one that we
+[0:06:46] ran. Thank you. Go ahead and still give
+[0:06:48] me that top 10 table. Thank you. All
+[0:06:50] right. So, let's go ahead and let her
+[0:06:53] cook that up while I show you the
+[0:06:55] harness. So, all of this, you know, you
+[0:06:58] could apply this to anything. Carpathy
+[0:07:00] Loop obviously wasn't about trading. I
+[0:07:02] just thought it was a cool idea and I
+[0:07:06] applied it to trading and it's
+[0:07:08] literally, you know, I built something
+[0:07:10] like this a couple years back and I just
+[0:07:12] didn't have a good name for it or as
+[0:07:15] much um experience as Carpathy does. So,
+[0:07:18] he's much more experienced when it comes
+[0:07:19] to coding than I am. I had a janky
+[0:07:21] version of this. My version went through
+[0:07:24] and made a ton of back tests. His
+[0:07:25] version goes and replaces the the last
+[0:07:28] one. So, it's a different approach to
+[0:07:30] it. So that's the harness py. Okay, what
+[0:07:32] other files do you need? You need the
+[0:07:34] loop. py. Let's go ahead and show you
+[0:07:35] the loop. py. So it just loops and it
+[0:07:38] was looping all night last night. And
+[0:07:40] you saw how much it costs. I would say
+[0:07:41] on API terms, I don't know the actual
+[0:07:43] cost. I could look at the tokens. Maybe
+[0:07:45] that's a good ask I can have here. How
+[0:07:48] much would it cost if I ran this through
+[0:07:50] the API? But at the end of the day, I
+[0:07:53] wouldn't do that. I would never do that.
+[0:07:56] You know, this is like when Uber Uber
+[0:07:58] was cheap back in the day. It was being
+[0:08:00] subsidized by VCs and this is like the
+[0:08:02] biggest technology in the world being
+[0:08:04] subsidized by VCs. We get it. We get
+[0:08:06] unlimited access pretty much for 200
+[0:08:08] bucks a month. I know some people hit
+[0:08:10] their limits, but I don't really hit my
+[0:08:12] limits that often. So 50% is pretty
+[0:08:14] heavy.
+[0:08:22] All right. I don't know what just
+[0:08:23] happened to my computer, but anyways,
+[0:08:25] can you throw a one in the chat if you
+[0:08:26] can see this? Let's go through the rest
+[0:08:28] of this code here. here the loop py and
+[0:08:30] then the results should be done here. Um
+[0:08:33] yeah, throw one in the chat if you can
+[0:08:35] see my computer in the zoom. Uh okay,
+[0:08:38] you can see it. Sorry for the delay
+[0:08:40] there. Anyways, we got the results here.
+[0:08:41] That should be interesting to go
+[0:08:43] through. So, you already saw all the
+[0:08:45] code. Not all of it, but I will show you
+[0:08:47] the rest of the code here. You can see
+[0:08:48] that my computer's all zoomed in and
+[0:08:50] stuff. It's super weird, but anyways,
+[0:08:52] you can see uh memory updated. Okay, two
+[0:08:55] notes that you already have written
+[0:08:56] down. Okay, two notes things have
+[0:08:58] already written. Okay, let's go ahead
+[0:09:00] and read through what she said here
+[0:09:01] because this is interesting. She built a
+[0:09:03] transcript for this one strategy and it
+[0:09:06] went through 158 rungs. What are rungs?
+[0:09:09] Yeah, I'm not sure. I'm not sure. So,
+[0:09:11] let's go ahead and get through one one
+[0:09:13] more piece of code before I show you the
+[0:09:14] actual results of these cuz I think
+[0:09:17] applying the carpathy loop to all types
+[0:09:19] of things could be interesting, but I
+[0:09:21] want to also make sure that you get all
+[0:09:22] the code throughout this. Uh, so let's
+[0:09:24] go back to auto research here. And you
+[0:09:26] can see here, this is the we just showed
+[0:09:29] you the loop. Now I'm going to show you
+[0:09:30] the morning. py and then the rest of the
+[0:09:33] stuff will be autogenerated.
+[0:09:35] Essentially, you might need the
+[0:09:36] baseline.json baseline.json. So I'll
+[0:09:38] show you that as well, but then I'm
+[0:09:39] going to show you all the results. So
+[0:09:42] the next one I'm going to show you is
+[0:09:43] the morning. py. So you can see this is
+[0:09:45] all of the code for morning. py. Go
+[0:09:48] ahead and score file. Got to score
+[0:09:50] everything. This is the main function
+[0:09:52] here. Okay, beautiful. So, one more
+[0:09:54] piece of code I think to show you. Um,
+[0:09:57] and that last piece of code is this is
+[0:10:00] the baseline.json.
+[0:10:02] Now, strategy.b best. Oh, we also need
+[0:10:04] to show you that. So, baseline.json.
+[0:10:06] Okay. So, it's looking at this is the
+[0:10:07] baseline for now. Nothing really you
+[0:10:10] need. Um, and you can probably build
+[0:10:12] your own there based off of that. But,
+[0:10:14] strategy best. py. This should be the
+[0:10:16] best strategy thus far. This is the one
+[0:10:18] file the agent may edit. So this is what
+[0:10:20] the agent edits each time and then it
+[0:10:23] goes through and I've already shown you
+[0:10:25] strategy.py. So I don't think you
+[0:10:27] actually need to see this. Strategy best
+[0:10:29] is just going to be the best version of
+[0:10:30] that. Um, okay. So now you have all the
+[0:10:34] code. It's going to keep things in the
+[0:10:35] keepers folder, logs folder,
+[0:10:37] results.tsv. Okay. So now let's go
+[0:10:39] through the actual results from the
+[0:10:41] Carpathy Loop for trading here. So one
+[0:10:43] strategy 158 tries at it. The loop
+[0:10:45] scored 158 edits and kept 112 of them.
+[0:10:48] walking K from 0.15 to 4.16
+[0:10:52] but every keeper is the same strategy
+[0:10:54] with the size dial turned up and the
+[0:10:56] last 64 iterations bought return with
+[0:10:59] leverage not edge interesting here is
+[0:11:02] the top 10 so that's pretty interesting
+[0:11:05] here you can see 187 thou or 187% here
+[0:11:09] ROI that's the winner the sharpest 3.94
+[0:11:12] okay that's actually a pretty good sharp
+[0:11:13] draw down is 1230
+[0:11:16] you can see versus the buy and hold of
+[0:11:17] ETH is5. So 187% sharp ratio of 3.94. K
+[0:11:23] the loop score here I'll keep these on
+[0:11:25] the screen. K is the loop score time
+[0:11:27] sharp ROI time sharp. It rewards return
+[0:11:30] and risk adjusted return together. So
+[0:11:32] turning up size raises it even when the
+[0:11:35] edge is flat. You see we have draw down.
+[0:11:37] We got win percentage in sample. Okay.
+[0:11:40] So I have some questions here where the
+[0:11:42] knight stopped helping these. Are they
+[0:11:45] kept rungs across the whole night? Not
+[0:11:47] just the top 10 in sample. Sharp rises
+[0:11:49] hard to iteration 94 then flattens and
+[0:11:52] turns down. Annualized ball never stops
+[0:11:56] rising because the ball guard allows
+[0:11:59] plus 10% of the current baseline. That
+[0:12:01] is the ratchet. So you can see the in
+[0:12:03] sample sharp versus the annualized ball
+[0:12:05] kept by iteration here. And then you can
+[0:12:07] see the out of sample sharp here versus
+[0:12:09] the cost wall. So turns positive at
+[0:12:12] iteration 73. So, it took 73 iterations
+[0:12:16] in order to turn the chart positive.
+[0:12:18] That's interesting. I've got a lot of
+[0:12:20] ideas how I want to improve this cuz
+[0:12:23] this is really just version one for me.
+[0:12:25] Uh, you can see the cost wall out of
+[0:12:26] sample ROI percentage return hits zero
+[0:12:29] at 108 BP round trip. It's pretty high
+[0:12:32] though. What to do before tonight's run?
+[0:12:35] Launch it with the T Python TFlow. Yes.
+[0:12:38] Fix the fee comment. Then decide which
+[0:12:40] one you meant. This is a pretty high
+[0:12:42] fee. 0003 is triple. Cap the vulgard
+[0:12:44] against the seed. Stop scoring K alone.
+[0:12:48] Skip iteration 149, not 158. Let's go
+[0:12:52] here. Something weird is going on here
+[0:12:54] with my computer today. So, let's go
+[0:12:56] here. See if we can get this up. Just
+[0:12:58] all the results. You can see it's just
+[0:13:00] iterating through them. Okay, that was
+[0:13:02] the end. So, ship iteration 149, not
+[0:13:05] 158. The other three coins are the
+[0:13:07] honest test. So, the one thing I want to
+[0:13:09] do that comes to my mind is this. All
+[0:13:11] right. So since this is trading crypto,
+[0:13:14] let's uh optimize for ROI versus draw
+[0:13:18] down as sharp ratio. Ratio is penalized
+[0:13:23] upside and downside. So let's update it.
+[0:13:26] Update to do that this time through. And
+[0:13:29] then I'm going to run it again for 24
+[0:13:34] hours. And also go ahead and fix the
+[0:13:38] Tflow path and the
+[0:13:42] fees should be
+[0:13:45] 01. You can see these fees are 3x the
+[0:13:49] price. All right, let's let's make these
+[0:13:51] updates. Let's make these and then I
+[0:13:54] will run it. I don't know what P hacking
+[0:13:56] is, but he says, "Hey, if you're if
+[0:13:58] you're doing this many iterations before
+[0:14:01] it's positive, doesn't count as P
+[0:14:03] hacking." I'm not sure what P hacking
+[0:14:04] is, but I'm grateful that you are
+[0:14:06] mentioning it. What What's P hacking?
+[0:14:08] Overfitting. Yeah, it's definitely
+[0:14:10] overfitting. Absolutely. Absolutely.
+[0:14:11] Absolutely. Absolutely. All this is
+[0:14:13] overfitting, but that's why I go ahead
+[0:14:15] and incubate. So, a lot of back testing,
+[0:14:18] you're just going to end up overfitting.
+[0:14:20] And you know, even if you're doing it by
+[0:14:22] hand, you're going to end up
+[0:14:23] overfitting. You're going to like pick
+[0:14:24] the the 39 SMA and it's going to be
+[0:14:28] really good. But the solution for me, of
+[0:14:31] course, you have a robustness test, but
+[0:14:32] on top of that, I just incubate small
+[0:14:34] size, $10 size. So, I think this is
+[0:14:37] interesting. Just the concept of the
+[0:14:38] carpathy loop. That's why I'm applying
+[0:14:40] it. But yeah, of course, you're going to
+[0:14:41] get overfit results. If you sit long
+[0:14:43] enough with a back test, you are going
+[0:14:45] to overfit pretty much everything. Okay.
+[0:14:47] So, you see what I'm going to set up
+[0:14:48] here. And then I'm going to go ahead and
+[0:14:50] get it live and run it again for 24
+[0:14:52] hours because it looks like I do maybe
+[0:14:55] I'll run it for 12 hours. I do need a
+[0:14:57] little bit of clog code for this week,
+[0:14:58] but you saw the results like in the
+[0:15:00] 150%ish. Um, not as crazy as before and
+[0:15:04] they probably are overfit. So, the
+[0:15:06] process I follow and if you're inside of
+[0:15:08] the Zoom right now, you have the access
+[0:15:11] to my road map moon.com/roadmap
+[0:15:14] here and I go ahead and explain the
+[0:15:16] process I follow. Comes down with coming
+[0:15:18] up with ideas and then back testing to
+[0:15:19] see if those ideas actually work in the
+[0:15:21] past. If they work in the past, they
+[0:15:22] might work in the future, not
+[0:15:23] guaranteed. And you know, doing things
+[0:15:26] like this, looping or sitting on one
+[0:15:29] idea over and over again, trying to make
+[0:15:31] it better and better is like the
+[0:15:32] definition of overfitting. So if you're
+[0:15:35] going to back test, just make sure to
+[0:15:37] know that it's not guaranteed to work in
+[0:15:39] the future. So what I do is I incubate
+[0:15:41] with small size to make sure that it
+[0:15:43] actually works in the future. So when I
+[0:15:45] got started, I just ran and built a bot.
+[0:15:46] I didn't have any of these three steps.
+[0:15:48] So I hope they're helpful for you. So
+[0:15:50] now I'll measure what the current
+[0:15:51] strategy looks like. Okay. Okay.
+[0:15:53] Measure. This is the key input to the
+[0:15:55] design. ROI. Okay. Retention return over
+[0:15:59] to draw down is a leverage dial as well.
+[0:16:01] I don't want you to use leverage
+[0:16:02] actually. Also, let's make sure that
+[0:16:05] they're not using leverage because I
+[0:16:07] don't want these returns to be from
+[0:16:09] leverage. I want them to be from actual
+[0:16:11] edge that they're finding. Thank you.
+[0:16:12] Not I wouldn't say hundreds. No, no,
+[0:16:14] absolutely not hundreds. That'd be
+[0:16:15] that'd be tough. But the things that I
+[0:16:18] find that work well in the past, I'll
+[0:16:20] incubate few at a time and then the ones
+[0:16:23] that continue to work, I'll scale up a
+[0:16:25] bit. But my philosophy around this is
+[0:16:28] it's better to have multiple winning
+[0:16:30] strategies that can work together to
+[0:16:33] make your P&L curve smooth. For example,
+[0:16:36] like instead of just having one trending
+[0:16:38] strategy, what if you have a trender and
+[0:16:39] a mean reverter? Well, one might be
+[0:16:42] doing well while the other one's not.
+[0:16:43] They're not always all in a trade. Um,
+[0:16:45] it's just a better portfolio strategy in
+[0:16:48] my opinion than just like I know a lot
+[0:16:50] of people think that you get into
+[0:16:51] trading bots and you find one like holy
+[0:16:53] grail and I I just haven't seen that. I
+[0:16:55] haven't seen a holy grail yet. So, got
+[0:16:57] to test out a sample, got to test like
+[0:16:59] fee parameter testing, fee
+[0:17:01] sensitivities. So, there's a you know,
+[0:17:03] you can you can do unlimited back
+[0:17:06] testing and robustness testing, but it's
+[0:17:07] just a confidence game at the end of the
+[0:17:09] day. And I find this works for me. It's
+[0:17:11] like, okay, pick pick which one makes it
+[0:17:14] through all of the tests and then
+[0:17:16] incubate with small size $10 size
+[0:17:18] because nothing the like the future
+[0:17:20] doesn't lie, right? A live trading bot
+[0:17:22] doesn't lie. And a lot of people are
+[0:17:25] going to show you like Trading View back
+[0:17:26] tests and stuff and be like, "Oh, this
+[0:17:28] prints money." Just like, "Okay, well,
+[0:17:31] let's try it live. If it does, it does.
+[0:17:33] If it doesn't, then kill it." And I know
+[0:17:35] some sometimes $10 size is too much for
+[0:17:39] people, but I think that most
+[0:17:41] algorithmic traders can put down $10 and
+[0:17:44] just let the bot run. See if it actually
+[0:17:46] works. All right. So, she's updating
+[0:17:48] this now. I have the full picture. F is
+[0:17:50] clipped from F max. Okay. Then fills
+[0:17:53] then three tilt. Multiply it afterward.
+[0:17:55] So, the real cap is higher than 3x. Let
+[0:17:58] me build and test the no leverage
+[0:18:00] version. Everything checks out with
+[0:18:02] leverage band iteration 158. Okay, one
+[0:18:06] trap I have to close at the same time
+[0:18:08] with the return/draw down score is the
+[0:18:11] 1x cap.
+[0:18:14] All right, I got this live again, but my
+[0:18:16] screen is all messed up right now. Like
+[0:18:18] you see it's all zoomed in. I need to
+[0:18:19] like restart my computer or do something
+[0:18:22] because this is very weird. I'll do that
+[0:18:25] after I'm done studying this live. And
+[0:18:27] then tomorrow we'll come back and check
+[0:18:29] to see if there's any good ideas coming
+[0:18:30] out of this. And I just like the idea of
+[0:18:33] the Carpathy loop, but I've always liked
+[0:18:34] something like this. You know, I built
+[0:18:35] that agent a couple years back right
+[0:18:37] when OpenAI dropped. It's like, okay,
+[0:18:39] you just go research and back test and
+[0:18:41] see if you can just spam ideas. Spam
+[0:18:43] ideas and find some winners in there.
+[0:18:45] It's pretty low cost. Okay, now the
+[0:18:48] TFlow path in the loop. PY plus the
+[0:18:51] labels that still say Hey,
+[0:23:11] Our
+[0:23:22] path loop is running here. And you can
+[0:23:25] see that I am essentially having it run
+[0:23:28] all day with this new update I just made
+[0:23:31] that essentially removes all leverage.
+[0:23:33] So, we're not doing that anymore.
+[0:23:36] Damn. So, how long was I muted is the
+[0:23:38] question.
+[0:23:44] That's the real question is how long was
+[0:23:46] I muted?
+[0:23:48] I went ahead and I made a couple updates
+[0:23:51] here and the update that I made was
+[0:23:55] essentially I removed the leverage from
+[0:23:56] this and then I was just asking her,
+[0:23:59] hey, is this the best way to do it
+[0:24:01] starting at iteration 160? because I did
+[0:24:03] update. We already up made the update
+[0:24:05] for the no leverage version and those
+[0:24:08] other couple changes I had added.
+[0:24:11] [snorts] But now um I asked her if we
+[0:24:14] should start from scratch and the answer
+[0:24:15] is clear. Continue from 160. Do not
+[0:24:17] start from scratch. Beautiful. Okay,
+[0:24:19] that's good to know. That's good to
+[0:24:21] know. You can see it's BTCE soul XRP
+[0:24:25] and we lowered the leverage as well. He
+[0:24:26] said I was gone for a lot. My bad, dude.
+[0:24:30] My bad. I was uh on mute. I went and got
+[0:24:34] coffee. I put it on mute and I forgot to
+[0:24:35] put it back. Okay, so it is finishing
+[0:24:39] here. My replacement dropped the
+[0:24:40] indentation. So, it's fixing it.
+[0:24:50] Everything is consistent. You're good to
+[0:24:52] run. Beautiful answer. Continue for 160.
+[0:24:55] The one real hazard is this. Okay. So,
+[0:24:57] I'm going to restart it just in case.
+[0:25:00] And then now we have a full new test
+[0:25:02] here of the Carpathy loop. And I think
+[0:25:04] by tomorrow I'll have more results on
+[0:25:06] this. I think it's pretty interesting
+[0:25:08] just applying the loop to trading
+[0:25:10] instead of whatever he was building it
+[0:25:12] for. But that's kind of why he built it,
+[0:25:14] right? He built it for us to go um
+[0:25:16] create whatever we want to create. So uh
+[0:25:19] we'll come back tomorrow with the new
+[0:25:21] update. You've already gotten all the
+[0:25:23] code. Much love to you. I'll see you in
+[0:25:25] the zoom.

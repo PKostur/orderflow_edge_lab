@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "check_id": "hyperliquid-venue-check-v1",
+  "status": "DECLARED_BEFORE_EVALUATION",
+  "kind": "inspect_data (venue replication of the lead candidate; not a new strategy or variant)",
+  "question": "Does the frozen multi-premia blend hold up on a third venue whose prices and funding come from the same exchange (Hyperliquid), over a longer window than MEXC's funding history allows?",
+  "registration_note": "Declared 2026-10-09 before any Hyperliquid strategy result was computed. Follows fast-gates-v1 G3 (Binance consistent venue: S4 1.05, t 2.31, pass by a hair; Bybit fail) and funding-source-check-v1 (untouched coins MATERIAL). Prompted by the 2026-10-09 review of an external video that relies on Hyperliquid data; only the free public Hyperliquid info API is used. Run once.",
+  "data": {
+    "venue": "Hyperliquid perpetuals, public info API (https://api.hyperliquid.xyz/info)",
+    "prices": "candleSnapshot 8h bars; bars with zero volume are dropped (pre-listing placeholders)",
+    "funding": "fundingHistory (hourly realized rates), same venue",
+    "symbols": "the 70 multi-premia-blend-v1 symbols mapped to Hyperliquid names (FILECOIN->FIL, TRUMPOFFICIAL->TRUMP, PUMPFUN->PUMP, then a k-prefixed 1000x contract if the plain one is missing); 64 are listed at registration (missing AKE, BR, LSK, PHA, QNT, RARE)",
+    "window": ["2023-05-12", "2026-09-12"]
+  },
+  "method": "Frozen multi-premia-blend-v1 legs and blend (S1 trend, S2 XS momentum, S3 XS carry, S4 equal-risk blend, 20 bps round trip), unchanged, on Hyperliquid prices with Hyperliquid funding. Reference: the same rules on MEXC prices with Binance funding (the development construction, %TEMP%/multi_premia_data.pkl) for the same coins, compared on the common S4 dates.",
+  "pass_rule": "PASS if at least 40 coins are available, Hyperliquid S4 annualized Sharpe >= 0.5 x the reference S4 Sharpe on the common dates, and Hyperliquid S4 Newey-West t (5 lags) >= 2.0. Otherwise FAIL. Leg statistics are descriptive.",
+  "claims": {
+    "strategy_promotion_authorized": false,
+    "live_trading_authorized": false,
+    "changes_frozen_watches": false
+  }
+}

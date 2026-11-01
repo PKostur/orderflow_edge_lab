@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "study_id": "trend-core-leverage-assessment-v1",
+  "status": "FROZEN_BEFORE_COMPUTATION",
+  "question": "How much leverage could the repo's crypto trend core (the component that survived every consistent-venue check) have carried on Binance perpetuals before liquidations or ruin?",
+  "registration_note": "Registered 2026-10-12. Descriptive leverage study of an existing, already-validated strategy (rules config/crypto_trend_core_v1.json); it is NOT a search trial and does not count toward N, because its rules were chosen with this data already seen. No promotion, no live trading.",
+  "rules": "crypto-trend-core-v1 exactly (DON8 + EMA8 sleeves, inverse-vol entry sizing, canonical v3.1 accounting), on Binance USDT-M perps: 8h bars built from 1h klines ending 00/08/16 UTC, Binance funding, for the core's symbols available on Binance",
+  "costs": "20 bps round trip as in the core's registration, plus realized Binance funding",
+  "leverage": "levels 1, 2, 3, 5, 10, 20; isolated margin per position; liquidation when the adverse mark-price move from the entry fill (1h mark high/low within the holding period) reaches 1/L - 0.005; loss = margin + 0.5% of notional; ruin = equity < 50% of start; stationary block bootstrap of daily account returns (mean block 10 days, 5000 paths, seed 20261012), P(ruin within 365 days)",
+  "samples": "whole sample 2020-01-01..2026-09-30 and the sub-period 2023-01-01..2026-09-30, both reported",
+  "output": "per leverage: annual return, max drawdown, liquidation count, P(ruin 365d), median and 5th-percentile 1-year equity; max safe leverage = largest L with P(ruin) <= 5% and no liquidations in the 2023-2026 path",
+  "follow_up": "if max safe leverage >= 2, a separately registered descriptive paper forward watch at that leverage may follow",
+  "claims": {"strategy_promotion_authorized": false, "live_trading_authorized": false, "orders_sent": false}
+}

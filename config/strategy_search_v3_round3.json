@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "search_id": "strategy-search-v3-leveraged",
+  "round": 3,
+  "status": "DECLARED_NO_ELIGIBLE_CANDIDATE_SEARCH_CLOSED",
+  "registration_note": "Declared 2026-10-13 after round-3 desk research (research_notes/Leveraged short horizon search/round3_candidates.md) and before any round-3 price data was loaded or any return computed. No screened candidate can pass the gates by its authors' own numbers, so no trial is spent (N stays 11). Round 3 is the protocol's last round, so strategy-search-v3-leveraged closes: FAIL, 0 of 2 trials pass, budget 2/30 used.",
+  "screened_out": {
+    "B2_us_hours_overnight_btc_eth": "the only rule whose claimed gross edge clears the 14 bp round trip (Bespoke 2020-22 ~20 bp/night by the researcher's arithmetic; Falkenstein +48 bp/night dominated by 2017), but G7 requires a cost wall >= 3 x 14 = 42 bp per trade; the source-window claim (~20 bp gross, before funding) cannot reach it, so the candidate cannot pass all gates by its own numbers (same a-priori screen as round 1). Also overlaps the session family (zoo v2 Y2 US-session long failed, Sharpe -0.69) and is practitioner evidence without an out-of-sample test",
+    "B1_volume_conditional_daily_reversal_bianchi": "authors' own Binance-only numbers: ~18.7 bp/day gross vs ~28 bp/day cost, net -21 bp/day; headline edge sits in illiquid coins without perps",
+    "B3_btc_22_23_utc_seasonality": "~9-13 bp gross per trade, below the 14 bp round trip",
+    "B4_btc_max10": "entry, hold and costs unspecified; trend variant on BTC only (evidence-rate rule)",
+    "B5_spy_intraday_momentum": "full text not obtained; crypto mapping unspecified; paper assumes ~1 bp costs",
+    "B7_daily_reversal_momentum_zaremba_ficura": "abstracts only; no cost numbers; Ficura is weekly",
+    "semivolatility_timing_batista_fernandes": "full text read: monthly rebalance, BTC only, long-only, no costs (outside the holding-period scope)",
+    "vol_scaled_crypto_portfolios_habeli": "full text not obtained (SSRN 403); abstract says the benefit grows with horizon",
+    "monday_asia_open_concretum": "no rules disclosed; gross-only Sharpe; underlying paper is a Donchian trend ensemble (trend variant)",
+    "first_vs_last_half_hour_shen_urquhart_wang": "full text not obtained (bot walls not circumvented); rules and costs unverifiable",
+    "oi_long_short_taker_rules": "no published rule found in three searches; any such rule would be a repo hypothesis (round 2 already spent one)"
+  },
+  "not_reused": "the round-2 liquidation-cascade rule is not re-parameterised: its validation data have been seen (threshold veto); it continues only as a descriptive forward watch (config/near_miss_forward_v1.json)",
+  "data_note": "Binance's free archive now carries TradFi USDT-M perps (single stocks, SPY/QQQ/IWM, gold, silver, oil, gas, copper) with 5-10 months of history: too short for G1-G8, but candidate independent breadth for a separately registered descriptive forward watch (not a trial)",
+  "trials_after_round": "11 cumulative (v1 9 + v3 2); unchanged",
+  "outcome": "strategy-search-v3-leveraged CLOSED: FAIL (0/2 trials pass; no promising prospect)",
+  "claims": {
+    "strategy_promotion_authorized": false,
+    "live_trading_authorized": false,
+    "orders_sent": false
+  }
+}
